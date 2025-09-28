@@ -7,7 +7,7 @@ import HintBox from "../../../common/box/HintBox";
 import WarningBox from "../../../common/box/WarningBox";
 import GraphBox from "../../../common/box/GraphBox";
 import { TopicContent } from "@/types/docs/topic";
-import 'katex/dist/katex.min.css';
+
 import { BlockMath, InlineMath } from "react-katex";
 
 const Ellipse = () => {

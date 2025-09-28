@@ -44,7 +44,7 @@ const FOUNDERS = [
             },
             {
                 type: "github",
-                href: "https://github.com/Rafat10"
+                href: "https://github.com/Ra-Fat"
             },
         ],
         role: "Frontend Developer",

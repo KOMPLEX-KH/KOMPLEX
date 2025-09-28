@@ -5,7 +5,6 @@ import TipBox from '../../../common/box/TipBox'
 import ExampleBox from '../../../common/box/ExampleBox'
 import WarningBox from '../../../common/box/WarningBox'
 import { InlineMath } from 'react-katex'
-import { BlockMath } from 'react-katex'
 
 const TOPIC_CONTENT: TopicContent = {
   definition: {
