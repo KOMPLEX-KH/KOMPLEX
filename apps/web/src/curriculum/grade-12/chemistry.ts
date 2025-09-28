@@ -1,26 +1,132 @@
-import { Content } from "@/types/docs/curriculum";
+import { Content, TopicComponent } from "@/types/docs/curriculum";
 import { FlaskConical } from "lucide-react";
-import RateChemicalReaction from "@components/pages/docs/grade-12/chemistry/chemica-kinetics/Rate-chemical-reaction";
-import Reaction_rate_factors from "@components/pages/docs/grade-12/chemistry/chemica-kinetics/Reaction_rate_factors";
-import Aqueous_solution from "@components/pages/docs/grade-12/chemistry/aqueous_solution_forces/Aqueous_solution";
-import Intermolecular_forces from "@components/pages/docs/grade-12/chemistry/aqueous_solution_forces/Intermolecular_forces";
-import Acid_base_theory from "@components/pages/docs/grade-12/chemistry/acid_base/Acid_base_theory";
-import AcidbaseReaction from "@components/pages/docs/grade-12/chemistry/acid_base/Acid_base_reaction";
-import Aqueous_solution_ph from "@components/pages/docs/grade-12/chemistry/acid_base/Aqueous_solution_ph";
-import Equilibrium_shift from "@components/pages/docs/grade-12/chemistry/chemical_equilibrium/Equilibrium_shift";
-import Nature_equilibrium from "@components/pages/docs/grade-12/chemistry/chemical_equilibrium/Nature_equilibrium";
-import Ester_fat_oil from "@components/pages/docs/grade-12/chemistry/organic_chemistry/Ester_fat_oil";
-import Aliphatic_acid_derivatives from "@components/pages/docs/grade-12/chemistry/organic_chemistry/Aliphatic_acid_derivatives";
-import Inorganic_compounds from "@components/pages/docs/grade-12/chemistry/organic_chemistry/Inorganic_compounds";
-import Chemica_Practice from "@components/pages/docs/grade-12/chemistry/chemica-kinetics/Kinetics-Practice";
-import AqueousPractice from "@components/pages/docs/grade-12/chemistry/aqueous_solution_forces/Aqueous-Practice";
-import Acid_base_practice from "@components/pages/docs/grade-12/chemistry/acid_base/Acid_base_practice";
-import EquilibriumPractice from "@components/pages/docs/grade-12/chemistry/chemical_equilibrium/Equilibrium-Practice";
-import OrganicPractice from "@components/pages/docs/grade-12/chemistry/organic_chemistry/Organic-Practice";
-import ChemisTables from "@components/pages/docs/grade-12/chemistry/aqueous_solution_forces/Table";
-import Acid_Base_Tables from "@components/pages/docs/grade-12/chemistry/acid_base/Acid_Base_Table";
-import Acid_base_titration from "@components/pages/docs/grade-12/chemistry/acid_base/Acid_base_titration";
-import Equilibrium_Acid_Base_Salt from "@components/pages/docs/grade-12/chemistry/chemical_equilibrium/Equilibrium_Acid_Base_Salt";
+import dynamic from "next/dynamic";
+const RateChemicalReaction: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/chemica-kinetics/Rate-chemical-reaction"
+    )
+);
+const Reaction_rate_factors: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/chemica-kinetics/Reaction_rate_factors"
+    )
+);
+const Aqueous_solution: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/aqueous_solution_forces/Aqueous_solution"
+    )
+);
+const Intermolecular_forces: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/aqueous_solution_forces/Intermolecular_forces"
+    )
+);
+const Acid_base_theory: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/acid_base/Acid_base_theory"
+    )
+);
+const AcidbaseReaction: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/acid_base/Acid_base_reaction"
+    )
+);
+const Aqueous_solution_ph: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/acid_base/Aqueous_solution_ph"
+    )
+);
+const Equilibrium_shift: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/chemical_equilibrium/Equilibrium_shift"
+    )
+);
+const Nature_equilibrium: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/chemical_equilibrium/Nature_equilibrium"
+    )
+);
+const Ester_fat_oil: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/organic_chemistry/Ester_fat_oil"
+    )
+);
+const Aliphatic_acid_derivatives: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/organic_chemistry/Aliphatic_acid_derivatives"
+    )
+);
+const Inorganic_compounds: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/organic_chemistry/Inorganic_compounds"
+    )
+);
+const Chemica_Practice: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/chemica-kinetics/Kinetics-Practice"
+    )
+);
+const AqueousPractice: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/aqueous_solution_forces/Aqueous-Practice"
+    )
+);
+const Acid_base_practice: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/acid_base/Acid_base_practice"
+    )
+);
+const EquilibriumPractice: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/chemical_equilibrium/Equilibrium-Practice"
+    )
+);
+const OrganicPractice: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/organic_chemistry/Organic-Practice"
+    )
+);
+const ChemisTables: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/aqueous_solution_forces/Table"
+    )
+);
+const Acid_Base_Tables: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/acid_base/Acid_Base_Table"
+    )
+);
+const Acid_base_titration: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/acid_base/Acid_base_titration"
+    )
+);
+const Equilibrium_Acid_Base_Salt: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/chemistry/chemical_equilibrium/Equilibrium_Acid_Base_Salt"
+    )
+);
 
 export const chemistry: Content = {
   subject: "chemistry",

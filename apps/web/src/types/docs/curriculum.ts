@@ -4,6 +4,8 @@
 
 // ===== CURRICULUM HIERARCHY =====
 
+export type TopicComponent = React.ComponentType<{ size?: number; className?: string }>
+
 // Grade level (e.g., Grade 12)
 export interface Grade {
   grade: string; // English grade identifier (e.g., "grade-12")
@@ -33,6 +35,6 @@ export interface Lesson {
 export interface Topic {
   title: string; // Khmer topic name (e.g., "លីមីត ០/០")
   englishTitle: string; // English topic identifier (e.g., "zero-over-zero")
-  component: React.ComponentType<{ size?: number; className?: string }>; // Topic component
+  component: TopicComponent;
   subtopics?: Topic[]; // Optional subtopics within this topic
 }

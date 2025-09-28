@@ -94,7 +94,7 @@ export default function LogIn({
             <button
                 type="submit"
                 disabled={!isLoginValid() || isSubmitting}
-                className="w-full bg-indigo-600 text-white py-3 px-4 rounded-full font-semibold hover:bg-indigo-500 transition-colors duration-300 shadow-lg shadow-indigo-500/30 border border-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-indigo-600 text-white py-3 px-4 rounded-full font-semibold hover:bg-indigo-500 transition-colors duration-300 shadow-lg shadow-indigo-500/30 border border-white/20 disabled:cursor-not-allowed"
             >
                 {isSubmitting ? 'កំពុងចូល...' : 'ចូលទៅកាន់'}
             </button>
