@@ -17,22 +17,22 @@ export const physics: Content = {
         {
           title: "ចលនាត្រង់",
           englishTitle: "Rectilinear-Motion",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ច្បាប់ចលនារបស់ញូតុន",
           englishTitle: "Newtons-Laws-of-Motion",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "កម្មន្ត ថាមពល និងអានុភាព",
           englishTitle: "Work-Energy-and-Power",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "សម្ពាធនៃសន្ទនីយស្តាទិច",
           englishTitle: "Pressure-of-Static-Fluids",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -45,17 +45,17 @@ export const physics: Content = {
         {
           title: "សីតុណ្ហភាព",
           englishTitle: "Temperature",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ទ្រឹស្តីស៊ីនេទិចនៃរូបធាតុ",
           englishTitle: "Kinetic-Theory-of-Matter",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "កម្ដៅ",
           englishTitle: "Heat",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -68,17 +68,17 @@ export const physics: Content = {
         {
           title: "អេឡិចត្រូស្តាទិច",
           englishTitle: "Electrostatics",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ចរន្តជាប់និងម៉ាញេទិច",
           englishTitle: "Direct-Current-and-Magnetism",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ចរន្តឆ្លាស់",
           englishTitle: "Alternating-Current",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -91,12 +91,12 @@ export const physics: Content = {
         {
           title: "ធម្មជាតិនិងដំណាលនៃពន្លឺ",
           englishTitle: "Nature-and-Propagation-of-Light",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ឡង់ទី",
           englishTitle: "Lenses",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -110,13 +110,13 @@ export const physics: Content = {
           title: "ការបំប្លែងថាមពលដែលមានប្រភពខុសៗគ្នាឱ្យទៅជាថាមពលអគ្គិសនី",
           englishTitle:
             "Conversion-of-Energy-from-Different-Sources-into-Electrical-Energy",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ការបំប្លែងថាមពលអគ្គិសនីឱ្យទៅជាថាមពលផ្សេងៗ",
           englishTitle:
             "Conversion-of-Electrical-Energy-into-Other-Forms-of-Energy",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },

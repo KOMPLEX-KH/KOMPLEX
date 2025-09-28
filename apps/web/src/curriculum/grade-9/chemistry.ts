@@ -17,12 +17,12 @@ export const chemistry: Content = {
         {
           title: "តារាងខួបនៃធាតុគីមី",
           englishTitle: "Periodic-Table-of-Chemical-Elements",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "លក្ខណៈធាតុតាមក្រុម",
           englishTitle: "Characteristics-of-Elements-by-Group",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -35,17 +35,17 @@ export const chemistry: Content = {
         {
           title: "កាបួន",
           englishTitle: "Carbon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "អុកស៊ីសែន",
           englishTitle: "Oxygen",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "អ៊ីដ្រូសែន",
           englishTitle: "Hydrogen",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -58,22 +58,22 @@ export const chemistry: Content = {
         {
           title: "អុកស៊ីត",
           englishTitle: "Oxide",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "អាស៊ីត",
           englishTitle: "Acid",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "បាស",
           englishTitle: "Base",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "អំបិល",
           englishTitle: "Salt",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
