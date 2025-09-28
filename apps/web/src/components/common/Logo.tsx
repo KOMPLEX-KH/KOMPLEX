@@ -55,7 +55,7 @@ export const Logo = ({ isVertical = false, size = "md", isLoading = false, varia
     const currentVariant = variantConfig[variant];
 
     return (
-        <div className={`flex items-center justify-center ${currentSize.gap} ${isVertical ? 'flex-col' : 'flex-row'} ${isLoading ? 'animate-pulse' : ''}`}>
+        <div className={`flex items-center justify-center ${currentSize.gap} ${isVertical ? 'flex-col' : 'flex-row'} ${isLoading ? 'opacity-70 animate-pulse' : ''}`}>
             <img src={currentVariant.logo} alt="logo" className={currentSize.image} />
             {showText && (
                 <div className="flex items-center justify-center gap-0">

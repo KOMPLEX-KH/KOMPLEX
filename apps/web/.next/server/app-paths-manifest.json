@@ -1,10 +1,5 @@
 {
-  "/auth/page": "app/auth/page.js",
-  "/blogs/[id]/page": "app/blogs/[id]/page.js",
-  "/blogs/page": "app/blogs/page.js",
   "/docs/[grade]/[subject]/[lesson]/[topic]/page": "app/docs/[grade]/[subject]/[lesson]/[topic]/page.js",
   "/docs/page": "app/docs/page.js",
-  "/forums/[id]/page": "app/forums/[id]/page.js",
-  "/forums/page": "app/forums/page.js",
   "/page": "app/page.js"
 }

@@ -1,46 +1,60 @@
-import EquationFunction from "@/components/pages/docs/grade-12/math/function/Equation-Function";
-import ExponentialFunction from "@/components/pages/docs/grade-12/math/function/Exponential-Function";
-import FunctionAnalysisPlan from "@/components/pages/docs/grade-12/math/function/Function-Analysis-Plan";
-import FunctionDefinition from "@/components/pages/docs/grade-12/math/function/Function-Definition";
-import FunctionPractice from "@/components/pages/docs/grade-12/math/function/Function-Practice";
-import LogarithmicFunction from "@/components/pages/docs/grade-12/math/function/Logarithmic-Function";
-import PolynomialFunction from "@/components/pages/docs/grade-12/math/function/Polynomial-Function";
 import { Topic } from "@/types/docs/curriculum";
 
 export const Function: Topic[] = [
   {
     title: "និយមន័យអនុគមន៍",
     englishTitle: "Function-Definition",
-    component: FunctionDefinition,
+    component: () =>
+      import(
+        "@/components/pages/docs/grade-12/math/function/Function-Definition"
+      ),
   },
   {
     title: "អនុគមន៍សនិទាន",
     englishTitle: "Polynomial-Function",
-    component: PolynomialFunction,
+    component: () =>
+      import(
+        "@/components/pages/docs/grade-12/math/function/Polynomial-Function"
+      ),
   },
   {
     title: "អនុគមន៍អិចស្បូណង់ស្យែល ",
     englishTitle: "Exponential-Function",
-    component: ExponentialFunction,
+    component: () =>
+      import(
+        "@/components/pages/docs/grade-12/math/function/Exponential-Function"
+      ),
   },
   {
     title: "អនុគមន៍ឡូការីត",
     englishTitle: "Logarithmic-Function",
-    component: LogarithmicFunction,
+    component: () =>
+      import(
+        "@/components/pages/docs/grade-12/math/function/Logarithmic-Function"
+      ),
   },
   {
     title: "សមីការ",
     englishTitle: "Equation-Function",
-    component: EquationFunction,
+    component: () =>
+      import(
+        "@/components/pages/docs/grade-12/math/function/Equation-Function"
+      ),
   },
   {
     title: "ប្លង់សិក្សាអនុគមន៍",
     englishTitle: "Function-Analysis-Plan",
-    component: FunctionAnalysisPlan,
+    component: () =>
+      import(
+        "@/components/pages/docs/grade-12/math/function/Function-Analysis-Plan"
+      ),
   },
   {
     title: "លំហាត់អនុវត្ត",
     englishTitle: "Function-Practice",
-    component: FunctionPractice,
+    component: () =>
+      import(
+        "@/components/pages/docs/grade-12/math/function/Function-Practice"
+      ),
   },
 ];

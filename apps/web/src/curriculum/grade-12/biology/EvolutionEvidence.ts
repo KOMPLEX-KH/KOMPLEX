@@ -1,22 +1,28 @@
-import ComparativeStudy from "@/components/pages/docs/grade-12/biology/evolutionEvidence/ComparativeStudy";
-import DescriptionDarwin from "@/components/pages/docs/grade-12/biology/evolutionEvidence/Description";
-import OriginOfSpecies from "@/components/pages/docs/grade-12/biology/evolutionEvidence/OriginOfSpecies";
 import { Topic } from "@/types/docs/curriculum";
 
 export const EvolutionEvidence: Topic[] = [
   {
     title: "បំណកស្រាយភស្ដុតាងនៃការវិវត្ត",
     englishTitle: "evolution-evidence-description",
-    component: DescriptionDarwin,
+    component: () =>
+      import(
+        "@/components/pages/docs/grade-12/biology/evolutionEvidence/Description"
+      ),
   },
   {
     title: "ទំនាក់ទំនងសែស្រឡាយរវាងប្រភេទផ្សេង",
     englishTitle: "comparative-study-between-species",
-    component: ComparativeStudy,
+    component: () =>
+      import(
+        "@/components/pages/docs/grade-12/biology/evolutionEvidence/ComparativeStudy"
+      ),
   },
   {
     title: "ដើមកំណើតប្រភេទ",
     englishTitle: "birth-of-species",
-    component: OriginOfSpecies,
+    component: () =>
+      import(
+        "@/components/pages/docs/grade-12/biology/evolutionEvidence/OriginOfSpecies"
+      ),
   },
 ];

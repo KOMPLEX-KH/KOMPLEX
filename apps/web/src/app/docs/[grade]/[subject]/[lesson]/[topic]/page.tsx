@@ -1,11 +1,14 @@
 'use client';
 
+import Skeleton from "@/components/pages/docs/common/Skeleton";
 import { curriculum } from "@/curriculum";
 import DocHeader from "@components/pages/docs/common/DocHeader";
 import Sidebar from "@components/pages/docs/common/Sidebar";
 import TopicWrapper from "@components/pages/docs/common/TopicWrapper";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import { useParams } from "next/navigation";
+import { FC } from "react";
 
 type Params = { grade: string; subject: string; lesson: string; topic: string };
 
@@ -48,7 +51,10 @@ export default function Page() {
         return notFound();
     }
 
-    const Component = topic.component;
+    const path = topic.component;
+    const Component = dynamic(() => path(), {
+        loading: () => <Skeleton></Skeleton>,
+    });
 
     return (
         <div className="flex bg-gray-50 min-h-screen">

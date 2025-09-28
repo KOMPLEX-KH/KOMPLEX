@@ -1,47 +1,39 @@
-import ComplexDefinition from "@/components/pages/docs/grade-12/math/complex/Complex-Definition";
-import ComplexModulus from "@/components/pages/docs/grade-12/math/complex/Complex-Modulus";
-import ComplexMultiplicationDivision from "@/components/pages/docs/grade-12/math/complex/Complex-Multiplication-Devision";
-import ComplexOperations from "@/components/pages/docs/grade-12/math/complex/Complex-Operations";
-import ComplexPractice from "@/components/pages/docs/grade-12/math/complex/Complex-Practice";
-import QuadraticEquation from "@/components/pages/docs/grade-12/math/complex/Quadratic-Equation";
-import TrigonometricForm from "@/components/pages/docs/grade-12/math/complex/Trigonometric-Form";
 import { Topic } from "@/types/docs/curriculum";
 
 export const Complex: Topic[] = [
   {
     title: "និយមន័យកុំផ្លិច",
     englishTitle: "Complex-Definition",
-    component: ComplexDefinition,
+    component: () => import("@/components/pages/docs/grade-12/math/complex/Complex-Definition"),
   },
-
   {
     title: "ប្រមាណវិធីបូក ដកចំនួនកុំផ្លិច",
     englishTitle: "Complex-Operations",
-    component: ComplexOperations,
+    component: () => import("@/components/pages/docs/grade-12/math/complex/Complex-Operations"),
   },
   {
     title: "ប្រមាណវិធីគុណ និងចែកចំនួនកុំផ្លិច",
     englishTitle: "Complex-Multiplication-Division",
-    component: ComplexMultiplicationDivision,
+    component: () => import("@/components/pages/docs/grade-12/math/complex/Complex-Multiplication-Devision"),
   },
   {
     title: "ម៉ូឌុលនៃកុំផ្លិច",
     englishTitle: "Complex-Modulus",
-    component: ComplexModulus,
+    component: () => import("@/components/pages/docs/grade-12/math/complex/Complex-Modulus"),
   },
   {
     title: "សមីការដឺក្រេទី ២",
     englishTitle: "Quadratic-Equation",
-    component: QuadraticEquation,
+    component: () => import("@/components/pages/docs/grade-12/math/complex/Quadratic-Equation"),
   },
   {
     title: "ទម្រង់ត្រីកោណមាត្រ",
     englishTitle: "Trigonometric-Form",
-    component: TrigonometricForm,
+    component: () => import("@/components/pages/docs/grade-12/math/complex/Trigonometric-Form"),
   },
   {
     title: "លំហាត់អនុវត្ត",
     englishTitle: "Complex-Practice",
-    component: ComplexPractice,
+    component: () => import("@/components/pages/docs/grade-12/math/complex/Complex-Practice"),
   },
 ];
