@@ -1,6 +1,6 @@
 import TopicPracticeBox from "../../../common/box/TopicPracticeBox";
 import { InlineMath } from "react-katex";
-import 'katex/dist/katex.min.css';
+
 import SummaryBox from "../../../common/box/SummaryBox";
 import { BookAIcon } from "lucide-react";
 import { PracticeExercise, SummarySection } from "@/types/docs/topic";

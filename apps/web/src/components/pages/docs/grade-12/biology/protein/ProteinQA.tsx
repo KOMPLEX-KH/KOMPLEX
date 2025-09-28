@@ -1,5 +1,5 @@
 import TopicPracticeBox from "../../../common/box/TopicPracticeBox";
-import 'katex/dist/katex.min.css';
+
 import { PracticeExercise } from "@/types/docs/topic";
 
 

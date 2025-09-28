@@ -1,6 +1,6 @@
 import TopicPracticeBox from "../../../common/box/TopicPracticeBox";
 import { BlockMath, InlineMath } from "react-katex";
-import 'katex/dist/katex.min.css';
+
 import HintBox from "../../../common/box/HintBox";
 import SummaryBox from "../../../common/box/SummaryBox";
 import { AlertTriangleIcon, BookAIcon, ChartBarIcon, LightbulbIcon, WrenchIcon } from "lucide-react";

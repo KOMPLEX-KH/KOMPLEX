@@ -7,7 +7,7 @@ import WarningBox from "../../../common/box/WarningBox";
 import { ImageBox } from "../../../common/box/explanation-box/ImageExplanationBox";
 import { TopicContent } from "@/types/docs/topic";
 import { InlineMath } from "react-katex";
-import "katex/dist/katex.min.css";
+
 import { BlockMath } from "react-katex";
 import { GraphExplanationBox } from "../../../common/box/explanation-box/GraphExplanationBox";
 
