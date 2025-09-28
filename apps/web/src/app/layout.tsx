@@ -5,6 +5,8 @@ import Header from "@components/common/Header";
 import ModalRoot from "@components/common/ModalRoot";
 import Script from "next/script";
 import { AuthProvider } from "@hooks/useAuth";
+import "katex/dist/katex.min.css";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,7 +41,7 @@ export default function RootLayout({
     <html lang="kh" className={poppins.className}>
       <head>
         <meta charSet="utf-8" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/app/favicon.ico" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
@@ -52,6 +54,7 @@ export default function RootLayout({
         <Script id="eruda-init" strategy="beforeInteractive">
           {`eruda.init();`}
         </Script> */}
+
         <AuthProvider>
           <Header />
           {children}

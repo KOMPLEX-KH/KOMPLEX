@@ -8,7 +8,6 @@ import TopicWrapper from "@components/pages/docs/common/TopicWrapper";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import { useParams } from "next/navigation";
-import { FC } from "react";
 
 type Params = { grade: string; subject: string; lesson: string; topic: string };
 
@@ -51,8 +50,8 @@ export default function Page() {
         return notFound();
     }
 
-    const path = topic.component;
-    const Component = dynamic(() => path(), {
+    const importPath = topic.component;
+    const Component = dynamic(() => importPath(), {
         loading: () => <Skeleton></Skeleton>,
     });
 
