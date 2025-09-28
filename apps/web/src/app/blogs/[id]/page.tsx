@@ -135,10 +135,10 @@ export default function BlogPost() {
                                             e.currentTarget.nextElementSibling?.classList.remove('hidden');
                                         }}
                                     />
-                                ) : null}
-                                <div className={`w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold ${blogPost.profileImage ? 'hidden' : ''}`}>
+                                ) : <div className={`w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold ${blogPost.profileImage ? 'hidden' : ''}`}>
                                     {blogPost.username.split(" ")[0].charAt(0)}
-                                </div>
+                                </div>}
+
                                 <span className="font-semibold text-gray-900 hover:underline">{blogPost.username}</span>
                             </Link>
 

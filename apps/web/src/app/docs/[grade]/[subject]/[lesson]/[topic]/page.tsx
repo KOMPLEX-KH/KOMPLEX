@@ -1,6 +1,6 @@
 'use client';
 
-import { curriculum } from "@/curriculum/curriculum";
+import { curriculum } from "@/curriculum";
 import DocHeader from "@components/pages/docs/common/DocHeader";
 import Sidebar from "@components/pages/docs/common/Sidebar";
 import TopicWrapper from "@components/pages/docs/common/TopicWrapper";
@@ -10,6 +10,7 @@ import { useParams } from "next/navigation";
 type Params = { grade: string; subject: string; lesson: string; topic: string };
 
 const getTopicComponent = (params: Params) => {
+
     const grade = curriculum.find(g => g.grade === params.grade);
     const subject = grade?.content.find(s => s.subject === params.subject);
     const lesson = subject?.lessons.find(l => l.lesson === params.lesson);

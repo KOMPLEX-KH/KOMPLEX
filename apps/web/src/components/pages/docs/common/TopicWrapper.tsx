@@ -1,3 +1,5 @@
+"use client"
+
 import { ArrowLeft, ArrowRight, Share2, Download, Copy, X, Maximize2 } from "lucide-react";
 import Link from "next/link";
 import { Menu, Transition } from "@headlessui/react";

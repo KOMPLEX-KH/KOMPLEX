@@ -222,7 +222,7 @@ export default function SignUp({
                             type="date"
                             value={signupData.dateOfBirth}
                             onChange={(e) => setSignupData(prev => ({ ...prev, dateOfBirth: e.target.value }))}
-                            className="w-full pl-10 pr-4 py-3 border border-indigo-500/20 rounded-full bg-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
+                            className="pl-10 pr-4 py-3 border w-4/5 border-indigo-500/20 rounded-full bg-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
                             disabled={isSubmitting}
                         />
                         {signupData.dateOfBirth && getValidationError('dateOfBirth', signupData.dateOfBirth) && (

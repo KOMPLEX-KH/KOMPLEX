@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { curriculum } from "@/curriculum/curriculum";
+import { curriculum } from "@/curriculum";
 import { Logo } from "@/components/common/Logo";
 
 export default function Docs() {
@@ -19,7 +19,7 @@ export default function Docs() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 animation-pulse">
-            <Logo isVertical={true} size="xl" isLoading={true}/>
+            <Logo isVertical={true} size="xl" isLoading={true} />
         </div>
     );
 }

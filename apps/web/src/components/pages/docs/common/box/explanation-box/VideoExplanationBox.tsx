@@ -1,3 +1,5 @@
+'use client'
+
 import BulletList from '@components/helper/BulletList';
 import { VideoPlayer } from '@components/helper/VideoPlayer';
 import { Video, Maximize2, X } from 'lucide-react';

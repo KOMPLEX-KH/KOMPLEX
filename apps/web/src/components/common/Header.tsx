@@ -106,7 +106,7 @@ export default function Header() {
                                                     <Link
                                                         href={link.href}
                                                         className={`flex items-center gap-3 bg-transparent w-full text-left px-4 py-3 rounded-full text-sm text-gray-600 no-underline font-medium  transition-all duration-300 ${isActive
-                                                            ? 'text-indigo-600  shadow-sm border border-indigo-500/10'
+                                                            ? 'text-indigo-600   '
                                                             : 'hover:text-indigo-600  bg-transparent'
                                                             }`}
                                                     >
@@ -124,21 +124,21 @@ export default function Header() {
                                         <div className='h-0.5  my-2'></div>
                                         {user ? (
                                             <>
-                                                <Link href={"/me/profile"} className="flex items-center gap-3 px-2 py-2">
+                                                <Link href={"/me/profile"} className="flex items-center gap-3 px-2 py-2 overflow-hidden">
                                                     {user?.profileImage ? (
                                                         <img
                                                             src={user.profileImage}
                                                             alt="Profile"
                                                             className="w-8 h-8 border border-indigo-500 rounded-full object-cover"
                                                             onError={(e) => {
-                                                                e.currentTarget.style.display = 'none';
+                                                                e.currentTarget.src = '/image-error.png'
                                                                 e.currentTarget.nextElementSibling?.classList.remove('hidden');
                                                             }}
                                                         />
-                                                    ) : null}
-                                                    <div className={`w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-sm ${user?.profileImage ? 'hidden' : ''}`}>
+                                                    ) : <div className={`w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-sm ${user?.profileImage ? 'hidden' : ''}`}>
                                                         {((`${user?.firstName || ''} ${user?.lastName || ''}`.trim()) || user?.username || user?.email || 'U').toUpperCase().charAt(0)}
-                                                    </div>
+                                                    </div>}
+
                                                     <div>
                                                         <div className="text-sm font-semibold text-gray-900">
                                                             {user ? ((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || 'Unknown') : 'Unknown'}
