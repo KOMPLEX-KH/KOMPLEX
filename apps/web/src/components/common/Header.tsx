@@ -131,14 +131,14 @@ export default function Header() {
                                                             alt="Profile"
                                                             className="w-8 h-8 border border-indigo-500 rounded-full object-cover"
                                                             onError={(e) => {
-                                                                (e.target as HTMLImageElement).src = "/image-error.png";
+                                                                e.currentTarget.style.display = 'none';
+                                                                e.currentTarget.nextElementSibling?.classList.remove('hidden');
                                                             }}
                                                         />
-                                                    ) : (
-                                                        <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-sm">
-                                                            {((`${user?.firstName || ''} ${user?.lastName || ''}`.trim()) || user?.username || user?.email || 'U').toUpperCase().charAt(0)}
-                                                        </div>
-                                                    )}
+                                                    ) : null}
+                                                    <div className={`w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-sm ${user?.profileImage ? 'hidden' : ''}`}>
+                                                        {((`${user?.firstName || ''} ${user?.lastName || ''}`.trim()) || user?.username || user?.email || 'U').toUpperCase().charAt(0)}
+                                                    </div>
                                                     <div>
                                                         <div className="text-sm font-semibold text-gray-900">
                                                             {user ? ((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || 'Unknown') : 'Unknown'}
@@ -226,12 +226,19 @@ export default function Header() {
                             <HeadlessMenu as="div" className="relative ml-2">
                                 <HeadlessMenu.Button className="flex items-center gap-2 rounded-full transition-colors duration-200 cursor-pointer focus:outline-none">
                                     {user.profileImage ? (
-                                        <img src={user.profileImage} alt="Profile" className="w-8 h-8 border border-indigo-500 rounded-full object-cover" />
-                                    ) : (
-                                        <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-sm">
-                                            {((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || user.email || 'U').charAt(0)}
-                                        </div>
-                                    )}
+                                        <img
+                                            src={user.profileImage}
+                                            alt="Profile"
+                                            className="w-8 h-8 border border-indigo-500 rounded-full object-cover"
+                                            onError={(e) => {
+                                                e.currentTarget.style.display = 'none';
+                                                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                                            }}
+                                        />
+                                    ) : null}
+                                    <div className={`w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-sm ${user.profileImage ? 'hidden' : ''}`}>
+                                        {((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || user.email || 'U').charAt(0)}
+                                    </div>
                                 </HeadlessMenu.Button>
 
                                 <Transition
@@ -246,12 +253,19 @@ export default function Header() {
                                         {/* User Info Section */}
                                         <div className="flex items-center gap-3">
                                             {user.profileImage ? (
-                                                <img src={user.profileImage} alt="Profile" className="w-12 h-12 border border-indigo-500 rounded-full object-cover" />
-                                            ) : (
-                                                <div className="w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-lg">
-                                                    {((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || user.email || 'U').charAt(0)}
-                                                </div>
-                                            )}
+                                                <img
+                                                    src={user.profileImage}
+                                                    alt="Profile"
+                                                    className="w-12 h-12 border border-indigo-500 rounded-full object-cover"
+                                                    onError={(e) => {
+                                                        e.currentTarget.style.display = 'none';
+                                                        e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                                                    }}
+                                                />
+                                            ) : null}
+                                            <div className={`w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-lg ${user.profileImage ? 'hidden' : ''}`}>
+                                                {((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || user.email || 'U').charAt(0)}
+                                            </div>
                                             <div>
                                                 <h3 className="font-semibold text-gray-900 text-sm">
                                                     {((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || 'User')}

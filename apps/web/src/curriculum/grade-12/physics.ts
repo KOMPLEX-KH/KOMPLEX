@@ -1,16 +1,63 @@
-import { Content } from "@/types/docs/curriculum";
+import { Content, TopicComponent } from "@/types/docs/curriculum";
 import { Atom } from "lucide-react";
-import KineticTheory from "@components/pages/docs/grade-12/physic/thermodynamic/Kinetic-Theory";
-import FirstLawThermodynamics from "@components/pages/docs/grade-12/physic/thermodynamic/First-Law-Thermodynamics";
-import Engines from "@components/pages/docs/grade-12/physic/thermodynamic/Engines";
-import PrincipleWaves from "@components/pages/docs/grade-12/physic/waves/Principle-Waves";
-import ThermoPractice from "@components/pages/docs/grade-12/physic/thermodynamic/Thermo-Practice";
-import WavesPractice from "@components/pages/docs/grade-12/physic/waves/Waves-Practice";
-import MagneticField from "@components/pages/docs/grade-12/physic/electricity&magnetism/Magnetic-Field";
-import ElectromagneticInduction from "@components/pages/docs/grade-12/physic/electricity&magnetism/Electromagnetic-Induction";
-import SelfInduction from "@components/pages/docs/grade-12/physic/electricity&magnetism/Self-Induction";
-import AlternatingCircuits from "@components/pages/docs/grade-12/physic/electricity&magnetism/Alternating-Circuits";
-import ElectricityPractice from "@components/pages/docs/grade-12/physic/electricity&magnetism/Electricity-Practice";
+import dynamic from "next/dynamic";
+const KineticTheory: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/physic/thermodynamic/Kinetic-Theory"
+    )
+);
+const FirstLawThermodynamics: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/physic/thermodynamic/First-Law-Thermodynamics"
+    )
+);
+const Engines: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/physic/thermodynamic/Engines")
+);
+const PrincipleWaves: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/physic/waves/Principle-Waves")
+);
+const ThermoPractice: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/physic/thermodynamic/Thermo-Practice"
+    )
+);
+const WavesPractice: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/physic/waves/Waves-Practice")
+);
+const MagneticField: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/physic/electricity&magnetism/Magnetic-Field"
+    )
+);
+const ElectromagneticInduction: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/physic/electricity&magnetism/Electromagnetic-Induction"
+    )
+);
+const SelfInduction: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/physic/electricity&magnetism/Self-Induction"
+    )
+);
+const AlternatingCircuits: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/physic/electricity&magnetism/Alternating-Circuits"
+    )
+);
+const ElectricityPractice: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/physic/electricity&magnetism/Electricity-Practice"
+    )
+);
 
 export const physics: Content = {
   subject: "physics",

@@ -1,4 +1,5 @@
-import { Content } from "@/types/docs/curriculum";
+import { Content, TopicComponent } from "@/types/docs/curriculum";
+import dynamic from "next/dynamic";
 import {
   Leaf,
   Flower2,
@@ -14,66 +15,275 @@ import {
   Search,
   Hammer,
 } from "lucide-react";
-import GymnospermTypes from "@components/pages/docs/grade-12/biology/gymnosperms/GymnospermTypes";
-import GymnospermVegetativeOrgans from "@components/pages/docs/grade-12/biology/gymnosperms/GymnospermVegetativeOrgans";
-import GymnospermReproductiveOrgans from "@components/pages/docs/grade-12/biology/gymnosperms/GymnospermReproductiveOrgans";
-import GymnospermLifeCycle from "@components/pages/docs/grade-12/biology/gymnosperms/GymnospermLifeCycle";
-import ComingSoon from "@components/pages/docs/common/ComingSoon";
-import FormAminoAcid from "@components/pages/docs/grade-12/biology/aminoAcid/FormAminoAcid";
-import TypesAminoAcid from "@components/pages/docs/grade-12/biology/aminoAcid/TypesAminoAcid";
-import Peptide from "@components/pages/docs/grade-12/biology/aminoAcid/Peptide";
-import StructureProtein from "@components/pages/docs/grade-12/biology/protein/StructureProtein";
-import FunctionProtein from "@components/pages/docs/grade-12/biology/protein/FunctionProtein";
-import ProteinDenaturation from "@components/pages/docs/grade-12/biology/protein/ProteinDenaturation";
-import EnzymeDefinition from "@components/pages/docs/grade-12/biology/enzymes/EnzymeDefinition";
-import EnzymeFunction from "@components/pages/docs/grade-12/biology/enzymes/EnzymeFunction";
-import CharacteristicEnzyme from "@components/pages/docs/grade-12/biology/enzymes/CharacteristicEnzyme";
-import ChemicalComposition from "@components/pages/docs/grade-12/biology/adn/ChemicalComposition";
-import MolecularForm from "@components/pages/docs/grade-12/biology/adn/MolecularForm";
-import DnaQuantity from "@components/pages/docs/grade-12/biology/adn/DnaQuantity";
-import DnaVsProtein from "@components/pages/docs/grade-12/biology/geneExpression/DnaVsProtein";
-import GeneticCode from "@components/pages/docs/grade-12/biology/geneExpression/GeneticCode";
-import Ribosome from "@components/pages/docs/grade-12/biology/geneExpression/Ribosome";
-import Translation from "@components/pages/docs/grade-12/biology/geneExpression/Translation";
-import PhenotypeExpression from "@components/pages/docs/grade-12/biology/geneExpression/PhenotypeExpression";
-import PlantBreeding from "@components/pages/docs/grade-12/biology/biotechnology/PlantBreeding";
-import AnimalBreeding from "@components/pages/docs/grade-12/biology/biotechnology/AnimalBreeding";
-import PlantOffspring from "@components/pages/docs/grade-12/biology/biotechnology/PlantOffspring";
-import AnimalOffspring from "@components/pages/docs/grade-12/biology/biotechnology/AnimalOffspring";
-import Polyploidy from "@components/pages/docs/grade-12/biology/biotechnology/Polyploidy";
-import GeneTransferStages from "@components/pages/docs/grade-12/biology/biotechnology/GeneTransferStages";
-import GeneTransferExamples from "@components/pages/docs/grade-12/biology/biotechnology/GeneTransferExamples";
-import GeneticEngineering from "@components/pages/docs/grade-12/biology/biotechnology/GeneticEngineering";
-import Dangers from "@components/pages/docs/grade-12/biology/biotechnology/Dangers";
-import Observations from "@components/pages/docs/grade-12/biology/darwinTheory/Observations";
-import GalapagosOrganisms from "@components/pages/docs/grade-12/biology/darwinTheory/GalapagosOrganisms";
-import Evolution from "@components/pages/docs/grade-12/biology/darwinTheory/Evolution";
-import NaturalSelection from "@components/pages/docs/grade-12/biology/darwinTheory/NaturalSelection";
-import DescriptionDarwin from "@components/pages/docs/grade-12/biology/evolutionEvidence/Description";
-import ComparativeStudy from "@components/pages/docs/grade-12/biology/evolutionEvidence/ComparativeStudy";
-import OriginOfSpecies from "@components/pages/docs/grade-12/biology/evolutionEvidence/OriginOfSpecies";
-import FossilFormation from "@components/pages/docs/grade-12/biology/flaskConical/FossilFormation";
-import FossilDating from "@components/pages/docs/grade-12/biology/flaskConical/FossilDating";
-import FossilImportance from "@components/pages/docs/grade-12/biology/flaskConical/FossilImportance";
-import AngiospermVegetativeOrgan from "@components/pages/docs/grade-12/biology/angiosperm/AngiospermVegetativeOrgan";
-import AngiospermReproductiveOrgan from "@components/pages/docs/grade-12/biology/angiosperm/AngiospermReproductiveOrgan";
-import PollinationProcess from "@components/pages/docs/grade-12/biology/angiosperm/PollinationProcess";
-import Reproduction from "@components/pages/docs/grade-12/biology/angiosperm/Reproduction";
-import LifeCycle from "@components/pages/docs/grade-12/biology/angiosperm/LifeCycle";
-import Comparision from "@components/pages/docs/grade-12/biology/angiosperm/Comparision";
-import Advantage from "@components/pages/docs/grade-12/biology/angiosperm/Advantage";
-import NoneSpine from "@components/pages/docs/grade-12/biology/nervous/NoneSpine";
-import Spine from "@components/pages/docs/grade-12/biology/nervous/Spine";
-import Role from "@components/pages/docs/grade-12/biology/nervous/Role";
-import Neuron from "@components/pages/docs/grade-12/biology/nervous/Neuron";
-import CentralNervous from "@components/pages/docs/grade-12/biology/nervous/CentralNervous";
-import ADNFormulars from "@components/pages/docs/grade-12/biology/adn/ADNFormulars";
-import QuestionAnswer from "@components/pages/docs/grade-12/biology/adn/QuestionAnswer";
-import BigBrain from "@components/pages/docs/grade-12/biology/nervous/BigBrain";
-import SmallBrain from "@components/pages/docs/grade-12/biology/nervous/SmallBrain";
-import Medicine from "@components/pages/docs/grade-12/biology/nervous/Medicine";
-import PeripheralNervous from "@components/pages/docs/grade-12/biology/nervous/PeripheralNervous";
-import Back from "@components/pages/docs/grade-12/biology/nervous/Back";
+const GymnospermTypes: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/gymnosperms/GymnospermTypes"
+    )
+);
+const GymnospermVegetativeOrgans: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/gymnosperms/GymnospermVegetativeOrgans"
+    )
+);
+const GymnospermReproductiveOrgans: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/gymnosperms/GymnospermReproductiveOrgans"
+    )
+);
+const GymnospermLifeCycle: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/gymnosperms/GymnospermLifeCycle"
+    )
+);
+const ComingSoon: TopicComponent = dynamic(
+  () => import("@components/pages/docs/common/ComingSoon")
+);
+const FormAminoAcid: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/biology/aminoAcid/FormAminoAcid")
+);
+const TypesAminoAcid: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/biology/aminoAcid/TypesAminoAcid")
+);
+const Peptide: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/aminoAcid/Peptide")
+);
+const StructureProtein: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/biology/protein/StructureProtein")
+);
+const FunctionProtein: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/biology/protein/FunctionProtein")
+);
+const ProteinDenaturation: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/protein/ProteinDenaturation"
+    )
+);
+const EnzymeDefinition: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/biology/enzymes/EnzymeDefinition")
+);
+const EnzymeFunction: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/enzymes/EnzymeFunction")
+);
+const CharacteristicEnzyme: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/enzymes/CharacteristicEnzyme"
+    )
+);
+const ChemicalComposition: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/biology/adn/ChemicalComposition")
+);
+const MolecularForm: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/adn/MolecularForm")
+);
+const DnaQuantity: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/adn/DnaQuantity")
+);
+const DnaVsProtein: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/geneExpression/DnaVsProtein"
+    )
+);
+const GeneticCode: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/biology/geneExpression/GeneticCode")
+);
+const Ribosome: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/biology/geneExpression/Ribosome")
+);
+const Translation: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/biology/geneExpression/Translation")
+);
+const PhenotypeExpression: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/geneExpression/PhenotypeExpression"
+    )
+);
+const PlantBreeding: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/biotechnology/PlantBreeding"
+    )
+);
+const AnimalBreeding: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/biotechnology/AnimalBreeding"
+    )
+);
+const PlantOffspring: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/biotechnology/PlantOffspring"
+    )
+);
+const AnimalOffspring: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/biotechnology/AnimalOffspring"
+    )
+);
+const Polyploidy: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/biology/biotechnology/Polyploidy")
+);
+const GeneTransferStages: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/biotechnology/GeneTransferStages"
+    )
+);
+const GeneTransferExamples: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/biotechnology/GeneTransferExamples"
+    )
+);
+const GeneticEngineering: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/biotechnology/GeneticEngineering"
+    )
+);
+const Dangers: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/biotechnology/Dangers")
+);
+const Observations: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/biology/darwinTheory/Observations")
+);
+const GalapagosOrganisms: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/darwinTheory/GalapagosOrganisms"
+    )
+);
+const Evolution: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/darwinTheory/Evolution")
+);
+const NaturalSelection: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/darwinTheory/NaturalSelection"
+    )
+);
+const DescriptionDarwin: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/evolutionEvidence/Description"
+    )
+);
+const ComparativeStudy: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/evolutionEvidence/ComparativeStudy"
+    )
+);
+const OriginOfSpecies: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/evolutionEvidence/OriginOfSpecies"
+    )
+);
+const FossilFormation: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/flaskConical/FossilFormation"
+    )
+);
+const FossilDating: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/biology/flaskConical/FossilDating")
+);
+const FossilImportance: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/flaskConical/FossilImportance"
+    )
+);
+const AngiospermVegetativeOrgan: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/angiosperm/AngiospermVegetativeOrgan"
+    )
+);
+const AngiospermReproductiveOrgan: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/angiosperm/AngiospermReproductiveOrgan"
+    )
+);
+const PollinationProcess: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/biology/angiosperm/PollinationProcess"
+    )
+);
+const Reproduction: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/biology/angiosperm/Reproduction")
+);
+const LifeCycle: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/angiosperm/LifeCycle")
+);
+const Comparision: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/angiosperm/Comparision")
+);
+const Advantage: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/angiosperm/Advantage")
+);
+const NoneSpine: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/nervous/NoneSpine")
+);
+const Spine: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/nervous/Spine")
+);
+const Role: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/nervous/Role")
+);
+const Neuron: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/nervous/Neuron")
+);
+const CentralNervous: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/nervous/CentralNervous")
+);
+const ADNFormulars: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/adn/ADNFormulars")
+);
+const QuestionAnswer: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/adn/QuestionAnswer")
+);
+const BigBrain: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/nervous/BigBrain")
+);
+const SmallBrain: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/nervous/SmallBrain")
+);
+const Medicine: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/nervous/Medicine")
+);
+const PeripheralNervous: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/biology/nervous/PeripheralNervous")
+);
+const Back: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/biology/nervous/Back")
+);
 
 export const biology: Content = {
   subject: "biology",

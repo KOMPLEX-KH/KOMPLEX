@@ -1,4 +1,5 @@
-import { Content } from "@/types/docs/curriculum";
+import { Content, TopicComponent } from "@/types/docs/curriculum";
+import dynamic from "next/dynamic";
 import {
   Calculator,
   Target,
@@ -6,69 +7,270 @@ import {
   Variable,
   Box,
 } from "lucide-react";
-import LimitZeroOverZero from "@components/pages/docs/grade-12/math/limit/Limit-Zero-Over-Zero";
-import LimitAsymptotes from "@components/pages/docs/grade-12/math/limit/Limit-Asymptotes";
-import LimitContinuity from "@components/pages/docs/grade-12/math/limit/Limit-Continuity";
-import LimitInfinityMinusInfinity from "@components/pages/docs/grade-12/math/limit/Limit-Infinity-Minus-Infinity";
-import LimitTrigonometric from "@components/pages/docs/grade-12/math/limit/Limit-Trigonometric";
-import LimitExponential from "@components/pages/docs/grade-12/math/limit/Limit-Exponential";
-import LHopitalRule from "@components/pages/docs/grade-12/math/limit/L’Hôpital-Rule";
-import LimitPorformation from "@components/pages/docs/grade-12/math/limit/Limit-Portformation";
-import LimitDefinition from "@components/pages/docs/grade-12/math/limit/LimitDefinition";
-import LimitInfinityOverInfinity from "@components/pages/docs/grade-12/math/limit/Limit-Infinity-Over-Infinity";
-import LimitPractice from "@components/pages/docs/grade-12/math/limit/Limit-Practice";
-import LimitLogarithmic from "@components/pages/docs/grade-12/math/limit/Limit-Logarithmic";
-import DerivativeDefinition from "@components/pages/docs/grade-12/math/derivative/Definition";
-import DerivativePerformation from "@components/pages/docs/grade-12/math/derivative/Derivative-Performation";
-import DerivativeLogarithmic from "@components/pages/docs/grade-12/math/derivative/Derivative-Logarithmic";
-import DerivativeExponential from "@components/pages/docs/grade-12/math/derivative/Derivative-Exponential";
-import DerivativeTrigonometric from "@components/pages/docs/grade-12/math/derivative/Derivative-Trigonometric";
-import DerivativeGeometric from "@components/pages/docs/grade-12/math/derivative/derivative-Geometry";
-import DerivativePractice from "@components/pages/docs/grade-12/math/derivative/Derivative-Practice";
-import DerivativeHighLevel from "@components/pages/docs/grade-12/math/derivative/Derivative-high-level";
-import IntergralDefinition from "@components/pages/docs/grade-12/math/integral/integral-Definition";
-import Integralformular from "@components/pages/docs/grade-12/math/integral/Integral-formular";
-import IndefiniteIntegral from "@components/pages/docs/grade-12/math/integral/Indefinite-Integral";
-import DefiniteIntegral from "@components/pages/docs/grade-12/math/integral/Definite-Integral";
-import IntegralPractice from "@components/pages/docs/grade-12/math/integral/Integral-Practice";
-import VectorDefinition from "@components/pages/docs/grade-12/math/vector/Vector-Definition";
-import differentialdefinition from "@components/pages/docs/grade-12/math/differential-equation/Differential-Definition";
-import DifferentialPractice from "@components/pages/docs/grade-12/math/differential-equation/Differential-Practice";
-import VectorPractice from "@components/pages/docs/grade-12/math/vector/Vector-Practice";
-import TwoDVectorCoordinates from "@components/pages/docs/grade-12/math/vector/2D-Vector-Coordinates";
-import ShapeArea from "@components/pages/docs/grade-12/math/vector/Shape-Area";
-import Volume from "@components/pages/docs/grade-12/math/vector/Volume";
-import Equations from "@components/pages/docs/grade-12/math/vector/Equations";
-import LDE1 from "@components/pages/docs/grade-12/math/differential-equation/LDE1";
-import LDE2 from "@components/pages/docs/grade-12/math/differential-equation/LDE2";
-import LDEGeneral from "@components/pages/docs/grade-12/math/differential-equation/LDE-General";
-import VariousForms from "@components/pages/docs/grade-12/math/differential-equation/Various-Forms";
-import Parabola from "@components/pages/docs/grade-12/math/conic/Parabola";
-import Ellipse from "@components/pages/docs/grade-12/math/conic/Ellipse";
-import Hyperbola from "@components/pages/docs/grade-12/math/conic/Hyperbola";
-import ConicPractice from "@components/pages/docs/grade-12/math/conic/Conic-Practice";
-import FunctionDefinition from "@components/pages/docs/grade-12/math/function/Function-Definition";
-import PolynomialFunction from "@components/pages/docs/grade-12/math/function/Polynomial-Function";
-import ExponentialFunction from "@components/pages/docs/grade-12/math/function/Exponential-Function";
-import LogarithmicFunction from "@components/pages/docs/grade-12/math/function/Logarithmic-Function";
-import EquationFunction from "@components/pages/docs/grade-12/math/function/Equation-Function";
-import FunctionAnalysisPlan from "@components/pages/docs/grade-12/math/function/Function-Analysis-Plan";
-import FunctionPractice from "@components/pages/docs/grade-12/math/function/Function-Practice";
-import ProbabilityDefinition from "@components/pages/docs/grade-12/math/probability/Probability-Definition";
-import ProbabilityCombination from "@components/pages/docs/grade-12/math/probability/Probab-Combination";
-import ProbabilityPermutation from "@components/pages/docs/grade-12/math/probability/Probab-Permutation";
-import ProbabilityPractice from "@components/pages/docs/grade-12/math/probability/Probab-Practice";
-import ComplexDefinition from "@components/pages/docs/grade-12/math/complex/Complex-Definition";
-import ComplexFormulars from "@components/pages/docs/grade-12/math/complex/Complex-Formulars";
-import ComplexOperations from "@components/pages/docs/grade-12/math/complex/Complex-Operations";
-import ComplexModulus from "@components/pages/docs/grade-12/math/complex/Complex-Modulus";
-import QuadraticEquation from "@components/pages/docs/grade-12/math/complex/Quadratic-Equation";
-import TrigonometricForm from "@components/pages/docs/grade-12/math/complex/Trigonometric-Form";
-import ComplexPractice from "@components/pages/docs/grade-12/math/complex/Complex-Practice";
-import ComplexMultiplicationDivision from "@components/pages/docs/grade-12/math/complex/Complex-Multiplication-Devision";
-import CountingPrinciple from "@components/pages/docs/grade-12/math/probability/Counting-Principle";
-import ProbabCompound from "@components/pages/docs/grade-12/math/probability/Probab-Compound";
-import ConicDefinition from "@components/pages/docs/grade-12/math/conic/Conic-Definition";
+const LimitZeroOverZero: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/limit/Limit-Zero-Over-Zero")
+);
+const LimitAsymptotes: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/limit/Limit-Asymptotes")
+);
+const LimitContinuity: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/limit/Limit-Continuity")
+);
+const LimitInfinityMinusInfinity: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/limit/Limit-Infinity-Minus-Infinity"
+    )
+);
+const LimitTrigonometric: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/limit/Limit-Trigonometric")
+);
+const LimitExponential: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/limit/Limit-Exponential")
+);
+const LHopitalRule: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/limit/L’Hôpital-Rule")
+);
+const LimitPorformation: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/limit/Limit-Portformation")
+);
+const LimitDefinition: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/limit/LimitDefinition")
+);
+const LimitInfinityOverInfinity: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/limit/Limit-Infinity-Over-Infinity"
+    )
+);
+const LimitPractice: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/limit/Limit-Practice")
+);
+const LimitLogarithmic: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/limit/Limit-Logarithmic")
+);
+const DerivativeDefinition: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/derivative/Definition")
+);
+const DerivativePerformation: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/derivative/Derivative-Performation"
+    )
+);
+const DerivativeLogarithmic: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/derivative/Derivative-Logarithmic"
+    )
+);
+const DerivativeExponential: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/derivative/Derivative-Exponential"
+    )
+);
+const DerivativeTrigonometric: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/derivative/Derivative-Trigonometric"
+    )
+);
+const DerivativeGeometric: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/derivative/derivative-Geometry"
+    )
+);
+const DerivativePractice: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/derivative/Derivative-Practice"
+    )
+);
+const DerivativeHighLevel: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/derivative/Derivative-high-level"
+    )
+);
+const IntergralDefinition: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/integral/integral-Definition")
+);
+const Integralformular: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/integral/Integral-formular")
+);
+const IndefiniteIntegral: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/integral/Indefinite-Integral")
+);
+const DefiniteIntegral: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/integral/Definite-Integral")
+);
+const IntegralPractice: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/integral/Integral-Practice")
+);
+const VectorDefinition: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/vector/Vector-Definition")
+);
+const differentialdefinition: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/differential-equation/Differential-Definition"
+    )
+);
+const DifferentialPractice: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/differential-equation/Differential-Practice"
+    )
+);
+const VectorPractice: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/vector/Vector-Practice")
+);
+const TwoDVectorCoordinates: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/vector/2D-Vector-Coordinates")
+);
+const ShapeArea: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/vector/Shape-Area")
+);
+const Volume: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/vector/Volume")
+);
+const Equations: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/vector/Equations")
+);
+const LDE1: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/differential-equation/LDE1")
+);
+const LDE2: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/differential-equation/LDE2")
+);
+const LDEGeneral: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/differential-equation/LDE-General"
+    )
+);
+const VariousForms: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/differential-equation/Various-Forms"
+    )
+);
+const Parabola: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/conic/Parabola")
+);
+const Ellipse: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/conic/Ellipse")
+);
+const Hyperbola: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/conic/Hyperbola")
+);
+const ConicPractice: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/conic/Conic-Practice")
+);
+const FunctionDefinition: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/function/Function-Definition")
+);
+const PolynomialFunction: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/function/Polynomial-Function")
+);
+const ExponentialFunction: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/function/Exponential-Function")
+);
+const LogarithmicFunction: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/function/Logarithmic-Function")
+);
+const EquationFunction: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/function/Equation-Function")
+);
+const FunctionAnalysisPlan: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/function/Function-Analysis-Plan"
+    )
+);
+const FunctionPractice: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/function/Function-Practice")
+);
+const ProbabilityDefinition: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/probability/Probability-Definition"
+    )
+);
+const ProbabilityCombination: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/probability/Probab-Combination"
+    )
+);
+const ProbabilityPermutation: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/probability/Probab-Permutation"
+    )
+);
+const ProbabilityPractice: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/probability/Probab-Practice")
+);
+const ComplexDefinition: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/complex/Complex-Definition")
+);
+const ComplexOperations: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/complex/Complex-Operations")
+);
+const ComplexModulus: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/complex/Complex-Modulus")
+);
+const QuadraticEquation: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/complex/Quadratic-Equation")
+);
+const TrigonometricForm: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/complex/Trigonometric-Form")
+);
+const ComplexPractice: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/complex/Complex-Practice")
+);
+const ComplexMultiplicationDivision: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/complex/Complex-Multiplication-Devision"
+    )
+);
+const CountingPrinciple: TopicComponent = dynamic(
+  () =>
+    import(
+      "@components/pages/docs/grade-12/math/probability/Counting-Principle"
+    )
+);
+const ProbabCompound: TopicComponent = dynamic(
+  () =>
+    import("@components/pages/docs/grade-12/math/probability/Probab-Compound")
+);
+const ConicDefinition: TopicComponent = dynamic(
+  () => import("@components/pages/docs/grade-12/math/conic/Conic-Definition")
+);
 
 export const math: Content = {
   subject: "math",
