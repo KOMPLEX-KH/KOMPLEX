@@ -1,3 +1,4 @@
+'use client'
 import { FunctionSquare, Maximize2, X } from "lucide-react";
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';

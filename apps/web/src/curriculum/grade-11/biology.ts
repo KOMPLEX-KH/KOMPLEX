@@ -27,17 +27,17 @@ export const biology: Content = {
         {
           title: "សមាសធាតុគីមីក្នុងកោសិកា",
           englishTitle: "Chemical-Composition-of-Cells",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "រូបផ្តុំនិងនាទីកោសិកា",
           englishTitle: "Cell-Structure-and-Function",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ដំណុះដំណាលកោសិកានិងរូបផ្តុំសារពាង្គកាយរស់",
           englishTitle: "Cell-Development-and-Organization-of-Living-Organisms",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -50,12 +50,12 @@ export const biology: Content = {
         {
           title: "កំណកោសិកាបន្តពូជ",
           englishTitle: "Reproductive-Cells",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ការលូតលាស់របស់អំប្រ៊ីយ៉ុង",
           englishTitle: "Embryonic-Development",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -68,12 +68,12 @@ export const biology: Content = {
         {
           title: "ច្បាប់តំណពូជ",
           englishTitle: "Principles-of-Heredity",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ក្រូម៉ូសូម",
           englishTitle: "Chromosomes",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -86,12 +86,12 @@ export const biology: Content = {
         {
           title: "អាហារ",
           englishTitle: "Nutrition",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ការរំលាយអាហារ",
           englishTitle: "Digestion",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -104,12 +104,12 @@ export const biology: Content = {
         {
           title: "បណ្តូរឧស្ម័នរបស់សត្វ",
           englishTitle: "Gas-Exchange-in-Animals",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ការបញ្ចេញចោល",
           englishTitle: "Excretion",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -122,12 +122,12 @@ export const biology: Content = {
         {
           title: "របត់ឈាមនិងភាពស៊ាំ",
           englishTitle: "Blood-Circulation-and-Immunity",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ថេរលំនឹង",
           englishTitle: "Homeostasis",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -140,17 +140,17 @@ export const biology: Content = {
         {
           title: "ជាលិការុក្ខជាតិ",
           englishTitle: "Plant-Tissues",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ប្ញស",
           englishTitle: "Roots",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ដើមនិងស្លឹក",
           englishTitle: "Stems-and-Leaves",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -163,12 +163,12 @@ export const biology: Content = {
         {
           title: "ការប្រយុទ្ធប្រឆាំងនឹងជំងឺ",
           englishTitle: "Disease-Prevention-and-Control",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "អាហារនិងសុខភាព",
           englishTitle: "Nutrition-and-Health",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },

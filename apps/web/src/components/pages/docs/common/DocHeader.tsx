@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { ChevronDown, Check } from 'lucide-react';
-import { curriculum } from '@/curriculum/curriculum';
+import { curriculum } from '@/curriculum';
 
 interface DocHeaderProps {
     currentGrade?: string;

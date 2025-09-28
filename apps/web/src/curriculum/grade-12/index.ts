@@ -1,8 +1,8 @@
 import { Grade } from "@/types/docs/curriculum";
-import { math } from "./math";
-import { chemistry } from "./chemistry";
-import { biology } from "./biology";
-import { physics } from "./physics";
+import { math } from "./maths/index";
+import { chemistry } from "./chemistry/index";
+import { biology } from "./biology/index";
+import { physics } from "./physics/index";
 
 export const grade12: Grade = {
   grade: "grade-12",

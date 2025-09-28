@@ -7,7 +7,6 @@ import WarningBox from "../../../common/box/WarningBox";
 import { TopicContent } from "@/types/docs/topic";
 import { BlockMath, InlineMath } from "react-katex";
 import GraphBox from "../../../common/box/GraphBox";
-import { math } from "../../../../../../curriculum/grade-12/math";
 
 // Make KaTeX blocks scrollable & left-aligned on narrow screens
 const MathLine = ({ math }: { math: string }) => (

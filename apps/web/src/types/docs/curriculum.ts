@@ -2,9 +2,9 @@
 // These types define the hierarchical structure of the educational curriculum
 // From Grade → Subject → Lesson → Topic
 
-// ===== CURRICULUM HIERARCHY =====
+import { FC } from "react";
 
-export type TopicComponent = React.ComponentType<{ size?: number; className?: string }>
+// ===== CURRICULUM HIERARCHY =====
 
 // Grade level (e.g., Grade 12)
 export interface Grade {
@@ -35,6 +35,6 @@ export interface Lesson {
 export interface Topic {
   title: string; // Khmer topic name (e.g., "លីមីត ០/០")
   englishTitle: string; // English topic identifier (e.g., "zero-over-zero")
-  component: TopicComponent;
+  component: () => Promise<{ default: FC }>;
   subtopics?: Topic[]; // Optional subtopics within this topic
 }

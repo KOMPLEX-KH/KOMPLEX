@@ -17,32 +17,32 @@ export const biology: Content = {
         {
           title: "ចំណែកថ្នាក់និងដើមឈើ មែកធាងពូជអម្បូរ",
           englishTitle: "Classification-and-Phylogenetic-Trees",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "វីរុសនិងបាក់តេរី",
           englishTitle: "Viruses-and-Bacteria",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ប្រូទីស",
           englishTitle: "Protists",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ផ្សិត",
           englishTitle: "Fungi",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "រុក្ខជាតិ",
           englishTitle: "Plants",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "សត្វ",
           englishTitle: "Animals",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -55,12 +55,12 @@ export const biology: Content = {
         {
           title: "កោសិកា",
           englishTitle: "Cells",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ប្រការីយ៉ូតនិងអឺការីយ៉ូត",
           englishTitle: "Prokaryotes-and-Eukaryotes",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -73,12 +73,12 @@ export const biology: Content = {
         {
           title: "រស្មីសំយោគ",
           englishTitle: "Photosynthesis",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ដង្ហើមកោសិកា",
           englishTitle: "Cellular-Respiration",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -91,12 +91,12 @@ export const biology: Content = {
         {
           title: "ប្រព័ន្ធគ្រោងឆ្អឹង",
           englishTitle: "Skeletal-System",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ប្រព័ន្ធសាច់ដុំ",
           englishTitle: "Muscular-System",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -109,12 +109,12 @@ export const biology: Content = {
         {
           title: "ជី",
           englishTitle: "Fertilizers",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ការបង្កាត់",
           englishTitle: "Breeding",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },

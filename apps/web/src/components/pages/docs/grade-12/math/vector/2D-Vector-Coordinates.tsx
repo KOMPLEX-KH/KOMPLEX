@@ -7,9 +7,6 @@ import { ImageBox } from '../../../common/box/explanation-box/ImageExplanationBo
 import WarningBox from '../../../common/box/WarningBox';
 import HintBox from '../../../common/box/HintBox';
 import ExerciseBox from '../../../common/box/ExerciseBox';
-import { math } from '@/curriculum/grade-12/math';
-import { Content } from 'next/font/google';
-import { title } from 'process';
 
 // 2D Vector Content
 const TOPIC_CONTENT = {

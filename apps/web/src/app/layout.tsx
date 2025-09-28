@@ -39,7 +39,7 @@ export default function RootLayout({
     <html lang="kh" className={poppins.className}>
       <head>
         <meta charSet="utf-8" />
-        <link rel="icon" href="/logo.png" />
+        <link rel="icon" href="/favicon.ico" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}

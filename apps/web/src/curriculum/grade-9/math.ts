@@ -37,7 +37,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -50,7 +50,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -63,7 +63,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -76,7 +76,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -89,7 +89,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -102,7 +102,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -115,7 +115,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -128,7 +128,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -141,7 +141,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -154,7 +154,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -167,7 +167,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -180,7 +180,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -193,7 +193,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -206,7 +206,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -219,7 +219,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -232,7 +232,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -245,7 +245,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -258,7 +258,7 @@ export const math: Content = {
         {
           title: "នឹងមកដល់ឆាប់នេះ",
           englishTitle: "coming-soon",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },

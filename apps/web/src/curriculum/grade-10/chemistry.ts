@@ -17,12 +17,12 @@ export const chemistry: Content = {
         {
           title: "ទ្រឹស្តីអាតូម",
           englishTitle: "Atomic-Theory",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ទម្រង់អាតូម",
           englishTitle: "Atomic-Structure",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -35,12 +35,12 @@ export const chemistry: Content = {
         {
           title: "លក្ខណៈនៃតារាងខួប",
           englishTitle: "Characteristics-of-the-Periodic-Table",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "សិក្សាធាតុតាមក្រុម",
           englishTitle: "Study-of-Elements-by-Group",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -53,12 +53,12 @@ export const chemistry: Content = {
         {
           title: "សម្ព័ន្ធគីមី",
           englishTitle: "Chemical-Bonds",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ទម្រង់អង្គធាតុរឹង",
           englishTitle: "Solid-Structures",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -71,27 +71,27 @@ export const chemistry: Content = {
         {
           title: "ប្រេងកាតនិងឥន្ធនៈ",
           englishTitle: "Petroleum-and-Fuels",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "អ៊ីដ្រូកាបួឆ្អែត : អាល់កាន",
           englishTitle: "Saturated-Hydrocarbons-Alkanes",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "អ៊ីដ្រូកាបួមិនទាន់ឆ្អែត",
           englishTitle: "Unsaturated-Hydrocarbons",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "អ៊ីដ្រូកាបួប្រហើរ : បង់សែន",
           englishTitle: "Aromatic-Hydrocarbons-Benzene",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ជីគីមី",
           englishTitle: "Chemical-Fertilizers",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },

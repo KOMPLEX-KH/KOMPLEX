@@ -4,7 +4,6 @@ import TipBox from '../../../common/box/TipBox';
 import ExampleBox from '../../../common/box/ExampleBox';
 import { BlockMath, InlineMath } from 'react-katex';
 import { ImageBox } from '../../../common/box/explanation-box/ImageExplanationBox';
-import WarningBox from '../../../common/box/WarningBox';
 import HintBox from '../../../common/box/HintBox';
 import ExerciseBox from '../../../common/box/ExerciseBox';
 

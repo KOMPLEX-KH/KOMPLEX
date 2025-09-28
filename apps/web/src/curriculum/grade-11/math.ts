@@ -26,17 +26,17 @@ export const math: Content = {
         {
           title: "ស្វីតចំនួនពិត",
           englishTitle: "real-number-sequences",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ស្វីតនព្វន្ត",
           englishTitle: "arithmetic-sequences",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ស្វ៊ីតធរណីមាត្រ",
           englishTitle: "geometric-sequences",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -49,12 +49,12 @@ export const math: Content = {
         {
           title: "អនុគមន៍អិចស្ប៉ូណង់ស្យែល",
           englishTitle: "exponential-functions",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "អនុគមន៍លោការីត",
           englishTitle: "logarithmic-functions",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -67,17 +67,17 @@ export const math: Content = {
         {
           title: "អនុគមន៍ត្រីកោណមាត្រ",
           englishTitle: "trigonometric-functions",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "រូបមន្តត្រីកោណមាត្រ",
           englishTitle: "trigonometric-formulas",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "សមីការនិងវិសមីការត្រីកោណមាត្រ",
           englishTitle: "trigonometric-equations-and-inequalities",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -90,12 +90,12 @@ export const math: Content = {
         {
           title: "ម៉ាទ្រីស",
           englishTitle: "matrices",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "ដេទែរមីណង់",
           englishTitle: "determinants",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -108,17 +108,17 @@ export const math: Content = {
         {
           title: "លីមីតនិងដេរីវេ",
           englishTitle: "limits-and-derivatives",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "អនុវត្តន៍នៃដេរីវេ",
           englishTitle: "applications-of-derivatives",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "អថិរភាពនិងក្រាបនៃអនុគមន៍",
           englishTitle: "variations-and-graphs-of-functions",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -131,7 +131,7 @@ export const math: Content = {
         {
           title: "ប្រូបាប",
           englishTitle: "probability",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
@@ -144,17 +144,17 @@ export const math: Content = {
         {
           title: "ការបែងចែកទិន្នន័យជាភាគរយ",
           englishTitle: "data-distribution-in-percentages",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "រង្វាស់នៃគម្លាត",
           englishTitle: "measures-of-dispersion",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
         {
           title: "គំនូសតាងបំណែងចែក",
           englishTitle: "distribution-charts",
-          component: ComingSoon,
+          component: () => import("@components/pages/docs/common/ComingSoon"),
         },
       ],
     },
