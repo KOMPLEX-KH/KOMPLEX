@@ -1,57 +1,12 @@
 import { View, Text, StyleSheet, Pressable, TextInput, ScrollView } from 'react-native';
 import Logo from '@/components/logo';
 import { BookOpen, Pencil, Newspaper, MessageSquare, PlayCircle, Bot, Search, Home, Layers, ListChecks, PlaySquare, Users, MoreHorizontal } from 'lucide-react-native';
+import { tw } from '@/utils/styles';
 
 export default function HomeScreen() {
     return (
-        <View style={styles.root}>
-            <View style={styles.appBar}>
-                <Logo />
-            </View>
-
-            <ScrollView contentContainerStyle={styles.content}>
-
-                <View style={styles.grid}>
-                    <FeatureCard title="មេរៀន" Icon={BookOpen} />
-                    <FeatureCard title="លំហាត់" Icon={Pencil} />
-                    <FeatureCard title="អត្ថបទ" Icon={Newspaper} />
-                    <FeatureCard title="វេទិកា" Icon={MessageSquare} />
-                    <FeatureCard title="វីដេអូ" Icon={PlayCircle} />
-                    <FeatureCard title="ដារ៉ា AI" Icon={Bot} />
-                </View>
-
-                {/* <View style={styles.searchSection}>
-                    <Text style={styles.searchTitle}>ស្វែងរកទាំងអស់</Text>
-                    <View style={styles.searchBar}>
-                        <Search color="#6b7280" size={18} />
-                        <TextInput
-                            style={styles.searchInput}
-                            placeholder="ស្វែងរកមេរៀន ប្រធានបទ វីដេអូ..."
-                            placeholderTextColor="#9ca3af"
-                        />
-                    </View>
-                </View>
-
-                <View style={styles.recentSection}>
-                    <Text style={styles.recentTitle}>បានមើលថ្មីៗ</Text>
-                    <RecentItem name="ការណែនាំពីរូបវិទ្យា" Icon={BookOpen} />
-                    <RecentItem name="ជីវវិទ្យាមូលដ្ឋាន" Icon={PlayCircle} />
-                    <RecentItem name="លំហាត់បណ្តោះអាសន្នអាល់ជេប្រា" Icon={Pencil} />
-                </View> */}
-            </ScrollView>
-
-            <Pressable style={styles.aiFab} accessibilityRole="button">
-                <Bot color="#fff" size={26} />
-            </Pressable>
-
-            <View style={styles.bottomNav}>
-                <NavItem active Icon={Home} />
-                <NavItem Icon={Layers} />
-                <NavItem Icon={ListChecks} />
-                <NavItem Icon={PlaySquare} />
-                <NavItem Icon={Users} />
-                <NavItem Icon={MoreHorizontal} />
-            </View>
+        <View>
+            <Text style={tw("text-red-500")}>Hello</Text>
         </View>
     );
 }

@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     // Re-sync on route change in case auth state changed elsewhere
     try {
-      const storedUserJson = localStorage.getItem("user");
+      const storedUserJson = typeof window !== 'undefined' ? localStorage.getItem("user") : null;
       setUser(storedUserJson ? JSON.parse(storedUserJson) : null);
     } catch {
       setUser(null);

@@ -196,7 +196,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
 
     return (
         <Transition.Root show={open} as={Fragment}>
-            <Dialog as="div" className="relative z-50" onClose={() => { }}>
+            <Dialog as="div" className="relative z-50" onClose={() => { onClose() }}>
                 {/* Backdrop */}
                 <Transition.Child
                     as={Fragment}
