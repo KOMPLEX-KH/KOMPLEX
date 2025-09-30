@@ -16,7 +16,6 @@ export const applyStyles = (classNames: string[]): any => {
   return styles;
 };
 
-// Alternative function with string input (space-separated classes)
 export const tw = (classNames: string): any => {
   return applyStyles(classNames.split(" ").filter(Boolean));
 };

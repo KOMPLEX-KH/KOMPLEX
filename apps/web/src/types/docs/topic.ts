@@ -1,4 +1,4 @@
-import { ThreeDBoxProps } from "@components/pages/docs/common/box/3DBox";
+import { ThreeDBoxProps } from "@/components/pages/docs/boxes/3DBox";
 // ===== TOPIC CONTENT TYPES =====
 // These types define the structure for educational topic content
 // Each type corresponds to a specific box component used in topic pages
@@ -20,20 +20,20 @@ export interface ExerciseQuestion {
 // Import prop interfaces from box components to ensure type safety
 // Each interface matches exactly what its corresponding component expects
 
-import { DefinitionBoxProps } from "@components/pages/docs/common/box/DefinitionBox";
-import { TipBoxProps } from "@components/pages/docs/common/box/TipBox";
-import { ExampleBoxProps } from "@components/pages/docs/common/box/ExampleBox";
-import { ExerciseBoxProps } from "@components/pages/docs/common/box/ExerciseBox";
-import { HintBoxProps } from "@components/pages/docs/common/box/HintBox";
-import { WarningBoxProps } from "@components/pages/docs/common/box/WarningBox";
-import { CustomBoxProps } from "@components/pages/docs/common/box/CustomBox";
-import { GraphBoxProps } from "@components/pages/docs/common/box/GraphBox";
+import { DefinitionBoxProps } from "@/components/pages/docs/boxes/DefinitionBox";
+import { TipBoxProps } from "@/components/pages/docs/boxes/TipBox";
+import { ExampleBoxProps } from "@/components/pages/docs/boxes/ExampleBox";
+import { ExerciseBoxProps } from "@/components/pages/docs/boxes/ExerciseBox";
+import { HintBoxProps } from "@/components/pages/docs/boxes/HintBox";
+import { WarningBoxProps } from "@/components/pages/docs/boxes/WarningBox";
+import { CustomBoxProps } from "@/components/pages/docs/boxes/CustomBox";
+import { GraphBoxProps } from "@/components/pages/docs/boxes/GraphBox";
 
 // Explanation Box Props
-import { ImageBoxProps } from "@components/pages/docs/common/box/explanation-box/ImageExplanationBox";
-import { VideoBoxProps } from "@components/pages/docs/common/box/explanation-box/VideoExplanationBox";
-import { GraphExplanationBoxProps } from "@components/pages/docs/common/box/explanation-box/GraphExplanationBox";
-import { ThreeDExplanationBoxProps } from "@components/pages/docs/common/box/explanation-box/3DExplanationBox";
+import { ImageBoxProps } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
+import { VideoBoxProps } from "@/components/pages/docs/boxes/explanation-box/VideoExplanationBox";
+import { GraphExplanationBoxProps } from "@/components/pages/docs/boxes/explanation-box/GraphExplanationBox";
+import { ThreeDExplanationBoxProps } from "@/components/pages/docs/boxes/explanation-box/3DExplanationBox";
 import { ReactNode } from "react";
 
 // ===== MAIN TOPIC CONTENT INTERFACE =====

@@ -1,11 +1,12 @@
+import { tw } from "@/utils/styles";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
 
 export default function RootLayout() {
   return (
-    <View style={styles.root}>
+    <View style={tw("flex-1 bg-white p-0")}>
       <Stack>
         <Stack.Screen name="index" options={{ title: "" }} />
       </Stack>
@@ -14,10 +15,3 @@ export default function RootLayout() {
   );
 }
 
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: "#fff",
-    padding: 10,
-  },
-});

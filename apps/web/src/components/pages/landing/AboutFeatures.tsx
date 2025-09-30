@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import { BookOpen, ImageIcon, ChartBar, CheckCircle, FileText, MessageSquare, Bot, Video } from "lucide-react";
-import ThreeDBox from "@components/pages/docs/common/box/3DBox";
-import GraphBox from "@components/pages/docs/common/box/GraphBox";
+import ThreeDBox from "@/components/pages/docs/boxes/3DBox";
+import GraphBox from "@/components/pages/docs/boxes/GraphBox";
 import { Stars } from "@react-three/drei";
-import ExerciseBox from "../docs/common/box/ExerciseBox";
+import ExerciseBox from "@/components/pages/docs/boxes/ExerciseBox";
 import { InlineMath } from "react-katex";
 import Link from "next/link";
 
