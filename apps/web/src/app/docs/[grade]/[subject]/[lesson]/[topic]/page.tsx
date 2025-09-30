@@ -1,10 +1,10 @@
 'use client';
 
-import Skeleton from "@/components/pages/docs/common/Skeleton";
-import { curriculum } from "@/curriculum";
-import DocHeader from "@components/pages/docs/common/DocHeader";
-import Sidebar from "@components/pages/docs/common/Sidebar";
-import TopicWrapper from "@components/pages/docs/common/TopicWrapper";
+import Skeleton from "@/components/pages/docs/Skeleton";
+import { curriculum } from "@/lessons/curriculum";
+import DocHeader from "@components/pages/docs/DocHeader";
+import Sidebar from "@components/pages/docs/Sidebar";
+import TopicWrapper from "@components/pages/docs/TopicWrapper";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import { useParams } from "next/navigation";

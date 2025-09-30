@@ -28,7 +28,6 @@
       "@/*": [
         "./*"
       ],
-      "nativewind/*": ["../../node_modules/nativewind/*"],
       "@components/*": [
         "./components/*"
       ],

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { curriculum } from "@/curriculum";
+import { curriculum } from "@/lessons/curriculum";
 import { Logo } from "@/components/common/Logo";
 
 export default function Docs() {

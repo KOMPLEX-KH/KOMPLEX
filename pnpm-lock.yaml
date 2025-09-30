@@ -29,6 +29,9 @@ importers:
       axios:
         specifier: ^1.12.2
         version: 1.12.2
+      culori:
+        specifier: ^4.0.2
+        version: 4.0.2
       delayed-stream:
         specifier: ^1.0.0
         version: 1.0.0
@@ -174,6 +177,9 @@ importers:
 
   apps/mobile:
     dependencies:
+      culori:
+        specifier: ^4.0.2
+        version: 4.0.2
       expo:
         specifier: ~54.0.9
         version: 54.0.9(@babel/core@7.28.4)(@expo/metro-runtime@6.1.2)(expo-router@6.0.7)(react-native@0.81.4(@babel/core@7.28.4)(@types/react@19.1.13)(react@19.1.0))(react@19.1.0)
@@ -3636,6 +3642,10 @@ packages:
 
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
+
+  culori@4.0.2:
+    resolution: {integrity: sha512-1+BhOB8ahCn4O0cep0Sh2l9KCOfOdY+BXJnKMHFFzDEouSr/el18QwXEMRlOj9UY5nCeA8UN3a/82rUWRBeyBw==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
   currently-unhandled@0.4.1:
     resolution: {integrity: sha512-/fITjgjGU50vjQ4FH6eUoYu+iUoUKIXws2hL15JJpIR+BbTxaXQsMuuyjtNh2WqsSBS5nsaZHFsFecyw5CCAng==}
@@ -12569,6 +12579,8 @@ snapshots:
   cssesc@3.0.0: {}
 
   csstype@3.1.3: {}
+
+  culori@4.0.2: {}
 
   currently-unhandled@0.4.1:
     dependencies:
