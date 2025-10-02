@@ -31,6 +31,12 @@ export default function RootLayout() {
       /> */}
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="docs" options={{ headerShown: false, }} />
+        <Stack.Screen name="ai" options={{ headerShown: false, }} />
+        <Stack.Screen name="blogs" options={{ headerShown: false, }} />
+        <Stack.Screen name="exercises" options={{ headerShown: false }} />
+        <Stack.Screen name="forums" />
+        <Stack.Screen name="videos" options={{ presentation: "card" }} />
       </Stack>
       <StatusBar style="dark" translucent backgroundColor="transparent" />
     </SafeAreaView>

@@ -10,32 +10,32 @@ const MAIN_FEATURES = [
     {
         title: 'មេរៀន',
         icon: <BookOpen size={28} color={"white"} />,
-        link: '/docs',
+        href: '/docs',
     },
     {
         title: 'អនុវត្តន៍',
         icon: <Edit size={28} color={"white"} />,
-        link: '/docs',
+        href: '/exercises',
     },
     {
         title: 'តារា AI',
         icon: <Bot size={28} color={"white"} />,
-        link: '/ai'
+        href: '/ai'
     },
     {
         title: 'ពិភាក្សា',
         icon: <MessageSquare size={28} color={"white"} />,
-        link: '/forums',
+        href: '/forums',
     },
     {
         title: 'អត្ថបទ',
         icon: <BookOpen size={28} color={"white"} />,
-        link: '/blogs',
+        href: '/blogs',
     },
     {
         title: 'វីដេអូ',
         icon: <Camera size={28} color={"white"} />,
-        link: '/videos'
+        href: '/videos'
     },
 
 ]
@@ -59,7 +59,7 @@ export default function HomeScreen() {
                     <View style={tw("flex-row items-center gap-3 justify-between mt-5")}>
                         <Text style={tw("text-3xl font-extrabold italic")}>សួស្ដី រក្សា!</Text>
                         <Pressable style={tw("rounded-full bg-indigo-600 px-4 py-2 flex-row items-center ")}>
-                            <Text style={tw("text-white font-bold italic mr-1")}>បន្តមេរៀន</Text>
+                            <Text style={tw("text-white font-bold italic ")}>បន្តមេរៀន</Text>
                             <ArrowRight size={20} color="white" />
                         </Pressable>
                     </View>
@@ -81,7 +81,7 @@ export default function HomeScreen() {
                         createdAt="2 ថ្ងៃមុន"
                         description="យើងកំពុងសាកល្បងប្រើ AI ដើម្បីជួយសិស្សចងចាំ និងយល់បានកាន់តែងាយស្រួល។"
                         image="https://komplex.app/chemistry/pic27.png"
-                        link="/"
+                        href="/"
                     />
 
                     <PostCard
@@ -90,7 +90,7 @@ export default function HomeScreen() {
                         createdAt="1 ម៉ោងមុន"
                         description="កម្ពុជាបានឈ្នះការប្រកួតបាល់ទាត់អាស៊ានជាមួយលទ្ធផល 3-1។"
                         image="https://pub-92b72a731f7641aba0ab9d1897016909.r2.dev/1-0cb1a888-8dad-48a9-9256-6b3a9a93bb5c-the-quadratic-formula-for-the-practice-problems-with-answers-1024x655.webp"
-                        link="/"
+                        href="/"
                     />
 
                     <PostCard
@@ -99,7 +99,7 @@ export default function HomeScreen() {
                         createdAt="ម្សិលមិញ"
                         description="ពិព័រណ៍បង្ហាញស្នាដៃរបស់សិល្បករវ័យក្មេង ជាមួយនឹងការច្នៃប្រឌិតថ្មីៗ។"
                         image="https://pub-92b72a731f7641aba0ab9d1897016909.r2.dev/12-4f3cc4ef-ef59-4bfe-b0d4-bfa56dc79140-anoushka-puri-f1YfrZ1o2r8-unsplash.jpg"
-                        link="/"
+                        href="/"
                     />
 
                     <PostCard
@@ -108,7 +108,7 @@ export default function HomeScreen() {
                         createdAt="5 ថ្ងៃមុន"
                         description="From performance boosts to new styling APIs, here’s what’s exciting in the latest version."
                         image="https://pub-92b72a731f7641aba0ab9d1897016909.r2.dev/15-4001721e-900b-43aa-9cf8-ce73e84582df-IMG_6865.jpeg"
-                        link="/"
+                        href="/"
                     />
 
                     <PostCard
@@ -117,7 +117,7 @@ export default function HomeScreen() {
                         createdAt="3 ម៉ោងមុន"
                         description="ការផឹកទឹកច្រើន និងការប្រើសាប៊ូសម្អាតស្បែកល្មម អាចជួយរក្សាសុខភាពស្បែកបាន។"
                         image="https://pub-92b72a731f7641aba0ab9d1897016909.r2.dev/2-3d250cdf-bf5d-4671-a34d-0dce1a36066d-GettyImages-713784033-5962f27b3df78cdc68bb2b6d.jpg"
-                        link="/"
+                        href="/"
                     />
 
                     <Pressable

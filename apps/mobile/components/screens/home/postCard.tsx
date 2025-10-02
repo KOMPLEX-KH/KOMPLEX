@@ -1,7 +1,7 @@
 import { Text } from "@/components/common/Text";
 import { tw } from "@/utils/styles";
 import { View, Image, Pressable } from "react-native";
-import { Link } from "expo-router";
+import { Href, Link } from "expo-router";
 import { ArrowRight, User } from "lucide-react-native";
 
 interface PostCardProps {
@@ -10,10 +10,10 @@ interface PostCardProps {
     title: string;
     description: string;
     image: string;
-    link: string;
+    href: Href;
 }
 
-export default function PostCard({ username, createdAt, title, description, image, link }: PostCardProps) {
+export default function PostCard({ username, createdAt, title, description, image, href }: PostCardProps) {
     return (
         <View style={tw("rounded-3xl bg-white shadow-md p-4 flex  justify-between gap-4")}>
             <View style={tw("flex-row items-center gap-2")}>
