@@ -1,10 +1,10 @@
 import { View } from "react-native";
 import { Text } from "@components/common/Text"
 
-export default function ExercisesScreen() {
+export default function BlogScreen() {
     return (
         <View>
-            <Text>Exercises</Text>
+            <Text>Blog</Text>
         </View>
     )
 }
