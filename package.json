@@ -41,6 +41,7 @@
     "lucide-react": "^0.536.0",
     "mathlive": "^0.107.0",
     "nativewind": "^4.2.1",
+    "expo-blur": "^15.0.7",
     "next": "15.4.5",
     "parse5": "^8.0.0",
     "pdfjs-dist": "^5.4.54",

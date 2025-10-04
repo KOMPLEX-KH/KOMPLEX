@@ -1,7 +1,8 @@
 {
-  "/docs/[grade]/[subject]/[lesson]/[topic]/page": "app/docs/[grade]/[subject]/[lesson]/[topic]/page.js",
-  "/docs/page": "app/docs/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/me/blogs/page": "app/me/blogs/page.js",
+  "/me/create-blog/page": "app/me/create-blog/page.js",
   "/me/page": "app/me/page.js",
   "/page": "app/page.js"
 }

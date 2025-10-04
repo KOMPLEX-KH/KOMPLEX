@@ -30,11 +30,11 @@ function resolveNumericWeight(style: StyleProp<TextStyle>): number {
     return 500; // default Medium
 }
 
-export function Text(props: TextProps & { children: string }) {
+export function Text(props: TextProps & { children: string | React.ReactNode }) {
     const { children, style, ...rest } = props;
     const weight = resolveNumericWeight(style as StyleProp<TextStyle>);
     const flattenedStyle = StyleSheet.flatten(style) as TextStyle | undefined;
     const isItalic = flattenedStyle?.fontStyle === 'italic';
-    const renderedText = renderMixedText(children, { ...rest, style }, weight, isItalic);
+    const renderedText = renderMixedText(children as string, { ...rest, style }, weight, isItalic);
     return <RNText style={tw("flex-row gap-0")}>{renderedText}</RNText>;
 }
