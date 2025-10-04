@@ -59,6 +59,8 @@ export const TAILWIND_CLASSES = {
   // Position
   absolute: { position: "absolute" },
   relative: { position: "relative" },
+  fixed: { position: "fixed" },
+  sticky: { position: "sticky" },
   "top-0": { top: 0 },
   "top-1": { top: 4 },
   "top-2": { top: 8 },
@@ -848,7 +850,17 @@ export const TAILWIND_CLASSES = {
   "text-9xl": { fontSize: 128 },
 
   // Font Weight
-  "font-thin": { fontWeight: "100", fontFamily: "Noto-Sans-Thin" },
+  "font-en-thin": { fontWeight: "100", fontFamily: "Poppins-Thin" },
+  "font-en-extralight": { fontWeight: "200", fontFamily: "Poppins-ExtraLight" },
+  "font-en-light": { fontWeight: "300", fontFamily: "Poppins-Light" },
+  "font-en-normal": { fontWeight: "400", fontFamily: "Poppins-Regular" },
+  "font-en-medium": { fontWeight: "500", fontFamily: "Poppins-Medium" },
+  "font-en-semibold": { fontWeight: "600", fontFamily: "Poppins-SemiBold" },
+  "font-en-bold": { fontWeight: "700", fontFamily: "Poppins-Bold" },
+  "font-en-extrabold": { fontWeight: "800", fontFamily: "Poppins-ExtraBold" },
+  "font-en-black": { fontWeight: "900", fontFamily: "Poppins-Black" },
+  
+  "font-thin": { fontWeight: "100", fontFamily: "Poppins-Thin" },
   "font-extralight": { fontWeight: "200", fontFamily: "Poppins-ExtraLight" },
   "font-light": { fontWeight: "300", fontFamily: "Poppins-Light" },
   "font-normal": { fontWeight: "400", fontFamily: "Poppins-Regular" },
@@ -857,6 +869,16 @@ export const TAILWIND_CLASSES = {
   "font-bold": { fontWeight: "700", fontFamily: "Poppins-Bold" },
   "font-extrabold": { fontWeight: "800", fontFamily: "Poppins-ExtraBold" },
   "font-black": { fontWeight: "900", fontFamily: "Poppins-Black" },
+
+  "font-kh-thin": { fontWeight: "100", fontFamily: "Noto-Sans-Thin" },
+  "font-kh-extralight": { fontWeight: "200", fontFamily: "Noto-Sans-ExtraLight" },
+  "font-kh-light": { fontWeight: "300", fontFamily: "Noto-Sans-Light" },
+  "font-kh-normal": { fontWeight: "400", fontFamily: "Noto-Sans-Regular" },
+  "font-kh-medium": { fontWeight: "500", fontFamily: "Noto-Sans-Medium" },
+  "font-kh-semibold": { fontWeight: "600", fontFamily: "Noto-Sans-SemiBold" },
+  "font-kh-bold": { fontWeight: "700", fontFamily: "Noto-Sans-Bold" },
+  "font-kh-extrabold": { fontWeight: "800", fontFamily: "Noto-Sans-ExtraBold" },
+  "font-kh-black": { fontWeight: "900", fontFamily: "Noto-Sans-Black" },
 
   // Text Alignment
   "text-left": { textAlign: "left" },
@@ -4677,6 +4699,7 @@ export const TAILWIND_CLASSES = {
   "border-purple-900/95": { borderColor: TAILWIND_COLORS["purple-900/95"] },
 
   // Indigo border colors with full opacity range
+  "border-indigo-50": { borderColor: TAILWIND_COLORS["indigo-50"] },
   "border-indigo-50/5": { borderColor: TAILWIND_COLORS["indigo-50/5"] },
   "border-indigo-50/10": { borderColor: TAILWIND_COLORS["indigo-50/10"] },
   "border-indigo-50/15": { borderColor: TAILWIND_COLORS["indigo-50/15"] },
@@ -4797,6 +4820,7 @@ export const TAILWIND_CLASSES = {
   "border-indigo-500/90": { borderColor: TAILWIND_COLORS["indigo-500/90"] },
   "border-indigo-500/95": { borderColor: TAILWIND_COLORS["indigo-500/95"] },
 
+  "border-indigo-600": { borderColor: TAILWIND_COLORS["indigo-600"] },
   "border-indigo-600/5": { borderColor: TAILWIND_COLORS["indigo-600/5"] },
   "border-indigo-600/10": { borderColor: TAILWIND_COLORS["indigo-600/10"] },
   "border-indigo-600/15": { borderColor: TAILWIND_COLORS["indigo-600/15"] },
@@ -4817,6 +4841,7 @@ export const TAILWIND_CLASSES = {
   "border-indigo-600/90": { borderColor: TAILWIND_COLORS["indigo-600/90"] },
   "border-indigo-600/95": { borderColor: TAILWIND_COLORS["indigo-600/95"] },
 
+  "border-indigo-700": { borderColor: TAILWIND_COLORS["indigo-700"] },
   "border-indigo-700/5": { borderColor: TAILWIND_COLORS["indigo-700/5"] },
   "border-indigo-700/10": { borderColor: TAILWIND_COLORS["indigo-700/10"] },
   "border-indigo-700/15": { borderColor: TAILWIND_COLORS["indigo-700/15"] },
@@ -4837,6 +4862,7 @@ export const TAILWIND_CLASSES = {
   "border-indigo-700/90": { borderColor: TAILWIND_COLORS["indigo-700/90"] },
   "border-indigo-700/95": { borderColor: TAILWIND_COLORS["indigo-700/95"] },
 
+  "border-indigo-800": { borderColor: TAILWIND_COLORS["indigo-800"] },
   "border-indigo-800/5": { borderColor: TAILWIND_COLORS["indigo-800/5"] },
   "border-indigo-800/10": { borderColor: TAILWIND_COLORS["indigo-800/10"] },
   "border-indigo-800/15": { borderColor: TAILWIND_COLORS["indigo-800/15"] },
@@ -4857,6 +4883,7 @@ export const TAILWIND_CLASSES = {
   "border-indigo-800/90": { borderColor: TAILWIND_COLORS["indigo-800/90"] },
   "border-indigo-800/95": { borderColor: TAILWIND_COLORS["indigo-800/95"] },
 
+  "border-indigo-900": { borderColor: TAILWIND_COLORS["indigo-900"] },
   "border-indigo-900/5": { borderColor: TAILWIND_COLORS["indigo-900/5"] },
   "border-indigo-900/10": { borderColor: TAILWIND_COLORS["indigo-900/10"] },
   "border-indigo-900/15": { borderColor: TAILWIND_COLORS["indigo-900/15"] },
@@ -4969,6 +4996,36 @@ export const TAILWIND_CLASSES = {
   "border-4": { borderWidth: 4 },
   "border-8": { borderWidth: 8 },
 
+  "border-dashed": { borderStyle: "dashed" },
+  "border-dotted": { borderStyle: "dotted" },
+  "border-double": { borderStyle: "double" },
+  "border-groove": { borderStyle: "groove" },
+  "border-ridge": { borderStyle: "ridge" },
+  "border-inset": { borderStyle: "inset" },
+  "border-outset": { borderStyle: "outset" },
+  "border-hidden": { borderStyle: "hidden" },
+  "border-none": { borderStyle: "none" },
+  "border-solid": { borderStyle: "solid" },
+  "border-thick": { borderStyle: "thick" },
+  "border-thin": { borderStyle: "thin" },
+
+  "border-b": { borderBottomWidth: 1, },
+  "border-b-2": { borderBottomWidth: 2, },
+  "border-b-4": { borderBottomWidth: 4, },
+  "border-b-8": { borderBottomWidth: 8, },
+  "border-t": { borderTopWidth: 1, },
+  "border-t-2": { borderTopWidth: 2, },
+  "border-t-4": { borderTopWidth: 4, },
+  "border-t-8": { borderTopWidth: 8, },
+  "border-l": { borderLeftWidth: 1, },
+  "border-l-2": { borderLeftWidth: 2, },
+  "border-l-4": { borderLeftWidth: 4, },
+  "border-l-8": { borderLeftWidth: 8, },
+  "border-r": { borderRightWidth: 1, },
+  "border-r-2": { borderRightWidth: 2, },
+  "border-r-4": { borderRightWidth: 4, },
+  "border-r-8": { borderRightWidth: 8, },
+
   // Border Color
   "border-transparent": { borderColor: "transparent" },
   "border-white": { borderColor: "#ffffff" },
@@ -5056,4 +5113,13 @@ export const TAILWIND_CLASSES = {
   "-z-30": { zIndex: -30 },
   "-z-40": { zIndex: -40 },
   "-z-50": { zIndex: -50 },
+
+  "transition-all": { transition: "all 0.3s ease-in-out" },
+  "translate-y-full": { transform: [{ translateY: 100 }] },
+  "-translate-y-full": { transform: [{ translateY: -200 }] },
+  "translate-y-0": { transform: [{ translateY: 0 }] },
+  "translate-x-full": { transform: [{ translateX: 100 }] },
+  "translate-x-0": { transform: [{ translateX: 0 }] },
+
+  "duration-300": { duration: 300 },
 };

@@ -13,9 +13,9 @@ interface props {
 export default function FeatureCard({ title, icon, href }: props) {
     const router = useRouter();
     return (
-        <Pressable style={tw("rounded-3xl bg-white shadow px-4 py-6 flex items-center justify-between gap-4")} onPress={() => router.push(href)}>
-            <View style={tw("p-3 rounded-full bg-indigo-600 text-white")}>{icon}</View>
-            <Text style={tw("text-lg font-bold ")}>{title}</Text>
+        <Pressable style={tw("rounded-3xl bg-indigo-50 border border-indigo-600 shadow-md px-5 py-5 flex items-center justify-between gap-1")} onPress={() => router.push(href)}>
+            <View style={tw("p-2 rounded-full bg-indigo-600 text-white")}>{icon}</View>
+            <Text style={tw("text-lg font-medium ")}>{title}</Text>
         </Pressable>
     );
 }
