@@ -3814,6 +3814,7 @@ export const TAILWIND_CLASSES = {
   "border-red-500/90": { borderColor: TAILWIND_COLORS["red-500/90"] },
   "border-red-500/95": { borderColor: TAILWIND_COLORS["red-500/95"] },
 
+  "border-red-600": { borderColor: TAILWIND_COLORS["red-600"] },
   "border-red-600/5": { borderColor: TAILWIND_COLORS["red-600/5"] },
   "border-red-600/10": { borderColor: TAILWIND_COLORS["red-600/10"] },
   "border-red-600/15": { borderColor: TAILWIND_COLORS["red-600/15"] },

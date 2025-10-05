@@ -1,77 +1,101 @@
-// import React from "react";
-// import { BookOpen } from "lucide-react";
-// import DefinitionBox from "./boxes/DefinitionBox";
-// import ExerciseBox from "./boxes/ExerciseBox";
-// import TipBox from "./boxes/TipBox";
-// import { ExerciseQuestion } from "@/types/docs/topic";
+import React from "react";
+import { View } from "react-native";
+import { tw } from "@/utils/styles";
+import { Text } from "@/components/common/Text";
+import { BookOpen } from "lucide-react-native";
+import { TAILWIND_COLORS } from "@/constants/styles/tailwind-colors";
+import DefinitionBox from "./boxes/DefinitionBox";
+import TipBox from "./boxes/TipBox";
+import HintBox from "./boxes/HintBox";
+import WarningBox from "./boxes/WarningBox";
+import SummaryBox from "./boxes/SummaryBox";
+import { CheckCircle, Star, Target } from "lucide-react-native";
 
-// export default function ComingSoon() {
-//     // Fake data for background components
-//     const fakeDefinition = {
-//         title: "ចំណងជើងមេរៀន",
-//         content: "មេរៀននេះស្តីអំពី [ប្រធានបទមេរៀនខ្លីៗ]។ វាផ្តល់នូវសេចក្តីពន្យល់មូលដ្ឋាន និងព័ត៌មានសំខាន់ៗ ដើម្បីជួយឱ្យអ្នកចាប់ផ្តើមបានយល់។"
-//     };
+export default function ComingSoon() {
+    // Fake data for background components
+    const fakeDefinition = {
+        title: "លីមីត",
+        content: "លីមីតគឺជាតម្លៃដែលអនុគមន៍មួយចង់ទៅដល់នៅពេលអថេរចូលជិតតម្លៃជាក់លាក់មួយ។ វាជាគំនិតគ្រឹះក្នុងការគណនាដេរីវេ។"
+    };
 
-//     const fakeExercise: ExerciseQuestion[] = [
-//         {
-//             id: "fake-question-1",
-//             question: "តើមេរៀននេះស្តីអំពីអ្វី?",
-//             options: [
-//                 "ប្រធានបទ ក",
-//                 "ប្រធានបទ ខ",
-//                 "ប្រធានបទ គ",
-//                 "ប្រធានបទ ឃ"
-//             ],
-//             correctAnswer: 1
-//         }
-//     ];
+    const fakeTip = {
+        title: "គន្លឹះសំខាន់",
+        content: "ពេលគណនាលីមីត សូមចងចាំពិនិត្យមើលថាតើមានការបែងចែកដោយសូន្យ ឬរូបមន្តមិនកំណត់ដែរឬទេ។"
+    };
 
-//     const fakeTip = {
-//         title: "ចំណាំសំខាន់ៗ",
-//         content: "សូមចងចាំពិនិត្យមើលមាតិកាសំខាន់ៗ និងឧទាហរណ៍ក្នុងមេរៀននេះ មុននឹងបន្តទៅប្រធានបទបន្ទាប់។"
-//     };
+    const fakeHint = {
+        content: "លីមីតអាចជាចំនួនកំណត់ ឬអនន្ត។ វាក៏អាចមិនមានដែរ ប្រសិនបើអនុគមន៍មិនចូលជិតតម្លៃណាមួយ។"
+    };
 
+    const fakeWarning = {
+        content: "កុំច្រឡំរវាងលីមីតខាងស្តាំ លីមីតខាងឆ្វេង និងលីមីតទ្វេចំហៀង។ ពួកគេមាននិយមន័យខុសគ្នា។"
+    };
 
-//     return (
-//         <div className="relative w-full h-full min-h-[600px] overflow-hidden">
+    const fakeSummary = {
+        title: "សរុបមេរៀន",
+        icon: CheckCircle,
+        sections: [
+            {
+                key: "definition",
+                title: "និយមន័យលីមីត",
+                content: "លីមីតគឺជាតម្លៃដែលអនុគមន៍ f(x) ចង់ទៅដល់នៅពេល x ចូលជិត a",
+                icon: Target
+            },
+            {
+                key: "properties",
+                title: "លក្ខណៈសម្បត្តិ",
+                content: [
+                    "លីមីតនៃផលបូក = ផលបូកនៃលីមីត",
+                    "លីមីតនៃផលគុណ = ផលគុណនៃលីមីត",
+                    "លីមីតនៃផលចែក = ផលចែកនៃលីមីត"
+                ],
+                icon: Star
+            }
+        ]
+    };
 
-//             {/* Background Components with Fake Data */}
-//             <div className="absolute inset-0 opacity-20 pointer-events-none h-full">
-//                 <div className="p-6 space-y-4">
-//                     <DefinitionBox
-//                         title={fakeDefinition.title}
-//                         content={fakeDefinition.content}
-//                     />
-//                     <TipBox
-//                         title={fakeTip.title}
-//                         content={fakeTip.content}
-//                     />
-//                     <ExerciseBox questions={fakeExercise} />
-//                 </div>
-//             </div>
+    return (
+        <View style={tw("relative flex-1 overflow-hidden")}>
+            {/* Background Components with Fake Data */}
+            <View style={tw("absolute inset-0 opacity-20 pointer-events-none")}>
+                <View style={tw("p-6 gap-4")}>
+                    <DefinitionBox
+                        title={fakeDefinition.title}
+                        content={fakeDefinition.content}
+                    />
+                    <TipBox
+                        title={fakeTip.title}
+                        content={fakeTip.content}
+                    />
+                    <HintBox content={fakeHint.content} />
+                    <WarningBox content={fakeWarning.content} />
+                    <SummaryBox
+                        title={fakeSummary.title}
+                        icon={fakeSummary.icon}
+                        sections={fakeSummary.sections}
+                    />
+                </View>
+            </View>
 
-//             {/* Overlay Content */}
-//             <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/10 backdrop-blur-xs">
-//                 <div className="text-center space-y-4 p-8">
-//                     {/* Icon */}
-//                     <div className="relative">
-//                         <div className="w-20 h-20 bg-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-//                             <BookOpen className="w-10 h-10 text-white" />
-//                         </div>
-//                     </div>
+            {/* Overlay Content */}
+            <View style={tw("absolute inset-0 flex items-center justify-center bg-white/80")}>
+                <View style={tw("items-center gap-6 p-8")}>
+                    {/* Icon */}
+                    <View style={tw("w-20 h-20 bg-indigo-500 rounded-full items-center justify-center shadow-lg")}>
+                        <BookOpen size={40} color="white" />
+                    </View>
 
-//                     {/* Text */}
-//                     <div className="space-y-2">
-//                         <h2 className="text-2xl font-bold text-gray-800">
-//                             មេរៀននឹងមកដល់ឆាប់ៗ
-//                         </h2>
-//                         <p className="text-gray-600 max-w-md">
-//                             មេរៀននេះកំពុងត្រូវបានរៀបចំ សូមរង់ចាំឆាប់ៗនេះ
-//                         </p>
-//                     </div>
-
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
+                    {/* Text */}
+                    <View style={tw("items-center gap-2")}>
+                        <Text style={tw("text-2xl font-bold text-gray-800 text-center")}>
+                            មេរៀននឹងមកដល់ឆាប់ៗ
+                        </Text>
+                        <Text style={tw("text-gray-600 text-center max-w-xs")}>
+                            មេរៀននេះកំពុងត្រូវបានរៀបចំ សូមរង់ចាំឆាប់ៗនេះ
+                        </Text>
+                    </View>
+                </View>
+            </View>
+        </View>
+    );
+}

@@ -1,4 +1,4 @@
-import { Content } from "@/types/docs/curriculum";
+import { Content } from "@core-types/docs/curriculum";
 import { Leaf, Brain, Shield, Bug, Globe } from "lucide-react";
 import ComingSoon from "@components/pages/docs/ComingSoon";
 
