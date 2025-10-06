@@ -10,6 +10,10 @@ import { TAILWIND_COLORS } from "@/constants/styles/tailwind-colors"
 import TopicWrapper from "@/components/screens/docs/TopicWrapper"
 import { curriculum } from "@/lessons/curriculum"
 import Skeleton from "@/components/screens/docs/Skeleton"
+import Definition from "@/lessons/components/grade-12/math/complex/Complex-Definition"
+import ComplexDefinition from "@/lessons/components/grade-12/math/complex/Complex-Definition"
+import { HEADER_CONFIG } from "@/constants/header-config"
+// import { Definition as DefinitionType } from "@/lessons/types"
 
 type Params = {
     grade: string
@@ -73,16 +77,7 @@ export default function LessonsScreen() {
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: 'មេរៀន',
-            headerBackButtonDisplayMode: "minimal",
-            headerShown: true,
-            contentStyle: { backgroundColor: "transparent", borderRadius: 0 },
-            presentation: "card",
-            header: ({ navigation, back, options }) => (
-                <Header
-                    title={options.headerTitle as string}
-                    icon={<BookOpen size={16} color={TAILWIND_COLORS["indigo-600"]} />}
-                />
-            )
+            ...HEADER_CONFIG,
         })
     }, [navigation])
 
@@ -90,7 +85,7 @@ export default function LessonsScreen() {
         // Handle 404 case
         return (
             <View style={tw("flex-1 items-center justify-center")}>
-                <Text>មិនមានមេរៀននេះទេ</Text>
+                {/* <Text>មិនមានមេរៀននេះទេ</Text> */}
             </View>
         )
     }
@@ -106,15 +101,7 @@ export default function LessonsScreen() {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={tw("py-36")}
             >
-                <TopicWrapper
-                    title={topic.title}
-                    prev={navigationTopics.prev}
-                    next={navigationTopics.next}
-                >
-                    <Suspense fallback={<Skeleton />}>
-                        <TopicComponent />
-                    </Suspense>
-                </TopicWrapper>
+                <ComplexDefinition/>
             </ScrollView>
         </View>
     )

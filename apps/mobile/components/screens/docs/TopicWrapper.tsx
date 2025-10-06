@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Pressable } from 'react-native'
+import { View, Pressable } from 'react-native'
 import { Text } from '@components/common/Text'
 import { ArrowLeft, ArrowRight } from 'lucide-react-native'
 import { useNavigation } from '@react-navigation/native'

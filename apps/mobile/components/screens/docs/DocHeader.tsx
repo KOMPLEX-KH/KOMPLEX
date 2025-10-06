@@ -18,7 +18,7 @@ interface DocHeaderProps {
 export default function DocHeader({
     currentGrade = 'grade-12',
     currentSubject = 'math',
-    currentLesson = 'limits',
+    currentLesson = 'complex',
     currentTopic = 'zero-over-zero',
     isVisible = true
 }: DocHeaderProps) {
