@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { FONTS } from "@/constants/styles/fonts";
 import { SafeAreaView } from "react-native-safe-area-context";
 import NavBar from "@/components/common/NavBar";
-import AppStack from "@/router/AppStack";
+import AppStack from "@/navigation/AppStack";
 SplashScreen.preventAutoHideAsync(); // keep splash until fonts are loaded
 
 

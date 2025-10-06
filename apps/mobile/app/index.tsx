@@ -1,6 +1,6 @@
 import { FlatList, Pressable, TextInput, View } from 'react-native';
 import { tw } from '@/utils/styles';
-import Logo from '@/components/logo';
+import Logo from '@/components/common/Logo';
 import { Text } from '@/components/common/Text';
 import { ArrowRight, Bell, BookOpen, Bot, Camera, Edit, MessageSquare, Search } from 'lucide-react-native'
 import FeatureCard from '@/components/screens/home/featureCard';

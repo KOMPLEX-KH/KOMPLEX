@@ -18,14 +18,13 @@ interface DocHeaderProps {
 export default function DocHeader({
     currentGrade = 'grade-12',
     currentSubject = 'math',
-    currentLesson = 'limits',
+    currentLesson = 'complex',
     currentTopic = 'zero-over-zero',
     isVisible = true
 }: DocHeaderProps) {
 
     const translateY = useRef(new Animated.Value(-200)).current; // start hidden
     const opacity = useRef(new Animated.Value(0)).current;
-
     useEffect(() => {
         Animated.timing(translateY, {
             toValue: isVisible ? 0 : -200,
@@ -34,7 +33,7 @@ export default function DocHeader({
         }).start();
         Animated.timing(opacity, {
             toValue: isVisible ? 1 : 0,
-            duration: 100,
+            duration: 50,
             useNativeDriver: true,
         }).start();
     }, [isVisible]);
@@ -72,7 +71,7 @@ export default function DocHeader({
     const currentLessonData = lessons.find(l => l.lesson === currentLesson);
 
     return (
-        <Animated.View style={[tw(`absolute top-12 left-0 right-0 z-10`), { transform: [{ translateY }], opacity }]}>
+        <Animated.View style={[tw(`absolute top-12 left-0 right-0 z-10`), { transform: [{ translateY: translateY }], opacity }]}>
             <View style={[tw("bg-white/95 border-b border-indigo-500/10 transition-all duration-300")]}>
                 <View style={tw("flex gap-1 py-2 px-4")}>
                     {/* Grade and Subject Header */}
