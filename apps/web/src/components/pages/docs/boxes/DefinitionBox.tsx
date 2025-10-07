@@ -1,4 +1,9 @@
+'use client'
+
 import BulletList from '@components/helper/BulletList';
+import JsxParser from "react-jsx-parser";
+import reactElementToJSXString from "react-element-to-jsx-string";
+import { BlockMath, InlineMath } from 'react-katex';
 
 export interface DefinitionBoxProps {
     title: string | React.ReactNode;
@@ -6,6 +11,12 @@ export interface DefinitionBoxProps {
 }
 
 export default function DefinitionBox({ title, content }: DefinitionBoxProps) {
+    const jsxString =
+        typeof content === "string"
+            ? content
+            : Array.isArray(content)
+                ? content.map(el => reactElementToJSXString(el)).join("\n")
+                : reactElementToJSXString(content);
     return (
         <div className=" my-6 space-y-4 ">
             <h4 className="text-black font-bold text-2xl">{title}</h4>
@@ -15,7 +26,7 @@ export default function DefinitionBox({ title, content }: DefinitionBoxProps) {
                 <BulletList content={content} />
             ) : (
                 <div className="text-gray-700 leading-relaxed text-base">
-                    {content}
+                    <JsxParser jsx={jsxString} components={{ }} />
                 </div>
             )}
         </div>

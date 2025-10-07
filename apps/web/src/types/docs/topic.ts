@@ -103,3 +103,52 @@ export interface PracticeExercise {
   problems: string[] | ReactNode[];
   answers?: ReactNode[];
 }
+
+{
+
+}
+
+
+export interface TopicContent_V2 {
+  definition?: DefinitionBoxProps[];
+
+  // Tip section - provides helpful hints or tips
+  tip?: TipBoxProps[];
+
+  // Example section - shows worked examples with steps
+  example?: ExampleBoxProps[];
+
+  // Exercise section - interactive practice questions
+  exercise?: ExerciseBoxProps[];
+
+  // Hint section - additional guidance or notes
+  hint?: HintBoxProps[];
+
+  // Warning section - important cautions or common mistakes
+  warning?: WarningBoxProps[];
+
+  // Custom section - flexible custom content
+  custom?: CustomBoxProps[];
+
+  // 3D section - 3D model with wrapper
+  threeD?: ThreeDBoxProps[];
+
+  // Graph section - mathematical graph with wrapper
+  graph?: GraphBoxProps[];
+
+  // ===== EXPLANATION BOXES =====
+  // These boxes have content on the left and explanation on the right
+  // They are responsive and follow a specific layout pattern
+
+  // Image explanation section - image with explanation
+  imageExplanation?: ImageBoxProps[];
+
+  // Video explanation section - video with explanation
+  videoExplanation?: VideoBoxProps[];
+
+  // Graph explanation section - Desmos graph with explanation
+  graphExplanation?: GraphExplanationBoxProps[];
+
+  // 3D explanation section - 3D content with explanation
+  threeDExplanation?: ThreeDExplanationBoxProps[];
+}
