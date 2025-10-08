@@ -1,13 +1,15 @@
-import BulletList from '@components/helper/BulletList';
-import { Lightbulb } from 'lucide-react';
+'use client'
+
+import { Lightbulb } from 'lucide-react'
+import BulletList from '@components/helper/BulletList'
 
 export interface TipBoxProps {
-    title?: string | React.ReactNode;
-    icon?: React.ComponentType<{ size?: number; className?: string }>;
-    content: string | string[] | React.ReactNode;
+    title?: string | React.ReactNode
+    icon?: React.ComponentType<{ size?: number; className?: string }>
+    content: string | string[] | React.ReactNode
 }
 
-export default function TipBox({
+export  function TipBox({
     title,
     content,
     icon: Icon = Lightbulb
@@ -23,9 +25,7 @@ export default function TipBox({
                 </div>
             )}
             {typeof content === 'string' ? (
-                <div className="text-gray-700 leading-relaxed text-base">
-                    {content}
-                </div>
+                <div className="text-gray-700 leading-relaxed text-base">{content}</div>
             ) : Array.isArray(content) ? (
                 <BulletList content={content} />
             ) : (
@@ -34,5 +34,5 @@ export default function TipBox({
                 </div>
             )}
         </div>
-    );
+    )
 }

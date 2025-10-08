@@ -12,7 +12,7 @@ export interface VideoBoxProps {
     explanation: string | string[] | React.ReactNode;
 }
 
-export const VideoBox = ({ src, videoTitle, explanation }: VideoBoxProps) => {
+export const VideoExplanationBox = ({ src, videoTitle, explanation }: VideoBoxProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (

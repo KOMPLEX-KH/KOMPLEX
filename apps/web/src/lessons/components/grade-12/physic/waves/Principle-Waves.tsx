@@ -11,19 +11,18 @@
 // export default PrincipleWaves
 
 import React from "react";
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox";
-import ExampleBox from "@/components/pages/docs/boxes/ExampleBox";
-import TipBox from "@/components/pages/docs/boxes/TipBox";
-import ExerciseBox from "@/components/pages/docs/boxes/ExerciseBox";
-import HintBox from "@/components/pages/docs/boxes/HintBox";
-import WarningBox from "@/components/pages/docs/boxes/WarningBox";
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
 import { BlockMath, InlineMath } from "react-katex";
 import { MathLine } from "@components/helper/MathLine";
 import { MathScroll } from "@components/helper/MathScroll";
-import { ImageBox } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
+import { ImageExplanationBox } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
 import { heatEngineImg } from "../../../../../../public/docs/grade-12/physic/engine/ImportImage";
 import { Check } from "lucide-react";
-
 
 type Variant = "green" | "violet" | "neutral" | "amber";
 
@@ -69,8 +68,6 @@ export function ResultCallout({
   );
 }
 
-
-
 const LessonChip = ({ children }: { children: React.ReactNode }) => (
   <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-600 text-white text-sm font-bold">
     {children}
@@ -105,7 +102,6 @@ const Section = ({
     {children}
   </section>
 );
-
 
 // components/helper/Therefore.tsx
 
@@ -142,7 +138,6 @@ export const Therefore: React.FC<ThereforeProps> = ({
     </span>
   </div>
 );
-
 
 export default function PrincipleWaves() {
   return (
@@ -195,9 +190,7 @@ export default function PrincipleWaves() {
             {/* ================= 1. OVERVIEW ================= */}
             <Section no={1} title="សមីការរលក" id="sec-wave-equation">
               <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-                <p className="font-semibold text-slate-800 mb-1">
-                  តាមរូបមន្ត
-                </p>
+                <p className="font-semibold text-slate-800 mb-1">តាមរូបមន្ត</p>
                 <MathScroll math={String.raw`y = asin(\omega t - \phi )`} />
                 <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
                   <li>
@@ -207,8 +200,8 @@ export default function PrincipleWaves() {
                     <InlineMath math="t" /> រយៈពេល (<InlineMath math="s" />)
                   </li>
                   <li>
-                    <InlineMath math={String.raw`\omega `} />​ ល្បឿនប្រេកង់ (<InlineMath math="rad/s" />)
-
+                    <InlineMath math={String.raw`\omega `} />​ ល្បឿនប្រេកង់ (
+                    <InlineMath math="rad/s" />)
                   </li>
                 </ul>
               </div>
@@ -218,10 +211,13 @@ export default function PrincipleWaves() {
             <Section no={2} title="ខួបនិងប្រេកង់" id="sec-wave-frequency">
               <div className="space-y-4">
                 <p>
-                  <strong> <em>ខួប</em> </strong> ជារយៈពេលដែលរលកផ្លាស់ទីមួយបានមួយជុំ។ <br />
+                  <strong>
+                    {" "}
+                    <em>ខួប</em>{" "}
+                  </strong>{" "}
+                  ជារយៈពេលដែលរលកផ្លាស់ទីមួយបានមួយជុំ។ <br />
                 </p>
                 <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-
                   <p className="font-semibold text-slate-800 mb-1">
                     តាមរូបមន្ត
                   </p>
@@ -231,17 +227,21 @@ export default function PrincipleWaves() {
                       <InlineMath math="T" /> ខួប (<InlineMath math="s" />)
                     </li>
                     <li>
-                      <InlineMath math={String.raw`\omega `} />​ ល្បឿនប្រេកង់ (<InlineMath math="rad/s" />)
+                      <InlineMath math={String.raw`\omega `} />​ ល្បឿនប្រេកង់ (
+                      <InlineMath math="rad/s" />)
                     </li>
                   </ul>
                 </div>
               </div>
               <div className="space-y-4">
                 <p>
-                  <strong> <em>ប្រកង់</em> </strong> ជាចំនួនរលកផ្លាស់ទីបានមួយជុំ។ <br />
+                  <strong>
+                    {" "}
+                    <em>ប្រកង់</em>{" "}
+                  </strong>{" "}
+                  ជាចំនួនរលកផ្លាស់ទីបានមួយជុំ។ <br />
                 </p>
                 <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-
                   <p className="font-semibold text-slate-800 mb-1">
                     តាមរូបមន្ត
                   </p>
@@ -251,7 +251,8 @@ export default function PrincipleWaves() {
                       <InlineMath math="T" /> ខួប (<InlineMath math="s" />)
                     </li>
                     <li>
-                      <InlineMath math={String.raw`f `} />​ ចំនួនប្រេកង់ (<InlineMath math=" Hz " />)
+                      <InlineMath math={String.raw`f `} />​ ចំនួនប្រេកង់ (
+                      <InlineMath math=" Hz " />)
                     </li>
                   </ul>
                 </div>
@@ -259,31 +260,32 @@ export default function PrincipleWaves() {
             </Section>
 
             {/* ================= 3. CARNOT ================= */}
-            <Section
-              no={3}
-              title="ជំហានរលក"
-              id="sec-carnot"
-            >
+            <Section no={3} title="ជំហានរលក" id="sec-carnot">
               <div className="space-y-4">
                 <p>
-                  <strong> <em>ជំហានរលក
-                  </em> </strong> ជាចម្ងាយដែលផ្លាស់ទីបានក្នុងបានក្នុងរយៈពេលមួយខួប។ <br />
+                  <strong>
+                    {" "}
+                    <em>ជំហានរលក</em>{" "}
+                  </strong>{" "}
+                  ជាចម្ងាយដែលផ្លាស់ទីបានក្នុងបានក្នុងរយៈពេលមួយខួប។ <br />
                 </p>
                 <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-
                   <p className="font-semibold text-slate-800 mb-1">
                     តាមរូបមន្ត
                   </p>
                   <MathScroll math={String.raw`\lambda = v \cdot T`} />
                   <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
                     <li>
-                      <InlineMath math="\lambda" /> ចំនួនជំហានរលក (<InlineMath math="m" />)
+                      <InlineMath math="\lambda" /> ចំនួនជំហានរលក (
+                      <InlineMath math="m" />)
                     </li>
                     <li>
-                      <InlineMath math={String.raw`V `} />​ ល្បឿនរលក (<InlineMath math=" m/s" />)
+                      <InlineMath math={String.raw`V `} />​ ល្បឿនរលក (
+                      <InlineMath math=" m/s" />)
                     </li>
                     <li>
-                      <InlineMath math={String.raw`T`} />​ រយៈពេល (<InlineMath math="s" />)
+                      <InlineMath math={String.raw`T`} />​ រយៈពេល (
+                      <InlineMath math="s" />)
                     </li>
                   </ul>
                 </div>
@@ -291,15 +293,9 @@ export default function PrincipleWaves() {
             </Section>
 
             {/* ================= 4. Wave Reflection ================= */}
-            <Section
-              no={4}
-              title="សមីការរលកជញ្រ្ជំុ"
-              id="sec-wave-reflection"
-            >
+            <Section no={4} title="សមីការរលកជញ្រ្ជំុ" id="sec-wave-reflection">
               <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-                <p className="font-semibold text-slate-800 mb-1">
-                  រូបមន្ត
-                </p>
+                <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
                 <div className="space-y-1">
                   <BlockMath math={String.raw`y = asin(kx - \omega t)`} />
                 </div>
@@ -308,16 +304,20 @@ export default function PrincipleWaves() {
                     <InlineMath math="a" /> អំព្លីទុត (<InlineMath math="m" />)
                   </li>
                   <li>
-                    <InlineMath math={String.raw`K `} />​ ល្បឿនរលក (<InlineMath math=" m/s" />)
+                    <InlineMath math={String.raw`K `} />​ ល្បឿនរលក (
+                    <InlineMath math=" m/s" />)
                   </li>
                   <li>
-                    <InlineMath math={String.raw`x`} />​   (<InlineMath math="s" />)
+                    <InlineMath math={String.raw`x`} />​ (
+                    <InlineMath math="s" />)
                   </li>
                   <li>
-                    <InlineMath math={String.raw`\omega `} />​ ល្បឿនប្រេកង់ (<InlineMath math=" rad/s" />)
+                    <InlineMath math={String.raw`\omega `} />​ ល្បឿនប្រេកង់ (
+                    <InlineMath math=" rad/s" />)
                   </li>
                   <li>
-                    <InlineMath math={String.raw`t`} />​ រយៈពេល (<InlineMath math="s" />)
+                    <InlineMath math={String.raw`t`} />​ រយៈពេល (
+                    <InlineMath math="s" />)
                   </li>
                 </ul>
               </div>
@@ -326,9 +326,7 @@ export default function PrincipleWaves() {
             {/* ================= 5. Wave diffraction ================= */}
             <Section no={5} title="សមីការរលកតម្រួត" id="sec-wave-diffraction">
               <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-                <p className="font-semibold text-slate-800 mb-1">
-                  រូបមន្ត
-                </p>
+                <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
                 <div className="space-y-1">
                   <BlockMath math={String.raw`y = y_1 + y_2`} />
                 </div>
@@ -337,66 +335,97 @@ export default function PrincipleWaves() {
                 title="សម្រាយបញ្ចាក់"
                 content={
                   <>
-                    <div className="mt-2" >
-                      <InlineMath math={String.raw`យើងមាន\space​ y_1 = a_1sin(\omega t - \phi_1 )`} />
-                      <InlineMath math={String.raw`\space នឹង\space​ y_2 = a_2sin(\omega t - \phi_2 )`} />
-
+                    <div className="mt-2">
+                      <InlineMath
+                        math={String.raw`យើងមាន\space​ y_1 = a_1sin(\omega t - \phi_1 )`}
+                      />
+                      <InlineMath
+                        math={String.raw`\space នឹង\space​ y_2 = a_2sin(\omega t - \phi_2 )`}
+                      />
                     </div>
-                    <div className="mt-2" >
-                      <InlineMath math={String.raw`⟹​ y = y_1 + y_2 = a_1sin(\omega t - \phi_1 ) + a_2sin(\omega t - \phi_2 )`} />
+                    <div className="mt-2">
+                      <InlineMath
+                        math={String.raw`⟹​ y = y_1 + y_2 = a_1sin(\omega t - \phi_1 ) + a_2sin(\omega t - \phi_2 )`}
+                      />
                     </div>
 
-                    <Therefore className="mt-3" math={String.raw`y = a_1sin(\omega t - \phi_1 ) + a_2sin(\omega t - \phi_2 )`} />
+                    <Therefore
+                      className="mt-3"
+                      math={String.raw`y = a_1sin(\omega t - \phi_1 ) + a_2sin(\omega t - \phi_2 )`}
+                    />
                   </>
                 }
               />
               <HintBox
                 content={
                   <>
-                    <p> <InlineMath math={String.raw`sina + sinb = 2sin\frac{a+b}{2}\cdot cos\frac{a-b}{2}`} /> </p>
+                    <p>
+                      {" "}
+                      <InlineMath
+                        math={String.raw`sina + sinb = 2sin\frac{a+b}{2}\cdot cos\frac{a-b}{2}`}
+                      />{" "}
+                    </p>
                   </>
                 }
               />
             </Section>
 
-            <Section no={6} title="ទីតាំងថ្នាំងនិងទីតាំងពោះ" id="sec-wave-refraction">
+            <Section
+              no={6}
+              title="ទីតាំងថ្នាំងនិងទីតាំងពោះ"
+              id="sec-wave-refraction"
+            >
               <div className="space-y-4">
                 <p>
-                  <strong> <em>ទីតាំងថ្នាំង</em> </strong> ជាទីតាំងដែលរលកតម្រួតមានអំព្លីទុត​ <InlineMath math={String.raw`a=0`} />។ <br />
+                  <strong>
+                    {" "}
+                    <em>ទីតាំងថ្នាំង</em>{" "}
+                  </strong>{" "}
+                  ជាទីតាំងដែលរលកតម្រួតមានអំព្លីទុត​{" "}
+                  <InlineMath math={String.raw`a=0`} />។ <br />
                 </p>
                 <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-
                   <p className="font-semibold text-slate-800 mb-1">
                     តាមរូបមន្ត
                   </p>
-                  <MathScroll math={String.raw`x = n\frac{\lambda}{2} \space,n = 0, 1, 2, 3, ....`} />
+                  <MathScroll
+                    math={String.raw`x = n\frac{\lambda}{2} \space,n = 0, 1, 2, 3, ....`}
+                  />
                   <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
                     <li>
                       <InlineMath math="T" /> ខួប (<InlineMath math="s" />)
                     </li>
                     <li>
-                      <InlineMath math={String.raw`\omega `} />​ ល្បឿនប្រេកង់ (<InlineMath math="rad/s" />)
+                      <InlineMath math={String.raw`\omega `} />​ ល្បឿនប្រេកង់ (
+                      <InlineMath math="rad/s" />)
                     </li>
                   </ul>
                 </div>
               </div>
               <div className="space-y-4">
                 <p>
-                  <strong> <em>ទីតាំងពោះ</em> </strong> ជាទីតាំងដែលរលកតម្រួតមានអំព្លីទុត​ <InlineMath math={String.raw`a=\pm 1`} />។ <br />
+                  <strong>
+                    {" "}
+                    <em>ទីតាំងពោះ</em>{" "}
+                  </strong>{" "}
+                  ជាទីតាំងដែលរលកតម្រួតមានអំព្លីទុត​{" "}
+                  <InlineMath math={String.raw`a=\pm 1`} />។ <br />
                 </p>
                 <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-
                   <p className="font-semibold text-slate-800 mb-1">
                     តាមរូបមន្ត
                   </p>
-                  <MathScroll math={String.raw`x = (2n-1)\frac{\lambda}{2} \space,n = 0, 1, 2, 3, ....`} />
+                  <MathScroll
+                    math={String.raw`x = (2n-1)\frac{\lambda}{2} \space,n = 0, 1, 2, 3, ....`}
+                  />
 
                   <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
                     <li>
                       <InlineMath math="T" /> ខួប (<InlineMath math="s" />)
                     </li>
                     <li>
-                      <InlineMath math={String.raw`f `} />​ ចំនួនប្រេកង់ (<InlineMath math=" Hz " />)
+                      <InlineMath math={String.raw`f `} />​ ចំនួនប្រេកង់ (
+                      <InlineMath math=" Hz " />)
                     </li>
                   </ul>
                 </div>
@@ -413,8 +442,14 @@ export default function PrincipleWaves() {
                     options: [
                       <BlockMath key="a" math={String.raw`e=\frac{Q_h}{W}`} />,
                       <BlockMath key="b" math={String.raw`e=\frac{W}{Q_h}`} />,
-                      <BlockMath key="c" math={String.raw`e=1-\frac{Q_h}{Q_c}`} />,
-                      <BlockMath key="d" math={String.raw`e=\frac{Q_c}{Q_h}`} />,
+                      <BlockMath
+                        key="c"
+                        math={String.raw`e=1-\frac{Q_h}{Q_c}`}
+                      />,
+                      <BlockMath
+                        key="d"
+                        math={String.raw`e=\frac{Q_c}{Q_h}`}
+                      />,
                     ],
                     correctAnswer: 1,
                   },
@@ -422,16 +457,28 @@ export default function PrincipleWaves() {
                     id: "e2",
                     question: (
                       <p>
-                        ម៉ាស៊ីនមួយទទួល <InlineMath math="Q_h=1500\,\text{J}" /> និង
-                        បញ្ចេញ <InlineMath math="Q_c=900\,\text{J}" />។{" "}
+                        ម៉ាស៊ីនមួយទទួល <InlineMath math="Q_h=1500\,\text{J}" />{" "}
+                        និង បញ្ចេញ <InlineMath math="Q_c=900\,\text{J}" />។{" "}
                         <InlineMath math="W" /> និង <InlineMath math="e" />?
                       </p>
                     ),
                     options: [
-                      <BlockMath key="a" math={String.raw`W=600\,\text{J},\ e=40\%`} />,
-                      <BlockMath key="b" math={String.raw`W=600\,\text{J},\ e=60\%`} />,
-                      <BlockMath key="c" math={String.raw`W=900\,\text{J},\ e=40\%`} />,
-                      <BlockMath key="d" math={String.raw`W=900\,\text{J},\ e=60\%`} />,
+                      <BlockMath
+                        key="a"
+                        math={String.raw`W=600\,\text{J},\ e=40\%`}
+                      />,
+                      <BlockMath
+                        key="b"
+                        math={String.raw`W=600\,\text{J},\ e=60\%`}
+                      />,
+                      <BlockMath
+                        key="c"
+                        math={String.raw`W=900\,\text{J},\ e=40\%`}
+                      />,
+                      <BlockMath
+                        key="d"
+                        math={String.raw`W=900\,\text{J},\ e=60\%`}
+                      />,
                     ],
                     correctAnswer: 0,
                   },
@@ -454,16 +501,24 @@ export default function PrincipleWaves() {
                   },
                   {
                     id: "e4",
-                    question: (
-                      <p>
-                        Refrigerator COP? ជម្រើសត្រឹមត្រូវ៖
-                      </p>
-                    ),
+                    question: <p>Refrigerator COP? ជម្រើសត្រឹមត្រូវ៖</p>,
                     options: [
-                      <BlockMath key="a" math={String.raw`\text{COP}_{\text{ref}}=\frac{Q_h}{W}`} />,
-                      <BlockMath key="b" math={String.raw`\text{COP}_{\text{ref}}=\frac{Q_c}{W}`} />,
-                      <BlockMath key="c" math={String.raw`\text{COP}_{\text{ref}}=\frac{W}{Q_c}`} />,
-                      <BlockMath key="d" math={String.raw`\text{COP}_{\text{ref}}=\frac{T_h-T_c}{T_h}`} />,
+                      <BlockMath
+                        key="a"
+                        math={String.raw`\text{COP}_{\text{ref}}=\frac{Q_h}{W}`}
+                      />,
+                      <BlockMath
+                        key="b"
+                        math={String.raw`\text{COP}_{\text{ref}}=\frac{Q_c}{W}`}
+                      />,
+                      <BlockMath
+                        key="c"
+                        math={String.raw`\text{COP}_{\text{ref}}=\frac{W}{Q_c}`}
+                      />,
+                      <BlockMath
+                        key="d"
+                        math={String.raw`\text{COP}_{\text{ref}}=\frac{T_h-T_c}{T_h}`}
+                      />,
                     ],
                     correctAnswer: 1,
                   },
@@ -471,15 +526,27 @@ export default function PrincipleWaves() {
                     id: "e5",
                     question: (
                       <p>
-                        សម្រាប់សីតុណ្ហភាពដូចគ្នា{" "}
-                        <InlineMath math="(T_h,T_c)" />៖ ត្រូវអ្វី?
+                        សម្រាប់សីតុណ្ហភាពដូចគ្នា <InlineMath math="(T_h,T_c)" />
+                        ៖ ត្រូវអ្វី?
                       </p>
                     ),
                     options: [
-                      <BlockMath key="a" math={String.raw`\text{COP}_{\text{hp}}=\text{COP}_{\text{ref}}`} />,
-                      <BlockMath key="b" math={String.raw`\text{COP}_{\text{hp}}=\text{COP}_{\text{ref}}-1`} />,
-                      <BlockMath key="c" math={String.raw`\text{COP}_{\text{hp}}=\text{COP}_{\text{ref}}+1`} />,
-                      <BlockMath key="d" math={String.raw`\text{COP}_{\text{hp}}=1/\text{COP}_{\text{ref}}`} />,
+                      <BlockMath
+                        key="a"
+                        math={String.raw`\text{COP}_{\text{hp}}=\text{COP}_{\text{ref}}`}
+                      />,
+                      <BlockMath
+                        key="b"
+                        math={String.raw`\text{COP}_{\text{hp}}=\text{COP}_{\text{ref}}-1`}
+                      />,
+                      <BlockMath
+                        key="c"
+                        math={String.raw`\text{COP}_{\text{hp}}=\text{COP}_{\text{ref}}+1`}
+                      />,
+                      <BlockMath
+                        key="d"
+                        math={String.raw`\text{COP}_{\text{hp}}=1/\text{COP}_{\text{ref}}`}
+                      />,
                     ],
                     correctAnswer: 2,
                   },

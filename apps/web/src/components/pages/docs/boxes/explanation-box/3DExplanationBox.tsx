@@ -1,25 +1,22 @@
 'use client'
 
-import BulletList from '@components/helper/BulletList';
-import { Box, Maximize2, X } from 'lucide-react';
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
-import { ThreeD } from '@components/helper/ThreeD';
-import { ThreeDTextItem, TwoDTextItem } from '@/types/docs/threeD';
-
-
+import { Box, Maximize2, X } from 'lucide-react'
+import { Dialog, Transition } from '@headlessui/react'
+import { Fragment, useState } from 'react'
+import { ThreeD } from '@components/helper/ThreeD'
+import { ThreeDTextItem, TwoDTextItem } from '@/types/docs/threeD'
 
 export interface ThreeDExplanationBoxProps {
-    src?: string | React.ReactNode;
-    explanation: string | string[] | React.ReactNode;
-    scale?: number;
-    target?: [number, number, number];
-    canvasBackground?: React.ReactNode;
-    canvasBackgroundColor?: string;
-    threeDText?: ThreeDTextItem | ThreeDTextItem[];
-    twoDText?: TwoDTextItem | TwoDTextItem[];
-    height?: number;
-    title?: string;
+    src?: string | React.ReactNode
+    explanation: string | string[] | React.ReactNode
+    scale?: number
+    target?: [number, number, number]
+    canvasBackground?: React.ReactNode
+    canvasBackgroundColor?: string
+    threeDText?: ThreeDTextItem | ThreeDTextItem[]
+    twoDText?: TwoDTextItem | TwoDTextItem[]
+    height?: number
+    title?: string
 }
 
 export const ThreeDExplanationBox = ({
@@ -34,10 +31,10 @@ export const ThreeDExplanationBox = ({
     height = 400,
     title = "ការពន្យល់"
 }: ThreeDExplanationBoxProps) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     const handleCloseModal = () => {
-        window.location.reload();
+        window.location.reload()
     }
 
     return (
@@ -69,17 +66,7 @@ export const ThreeDExplanationBox = ({
                             <Box size={20} className='text-indigo-600' />
                             <h3 className="text-xl font-bold text-gray-900">{title}</h3>
                         </div>
-                        {typeof explanation === 'string' ? (
-                            <p className="text-gray-700 text-base">
-                                {explanation}
-                            </p>
-                        ) : Array.isArray(explanation) ? (
-                            <BulletList content={explanation} />
-                        ) : (
-                            <div className="text-gray-700 text-base">
-                                {explanation}
-                            </div>
-                        )}
+                        {explanation}
                     </div>
                 </div>
                 <div className="hidden lg:flex bg-indigo-50/80 border border-indigo-600 p-6 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
@@ -89,17 +76,7 @@ export const ThreeDExplanationBox = ({
                                 <Box size={20} className='text-indigo-600' />
                                 <h3 className="text-xl font-bold text-gray-900">{title}</h3>
                             </div>
-                            {typeof explanation === 'string' ? (
-                                <p className="text-gray-700 leading-relaxed text-base">
-                                    {explanation}
-                                </p>
-                            ) : Array.isArray(explanation) ? (
-                                <BulletList content={explanation} />
-                            ) : (
-                                <div className="text-gray-700 leading-relaxed text-base">
-                                    {explanation}
-                                </div>
-                            )}
+                            {explanation}
                         </div>
                     </div>
                 </div>
@@ -134,7 +111,7 @@ export const ThreeDExplanationBox = ({
                                 <Dialog.Panel className="relative w-full max-w-6xl transform overflow-hidden rounded-3xl bg-white text-left align-middle shadow-xl transition-all">
                                     <div className="relative">
                                         <button
-                                            onClick={() => handleCloseModal()}
+                                            onClick={handleCloseModal}
                                             className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
                                         >
                                             <X size={20} />
@@ -161,5 +138,5 @@ export const ThreeDExplanationBox = ({
                 </Dialog>
             </Transition>
         </>
-    );
-}; 
+    )
+}

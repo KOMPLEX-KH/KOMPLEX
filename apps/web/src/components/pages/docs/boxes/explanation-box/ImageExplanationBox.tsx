@@ -1,30 +1,32 @@
 'use client'
 
-import BulletList from '@components/helper/BulletList';
-import { Image, Maximize2, X } from 'lucide-react';
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Image as ImageIcon, Maximize2, X } from 'lucide-react'
+import { Dialog, Transition } from '@headlessui/react'
+import { Fragment, useState } from 'react'
+import Image from 'next/image'
 
 export interface ImageBoxProps {
-    src?: string;
-    imageAlt: string;
-    explanation: string | string[] | React.ReactNode;
-    title?: string;
+    src?: string
+    imageAlt: string
+    explanation: string | string[] | React.ReactNode
+    title?: string
 }
 
-export const ImageBox = ({ src, imageAlt, explanation, title }: ImageBoxProps) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+export const ImageExplanationBox = ({ src, imageAlt, explanation, title }: ImageBoxProps) => {
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     return (
         <>
             <div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-6 gap-2 my-6'>
-                <div className="bg-indigo-50/80 border border-indigo-600 p-6  rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
-                    <div className="grid grid-cols-1  gap-6">
+                <div className="bg-indigo-50/80 border border-indigo-600 p-6 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+                    <div className="grid grid-cols-1 gap-6">
                         <div className="w-full relative group bg-white rounded-3xl">
-                            <img
-                                src={src}
+                            <Image
+                                src={src || '/image-error.png'}
                                 alt={imageAlt}
-                                className="rounded-3xl  h-auto w-full  object-contain"
+                                width={800}
+                                height={600}
+                                className="rounded-3xl h-auto w-full object-contain"
                             />
                             <button
                                 onClick={() => setIsModalOpen(true)}
@@ -36,41 +38,20 @@ export const ImageBox = ({ src, imageAlt, explanation, title }: ImageBoxProps) =
                     </div>
                     <div className="lg:hidden flex flex-col my-6 w-full">
                         <div className="flex items-center gap-3 mb-4">
-                            <Image size={20} className='text-indigo-600' />
+                            <ImageIcon size={20} className='text-indigo-600' />
                             <h3 className="text-xl font-bold text-gray-900">{title || "ការពន្យល់"}</h3>
                         </div>
-                        {typeof explanation === 'string' ? (
-                            <p className="text-gray-700 text-base">
-                                {explanation}
-                            </p>
-                        ) : Array.isArray(explanation) ? (
-                            <BulletList content={explanation} />
-                        ) : (
-                            <div className="text-gray-700 text-base">
-                                {explanation}
-                            </div>
-                        )}
+                        {explanation}
                     </div>
                 </div>
-                <div className="hidden lg:flex  bg-indigo-50/80 border border-indigo-600 p-6  rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
-                    <div className="grid grid-cols-1  gap-6">
-
+                <div className="hidden lg:flex bg-indigo-50/80 border border-indigo-600 p-6 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+                    <div className="grid grid-cols-1 gap-6">
                         <div className="w-full">
-                            <div className="flex  items-center gap-3 mb-4">
-                                <Image size={20} className='text-indigo-600' />
+                            <div className="flex items-center gap-3 mb-4">
+                                <ImageIcon size={20} className='text-indigo-600' />
                                 <h3 className="text-xl font-bold text-gray-900">{title || "ការពន្យល់"}</h3>
                             </div>
-                            {typeof explanation === 'string' ? (
-                                <p className="text-gray-700 leading-relaxed text-base">
-                                    {explanation}
-                                </p>
-                            ) : Array.isArray(explanation) ? (
-                                <BulletList content={explanation} />
-                            ) : (
-                                <div className="text-gray-700 leading-relaxed text-base">
-                                    {explanation}
-                                </div>
-                            )}
+                            {explanation}
                         </div>
                     </div>
                 </div>
@@ -110,9 +91,11 @@ export const ImageBox = ({ src, imageAlt, explanation, title }: ImageBoxProps) =
                                         >
                                             <X size={20} />
                                         </button>
-                                        <img
-                                            src={src}
+                                        <Image
+                                            src={src || '/image-error.png'}
                                             alt={imageAlt}
+                                            width={1200}
+                                            height={800}
                                             className="w-full h-auto max-h-[80vh] object-contain"
                                         />
                                     </div>
@@ -123,5 +106,5 @@ export const ImageBox = ({ src, imageAlt, explanation, title }: ImageBoxProps) =
                 </Dialog>
             </Transition>
         </>
-    );
-};
+    )
+}

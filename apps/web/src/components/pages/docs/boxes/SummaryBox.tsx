@@ -1,8 +1,6 @@
-import TipBox from "./TipBox";
+import { TipBox } from "./TipBox";
 import React from "react";
 import { SummarySection } from "@/types/docs/topic";
-
-
 
 export interface SummaryBoxProps {
     title?: string | React.ReactNode;
@@ -10,12 +8,7 @@ export interface SummaryBoxProps {
     sections: SummarySection[];
 }
 
-export default function SummaryBox({
-    title,
-    icon,
-    sections,
-}: SummaryBoxProps) {
-
+export function SummaryBox({ title, icon, sections }: SummaryBoxProps) {
     const content = (
         <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4`}>
             {sections.map((section, index) => {

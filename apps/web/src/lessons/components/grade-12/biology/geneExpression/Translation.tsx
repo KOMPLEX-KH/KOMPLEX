@@ -1,42 +1,49 @@
 import { TopicContent } from "@/types/docs/topic";
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox";
-import TipBox from "@/components/pages/docs/boxes/TipBox";
-import ExampleBox from "@/components/pages/docs/boxes/ExampleBox";
-import WarningBox from "@/components/pages/docs/boxes/WarningBox";
-import { ImageBox, ImageBoxProps } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
-import { ThreeDExplanationBox, ThreeDExplanationBoxProps } from "@/components/pages/docs/boxes/explanation-box/3DExplanationBox";
-import { BlockMath, InlineMath } from "react-katex"
-import 'katex/dist/katex.min.css'
-
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
+import {
+  ImageExplanationBox,
+  ImageBoxProps,
+} from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
+import {
+  ThreeDExplanationBox,
+  ThreeDExplanationBoxProps,
+} from "@/components/pages/docs/boxes/explanation-box/3DExplanationBox";
+import { BlockMath, InlineMath } from "react-katex";
+import "katex/dist/katex.min.css";
 
 const FirstTopicContent: TopicContent = {
   definition: {
     title: "៤.៣ ចលនាការបកប្រែក្រម",
-    content:
+    content: (
       <>
-        <div className="flex flex-col items-start">
-        </div>
+        <div className="flex flex-col items-start"></div>
       </>
+    ),
   },
   tip: {
     title: "ចំណុចសំខាន់",
     content: (
       <>
-        <p>ចលនការបកប្រែក្រមមានបីដំណាក់គឺ ដំណាក់ដំបូង ដំណាក់លូតវែង និងដំណាក់បញ្ចប់។</p>
+        <p>
+          ចលនការបកប្រែក្រមមានបីដំណាក់គឺ ដំណាក់ដំបូង ដំណាក់លូតវែង
+          និងដំណាក់បញ្ចប់។
+        </p>
       </>
     ),
   },
-}
-
+};
 
 const SecondTopicContent: TopicContent = {
   definition: {
     title: "ក. ដំណាក់ដំបូង",
-    content:
+    content: (
       <>
-        <div className="flex flex-col items-start">
-        </div>
+        <div className="flex flex-col items-start"></div>
       </>
+    ),
   },
   imageExplanation: [
     {
@@ -48,17 +55,17 @@ const SecondTopicContent: TopicContent = {
         "កូដុងផ្តើម AUG មានតែ1គត់គ្រប់ច្រវ៉ាក់ប៉ូលីប៉ិបទីត ដែលកំពុងសំយោគ មានអាស៊ីតអាមីនេមេត្យូនីន។",
       ],
     },
-  ]
-}
+  ],
+};
 
 const ThirdTopicContent: TopicContent = {
   definition: {
     title: "ខ. ដំណាក់លូតវែង",
-    content:
+    content: (
       <>
-        <div className="flex flex-col items-start">
-        </div>
+        <div className="flex flex-col items-start"></div>
       </>
+    ),
   },
   imageExplanation: [
     {
@@ -71,17 +78,17 @@ const ThirdTopicContent: TopicContent = {
         "រីបូសូមបំលាស់ទីតាមបណ្តោយ ARN_m ម្តង1កូដុងៗ ARN_t ដឹកអាស៊ីតអាមីនេ ទៅទម្លាក់ជាបន្តបន្ទាប់ក្នុងថតA នៃរីបូសូម។ អាស៊ីតអាមីនេទាំងនេះភ្ជាប់គ្នាដោយចំណងប៉ិបទីតនាំឲ្យច្រវាក់ប៉ូលីប៉ិបទីតកាន់តែលូតវែង។",
       ],
     },
-  ]
-}
+  ],
+};
 
 const FourthTopicContent: TopicContent = {
   definition: {
     title: "គ. ដំណាក់បញ្ចប់",
-    content:
+    content: (
       <>
-        <div className="flex flex-col items-start">
-        </div>
+        <div className="flex flex-col items-start"></div>
       </>
+    ),
   },
   imageExplanation: [
     {
@@ -94,55 +101,91 @@ const FourthTopicContent: TopicContent = {
         "រីបូសូមទី1ផ្លាស់ទីបានប្រវែង 5 ទៅ10nm រីបូសូមទី2 ភ្ជាប់លើARN_m បន្ទាប់មកទី3 ទី4 ...។",
       ],
     },
-  ]
-}
-
-
-
+  ],
+};
 
 const Translation = () => {
   return (
     <div>
       <div>
         {FirstTopicContent.definition && (
-          <DefinitionBox title={FirstTopicContent.definition.title} content={FirstTopicContent.definition.content} />
+          <DefinitionBox
+            title={FirstTopicContent.definition.title}
+            content={FirstTopicContent.definition.content}
+          />
         )}
         {FirstTopicContent.tip && (
-          <TipBox title={FirstTopicContent.tip.title} content={FirstTopicContent.tip.content} />
+          <TipBox
+            title={FirstTopicContent.tip.title}
+            content={FirstTopicContent.tip.content}
+          />
         )}
       </div>
       <div>
         {SecondTopicContent.definition && (
-          <DefinitionBox title={SecondTopicContent.definition.title} content={SecondTopicContent.definition.content} />
+          <DefinitionBox
+            title={SecondTopicContent.definition.title}
+            content={SecondTopicContent.definition.content}
+          />
         )}
         {SecondTopicContent.imageExplanation &&
           Array.isArray(SecondTopicContent.imageExplanation) &&
-          SecondTopicContent.imageExplanation.map((image: ImageBoxProps, index: number) => (
-            <ImageBox key={index} title={image.title} src={image.src} imageAlt={image.imageAlt} explanation={image.explanation} />
-          ))}
+          SecondTopicContent.imageExplanation.map(
+            (image: ImageBoxProps, index: number) => (
+              <ImageExplanationBox
+                key={index}
+                title={image.title}
+                src={image.src}
+                imageAlt={image.imageAlt}
+                explanation={image.explanation}
+              />
+            )
+          )}
       </div>
       <div>
         {ThirdTopicContent.definition && (
-          <DefinitionBox title={ThirdTopicContent.definition.title} content={ThirdTopicContent.definition.content} />
+          <DefinitionBox
+            title={ThirdTopicContent.definition.title}
+            content={ThirdTopicContent.definition.content}
+          />
         )}
         {ThirdTopicContent.imageExplanation &&
           Array.isArray(ThirdTopicContent.imageExplanation) &&
-          ThirdTopicContent.imageExplanation.map((image: ImageBoxProps, index: number) => (
-            <ImageBox key={index} title={image.title} src={image.src} imageAlt={image.imageAlt} explanation={image.explanation} />
-          ))}
+          ThirdTopicContent.imageExplanation.map(
+            (image: ImageBoxProps, index: number) => (
+              <ImageExplanationBox
+                key={index}
+                title={image.title}
+                src={image.src}
+                imageAlt={image.imageAlt}
+                explanation={image.explanation}
+              />
+            )
+          )}
       </div>
       <div>
         {FourthTopicContent.definition && (
-          <DefinitionBox title={FourthTopicContent.definition.title} content={FourthTopicContent.definition.content} />
+          <DefinitionBox
+            title={FourthTopicContent.definition.title}
+            content={FourthTopicContent.definition.content}
+          />
         )}
         {FourthTopicContent.imageExplanation &&
           Array.isArray(FourthTopicContent.imageExplanation) &&
-          FourthTopicContent.imageExplanation.map((image: ImageBoxProps, index: number) => (
-            <ImageBox key={index} title={image.title} src={image.src} imageAlt={image.imageAlt} explanation={image.explanation} />
-          ))}
+          FourthTopicContent.imageExplanation.map(
+            (image: ImageBoxProps, index: number) => (
+              <ImageExplanationBox
+                key={index}
+                title={image.title}
+                src={image.src}
+                imageAlt={image.imageAlt}
+                explanation={image.explanation}
+              />
+            )
+          )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Translation
+export default Translation;

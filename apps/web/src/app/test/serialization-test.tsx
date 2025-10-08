@@ -1,20 +1,23 @@
-import { InlineMath } from 'react-katex'
-import { serializeContent, deserializeContent } from '@/utils/ContentSerializer'
-import { TipBox } from '@/components/pages/docs/boxes/TipBox'
-import { DefinitionBox } from '@/components/pages/docs/boxes/DefinitionBox'
-import { ExampleBox } from '@/components/pages/docs/boxes/ExampleBox'
-import { GraphBox } from '@/components/pages/docs/boxes/GraphBox'
-import { ThreeDBox } from '@/components/pages/docs/boxes/3DBox'
+import { InlineMath } from "react-katex";
+import {
+    serializeContent,
+    deserializeContent,
+} from "@/utils/ContentSerializer";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { GraphBox } from "@/components/pages/docs/boxes/GraphBox";
 
 export default function SerializationTest() {
     // Test 1: Simple content with KaTeX
     const simpleContent = (
         <div>
-            i ហៅថាតម្លៃនិមិត្ត ដែល <InlineMath math="i^2 = -1" /> និង <InlineMath math="i = \sqrt{-1}" />
+            i ហៅថាតម្លៃនិមិត្ត ដែល <InlineMath math="i^2 = -1" /> និង{" "}
+            <InlineMath math="i = \sqrt{-1}" />
             <br />
             សំណុំចំនួនកុំផ្លិចតាងដោយ​​ C
         </div>
-    )
+    );
 
     // Test 2: Complete TipBox component
     const tipBoxComponent = (
@@ -26,7 +29,7 @@ export default function SerializationTest() {
                 </div>
             }
         />
-    )
+    );
 
     // Test 3: DefinitionBox component
     const definitionBoxComponent = (
@@ -38,44 +41,36 @@ export default function SerializationTest() {
                 </div>
             }
         />
-    )
+    );
 
     // Test 4: ExampleBox with complex structure
     const exampleBoxComponent = (
         <ExampleBox
-            question={<span>គណនារកតម្លៃនៃ <InlineMath math="(2+3i) + (1-2i)" /></span>}
+            question={
+                <span>
+                    គណនារកតម្លៃនៃ <InlineMath math="(2+3i) + (1-2i)" />
+                </span>
+            }
             steps={[
                 { title: "បូកផ្នែកពិត", content: <InlineMath math="2 + 1 = 3" /> },
-                { title: "បូកផ្នែកនិមិត្ត", content: <InlineMath math="3i + (-2i) = i" /> }
+                {
+                    title: "បូកផ្នែកនិមិត្ត",
+                    content: <InlineMath math="3i + (-2i) = i" />,
+                },
             ]}
             answer={<InlineMath math="3 + i" />}
         />
-    )
+    );
 
     // Test 5: GraphBox with expressions
     const graphBoxComponent = (
         <GraphBox
             expressions={[
-                { id: '1', latex: 'y=x^2', color: '#2563eb' },
-                { id: '2', latex: 'y=2x+1', color: '#dc2626' }
+                { id: "1", latex: "y=x^2", color: "#2563eb" },
+                { id: "2", latex: "y=2x+1", color: "#dc2626" },
             ]}
         />
-    )
-
-    const threeDBoxComponent = (
-        <ThreeDBox
-            src="/test.glb"
-            scale={0.1}
-            target={[0, 0, 0]}
-            title="រូបភាព 3D"
-            content={<InlineMath math="x^2 + y^2 + z^2 = 1" />}
-            // canvasBackground={<div>រូបភាព 3D</div>}
-            canvasBackgroundColor="black"
-            // threeDText={[{ content: 'x', position: [0, 0, 0], fontSize: 0.1, color: '#2563eb' }]}
-            // twoDText={[{ content: 'x', position: [0, 0, 0], fontSize: 0.1, color: '#2563eb' }]}
-            height={500}
-        />
-    )
+    );
 
     // Serialize all tests
     const tests = [
@@ -84,8 +79,7 @@ export default function SerializationTest() {
         { name: "DefinitionBox Component", component: definitionBoxComponent },
         { name: "ExampleBox Component", component: exampleBoxComponent },
         { name: "GraphBox Component", component: graphBoxComponent },
-        { name: "ThreeDBox Component", component: threeDBoxComponent },
-    ]
+    ];
 
     return (
         <div className="p-20 space-y-12">
@@ -93,8 +87,8 @@ export default function SerializationTest() {
 
             {tests.map((test, index) => {
                 try {
-                    const serialized = serializeContent(test.component)
-                    const deserialized = deserializeContent(serialized)
+                    const serialized = serializeContent(test.component);
+                    const deserialized = deserializeContent(serialized);
 
                     return (
                         <div key={index} className="border-t pt-8">
@@ -107,7 +101,9 @@ export default function SerializationTest() {
                                 </div>
 
                                 <div>
-                                    <h3 className="text-lg font-semibold mb-2">Deserialized (from JSON):</h3>
+                                    <h3 className="text-lg font-semibold mb-2">
+                                        Deserialized (from JSON):
+                                    </h3>
                                     {deserialized}
                                 </div>
                             </div>
@@ -121,11 +117,13 @@ export default function SerializationTest() {
                                 </pre>
                             </details>
                         </div>
-                    )
+                    );
                 } catch (error) {
                     return (
                         <div key={index} className="border-t pt-8 bg-red-50 p-4 rounded-lg">
-                            <h2 className="text-2xl font-bold mb-4 text-red-600">{test.name} - ERROR</h2>
+                            <h2 className="text-2xl font-bold mb-4 text-red-600">
+                                {test.name} - ERROR
+                            </h2>
                             <p className="text-red-700">
                                 {error instanceof Error ? error.message : String(error)}
                             </p>
@@ -138,7 +136,7 @@ export default function SerializationTest() {
                                 </pre>
                             </details>
                         </div>
-                    )
+                    );
                 }
             })}
 
@@ -167,5 +165,5 @@ return <div>{content}</div>;`}
                 </pre>
             </div>
         </div>
-    )
+    );
 }

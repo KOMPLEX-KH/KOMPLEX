@@ -12,7 +12,6 @@ import { useParams } from "next/navigation";
 type Params = { grade: string; subject: string; lesson: string; topic: string };
 
 const getTopicComponent = (params: Params) => {
-
     const grade = curriculum.find(g => g.grade === params.grade);
     const subject = grade?.content.find(s => s.subject === params.subject);
     const lesson = subject?.lessons.find(l => l.lesson === params.lesson);
@@ -51,8 +50,10 @@ export default function Page() {
     }
 
     const importPath = topic.component;
+    // Load component with ssr disabled to ensure client-side rendering
     const Component = dynamic(() => importPath(), {
-        loading: () => <Skeleton></Skeleton>,
+        loading: () => <Skeleton />,
+        ssr: false
     });
 
     return (

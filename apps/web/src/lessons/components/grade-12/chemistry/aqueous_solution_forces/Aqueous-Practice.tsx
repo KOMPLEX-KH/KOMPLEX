@@ -1,4 +1,4 @@
-import TopicPracticeBox from "@/components/pages/docs/boxes/TopicPracticeBox";
+import { TopicPracticeBox } from "@/components/pages/docs/boxes/TopicPracticeBox";
 import { InlineMath } from "react-katex";
 
 import { PracticeExercise } from "@/types/docs/topic";

@@ -1,19 +1,19 @@
 import React from "react";
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox";
-import ExampleBox from "@/components/pages/docs/boxes/ExampleBox";
-import TipBox from "@/components/pages/docs/boxes/TipBox";
-import ExerciseBox from "@/components/pages/docs/boxes/ExerciseBox";
-import HintBox from "@/components/pages/docs/boxes/HintBox";
-import WarningBox from "@/components/pages/docs/boxes/WarningBox";
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
 import { BlockMath, InlineMath } from "react-katex";
 import { MathLine } from "@components/helper/MathLine";
 import { MathScroll } from "@components/helper/MathScroll";
-import { ImageBox } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
+import { ImageExplanationBox } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
 import { heatEngineImg } from "../../../../../../public/docs/grade-12/physic/engine/ImportImage";
 import { Check } from "lucide-react";
 import { p } from "framer-motion/client";
 
-import { HintBoxProps } from '@/components/pages/docs/boxes/HintBox';
+import { HintBoxProps } from "@/components/pages/docs/boxes/HintBox";
 
 type Variant = "green" | "violet" | "neutral" | "amber";
 
@@ -59,8 +59,6 @@ export function ResultCallout({
   );
 }
 
-
-
 const LessonChip = ({ children }: { children: React.ReactNode }) => (
   <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-600 text-white text-sm font-bold">
     {children}
@@ -95,7 +93,6 @@ const Section = ({
     {children}
   </section>
 );
-
 
 // components/helper/Therefore.tsx
 
@@ -133,7 +130,6 @@ export const Therefore: React.FC<ThereforeProps> = ({
   </div>
 );
 
-
 const SelfInduction = () => {
   return (
     <div className="prose dark:prose-invert max-w-none space-y-4">
@@ -151,7 +147,9 @@ const SelfInduction = () => {
           </li>
           <li>
             <a href="#sec-electric-motor-force-bar" className={chip}>
-              <span className="font-semibold">3. កម្លាំងអគ្គិសនីចលករអូតូអាំងឌ្វី</span>
+              <span className="font-semibold">
+                3. កម្លាំងអគ្គិសនីចលករអូតូអាំងឌ្វី
+              </span>
             </a>
           </li>
           <li>
@@ -161,7 +159,9 @@ const SelfInduction = () => {
           </li>
           <li>
             <a href="#sec-electric-motor-force-period" className={chip}>
-              <span className="font-semibold">5. កន្សោមតង់ស្សុងនៃសៀគ្វី​(RL)</span>
+              <span className="font-semibold">
+                5. កន្សោមតង់ស្សុងនៃសៀគ្វី​(RL)
+              </span>
             </a>
           </li>
           <li>
@@ -194,24 +194,25 @@ const SelfInduction = () => {
 
       <Section no={1} title="អាំងឌុចតង់" id="sec-magnetic-flux">
         <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
+          <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
           <div className="space-y-1">
             <BlockMath math={String.raw`L = \mu \frac{N^{2} A}{l}`} />
           </div>
           <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
             <li>
-              <InlineMath math={String.raw`L `} />​ អាំងឌុចតង់ (<InlineMath math=" H" />)
+              <InlineMath math={String.raw`L `} />​ អាំងឌុចតង់ (
+              <InlineMath math=" H" />)
             </li>
             <li>
               <InlineMath math="N" /> ចំនួនស្ពៀ
             </li>
             <li>
-              <InlineMath math={String.raw`A`} />​ ផ្ទៃកាត់ (<InlineMath math="m^2" />)
+              <InlineMath math={String.raw`A`} />​ ផ្ទៃកាត់ (
+              <InlineMath math="m^2" />)
             </li>
             <li>
-              <InlineMath math={String.raw`l`} />​ ប្រវែង (<InlineMath math="m" />)
+              <InlineMath math={String.raw`l`} />​ ប្រវែង (
+              <InlineMath math="m" />)
             </li>
           </ul>
         </div>
@@ -219,31 +220,34 @@ const SelfInduction = () => {
 
       <Section no={2} title="ភ្លុចអាំងឌុចស្យុង" id="sec-electric-motor-force">
         <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
+          <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
           <div className="space-y-1">
             <BlockMath math={String.raw`\phi = Li`} />
           </div>
           <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
             <li>
-              <InlineMath math={String.raw`\phi `} />​ ភ្លុចអាំងឌុចស្យុង (<InlineMath math=" Wb" />)
+              <InlineMath math={String.raw`\phi `} />​ ភ្លុចអាំងឌុចស្យុង (
+              <InlineMath math=" Wb" />)
             </li>
             <li>
-              <InlineMath math={String.raw`L`} />​ អាំងឌុចតង់ (<InlineMath math="H" />)
+              <InlineMath math={String.raw`L`} />​ អាំងឌុចតង់ (
+              <InlineMath math="H" />)
             </li>
             <li>
-              <InlineMath math={String.raw`i`} />​ ចរន្ត (<InlineMath math="A" />)
+              <InlineMath math={String.raw`i`} />​ ចរន្ត (
+              <InlineMath math="A" />)
             </li>
           </ul>
         </div>
       </Section>
 
-      <Section no={3} title="កម្លាំងអគ្គីសនីចលករអូតូអាំងឌ្វី" id="sec-electric-motor-force">
+      <Section
+        no={3}
+        title="កម្លាំងអគ្គីសនីចលករអូតូអាំងឌ្វី"
+        id="sec-electric-motor-force"
+      >
         <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
+          <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
           <div className="space-y-1">
             <BlockMath math={String.raw`e = - L\frac{di}{dt}`} />
           </div>
@@ -263,9 +267,7 @@ const SelfInduction = () => {
 
       <Section no={3} title="ថេរពេលនៃសៀគ្វី" id="sec-electric-motor-force">
         <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
+          <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
           <div className="space-y-1">
             <BlockMath math={String.raw`\tau = L \frac{L}{R}`} />
           </div>
@@ -283,11 +285,13 @@ const SelfInduction = () => {
         </div>
       </Section>
 
-      <Section no={3} title="កន្សោមតង់ស្យុងនៃសៀគ្វី" id="sec-electric-motor-force">
+      <Section
+        no={3}
+        title="កន្សោមតង់ស្យុងនៃសៀគ្វី"
+        id="sec-electric-motor-force"
+      >
         <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
+          <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
           <div className="space-y-1">
             <BlockMath math={String.raw`V_{AC} = Ri + L\frac{di}{dt}`} />
           </div>
@@ -307,9 +311,7 @@ const SelfInduction = () => {
 
       <Section no={3} title="សមីការចរន្តខណៈ" id="sec-electric-motor-force">
         <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
+          <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
           <div className="space-y-1">
             <BlockMath math={String.raw`i = I_p(1-e^{-t/\tau})`} />
           </div>
@@ -329,9 +331,7 @@ const SelfInduction = () => {
 
       <Section no={3} title="ខួបនៃសៀគ្វី" id="sec-electric-motor-force">
         <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
+          <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
           <div className="space-y-1">
             <BlockMath math={String.raw`T = 2\pi\sqrt{LC}`} />
           </div>
@@ -348,12 +348,8 @@ const SelfInduction = () => {
           </ul> */}
         </div>
       </Section>
-
-
-
     </div>
-  )
-}
+  );
+};
 
 export default SelfInduction;
-

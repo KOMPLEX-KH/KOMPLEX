@@ -1,18 +1,18 @@
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox"
-import TipBox from "@/components/pages/docs/boxes/TipBox"
-import HintBox from "@/components/pages/docs/boxes/HintBox"
-import { TopicContent } from "@/types/docs/topic"
-import { BlockMath, InlineMath } from "react-katex"
-import 'katex/dist/katex.min.css'
-import WarningBox from "@/components/pages/docs/boxes/WarningBox"
-import ExerciseBox from "@/components/pages/docs/boxes/ExerciseBox"
-import ExampleBox from "@/components/pages/docs/boxes/ExampleBox"
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+import { TopicContent } from "@/types/docs/topic";
+import { BlockMath, InlineMath } from "react-katex";
+import "katex/dist/katex.min.css";
+import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
+import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
 
 const FirstTopicContent: TopicContent = {
   definition: {
     title: "សមីការអូម៉ូសែន",
     content:
-      "សមីការឌីផែរ៉ង់ស្សែលលីនេអែអូម៉ូសែនលំដាប់ទី២មានមេគុណថេរគឺគ្រប់សមីការដែលមានទម្រង់ ay'' + by' + cy = 0 ; a,b,c ជាចំនួនថេរ​។"
+      "សមីការឌីផែរ៉ង់ស្សែលលីនេអែអូម៉ូសែនលំដាប់ទី២មានមេគុណថេរគឺគ្រប់សមីការដែលមានទម្រង់ ay'' + by' + cy = 0 ; a,b,c ជាចំនួនថេរ​។",
   },
   tip: {
     title: "ជាទូទៅ",
@@ -23,13 +23,11 @@ const FirstTopicContent: TopicContent = {
         <p>គេត្រូវបង្កេីតសមីការសម្គាល់ដែលមានរាង</p>
         <BlockMath math="a \lambda^2 + b\lambda + c = 0" />
         <p>រួចដោះស្រាយរកឫសនៃសមីការ។</p>
-
       </>
     ),
-
   },
   example: {
-    question:
+    question: (
       <div className="flex flex-col items-start gap-3">
         <div className="flex flex-col gap-3">
           <p>ដោះស្រាយសមីការឌីផែរ៉ង់ស្សែលអូម៉ូសែនលំដាប់ទី២</p>
@@ -43,11 +41,12 @@ const FirstTopicContent: TopicContent = {
             </div>
           </div>
         </div>
-      </div>,
+      </div>
+    ),
     steps: [
       {
         title: "ដោះស្រាយសមីការទី១",
-        content:
+        content: (
           <div className="flex flex-col items-start">
             <BlockMath math="2y'' - 3y' + y = 0" />
             <div className="flex items-center gap-3 flex-wrap">
@@ -62,12 +61,12 @@ const FirstTopicContent: TopicContent = {
               <p>ចម្លើយទូទៅនៃសមីការគឺ</p>
               <BlockMath math="y = Ae^{x} + Be^{\left(\frac{1}{2} x\right)}  \ A,B \in \mathbb{R}" />
             </div>
-
           </div>
+        ),
       },
       {
         title: "ដោះស្រាយសមីការទី២",
-        content:
+        content: (
           <div className="flex flex-col items-start">
             <BlockMath math="y'' - 6y' + 9y = 0" />
             <div className="flex items-center gap-3 flex-wrap">
@@ -82,8 +81,8 @@ const FirstTopicContent: TopicContent = {
               <p>ចម្លើយទូទៅនៃសមីការគឺ</p>
               <BlockMath math="y = ( A + Bx)e^{3x} \ A,B \in \mathbb{R}" />
             </div>
-
           </div>
+        ),
       },
     ],
     answer: (
@@ -93,7 +92,7 @@ const FirstTopicContent: TopicContent = {
           <BlockMath math="y = ( A + Bx)e^{3x} \ A,B \in \mathbb{R}" />
         </div>
       </div>
-    )
+    ),
   },
   example2: {
     question: [
@@ -104,7 +103,10 @@ const FirstTopicContent: TopicContent = {
             <BlockMath math="y'' - 3y' + 2y = 0" />
           </div>
           <div className="flex items-center gap-5 flex-wrap">
-            <p>ខ. រកចម្លេីយ f មួយនៃសមីការ បេីគេដឹងថាក្រាបនៃអនុគមន៍ចម្លេីយ ប៉ះនឹងបន្ទាត់ y= x+2 ត្រង់ចំណុច A(0,2)</p>
+            <p>
+              ខ. រកចម្លេីយ f មួយនៃសមីការ បេីគេដឹងថាក្រាបនៃអនុគមន៍ចម្លេីយ
+              ប៉ះនឹងបន្ទាត់ y= x+2 ត្រង់ចំណុច A(0,2)
+            </p>
           </div>
         </div>
       </div>,
@@ -112,7 +114,7 @@ const FirstTopicContent: TopicContent = {
     steps: [
       {
         title: "ដោះស្រាយសមីការ y'' - 3y' + 2y = 0",
-        content:
+        content: (
           <div className="flex flex-col items-start">
             <div className="flex items-center gap-3 flex-wrap">
               <p>គេមាន : សមីការសម្គាល់គឺ</p>
@@ -128,10 +130,11 @@ const FirstTopicContent: TopicContent = {
               <p>, A, B ជាចំនួនថេរ។</p>
             </div>
           </div>
+        ),
       },
       {
         title: "រកចម្លេីយ f មួយនៃសមីការ",
-        content:
+        content: (
           <div className="flex flex-col items-start">
             <div className="flex items-center gap-3 flex-wrap">
               <p>គេមាន : </p>
@@ -139,10 +142,14 @@ const FirstTopicContent: TopicContent = {
             </div>
 
             <BlockMath math="\Rightarrow f'(x) = Ae^x + 2Be^{2x}" />
-            <p>ម៉្យាងទៀត: ដោយក្រាបនៃអនុគមន៍ចម្លេីយប៉ះនឹងបន្ទាត់ y=x+2 ត្រង់ចំណុច A(0,2)</p>
+            <p>
+              ម៉្យាងទៀត: ដោយក្រាបនៃអនុគមន៍ចម្លេីយប៉ះនឹងបន្ទាត់ y=x+2 ត្រង់ចំណុច
+              A(0,2)
+            </p>
             <div className="flex items-center gap-3 flex-wrap">
               <p>គេបាន : </p>
-              <BlockMath math="\begin{cases} 
+              <BlockMath
+                math="\begin{cases} 
                           f(0)  = 2 \\ 
                           f'(0) = 1 
                           \end{cases}"
@@ -151,35 +158,38 @@ const FirstTopicContent: TopicContent = {
 
             <div className="flex items-center gap-3 flex-wrap">
               <p>នាំឲ្យ : </p>
-              <BlockMath math="\begin{cases} 
+              <BlockMath
+                math="\begin{cases} 
                           Ae^0 + Be^0  = 2 \\ 
                           Ae^0 + 2Be^0 = 1
                           \end{cases}"
               />
             </div>
-            <BlockMath math="\Rightarrow \begin{cases} 
+            <BlockMath
+              math="\Rightarrow \begin{cases} 
                       A + B  = 2 \\ 
                       A + 2B = 1
                       \end{cases}"
             />
 
-            <BlockMath math="\Rightarrow \begin{cases} 
+            <BlockMath
+              math="\Rightarrow \begin{cases} 
                       A =  3 \\ 
                       B = -1
                       \end{cases}"
             />
           </div>
+        ),
       },
     ],
-    answer:
-      (
-        <div>
-          <p>អនុគមន៍ចម្លេីយគឺ</p>
-          <div className="justify-center items-center flex flex-col">
-            <BlockMath math="f(x) = 3e^x - e^{2x}" />
-          </div>
+    answer: (
+      <div>
+        <p>អនុគមន៍ចម្លេីយគឺ</p>
+        <div className="justify-center items-center flex flex-col">
+          <BlockMath math="f(x) = 3e^x - e^{2x}" />
         </div>
-      )
+      </div>
+    ),
   },
   exercise: {
     questions: [
@@ -199,9 +209,9 @@ const FirstTopicContent: TopicContent = {
           <InlineMath key="q1-o1" math={"y = Ae^{2x} + Be^{3x}"} />,
           <InlineMath key="q1-o2" math={"y = Ae^{-x} + Be^{-5x}"} />,
           <InlineMath key="q1-o3" math={"y = Ae^{-2x} + Be^{-3x}"} />,
-          <InlineMath key="q1-o4" math={"y = Ae^{x} + Be^{5x}"} />
+          <InlineMath key="q1-o4" math={"y = Ae^{x} + Be^{5x}"} />,
         ],
-        correctAnswer: 2
+        correctAnswer: 2,
       },
       {
         id: "q2",
@@ -218,10 +228,13 @@ const FirstTopicContent: TopicContent = {
         options: [
           <InlineMath key="q2-o1" math={"y = Ae^{x} + Be^{-x}"} />,
           <InlineMath key="q2-o2" math={"y = (A + Bx)e^{\\frac{1}{2}x}"} />,
-          <InlineMath key="q2-o3" math={"y = Ae^{\\frac{1}{2}x} + Be^{-\\frac{1}{2}x}"} />,
-          <InlineMath key="q2-o4" math={"y = (A + Bx)e^{-\\frac{1}{2}x}"} />
+          <InlineMath
+            key="q2-o3"
+            math={"y = Ae^{\\frac{1}{2}x} + Be^{-\\frac{1}{2}x}"}
+          />,
+          <InlineMath key="q2-o4" math={"y = (A + Bx)e^{-\\frac{1}{2}x}"} />,
         ],
-        correctAnswer: 1
+        correctAnswer: 1,
       },
       {
         id: "q3",
@@ -239,15 +252,15 @@ const FirstTopicContent: TopicContent = {
           <InlineMath key="q3-o1" math={"y = Ae^{2x} + Be^{-2x}"} />,
           <InlineMath key="q3-o2" math={"y = (A + Bx)e^{2x}"} />,
           <InlineMath key="q3-o3" math={"y = A\\cos(2x) + B\\sin(2x)"} />,
-          <InlineMath key="q3-o4" math={"y = A\\cos(x) + B\\sin(x)"} />
+          <InlineMath key="q3-o4" math={"y = A\\cos(x) + B\\sin(x)"} />,
         ],
-        correctAnswer: 2
+        correctAnswer: 2,
       },
-    ]
+    ],
   },
 
   hint: {
-    content:
+    content: (
       <>
         <p>
           នៅពេលដោះស្រាយសមីការឌីផែរ៉ង់ស្សែលលំដាប់ទី២ អូម៉ូសែន
@@ -270,16 +283,15 @@ const FirstTopicContent: TopicContent = {
           <InlineMath math={"y = e^{px}(A\\cos(qx) + B\\sin(qx))"} />។
         </p>
       </>
+    ),
   },
-}
-
-
+};
 
 const SecondTopic: TopicContent = {
   definition: {
     title: "សមីការមិនអូម៉ូសែន",
     content:
-      "សមីការឌីផែរ៉ង់ស្សែលលីនេអែមិនអូម៉ូសែនលំដាប់ទី២មានមេគុណថេរគឺគ្រប់សមីការដែលមានទម្រង់ ay'' + by' + cy = P(x) (E) ដែល P(X) ខុសពី 0"
+      "សមីការឌីផែរ៉ង់ស្សែលលីនេអែមិនអូម៉ូសែនលំដាប់ទី២មានមេគុណថេរគឺគ្រប់សមីការដែលមានទម្រង់ ay'' + by' + cy = P(x) (E) ដែល P(X) ខុសពី 0",
   },
   tip: {
     title: "ជាទូទៅ",
@@ -305,7 +317,6 @@ const SecondTopic: TopicContent = {
         </ul>
       </>
     ),
-
   },
   example: {
     question: [
@@ -340,14 +351,16 @@ const SecondTopic: TopicContent = {
 
             <p>ចម្លើយទូទៅនៃសមីការ</p>
             <div className="flex items-center flex-wrap">
-              <BlockMath math={`y = e^{\\frac{3}{2} x} ( A \\cos( \\frac{\\sqrt{11}}{2} x ) + B \\sin( \\frac{\\sqrt{11}}{2} x ) )`} />
+              <BlockMath
+                math={`y = e^{\\frac{3}{2} x} ( A \\cos( \\frac{\\sqrt{11}}{2} x ) + B \\sin( \\frac{\\sqrt{11}}{2} x ) )`}
+              />
             </div>
 
             <p>ដែល A, Bជាចំនួនថេរ។</p>
           </div>
-        )
-      }
-    ]
+        ),
+      },
+    ],
   },
   exercise: {
     questions: [
@@ -369,7 +382,7 @@ const SecondTopic: TopicContent = {
           <InlineMath key="q1-o3" math={"y = Ae^{x} + Be^{x} + e^{-x}"} />,
           <InlineMath key="q1-o4" math={"y = (A + Bx)e^{x} + xe^{-x}"} />,
         ],
-        correctAnswer: 0
+        correctAnswer: 0,
       },
       {
         id: "q2",
@@ -378,18 +391,24 @@ const SecondTopic: TopicContent = {
             <div className="flex flex-col gap-3">
               <p>ចម្លើយទូទៅនៃសមីការ</p>
               <div className="flex items-center justify-center gap-3 flex-wrap">
-                <InlineMath math={"y'' + y = \sin x :"} />
+                <InlineMath math={"y'' + y = sin x :"} />
               </div>
             </div>
           </>
         ),
         options: [
-          <InlineMath key="q2-o1" math={"y = A\\cos x + B\\sin x + \\frac{1}{2} x \\cos x"} />,
-          <InlineMath key="q2-o2" math={"y = A\\cos x + B\\sin x + x \\sin x"} />,
+          <InlineMath
+            key="q2-o1"
+            math={"y = A\\cos x + B\\sin x + \\frac{1}{2} x \\cos x"}
+          />,
+          <InlineMath
+            key="q2-o2"
+            math={"y = A\\cos x + B\\sin x + x \\sin x"}
+          />,
           <InlineMath key="q2-o3" math={"y = Ae^{x} + Be^{-x} + \\sin x"} />,
           <InlineMath key="q2-o4" math={"y = A\\cos x + B\\sin x + \\cos x"} />,
         ],
-        correctAnswer: 0
+        correctAnswer: 0,
       },
       {
         id: "q3",
@@ -406,12 +425,18 @@ const SecondTopic: TopicContent = {
         options: [
           <InlineMath key="q3-o1" math={"y = A\\cos 2x + B\\sin 2x + x"} />,
           <InlineMath key="q3-o2" math={"y = A\\cos 2x + B\\sin 2x + x^2"} />,
-          <InlineMath key="q3-o3" math={"y = A\\cos 2x + B\\sin 2x + x^2 + 1"} />,
-          <InlineMath key="q3-o4" math={"y = A\\cos 2x + B\\sin 2x + x^2 - 1"} />,
+          <InlineMath
+            key="q3-o3"
+            math={"y = A\\cos 2x + B\\sin 2x + x^2 + 1"}
+          />,
+          <InlineMath
+            key="q3-o4"
+            math={"y = A\\cos 2x + B\\sin 2x + x^2 - 1"}
+          />,
         ],
-        correctAnswer: 1
+        correctAnswer: 1,
       },
-    ]
+    ],
   },
 
   hint: {
@@ -425,39 +450,51 @@ const SecondTopic: TopicContent = {
 
         <ul className="list-disc pl-4 flex flex-col gap-3">
           <li>
-            បើ <InlineMath math="(f_1)" /> ជាចម្លើយនៃសមីការ (1) ហេីយ <InlineMath math="(f_2)" /> ជាចម្លើយនៃសមីការ (2)​នោះ
+            បើ <InlineMath math="(f_1)" /> ជាចម្លើយនៃសមីការ (1) ហេីយ{" "}
+            <InlineMath math="(f_2)" /> ជាចម្លើយនៃសមីការ (2)​នោះ
             <InlineMath math="f_1 + f_2" /> ជាចម្លើយនៃសមីការ (1) ។
           </li>
           <li>
-            បើ <InlineMath math="f_1" /> និង <InlineMath math="f_2" /> ជាចម្លើយនៃសមីការ (1) នោះ
+            បើ <InlineMath math="f_1" /> និង <InlineMath math="f_2" />{" "}
+            ជាចម្លើយនៃសមីការ (1) នោះ
             <InlineMath math="f_1 - f_2" /> ជាចម្លើយនៃសមីការ (2) ។
           </li>
         </ul>
-
       </>
-    )
+    ),
   },
-}
-
-
-
+};
 
 const LDE2 = () => {
   return (
     <>
       <div>
         {FirstTopicContent.definition && (
-          <DefinitionBox title={FirstTopicContent.definition.title} content={FirstTopicContent.definition.content} />
+          <DefinitionBox
+            title={FirstTopicContent.definition.title}
+            content={FirstTopicContent.definition.content}
+          />
         )}
         {FirstTopicContent.tip && (
-          <TipBox title={FirstTopicContent.tip.title} content={FirstTopicContent.tip.content} />
+          <TipBox
+            title={FirstTopicContent.tip.title}
+            content={FirstTopicContent.tip.content}
+          />
         )}
 
         {FirstTopicContent.example && (
-          <ExampleBox question={FirstTopicContent.example.question} steps={FirstTopicContent.example.steps} answer={FirstTopicContent.example.answer} />
+          <ExampleBox
+            question={FirstTopicContent.example.question}
+            steps={FirstTopicContent.example.steps}
+            answer={FirstTopicContent.example.answer}
+          />
         )}
         {FirstTopicContent.example2 && (
-          <ExampleBox question={FirstTopicContent.example2.question} steps={FirstTopicContent.example2.steps} answer={FirstTopicContent.example2.answer} />
+          <ExampleBox
+            question={FirstTopicContent.example2.question}
+            steps={FirstTopicContent.example2.steps}
+            answer={FirstTopicContent.example2.answer}
+          />
         )}
         {FirstTopicContent.exercise && (
           <ExerciseBox questions={FirstTopicContent.exercise.questions} />
@@ -469,23 +506,31 @@ const LDE2 = () => {
 
       <div>
         {SecondTopic.definition && (
-          <DefinitionBox title={SecondTopic.definition.title} content={SecondTopic.definition.content} />
+          <DefinitionBox
+            title={SecondTopic.definition.title}
+            content={SecondTopic.definition.content}
+          />
         )}
         {SecondTopic.tip && (
-          <TipBox title={SecondTopic.tip.title} content={SecondTopic.tip.content} />
+          <TipBox
+            title={SecondTopic.tip.title}
+            content={SecondTopic.tip.content}
+          />
         )}
         {SecondTopic.example && (
-          <ExampleBox question={SecondTopic.example.question} steps={SecondTopic.example.steps} answer={SecondTopic.example.answer} />
+          <ExampleBox
+            question={SecondTopic.example.question}
+            steps={SecondTopic.example.steps}
+            answer={SecondTopic.example.answer}
+          />
         )}
         {SecondTopic.exercise && (
           <ExerciseBox questions={SecondTopic.exercise.questions} />
         )}
-        {SecondTopic.hint && (
-          <HintBox content={SecondTopic.hint.content} />
-        )}
+        {SecondTopic.hint && <HintBox content={SecondTopic.hint.content} />}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default LDE2
+export default LDE2;

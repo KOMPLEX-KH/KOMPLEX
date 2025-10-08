@@ -1,11 +1,11 @@
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox";
-import ExampleBox from "@/components/pages/docs/boxes/ExampleBox";
-import TipBox from "@/components/pages/docs/boxes/TipBox";
-import ExerciseBox from "@/components/pages/docs/boxes/ExerciseBox";
-import HintBox from "@/components/pages/docs/boxes/HintBox";
-import WarningBox from "@/components/pages/docs/boxes/WarningBox";
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
 import { TopicContent } from "@/types/docs/topic";
-import GraphBox from "@/components/pages/docs/boxes/GraphBox";
+import { GraphBox } from "@/components/pages/docs/boxes/GraphBox";
 import { BlockMath, InlineMath } from "react-katex";
 
 // Small helper to make block math scrollable & left-aligned on narrow screens
@@ -86,7 +86,8 @@ const TOPIC_CONTENT: TopicContent = {
         <div className="rounded-lg border-l-4 border-indigo-500 bg-indigo-50/70 p-3 shadow-sm">
           <p className="font-semibold text-indigo-900 mb-1">សញ្ញា និងទម្រង់</p>
           <p className="text-slate-700">
-            • ចងចាំសញ្ញា៖ <InlineMath math={String.raw`(\cos x)'=-\sin x`} /> មាន “−”។
+            • ចងចាំសញ្ញា៖ <InlineMath math={String.raw`(\cos x)'=-\sin x`} />{" "}
+            មាន “−”។
           </p>
           <MathLine
             math={String.raw`(\tan x)'=1+\tan^2 x,\qquad (\cot x)'=-(1+\cot^2 x)`}
@@ -94,7 +95,9 @@ const TOPIC_CONTENT: TopicContent = {
         </div>
 
         <div className="rounded-lg border-l-4 border-emerald-500 bg-emerald-50/70 p-3 shadow-sm">
-          <p className="font-semibold text-emerald-900 mb-1">ខ្សែសង្វាក់ (u=ax+b …)</p>
+          <p className="font-semibold text-emerald-900 mb-1">
+            ខ្សែសង្វាក់ (u=ax+b …)
+          </p>
           <MathLine
             math={String.raw`\frac{d}{dx}[\sin(ax+b)]=a\cos(ax+b),\qquad \frac{d}{dx}[\tan(3x)]=3\,(1+\tan^2 3x)`}
           />
@@ -103,9 +106,11 @@ const TOPIC_CONTENT: TopicContent = {
         <div className="rounded-lg border-l-4 border-rose-500 bg-rose-50/70 p-3 shadow-sm">
           <p className="font-semibold text-rose-900 mb-1">ដែនកំណត់</p>
           <p className="text-slate-700">
-            • <em>tan</em> មិនកំណត់នៅ <InlineMath math={String.raw`x=\frac{\pi}{2}+k\pi`} /> ;{" "}
+            • <em>tan</em> មិនកំណត់នៅ{" "}
+            <InlineMath math={String.raw`x=\frac{\pi}{2}+k\pi`} /> ;{" "}
             <em>cot</em> មិនកំណត់នៅ <InlineMath math={String.raw`x=k\pi`} /> ;{" "}
-            <em>arcsin/arccos</em> ត្រូវការ <InlineMath math={String.raw`|x|<1`} />។
+            <em>arcsin/arccos</em> ត្រូវការ{" "}
+            <InlineMath math={String.raw`|x|<1`} />។
           </p>
         </div>
       </div>
@@ -131,10 +136,12 @@ const TOPIC_CONTENT: TopicContent = {
       },
       {
         title: "បូកទាំងអស់",
-        content: <MathLine math={String.raw`y'=\cos x-2\sin x-3(1+\tan^2 x)`} />,
+        content: (
+          <MathLine math={String.raw`y'=\cos x-2\sin x-3(1+\tan^2 x)`} />
+        ),
       },
       {
-        title: "គណនា​នៅ x=\pi/4",
+        title: "គណនា​នៅ x=pi/4",
         content: (
           <>
             <MathLine
@@ -147,8 +154,7 @@ const TOPIC_CONTENT: TopicContent = {
         ),
       },
     ],
-    answer:
-      "y' = cos x − 2 sin x − 3(1 + tan²x) និង y'(π/4) = −(√2)/2 − 6",
+    answer: "y' = cos x − 2 sin x − 3(1 + tan²x) និង y'(π/4) = −(√2)/2 − 6",
   },
 
   exercise: {
@@ -194,9 +200,18 @@ const TOPIC_CONTENT: TopicContent = {
           </>
         ),
         options: [
-          <MathLine key="tq3o0" math={String.raw`1+\tan^2(\pi/6)=\frac{4}{3}`} />,
-          <MathLine key="tq3o1" math={String.raw`\tan(\pi/6)=\frac{1}{\sqrt{3}}`} />,
-          <MathLine key="tq3o2" math={String.raw`\frac{1}{1+\tan^2(\pi/6)}=\frac{3}{4}`} />,
+          <MathLine
+            key="tq3o0"
+            math={String.raw`1+\tan^2(\pi/6)=\frac{4}{3}`}
+          />,
+          <MathLine
+            key="tq3o1"
+            math={String.raw`\tan(\pi/6)=\frac{1}{\sqrt{3}}`}
+          />,
+          <MathLine
+            key="tq3o2"
+            math={String.raw`\frac{1}{1+\tan^2(\pi/6)}=\frac{3}{4}`}
+          />,
           <MathLine key="tq3o3" math={String.raw`0`} />,
         ],
         correctAnswer: 0,
@@ -212,7 +227,9 @@ const TOPIC_CONTENT: TopicContent = {
       <>
         <p> ឧទាហរណ៍៖</p>
         <MathLine math={String.raw`\frac{d}{dx}[\cos(5x-1)]=-5\sin(5x-1)`} />
-        <MathLine math={String.raw`\frac{d}{dx}[\arctan(2x)]=\frac{2}{1+(2x)^2}`} />
+        <MathLine
+          math={String.raw`\frac{d}{dx}[\arctan(2x)]=\frac{2}{1+(2x)^2}`}
+        />
       </>
     ),
   },
@@ -220,14 +237,18 @@ const TOPIC_CONTENT: TopicContent = {
   warning: {
     content: (
       <>
-        <p>• ប្រយ័ត្នសញ្ញា “−” សម្រាប់ <em>cos</em>, <em>cot</em> និង <em>arccos</em>។</p>
+        <p>
+          • ប្រយ័ត្នសញ្ញា “−” សម្រាប់ <em>cos</em>, <em>cot</em> និង{" "}
+          <em>arccos</em>។
+        </p>
         <p>
           • Domain matters: <em>tan</em> មិនកំណត់នៅ{" "}
           <MathLine math={String.raw`x=\frac{\pi}{2}+k\pi`} />
           <span className="-mt-1 block" />
           <span>
             <em>cot</em> មិនកំណត់នៅ <InlineMath math={String.raw`x=k\pi`} />;{" "}
-            <em>arcsin/arccos</em> ត្រូវការ <InlineMath math={String.raw`|x|<1`} />។
+            <em>arcsin/arccos</em> ត្រូវការ{" "}
+            <InlineMath math={String.raw`|x|<1`} />។
           </span>
         </p>
       </>
@@ -255,7 +276,10 @@ export default function DerivativeTrigonometric() {
       )}
 
       {TOPIC_CONTENT.tip && (
-        <TipBox title={TOPIC_CONTENT.tip.title} content={TOPIC_CONTENT.tip.content} />
+        <TipBox
+          title={TOPIC_CONTENT.tip.title}
+          content={TOPIC_CONTENT.tip.content}
+        />
       )}
 
       {TOPIC_CONTENT.example && (

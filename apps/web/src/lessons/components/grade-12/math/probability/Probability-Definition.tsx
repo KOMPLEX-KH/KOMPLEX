@@ -1,24 +1,27 @@
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox"
-import TipBox from "@/components/pages/docs/boxes/TipBox"
-import HintBox from "@/components/pages/docs/boxes/HintBox"
-import { TopicContent } from "@/types/docs/topic"
-import { BlockMath, InlineMath } from "react-katex"
-import 'katex/dist/katex.min.css'
-import WarningBox from "@/components/pages/docs/boxes/WarningBox"
-import ExerciseBox from "@/components/pages/docs/boxes/ExerciseBox"
-import ExampleBox from "@/components/pages/docs/boxes/ExampleBox"
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+import { TopicContent } from "@/types/docs/topic";
+import { BlockMath, InlineMath } from "react-katex";
+import "katex/dist/katex.min.css";
+import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
+import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
 
 const FirstTopicContent: TopicContent = {
   definition: {
     title: "ប្រូបាប",
-    content:
+    content: (
       <>
         <div className="flex flex-col items-start">
           <div className="flex items-center gap-3 flex-wrap w-full">
-            <p>ប្រូបាបគឺជាផលធៀបរវាងចំនួនករណីស្របនិងចំនួនករណីអាចដែលនៅចន្លោះ 0 - 1។</p>
+            <p>
+              ប្រូបាបគឺជាផលធៀបរវាងចំនួនករណីស្របនិងចំនួនករណីអាចដែលនៅចន្លោះ 0 - 1។
+            </p>
           </div>
         </div>
       </>
+    ),
   },
   tip: {
     title: "ជាទូទៅ",
@@ -41,7 +44,10 @@ const FirstTopicContent: TopicContent = {
       <div className="flex flex-col items-start gap-3" key="q2">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-3 flex-wrap">
-            <p>គេរេីសសិស្សម្នាក់ធ្វេីជាប្រធានថ្នាក់ក្នុងចំណោមសិស្សស្រី ៥ នាក់​ និងសិស្សប្រុស ៣ នាក់។រកប្រូបាបដែល :</p>
+            <p>
+              គេរេីសសិស្សម្នាក់ធ្វេីជាប្រធានថ្នាក់ក្នុងចំណោមសិស្សស្រី ៥ នាក់
+              និងសិស្សប្រុស ៣ នាក់។រកប្រូបាបដែល :
+            </p>
           </div>
           <div className="flex  gap-5 flex-col">
             <p>ក. ប្រធានថ្នាក់ជាស្រី</p>
@@ -53,17 +59,18 @@ const FirstTopicContent: TopicContent = {
     steps: [
       {
         title: "រកចំនួនករណីអាច",
-        content:
+        content: (
           <div>
             <div className="flex flex-col items-start">
               <p>សិស្សទាំងអស់មាន ៨ នាក់</p>
               <BlockMath math={"\\Rightarrow n(s) = 8"} />
             </div>
           </div>
+        ),
       },
       {
         title: "ក. ប្រធានថ្នាក់ជាស្រី",
-        content:
+        content: (
           <div>
             <div className="flex items-center flex-wrap gap-2">
               <p>សិស្សស្រីមាន ៥ នាក់</p>
@@ -75,10 +82,11 @@ const FirstTopicContent: TopicContent = {
               <BlockMath math={"P(A) = \\frac{n(A)}{n(s)} = \\frac{5}{8}"} />
             </div>
           </div>
+        ),
       },
       {
         title: "ក. ប្រធានថ្នាក់ជាប្រុស",
-        content:
+        content: (
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-3 flex-wrap">
               <p>សិស្សប្រុសមាន ៣ នាក់</p>
@@ -90,8 +98,9 @@ const FirstTopicContent: TopicContent = {
               <BlockMath math={"P(A) = \\frac{n(A)}{n(s)} = \\frac{3}{8}"} />
             </div>
           </div>
+        ),
       },
-    ]
+    ],
   },
   exercise: {
     questions: [
@@ -99,7 +108,10 @@ const FirstTopicContent: TopicContent = {
         id: "ex-q1",
         question: (
           <div className="flex flex-col gap-3">
-            <p>ក្នុងប្រអប់មួយមានបាល់ពណ៌ក្រហម ៣ បាល់ និងបាល់ពណ៌បៃតង ៧ បាល់។ ចាប់យកបាល់មួយដោយចៃដន្យ។ រកប្រូបាបនៃការចាប់យកបាល់ពណ៌បៃតង។</p>
+            <p>
+              ក្នុងប្រអប់មួយមានបាល់ពណ៌ក្រហម ៣ បាល់ និងបាល់ពណ៌បៃតង ៧ បាល់។
+              ចាប់យកបាល់មួយដោយចៃដន្យ។ រកប្រូបាបនៃការចាប់យកបាល់ពណ៌បៃតង។
+            </p>
           </div>
         ),
         options: [
@@ -114,7 +126,10 @@ const FirstTopicContent: TopicContent = {
         id: "ex-q2",
         question: (
           <div className="flex flex-col gap-3">
-            <p>មានកាត ៥០ សន្លឹក។ ជ្រើសរើសកាតមួយសន្លឹកដោយចៃដន្យ។ រកប្រូបាបនៃការជ្រើសរើសកាតដែលមានលេខចាប់ពី ១ ទៅ ១០។</p>
+            <p>
+              មានកាត ៥០ សន្លឹក។ ជ្រើសរើសកាតមួយសន្លឹកដោយចៃដន្យ។
+              រកប្រូបាបនៃការជ្រើសរើសកាតដែលមានលេខចាប់ពី ១ ទៅ ១០។
+            </p>
           </div>
         ),
         options: [
@@ -129,7 +144,10 @@ const FirstTopicContent: TopicContent = {
         id: "ex-q3",
         question: (
           <div className="flex flex-col gap-3">
-            <p>ក្នុងថ្នាក់មានសិស្ស ២៥ នាក់ ដែលមានសិស្សស្រី ១៥ នាក់។ ចាប់យកសិស្សម្នាក់ដោយចៃដន្យ។ រកប្រូបាបនៃការចាប់យកសិស្សប្រុស។</p>
+            <p>
+              ក្នុងថ្នាក់មានសិស្ស ២៥ នាក់ ដែលមានសិស្សស្រី ១៥ នាក់។
+              ចាប់យកសិស្សម្នាក់ដោយចៃដន្យ។ រកប្រូបាបនៃការចាប់យកសិស្សប្រុស។
+            </p>
           </div>
         ),
         options: [
@@ -141,29 +159,39 @@ const FirstTopicContent: TopicContent = {
         correctAnswer: 0,
       },
     ],
-  }
-}
+  },
+};
 
 const ProbabilityDefinition = () => {
   return (
     <>
       <div>
         {FirstTopicContent.definition && (
-          <DefinitionBox title={FirstTopicContent.definition.title} content={FirstTopicContent.definition.content} />
+          <DefinitionBox
+            title={FirstTopicContent.definition.title}
+            content={FirstTopicContent.definition.content}
+          />
         )}
         {FirstTopicContent.tip && (
-          <TipBox title={FirstTopicContent.tip.title} content={FirstTopicContent.tip.content} />
+          <TipBox
+            title={FirstTopicContent.tip.title}
+            content={FirstTopicContent.tip.content}
+          />
         )}
 
         {FirstTopicContent.example && (
-          <ExampleBox question={FirstTopicContent.example.question} steps={FirstTopicContent.example.steps} answer={FirstTopicContent.example.answer} />
+          <ExampleBox
+            question={FirstTopicContent.example.question}
+            steps={FirstTopicContent.example.steps}
+            answer={FirstTopicContent.example.answer}
+          />
         )}
         {FirstTopicContent.exercise && (
           <ExerciseBox questions={FirstTopicContent.exercise.questions} />
         )}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ProbabilityDefinition
+export default ProbabilityDefinition;
