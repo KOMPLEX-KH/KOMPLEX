@@ -1,4 +1,4 @@
-import ExamQuestionBox from "@/components/pages/docs/boxes/ExamQuestionBox";
+import { ExamQuestionBox } from "@/components/pages/docs/boxes/ExamQuestionBox";
 
 export default function BacII2024() {
     return (
