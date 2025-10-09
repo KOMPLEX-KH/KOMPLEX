@@ -6,7 +6,7 @@ import ModalRoot from "@components/common/ModalRoot";
 import Script from "next/script";
 import { AuthProvider } from "@hooks/useAuth";
 import "katex/dist/katex.min.css";
-
+import { curriculum } from "@/lessons/curriculum";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +37,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log(curriculum);
   return (
     <html lang="kh" className={poppins.className}>
       <head>

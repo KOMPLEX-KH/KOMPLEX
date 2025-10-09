@@ -18,12 +18,12 @@ const navLinks = [
         icon: FileText,
         style: "bg-transparent  hover:text-indigo-600 hover:bg-indigo-50/90 "
     },
-    {
-        label: 'អនុវត្តន៍',
-        href: '/exercises',
-        icon: Pencil,
-        style: "bg-transparent  hover:text-indigo-600 hover:bg-indigo-50/90 "
-    },
+    // {
+    //     label: 'អនុវត្តន៍',
+    //     href: '/exercises',
+    //     icon: Pencil,
+    //     style: "bg-transparent  hover:text-indigo-600 hover:bg-indigo-50/90 "
+    // },
     {
         label: 'ពិភាក្សា',
         href: '/forums',

@@ -9,6 +9,7 @@ import {
     deserializeTopicContentV3,
     deserializeTopicContentV3ToTree,
 } from "@/components/pages/docs/utils/ContentSerializerV2";
+import { Calculator } from "lucide-react";
 
 // Stage 1: Original authoring shape (TopicContent_V3)
 const TOPIC_CONTENT_V3: TopicContent_V3[] = [
@@ -63,6 +64,9 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
         content: (
             <div>
                 ចងចាំថា <InlineMath math="\\overline{a+bi}=a-bi" />
+                <Calculator size={16} color="red"></Calculator>
+                <Calculator size={16} color="red"></Calculator>
+                <Calculator size={16} color="red"></Calculator>
             </div>
         ),
     },

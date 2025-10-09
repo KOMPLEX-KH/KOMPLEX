@@ -1,6 +1,7 @@
 'use client';
 
 import Skeleton from "@/components/pages/docs/Skeleton";
+import TestingRenderer from "@/lessons/components/grade-12/math/differential-equation/test";
 import { curriculum } from "@/lessons/curriculum";
 import DocHeader from "@components/pages/docs/DocHeader";
 import Sidebar from "@components/pages/docs/Sidebar";
@@ -8,7 +9,6 @@ import TopicWrapper from "@components/pages/docs/TopicWrapper";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import { useParams } from "next/navigation";
-import TestingRenderer from "@/lessons/components/grade-12/math/differential-equation/test";
 
 type Params = { grade: string; subject: string; lesson: string; topic: string };
 
@@ -78,6 +78,7 @@ export default function Page() {
                     next={navigation.next}
                 >
                     <Component />
+                    <TestingRenderer />
                 </TopicWrapper>
             </div>
         </div>

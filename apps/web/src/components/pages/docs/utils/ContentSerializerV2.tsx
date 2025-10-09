@@ -1,5 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ReactNode } from "react";
+import * as LucideIcons from "lucide-react";
+
+// Cache to speed up lucide type → name detection
+const lucideTypeToName = new WeakMap<object, string>();
+function resolveLucideNameFromType(type: unknown): string | null {
+  if (!type || (typeof type !== "function" && typeof type !== "object")) return null;
+  const key = type as object;
+  const cached = lucideTypeToName.get(key);
+  if (cached) return cached;
+
+  const displayName = (type as any)?.displayName || (type as any)?.name;
+  if (displayName && (LucideIcons as any)[displayName]) {
+    lucideTypeToName.set(key, displayName);
+    return displayName;
+  }
+  // Deep match by constructor equality
+  for (const iconName of Object.keys(LucideIcons)) {
+    const Icon = (LucideIcons as any)[iconName];
+    if (Icon === type) {
+      lucideTypeToName.set(key, iconName);
+      return iconName;
+    }
+  }
+  return null;
+}
 import { InlineMath, BlockMath } from "react-katex";
 
 // Import all box components for type checking
@@ -138,6 +163,24 @@ function serializeElementValue(
     return { type: "BlockMath", props: { math: el.props.math } };
   }
 
+  // Flatten React.Fragment instead of emitting placeholder elements
+  if (el.type === React.Fragment) {
+    const children = (el as any).props?.children;
+    return children != null ? serializeElementValue(children) : "";
+  }
+
+  // Lucide icon detection (robust)
+  {
+    const lucideName = resolveLucideNameFromType(el.type);
+    if (lucideName) {
+      const { size, color, strokeWidth, className } = (el as any).props || {};
+      return {
+        type: "LucideIcon",
+        props: { name: lucideName, size, color, strokeWidth, className },
+      } as SerializedContent;
+    }
+  }
+
   // Custom boxes handled as generic element trees for inner props
   const componentType = el.type;
   const componentName =
@@ -177,20 +220,27 @@ function serializeElementValue(
     } as SerializedContent;
   }
 
-  // HTML element
-  const tagName =
-    typeof el.type === "string"
-      ? el.type
-      : ((el.type as { name?: string }).name || "div");
+  // HTML element or unknown component
+  if (typeof el.type === "string") {
+    const tagName = el.type;
+    const { /* children, */ ...restProps } = el.props;
+    return {
+      type: tagName,
+      props: {
+        ...restProps,
+        children: el.props?.children ? serializeElementValue(el.props.children) : undefined,
+      },
+    } as SerializedContent;
+  }
 
-  const { /* children, */ ...restProps } = el.props;
-  return {
-    type: tagName,
-    props: {
-      ...restProps,
-      children: el.props?.children ? serializeElementValue(el.props.children) : undefined,
-    },
-  } as SerializedContent;
+  // Unknown function/class components that we don't explicitly support
+  // Drop the wrapper and serialize its children (no placeholder element)
+  if ((el as any).props?.children != null) {
+    return serializeElementValue((el as any).props.children);
+  }
+
+  // As a last resort, drop entirely
+  return "";
 }
 
 function deserializeElementValue(
@@ -234,6 +284,24 @@ function deserializeElementValue(
   }
   if (obj.type === "BlockMath") {
     return <BlockMath key={Math.random()} math={(obj.props as any)?.math} />;
+  }
+
+  // Lucide icon revival
+  if (obj.type === "LucideIcon") {
+    const { name, size, color, strokeWidth, className } = (obj.props || {}) as any;
+    const Icon = (LucideIcons as any)[name as string];
+    if (Icon) {
+      return (
+        <Icon
+          key={Math.random()}
+          size={size}
+          color={color}
+          strokeWidth={strokeWidth}
+          className={className}
+        />
+      );
+    }
+    return <span key={Math.random()} data-missing-icon={String(name)} />;
   }
 
   // Map names to components for inner trees (same as deserializeContent)
@@ -300,6 +368,133 @@ function deserializeElementValue(
     "h4",
     "h5",
     "h6",
+    "abbr",
+    "address",
+    "area",
+    "article",
+    "aside",
+    "audio",
+    "b",
+    "base",
+    "bdi",
+    "bdo",
+    "blockquote",
+    "body",
+    "button",
+    "canvas",
+    "caption",
+    "cite",
+    "code",
+    "col",
+    "colgroup",
+    "data",
+    "datalist",
+    "dd",
+    "del",
+    "details",
+    "dfn",
+    "dialog",
+    "dl",
+    "dt",
+    "fieldset",
+    "figcaption",
+    "figure",
+    "footer",
+    "form",
+    "head",
+    "header",
+    "hr",
+    "html",
+    "i",
+    "iframe",
+    "img",
+    "input",
+    "ins",
+    "kbd",
+    "label",
+    "legend",
+    "link",
+    "main",
+    "map",
+    "mark",
+    "meta",
+    "meter",
+    "nav",
+    "noscript",
+    "object",
+    "optgroup",
+    "option",
+    "output",
+    "param",
+    "picture",
+    "pre",
+    "progress",
+    "q",
+    "rb",
+    "rp",
+    "rt",
+    "rtc",
+    "ruby",
+    "s",
+    "samp",
+    "script",
+    "section",
+    "select",
+    "small",
+    "source",
+    "span",
+    "strong",
+    "style",
+    "sub",
+    "summary",
+    "sup",
+    "svg",
+    "path",
+    "circle",
+    "ellipse",
+    "g",
+    "line",
+    "marker",
+    "mask",
+    "pattern",
+    "polygon",
+    "polyline",
+    "rect",
+    "symbol",
+    "text",
+    "tspan",
+    "use",
+    "switch",
+    "foreignObject",
+    "title",
+    "desc",
+    "defs",
+    "clipPath",
+    "filter",
+    "linearGradient",
+    "radialGradient",
+    "stop",
+    "animate",
+    "animateMotion",
+    "animateTransform",
+    "mpath",
+    "set",
+    "table",
+    "tbody",
+    "td",
+    "template",
+    "textarea",
+    "tfoot",
+    "th",
+    "thead",
+    "time",
+    "tr",
+    "track",
+    "u",
+    "ul",
+    "var",
+    "video",
+    "wbr"
   ];
   if (validHtmlTags.includes(obj.type)) {
     const { children, ...restProps } = obj.props || {};
@@ -309,42 +504,6 @@ function deserializeElementValue(
   }
   return null;
 }
-
-// V3 mapping helpers for type names
-// (kept for reference) mapping from component names to V3 types
-// const V3_TYPE_MAP: Record<string, TopicContent_V3["type"]> = {
-//   DefinitionBox: "definition",
-//   TipBox: "tip",
-//   ExampleBox: "example",
-//   ExerciseBox: "exercise",
-//   HintBox: "hint",
-//   WarningBox: "warning",
-//   CustomBox: "custom",
-//   ThreeDBox: "threeD",
-//   GraphBox: "graph",
-//   ImageBox: "imageExplanation",
-//   VideoBox: "videoExplanation",
-//   GraphExplanationBox: "graphExplanation",
-//   ThreeDExplanationBox: "threeDExplanation",
-// };
-
-// const V3_COMPONENT_BY_TYPE: {
-//   [K in TopicContent_V3["type"]]: React.ComponentType<unknown>;
-// } = {
-//   definition: DefinitionBox,
-//   tip: TipBox,
-//   example: ExampleBox,
-//   exercise: ExerciseBox,
-//   hint: HintBox,
-//   warning: WarningBox,
-//   custom: CustomBox,
-//   threeD: ThreeDBox,
-//   graph: GraphBox,
-//   imageExplanation: ImageExplanationBox,
-//   videoExplanation: VideoExplanationBox,
-//   graphExplanation: GraphExplanationBox,
-//   threeDExplanation: ThreeDExplanationBox,
-// };
 
 /**
  * Serialize TopicContent_V3[] to JSON
