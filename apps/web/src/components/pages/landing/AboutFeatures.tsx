@@ -11,7 +11,7 @@ import {
   Bot,
   Video,
 } from "lucide-react";
-import ThreeDBox from "@/components/pages/docs/boxes/3DBox";
+import {ThreeDBox} from "@/components/pages/docs/boxes/3DBox";
 import { GraphBox } from "@/components/pages/docs/boxes/GraphBox";
 import { Stars } from "@react-three/drei";
 import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";

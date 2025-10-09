@@ -8,6 +8,7 @@ import TopicWrapper from "@components/pages/docs/TopicWrapper";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import { useParams } from "next/navigation";
+import TestingRenderer from "@/lessons/components/grade-12/math/differential-equation/test";
 
 type Params = { grade: string; subject: string; lesson: string; topic: string };
 
@@ -76,7 +77,7 @@ export default function Page() {
                     prev={navigation.prev}
                     next={navigation.next}
                 >
-                    <Component />
+                    <TestingRenderer />
                 </TopicWrapper>
             </div>
         </div>

@@ -5,6 +5,7 @@ import { ImageExplanationBox } from "@/components/pages/docs/boxes/explanation-b
 import { TipBox } from "@/components/pages/docs/boxes/TipBox";
 import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
 import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+import { HintBox } from "@/components/pages/docs/boxes/HintBox";
 
 const TOPIC_CONTENT = {
   definition: {

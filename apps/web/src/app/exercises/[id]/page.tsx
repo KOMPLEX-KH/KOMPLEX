@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { ArrowLeft, Clock, Flag } from "lucide-react";
 import { useParams } from "next/navigation";
-import { ExerciseBox } from "@/components/pages/exercises/ExerciseBox";
+import ExerciseBox  from "@/components/pages/exercises/ExerciseBox";
 import PracticeInfo from "@/components/pages/exercises/ExerciseInfo";
 import PracticeResult from "@/components/pages/exercises/ExerciseResult";
 import ContentError from "@components/common/ContentError";

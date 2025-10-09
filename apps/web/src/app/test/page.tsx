@@ -1,5 +1,5 @@
 import { InlineMath } from 'react-katex'
-import { serializeContent, deserializeContent } from '@/utils/ContentSerializer'
+import { serializeContent, deserializeContent } from '@/components/pages/docs/utils/ContentSerializer'
 import { TipBox } from '@/components/pages/docs/boxes/TipBox'
 import { DefinitionBox } from '@/components/pages/docs/boxes/DefinitionBox'
 import { ExampleBox } from '@/components/pages/docs/boxes/ExampleBox'
