@@ -1,18 +1,20 @@
 import { TopicContent } from "@/types/docs/topic";
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox";
-import TipBox from "@/components/pages/docs/boxes/TipBox";
-import { ImageBox, ImageBoxProps } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
-import 'katex/dist/katex.min.css'
-
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import {
+  ImageExplanationBox,
+  ImageBoxProps,
+} from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
+import "katex/dist/katex.min.css";
 
 const FirstTopicContent: TopicContent = {
   definition: {
     title: "១. ការសង្កេតរបស់ដាវិន",
-    content:
+    content: (
       <>
-        <div className="flex flex-col items-start">
-        </div>
+        <div className="flex flex-col items-start"></div>
       </>
+    ),
   },
   imageExplanation: [
     {
@@ -27,25 +29,35 @@ const FirstTopicContent: TopicContent = {
         "ដាវិនសន្និដ្ឋានថា សត្វនៅលើកោះមានដើមកំណើតពីសត្វនៅលើទ្វីប។",
       ],
     },
-  ]
-}
-
+  ],
+};
 
 const Observations = () => {
   return (
     <div>
       <div>
         {FirstTopicContent.definition && (
-          <DefinitionBox title={FirstTopicContent.definition.title} content={FirstTopicContent.definition.content} />
+          <DefinitionBox
+            title={FirstTopicContent.definition.title}
+            content={FirstTopicContent.definition.content}
+          />
         )}
         {FirstTopicContent.imageExplanation &&
           Array.isArray(FirstTopicContent.imageExplanation) &&
-          FirstTopicContent.imageExplanation.map((image: ImageBoxProps, index: number) => (
-            <ImageBox key={index} title={image.title} src={image.src} imageAlt={image.imageAlt} explanation={image.explanation} />
-          ))}
+          FirstTopicContent.imageExplanation.map(
+            (image: ImageBoxProps, index: number) => (
+              <ImageExplanationBox
+                key={index}
+                title={image.title}
+                src={image.src}
+                imageAlt={image.imageAlt}
+                explanation={image.explanation}
+              />
+            )
+          )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Observations
+export default Observations;

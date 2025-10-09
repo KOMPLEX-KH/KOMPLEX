@@ -1,10 +1,10 @@
 import React from "react";
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox";
-import ExampleBox from "@/components/pages/docs/boxes/ExampleBox";
-import TipBox from "@/components/pages/docs/boxes/TipBox";
-import ExerciseBox from "@/components/pages/docs/boxes/ExerciseBox";
-import HintBox from "@/components/pages/docs/boxes/HintBox";
-import WarningBox from "@/components/pages/docs/boxes/WarningBox";
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
 import { BlockMath, InlineMath } from "react-katex";
 import { Check } from "lucide-react";
 
@@ -52,8 +52,6 @@ export function ResultCallout({
   );
 }
 
-
-
 const LessonChip = ({ children }: { children: React.ReactNode }) => (
   <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-600 text-white text-sm font-bold">
     {children}
@@ -88,7 +86,6 @@ const Section = ({
     {children}
   </section>
 );
-
 
 // components/helper/Therefore.tsx
 
@@ -125,7 +122,6 @@ export const Therefore: React.FC<ThereforeProps> = ({
     </span>
   </div>
 );
-
 
 const AlternatingCircuits = () => {
   return (
@@ -182,9 +178,7 @@ const AlternatingCircuits = () => {
 
       <Section no={3} title="សមីការចរន្តឆ្លាស់" id="sec-electric-motor-force">
         <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
+          <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
           <div className="space-y-1">
             <BlockMath math={String.raw`i = I_msin(\omega t + \phi)`} />
           </div>
@@ -204,9 +198,7 @@ const AlternatingCircuits = () => {
 
       <Section no={3} title="ចរន្តប្រសិទ្ធ" id="sec-electric-motor-force">
         <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
+          <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
           <div className="space-y-1">
             <BlockMath math={String.raw`I = \frac{I_m}{\sqrt{2}}`} />
           </div>
@@ -226,9 +218,7 @@ const AlternatingCircuits = () => {
 
       <Section no={3} title="សមីការតង់ស្យុង" id="sec-electric-motor-force">
         <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
+          <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
           <div className="space-y-1">
             <BlockMath math={String.raw`v = V_msin(\omega t + \phi)`} />
           </div>
@@ -248,9 +238,7 @@ const AlternatingCircuits = () => {
 
       <Section no={3} title="តង់ស្យុងប្រសិទ្ធ" id="sec-electric-motor-force">
         <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
+          <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
           <div className="space-y-1">
             <BlockMath math={String.raw`V = \frac{V_m}{\sqrt{2}}`} />
           </div>
@@ -272,9 +260,7 @@ const AlternatingCircuits = () => {
         <div className="grid gap-2 sm:grid-cols-2">
           {/* Isochoric */}
           <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-            <p className="font-semibold text-slate-800 mb-1">
-              រូបមន្ត
-            </p>
+            <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
             <div className="space-y-1">
               <BlockMath math={String.raw`Z_R = R`} />
             </div>
@@ -293,9 +279,7 @@ const AlternatingCircuits = () => {
 
           {/* Isobaric */}
           <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-            <p className="font-semibold text-slate-800 mb-1">
-              រូបមន្ត
-            </p>
+            <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
             <div className="space-y-1">
               <BlockMath math={String.raw`Z_C = \frac{1}{C\omega}`} />
             </div>
@@ -313,13 +297,11 @@ const AlternatingCircuits = () => {
           </div>
 
           <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
-          <div className="space-y-1">
-            <BlockMath math={String.raw`Z_L = L \cdot \omega`} />
-          </div>
-          {/* <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
+            <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
+            <div className="space-y-1">
+              <BlockMath math={String.raw`Z_L = L \cdot \omega`} />
+            </div>
+            {/* <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
                   <li>
                     <InlineMath math={String.raw`\phi `} />​ ភ្លុចអាំងឌុចស្យុង (<InlineMath math=" Wb" />)
                   </li>
@@ -330,16 +312,16 @@ const AlternatingCircuits = () => {
                     <InlineMath math={String.raw`i`} />​ ចរន្ត (<InlineMath math="A" />)
                   </li>
                 </ul> */}
-        </div>
-
-        <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
-          <div className="space-y-1">
-            <BlockMath math={String.raw`Z_{RC} = \sqrt{R^2 + \left(\frac{1}{C\omega}\right)^2}`} />
           </div>
-          {/* <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
+
+          <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
+            <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
+            <div className="space-y-1">
+              <BlockMath
+                math={String.raw`Z_{RC} = \sqrt{R^2 + \left(\frac{1}{C\omega}\right)^2}`}
+              />
+            </div>
+            {/* <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
                   <li>
                     <InlineMath math={String.raw`\phi `} />​ ភ្លុចអាំងឌុចស្យុង (<InlineMath math=" Wb" />)
                   </li>
@@ -350,16 +332,16 @@ const AlternatingCircuits = () => {
                     <InlineMath math={String.raw`i`} />​ ចរន្ត (<InlineMath math="A" />)
                   </li>
                 </ul> */}
-        </div>
-
-        <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
-          <div className="space-y-1">
-            <BlockMath math={String.raw`Z_{RL} = \sqrt{R^2 + \left(L \cdot \omega\right)^2}`} />
           </div>
-          {/* <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
+
+          <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
+            <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
+            <div className="space-y-1">
+              <BlockMath
+                math={String.raw`Z_{RL} = \sqrt{R^2 + \left(L \cdot \omega\right)^2}`}
+              />
+            </div>
+            {/* <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
                   <li>
                     <InlineMath math={String.raw`\phi `} />​ ភ្លុចអាំងឌុចស្យុង (<InlineMath math=" Wb" />)
                   </li>
@@ -370,16 +352,16 @@ const AlternatingCircuits = () => {
                     <InlineMath math={String.raw`i`} />​ ចរន្ត (<InlineMath math="A" />)
                   </li>
                 </ul> */}
-        </div>
-
-        <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-          <p className="font-semibold text-slate-800 mb-1">
-            រូបមន្ត
-          </p>
-          <div className="space-y-1">
-            <BlockMath math={String.raw`Z_RLC = \sqrt{R^2 + \left(\frac{1}{C\omega}\right)^2 + \left(L \cdot \omega\right)^2}`} />
           </div>
-          {/* <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
+
+          <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
+            <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
+            <div className="space-y-1">
+              <BlockMath
+                math={String.raw`Z_RLC = \sqrt{R^2 + \left(\frac{1}{C\omega}\right)^2 + \left(L \cdot \omega\right)^2}`}
+              />
+            </div>
+            {/* <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
                   <li>
                     <InlineMath math={String.raw`\phi `} />​ ភ្លុចអាំងឌុចស្យុង (<InlineMath math=" Wb" />)
                   </li>
@@ -390,13 +372,11 @@ const AlternatingCircuits = () => {
                     <InlineMath math={String.raw`i`} />​ ចរន្ត (<InlineMath math="A" />)
                   </li>
                 </ul> */}
+          </div>
         </div>
-        </div>
-
       </Section>
     </div>
-  )
-}
+  );
+};
 
-export default AlternatingCircuits
-
+export default AlternatingCircuits;

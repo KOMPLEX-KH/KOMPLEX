@@ -8,11 +8,11 @@ import TopicWrapper from "@components/pages/docs/TopicWrapper";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import { useParams } from "next/navigation";
+import TestingRenderer from "@/lessons/components/grade-12/math/differential-equation/test";
 
 type Params = { grade: string; subject: string; lesson: string; topic: string };
 
 const getTopicComponent = (params: Params) => {
-
     const grade = curriculum.find(g => g.grade === params.grade);
     const subject = grade?.content.find(s => s.subject === params.subject);
     const lesson = subject?.lessons.find(l => l.lesson === params.lesson);
@@ -51,8 +51,10 @@ export default function Page() {
     }
 
     const importPath = topic.component;
+    // Load component with ssr disabled to ensure client-side rendering
     const Component = dynamic(() => importPath(), {
-        loading: () => <Skeleton></Skeleton>,
+        loading: () => <Skeleton />,
+        ssr: false
     });
 
     return (
@@ -75,7 +77,7 @@ export default function Page() {
                     prev={navigation.prev}
                     next={navigation.next}
                 >
-                    <Component />
+                    <TestingRenderer />
                 </TopicWrapper>
             </div>
         </div>

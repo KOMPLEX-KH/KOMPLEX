@@ -1,6 +1,6 @@
-import TopicPracticeBox from "@/components/pages/docs/boxes/TopicPracticeBox";
+import { TopicPracticeBox } from "@/components/pages/docs/boxes/TopicPracticeBox";
 import { BlockMath, InlineMath } from "react-katex";
-import SummaryBox from "@/components/pages/docs/boxes/SummaryBox";
+import { SummaryBox } from "@/components/pages/docs/boxes/SummaryBox";
 import { AlertTriangleIcon, BookAIcon, ChartBarIcon, LightbulbIcon, WrenchIcon } from "lucide-react";
 import { PracticeExercise, SummarySection } from "@/types/docs/topic";
 

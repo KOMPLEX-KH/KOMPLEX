@@ -1,23 +1,20 @@
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox"
-import TipBox from "@/components/pages/docs/boxes/TipBox"
-import { TopicContent } from "@/types/docs/topic"
-import { BlockMath, InlineMath } from "react-katex"
-import 'katex/dist/katex.min.css'
-import ExerciseBox from "@/components/pages/docs/boxes/ExerciseBox"
-import ExampleBox from "@/components/pages/docs/boxes/ExampleBox"
-
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { TopicContent } from "@/types/docs/topic";
+import { BlockMath, InlineMath } from "react-katex";
+import "katex/dist/katex.min.css";
+import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
 
 const FirstTopicContent: TopicContent = {
   definition: {
-    title:
+    title: (
       <div className="flex items-center gap-2 sm:flex-row flex-col">
         <p>សមីការឌីផែរ៉ង់ស្សែលរាង </p>
         <BlockMath math="\frac{d_y}{d_x} = f(x)" />
-      </div>,
-    content:
-      <>
-
-      </>
+      </div>
+    ),
+    content: <></>,
   },
   tip: {
     title: "ជាទូទៅ",
@@ -46,12 +43,12 @@ const FirstTopicContent: TopicContent = {
             </div>
           </div>
         </div>
-      </>
+      </>,
     ],
     steps: [
       {
         title: "ដោះស្រាយសមីការទី១",
-        content:
+        content: (
           <div className="flex flex-col items-start">
             <div className="flex items-center gap-2 flex-wrap">
               <p>សមីការ៖ </p>
@@ -63,10 +60,11 @@ const FirstTopicContent: TopicContent = {
             </div>
             <BlockMath math="\Rightarrow y = x^3 - e^x + x + c ,\ c \in \mathbb{R}" />
           </div>
+        ),
       },
       {
         title: "ដោះស្រាយសមីការទី២",
-        content:
+        content: (
           <div className="flex flex-col items-start">
             <div className="flex items-center gap-2 flex-wrap">
               <p>សមីការ៖ </p>
@@ -82,6 +80,7 @@ const FirstTopicContent: TopicContent = {
               <BlockMath math="\Rightarrow y = \frac{1}{2} e^{x^2}  + 2x + c ,\ c \in \mathbb{R}" />
             </div>
           </div>
+        ),
       },
     ],
     answer: (
@@ -93,7 +92,7 @@ const FirstTopicContent: TopicContent = {
           </div>
         </div>
       </>
-    )
+    ),
   },
   exercise: {
     questions: [
@@ -139,19 +138,21 @@ const FirstTopicContent: TopicContent = {
       },
     ],
   },
-}
-
-
+};
 
 const SecondTopic: TopicContent = {
   definition: {
     title: "សមីការឌីផែរ៉ង់ស្សែលដែលញែកអថេរបាន",
-    content:
+    content: (
       <>
-        <p>សមីការដែលក្រោយពីសម្រួលរួចមានទម្រង់ <InlineMath math={"\\frac{d_y}{d_x} = \\frac{M(x)}{N(y)}"} />  </p>
-        <p>ហៅថាសមីការញែកអថេរបានហេីយមានចម្លេីយទូទៅគឺ​​  </p>
+        <p>
+          សមីការដែលក្រោយពីសម្រួលរួចមានទម្រង់{" "}
+          <InlineMath math={"\\frac{d_y}{d_x} = \\frac{M(x)}{N(y)}"} />{" "}
+        </p>
+        <p>ហៅថាសមីការញែកអថេរបានហេីយមានចម្លេីយទូទៅគឺ​​ </p>
         <InlineMath math={"\\int N(y)d_y = \\int M(x)d_x + C "} />
       </>
+    ),
   },
   example: {
     question: [
@@ -170,12 +171,12 @@ const SecondTopic: TopicContent = {
             </div>
           </div>
         </div>
-      </>
+      </>,
     ],
     steps: [
       {
         title: "ដោះស្រាយសមីការទី១",
-        content:
+        content: (
           <div className="flex flex-col items-start">
             <div className="flex items-center gap-2 flex-wrap">
               <p>សមីការ៖ </p>
@@ -203,7 +204,6 @@ const SecondTopic: TopicContent = {
                   <BlockMath math="\Rightarrow -e^{-y} = -e^x + c " />
                   <BlockMath math=", c= c_1 - c_2" />
                 </div>
-
               </div>
             </div>
             <div className="flex items-center gap-2 justify-center">
@@ -213,10 +213,11 @@ const SecondTopic: TopicContent = {
               </div>
             </div>
           </div>
+        ),
       },
       {
         title: "ដោះស្រាយសមីការទី២",
-        content:
+        content: (
           <div className="flex flex-col items-start">
             <div className="flex items-center gap-2 flex-wrap">
               <p>សមីការ៖ </p>
@@ -246,7 +247,8 @@ const SecondTopic: TopicContent = {
               <BlockMath math="\Rightarrow c= - \frac{1}{2} \ln3 " />
             </div>
           </div>
-      }
+        ),
+      },
     ],
     answer: (
       <>
@@ -257,7 +259,7 @@ const SecondTopic: TopicContent = {
           </div>
         </div>
       </>
-    )
+    ),
   },
   exercise: {
     questions: [
@@ -322,25 +324,39 @@ const SecondTopic: TopicContent = {
         correctAnswer: 3,
       },
     ],
-  }
-}
+  },
+};
 
 const VariousForms = () => {
   return (
     <>
       <div>
         {FirstTopicContent.definition && (
-          <DefinitionBox title={FirstTopicContent.definition.title} content={FirstTopicContent.definition.content} />
+          <DefinitionBox
+            title={FirstTopicContent.definition.title}
+            content={FirstTopicContent.definition.content}
+          />
         )}
         {FirstTopicContent.tip && (
-          <TipBox title={FirstTopicContent.tip.title} content={FirstTopicContent.tip.content} />
+          <TipBox
+            title={FirstTopicContent.tip.title}
+            content={FirstTopicContent.tip.content}
+          />
         )}
 
         {FirstTopicContent.example && (
-          <ExampleBox question={FirstTopicContent.example.question} steps={FirstTopicContent.example.steps} answer={FirstTopicContent.example.answer} />
+          <ExampleBox
+            question={FirstTopicContent.example.question}
+            steps={FirstTopicContent.example.steps}
+            answer={FirstTopicContent.example.answer}
+          />
         )}
         {FirstTopicContent.example2 && (
-          <ExampleBox question={FirstTopicContent.example2.question} steps={FirstTopicContent.example2.steps} answer={FirstTopicContent.example2.answer} />
+          <ExampleBox
+            question={FirstTopicContent.example2.question}
+            steps={FirstTopicContent.example2.steps}
+            answer={FirstTopicContent.example2.answer}
+          />
         )}
         {FirstTopicContent.exercise && (
           <ExerciseBox questions={FirstTopicContent.exercise.questions} />
@@ -349,17 +365,24 @@ const VariousForms = () => {
 
       <div>
         {SecondTopic.definition && (
-          <DefinitionBox title={SecondTopic.definition.title} content={SecondTopic.definition.content} />
+          <DefinitionBox
+            title={SecondTopic.definition.title}
+            content={SecondTopic.definition.content}
+          />
         )}
         {SecondTopic.example && (
-          <ExampleBox question={SecondTopic.example.question} steps={SecondTopic.example.steps} answer={SecondTopic.example.answer} />
+          <ExampleBox
+            question={SecondTopic.example.question}
+            steps={SecondTopic.example.steps}
+            answer={SecondTopic.example.answer}
+          />
         )}
         {SecondTopic.exercise && (
           <ExerciseBox questions={SecondTopic.exercise.questions} />
         )}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default VariousForms
+export default VariousForms;

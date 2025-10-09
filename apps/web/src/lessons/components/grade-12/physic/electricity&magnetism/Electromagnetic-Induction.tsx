@@ -1,20 +1,20 @@
 import React from "react";
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox";
-import ExampleBox from "@/components/pages/docs/boxes/ExampleBox";
-import TipBox from "@/components/pages/docs/boxes/TipBox";
-import ExerciseBox from "@/components/pages/docs/boxes/ExerciseBox";
-import HintBox from "@/components/pages/docs/boxes/HintBox";
-import WarningBox from "@/components/pages/docs/boxes/WarningBox";
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
 import { BlockMath, InlineMath } from "react-katex";
 import { MathLine } from "@components/helper/MathLine";
 import { MathScroll } from "@components/helper/MathScroll";
-import { ImageBox } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
+import { ImageExplanationBox } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
 import { heatEngineImg } from "../../../../../../public/docs/grade-12/physic/engine/ImportImage";
 import { Check } from "lucide-react";
 import { p } from "framer-motion/client";
 import { div } from "three/tsl";
 
-import { HintBoxProps } from '@/components/pages/docs/boxes/HintBox';
+import { HintBoxProps } from "@/components/pages/docs/boxes/HintBox";
 
 type Variant = "green" | "violet" | "neutral" | "amber";
 
@@ -60,8 +60,6 @@ export function ResultCallout({
   );
 }
 
-
-
 const LessonChip = ({ children }: { children: React.ReactNode }) => (
   <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-600 text-white text-sm font-bold">
     {children}
@@ -96,7 +94,6 @@ const Section = ({
     {children}
   </section>
 );
-
 
 // components/helper/Therefore.tsx
 
@@ -134,7 +131,6 @@ export const Therefore: React.FC<ThereforeProps> = ({
   </div>
 );
 
-
 const ElectromagneticInduction = () => {
   return (
     <div>
@@ -147,17 +143,23 @@ const ElectromagneticInduction = () => {
           </li>
           <li>
             <a href="#sec-electric-motor-force" className={chip}>
-              <span className="font-semibold">2. កម្លាំងអគ្គិសនីចលករអាំងឌ្វី</span>
+              <span className="font-semibold">
+                2. កម្លាំងអគ្គិសនីចលករអាំងឌ្វី
+              </span>
             </a>
           </li>
           <li>
             <a href="#sec-electric-motor-force-bar" className={chip}>
-              <span className="font-semibold">3. កម្លាំងអគ្គិសនីចលករអាំងឌ្វីក្នុងរបារផ្លាស់ទី</span>
+              <span className="font-semibold">
+                3. កម្លាំងអគ្គិសនីចលករអាំងឌ្វីក្នុងរបារផ្លាស់ទី
+              </span>
             </a>
           </li>
           <li>
             <a href="#sec-electric-motor-force-period" className={chip}>
-              <span className="font-semibold">4. កម្លាំងអគ្គិសនីចលករអាំងឌ្វីខណៈពេលណាមួយ</span>
+              <span className="font-semibold">
+                4. កម្លាំងអគ្គិសនីចលករអាំងឌ្វីខណៈពេលណាមួយ
+              </span>
             </a>
           </li>
           <li>
@@ -177,137 +179,170 @@ const ElectromagneticInduction = () => {
                 title="និយមន័យ"
                 content={
                   <div className="space-y-2">
-                    <p>ភ្លុចម៉ាញេទិចគឺជាទំហំមួយសម្រាប់សម្គាល់ខ្សែដែនម៉ាញេទិចឆ្លងកាត់ផ្ទៃមួយ។</p>
+                    <p>
+                      ភ្លុចម៉ាញេទិចគឺជាទំហំមួយសម្រាប់សម្គាល់ខ្សែដែនម៉ាញេទិចឆ្លងកាត់ផ្ទៃមួយ។
+                    </p>
                   </div>
                 }
               />
 
               <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-                <p className="font-semibold text-slate-800 mb-1">
-                  រូបមន្ត
-                </p>
+                <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
                 <div className="space-y-1">
-                  <BlockMath math={String.raw`\Phi = B \cdot A \cdot cos\theta`} />
+                  <BlockMath
+                    math={String.raw`\Phi = B \cdot A \cdot cos\theta`}
+                  />
                 </div>
                 <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
                   <li>
-                    <InlineMath math={String.raw`\Phi `} />​ ភ្លុចម៉ាញេទិច (<InlineMath math=" Wb" />)
+                    <InlineMath math={String.raw`\Phi `} />​ ភ្លុចម៉ាញេទិច (
+                    <InlineMath math=" Wb" />)
                   </li>
                   <li>
-                    <InlineMath math="B" /> ដែនម៉ាញេទិច (<InlineMath math="T" />)
+                    <InlineMath math="B" /> ដែនម៉ាញេទិច (<InlineMath math="T" />
+                    )
                   </li>
                   <li>
-                    <InlineMath math={String.raw`A`} />​ ផ្ទៃកាត់ (<InlineMath math="m^2" />)
+                    <InlineMath math={String.raw`A`} />​ ផ្ទៃកាត់ (
+                    <InlineMath math="m^2" />)
                   </li>
                 </ul>
               </div>
               <HintBox
                 content={
                   <div className="space-y-2">
-                    <BlockMath math={String.raw`\vec{B} \perp A ⟹​ \theta = 0\degree`} />
-                    <BlockMath math={String.raw`\vec{B} \parallel A ⟹​ \theta = 90\degree`} />
-
+                    <BlockMath
+                      math={String.raw`\vec{B} \perp A ⟹​ \theta = 0\degree`}
+                    />
+                    <BlockMath
+                      math={String.raw`\vec{B} \parallel A ⟹​ \theta = 90\degree`}
+                    />
                   </div>
                 }
               />
             </Section>
 
-            <Section no={2} title="កម្លាំងអគ្គិសនីចលករអាំងឌ្វី" id="sec-electric-motor-force">
+            <Section
+              no={2}
+              title="កម្លាំងអគ្គិសនីចលករអាំងឌ្វី"
+              id="sec-electric-motor-force"
+            >
               <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-                <p className="font-semibold text-slate-800 mb-1">
-                  រូបមន្ត
-                </p>
+                <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
                 <div className="space-y-1">
-                  <BlockMath math={String.raw`\left| E \right| = N\frac{\left| \Delta \phi \right|}{\left| \Delta t \right|}`} />
+                  <BlockMath
+                    math={String.raw`\left| E \right| = N\frac{\left| \Delta \phi \right|}{\left| \Delta t \right|}`}
+                  />
                 </div>
                 <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
                   <li>
-                    <InlineMath math={String.raw`E `} />​ ភ្លុចម៉ាញេទិច (<InlineMath math=" Wb" />)
+                    <InlineMath math={String.raw`E `} />​ ភ្លុចម៉ាញេទិច (
+                    <InlineMath math=" Wb" />)
                   </li>
                   <li>
-                    <InlineMath math={String.raw`\phi `} />​ ភ្លុចម៉ាញេទិច (<InlineMath math=" Wb" />)
+                    <InlineMath math={String.raw`\phi `} />​ ភ្លុចម៉ាញេទិច (
+                    <InlineMath math=" Wb" />)
                   </li>
                   <li>
                     <InlineMath math="N" /> ចំនួនស្ពៀ
                   </li>
                   <li>
-                    <InlineMath math={String.raw`t`} />​ រយពេល (<InlineMath math="s" />)
+                    <InlineMath math={String.raw`t`} />​ រយពេល (
+                    <InlineMath math="s" />)
                   </li>
                 </ul>
               </div>
               <HintBox
                 content={
                   <div className="space-y-2">
-                    <BlockMath math={String.raw`\vec{B} \perp A ⟹​ \theta = 0\degree`} />
-                    <BlockMath math={String.raw`\vec{B} \parallel A ⟹​ \theta = 90\degree`} />
-
+                    <BlockMath
+                      math={String.raw`\vec{B} \perp A ⟹​ \theta = 0\degree`}
+                    />
+                    <BlockMath
+                      math={String.raw`\vec{B} \parallel A ⟹​ \theta = 90\degree`}
+                    />
                   </div>
                 }
               />
             </Section>
 
-            <Section no={3} title="កម្លាំងអគ្គិសនីចលករអាំងឌ្វីក្នុងរបារផ្លាស់ទី" id="sec-electric-motor-force">
+            <Section
+              no={3}
+              title="កម្លាំងអគ្គិសនីចលករអាំងឌ្វីក្នុងរបារផ្លាស់ទី"
+              id="sec-electric-motor-force"
+            >
               <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-                <p className="font-semibold text-slate-800 mb-1">
-                  រូបមន្ត
-                </p>
+                <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
                 <div className="space-y-1">
-                  <BlockMath math={String.raw`\left| E \right| = BVlsin\theta`} />
+                  <BlockMath
+                    math={String.raw`\left| E \right| = BVlsin\theta`}
+                  />
                 </div>
                 <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
                   <li>
-                    <InlineMath math={String.raw`E `} />​ ភ្លុចម៉ាញេទិច (<InlineMath math=" Wb" />)
+                    <InlineMath math={String.raw`E `} />​ ភ្លុចម៉ាញេទិច (
+                    <InlineMath math=" Wb" />)
                   </li>
                   <li>
-                    <InlineMath math={String.raw`l `} />​ ចម្ងាយ (<InlineMath math="m" />)
+                    <InlineMath math={String.raw`l `} />​ ចម្ងាយ (
+                    <InlineMath math="m" />)
                   </li>
                   <li>
-                    <InlineMath math="B" /> ដែនម៉ាញេទិច (<InlineMath math="T" />)
+                    <InlineMath math="B" /> ដែនម៉ាញេទិច (<InlineMath math="T" />
+                    )
                   </li>
                   <li>
-                    <InlineMath math={String.raw`V`} />​ តង់ស្យុង (<InlineMath math="V" />)
+                    <InlineMath math={String.raw`V`} />​ តង់ស្យុង (
+                    <InlineMath math="V" />)
                   </li>
                 </ul>
               </div>
             </Section>
 
-            <Section no={4} title="កម្លាំងអគ្គិសនីចលករអាំងឌ្វីខណៈពេលណាមួយ" id="sec-electric-motor-force-period">
+            <Section
+              no={4}
+              title="កម្លាំងអគ្គិសនីចលករអាំងឌ្វីខណៈពេលណាមួយ"
+              id="sec-electric-motor-force-period"
+            >
               <div className="grid gap-2 sm:grid-cols-2">
                 {/* Isochoric */}
                 <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-                  <p className="font-semibold text-slate-800 mb-1">
-                    រូបមន្ត
-                  </p>
+                  <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
                   <div className="space-y-1">
                     <BlockMath math={String.raw`e = E_m sin\theta`} />
                   </div>
                   <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
                     <li>
-                      <InlineMath math={String.raw`e `} />​ កម្លាំងអគ្គិសនីចលករអាំងឌ្វីខណៈពេលណាមួយ (<InlineMath math=" Wb" />)
+                      <InlineMath math={String.raw`e `} />
+                      កម្លាំងអគ្គិសនីចលករអាំងឌ្វីខណៈពេលណាមួយ (
+                      <InlineMath math=" Wb" />)
                     </li>
                     <li>
-                      <InlineMath math={String.raw`E_m `} />​ ចម្ងាយ (<InlineMath math="m" />)
+                      <InlineMath math={String.raw`E_m `} />​ ចម្ងាយ (
+                      <InlineMath math="m" />)
                     </li>
                   </ul>
                 </div>
 
                 {/* Isobaric */}
                 <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-                  <p className="font-semibold text-slate-800 mb-1">
-                    រូបមន្ត
-                  </p>
+                  <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
                   <div className="space-y-1">
                     <BlockMath math={String.raw`e = E_m sin\omega t`} />
                   </div>
                   <ul className="text-sm text-slate-700 mt-1 list-disc pl-6 space-y-1">
                     <li>
-                      <InlineMath math={String.raw`e `} />​ កម្លាំងអគ្គិសនីចលករអាំងឌ្វីខណៈពេលណាមួយ (<InlineMath math=" V" />)
+                      <InlineMath math={String.raw`e `} />
+                      កម្លាំងអគ្គិសនីចលករអាំងឌ្វីខណៈពេលណាមួយ (
+                      <InlineMath math=" V" />)
                     </li>
                     <li>
-                      <InlineMath math={String.raw`E_m `} />​ ចម្ងាយ (<InlineMath math="V" />)
+                      <InlineMath math={String.raw`E_m `} />​ ចម្ងាយ (
+                      <InlineMath math="V" />)
                     </li>
                     <li>
-                      <InlineMath math={String.raw`\omega`} />​ ល្បឿនប្រេកង់ (<InlineMath math="rad/s" />)
+                      <InlineMath math={String.raw`\omega`} />​ ល្បឿនប្រេកង់ (
+                      <InlineMath math="rad/s" />)
                     </li>
                   </ul>
                 </div>
@@ -328,24 +363,20 @@ const ElectromagneticInduction = () => {
                       </li>
                       <li>
                         1ជំុ/mn = 1/60 <InlineMath math="Hz" />
-
                       </li>
                       <li>
                         1ជំុ/h = 1/3600 <InlineMath math="Hz" />
-
                       </li>
                     </ul>
                   </div>
                 }
               />
             </Section>
-
           </div>
         }
-
       />
-    </div >
-  )
-}
+    </div>
+  );
+};
 
-export default ElectromagneticInduction
+export default ElectromagneticInduction;

@@ -1,12 +1,12 @@
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox";
-import ExampleBox from "@/components/pages/docs/boxes/ExampleBox";
-import TipBox from "@/components/pages/docs/boxes/TipBox";
-import ExerciseBox from "@/components/pages/docs/boxes/ExerciseBox";
-import HintBox from "@/components/pages/docs/boxes/HintBox";
-import WarningBox from "@/components/pages/docs/boxes/WarningBox";
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
 import { TopicContent } from "@/types/docs/topic";
 import { BlockMath, InlineMath } from "react-katex";
-import GraphBox from "@/components/pages/docs/boxes/GraphBox";
+import { GraphBox } from "@/components/pages/docs/boxes/GraphBox";
 
 // Make KaTeX blocks scrollable & left-aligned on narrow screens
 const MathLine = ({ math }: { math: string }) => (
@@ -102,22 +102,35 @@ const TOPIC_CONTENT: TopicContent = {
         content: (
           <>
             <MathLine math={String.raw`\frac{d}{dx}(e^{2x}) = 2e^{2x}`} />
-            <MathLine math={String.raw`\frac{d}{dx}(-4e^{-x}) = -4\cdot(-e^{-x}) = 4e^{-x}`} />
-            <MathLine math={String.raw`\frac{d}{dx}(3\cdot 5^{x}) = 3\cdot 5^{x}\ln(5)`} />
+            <MathLine
+              math={String.raw`\frac{d}{dx}(-4e^{-x}) = -4\cdot(-e^{-x}) = 4e^{-x}`}
+            />
+            <MathLine
+              math={String.raw`\frac{d}{dx}(3\cdot 5^{x}) = 3\cdot 5^{x}\ln(5)`}
+            />
           </>
         ),
       },
       {
         title: "បូកលទ្ធផល",
-        content: <MathLine math={String.raw`y' = 2e^{2x} + 4e^{-x} + 3\ln(5)\,5^{x}`} />,
+        content: (
+          <MathLine
+            math={String.raw`y' = 2e^{2x} + 4e^{-x} + 3\ln(5)\,5^{x}`}
+          />
+        ),
       },
       {
         title: "ចម្លើយ",
-        content:
-          <MathLine math={String.raw`y' = 2e^{2x} + 4e^{-x} + 3\ln(5)\,5^{x}`} />,
+        content: (
+          <MathLine
+            math={String.raw`y' = 2e^{2x} + 4e^{-x} + 3\ln(5)\,5^{x}`}
+          />
+        ),
       },
     ],
-    answer: <InlineMath math={String.raw`y' = 2e^{2x} + 4e^{-x} + 3\ln(5)\,5^{x}`} />,
+    answer: (
+      <InlineMath math={String.raw`y' = 2e^{2x} + 4e^{-x} + 3\ln(5)\,5^{x}`} />
+    ),
   },
 
   exercise: {
@@ -161,7 +174,9 @@ const TOPIC_CONTENT: TopicContent = {
         question: (
           <>
             <p>គណនា</p>
-            <MathLine math={String.raw`y'(0) \text{ សម្រាប់ } y = e^{x} + 5\cdot 3^{x}`} />
+            <MathLine
+              math={String.raw`y'(0) \text{ សម្រាប់ } y = e^{x} + 5\cdot 3^{x}`}
+            />
           </>
         ),
         options: [
@@ -178,10 +193,19 @@ const TOPIC_CONTENT: TopicContent = {
   hint: {
     content: (
       <div className="space-y-2">
-        <p>ចងចាំ៖ អាចសរសេរ <InlineMath math={String.raw`a^x = e^{x\ln a}`} /> ហើយយកដេរីវេតាមខ្សែសង្វាក់៖</p>
-        <MathLine math={String.raw`\frac{d}{dx}\big(e^{x\ln a}\big) = (\ln a)\,e^{x\ln a} = (\ln a)\,a^{x}`} />
-        <p>សម្រាប់ <InlineMath math={String.raw`e^{kx+b}`} /> មាន</p>
-        <MathLine math={String.raw`\frac{d}{dx}\big(e^{kx+b}\big)=k\,e^{kx+b}`} />
+        <p>
+          ចងចាំ៖ អាចសរសេរ <InlineMath math={String.raw`a^x = e^{x\ln a}`} />{" "}
+          ហើយយកដេរីវេតាមខ្សែសង្វាក់៖
+        </p>
+        <MathLine
+          math={String.raw`\frac{d}{dx}\big(e^{x\ln a}\big) = (\ln a)\,e^{x\ln a} = (\ln a)\,a^{x}`}
+        />
+        <p>
+          សម្រាប់ <InlineMath math={String.raw`e^{kx+b}`} /> មាន
+        </p>
+        <MathLine
+          math={String.raw`\frac{d}{dx}\big(e^{kx+b}\big)=k\,e^{kx+b}`}
+        />
       </div>
     ),
   },
@@ -189,13 +213,20 @@ const TOPIC_CONTENT: TopicContent = {
   warning: {
     content: (
       <div className="space-y-1">
-        <p>• កុំភ្លេចកត្តា <InlineMath math={String.raw`\ln(a)`} /> សម្រាប់ <InlineMath math={String.raw`a^x`} />។</p>
+        <p>
+          • កុំភ្លេចកត្តា <InlineMath math={String.raw`\ln(a)`} /> សម្រាប់{" "}
+          <InlineMath math={String.raw`a^x`} />។
+        </p>
         <p>
           • ប្រើខ្សែសង្វាក់ពេលអាគុយម៉ង់មិនមែន x តែប៉ុណ្ណោះ (ឧ.{" "}
           <InlineMath math={String.raw`e^{2x-1}`} />,{" "}
-          <InlineMath math={String.raw`3^{x^2}`} />)។
+          <InlineMath math={String.raw`3^{x^2}`} />
+          )។
         </p>
-        <p>• បើជាប្រូដាក់ (ឧ. <InlineMath math={String.raw`x\,e^x`} />) ត្រូវប្រើច្បាប់គុណ មិនមែនខ្សែសង្វាក់។</p>
+        <p>
+          • បើជាប្រូដាក់ (ឧ. <InlineMath math={String.raw`x\,e^x`} />)
+          ត្រូវប្រើច្បាប់គុណ មិនមែនខ្សែសង្វាក់។
+        </p>
       </div>
     ),
   },
@@ -223,7 +254,10 @@ export default function DerivativeExponential() {
       )}
 
       {TOPIC_CONTENT.tip && (
-        <TipBox title={TOPIC_CONTENT.tip.title} content={TOPIC_CONTENT.tip.content} />
+        <TipBox
+          title={TOPIC_CONTENT.tip.title}
+          content={TOPIC_CONTENT.tip.content}
+        />
       )}
 
       {TOPIC_CONTENT.example && (
@@ -239,7 +273,9 @@ export default function DerivativeExponential() {
       )}
 
       {TOPIC_CONTENT.hint && <HintBox content={TOPIC_CONTENT.hint.content} />}
-      {TOPIC_CONTENT.warning && <WarningBox content={TOPIC_CONTENT.warning.content} />}
+      {TOPIC_CONTENT.warning && (
+        <WarningBox content={TOPIC_CONTENT.warning.content} />
+      )}
       {TOPIC_CONTENT.graph && (
         <GraphBox expressions={TOPIC_CONTENT.graph.expressions} />
       )}

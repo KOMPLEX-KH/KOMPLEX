@@ -1,6 +1,6 @@
 import { TopicContent } from "@/types/docs/topic";
 
-import { ImageBox, ImageBoxProps } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
+import { ImageExplanationBox, ImageBoxProps } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
 const TOPIC_CONTENT: TopicContent = {
     imageExplanation: [
         {
@@ -40,7 +40,7 @@ export default function GymnospermLifeCycle() {
             {TOPIC_CONTENT.imageExplanation &&
                 Array.isArray(TOPIC_CONTENT.imageExplanation) &&
                 TOPIC_CONTENT.imageExplanation.map((image: ImageBoxProps, index: number) => (
-                    <ImageBox key={index} title={image.title} src={image.src} imageAlt={image.imageAlt} explanation={image.explanation} />
+                    <ImageExplanationBox key={index} title={image.title} src={image.src} imageAlt={image.imageAlt} explanation={image.explanation} />
                 ))}
         </>
     )

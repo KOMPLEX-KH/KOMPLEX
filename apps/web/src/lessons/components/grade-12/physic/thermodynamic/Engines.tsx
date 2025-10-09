@@ -1,17 +1,16 @@
 import React from "react";
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox";
-import ExampleBox from "@/components/pages/docs/boxes/ExampleBox";
-import TipBox from "@/components/pages/docs/boxes/TipBox";
-import ExerciseBox from "@/components/pages/docs/boxes/ExerciseBox";
-import HintBox from "@/components/pages/docs/boxes/HintBox";
-import WarningBox from "@/components/pages/docs/boxes/WarningBox";
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
 import { BlockMath, InlineMath } from "react-katex";
 import { MathLine } from "@components/helper/MathLine";
 import { MathScroll } from "@components/helper/MathScroll";
-import { ImageBox } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
+import { ImageExplanationBox } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
 import { heatEngineImg } from "../../../../../../public/docs/grade-12/physic/engine/ImportImage";
 import { Check } from "lucide-react";
-
 
 type Variant = "green" | "violet" | "neutral" | "amber";
 
@@ -57,8 +56,6 @@ export function ResultCallout({
   );
 }
 
-
-
 const LessonChip = ({ children }: { children: React.ReactNode }) => (
   <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-600 text-white text-sm font-bold">
     {children}
@@ -93,7 +90,6 @@ const Section = ({
     {children}
   </section>
 );
-
 
 // components/helper/Therefore.tsx
 
@@ -131,7 +127,6 @@ export const Therefore: React.FC<ThereforeProps> = ({
   </div>
 );
 
-
 export default function Engines() {
   return (
     <>
@@ -145,7 +140,8 @@ export default function Engines() {
           </li>
           <li>
             <a href="#sec-engine" className={chip}>
-              <span className="font-semibold">2.</span> ទិន្នផលកម្តៅ (Heat engine)
+              <span className="font-semibold">2.</span> ទិន្នផលកម្តៅ (Heat
+              engine)
             </a>
           </li>
           <li>
@@ -181,16 +177,30 @@ export default function Engines() {
                 title="ទ្រឹស្តីបទ"
                 content={
                   <div className="space-y-2">
-                    <ImageBox
+                    <ImageExplanationBox
                       src={heatEngineImg}
                       imageAlt="ម៉ាស៊ីនកំដៅ"
                       explanation={
                         <>
-                          <p> <InlineMath math={String.raw`Q_h`} />បរិមាណកម្តៅបានពីប្រភពក្តៅផ្តល់ឪ្យម៉ាសុីន(ថាមពលសរុប)( <InlineMath math={String.raw`J`} />) </p>
-                          <p> <InlineMath math={String.raw`W`} /> កម្មន្តដែលឧស្ម័នធ្វើការ( <InlineMath math={String.raw`J`} />) </p>
-                          <p> <InlineMath math={String.raw`Q_c`} /> បរិមាណកម្តៅដែលបញ្ចេញទៅប្រភពត្រជាក់(បរិមាណកម្តៅមិនបានការ)( <InlineMath math={String.raw`J`} />) </p>
+                          <p>
+                            {" "}
+                            <InlineMath math={String.raw`Q_h`} />
+                            បរិមាណកម្តៅបានពីប្រភពក្តៅផ្តល់ឪ្យម៉ាសុីន(ថាមពលសរុប)({" "}
+                            <InlineMath math={String.raw`J`} />){" "}
+                          </p>
+                          <p>
+                            {" "}
+                            <InlineMath math={String.raw`W`} />{" "}
+                            កម្មន្តដែលឧស្ម័នធ្វើការ({" "}
+                            <InlineMath math={String.raw`J`} />){" "}
+                          </p>
+                          <p>
+                            {" "}
+                            <InlineMath math={String.raw`Q_c`} />{" "}
+                            បរិមាណកម្តៅដែលបញ្ចេញទៅប្រភពត្រជាក់(បរិមាណកម្តៅមិនបានការ)({" "}
+                            <InlineMath math={String.raw`J`} />){" "}
+                          </p>
                         </>
-
                       }
                       title="ម៉ាស៊ីនកំដៅ"
                     />
@@ -231,82 +241,85 @@ export default function Engines() {
                 <HintBox
                   content={
                     <>
-                      <p> <InlineMath math={String.raw`1eV = 1.6\times 10^{-19}J`} /> </p>
+                      <p>
+                        {" "}
+                        <InlineMath
+                          math={String.raw`1eV = 1.6\times 10^{-19}J`}
+                        />{" "}
+                      </p>
                     </>
                   }
                 />
-
-
               </div>
             </Section>
 
             {/* ================= 3. CARNOT ================= */}
-            <Section
-              no={3}
-              title="ទិន្នផលកម្តៅ"
-              id="sec-carnot"
-            >
+            <Section no={3} title="ទិន្នផលកម្តៅ" id="sec-carnot">
               <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-                <p className="font-semibold text-slate-800 mb-1">
-                  រូបមន្ត
-                </p>
+                <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
                 <div className="space-y-1">
                   <BlockMath math={String.raw`e = \frac{W_m}{Q_h}`} />
                 </div>
                 <p className="text-sm text-slate-700 mt-1">
-                  <InlineMath math="W_m" /> និង <InlineMath math="Q_c" /> គិតជា <InlineMath math={String.raw`J`} />
-
+                  <InlineMath math="W_m" /> និង <InlineMath math="Q_c" /> គិតជា{" "}
+                  <InlineMath math={String.raw`J`} />
                 </p>
               </div>
               <TipBox
                 title="សម្រាយបញ្ចាក់"
                 content={
                   <>
-                    <div className="mt-2" >
+                    <div className="mt-2">
                       <InlineMath math={String.raw`e = \frac{W_m}{Q_h}`} />
                     </div>
-                    <div className="mt-2" >
-                      <InlineMath math={String.raw`\text{តែ} W_m = Q_h - Q_c`} />
+                    <div className="mt-2">
+                      <InlineMath
+                        math={String.raw`\text{តែ} W_m = Q_h - Q_c`}
+                      />
                     </div>
-                    <div className="mt-2" >
-                      <InlineMath math={String.raw`⟹​  e = \frac{Q_h - Q_c}{Q_h} = 1 - \frac{Q_h}{Q_c}`} />
+                    <div className="mt-2">
+                      <InlineMath
+                        math={String.raw`⟹​  e = \frac{Q_h - Q_c}{Q_h} = 1 - \frac{Q_h}{Q_c}`}
+                      />
                     </div>
-                    <Therefore className="mt-3" math={String.raw`e = 1 - \frac{Q_h}{Q_c}`} />
+                    <Therefore
+                      className="mt-3"
+                      math={String.raw`e = 1 - \frac{Q_h}{Q_c}`}
+                    />
                   </>
                 }
               />
             </Section>
 
             {/* ================= 4. FRIDGE / HEAT PUMP ================= */}
-            <Section
-              no={4}
-              title="ទំនាក់ទំនងម៉ាស៊ីនកាកណូ"
-              id="sec-fridge"
-            >
+            <Section no={4} title="ទំនាក់ទំនងម៉ាស៊ីនកាកណូ" id="sec-fridge">
               <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-                <p className="font-semibold text-slate-800 mb-1">
-                  រូបមន្ត
-                </p>
+                <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
                 <div className="space-y-1">
-                  <BlockMath math={String.raw`\frac{Q_h}{Q_c}=\frac{T_h}{T_c}`} />
+                  <BlockMath
+                    math={String.raw`\frac{Q_h}{Q_c}=\frac{T_h}{T_c}`}
+                  />
                 </div>
-                <p className="text-sm text-slate-700 mt-1">
-
-                </p>
+                <p className="text-sm text-slate-700 mt-1"></p>
               </div>
 
               <TipBox
                 title="សម្រាយបញ្ចាក់"
                 content={
                   <>
-                    <div className="mt-2" >
+                    <div className="mt-2">
                       <InlineMath math={String.raw`e = 1-\frac{Q_c}{Q_h}`} />
                     </div>
-                    <div className="mt-2" >
-                      <InlineMath math={String.raw`\text{តែ} \frac{Q_c}{Q_h} = \frac{T_c}{T_h} \Leftrightarrow\ e = 1 - \frac{T_h}{T_c}`} />
+                    <div className="mt-2">
+                      <InlineMath
+                        math={String.raw`\text{តែ} \frac{Q_c}{Q_h} = \frac{T_c}{T_h} \Leftrightarrow\ e = 1 - \frac{T_h}{T_c}`}
+                      />
                     </div>
 
-                    <Therefore className="mt-3" math={String.raw`e = 1 - \frac{T_c}{T_h}`} />
+                    <Therefore
+                      className="mt-3"
+                      math={String.raw`e = 1 - \frac{T_c}{T_h}`}
+                    />
                   </>
                 }
               />
@@ -315,48 +328,46 @@ export default function Engines() {
             {/* ================= 5. EXAMPLES ================= */}
             <Section no={5} title="ទិន្នផលគ្រឿងបញ្ចូន" id="sec-examples">
               <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-                <p className="font-semibold text-slate-800 mb-1">
-                  រូបមន្ត
-                </p>
+                <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
                 <div className="space-y-1">
                   <BlockMath math={String.raw`e_m=\frac{W_u}{W_m}`} />
                 </div>
-                <p className="text-sm text-slate-700 mt-1">
-                </p>
+                <p className="text-sm text-slate-700 mt-1"></p>
               </div>
             </Section>
 
             <Section no={6} title="ទិន្នផលបានការ" id="sec-exercises">
               <div className="rounded-xl border-l-4 border-violet-500 bg-violet-50/70 p-4 shadow-sm">
-                <p className="font-semibold text-slate-800 mb-1">
-                  រូបមន្ត
-                </p>
+                <p className="font-semibold text-slate-800 mb-1">រូបមន្ត</p>
                 <div className="space-y-1">
                   <BlockMath math={String.raw`e_u=\frac{W_u}{Q_h}`} />
                 </div>
-                <p className="text-sm text-slate-700 mt-1">
-                </p>
+                <p className="text-sm text-slate-700 mt-1"></p>
               </div>
 
               <TipBox
                 title="សម្រាយបញ្ចាក់"
                 content={
                   <>
-                    <div className="mt-2" >
+                    <div className="mt-2">
                       <InlineMath math={String.raw`e_u =\frac{W_u}{Q_h}`} />
                     </div>
-                    <div className="mt-2" >
-                      <InlineMath math={String.raw`\text{នាំឧ្យ } e_u = \frac{W_u}{Q_h} \times \frac{W_m}{W_m} \Leftrightarrow\ e_u = \frac{W_u}{Q_h} \times \frac{W_m}{W_m}`} />
-
+                    <div className="mt-2">
+                      <InlineMath
+                        math={String.raw`\text{នាំឧ្យ } e_u = \frac{W_u}{Q_h} \times \frac{W_m}{W_m} \Leftrightarrow\ e_u = \frac{W_u}{Q_h} \times \frac{W_m}{W_m}`}
+                      />
                     </div>
 
-                    <div className="mt-2" >
-                      <InlineMath math={String.raw`⟹​ e_u = \frac{W_u}{W_m}\cdot\frac{W_m}{Q_h} = e_m \times e`} />
+                    <div className="mt-2">
+                      <InlineMath
+                        math={String.raw`⟹​ e_u = \frac{W_u}{W_m}\cdot\frac{W_m}{Q_h} = e_m \times e`}
+                      />
                     </div>
 
-
-
-                    <Therefore className="mt-3" math={String.raw` e_u = e_m \times e `} />
+                    <Therefore
+                      className="mt-3"
+                      math={String.raw` e_u = e_m \times e `}
+                    />
                   </>
                 }
               />
@@ -372,8 +383,14 @@ export default function Engines() {
                     options: [
                       <BlockMath key="a" math={String.raw`e=\frac{Q_h}{W}`} />,
                       <BlockMath key="b" math={String.raw`e=\frac{W}{Q_h}`} />,
-                      <BlockMath key="c" math={String.raw`e=1-\frac{Q_h}{Q_c}`} />,
-                      <BlockMath key="d" math={String.raw`e=\frac{Q_c}{Q_h}`} />,
+                      <BlockMath
+                        key="c"
+                        math={String.raw`e=1-\frac{Q_h}{Q_c}`}
+                      />,
+                      <BlockMath
+                        key="d"
+                        math={String.raw`e=\frac{Q_c}{Q_h}`}
+                      />,
                     ],
                     correctAnswer: 1,
                   },
@@ -381,16 +398,28 @@ export default function Engines() {
                     id: "e2",
                     question: (
                       <p>
-                        ម៉ាស៊ីនមួយទទួល <InlineMath math="Q_h=1500\,\text{J}" /> និង
-                        បញ្ចេញ <InlineMath math="Q_c=900\,\text{J}" />។{" "}
+                        ម៉ាស៊ីនមួយទទួល <InlineMath math="Q_h=1500\,\text{J}" />{" "}
+                        និង បញ្ចេញ <InlineMath math="Q_c=900\,\text{J}" />។{" "}
                         <InlineMath math="W" /> និង <InlineMath math="e" />?
                       </p>
                     ),
                     options: [
-                      <BlockMath key="a" math={String.raw`W=600\,\text{J},\ e=40\%`} />,
-                      <BlockMath key="b" math={String.raw`W=600\,\text{J},\ e=60\%`} />,
-                      <BlockMath key="c" math={String.raw`W=900\,\text{J},\ e=40\%`} />,
-                      <BlockMath key="d" math={String.raw`W=900\,\text{J},\ e=60\%`} />,
+                      <BlockMath
+                        key="a"
+                        math={String.raw`W=600\,\text{J},\ e=40\%`}
+                      />,
+                      <BlockMath
+                        key="b"
+                        math={String.raw`W=600\,\text{J},\ e=60\%`}
+                      />,
+                      <BlockMath
+                        key="c"
+                        math={String.raw`W=900\,\text{J},\ e=40\%`}
+                      />,
+                      <BlockMath
+                        key="d"
+                        math={String.raw`W=900\,\text{J},\ e=60\%`}
+                      />,
                     ],
                     correctAnswer: 0,
                   },
@@ -413,16 +442,24 @@ export default function Engines() {
                   },
                   {
                     id: "e4",
-                    question: (
-                      <p>
-                        Refrigerator COP? ជម្រើសត្រឹមត្រូវ៖
-                      </p>
-                    ),
+                    question: <p>Refrigerator COP? ជម្រើសត្រឹមត្រូវ៖</p>,
                     options: [
-                      <BlockMath key="a" math={String.raw`\text{COP}_{\text{ref}}=\frac{Q_h}{W}`} />,
-                      <BlockMath key="b" math={String.raw`\text{COP}_{\text{ref}}=\frac{Q_c}{W}`} />,
-                      <BlockMath key="c" math={String.raw`\text{COP}_{\text{ref}}=\frac{W}{Q_c}`} />,
-                      <BlockMath key="d" math={String.raw`\text{COP}_{\text{ref}}=\frac{T_h-T_c}{T_h}`} />,
+                      <BlockMath
+                        key="a"
+                        math={String.raw`\text{COP}_{\text{ref}}=\frac{Q_h}{W}`}
+                      />,
+                      <BlockMath
+                        key="b"
+                        math={String.raw`\text{COP}_{\text{ref}}=\frac{Q_c}{W}`}
+                      />,
+                      <BlockMath
+                        key="c"
+                        math={String.raw`\text{COP}_{\text{ref}}=\frac{W}{Q_c}`}
+                      />,
+                      <BlockMath
+                        key="d"
+                        math={String.raw`\text{COP}_{\text{ref}}=\frac{T_h-T_c}{T_h}`}
+                      />,
                     ],
                     correctAnswer: 1,
                   },
@@ -430,15 +467,27 @@ export default function Engines() {
                     id: "e5",
                     question: (
                       <p>
-                        សម្រាប់សីតុណ្ហភាពដូចគ្នា{" "}
-                        <InlineMath math="(T_h,T_c)" />៖ ត្រូវអ្វី?
+                        សម្រាប់សីតុណ្ហភាពដូចគ្នា <InlineMath math="(T_h,T_c)" />
+                        ៖ ត្រូវអ្វី?
                       </p>
                     ),
                     options: [
-                      <BlockMath key="a" math={String.raw`\text{COP}_{\text{hp}}=\text{COP}_{\text{ref}}`} />,
-                      <BlockMath key="b" math={String.raw`\text{COP}_{\text{hp}}=\text{COP}_{\text{ref}}-1`} />,
-                      <BlockMath key="c" math={String.raw`\text{COP}_{\text{hp}}=\text{COP}_{\text{ref}}+1`} />,
-                      <BlockMath key="d" math={String.raw`\text{COP}_{\text{hp}}=1/\text{COP}_{\text{ref}}`} />,
+                      <BlockMath
+                        key="a"
+                        math={String.raw`\text{COP}_{\text{hp}}=\text{COP}_{\text{ref}}`}
+                      />,
+                      <BlockMath
+                        key="b"
+                        math={String.raw`\text{COP}_{\text{hp}}=\text{COP}_{\text{ref}}-1`}
+                      />,
+                      <BlockMath
+                        key="c"
+                        math={String.raw`\text{COP}_{\text{hp}}=\text{COP}_{\text{ref}}+1`}
+                      />,
+                      <BlockMath
+                        key="d"
+                        math={String.raw`\text{COP}_{\text{hp}}=1/\text{COP}_{\text{ref}}`}
+                      />,
                     ],
                     correctAnswer: 2,
                   },

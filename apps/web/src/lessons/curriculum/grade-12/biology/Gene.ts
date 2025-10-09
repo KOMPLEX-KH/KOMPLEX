@@ -10,14 +10,12 @@ export const Gene: Topic[] = [
       ),
   },
   {
-    title: "រូបផ្តុំ ARN នាំសារ (ARNm)",
-    englishTitle: "messenger-rna-mrna",
-    component: () => import("@/components/pages/docs/ComingSoon"),
-  },
-  {
-    title: "ចលនការចម្លងក្រម",
-    englishTitle: "transcription-process",
-    component: () => import("@/components/pages/docs/ComingSoon"),
+    title: "ការចម្លងព័ត៍មានសេនេទិច",
+    englishTitle: "genetic-information-replication",
+    component: () =>
+      import(
+        "@/lessons/components/grade-12/biology/geneExpression/GeneticTransform"
+      ),
   },
   {
     title: "ក្រមសេនេទិច",
@@ -28,15 +26,20 @@ export const Gene: Topic[] = [
       ),
   },
   {
-    title: "រីបូសូម",
-    englishTitle: "ribosome",
+    title: "ចលនការចម្លងក្រម",
+    englishTitle: "transcription-process",
     component: () =>
-      import("@/lessons/components/grade-12/biology/geneExpression/Ribosome"),
+      import(
+        "@/lessons/components/grade-12/biology/geneExpression/Translation"
+      ),
   },
   {
-    title: "ARN ដឹកនាំ (ARNt)",
-    englishTitle: "transfer-rna-trna",
-    component: () => import("@/components/pages/docs/ComingSoon"),
+    title: "ការបកប្រែក្រម",
+    englishTitle: "code-translation",
+    component: () =>
+      import(
+        "@/lessons/components/grade-12/biology/geneExpression/CodeTranslation"
+      ),
   },
   {
     title: "ចលនការបកប្រែក្រម",
@@ -52,6 +55,22 @@ export const Gene: Topic[] = [
     component: () =>
       import(
         "@/lessons/components/grade-12/biology/geneExpression/PhenotypeExpression"
+      ),
+  },
+  {
+    title: "រូបមន្តការសម្តែងចេញនៃសេន",
+    englishTitle: "GeneticFormular",
+    component: () =>
+      import(
+        "@/lessons/components/grade-12/biology/geneExpression/GeneticFormular"
+      ),
+  },
+  {
+    title: "សំណួរ & លំហាត់",
+    englishTitle: "GeneticPractice",
+    component: () =>
+      import(
+        "@/lessons/components/grade-12/biology/geneExpression/GeneticPractice"
       ),
   },
 ];

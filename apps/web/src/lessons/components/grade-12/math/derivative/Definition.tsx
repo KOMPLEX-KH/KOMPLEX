@@ -1,9 +1,9 @@
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox";
-import ExampleBox from "@/components/pages/docs/boxes/ExampleBox";
-import TipBox from "@/components/pages/docs/boxes/TipBox";
-import ExerciseBox from "@/components/pages/docs/boxes/ExerciseBox";
-import HintBox from "@/components/pages/docs/boxes/HintBox";
-import WarningBox from "@/components/pages/docs/boxes/WarningBox";
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
 import { TopicContent } from "@/types/docs/topic";
 import { BlockMath, InlineMath } from "react-katex";
 
@@ -16,46 +16,73 @@ const TOPIC_CONTENT: TopicContent = {
       <>
         <ul className="list-disc pl-5 space-y-3">
           <li>
-            <p>បើ<InlineMath math={String.raw`f`} />ជាអនុគមន៍មួយលើចន្លោះមួយ <InlineMath math={String.raw`I`} />និងមានដេរីវេត្រង់គ្រប់ចំណុចទាំងអស់នៅក្នុងចន្លោះ​ <InlineMath math={String.raw`I`} /> នោះគេថាអនុគមន៍<InlineMath math={String.raw`f`} /> មានដេរីវេលើចន្លោះ​ <InlineMath math={String.raw`I`} />។</p>
+            <p>
+              បើ
+              <InlineMath math={String.raw`f`} />
+              ជាអនុគមន៍មួយលើចន្លោះមួយ <InlineMath math={String.raw`I`} />
+              និងមានដេរីវេត្រង់គ្រប់ចំណុចទាំងអស់នៅក្នុងចន្លោះ​{" "}
+              <InlineMath math={String.raw`I`} /> នោះគេថាអនុគមន៍
+              <InlineMath math={String.raw`f`} /> មានដេរីវេលើចន្លោះ​{" "}
+              <InlineMath math={String.raw`I`} />។
+            </p>
           </li>
 
           <li>
-            <p>អនុគមន៍ដែលគ្រប់​<InlineMath math={String.raw`x\in I`} /> ផ្សំបានចំនួនដេរីវេ<InlineMath math={String.raw`f`} />ត្រង់​<InlineMath math={String.raw`x`} />ហៅថាអនុគមន៍ដេរីវេនៃ<InlineMath math={String.raw`f`} /> ដែលគេកំណត់សរសេរ <InlineMath math={String.raw`f': x\mapsto f'(x)`} />។</p>
+            <p>
+              អនុគមន៍ដែលគ្រប់
+              <InlineMath math={String.raw`x\in I`} /> ផ្សំបានចំនួនដេរីវេ
+              <InlineMath math={String.raw`f`} />
+              ត្រង់
+              <InlineMath math={String.raw`x`} />
+              ហៅថាអនុគមន៍ដេរីវេនៃ
+              <InlineMath math={String.raw`f`} /> ដែលគេកំណត់សរសេរ{" "}
+              <InlineMath math={String.raw`f': x\mapsto f'(x)`} />។
+            </p>
           </li>
 
           <li>
-            <p>ដេរីវេ​ <InlineMath math={String.raw`f'(x)`} />នៃអនុគមន៍ <InlineMath math={String.raw`y=f(x)`} /> គឺជាអនុគមន៍ដែលកំណត់ដោយ</p>
-            <BlockMath math={String.raw`f'(x)=\lim_{h\to 0}\frac{f(x+h)-f(x)}{h}`} />
+            <p>
+              ដេរីវេ​ <InlineMath math={String.raw`f'(x)`} />
+              នៃអនុគមន៍ <InlineMath math={String.raw`y=f(x)`} />{" "}
+              គឺជាអនុគមន៍ដែលកំណត់ដោយ
+            </p>
+            <BlockMath
+              math={String.raw`f'(x)=\lim_{h\to 0}\frac{f(x+h)-f(x)}{h}`}
+            />
           </li>
-
         </ul>
       </>
     ),
-
   },
 
   tip: {
     title: "ចំណុចសំខាន់ៗ",
     content: (
       <div>
-        <p>គេអាចប្រើនិមិត្តសញ្ញា <InlineMath math={String.raw`y' = f'(x) = \frac{dy}{dx} = \frac{df(x)}{dx}`} /></p>
+        <p>
+          គេអាចប្រើនិមិត្តសញ្ញា{" "}
+          <InlineMath
+            math={String.raw`y' = f'(x) = \frac{dy}{dx} = \frac{df(x)}{dx}`}
+          />
+        </p>
       </div>
     ),
   },
 
-
-
-
   example: {
     question: (
-      <BlockMath math={String.raw`\text{រក } f'(2) \text{ ដោយនិយមន័យ សម្រាប់ } f(x)=x^2+3x-2`} />
+      <BlockMath
+        math={String.raw`\text{រក } f'(2) \text{ ដោយនិយមន័យ សម្រាប់ } f(x)=x^2+3x-2`}
+      />
     ),
     steps: [
       {
         title: "សរសេរនិយមន័យ",
         content: (
           <>
-            <BlockMath math={String.raw`f'(2)=\lim_{h\to0}\frac{f(2+h)-f(2)}{h}`} />
+            <BlockMath
+              math={String.raw`f'(2)=\lim_{h\to0}\frac{f(2+h)-f(2)}{h}`}
+            />
           </>
         ),
       },
@@ -91,7 +118,9 @@ const TOPIC_CONTENT: TopicContent = {
       {
         id: "dd1",
         question: (
-          <BlockMath math={String.raw`\text{គណនា }f'(2)\text{ ដោយនិយមន័យ សម្រាប់ }f(x)=x^2+3x-2`} />
+          <BlockMath
+            math={String.raw`\text{គណនា }f'(2)\text{ ដោយនិយមន័យ សម្រាប់ }f(x)=x^2+3x-2`}
+          />
         ),
         options: [
           <BlockMath key="dd1o0" math={String.raw`6`} />,
@@ -105,20 +134,38 @@ const TOPIC_CONTENT: TopicContent = {
       {
         id: "dd2",
         question: (
-          <BlockMath math={String.raw`\text{ជ្រើសរើសនិយមន័យត្រឹមត្រូវរបស់ }f'(a)`} />
+          <BlockMath
+            math={String.raw`\text{ជ្រើសរើសនិយមន័យត្រឹមត្រូវរបស់ }f'(a)`}
+          />
         ),
         options: [
-          <BlockMath key="dd2o0" math={String.raw`\lim_{h\to0}\frac{f(a+h)-f(a)}{h}`} />,
-          <BlockMath key="dd2o1" math={String.raw`\lim_{h\to0}\frac{f(a)-f(a+h)}{h}`} />,
-          <BlockMath key="dd2o2" math={String.raw`\lim_{x\to a}\frac{f(a)-f(x)}{x-a}`} />,
-          <BlockMath key="dd2o3" math={String.raw`\lim_{h\to0}\frac{f(a+h)}{h}`} />,
+          <BlockMath
+            key="dd2o0"
+            math={String.raw`\lim_{h\to0}\frac{f(a+h)-f(a)}{h}`}
+          />,
+          <BlockMath
+            key="dd2o1"
+            math={String.raw`\lim_{h\to0}\frac{f(a)-f(a+h)}{h}`}
+          />,
+          <BlockMath
+            key="dd2o2"
+            math={String.raw`\lim_{x\to a}\frac{f(a)-f(x)}{x-a}`}
+          />,
+          <BlockMath
+            key="dd2o3"
+            math={String.raw`\lim_{h\to0}\frac{f(a+h)}{h}`}
+          />,
         ],
         correctAnswer: 0,
       },
       // 3
       {
         id: "dd3",
-        question: <BlockMath math={String.raw`\text{រក }f'(a)\text{ ដោយនិយមន័យ សម្រាប់ }f(x)=x^2`} />,
+        question: (
+          <BlockMath
+            math={String.raw`\text{រក }f'(a)\text{ ដោយនិយមន័យ សម្រាប់ }f(x)=x^2`}
+          />
+        ),
         options: [
           <BlockMath key="dd3o0" math={String.raw`2a`} />,
           <BlockMath key="dd3o1" math={String.raw`a^2`} />,
@@ -130,7 +177,11 @@ const TOPIC_CONTENT: TopicContent = {
       // 4
       {
         id: "dd4",
-        question: <BlockMath math={String.raw`\text{រក }f'(1)\ \text{សម្រាប់}\ f(x)=x^3+1`} />,
+        question: (
+          <BlockMath
+            math={String.raw`\text{រក }f'(1)\ \text{សម្រាប់}\ f(x)=x^3+1`}
+          />
+        ),
         options: [
           <BlockMath key="dd4o0" math={String.raw`1`} />,
           <BlockMath key="dd4o1" math={String.raw`2`} />,
@@ -142,7 +193,11 @@ const TOPIC_CONTENT: TopicContent = {
       // 5
       {
         id: "dd5",
-        question: <BlockMath math={String.raw`\text{រក }f'(a)\ \text{សម្រាប់}\ f(x)=mx+b`} />,
+        question: (
+          <BlockMath
+            math={String.raw`\text{រក }f'(a)\ \text{សម្រាប់}\ f(x)=mx+b`}
+          />
+        ),
         options: [
           <BlockMath key="dd5o0" math={String.raw`m`} />,
           <BlockMath key="dd5o1" math={String.raw`b`} />,
@@ -154,7 +209,11 @@ const TOPIC_CONTENT: TopicContent = {
       // 6
       {
         id: "dd6",
-        question: <BlockMath math={String.raw`\text{រក }f'(1)\ \text{សម្រាប់}\ f(x)=\frac{1}{x}`} />,
+        question: (
+          <BlockMath
+            math={String.raw`\text{រក }f'(1)\ \text{សម្រាប់}\ f(x)=\frac{1}{x}`}
+          />
+        ),
         options: [
           <BlockMath key="dd6o0" math={String.raw`1`} />,
           <BlockMath key="dd6o1" math={String.raw`-1`} />,
@@ -166,7 +225,11 @@ const TOPIC_CONTENT: TopicContent = {
       // 7
       {
         id: "dd7",
-        question: <BlockMath math={String.raw`\text{រក }f'(4)\ \text{សម្រាប់}\ f(x)=\sqrt{x}`} />,
+        question: (
+          <BlockMath
+            math={String.raw`\text{រក }f'(4)\ \text{សម្រាប់}\ f(x)=\sqrt{x}`}
+          />
+        ),
         options: [
           <BlockMath key="dd7o0" math={String.raw`\tfrac12`} />,
           <BlockMath key="dd7o1" math={String.raw`\tfrac14`} />,
@@ -178,7 +241,9 @@ const TOPIC_CONTENT: TopicContent = {
       // 8
       {
         id: "dd8",
-        question: <BlockMath math={String.raw`\lim_{h\to0}\frac{(2+h)^2-4}{h}=\ ?`} />,
+        question: (
+          <BlockMath math={String.raw`\lim_{h\to0}\frac{(2+h)^2-4}{h}=\ ?`} />
+        ),
         options: [
           <BlockMath key="dd8o0" math={String.raw`2`} />,
           <BlockMath key="dd8o1" math={String.raw`3`} />,
@@ -191,7 +256,9 @@ const TOPIC_CONTENT: TopicContent = {
       {
         id: "dd9",
         question: (
-          <BlockMath math={String.raw`\lim_{h\to0}\frac{(2+h)^2+3(2+h)-2-\big(2^2+3\cdot2-2\big)}{h}=\ ?`} />
+          <BlockMath
+            math={String.raw`\lim_{h\to0}\frac{(2+h)^2+3(2+h)-2-\big(2^2+3\cdot2-2\big)}{h}=\ ?`}
+          />
         ),
         options: [
           <BlockMath key="dd9o0" math={String.raw`6`} />,
@@ -204,11 +271,22 @@ const TOPIC_CONTENT: TopicContent = {
       // 10
       {
         id: "dd10",
-        question: <BlockMath math={String.raw`\text{ជ្រើសរើសទម្រង់ស្មើនៃ } f'(a)`} />,
+        question: (
+          <BlockMath math={String.raw`\text{ជ្រើសរើសទម្រង់ស្មើនៃ } f'(a)`} />
+        ),
         options: [
-          <BlockMath key="dd10o0" math={String.raw`\lim_{x\to a}\frac{f(x)-f(a)}{x-a}`} />,
-          <BlockMath key="dd10o1" math={String.raw`\lim_{x\to a}\frac{f(a)-f(x)}{h}`} />,
-          <BlockMath key="dd10o2" math={String.raw`\lim_{h\to0}\frac{f(x+h)-f(a)}{x-a}`} />,
+          <BlockMath
+            key="dd10o0"
+            math={String.raw`\lim_{x\to a}\frac{f(x)-f(a)}{x-a}`}
+          />,
+          <BlockMath
+            key="dd10o1"
+            math={String.raw`\lim_{x\to a}\frac{f(a)-f(x)}{h}`}
+          />,
+          <BlockMath
+            key="dd10o2"
+            math={String.raw`\lim_{h\to0}\frac{f(x+h)-f(a)}{x-a}`}
+          />,
           <BlockMath key="dd10o3" math={String.raw`\frac{f(a+h)-f(a)}{h}`} />,
         ],
         correctAnswer: 0,
@@ -216,7 +294,11 @@ const TOPIC_CONTENT: TopicContent = {
       // 11
       {
         id: "dd11",
-        question: <BlockMath math={String.raw`\text{រក }f'(a)\ \text{សម្រាប់}\ f(x)=x^4`} />,
+        question: (
+          <BlockMath
+            math={String.raw`\text{រក }f'(a)\ \text{សម្រាប់}\ f(x)=x^4`}
+          />
+        ),
         options: [
           <BlockMath key="dd11o0" math={String.raw`2a^3`} />,
           <BlockMath key="dd11o1" math={String.raw`3a^2`} />,
@@ -228,7 +310,11 @@ const TOPIC_CONTENT: TopicContent = {
       // 12
       {
         id: "dd12",
-        question: <BlockMath math={String.raw`\text{រក }f'(x)\ \text{សម្រាប់}\ f(x)=x^2+3x`} />,
+        question: (
+          <BlockMath
+            math={String.raw`\text{រក }f'(x)\ \text{សម្រាប់}\ f(x)=x^2+3x`}
+          />
+        ),
         options: [
           <BlockMath key="dd12o0" math={String.raw`2x+3`} />,
           <BlockMath key="dd12o1" math={String.raw`2x`} />,
@@ -240,7 +326,11 @@ const TOPIC_CONTENT: TopicContent = {
       // 13
       {
         id: "dd13",
-        question: <BlockMath math={String.raw`\text{រក }f'(a)\ \text{សម្រាប់}\ f(x)=x^{-1}`} />,
+        question: (
+          <BlockMath
+            math={String.raw`\text{រក }f'(a)\ \text{សម្រាប់}\ f(x)=x^{-1}`}
+          />
+        ),
         options: [
           <BlockMath key="dd13o0" math={String.raw`-\frac{1}{a^2}`} />,
           <BlockMath key="dd13o1" math={String.raw`\frac{1}{a^2}`} />,
@@ -252,7 +342,11 @@ const TOPIC_CONTENT: TopicContent = {
       // 14
       {
         id: "dd14",
-        question: <BlockMath math={String.raw`\text{រក }f'(a)\ \text{សម្រាប់}\ f(x)=\sqrt{x}`} />,
+        question: (
+          <BlockMath
+            math={String.raw`\text{រក }f'(a)\ \text{សម្រាប់}\ f(x)=\sqrt{x}`}
+          />
+        ),
         options: [
           <BlockMath key="dd14o0" math={String.raw`\frac{1}{2\sqrt{a}}`} />,
           <BlockMath key="dd14o1" math={String.raw`\frac{1}{\sqrt{a}}`} />,
@@ -264,7 +358,11 @@ const TOPIC_CONTENT: TopicContent = {
       // 15
       {
         id: "dd15",
-        question: <BlockMath math={String.raw`\text{រក }f'(2)\ \text{សម្រាប់}\ f(x)=3x-5`} />,
+        question: (
+          <BlockMath
+            math={String.raw`\text{រក }f'(2)\ \text{សម្រាប់}\ f(x)=3x-5`}
+          />
+        ),
         options: [
           <BlockMath key="dd15o0" math={String.raw`3`} />,
           <BlockMath key="dd15o1" math={String.raw`-5`} />,
@@ -276,7 +374,11 @@ const TOPIC_CONTENT: TopicContent = {
       // 16
       {
         id: "dd16",
-        question: <BlockMath math={String.raw`\text{រក }f'(a)\ \text{សម្រាប់}\ f(x)=x^n\ (n\in\mathbb{N})`} />,
+        question: (
+          <BlockMath
+            math={String.raw`\text{រក }f'(a)\ \text{សម្រាប់}\ f(x)=x^n\ (n\in\mathbb{N})`}
+          />
+        ),
         options: [
           <BlockMath key="dd16o0" math={String.raw`n a^{\,n-1}`} />,
           <BlockMath key="dd16o1" math={String.raw`a^n`} />,
@@ -288,7 +390,11 @@ const TOPIC_CONTENT: TopicContent = {
       // 17
       {
         id: "dd17",
-        question: <BlockMath math={String.raw`\text{សូមជ្រើសរើស៖ }(c)'\ \text{ស្មើ} \ ?`} />,
+        question: (
+          <BlockMath
+            math={String.raw`\text{សូមជ្រើសរើស៖ }(c)'\ \text{ស្មើ} \ ?`}
+          />
+        ),
         options: [
           <BlockMath key="dd17o0" math={String.raw`0`} />,
           <BlockMath key="dd17o1" math={String.raw`c`} />,
@@ -300,7 +406,11 @@ const TOPIC_CONTENT: TopicContent = {
       // 18
       {
         id: "dd18",
-        question: <BlockMath math={String.raw`\text{គណនា } \lim_{h\to0}\frac{(a+h)^2-a^2}{h}`} />,
+        question: (
+          <BlockMath
+            math={String.raw`\text{គណនា } \lim_{h\to0}\frac{(a+h)^2-a^2}{h}`}
+          />
+        ),
         options: [
           <BlockMath key="dd18o0" math={String.raw`a`} />,
           <BlockMath key="dd18o1" math={String.raw`2a`} />,
@@ -312,7 +422,11 @@ const TOPIC_CONTENT: TopicContent = {
       // 19
       {
         id: "dd19",
-        question: <BlockMath math={String.raw`\text{គណនា } \lim_{h\to0}\frac{\sqrt{a+h}-\sqrt{a}}{h}\ \ (a>0)`} />,
+        question: (
+          <BlockMath
+            math={String.raw`\text{គណនា } \lim_{h\to0}\frac{\sqrt{a+h}-\sqrt{a}}{h}\ \ (a>0)`}
+          />
+        ),
         options: [
           <BlockMath key="dd19o0" math={String.raw`\frac{1}{2\sqrt{a}}`} />,
           <BlockMath key="dd19o1" math={String.raw`\frac{1}{\sqrt{a}}`} />,
@@ -342,18 +456,21 @@ const TOPIC_CONTENT: TopicContent = {
   },
 
   hint: {
-    content: (
-      <div>
-
-      </div>
-    ),
+    content: <div></div>,
   },
 
   warning: {
     content: (
       <>
-        <p>• អាចមិនមានដេរីវេនៅចំណុចដែលអនុគមន៍មានជ្រុង/កាត់ទ្វេដង (ឧ. <BlockMath math={String.raw`f(x)=|x|`} /> នៅ x=0).</p>
-        <p>• ប្រយ័ត្ននឹងសញ្ញាគុណ <BlockMath math={String.raw`\cdot`} /> និងការប្រើ <code>String.raw</code> នៅក្នុង <code>&lt;BlockMath&gt;</code> ដើម្បីជៀសវាង escape ខុស។</p>
+        <p>
+          • អាចមិនមានដេរីវេនៅចំណុចដែលអនុគមន៍មានជ្រុង/កាត់ទ្វេដង (ឧ.{" "}
+          <BlockMath math={String.raw`f(x)=|x|`} /> នៅ x=0).
+        </p>
+        <p>
+          • ប្រយ័ត្ននឹងសញ្ញាគុណ <BlockMath math={String.raw`\cdot`} />{" "}
+          និងការប្រើ <code>String.raw</code> នៅក្នុង{" "}
+          <code>&lt;BlockMath&gt;</code> ដើម្បីជៀសវាង escape ខុស។
+        </p>
       </>
     ),
   },
@@ -365,19 +482,32 @@ export default function DerivativeDefinition() {
   return (
     <>
       {TOPIC_CONTENT.definition && (
-        <DefinitionBox title={TOPIC_CONTENT.definition.title} content={TOPIC_CONTENT.definition.content} />
+        <DefinitionBox
+          title={TOPIC_CONTENT.definition.title}
+          content={TOPIC_CONTENT.definition.content}
+        />
       )}
 
-      {TOPIC_CONTENT.tip && <TipBox title={TOPIC_CONTENT.tip.title} content={TOPIC_CONTENT.tip.content} />}
+      {TOPIC_CONTENT.tip && (
+        <TipBox
+          title={TOPIC_CONTENT.tip.title}
+          content={TOPIC_CONTENT.tip.content}
+        />
+      )}
 
       {TOPIC_CONTENT.example && (
-        <ExampleBox question={TOPIC_CONTENT.example.question} steps={TOPIC_CONTENT.example.steps} answer={TOPIC_CONTENT.example.answer} />
+        <ExampleBox
+          question={TOPIC_CONTENT.example.question}
+          steps={TOPIC_CONTENT.example.steps}
+          answer={TOPIC_CONTENT.example.answer}
+        />
       )}
 
-      {TOPIC_CONTENT.exercise && <ExerciseBox questions={TOPIC_CONTENT.exercise.questions} />}
+      {TOPIC_CONTENT.exercise && (
+        <ExerciseBox questions={TOPIC_CONTENT.exercise.questions} />
+      )}
 
       {/* {TOPIC_CONTENT.hint && <HintBox content={TOPIC_CONTENT.hint.content} />} */}
-
     </>
   );
 }

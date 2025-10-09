@@ -91,7 +91,7 @@ export default function DocHeader({
     return (
         <>
             {/* Desktop Subject Header */}
-            <div className="hidden md:block fixed w-full top-14 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10">
+            <div className="hidden lg:block fixed w-full top-14 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10">
                 <div className="max-w-full mx-auto px-5 py-2">
                     <div className="flex items-center justify-between gap-5">
                         <div className="flex items-center gap-4">
@@ -184,7 +184,7 @@ export default function DocHeader({
             </div>
 
             {/* Mobile Subject Navigation */}
-            <div className={`md:hidden fixed w-full top-13 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-full' : 'translate-y-0'
+            <div className={`lg:hidden fixed w-full top-13 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-full' : 'translate-y-0'
                 }`}>
                 <div className="max-w-full mx-auto px-5 py-2">
                     <div className="flex items-center justify-between gap-3">
@@ -254,7 +254,7 @@ export default function DocHeader({
             </div>
 
             {/* Mobile Content Navigation */}
-            <div className={`md:hidden fixed w-full top-25.5 z-30 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-full' : 'translate-y-0'
+            <div className={`lg:hidden fixed w-full top-25.5 z-30 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-full' : 'translate-y-0'
                 }`}>
                 <div className="max-w-full mx-auto px-5 py-2">
                     <div className="flex items-center justify-start gap-3">

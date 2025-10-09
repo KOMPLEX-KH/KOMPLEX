@@ -18,7 +18,7 @@ function AnswerBox({ answer }: { answer: string | React.ReactNode }) {
     );
 }
 
-export default function ExampleBox({ question, content, steps, answer }: ExampleBoxProps) {
+export  function ExampleBox({ question, content, steps, answer }: ExampleBoxProps) {
     return (
         <div className="bg-amber-50/90 border-2 border-amber-500 rounded-3xl p-6 my-6 shadow-lg shadow-amber-500/15">
             {/* Header */}

@@ -1,9 +1,9 @@
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox";
-import ExampleBox from "@/components/pages/docs/boxes/ExampleBox";
-import TipBox from "@/components/pages/docs/boxes/TipBox";
-import ExerciseBox from "@/components/pages/docs/boxes/ExerciseBox";
-import HintBox from "@/components/pages/docs/boxes/HintBox";
-import WarningBox from "@/components/pages/docs/boxes/WarningBox";
+import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
 import { TopicContent } from "@/types/docs/topic";
 import { BlockMath, InlineMath } from "react-katex";
 
@@ -21,13 +21,21 @@ const TOPIC_CONTENT: TopicContent = {
     content: (
       <div className="space-y-4">
         <p>
-          អាំងតេក្រាលមិនកំណត់​របស់អនុគមន៍ <em>f</em> គឺក្រុមអន្តរអនុគមន៍ទាំងអស់ <em>F</em> ដូច្នេះ
-          <em> <InlineMath math={String.raw`F'(x)=f(x)`} /></em>។ សរសេរ៖
+          អាំងតេក្រាលមិនកំណត់​របស់អនុគមន៍ <em>f</em> គឺក្រុមអន្តរអនុគមន៍ទាំងអស់{" "}
+          <em>F</em> ដូច្នេះ
+          <em>
+            {" "}
+            <InlineMath math={String.raw`F'(x)=f(x)`} />
+          </em>
+          ។ សរសេរ៖
         </p>
 
         <div className="rounded-xl border-l-4 border-sky-500 bg-sky-50/60 p-4 shadow-sm">
           <MathLine math={String.raw`\int f(x)\,dx \;=\; F(x) + C`} />
-          <p className="text-sm text-slate-700">ទីនេះ <span className="font-medium">C</span> ជា​ថេរ​អាំងតេក្រាល ដែលត្រូវបន្ថែមជានិច្ច។</p>
+          <p className="text-sm text-slate-700">
+            ទីនេះ <span className="font-medium">C</span> ជា​ថេរ​អាំងតេក្រាល
+            ដែលត្រូវបន្ថែមជានិច្ច។
+          </p>
         </div>
       </div>
     ),
@@ -39,21 +47,29 @@ const TOPIC_CONTENT: TopicContent = {
       <div className="space-y-3">
         <div className="rounded-lg border-l-4 border-indigo-500 bg-indigo-50/70 p-3 shadow-sm">
           <p className="font-semibold text-indigo-800 mb-1">លីនេអារ៊ីតេ</p>
-          <MathLine math={String.raw`\int \!\big(c\,f(x)+g(x)\big)\,dx \;=\; c\!\int f(x)\,dx \;+\; \int g(x)\,dx`} />
+          <MathLine
+            math={String.raw`\int \!\big(c\,f(x)+g(x)\big)\,dx \;=\; c\!\int f(x)\,dx \;+\; \int g(x)\,dx`}
+          />
         </div>
 
         <div className="rounded-lg border-l-4 border-emerald-500 bg-emerald-50/70 p-3 shadow-sm">
           <p className="font-semibold text-emerald-800 mb-1">ច្បាប់អំណាច</p>
-          <MathLine math={String.raw`\int x^{\,n}\,dx \;=\; \frac{x^{\,n+1}}{n+1} + C \qquad (n\ne -1)`} />
+          <MathLine
+            math={String.raw`\int x^{\,n}\,dx \;=\; \frac{x^{\,n+1}}{n+1} + C \qquad (n\ne -1)`}
+          />
         </div>
 
         <div className="rounded-lg border-l-4 border-fuchsia-500 bg-fuchsia-50/70 p-3 shadow-sm">
           <p className="font-semibold text-fuchsia-800 mb-1">ការជំនួស u</p>
-          <MathLine math={String.raw`\int f\!\big(g(x)\big)\,g'(x)\,dx \;=\; \int f(u)\,du \;=\; F(u)+C`} />
+          <MathLine
+            math={String.raw`\int f\!\big(g(x)\big)\,g'(x)\,dx \;=\; \int f(u)\,du \;=\; F(u)+C`}
+          />
         </div>
 
         <div className="rounded-lg border-l-4 border-amber-500 bg-amber-50/70 p-3 shadow-sm">
-          <p className="font-semibold text-amber-800 mb-1">អាំងតេក្រាល់តាមផ្នែក</p>
+          <p className="font-semibold text-amber-800 mb-1">
+            អាំងតេក្រាល់តាមផ្នែក
+          </p>
           <MathLine math={String.raw`\int u\,dv \;=\; u\,v \;-\; \int v\,du`} />
         </div>
       </div>
@@ -61,7 +77,9 @@ const TOPIC_CONTENT: TopicContent = {
   },
 
   example: {
-    question: <MathLine math={String.raw`\text{គណនា }\ \int \frac{2x}{x^2+1}\,dx`} />,
+    question: (
+      <MathLine math={String.raw`\text{គណនា }\ \int \frac{2x}{x^2+1}\,dx`} />
+    ),
     steps: [
       {
         title: "ជ្រើសការជំនួស u",
@@ -70,17 +88,23 @@ const TOPIC_CONTENT: TopicContent = {
             <p>ជ្រើស</p>
             <MathLine math={String.raw`u=x^2+1 \ \Rightarrow\ du=2x\,dx`} />
             <p>អាំងតេក្រាលក្លាយជា</p>
-            <MathLine math={String.raw`\int \frac{2x}{x^2+1}\,dx \;=\; \int \frac{1}{u}\,du`} />
+            <MathLine
+              math={String.raw`\int \frac{2x}{x^2+1}\,dx \;=\; \int \frac{1}{u}\,du`}
+            />
           </div>
         ),
       },
       {
         title: "អនុវត្តរូបមន្ត",
-        content: <MathLine math={String.raw`\int \frac{1}{u}\,du \;=\; \ln|u| + C`} />,
+        content: (
+          <MathLine math={String.raw`\int \frac{1}{u}\,du \;=\; \ln|u| + C`} />
+        ),
       },
       {
         title: "ប្ដូរវិញ​ទៅ x",
-        content: <MathLine math={String.raw`=\ln|x^2+1|+C \;=\; \ln(x^2+1)+C`} />,
+        content: (
+          <MathLine math={String.raw`=\ln|x^2+1|+C \;=\; \ln(x^2+1)+C`} />
+        ),
       },
     ],
     answer: "∫ (2x/(x²+1)) dx = ln(x²+1) + C",
@@ -142,10 +166,20 @@ const TOPIC_CONTENT: TopicContent = {
   hint: {
     content: (
       <div className="space-y-3">
-        <p>• សម្រាប់ការជំនួស <span className="font-medium">u</span> ចូរជ្រើស u ដូច្នេះ du លេចឡើងជាក់ស្តែងក្នុង dx៖</p>
-        <MathLine math={String.raw`u=g(x),\quad du=g'(x)\,dx \ \Rightarrow\ \int f(g(x))\,g'(x)\,dx=\int f(u)\,du`} />
-        <p>• សម្រាប់ <span className="font-medium">cos(ax), sin(ax)</span> ត្រូវមានកត្តា <Inline>1/a</Inline>៖</p>
-        <MathLine math={String.raw`\int \cos(ax)\,dx=\frac{1}{a}\sin(ax)+C \qquad,\qquad \int \sin(ax)\,dx=-\frac{1}{a}\cos(ax)+C`} />
+        <p>
+          • សម្រាប់ការជំនួស <span className="font-medium">u</span> ចូរជ្រើស u
+          ដូច្នេះ du លេចឡើងជាក់ស្តែងក្នុង dx៖
+        </p>
+        <MathLine
+          math={String.raw`u=g(x),\quad du=g'(x)\,dx \ \Rightarrow\ \int f(g(x))\,g'(x)\,dx=\int f(u)\,du`}
+        />
+        <p>
+          • សម្រាប់ <span className="font-medium">cos(ax), sin(ax)</span>{" "}
+          ត្រូវមានកត្តា <Inline>1/a</Inline>៖
+        </p>
+        <MathLine
+          math={String.raw`\int \cos(ax)\,dx=\frac{1}{a}\sin(ax)+C \qquad,\qquad \int \sin(ax)\,dx=-\frac{1}{a}\cos(ax)+C`}
+        />
       </div>
     ),
   },
@@ -153,9 +187,19 @@ const TOPIC_CONTENT: TopicContent = {
   warning: {
     content: (
       <div className="space-y-1.5">
-        <p>• កុំភ្លេចបន្ថែម <span className="font-medium">+ C</span> រាល់អាំងតេក្រាលមិនកំណត់។</p>
-        <p>• សម្រាប់ <span className="font-medium">∫(1/x) dx</span> ត្រូវជា <span className="font-medium">ln|x| + C</span> មិនមែន ln(x) ដោយគ្មាន absolute value ទេ។</p>
-        <p>• ត្រួតពិនិត្យត្រឡប់វិញដោយយកដេរីវេលើចម្លើយ រួចត្រូវតែបាន integrand ដើមវិញ។</p>
+        <p>
+          • កុំភ្លេចបន្ថែម <span className="font-medium">+ C</span>{" "}
+          រាល់អាំងតេក្រាលមិនកំណត់។
+        </p>
+        <p>
+          • សម្រាប់ <span className="font-medium">∫(1/x) dx</span> ត្រូវជា{" "}
+          <span className="font-medium">ln|x| + C</span> មិនមែន ln(x) ដោយគ្មាន
+          absolute value ទេ។
+        </p>
+        <p>
+          • ត្រួតពិនិត្យត្រឡប់វិញដោយយកដេរីវេលើចម្លើយ រួចត្រូវតែបាន integrand
+          ដើមវិញ។
+        </p>
       </div>
     ),
   },
@@ -172,7 +216,10 @@ export default function IndefiniteIntegral() {
         />
       )}
       {TOPIC_CONTENT.tip && (
-        <TipBox title={TOPIC_CONTENT.tip.title} content={TOPIC_CONTENT.tip.content} />
+        <TipBox
+          title={TOPIC_CONTENT.tip.title}
+          content={TOPIC_CONTENT.tip.content}
+        />
       )}
       {TOPIC_CONTENT.example && (
         <ExampleBox
@@ -185,7 +232,9 @@ export default function IndefiniteIntegral() {
         <ExerciseBox questions={TOPIC_CONTENT.exercise.questions} />
       )}
       {TOPIC_CONTENT.hint && <HintBox content={TOPIC_CONTENT.hint.content} />}
-      {TOPIC_CONTENT.warning && <WarningBox content={TOPIC_CONTENT.warning.content} />}
+      {TOPIC_CONTENT.warning && (
+        <WarningBox content={TOPIC_CONTENT.warning.content} />
+      )}
     </>
   );
 }

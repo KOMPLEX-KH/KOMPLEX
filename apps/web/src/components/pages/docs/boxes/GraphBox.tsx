@@ -10,7 +10,7 @@ export interface GraphBoxProps {
     options?: Partial<CalculatorOptions>;
 }
 
-export default function GraphBox({ expressions, options }: GraphBoxProps) {
+export  function GraphBox({ expressions, options }: GraphBoxProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (

@@ -1,11 +1,11 @@
-import DefinitionBox from "@/components/pages/docs/boxes/DefinitionBox";
-import ExampleBox from "@/components/pages/docs/boxes/ExampleBox";
-import TipBox from "@/components/pages/docs/boxes/TipBox";
-import ExerciseBox from "@/components/pages/docs/boxes/ExerciseBox";
-import HintBox from "@/components/pages/docs/boxes/HintBox";
-import WarningBox from "@/components/pages/docs/boxes/WarningBox";
+import { DefinitionBox } from '@/components/pages/docs/boxes/DefinitionBox'
+import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { TipBox } from "@/components/pages/docs/boxes/TipBox";
+import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
 import { TopicContent } from "@/types/docs/topic";
-import GraphBox from "@/components/pages/docs/boxes/GraphBox";
+import { GraphBox } from "@/components/pages/docs/boxes/GraphBox";
 import { InlineMath } from "react-katex";
 import { MathScroll } from "@components/helper/MathScroll";
 

@@ -1,6 +1,6 @@
 import { Brain, Lightbulb, Target, Zap } from "lucide-react"
 import { ThreeDExplanationBox } from "@/components/pages/docs/boxes/explanation-box/3DExplanationBox"
-import {ImageBox} from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox"
+import { ImageExplanationBox } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox"
 
 export default function SmallBrain() {
     return (
@@ -20,8 +20,8 @@ export default function SmallBrain() {
                     {/* Main Cerebellum Structure with 3D Model */}
                     <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border-l-4 border-green-400 hover:shadow-md transition-shadow">
                         <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 mb-3 sm:mb-4 border-b pb-2">រចនាសម្ព័ន្ធខួរតូច</h2>
-                        
-                        <ImageBox
+
+                        <ImageExplanationBox
                             title="ខួរតូច - មជ្ឈមណ្ឌលត្រួតពិនិត្យចលនា"
                             imageAlt="ខួរតូច"
                             src="/docs/grade-12/biology/gymnosperms/image.png"
@@ -29,41 +29,41 @@ export default function SmallBrain() {
                                 <div className=" p-4 rounded-lg">
                                     <h3 className="font-semibold text-green-800 mb-3">ខួរតូច និងលក្ខណៈសំខាន់ៗ</h3>
                                     <div className="space-y-3">
-                                        
+
                                     </div><div className="flex items-start space-x-3">
-                                            <span className="text-green-600 mt-1">🧠</span>
-                                            <div>
-                                                <strong>ខួរតូច (Cerebellum)</strong>
-                                            
-                                            </div>
+                                        <span className="text-green-600 mt-1">🧠</span>
+                                        <div>
+                                            <strong>ខួរតូច (Cerebellum)</strong>
+
                                         </div>
-                                        <div className="flex items-start space-x-3">
-                                            <span className="text-green-600 mt-1">🔹</span>
-                                            <div>
-                                                <p className="text-base mt-1">ខួរតូចស្ថិតនៅផ្នែកខាងក្រោយ ខាងក្រោមខួរធំ។</p>
-                                            </div>
+                                    </div>
+                                    <div className="flex items-start space-x-3">
+                                        <span className="text-green-600 mt-1">🔹</span>
+                                        <div>
+                                            <p className="text-base mt-1">ខួរតូចស្ថិតនៅផ្នែកខាងក្រោយ ខាងក្រោមខួរធំ។</p>
                                         </div>
-                                        <div className="flex items-start space-x-3">
-                                            <span className="text-green-600 mt-1">🔹</span>
-                                            <div>
-                                                <p className="text-basemt-1"> វាត្រួតពិនិត្យចលនាឆន្ទះទាំងអស់ និងចលនាអឆន្ទះមួយចំនួន។</p>
-                                            </div>
-                                        </div>  
-                                        <div className="flex items-start space-x-3">
-                                            <span className="text-green-600 mt-1">🔹</span>
-                                            <div>
-                                                <p className="text-base mt-1">ខួរតូច ក៏ចែកជាអឌ្ឍគោលខួរចំនួនពីរចំហៀងដែរ </p>
-                                            </div>
-                                        </div>  
-                                        <div className="flex items-start space-x-3">
-                                            <span className="text-green-600 mt-1">🔹</span>
-                                            <div>
+                                    </div>
+                                    <div className="flex items-start space-x-3">
+                                        <span className="text-green-600 mt-1">🔹</span>
+                                        <div>
+                                            <p className="text-basemt-1"> វាត្រួតពិនិត្យចលនាឆន្ទះទាំងអស់ និងចលនាអឆន្ទះមួយចំនួន។</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start space-x-3">
+                                        <span className="text-green-600 mt-1">🔹</span>
+                                        <div>
+                                            <p className="text-base mt-1">ខួរតូច ក៏ចែកជាអឌ្ឍគោលខួរចំនួនពីរចំហៀងដែរ </p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start space-x-3">
+                                        <span className="text-green-600 mt-1">🔹</span>
+                                        <div>
                                             <p className="text-base mt-1">ប្រសិនខួរតូចមានការបាត់បង់ ឬខូតខាត គេសង្កេតឃើញថា សារពាង្គកាយបាត់បង់តុល្យភាព ឬមានចលនា
-                                            កន្ត្រាក់ញ័រៗ។</p>
-                                            </div>
-                                        </div> 	
-                                        
-                              		
+                                                កន្ត្រាក់ញ័រៗ។</p>
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             }
                         />
@@ -81,11 +81,11 @@ export default function SmallBrain() {
                                 </div>
                                 <div className="space-y-3">
                                     <div className="flex items-start space-x-3">
-                                        
+
                                         <div>
                                             <p><strong>ខួរកញ្ចឹងករ:</strong> ស្ថិតនៅខាងក្រោមខួរធំ ខាងមុខខួរតូច ហើយភ្ជាប់ទៅនឹងខួរឆ្អឹងខ្នង។
-ស្រទាប់ក្រៅជាសារធាតុស ឯស្រទាប់ក្នុងជាសារធាតុប្រផេះ។
-វាមាននាទីត្រួតពិនិត្យចលនាអឆន្ទះមួយចំនួនរបស់សារពាង្គកាយគឺ ចង្វាក់ដង្ហើម និងការកន្ត្រាក់បេះដូង។</p>
+                                                ស្រទាប់ក្រៅជាសារធាតុស ឯស្រទាប់ក្នុងជាសារធាតុប្រផេះ។
+                                                វាមាននាទីត្រួតពិនិត្យចលនាអឆន្ទះមួយចំនួនរបស់សារពាង្គកាយគឺ ចង្វាក់ដង្ហើម និងការកន្ត្រាក់បេះដូង។</p>
                                         </div>
                                     </div>
 
@@ -102,17 +102,17 @@ export default function SmallBrain() {
                                 <div className="grid grid-cols-1    gap-4">
                                     <div className="bg-white p-4 rounded-lg border-l-4 border-purple-300">
                                         <h4 className="font-semibold text-purple-800 mb-2"><p className="text-sm mt-1">នៅពេលសាច់ដុំបញ្ចូនអាំងភ្លុចប្រសាទ តាមផ្លូវប្រសាទវិញ្ញាណនាំទៅខួរតូច អាំងភ្លុចប្រសាទនេះផ្តល់ព័ត៌មានពី
-ទីតាំង និងអត្រានៃការកន្ត្រាក់របស់សាច់ដុំ។ បន្ទាប់មកខួរតូចបញ្ចូនអាំងភ្លុចប្រសាទទៅសំបកខួរធំ ដើម្បីឲ្យ
-សំបកខួរកែលំអ និងសម្របសម្រួលចលនានៃសាច់ដុំ។</p></h4>
-                                       
+                                            ទីតាំង និងអត្រានៃការកន្ត្រាក់របស់សាច់ដុំ។ បន្ទាប់មកខួរតូចបញ្ចូនអាំងភ្លុចប្រសាទទៅសំបកខួរធំ ដើម្បីឲ្យ
+                                            សំបកខួរកែលំអ និងសម្របសម្រួលចលនានៃសាច់ដុំ។</p></h4>
+
                                     </div>
-                                    
+
                                     <div className="bg-white p-4 rounded-lg border-l-4 border-blue-300">
                                         <h4 className="font-semibold text-blue-800 mb-2"><p className="text-sm mt-1">ដូចនេះសំបកខួរ និងខួរតូចធ្វើការរួមគ្នា ដើម្បីបង្កើត
-                                        ចលនាឆន្ទះមួយមានសណ្តាប់ធ្នាប់និងរលូន។</p></h4>
+                                            ចលនាឆន្ទះមួយមានសណ្តាប់ធ្នាប់និងរលូន។</p></h4>
                                     </div>
-                                    
-                        
+
+
                                 </div>
                             </div>
                         </div>
