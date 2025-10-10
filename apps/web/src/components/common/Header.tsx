@@ -218,7 +218,7 @@ export default function Header() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={`flex items-center gap-2 text-gray-600 no-underline font-semibold  text-sm px-3 py-2.5 rounded-full transition-all duration-300 relative ${isActive ? 'text-indigo-600 bg-indigo-50/90 shadow-sm ' : link.style}`}
+                                    className={`flex items-center gap-2 text-gray-600 no-underline font-semibold  text-sm px-3 py-2.5 rounded-full transition-all duration-300 relative ${isActive ? 'text-indigo-600 border border-indigo-500/30 bg-indigo-50/90 shadow-sm ' : link.style}`}
                                 >
                                     <Icon size={18} />
                                     {link.label}

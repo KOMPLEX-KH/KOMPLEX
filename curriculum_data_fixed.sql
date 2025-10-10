@@ -3,13 +3,13 @@
 
 -- Insert Grades
 INSERT INTO grades (grade, grade_khmer) VALUES
-                                            ('grade-12', 'ថ្នាក់ទី១២'),
-                                            ('grade-11', 'ថ្នាក់ទី១១'),
-                                            ('grade-10', 'ថ្នាក់ទី១០'),
-                                            ('grade-9', 'ថ្នាក់ទី៩');
+('grade-12', 'ថ្នាក់ទី១២'),
+('grade-11', 'ថ្នាក់ទី១១'),
+('grade-10', 'ថ្នាក់ទី១០'),
+('grade-9', 'ថ្នាក់ទី៩');
 
 -- Insert Subjects
-INSERT INTO subjects (subject, title, english_table, icon, grade_id) VALUES
+INSERT INTO subjects (subject, title, english_title, icon, grade_id) VALUES
 -- Grade 12 Subjects (grade_id = 1)
 ('math', 'គណិតវិទ្យា', 'Mathematics', 'Calculator', 1),
 ('physics', 'រូបវិទ្យា', 'Physics', 'Atom', 1),
@@ -83,6 +83,31 @@ INSERT INTO lessons (lesson, title, english_title, icon, subject_id) VALUES
 ('probability', 'ប្រូបាប', 'Probability', 'Percent', 5),
 ('statistics', 'ស្ថិតិ', 'Statistics', 'PieChart', 5),
 
+-- Grade 11 Physics Lessons (subject_id = 6)
+('mechanics', 'មេកានិច', 'Mechanics', 'Zap', 6),
+('thermodynamics', 'ទែម៉ូឌីណាមិច', 'Thermodynamics', 'Thermometer', 6),
+('waves', 'រលក', 'Waves', 'Waves', 6),
+('electricity', 'អគ្គិសនី', 'Electricity', 'Lightbulb', 6),
+
+-- Grade 11 Chemistry Lessons (subject_id = 7)
+('chemical-calculations', 'ការគណនាក្នុងគីមី', 'Chemical-Calculations', 'Calculator', 7),
+('metals', 'លោហៈ', 'Metals', 'Beaker', 7),
+('oxidation-reduction-electrochemistry', 'អុកស៊ីតកម្ម រេដុកម្ម និងអេឡិចត្រូគីមី', 'Oxidation-Reduction-and-Electrochemistry', 'Atom', 7),
+('chemical-reactions-energy', 'ប្រតិកម្មគីមីនិងថាមពល', 'Chemical-Reactions-and-Energy', 'ThermometerSun', 7),
+('inorganic-compounds', 'សមាសធាតុអសរីរាង្គ', 'Inorganic-Compounds', 'FlaskRound', 7),
+('stereochemistry', 'ស្តេរ៉េអូគីមី', 'Stereochemistry', 'Shapes', 7),
+('organic-chemistry', 'គីមីសរីរាង្គ', 'Organic-Chemistry', 'Flame', 7),
+
+-- Grade 11 Biology Lessons (subject_id = 8)
+('cells', 'កោសិកា', 'Cells', 'Microscope', 8),
+('reproduction-growth', 'ការបន្តពូជនិងការលូតលាស់', 'Reproduction-and-Growth', 'Baby', 8),
+('heredity', 'តំណពូជ', 'Heredity', 'Dna', 8),
+('human-nutrition-digestion', 'អាហារនិងការរំលាយអាហាររបស់មនុស្ស', 'Human-Nutrition-and-Digestion', 'Utensils', 8),
+('gas-exchange-excretion-animals', 'បណ្តូរឧស្ម័ននិងការបញ្ចេញចោលរបស់សត្វ', 'Gas-Exchange-and-Excretion-in-Animals', 'Wind', 8),
+('interaction-organisms-environment', 'ប្រតិកម្មរវាងសត្វនិងមជ្ឈដ្ឋា', 'Interaction-between-Organisms-and-Environment', 'Globe', 8),
+('structure-vascular-plants', 'រូបផ្គុំរុក្ខជាតិមានសរសៃនាំ', 'Structure-of-Vascular-Plants', 'Sprout', 8),
+('biology-health', 'ជីវវិទ្យានិងសុខភាព', 'Biology-and-Health', 'HeartPulse', 8),
+
 -- Grade 10 Math Lessons (subject_id = 9)
 ('logic-sets-numbers', 'តក្កវិទ្យា សំណុំនិងចំនួន', 'Logic-Sets-and-Numbers', 'Brain', 9),
 ('polynomials', 'ពហុធា', 'Polynomials', 'Square', 9),
@@ -95,6 +120,26 @@ INSERT INTO lessons (lesson, title, english_title, icon, subject_id) VALUES
 ('vectors-plane', 'វ៉ិចទ័រក្នុងប្លង់', 'Vectors-in-a-Plane', 'ArrowRight', 9),
 ('geometric-transformations-plane', 'បំលែងរូបក្នុងប្លង់', 'Geometric-Transformations-in-a-Plane', 'RotateCcw', 9),
 ('geometry-space', 'ធរណីមាត្រក្នុងលំហ', 'Geometry-in-Space', 'Box', 9),
+
+-- Grade 10 Physics Lessons (subject_id = 10)
+('mechanics', 'មេកានិច', 'Mechanics', 'Zap', 10),
+('thermodynamics', 'ទែម៉ូឌីណាមិច', 'Thermodynamics', 'Flame', 10),
+('electricity-magnetism', 'អគ្គិសនីនិងម៉ាញេទិច', 'Electricity-and-Magnetism', 'Battery', 10),
+('optics', 'អុបទិច', 'Optics', 'Eye', 10),
+('energy-life', 'ថាមពល និងជីវិត', 'Energy-and-Life', 'Atom', 10),
+
+-- Grade 10 Chemistry Lessons (subject_id = 11)
+('atom', 'តាតូម', 'Atom', 'Atom', 11),
+('periodic-table-chemical-elements', 'តារាងខួបនៃធាតុគីមី', 'Periodic-Table-of-Chemical-Elements', 'Table', 11),
+('chemical-bonds-solid-structures', 'សម្ព័ន្ធគីមីនិងទម្រង់អង្គធាតុរឹង', 'Chemical-Bonds-and-Solid-Structures', 'Link', 11),
+('organic-chemistry', 'គីមីសរីរាង្គ', 'Organic-Chemistry', 'Leaf', 11),
+
+-- Grade 10 Biology Lessons (subject_id = 12)
+('diversity-living-organisms', 'នានាភាពនៃភាវៈរស់', 'Diversity-of-Living-Organisms', 'Leaf', 12),
+('uniformity-living-organisms', 'ឯកសណ្ឋានភាពនៃភាវៈរស់', 'Uniformity-of-Living-Organisms', 'Dna', 12),
+('metabolism', 'មេតាបូលីស', 'Metabolism', 'FlaskConical', 12),
+('human-biology', 'ជីវវិទ្យាមនុស្ស', 'Human-Biology', 'User', 12),
+('biology-agriculture', 'ជីវវិទ្យាក្នុងវិស័យកសិកម្ម', 'Biology-in-Agriculture', 'Sprout', 12),
 
 -- Grade 9 Math Lessons (subject_id = 13)
 ('irrational-numbers', 'ចំនួនអសនិទាន', 'Irrational-Numbers', 'Hash', 13),
@@ -114,11 +159,26 @@ INSERT INTO lessons (lesson, title, english_title, icon, subject_id) VALUES
 ('thales-theorem', 'ទ្រឹស្តីបទតាលែស', 'Thales-Theorem', 'Triangle', 13),
 ('similar-triangles', 'ត្រីកោណដូចគ្នា', 'Similar-Triangles', 'Triangle', 13),
 ('polygon', 'ពហុកោណ', 'Polygon', 'Square', 13),
-('solids', 'សូលីត', 'Solids', 'Box', 13);
+('solids', 'សូលីត', 'Solids', 'Box', 13),
 
--- Note: Physics, Chemistry, and Biology lessons for grades 9-11 are not fully defined in the curriculum files
--- They appear to use ComingSoon components, so they are not included in this SQL file
--- Only the subject entries are created for these grades
+-- Grade 9 Physics Lessons (subject_id = 14)
+('force-rotation-physics', 'ផលរង្វិលនៃកម្លាំង', 'Force-Rotation-Physics', 'Zap', 14),
+('simple-machines', 'ម៉ាស៊ីនងាយ', 'Simple-Machines', 'Cog', 14),
+('pressure', 'សម្ពាធ', 'Pressure', 'Battery', 14),
+('electricity-magnetism', 'អគ្គិសនីនិងម៉ាញេទិច', 'Electricity-and-Magnetism', 'Magnet', 14),
+('optics', 'អុបទិច', 'Optics', 'Eye', 14),
+
+-- Grade 9 Chemistry Lessons (subject_id = 15)
+('periodic-table-chemical-elements', 'តារាងខួបនៃធាតុគីមី', 'Periodic-Table-of-Chemical-Elements', 'Table', 15),
+('carbon-oxygen-hydrogen', 'កាបួន អុកស៊ីសែន និងអ៊ីដ្រូសែន', 'Carbon-Oxygen-and-Hydrogen', 'Atom', 15),
+('water-air', 'ទឹកនិងខ្យល់', 'Water-and-Air', 'Beaker', 15),
+
+-- Grade 9 Biology Lessons (subject_id = 16)
+('photosynthesis', 'រស្មីសំយោគ', 'Photosynthesis', 'Leaf', 16),
+('nervous-system', 'ប្រព័ន្ធប្រសាទ', 'Nervous-System', 'Brain', 16),
+('immune-system', 'ប្រព័ន្ធស៊ាំ', 'Immune-System', 'Shield', 16),
+('ecosystem', 'បរិស្ថានវិទ្យា', 'Ecosystem', 'Globe', 16),
+('health-hygiene', 'សុខភាពនិងអនាម័យ', 'Health-and-Hygiene', 'Bug', 16);
 
 -- Insert Topics
 -- Note: Lesson IDs are assigned sequentially starting from 1
@@ -615,129 +675,124 @@ INSERT INTO topics (title, english_title, lesson_id) VALUES
 
 -- Grade 9 Math Topics
 -- Irrational-Numbers (lesson_id = 82)
-('ចំនួនអសនិទាន', 'Irrational-Numbers', 82),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 82),
 
 -- Proportion (lesson_id = 83)
-('សមាមាត្រ', 'Proportion', 83),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 83),
 
 -- Algebraic-Expressions (lesson_id = 84)
-('កន្សោមពីជគណិត', 'Algebraic-Expressions', 84),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 84),
 
 -- First-Degree-Equation-With-One-Unknown (lesson_id = 85)
-('សមីការដឺក្រេទី 1 មានមួយអញ្ញាត', 'First-Degree-Equation-With-One-Unknown', 85),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 85),
 
 -- First-Degree-Inequality-With-One-Unknown (lesson_id = 86)
-('វិសមីការដឺក្រេទី 1 មានមួយអញ្ញាត', 'First-Degree-Inequality-With-One-Unknown', 86),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 86),
 
 -- Frequency-Distribution (lesson_id = 87)
-('បំណែងចែកប្រេកង់', 'Frequency-Distribution', 87),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 87),
 
 -- Statistical-Mean (lesson_id = 88)
-('មធ្យមស្ថិតិ', 'Statistical-Mean', 88),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 88),
 
 -- Probability (lesson_id = 89)
-('ប្រូបាប', 'Probability', 89),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 89),
 
 -- Distance-Between-Two-Points (lesson_id = 90)
-('ចម្ងាយរវាងពីរចំណុច', 'Distance-Between-Two-Points', 90),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 90),
 
 -- Equation-of-a-Line (lesson_id = 91)
-('សមីការនៃបន្ទាត់', 'Equation-of-a-Line', 91),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 91),
 
 -- System-of-First-Degree-Equations-With-Two-Unknowns (lesson_id = 92)
-('ប្រព័ន្ធសមីការដឺក្រេទី 1 មានពីរអញ្ញាត', 'System-of-First-Degree-Equations-With-Two-Unknowns', 92),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 92),
 
 -- Pythagorean-Theorem (lesson_id = 93)
-('ទ្រឹស្តីបទពីតាគ័រ', 'Pythagorean-Theorem', 93),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 93),
 
 -- Circle-and-Line (lesson_id = 94)
-('រង្វង់និងបន្ទាត់', 'Circle-and-Line', 94),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 94),
 
 -- Properties-of-Angles-in-a-Circle (lesson_id = 95)
-('លក្ខណៈមុំនៃរង្វង់', 'Properties-of-Angles-in-a-Circle', 95),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 95),
 
 -- Thales-Theorem (lesson_id = 96)
-('ទ្រឹស្តីបទតាលែស', 'Thales-Theorem', 96),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 96),
 
 -- Similar-Triangles (lesson_id = 97)
-('ត្រីកោណដូចគ្នា', 'Similar-Triangles', 97),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 97),
 
 -- Polygon (lesson_id = 98)
-('ពហុកោណ', 'Polygon', 98),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 98),
 
 -- Solids (lesson_id = 99)
-('សូលីត', 'Solids', 99),
+('នឹងមកដល់ឆាប់នេះ', 'coming-soon', 99),
 
 -- Grade 9 Physics Topics
--- Mechanics (lesson_id = 100)
-('ចលនាត្រង់', 'Rectilinear-Motion', 100),
-('ច្បាប់ចលនារបស់ញូតុន', 'Newtons-Laws-of-Motion', 100),
-('កម្មន្ត ថាមពល និងអានុភាព', 'Work-Energy-and-Power', 100),
-('សម្ពាធនៃសន្ទនីយស្តាទិច', 'Pressure-of-Static-Fluids', 100),
+-- Force-Rotation-Physics (lesson_id = 100)
+('បង្គំនិងបំបែកកម្លាំង', 'Combining-and-Decomposing-Forces', 100),
+('ម៉ូម៉ង់នៃកម្លាំង', 'Moment-of-Force', 100),
+('ទីប្រជុំទម្ងន់', 'Center-of-Gravity', 100),
 
--- Thermodynamics (lesson_id = 101)
-('សីតុណ្ហភាព', 'Temperature', 101),
-('ទ្រឹស្តីស៊ីនេទិចនៃរូបធាតុ', 'Kinetic-Theory-of-Matter', 101),
-('កម្ដៅ', 'Heat', 101),
+-- Simple-Machines (lesson_id = 101)
+('ឃ្នាស់', 'Lever', 101),
+('ប្លង់ទេរ', 'Inclined-Plane', 101),
+('រ៉ូលីង', 'Rolling', 101),
 
--- Electricity-and-Magnetism (lesson_id = 102)
-('អេឡិចត្រូស្តាទិច', 'Electrostatics', 102),
-('ចរន្តជាប់និងម៉ាញេទិច', 'Direct-Current-and-Magnetism', 102),
-('ចរន្តឆ្លាស់', 'Alternating-Current', 102),
+-- Pressure (lesson_id = 102)
+('សម្ពាធនៃរាវ', 'Pressure-of-Liquids', 102),
+('ច្បាប់បាស្កាល់', 'Pascals-Law', 102),
+('ច្បាប់អាកីមេដេស', 'Archimedes-Law', 102),
 
--- Optics (lesson_id = 103)
-('ធម្មជាតិនិងដំណាលនៃពន្លឺ', 'Nature-and-Propagation-of-Light', 103),
-('ឡង់ទី', 'Lenses', 103),
+-- Electricity-and-Magnetism (lesson_id = 103)
+('អេឡិចត្រូស្តាទិច', 'Electrostatics', 103),
+('ចរន្តជាប់', 'Direct-Current', 103),
+('ម៉ាញេទិច', 'Magnetism', 103),
 
--- Energy-and-Life (lesson_id = 104)
-('ការបំប្លែងថាមពលដែលមានប្រភពខុសៗគ្នាឱ្យទៅជាថាមពលអគ្គិសនី', 'Conversion-of-Energy-from-Different-Sources-into-Electrical-Energy', 104),
-('ការបំប្លែងថាមពលអគ្គិសនីឱ្យទៅជាថាមពលផ្សេងៗ', 'Conversion-of-Electrical-Energy-into-Other-Forms-of-Energy', 104),
+-- Optics (lesson_id = 104)
+('ធម្មជាតិនៃពន្លឺ', 'Nature-of-Light', 104),
+('ការឆ្លុះនៃពន្លឺ', 'Reflection-of-Light', 104),
+('ការឆ្លងនៃពន្លឺ', 'Refraction-of-Light', 104),
 
 -- Grade 9 Chemistry Topics
--- Atom (lesson_id = 105)
-('ទ្រឹស្តីអាតូម', 'Atomic-Theory', 105),
-('ទម្រង់អាតូម', 'Atomic-Structure', 105),
+-- Periodic-Table-of-Chemical-Elements (lesson_id = 105)
+('តារាងខួបនៃធាតុគីមី', 'Periodic-Table-of-Chemical-Elements', 105),
+('លក្ខណៈធាតុតាមក្រុម', 'Characteristics-of-Elements-by-Group', 105),
 
--- Periodic-Table-of-Chemical-Elements (lesson_id = 106)
-('លក្ខណៈនៃតារាងខួប', 'Characteristics-of-the-Periodic-Table', 106),
-('សិក្សាធាតុតាមក្រុម', 'Study-of-Elements-by-Group', 106),
+-- Carbon-Oxygen-and-Hydrogen (lesson_id = 106)
+('កាបួន', 'Carbon', 106),
+('អុកស៊ីសែន', 'Oxygen', 106),
+('អ៊ីដ្រូសែន', 'Hydrogen', 106),
 
--- Chemical-Bonds-and-Solid-Structures (lesson_id = 107)
-('សម្ព័ន្ធគីមី', 'Chemical-Bonds', 107),
-('ទម្រង់អង្គធាតុរឹង', 'Solid-Structures', 107),
-
--- Organic-Chemistry (lesson_id = 108)
-('ប្រេងកាតនិងឥន្ធនៈ', 'Petroleum-and-Fuels', 108),
-('អ៊ីដ្រូកាបួឆ្អែត : អាល់កាន', 'Saturated-Hydrocarbons-Alkanes', 108),
-('អ៊ីដ្រូកាបួមិនទាន់ឆ្អែត', 'Unsaturated-Hydrocarbons', 108),
-('អ៊ីដ្រូកាបួប្រហើរ : បង់សែន', 'Aromatic-Hydrocarbons-Benzene', 108),
-('ជីគីមី', 'Chemical-Fertilizers', 108),
+-- Water-and-Air (lesson_id = 107)
+('ទឹក', 'Water', 107),
+('ខ្យល់', 'Air', 107),
 
 -- Grade 9 Biology Topics
--- Diversity-of-Living-Organisms (lesson_id = 109)
-('ចំណែកថ្នាក់និងដើមឈើ មែកធាងពូជអម្បូរ', 'Classification-and-Phylogenetic-Trees', 109),
-('វីរុសនិងបាក់តេរី', 'Viruses-and-Bacteria', 109),
-('ប្រូទីស', 'Protists', 109),
-('ផ្សិត', 'Fungi', 109),
-('រុក្ខជាតិ', 'Plants', 109),
-('សត្វ', 'Animals', 109),
+-- Photosynthesis (lesson_id = 108)
+('រូបផ្តុំនៃស្លឹករុក្ខជាតិ', 'Structure-of-Plant-Leaves', 108),
+('ដំណើររស្មីសំយោគ', 'Process-of-Photosynthesis', 108),
+('ដង្ហើមរុក្ខជាតិ', 'Plant-Respiration', 108),
 
--- Uniformity-of-Living-Organisms (lesson_id = 110)
-('កោសិកា', 'Cells', 110),
-('ប្រការីយ៉ូតនិងអឺការីយ៉ូត', 'Prokaryotes-and-Eukaryotes', 110),
+-- Nervous-System (lesson_id = 109)
+('ណឺរ៉ូន', 'Neuron', 109),
+('មជ្ឈមណ្ឌលប្រសាទ', 'Central-Nervous-System', 109),
+('បរិមណ្ឌលប្រសាទ', 'Peripheral-Nervous-System', 109),
 
--- Metabolism (lesson_id = 111)
-('រស្មីសំយោគ', 'Photosynthesis', 111),
-('ដង្ហើមកោសិកា', 'Cellular-Respiration', 111),
+-- Immune-System (lesson_id = 110)
+('ប្រព័ន្ធស៊ាំ', 'Immune-System', 110),
+('អង់ទីបូឌី', 'Antibodies', 110),
+('វ៉ាក់សាំង', 'Vaccines', 110),
 
--- Human-Biology (lesson_id = 112)
-('ប្រព័ន្ធគ្រោងឆ្អឹង', 'Skeletal-System', 112),
-('ប្រព័ន្ធសាច់ដុំ', 'Muscular-System', 112),
+-- Ecosystem (lesson_id = 111)
+('បរិស្ថានវិទ្យា', 'Ecosystem', 111),
+('ចរន្តថាមពល', 'Energy-Flow', 111),
+('វដ្តធាតុ', 'Material-Cycles', 111),
 
--- Biology-in-Agriculture (lesson_id = 113)
-('ជី', 'Fertilizers', 113),
-('ការបង្កាត់', 'Breeding', 113);
-
+-- Health-and-Hygiene (lesson_id = 112)
+('សុខភាព', 'Health', 112),
+('អនាម័យ', 'Hygiene', 112),
+('ការបង្ការជំងឺ', 'Disease-Prevention', 112);
 
 select * from topics;
 select * from lessons;

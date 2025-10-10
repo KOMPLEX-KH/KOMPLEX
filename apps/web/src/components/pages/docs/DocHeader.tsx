@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { ChevronDown, Check } from 'lucide-react';
-import { curriculum } from '@/lessons/curriculum';
+import axios from 'axios';
+import { Grade } from '@/types/docs/curriculum';
+import { ICON_MAP } from '@/utils/icon';
 
 interface DocHeaderProps {
     currentGrade?: string;
@@ -23,6 +25,31 @@ export default function DocHeader({
     const topicsScrollRef = useRef<HTMLDivElement>(null);
     const [isScrollingDown, setIsScrollingDown] = useState(false);
     const [lastScrollY, setLastScrollY] = useState(0);
+    const [curriculum, setCurriculum] = useState<Grade[]>(
+        () => {
+            if (typeof window !== 'undefined') {
+                const stored = localStorage.getItem("curriculum");
+                return stored ? JSON.parse(stored) : [];
+            }
+            return [];
+        }
+    );
+
+    // Fallback fetch if curriculum is empty (shouldn't happen with layout.tsx)
+    useEffect(() => {
+        if (curriculum.length === 0) {
+            const fetchCurriculum = async () => {
+                try {
+                    const res = await axios.get('http://localhost:6969/api/feed/lessons');
+                    setCurriculum(res.data.data);
+                    localStorage.setItem('curriculum', JSON.stringify(res.data.data));
+                } catch (error) {
+                    console.error('Error fetching curriculum:', error);
+                }
+            };
+            fetchCurriculum();
+        }
+    }, [curriculum.length]);
 
     // Find the current grade and subject data
     const gradeData = curriculum.find(g => g.grade === currentGrade);
@@ -67,7 +94,7 @@ export default function DocHeader({
         return () => window.removeEventListener('scroll', handleScroll);
     }, [lastScrollY]);
 
-    if (!gradeData) return null;
+    if (!gradeData || curriculum.length === 0) return null;
 
     const subjects = gradeData.content;
     const grades = curriculum.map(g => ({ value: g.grade, label: g.gradeKhmer }));
@@ -84,7 +111,7 @@ export default function DocHeader({
             const firstSubject = subjects[0];
             const firstLesson = firstSubject.lessons[0];
             const firstTopic = firstLesson.topics[0];
-            window.location.href = `/docs/${grade}/${firstSubject.subject}/${firstLesson.lesson}/${firstTopic.englishTitle}`;
+            window.location.href = `/docs/${grade}/${firstSubject.subject}/${firstLesson.lesson}/${firstTopic.id}`;
         }
     }
 
@@ -96,12 +123,12 @@ export default function DocHeader({
                     <div className="flex items-center justify-between gap-5">
                         <div className="flex items-center gap-4">
                             {subjects.map((subject) => {
-                                const Icon = subject.icon;
+                                const Icon = ICON_MAP[subject.icon];
                                 const isActive = currentSubject === subject.subject;
                                 return (
                                     <Link
                                         key={subject.subject}
-                                        href={`/docs/${currentGrade}/${subject.subject}/${subject.lessons[0].lesson}/${subject.lessons[0].topics[0].englishTitle}`}
+                                        href={`/docs/${currentGrade}/${subject.subject}/${subject.lessons[0].lesson}/${subject.lessons[0].topics[0].id}`}
                                         className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${isActive
                                             ? 'text-indigo-600 bg-indigo-50/90 border border-indigo-500/20 shadow-sm'
                                             : 'text-gray-600 bg-white/80 backdrop-blur-sm border border-indigo-500/10 hover:text-indigo-600 hover:bg-indigo-50/90'
@@ -184,13 +211,13 @@ export default function DocHeader({
             </div>
 
             {/* Mobile Subject Navigation */}
-            <div className={`lg:hidden fixed w-full top-13 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-full' : 'translate-y-0'
+            <div className={`lg:hidden fixed w-full top-14 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-full' : 'translate-y-0'
                 }`}>
                 <div className="max-w-full mx-auto px-5 py-2">
                     <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
                             {subjects.map((subject) => {
-                                const Icon = subject.icon;
+                                const Icon = ICON_MAP[subject.icon];
                                 const isActive = currentSubject === subject.subject;
                                 return (
                                     <Link
@@ -201,7 +228,7 @@ export default function DocHeader({
                                             : 'text-gray-600 bg-white/80 backdrop-blur-sm border border-indigo-500/10 hover:text-indigo-600 hover:bg-indigo-50/90'
                                             }`}
                                     >
-                                        <Icon size={16} />
+                                        <Icon size={18} />
                                         {subject.title}
                                     </Link>
                                 );
@@ -254,7 +281,7 @@ export default function DocHeader({
             </div>
 
             {/* Mobile Content Navigation */}
-            <div className={`lg:hidden fixed w-full top-25.5 z-30 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-full' : 'translate-y-0'
+            <div className={`lg:hidden fixed w-full top-27 z-30 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-full' : 'translate-y-0'
                 }`}>
                 <div className="max-w-full mx-auto px-5 py-2">
                     <div className="flex items-center justify-start gap-3">

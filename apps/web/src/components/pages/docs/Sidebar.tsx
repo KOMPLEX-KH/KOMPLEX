@@ -3,30 +3,57 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ChevronDown, ChevronRight } from 'lucide-react';
-import { curriculum } from '@/lessons/curriculum';
+import axios from 'axios';
+import { Grade } from '@/types/docs/curriculum';
+import { ICON_MAP } from '@/utils/icon';
+import SidebarSkeleton from './SidebarSkeleton';
 
 interface SidebarProps {
-    currentGrade?: string;
-    currentSubject?: string;
-    currentLesson?: string;
-    currentTopic?: string;
+    currentGrade?: { id: number };
+    currentSubject?: { id: number };
+    currentLesson?: { id: number };
+    currentTopic?: { id: number };
 }
 
 export default function Sidebar({
-    currentGrade = 'grade-12',
-    currentSubject = 'math',
-    currentLesson = 'limits',
-    currentTopic = 'zero-over-zero'
+    currentGrade,
+    currentSubject,
+    currentLesson,
+    currentTopic,
 }: SidebarProps) {
     const [expandedLessons, setExpandedLessons] = useState<Record<string, boolean>>({});
     const sidebarRef = useRef<HTMLDivElement>(null);
 
+    const [curriculum, setCurriculum] = useState<Grade[]>(
+        () => {
+            const stored = localStorage.getItem("curriculum");
+            return stored ? JSON.parse(stored) : [];
+        }
+    );
+
+    // Fallback fetch if curriculum is empty (shouldn't happen with layout.tsx)
+    useEffect(() => {
+        if (curriculum.length === 0) {
+            const fetchCurriculum = async () => {
+                try {
+                    const res = await axios.get('http://localhost:6969/api/feed/lessons');
+                    setCurriculum(res.data.data);
+                    localStorage.setItem('curriculum', JSON.stringify(res.data.data));
+                } catch (error) {
+                    console.error('Error fetching curriculum:', error);
+                }
+            };
+            fetchCurriculum();
+        }
+    }, [curriculum.length]);
     // Initialize expanded lessons based on current lesson
     useEffect(() => {
-        const gradeData = curriculum.find(g => g.grade === currentGrade);
+        if (!currentGrade || !currentSubject) return;
+
+        const gradeData = curriculum.find(g => g.id === currentGrade.id);
         if (!gradeData) return;
 
-        const subjectData = gradeData.content.find(s => s.subject === currentSubject);
+        const subjectData = gradeData.content.find(s => s.id === currentSubject.id);
         if (!subjectData) return;
 
         // Initialize all lessons as expanded, with current lesson highlighted
@@ -36,15 +63,15 @@ export default function Sidebar({
         }, {} as Record<string, boolean>);
 
         setExpandedLessons(expandedState);
-    }, [currentGrade, currentSubject, currentLesson]);
+    }, [currentGrade, currentSubject, currentLesson, curriculum]);
 
     // Scroll to current lesson on mount only
     useEffect(() => {
-        if (sidebarRef.current && currentLesson) {
+        if (sidebarRef.current && currentLesson && curriculum.length > 0) {
             // Small delay to ensure DOM is fully rendered
             setTimeout(() => {
                 // Find the lesson button element
-                const lessonButton = sidebarRef.current?.querySelector(`[data-lesson="${currentLesson}"]`) as HTMLElement;
+                const lessonButton = sidebarRef.current?.querySelector(`[data-lesson="${currentLesson.id}"]`) as HTMLElement;
 
                 if (lessonButton && sidebarRef.current) {
                     // Scroll the lesson to the top of the sidebar
@@ -56,7 +83,7 @@ export default function Sidebar({
                 }
             }, 100);
         }
-    }, [currentLesson]); // Scroll when lesson changes
+    }, [currentLesson, curriculum]); // Scroll when lesson changes
 
     // Save scroll position before navigation
     const handleLinkClick = () => {
@@ -74,11 +101,17 @@ export default function Sidebar({
     };
 
     // Find the current grade and subject data
-    const gradeData = curriculum.find(g => g.grade === currentGrade);
-    if (!gradeData) return null;
+    if (!currentGrade || !currentSubject || !currentLesson || !currentTopic || curriculum.length === 0) {
+        return <SidebarSkeleton />;
+    }
 
-    const subjectData = gradeData.content.find(s => s.subject === currentSubject);
-    if (!subjectData) return null;
+    const gradeData = curriculum.find(g => g.id === currentGrade.id);
+    if (!gradeData) return <SidebarSkeleton />;
+
+    const subjectData = gradeData.content.find(s => s.id === currentSubject.id);
+    if (!subjectData) return <SidebarSkeleton />;
+
+
 
     return (
         <div
@@ -89,15 +122,15 @@ export default function Sidebar({
                 <div className="p-4">
                     <div className="space-y-4">
                         {subjectData.lessons.map((lessonData) => {
-                            const Icon = lessonData.icon;
+                            const Icon = ICON_MAP[lessonData.icon];
                             const isExpanded = expandedLessons[lessonData.lesson];
-                            const isActive = currentLesson === lessonData.lesson;
+                            const isActive = currentLesson?.id === lessonData.id;
 
                             return (
                                 <div key={lessonData.lesson} className="space-y-2">
                                     {/* Lesson Header */}
                                     <button
-                                        data-lesson={lessonData.lesson}
+                                        data-lesson={lessonData.id}
                                         onClick={(e) => toggleLesson(e, lessonData.lesson)}
                                         className={`w-full flex items-center justify-between p-4 rounded-full shadow-lg shadow-indigo-500/15 ${isActive
                                             ? 'bg-indigo-50 text-indigo-600 border-l-4 border-indigo-500 '
@@ -105,7 +138,7 @@ export default function Sidebar({
                                             }`}
                                     >
                                         <div className="flex items-center gap-3">
-                                            <Icon size={20} className={isActive ? 'text-indigo-600' : 'text-gray-500'} />
+                                            <Icon className='w-5 h-5 ' />
                                             <span className="font-semibold text-base">
                                                 {lessonData.title}
                                             </span>
@@ -121,11 +154,11 @@ export default function Sidebar({
                                     {isExpanded && (
                                         <div className="ml-4 space-y-2">
                                             {lessonData.topics.map((topicData, index) => {
-                                                const isTopicActive = currentTopic === topicData.englishTitle && lessonData.lesson === currentLesson;
+                                                const isTopicActive = currentTopic?.id === topicData.id && currentLesson?.id === lessonData.id;
                                                 return (
                                                     <Link
                                                         key={index}
-                                                        href={`/docs/${currentGrade}/${currentSubject}/${lessonData.lesson}/${topicData.englishTitle}`}
+                                                        href={`/docs/${currentGrade?.id}/${currentSubject?.id}/${lessonData.id}/${topicData.id}`}
                                                         onClick={handleLinkClick}
                                                         className={`block px-4 py-3 rounded-full text-sm font-medium ${isTopicActive
                                                             ? 'text-indigo-600 bg-indigo-50/80 font-semibold'
