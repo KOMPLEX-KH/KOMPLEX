@@ -56,7 +56,7 @@ export function CustomBox({
   showIcon = true,
   borderWidth = "1",
   shadow = "lg",
-  padding = "6",
+  padding = "4",
   margin = "6",
   rounded = "2xl",
   backdropBlur = false,

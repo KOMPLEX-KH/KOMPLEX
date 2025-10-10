@@ -44,7 +44,7 @@ export const ImageExplanationBox = ({ src, imageAlt, explanation, title }: Image
                         {explanation}
                     </div>
                 </div>
-                <div className="hidden lg:flex bg-indigo-50/80 border border-indigo-600 p-6 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+                <div className="hidden lg:flex bg-indigo-50/80 border border-indigo-600 p-4 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
                     <div className="grid grid-cols-1 gap-6">
                         <div className="w-full">
                             <div className="flex items-center gap-3 mb-4">

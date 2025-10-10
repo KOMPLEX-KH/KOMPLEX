@@ -20,7 +20,7 @@ export function ExamQuestionBox({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-6">
       {/* Questions PDF Box */}
-      <div className="bg-indigo-50/80 border border-indigo-600 p-6 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+      <div className="bg-indigo-50/80 border border-indigo-600 p-4 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
         <div className="flex items-center gap-3 mb-4">
           <FileText size={20} className="text-indigo-600" />
           <h3 className="text-xl font-bold text-gray-900">វិញ្ញាសា</h3>
@@ -37,7 +37,7 @@ export function ExamQuestionBox({
       </div>
 
       {/* Answers Box - Flexible Content */}
-      <div className="bg-indigo-50/80 border border-indigo-600 p-6 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+      <div className="bg-indigo-50/80 border border-indigo-600 p-4 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
         <div className="flex items-center gap-3 mb-4">
           <BookOpen size={20} className="text-indigo-600" />
           <h3 className="text-xl font-bold text-gray-900">ដំណោះស្រាយ</h3>

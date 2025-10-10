@@ -15,7 +15,7 @@ export  function TipBox({
     icon: Icon = Lightbulb
 }: TipBoxProps) {
     return (
-        <div className="bg-indigo-50/80 border-l-4 border-indigo-600 p-6 my-6 rounded-r-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+        <div className="bg-indigo-50/80 border-l-4 border-indigo-600 p-4 my-6 rounded-r-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
             {title && (
                 <div className="flex items-center gap-3 mb-3">
                     <Icon size={20} className="text-indigo-600" />

@@ -9,17 +9,17 @@ import { Grade } from '@/types/docs/curriculum';
 import { ICON_MAP } from '@/utils/icon';
 
 interface DocHeaderProps {
-    currentGrade?: string;
-    currentSubject?: string;
-    currentLesson?: string;
-    currentTopic?: string;
+    currentGrade?: { id: number };
+    currentSubject?: { id: number };
+    currentLesson?: { id: number };
+    currentTopic?: { id: number };
 }
 
 export default function DocHeader({
-    currentGrade = 'grade-12',
-    currentSubject = 'math',
-    currentLesson = 'limits',
-    currentTopic = 'zero-over-zero'
+    currentGrade,
+    currentSubject,
+    currentLesson,
+    currentTopic
 }: DocHeaderProps) {
 
     const topicsScrollRef = useRef<HTMLDivElement>(null);
@@ -52,7 +52,7 @@ export default function DocHeader({
     }, [curriculum.length]);
 
     // Find the current grade and subject data
-    const gradeData = curriculum.find(g => g.grade === currentGrade);
+    const gradeData = curriculum.find(g => g.id === currentGrade?.id);
 
     // Scroll to selected topic on mount and when topic changes
     useEffect(() => {
@@ -94,15 +94,15 @@ export default function DocHeader({
         return () => window.removeEventListener('scroll', handleScroll);
     }, [lastScrollY]);
 
-    if (!gradeData || curriculum.length === 0) return null;
+    if (!gradeData || !currentGrade || !currentSubject || !currentLesson || !currentTopic || curriculum.length === 0) return null;
 
     const subjects = gradeData.content;
     const grades = curriculum.map(g => ({ value: g.grade, label: g.gradeKhmer }));
 
     // Get current selections
-    const currentGradeData = grades.find(g => g.value === currentGrade);
-    const currentSubjectData = subjects.find(s => s.subject === currentSubject);
-    const currentLessonData = currentSubjectData?.lessons.find(l => l.lesson === currentLesson);
+    const currentGradeData = grades.find(g => g.value === gradeData.grade);
+    const currentSubjectData = subjects.find(s => s.id === currentSubject.id);
+    const currentLessonData = currentSubjectData?.lessons.find(l => l.id === currentLesson.id);
 
     const handleChangeGrade = (grade: string) => {
         const gradeData = curriculum.find(g => g.grade === grade);
@@ -111,7 +111,7 @@ export default function DocHeader({
             const firstSubject = subjects[0];
             const firstLesson = firstSubject.lessons[0];
             const firstTopic = firstLesson.topics[0];
-            window.location.href = `/docs/${grade}/${firstSubject.subject}/${firstLesson.lesson}/${firstTopic.id}`;
+            window.location.href = `/docs/${gradeData.id}/${firstSubject.id}/${firstLesson.id}/${firstTopic.id}`;
         }
     }
 
@@ -124,11 +124,11 @@ export default function DocHeader({
                         <div className="flex items-center gap-4">
                             {subjects.map((subject) => {
                                 const Icon = ICON_MAP[subject.icon];
-                                const isActive = currentSubject === subject.subject;
+                                const isActive = currentSubject.id === subject.id;
                                 return (
                                     <Link
                                         key={subject.subject}
-                                        href={`/docs/${currentGrade}/${subject.subject}/${subject.lessons[0].lesson}/${subject.lessons[0].topics[0].id}`}
+                                        href={`/docs/${gradeData.id}/${subject.id}/${subject.lessons[0].id}/${subject.lessons[0].topics[0].id}`}
                                         className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${isActive
                                             ? 'text-indigo-600 bg-indigo-50/90 border border-indigo-500/20 shadow-sm'
                                             : 'text-gray-600 bg-white/80 backdrop-blur-sm border border-indigo-500/10 hover:text-indigo-600 hover:bg-indigo-50/90'
@@ -143,7 +143,7 @@ export default function DocHeader({
                         {/* Grade select for desktop */}
                         <div className="hidden lg:flex items-center bg-indigo-50/50 p-1 gap-4 rounded-full">
                             {grades.map((grade) => {
-                                const isActive = currentGrade === grade.value;
+                                const isActive = gradeData.grade === grade.value;
                                 return (
                                     <button
                                         key={grade.value}
@@ -218,11 +218,11 @@ export default function DocHeader({
                         <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
                             {subjects.map((subject) => {
                                 const Icon = ICON_MAP[subject.icon];
-                                const isActive = currentSubject === subject.subject;
+                                const isActive = currentSubject.id === subject.id;
                                 return (
                                     <Link
                                         key={subject.subject}
-                                        href={`/docs/${currentGrade}/${subject.subject}/${subject.lessons[0].lesson}/${subject.lessons[0].topics[0].englishTitle}`}
+                                        href={`/docs/${gradeData.id}/${subject.id}/${subject.lessons[0].id}/${subject.lessons[0].topics[0].id}`}
                                         className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-xs whitespace-nowrap flex-shrink-0 ${isActive
                                             ? 'text-indigo-600 bg-indigo-50/90 border border-indigo-500/20 shadow-sm'
                                             : 'text-gray-600 bg-white/80 backdrop-blur-sm border border-indigo-500/10 hover:text-indigo-600 hover:bg-indigo-50/90'
@@ -238,7 +238,10 @@ export default function DocHeader({
                         {/* Mobile Grade Dropdown */}
                         <Listbox value={currentGradeData} onChange={(grade) => {
                             if (grade) {
-                                window.location.href = `/docs/${grade.value}/${subjects[0].subject}/${subjects[0].lessons[0].lesson}/${subjects[0].lessons[0].topics[0].englishTitle}`;
+                                const targetGrade = curriculum.find(g => g.grade === grade.value);
+                                if (targetGrade) {
+                                    window.location.href = `/docs/${targetGrade.id}/${targetGrade.content[0].id}/${targetGrade.content[0].lessons[0].id}/${targetGrade.content[0].lessons[0].topics[0].id}`;
+                                }
                             }
                         }}>
                             <div className="relative">
@@ -288,7 +291,7 @@ export default function DocHeader({
                         {/* Mobile Lesson Dropdown */}
                         <Listbox value={currentLessonData} onChange={(lesson) => {
                             if (lesson) {
-                                window.location.href = `/docs/${currentGrade}/${currentSubject}/${lesson.lesson}/${lesson.topics[0].englishTitle}`;
+                                window.location.href = `/docs/${gradeData.id}/${currentSubject.id}/${lesson.id}/${lesson.topics[0].id}`;
                             }
                         }}>
                             <div className="relative">
@@ -305,7 +308,7 @@ export default function DocHeader({
                                     leaveTo="transform scale-95 opacity-0"
                                 >
                                     <Listbox.Options className="absolute left-0 mt-2 w-48 bg-white/95 rounded-3xl border border-indigo-500/20 shadow-lg backdrop-blur-sm z-50 max-h-60 overflow-auto scrollbar-hide p-1.5 focus:outline-none">
-                                        {subjects.find(s => s.subject === currentSubject)?.lessons.map(lesson => (
+                                        {subjects.find(s => s.id === currentSubject.id)?.lessons.map(lesson => (
                                             <Listbox.Option
                                                 key={lesson.lesson}
                                                 value={lesson}
@@ -329,12 +332,12 @@ export default function DocHeader({
 
                         {/* Mobile Topics */}
                         <div ref={topicsScrollRef} className="flex items-center gap-2 overflow-x-auto scrollbar-hide" id="topics-scroll-container">
-                            {subjects.find(s => s.subject === currentSubject)?.lessons.find(l => l.lesson === currentLesson)?.topics.map((topic, index) => {
-                                const isActive = currentTopic === topic.englishTitle;
+                            {subjects.find(s => s.id === currentSubject.id)?.lessons.find(l => l.id === currentLesson.id)?.topics.map((topic, index) => {
+                                const isActive = currentTopic.id === topic.id;
                                 return (
                                     <Link
                                         key={topic.englishTitle}
-                                        href={`/docs/${currentGrade}/${currentSubject}/${currentLesson}/${topic.englishTitle}`}
+                                        href={`/docs/${gradeData.id}/${currentSubject.id}/${currentLesson.id}/${topic.id}`}
                                         className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-xs whitespace-nowrap flex-shrink-0 ${isActive
                                             ? 'text-indigo-600 bg-indigo-50/90 border border-indigo-500/20 shadow-sm'
                                             : 'text-gray-600 bg-white/80 backdrop-blur-sm border border-indigo-500/10 hover:text-indigo-600 hover:bg-indigo-50/90'

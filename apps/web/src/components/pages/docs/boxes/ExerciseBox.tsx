@@ -50,7 +50,7 @@ export function ExerciseBox({ questions }: ExerciseBoxProps) {
   };
 
   return (
-    <div className="bg-white/95 backdrop-blur-sm border-2 border-indigo-500/20 rounded-3xl p-6 my-6 shadow-lg shadow-indigo-500/15">
+    <div className="bg-white/95 backdrop-blur-sm border-2 border-indigo-500/20 rounded-3xl p-4 my-6 shadow-lg shadow-indigo-500/15">
       {/* Header */}
       <div className="flex items-center justify-between mb-6 pb-4 border-b border-indigo-500/20">
         <div className="text-indigo-600 font-semibold text-lg flex gap-2 items-center">

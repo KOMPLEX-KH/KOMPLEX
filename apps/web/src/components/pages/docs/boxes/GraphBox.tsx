@@ -15,7 +15,7 @@ export  function GraphBox({ expressions, options }: GraphBoxProps) {
 
     return (
         <>
-            <div className="bg-indigo-50/80 border border-indigo-600 my-6 rounded-3xl p-6 shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+            <div className="bg-indigo-50/80 border border-indigo-600 my-6 rounded-3xl p-4 shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
                 <div className="relative group bg-white rounded-3xl">
                     <Graph expressions={expressions} options={options} />
                     <button

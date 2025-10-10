@@ -4,7 +4,6 @@ import axios from "@/configs/axios";
 import DocHeader from "@components/pages/docs/DocHeader";
 import Sidebar from "@components/pages/docs/Sidebar";
 import TopicWrapper from "@components/pages/docs/TopicWrapper";
-import { notFound } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Grade } from "@/types/docs/curriculum";
@@ -70,7 +69,7 @@ export default function Page() {
             };
             fetchCurriculum();
         }
-    }, [curriculum.length]);
+    }, [curriculum.length, params.grade, params.subject, params.lesson, params.topic]);
 
 
     // Fetch topic component (just the JSON string)
@@ -97,7 +96,7 @@ export default function Page() {
             const nav = getNavigation(curriculum, params);
             setNavigation(nav);
         }
-    }, [curriculum, params.grade, params.subject, params.lesson, params.topic]);
+    }, [curriculum, params]);
 
     // Get topic info from curriculum
     const getTopicInfo = () => {
@@ -120,13 +119,19 @@ export default function Page() {
                     currentTopic={curriculum.length > 0 ? { id: parseInt(params.topic) } : undefined}
                 />
                 <DocHeader
-                    currentGrade={getTopicInfo().grade?.grade}
-                    currentSubject={getTopicInfo().subject?.subject}
-                    currentLesson={getTopicInfo().lesson?.lesson}
-                    currentTopic={getTopicInfo().topic?.title}
+                    currentGrade={{ id: parseInt(params.grade) }}
+                    currentSubject={{ id: parseInt(params.subject) }}
+                    currentLesson={{ id: parseInt(params.lesson) }}
+                    currentTopic={{ id: parseInt(params.topic) }}
                 />
                 <div className="w-full lg:ml-70 lg:mt-30 mt-40 p-5 lg:p-6">
-                    <Skeleton />
+                    <TopicWrapper
+                        title={getTopicInfo().topic?.title}
+                        prev={navigation?.prev}
+                        next={navigation?.next}
+                    >
+                        <Skeleton />
+                    </TopicWrapper>
                 </div>
 
             </div>
@@ -145,10 +150,10 @@ export default function Page() {
                     currentTopic={{ id: parseInt(params.topic) }}
                 />
                 <DocHeader
-                    currentGrade={getTopicInfo().grade?.grade}
-                    currentSubject={getTopicInfo().subject?.subject}
-                    currentLesson={getTopicInfo().lesson?.lesson}
-                    currentTopic={getTopicInfo().topic?.title}
+                    currentGrade={{ id: parseInt(params.grade) }}
+                    currentSubject={{ id: parseInt(params.subject) }}
+                    currentLesson={{ id: parseInt(params.lesson) }}
+                    currentTopic={{ id: parseInt(params.topic) }}
                 />
                 <div className="w-full lg:ml-70 lg:mt-30 mt-40 p-5 lg:p-6">
                     <TopicWrapper
@@ -174,10 +179,10 @@ export default function Page() {
                 currentTopic={{ id: parseInt(params.topic) }}
             />
             <DocHeader
-                currentGrade={getTopicInfo().grade?.grade}
-                currentSubject={getTopicInfo().subject?.subject}
-                currentLesson={getTopicInfo().lesson?.lesson}
-                currentTopic={getTopicInfo().topic?.title}
+                currentGrade={{ id: parseInt(params.grade) }}
+                currentSubject={{ id: parseInt(params.subject) }}
+                currentLesson={{ id: parseInt(params.lesson) }}
+                currentTopic={{ id: parseInt(params.topic) }}
             />
             <div className="w-full lg:ml-70 lg:mt-30 mt-40 p-5 lg:p-6">
                 <TopicWrapper
