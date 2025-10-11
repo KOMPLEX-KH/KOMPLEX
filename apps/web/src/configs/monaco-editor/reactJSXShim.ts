@@ -62,4 +62,5 @@ declare global {
 }
 
 declare const InlineMath: React.ComponentType<{ math: string }>;
+declare const BlockMath: React.ComponentType<{ math: string }>;
 `;

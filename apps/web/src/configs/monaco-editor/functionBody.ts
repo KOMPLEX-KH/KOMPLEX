@@ -1,25 +1,26 @@
-export const FUNCTION_BODY = `const React = arguments[0];
+export const FUNCTION_BODY = `
+                const React = arguments[0];
                 const InlineMath = arguments[1];
-                const Calculator = arguments[2];
-                const DefinitionBox = arguments[3];
-                const TipBox = arguments[4];
-                const ExampleBox = arguments[5];
-                const ExerciseBox = arguments[6];
-                const HintBox = arguments[7];
-                const WarningBox = arguments[8];
-                const CustomBox = arguments[9];
-                const GraphBox = arguments[10];
-                const ThreeDBox = arguments[11];
-                const SummaryBox = arguments[12];
-                const ExamQuestionBox = arguments[13];
-                const ExerciseCreationBox = arguments[14];
-                const TopicPracticeBox = arguments[15];
-                const ThreeDExplanationBox = arguments[16];
-                const GraphExplanationBox = arguments[17];
-                const ImageExplanationBox = arguments[18];
-                const VideoExplanationBox = arguments[19];
-                const IconsRaw = arguments[20];
-                
+                const BlockMath = arguments[2];
+                const Calculator = arguments[3];
+                const DefinitionBox = arguments[4];
+                const TipBox = arguments[5];
+                const ExampleBox = arguments[6];
+                const ExerciseBox = arguments[7];
+                const HintBox = arguments[8];
+                const WarningBox = arguments[9];
+                const CustomBox = arguments[10];
+                const GraphBox = arguments[11];
+                const ThreeDBox = arguments[12];
+                const SummaryBox = arguments[13];
+                const ExamQuestionBox = arguments[14];
+                const ExerciseCreationBox = arguments[15];
+                const TopicPracticeBox = arguments[16];
+                const ThreeDExplanationBox = arguments[17];
+                const GraphExplanationBox = arguments[18];
+                const ImageExplanationBox = arguments[19];
+                const VideoExplanationBox = arguments[20];
+                const IconsRaw = arguments[21];
                 // Safe icon wrapper to prevent crashes
                 const SafeIcon = ({ name, ...props }) => {
                     const IconComponent = IconsRaw[name];
@@ -40,4 +41,4 @@ export const FUNCTION_BODY = `const React = arguments[0];
                         }
                         return (props) => React.createElement(SafeIcon, { name: prop, ...props });
                     }
-                });`
+                });`;

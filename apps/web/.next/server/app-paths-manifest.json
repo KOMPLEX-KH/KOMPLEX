@@ -2,6 +2,7 @@
   "/_not-found/page": "app/_not-found/page.js",
   "/ai/page": "app/ai/page.js",
   "/docs/[grade]/[subject]/[lesson]/[topic]/page": "app/docs/[grade]/[subject]/[lesson]/[topic]/page.js",
+  "/docs/page": "app/docs/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/test/page": "app/test/page.js"
 }
