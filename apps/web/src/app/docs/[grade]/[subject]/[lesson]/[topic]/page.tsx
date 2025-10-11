@@ -77,11 +77,21 @@ export default function Page() {
         const fetchTopicComponent = async () => {
             try {
                 setIsLoadingTopic(true);
-                const res = await axios.get(`http://localhost:6969/api/feed/lessons/${params.grade}/${params.subject}/${params.lesson}/${params.topic}`);
+                const res = await axios.get(`http://localhost:6969/api/feed/lessons/${params.topic}`);
+                if (res.status !== 200) {
+                    // If not 200, forcibly redirect using window.location (client-side equivalent for notFound)
+                    window.location.href = "/not-found";
+                    return;
+                }
                 setTopicComponent(res.data.data ? JSON.stringify(res.data.data) : null);
-            } catch (error) {
-                console.error('Error fetching topic component:', error);
-                setTopicComponent(null);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (error: any) {
+                // If we get an Axios error with a response, handle 404 or others properly for redirect
+                if (error.response && error.response.status === 404) {
+                    window.location.href = "/not-found";
+                } else {
+                    console.error('Error fetching topic component:', error);
+                }
             } finally {
                 setIsLoadingTopic(false);
             }

@@ -29,10 +29,10 @@ export default function ComingSoon() {
   };
 
   return (
-    <div className="relative w-full h-full min-h-[600px] overflow-hidden">
+    <div className="relative w-full h-full min-h-[700px] overflow-hidden">
       {/* Background Components with Fake Data */}
       <div className="absolute inset-0 opacity-20 pointer-events-none h-full">
-        <div className="p-6 space-y-4">
+        <div className="p-2 space-y-4">
           <DefinitionBox
             title={fakeDefinition.title}
             content={fakeDefinition.content}
@@ -44,7 +44,7 @@ export default function ComingSoon() {
 
       {/* Overlay Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/10 backdrop-blur-xs">
-        <div className="text-center space-y-4 p-8">
+        <div className="text-center space-y-4 ">
           {/* Icon */}
           <div className="relative">
             <div className="w-20 h-20 bg-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
