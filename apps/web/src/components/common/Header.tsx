@@ -8,7 +8,7 @@ import FeedbackModal from '../pages/feedbacks/FeedbackModal';
 import { useAuth } from '@hooks/useAuth';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/configs/firebase';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Logo } from './Logo';
 
 const navLinks = [
@@ -57,6 +57,11 @@ export default function Header() {
 
 
     const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const handleLogout = async () => {
         try {
@@ -119,7 +124,7 @@ export default function Header() {
                                     })}
                                 </div>
                                 {/* Mobile: User area and actions */}
-                                {!loading && (
+                                {mounted && !loading && (
                                     <div className="mt-2 p-2">
                                         <div className='h-0.5  my-2'></div>
                                         {user ? (
@@ -222,7 +227,9 @@ export default function Header() {
                         })}
 
                         {/* User Menu or Sign Up Button */}
-                        {loading || pathname === "/auth" ? null : user ? (
+                        {pathname === "/auth" ? null : !mounted || loading ? (
+                            <div className="ml-2" />
+                        ) : user ? (
                             <HeadlessMenu as="div" className="relative ml-2">
                                 <HeadlessMenu.Button className="flex items-center gap-2 rounded-full transition-colors duration-200 cursor-pointer focus:outline-none">
                                     {user.profileImage ? (

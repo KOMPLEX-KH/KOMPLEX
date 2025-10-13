@@ -1,233 +1,143 @@
-import { View, Text, StyleSheet, Pressable, TextInput, ScrollView } from 'react-native';
-import Logo from '@/components/logo';
-import { BookOpen, Pencil, Newspaper, MessageSquare, PlayCircle, Bot, Search, Home, Layers, ListChecks, PlaySquare, Users, MoreHorizontal } from 'lucide-react-native';
+import { FlatList, Pressable, TextInput, View } from 'react-native';
 import { tw } from '@/utils/styles';
+import Logo from '@/components/common/Logo';
+import { Text } from '@/components/common/Text';
+import { ArrowRight, Bell, BookOpen, Bot, Camera, Edit, MessageSquare, Search } from 'lucide-react-native'
+import FeatureCard from '@/components/screens/home/featureCard';
+import PostCard from '@/components/screens/home/postCard';
+import { TAILWIND_COLORS } from '@/constants/styles/tailwind-colors';
+
+const MAIN_FEATURES = [
+    {
+        title: 'មេរៀន',
+        icon: <BookOpen size={28} color={"white"} />,
+        href: '/docs',
+    },
+    {
+        title: 'អនុវត្តន៍',
+        icon: <Edit size={28} color={"white"} />,
+        href: '/exercises',
+    },
+    {
+        title: 'តារា AI',
+        icon: <Bot size={28} color={"white"} />,
+        href: '/ai'
+    },
+    {
+        title: 'ពិភាក្សា',
+        icon: <MessageSquare size={28} color={"white"} />,
+        href: '/forums',
+    },
+    {
+        title: 'អត្ថបទ',
+        icon: <BookOpen size={28} color={"white"} />,
+        href: '/blogs',
+    },
+    {
+        title: 'វីដេអូ',
+        icon: <Camera size={28} color={"white"} />,
+        href: '/videos'
+    },
+
+]
 
 export default function HomeScreen() {
     return (
-        <View>
-            <Text style={tw("text-red-500")}>Hello</Text>
-        </View>
+        <FlatList
+            data={MAIN_FEATURES}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={3}
+            style={tw("bg-white flex-1")}
+            contentContainerStyle={tw("px-4 py-6 pb-20")}
+            showsVerticalScrollIndicator={false}
+            ListHeaderComponent={
+                <>
+                    <View style={tw("flex-row items-center justify-between mb-6")}>
+                        <Logo />
+                        <Pressable style={tw("rounded-full bg-indigo-600 p-2")}>
+                            <Bell size={20} color="white" />
+                        </Pressable>
+                    </View>
+                    {/* <View style={tw("flex-row items-center justify-between mb-6")}>
+                        <Text style={tw("text-3xl font-extrabold italic")}>សួស្ដី រក្សា!</Text>
+                        <Pressable style={tw("rounded-full bg-indigo-600 px-5 py-3 flex-row items-center gap-2")}>
+                            <Text style={tw("text-white font-bold italic")}>បន្តមេរៀន</Text>
+                            <ArrowRight size={18} color="white" />
+                        </Pressable>
+                    </View> */}
+                </>
+            }
+            renderItem={({ item }) => (
+                <View style={tw("flex-1 py-2 px-1")}>
+                    <FeatureCard {...(item as any)} />
+                </View>
+            )}
+            ListFooterComponent={
+                <View style={tw("mt-8")}>
+                    <View style={tw("flex-row items-center justify-between gap-2 mb-8")}>
+                        <TextInput placeholder="ស្វែងរក" placeholderTextColor={TAILWIND_COLORS["gray-500"]} style={tw("border border-gray-300 rounded-full px-3 py-2 flex-1 font-kh-medium")} />
+                        <Pressable style={tw("rounded-full bg-indigo-600 p-2")}>
+                            <Search size={20} color="white" />
+                        </Pressable>
+                    </View>
+                    <View style={tw("gap-4")}>
+                        <PostCard
+                            title="បច្ចេកវិទ្យា AI កំពុងផ្លាស់ប្តូរវិធីសាស្ត្រសិក្សា"
+                            username="TechEdu"
+                            createdAt="2 ថ្ងៃមុន"
+                            description="យើងកំពុងសាកល្បងប្រើ AI ដើម្បីជួយសិស្សចងចាំ និងយល់បានកាន់តែងាយស្រួល។"
+                            image="https://komplex.app/chemistry/pic27.png"
+                            href="/"
+                        />
+
+                        <PostCard
+                            title="កីឡា៖ ក្រុមជម្រើសជាតិឈ្នះជើងឯកអាស៊ាន"
+                            username="SportNews"
+                            createdAt="1 ម៉ោងមុន"
+                            description="កម្ពុជាបានឈ្នះការប្រកួតបាល់ទាត់អាស៊ានជាមួយលទ្ធផល 3-1។"
+                            image="https://pub-92b72a731f7641aba0ab9d1897016909.r2.dev/1-0cb1a888-8dad-48a9-9256-6b3a9a93bb5c-the-quadratic-formula-for-the-practice-problems-with-answers-1024x655.webp"
+                            href="/"
+                        />
+
+                        <PostCard
+                            title="សិល្បៈនិងវប្បធម៌៖ ពិព័រណ៍គំនូរថ្មីនៅភ្នំពេញ"
+                            username="CultureKH"
+                            createdAt="ម្សិលមិញ"
+                            description="ពិព័រណ៍បង្ហាញស្នាដៃរបស់សិល្បករវ័យក្មេង ជាមួយនឹងការច្នៃប្រឌិតថ្មីៗ។"
+                            image="https://pub-92b72a731f7641aba0ab9d1897016909.r2.dev/12-4f3cc4ef-ef59-4bfe-b0d4-bfa56dc79140-anoushka-puri-f1YfrZ1o2r8-unsplash.jpg"
+                            href="/"
+                        />
+
+                        <PostCard
+                            title="New React Native 0.74 Features You Should Know"
+                            username="DevTalk"
+                            createdAt="5 ថ្ងៃមុន"
+                            description="From performance boosts to new styling APIs, here's what's exciting in the latest version."
+                            image="https://pub-92b72a731f7641aba0ab9d1897016909.r2.dev/15-4001721e-900b-43aa-9cf8-ce73e84582df-IMG_6865.jpeg"
+                            href="/"
+                        />
+
+                        <PostCard
+                            title="សុខភាព៖ គន្លឹះក្នុងការថែរក្សាស្បែកនៅរដូវក្តៅ"
+                            username="HealthTips"
+                            createdAt="3 ម៉ោងមុន"
+                            description="ការផឹកទឹកច្រើន និងការប្រើសាប៊ូសម្អាតស្បែកល្មម អាចជួយរក្សាសុខភាពស្បែកបាន។"
+                            image="https://pub-92b72a731f7641aba0ab9d1897016909.r2.dev/2-3d250cdf-bf5d-4671-a34d-0dce1a36066d-GettyImages-713784033-5962f27b3df78cdc68bb2b6d.jpg"
+                            href="/"
+                        />
+                    </View>
+
+                    <Pressable
+                        style={tw("rounded-full bg-indigo-600 px-6 py-4 flex-row items-center justify-center mt-6")}>
+                        <Text style={tw("text-white font-bold italic mr-2")}>មើលបន្ថែម</Text>
+                        <ArrowRight size={18} color="white" />
+                    </Pressable>
+                </View>
+            }
+        />
     );
 }
 
-function FeatureCard({ title, Icon }: { title: string; Icon: any }) {
-    return (
-        <Pressable style={styles.featureCard} android_ripple={{ color: 'rgba(99,102,241,0.12)', borderless: false }}>
-            <View style={styles.featureIconBox}>
-                <Icon color="#fff" size={26} />
-            </View>
-            <Text style={styles.featureTitle}>{title}</Text>
-        </Pressable>
-    );
-}
 
-function RecentItem({ name, Icon }: { name: string; Icon: any }) {
-    return (
-        <Pressable style={styles.recentItem} android_ripple={{ color: '#f3f4f6' }}>
-            <View style={styles.recentIconBox}>
-                <Icon color="#fff" size={18} />
-            </View>
-            <View style={{ flex: 1 }}>
-                <Text style={styles.recentName}>{name}</Text>
-            </View>
-        </Pressable>
-    );
-}
 
-function NavItem({ Icon, active = false }: { Icon: any; active?: boolean }) {
-    return (
-        <Pressable style={[styles.navItem, active && styles.navItemActive]} android_ripple={{ color: '#eef2ff', borderless: true }}>
-            <Icon color={active ? '#6366f1' : '#9ca3af'} size={22} />
-        </Pressable>
-    );
-}
 
-const styles = StyleSheet.create({
-    root: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    appBar: {
-        backgroundColor: '#fff',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-    },
-    content: {
-        padding: 16,
-        paddingBottom: 120,
-    },
-    welcome: {
-        fontSize: 22,
-        fontWeight: '600',
-        color: '#111827',
-        textAlign: 'center',
-        marginBottom: 6,
-    },
-    welcomeSub: {
-        fontSize: 14,
-        color: '#6b7280',
-        textAlign: 'center',
-        marginBottom: 18,
-    },
-    grid: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        gap: 12,
-        marginBottom: 18,
-    },
-    featureCard: {
-        width: '48%',
-        backgroundColor: '#fff',
-        borderRadius: 14,
-        paddingVertical: 18,
-        paddingHorizontal: 14,
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'transparent',
-        shadowColor: '#000',
-        shadowOpacity: 0.06,
-        shadowRadius: 8,
-        shadowOffset: { width: 0, height: 2 },
-    },
-    featureIconBox: {
-        width: 56,
-        height: 56,
-        backgroundColor: '#6366f1',
-        borderRadius: 16,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 10,
-    },
-    featureTitle: {
-        fontSize: 15,
-        fontWeight: '600',
-        color: '#111827',
-        marginBottom: 3,
-    },
-    featureSubtitle: {
-        fontSize: 12,
-        color: '#6b7280',
-        textAlign: 'center',
-    },
-    searchSection: {
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        padding: 16,
-        shadowColor: '#000',
-        shadowOpacity: 0.06,
-        shadowRadius: 8,
-        shadowOffset: { width: 0, height: 2 },
-        marginBottom: 16,
-    },
-    searchTitle: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#111827',
-        marginBottom: 10,
-    },
-    searchBar: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#f3f4f6',
-        borderRadius: 10,
-        paddingHorizontal: 12,
-        paddingVertical: 10,
-        gap: 10,
-    },
-    searchInput: {
-        flex: 1,
-        fontSize: 16,
-        color: '#111827',
-        padding: 0,
-    },
-    recentSection: {
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        padding: 16,
-        shadowColor: '#000',
-        shadowOpacity: 0.06,
-        shadowRadius: 8,
-        shadowOffset: { width: 0, height: 2 },
-    },
-    recentTitle: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#111827',
-        marginBottom: 6,
-    },
-    recentItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#f3f4f6',
-    },
-    recentIconBox: {
-        width: 40,
-        height: 40,
-        backgroundColor: '#6366f1',
-        borderRadius: 8,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: 12,
-    },
-    recentName: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: '#111827',
-        marginBottom: 2,
-    },
-    aiFab: {
-        position: 'absolute',
-        bottom: 90,
-        right: 20,
-        width: 56,
-        height: 56,
-        backgroundColor: '#6366f1',
-        borderRadius: 28,
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: '#6366f1',
-        shadowOpacity: 0.3,
-        shadowRadius: 12,
-        shadowOffset: { width: 0, height: 6 },
-    },
-    bottomNav: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: '#fff',
-        borderTopWidth: 1,
-        borderTopColor: '#e5e7eb',
-        paddingTop: 6,
-        paddingBottom: 16,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        shadowColor: '#000',
-        shadowOpacity: 0.06,
-        shadowRadius: 8,
-        shadowOffset: { width: 0, height: -2 },
-    },
-    navItem: {
-        alignItems: 'center',
-        paddingVertical: 10,
-        paddingHorizontal: 6,
-        minWidth: 50,
-        borderRadius: 10,
-    },
-    navItemActive: {
-        backgroundColor: '#f5f7ff',
-    },
-    navLabel: {
-        fontSize: 10,
-        color: '#6b7280',
-        fontWeight: '600',
-        marginTop: 4,
-    },
-    navLabelActive: {
-        color: '#6366f1',
-    },
-});
