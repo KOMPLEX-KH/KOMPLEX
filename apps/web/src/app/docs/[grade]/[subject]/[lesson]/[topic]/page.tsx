@@ -77,7 +77,7 @@ export default function Page() {
                     prev={navigation.prev}
                     next={navigation.next}
                 >
-                    <TestingRenderer />
+                <Component />
                 </TopicWrapper>
             </div>
         </div>
