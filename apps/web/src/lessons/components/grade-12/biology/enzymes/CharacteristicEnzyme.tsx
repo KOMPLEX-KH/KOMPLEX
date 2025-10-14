@@ -12,7 +12,6 @@ import image3 from '../../../../../../public/docs/grade-12/biology/Enzyme/GraphO
 
 import { ImageExplanationBox } from '@/components/pages/docs/boxes/explanation-box/ImageExplanationBox';
 import { TipBox } from '@/components/pages/docs/boxes/TipBox';
-import { ExampleBox } from '@/components/pages/docs/boxes/ExampleBox';
 
 const items: TopicContent_V3[] = [
   {
@@ -28,6 +27,7 @@ const items: TopicContent_V3[] = [
   },
   {
     type: "example",
+    question: "",
     content: (
       <div>
         <p>កាតាឡាសមួយម៉ូលេគុល អាចបំបែកម៉ូលេគុលអុីដ្រូសែនពែអុកសុីតរាប់លានតែក្នុងមួយវិនាទី</p>
@@ -49,7 +49,7 @@ const items: TopicContent_V3[] = [
     title: "ក. ឥទ្ធិពលនៃសីតុណ្ហភាពលើសកម្មភាពអង់សុីម",
     content: (
       <ImageExplanationBox
-        src={image}
+        src={image.src}
         imageAlt="Graph of enzyme activity vs temperature"
         explanation={
           <div>
@@ -71,7 +71,7 @@ const items: TopicContent_V3[] = [
     title: "ខ. ឥទ្ធិពលpHទៅលើអង់សុីម",
     content: (
       <ImageExplanationBox
-        src={image2}
+        src={image2.src}
         imageAlt="Graph of enzyme activity on pH"
         explanation={
           <div>
@@ -93,7 +93,7 @@ const items: TopicContent_V3[] = [
     title: "គ. ឥទ្ធិពលកំហាប់ស៊ុបស្ត្រាតនិងអង់សុីមទៅលើប្រតិកម្ម",
     content: (
       <ImageExplanationBox
-        src={image3}
+        src={image3.src}
         imageAlt=" Graph of enzyme activity vs substrate concentration"
         explanation={
           <div>
