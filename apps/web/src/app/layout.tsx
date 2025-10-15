@@ -1,16 +1,15 @@
 'use client';
 
-import type { Metadata } from "next";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@components/common/Header";
 import ModalRoot from "@components/common/ModalRoot";
 import Script from "next/script";
 import { AuthProvider } from "@hooks/useAuth";
-import "katex/dist/katex.min.css";
 import { useEffect, useState } from "react";
 import { Grade } from "@core-types/docs/curriculum";
-import axios from "@/configs/axios";
+import { feedLessonsService } from "@/services";
+import "katex/dist/katex.min.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,23 +40,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [curriculum, setCurriculum] = useState<Grade[]>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem("curriculum");
-      return stored ? JSON.parse(stored) : [];
-    }
-    return [];
-  });
+
   useEffect(() => {
     const stored = localStorage.getItem("curriculum");
     if (stored) {
-      setCurriculum(JSON.parse(stored));
       return;
     }
     const fetchCurriculum = async () => {
-      const res = await axios.get('http://localhost:6969/api/feed/lessons');
-      setCurriculum(res.data.data);
-      localStorage.setItem('curriculum', JSON.stringify(res.data.data));
+      try {
+        const curriculumData = await feedLessonsService.getCurriculum();
+
+        localStorage.setItem('curriculum', JSON.stringify(curriculumData));
+      } catch (error) {
+        console.error('Error fetching curriculum:', error);
+      }
     };
     fetchCurriculum();
   }, []);

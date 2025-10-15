@@ -2,7 +2,7 @@
 
 import { Image as ImageIcon, Maximize2, X } from 'lucide-react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import Image from 'next/image'
 
 export interface ImageBoxProps {
@@ -14,6 +14,11 @@ export interface ImageBoxProps {
 
 export const ImageExplanationBox = ({ src, imageAlt, explanation, title }: ImageBoxProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [source, setSource] = useState("https://assets.komplex.app" + src);
+
+    useEffect(() => {
+        setSource("https://assets.komplex.app" + src);
+    }, [src]);
 
     return (
         <>
@@ -22,7 +27,7 @@ export const ImageExplanationBox = ({ src, imageAlt, explanation, title }: Image
                     <div className="grid grid-cols-1 gap-6">
                         <div className="w-full relative group bg-white rounded-3xl">
                             <Image
-                                src={src || '/image-error.png'}
+                                src={source || '/image-error.png'}
                                 alt={imageAlt}
                                 width={800}
                                 height={600}
@@ -92,7 +97,7 @@ export const ImageExplanationBox = ({ src, imageAlt, explanation, title }: Image
                                             <X size={20} />
                                         </button>
                                         <Image
-                                            src={src || '/image-error.png'}
+                                            src={source || '/image-error.png'}
                                             alt={imageAlt}
                                             width={1200}
                                             height={800}

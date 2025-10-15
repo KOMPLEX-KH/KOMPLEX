@@ -4,7 +4,7 @@ import BulletList from '@components/helper/BulletList';
 import { VideoPlayer } from '@components/helper/VideoPlayer';
 import { Video, Maximize2, X } from 'lucide-react';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 export interface VideoBoxProps {
     src?: string;
@@ -14,6 +14,11 @@ export interface VideoBoxProps {
 
 export const VideoExplanationBox = ({ src, videoTitle, explanation }: VideoBoxProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [source, setSource] = useState("https://assets.komplex.app" + src);
+
+    useEffect(() => {
+        setSource("https://assets.komplex.app" + src);
+    }, [src]);
 
     return (
         <>
@@ -21,10 +26,10 @@ export const VideoExplanationBox = ({ src, videoTitle, explanation }: VideoBoxPr
                 <div className="bg-indigo-50/80 border border-indigo-600 p-4 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
                     <div className="grid grid-cols-1 gap-6">
                         <div className="w-full relative group">
-                            {src ? (
+                            {source ? (
                                 <>
                                     <VideoPlayer
-                                        src={src}
+                                        src={source}
                                         poster="/angkor.jpg"
                                         className="rounded-lg shadow-md h-auto w-full"
                                     />
@@ -120,9 +125,9 @@ export const VideoExplanationBox = ({ src, videoTitle, explanation }: VideoBoxPr
                                         >
                                             <X size={20} />
                                         </button>
-                                        {src ? (
+                                        {source ? (
                                             <VideoPlayer
-                                                src={src}
+                                                src={source}
                                                 poster="/angkor.jpg"
                                                 className="w-full h-auto max-h-[80vh] object-contain"
                                             />

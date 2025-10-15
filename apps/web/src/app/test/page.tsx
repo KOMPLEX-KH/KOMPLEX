@@ -1,7 +1,7 @@
 'use client'
 
-import EditorAndPreview from '@/components/pages/notes/EditorAndPreview'
+import { ThreeDExplanationBox } from '@/components/pages/docs/boxes/explanation-box/3DExplanationBox'
 
 export default function SerializationTest() {
-    return <EditorAndPreview />
+    return <ThreeDExplanationBox explanation="Hello" src="/adn.glb" />
 }

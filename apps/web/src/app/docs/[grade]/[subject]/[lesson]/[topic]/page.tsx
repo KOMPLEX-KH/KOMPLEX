@@ -1,6 +1,5 @@
 'use client';
 
-import axios from "@/configs/axios";
 import DocHeader from "@components/pages/docs/DocHeader";
 import Sidebar from "@components/pages/docs/Sidebar";
 import TopicWrapper from "@components/pages/docs/TopicWrapper";
@@ -11,6 +10,7 @@ import { deserializeTopicContentV3 } from "@/components/pages/docs/utils/Content
 import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
 import ComingSoon from "@/components/pages/docs/ComingSoon";
 import Skeleton from "@/components/pages/docs/Skeleton";
+import { feedLessonsService } from "@/services";
 
 
 type Params = { grade: string; subject: string; lesson: string; topic: string };
@@ -60,9 +60,9 @@ export default function Page() {
         if (curriculum.length === 0) {
             const fetchCurriculum = async () => {
                 try {
-                    const res = await axios.get('http://localhost:6969/api/feed/lessons');
-                    setCurriculum(res.data.data);
-                    localStorage.setItem('curriculum', JSON.stringify(res.data.data));
+                    const curriculumData = await feedLessonsService.getCurriculum();
+                    setCurriculum(curriculumData);
+                    localStorage.setItem('curriculum', JSON.stringify(curriculumData));
                 } catch (error) {
                     console.error('Error fetching curriculum:', error);
                 }
@@ -77,20 +77,16 @@ export default function Page() {
         const fetchTopicComponent = async () => {
             try {
                 setIsLoadingTopic(true);
-                const res = await axios.get(`http://localhost:6969/api/feed/lessons/${params.topic}`);
-                if (res.status !== 200) {
-                    // If not 200, forcibly redirect using window.location (client-side equivalent for notFound)
-                    window.location.href = "/not-found";
-                    return;
-                }
-                setTopicComponent(res.data.data ? JSON.stringify(res.data.data) : null);
+                const topicData = await feedLessonsService.getTopicComponent(params.topic);
+                setTopicComponent(topicData ? JSON.stringify(topicData.component) : null);
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
-                // If we get an Axios error with a response, handle 404 or others properly for redirect
+                // If we get an error, handle 404 or others properly for redirect
                 if (error.response && error.response.status === 404) {
                     window.location.href = "/not-found";
                 } else {
                     console.error('Error fetching topic component:', error);
+                    window.location.href = "/not-found";
                 }
             } finally {
                 setIsLoadingTopic(false);
@@ -149,7 +145,7 @@ export default function Page() {
     }
 
     // Show not found if no topic component
-    if (!topicComponent) {
+    if (!topicComponent || JSON.parse(topicComponent).length === 0) {
         console.log("No topic component");
         return (
             <div className="flex bg-gray-50 min-h-screen">

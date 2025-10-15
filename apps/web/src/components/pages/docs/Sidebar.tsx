@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ChevronDown, ChevronRight } from 'lucide-react';
-import axios from 'axios';
 import { Grade } from '@/types/docs/curriculum';
 import { ICON_MAP } from '@/utils/icon';
 import SidebarSkeleton from './SidebarSkeleton';
+import { feedLessonsService } from '@/services';
 
 interface SidebarProps {
     currentGrade?: { id: number };
@@ -36,9 +36,9 @@ export default function Sidebar({
         if (curriculum.length === 0) {
             const fetchCurriculum = async () => {
                 try {
-                    const res = await axios.get('http://localhost:6969/api/feed/lessons');
-                    setCurriculum(res.data.data);
-                    localStorage.setItem('curriculum', JSON.stringify(res.data.data));
+                    const curriculumData = await feedLessonsService.getCurriculum();
+                    setCurriculum(curriculumData);
+                    localStorage.setItem('curriculum', JSON.stringify(curriculumData));
                 } catch (error) {
                     console.error('Error fetching curriculum:', error);
                 }
