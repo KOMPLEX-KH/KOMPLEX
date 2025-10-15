@@ -11,6 +11,7 @@ import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
 import ComingSoon from "@/components/pages/docs/ComingSoon";
 import Skeleton from "@/components/pages/docs/Skeleton";
 import { feedLessonsService } from "@/services";
+import { DoTopicExercise } from "@/components/pages/docs/boxes/DoTopicExercise";
 
 
 type Params = { grade: string; subject: string; lesson: string; topic: string };
@@ -46,6 +47,7 @@ export default function Page() {
     const [topicComponent, setTopicComponent] = useState<string | null>(null);
     const [navigation, setNavigation] = useState<{ prev: { title: string; link: string } | null; next: { title: string; link: string } | null } | null>(null);
     const [isLoadingTopic, setIsLoadingTopic] = useState(true);
+    const [isExercise, setIsExercise] = useState(false);
     // Curriculum state (for sidebar only) - initialized from localStorage
     const [curriculum, setCurriculum] = useState<Grade[]>(() => {
         if (typeof window !== 'undefined') {
@@ -93,6 +95,11 @@ export default function Page() {
             }
         };
 
+        if (curriculum.find(g => g.id === parseInt(params.grade))?.content.find(s => s.id === parseInt(params.subject))?.lessons.find(l => l.id === parseInt(params.lesson))?.topics.find(t => t.id === parseInt(params.topic))?.exerciseId) {
+            setIsExercise(true);
+            return;
+        }
+
         fetchTopicComponent();
     }, [params.grade, params.subject, params.lesson, params.topic]);
 
@@ -136,7 +143,14 @@ export default function Page() {
                         prev={navigation?.prev}
                         next={navigation?.next}
                     >
-                        <Skeleton />
+                        {!isExercise ? (
+                            <Skeleton />
+                        ) : (
+                            <DoTopicExercise
+                                title={getTopicInfo().topic?.title}
+                                exerciseId={getTopicInfo().topic?.exerciseId}
+                            />
+                        )}
                     </TopicWrapper>
                 </div>
 

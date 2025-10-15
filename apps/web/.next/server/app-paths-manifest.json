@@ -3,6 +3,9 @@
   "/ai/page": "app/ai/page.js",
   "/docs/[grade]/[subject]/[lesson]/[topic]/page": "app/docs/[grade]/[subject]/[lesson]/[topic]/page.js",
   "/docs/page": "app/docs/page.js",
+  "/exercises/[id]/page": "app/exercises/[id]/page.js",
+  "/exercises/page": "app/exercises/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/forums/page": "app/forums/page.js",
   "/test/page": "app/test/page.js"
 }

@@ -40,5 +40,6 @@ export interface Topic {
   title: string; // Khmer topic name (e.g., "លីមីត ០/០")
   englishTitle: string; // English topic identifier (e.g., "zero-over-zero")
   component: string;
+  exerciseId: number;
   subtopics?: Topic[]; // Optional subtopics within this topic
 }
