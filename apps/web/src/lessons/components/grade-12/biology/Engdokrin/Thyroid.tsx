@@ -13,18 +13,27 @@ import {
 const TOPIC_CONTENT_V3: TopicContent_V3[] = [
   {
       type: "definition",
-      title: "៣.៣. ក្រពេញទីរ៉ូអ៊ុត",
+      title: "៣.៣. ក្រពេញទីរ៉ូអ៊ុីត",
       content: (
           <div className="flex flex-col items-start">
         </div>
       ),
   },
+  
+  {
+        type: "imageExplanation",
+        src: "/docs/grade-12/biology/mixs/pic57.jpg",
+        imageAlt: "រូបភាព",
+        explanation: [
+          "ក្រពេញទីរ៉ូអ៊ីតស្ថិតនៅត្រង់ក ចំពីក្រោមបំពង់សំលេង និងនៅខាងមុខបំពង់ខ្យល់។ វាផលិតអរម៉ូនទីរ៉ូអ៊ីត និងអរម៉ូនកាលស៊ីតូនីន។"
+      ],
+        title: "ក្រពេញទីរ៉ូអ៊ុត",
+  }, 
   {
       type: "tip",
       title: "ចំណាំ",
       content: (
         <ul className='flex flex-col gap-2 items-start list-disc ml-5'>
-            <li>វាផលិតអរម៉ូន២គឺ អរម៉ូនទីរ៉ុកស៊ីន និងកាល់ស៊ីតូនីន។</li>
             <li>អរម៉ូនទីរ៉ុកស៊ីនបង្កឡើងពីអាស៊ីតអាមីនេទីរ៉ូស៊ីនពីរដោយភ្ជាប់អាតូមអ៊ីយ៉ូតចំនួនបួន។</li>
             <li>អរម៉ូនទីរ៉ុកស៊ីនមាននាទីបង្កើនអត្រាមេតាបូលីស ប្រូតេអ៊ីន ភ្លុយស៊ីត និងខ្លាញ់។</li>
             <p>_ ការបរិភោគអាហារកង្វះជាតិអ៊ីយ៉ូតនៅក្នុងរបបអាហារធ្វើឲ្យក្រពេញទីរ៉ូអ៊ីតប៉ោងធំដែលបណ្តាលឲ្យ
@@ -36,15 +45,6 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
         </ul>
       ),
   },
-  {
-        type: "imageExplanation",
-        src: "/docs/grade-12/biology/mixs/",
-        imageAlt: "រូបភាព",
-        explanation: [
-        
-      ],
-        title: "ក្រពេញទីរ៉ូអ៊ុត",
-  }, 
 ];
 
 

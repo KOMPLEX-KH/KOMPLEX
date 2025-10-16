@@ -53,15 +53,6 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
         explanation: [
         
       ],
-        title: "ពងស្វាស",
-  },
-  {
-        type: "imageExplanation",
-        src: "/docs/grade-12/biology/mixs/",
-        imageAlt: "រូបភាព",
-        explanation: [
-        
-      ],
         title: "អ៊ីប៉ូភីសក្រោយ",
   },
   {

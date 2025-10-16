@@ -31,7 +31,7 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
   },
   {
         type: "imageExplanation",
-        src: "/docs/grade-12/biology/mixs/",
+        src: "/docs/grade-12/biology/mixs/pic60.jpg",
         imageAlt: "រូបភាព",
         explanation: [
         

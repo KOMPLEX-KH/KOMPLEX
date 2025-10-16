@@ -20,26 +20,24 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
       ),
   },
   {
+        type: "imageExplanation",
+        src: "/docs/grade-12/biology/mixs/pic65.jpg",
+        imageAlt: "រូបភាព",
+        explanation: [
+          "ទីមុសជាក្រពេញនៃប្រព័ន្ធទឹករងៃ ដែលស្ថិតនៅខាងលើនៃទ្រូង ក្បែរបេះដូង។ ក្រពេញទីមុសផលិតអរម៉ូនទីម៉ូស៊ីន។"
+      ],
+        title: "ក្រពេញទីមុស",
+  },
+  {
       type: "tip",
       title: "ចំណាំ",
       content: (
         <ul className='flex flex-col gap-2 items-start list-disc ml-5'>
-           <li>ទីមុសជាក្រពេញនៃប្រព័ន្ធទឹករងៃ ដែលស្ថិតនៅខាងលើនៃទ្រូង ក្បែរបេះដូង។</li>
-           <li> ក្រពេញទីមុសផលិតអរម៉ូនទីម៉ូស៊ីន។</li>
            <li>អរម៉ូនទីម៉ូស៊ីនមាននាទី: </li>
            <p>_ ធ្វើឲ្យឡាំផូស៊ីតដំបូង ក្លាយជាឡាំផូស៊ីតពេញលក្ខណះមានមុខងារក្នុងប្រព័ន្ធភាពស៊ាំ។</p>
            <p>_ ធ្វើឲ្យក្រពេញទឹករងៃ និងសរីរាង្គផ្សេងៗផលិតឡាំផូស៊ីតថ្មីៗ។</p>
         </ul>
       ),
-  },
-  {
-        type: "imageExplanation",
-        src: "/docs/grade-12/biology/mixs/",
-        imageAlt: "រូបភាព",
-        explanation: [
-        
-      ],
-        title: "ក្រពេញទីមុស",
   },
 
 ];

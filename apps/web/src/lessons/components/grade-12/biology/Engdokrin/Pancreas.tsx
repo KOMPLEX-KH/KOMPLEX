@@ -20,6 +20,15 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
       ),
   },
   {
+        type: "imageExplanation",
+        src: "/docs/grade-12/biology/mixs/pic67.jpg",
+        imageAlt: "រូបភាព",
+        explanation: [
+          "លំពែង គឺជា​សរីរាង្គ​ក្រពេញ​មាន​រាង​វែង​ហើយ​សំ​ប៉ែត ដែល​ស្ថិតនៅ​ពីក្រោយ​ក្រពះ​នៅ​ផ្នែក​ខាងលើ​នៃ​ពោះ​។ លំពែង​មាន​តួនាទី​ផលិត​អង់ស៊ីម​ដែល​ជួយ​ដល់​ការរំលាយ​អាហារ និង​ពពួក​អ័រម៉ូន​ដែល​ជួយ​គ្រប់គ្រង​កម្រិត​ជាតិ​ស្ករ (​គ្លុយកូស​) នៅក្នុង​រាងកាយ​។"
+      ],
+        title: "លំពែង",
+  },
+  {
       type: "tip",
       title: "ចំណាំ",
       content: (
@@ -33,16 +42,6 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
         </ul>
       ),
   },
-
-  {
-        type: "imageExplanation",
-        src: "/docs/grade-12/biology/mixs/",
-        imageAlt: "រូបភាព",
-        explanation: [
-        
-      ],
-        title: "លំពែង",
-  },
   {
       type: "definition",
       title: "ក. អាំងស៊ុយលីន",
@@ -50,6 +49,15 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
           <div className="flex flex-col items-start">
         </div>
       ),
+  },
+  {
+        type: "imageExplanation",
+        src: "/docs/grade-12/biology/mixs/pic59.webp",
+        imageAlt: "រូបភាព",
+        explanation: [
+          "អាំងស៊ុយលីន គឺជាអ័រម៉ូនមួយប្រភេទ ដែលជាសារធាតុគីមីមួយ ត្រូវបានផលិតនៅក្នុងផ្នែកមួយនៃរាងកាយ ដើម្បីឲ្យមានសកម្មភាពមួយផ្សេងទៀត។ វាគឺជាប្រូតេអ៊ីន ដែលទទួលខុសត្រូវក្នុងការកំណត់កម្រិតជាតិស្ករនៅក្នុងឈាម ដែលជាផ្នែកមួយនៃការរំលាយអាហារ។"
+      ],
+        title: "អាំងស៊ុយលីន",
   },
   {
       type: "tip",
@@ -64,15 +72,6 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
             ដុំជាប់ឆ្អឹង។ ម៉្យាងទៀតគ្លុយកូសក៏ត្រូវបានបំប្លែងជា ខ្លាញ់ហើយស្តុកទុកក្នុងជាលិកាខ្លាញ់។</li>
         </ul>
       ),
-  },
-  {
-        type: "imageExplanation",
-        src: "/docs/grade-12/biology/mixs/",
-        imageAlt: "រូបភាព",
-        explanation: [
-        
-      ],
-        title: "អាំងស៊ុយលីន",
   },
   {
       type: "definition",
@@ -112,6 +111,15 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
       ),
   },
   {
+        type: "imageExplanation",
+        src: "/docs/grade-12/biology/mixs/pic64.jpg",
+        imageAlt: "រូបភាព",
+        explanation: [
+          "ជំងឺទឹកនោមផ្អែម គឺជាជំងឺដែលរាងកាយមានកម្រិតស្ករខ្ពស់លើសធម្មតា ដែលកើតឡើងពីការដែលរាងកាយមិនអាចប្រើប្រាស់ស្ករជាថាមពលបានយ៉ាងធម្មតា។ "
+      ],
+        title: "ជំងឺទឹកនោមផ្អែម",
+  },
+  {
       type: "tip",
       title: "ចំណាំ",
       content: (
@@ -122,15 +130,6 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
             <li>ការព្យាបាលដ៏មានប្រសិទ្ធភាពគឺ របបអាហារត្រឹមត្រូវ លេបឳសថឲ្យទៀងទាត់ និងចាក់អាំងស៊ុយលីនរៀងរាល់ថ្ងៃទើបអាចត្រួតពិនិត្យជំងឺបាន។</li>
         </ul>
       ),
-  },
-  {
-        type: "imageExplanation",
-        src: "/docs/grade-12/biology/mixs/",
-        imageAlt: "រូបភាព",
-        explanation: [
-        
-      ],
-        title: "ជំងឺទឹកនោមផ្អែម",
   },
   
 ];
