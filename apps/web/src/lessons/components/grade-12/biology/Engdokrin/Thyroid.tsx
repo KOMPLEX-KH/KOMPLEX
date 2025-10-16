@@ -1,27 +1,28 @@
-import { TopicContent, TopicContent_V3 } from "@/types/docs/topic";
-import {DefinitionBox }from "@components/pages/docs/boxes/DefinitionBox";
-import {TipBox} from "@components/pages/docs/boxes/TipBox";
-import {ExampleBox} from "@components/pages/docs/boxes/ExampleBox";
-import {WarningBox} from "@components/pages/docs/boxes/WarningBox";
-import {
-  ImageExplanationBox,
-  ImageBoxProps,
-} from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
-import { ThreeDExplanationBox, ThreeDExplanationBoxProps } from "@components/pages/docs/boxes/explanation-box/3DExplanationBox";
+"use client";
 
-const FirstTopicContent: TopicContent = {
-  definition: {
-    title: "៣.៣. ក្រពេញទីរ៉ូអ៊ុត",
-    content:
-      <>
-        <div className="flex flex-col items-start">
+import React from "react";
+import { InlineMath } from "react-katex";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+    serializeTopicContentV3,
+    deserializeTopicContentV3,
+    deserializeTopicContentV3ToTree,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+
+const TOPIC_CONTENT_V3: TopicContent_V3[] = [
+  {
+      type: "definition",
+      title: "៣.៣. ក្រពេញទីរ៉ូអ៊ុត",
+      content: (
+          <div className="flex flex-col items-start">
         </div>
-      </>
+      ),
   },
-  tip: {
-    title: "ចំណុចសំខាន់",
-    content: (
-      <>
+  {
+      type: "tip",
+      title: "ចំណាំ",
+      content: (
         <ul className='flex flex-col gap-2 items-start list-disc ml-5'>
             <li>វាផលិតអរម៉ូន២គឺ អរម៉ូនទីរ៉ុកស៊ីន និងកាល់ស៊ីតូនីន។</li>
             <li>អរម៉ូនទីរ៉ុកស៊ីនបង្កឡើងពីអាស៊ីតអាមីនេទីរ៉ូស៊ីនពីរដោយភ្ជាប់អាតូមអ៊ីយ៉ូតចំនួនបួន។</li>
@@ -33,43 +34,39 @@ const FirstTopicContent: TopicContent = {
               ហើយសកម្មខ្លាំងកំណើនសីតុណ្ហភាពសារពាង្គកាយ កំណើនអត្រាចង្វាក់បេះដូង និងមេតាបូលីស កំណើនសម្ពាធឈាម ស្រកទម្ងន់។</p>
             <li>អរម៉ូនកាល់ស៊ីតូនីនមាននាទីតម្រូវកម្រិតកាល់ស្យូមក្នុងឈាម និងមានអំពើផ្ទុយនឹងអំពើរបស់អរម៉ូនប៉ារ៉ាទីរ៉ូអ៊ីត។</li>
         </ul>
-      </>
-    ),
+      ),
   },
-  imageExplanation: [
-    {
-      title: "ក្រពេញទីរ៉ូអ៊ុត",
-      src: "/docs/grade-12/biology/",
-      imageAlt: "",
-      explanation: [
-          "ក្រពេញទីរ៉ូអ៊ុតស្ថិតនៅត្រង់ក ចំពីក្រោមបំពង់សំឡេង និងនៅខាងមុខបំពង់ខ្យល់។",
-          ""
+  {
+        type: "imageExplanation",
+        src: "/docs/grade-12/biology/mixs/",
+        imageAlt: "រូបភាព",
+        explanation: [
+        
       ],
-    },
-  ]
-}
+        title: "ក្រពេញទីរ៉ូអ៊ុត",
+  }, 
+];
+
+
+
+// Stage 2: Serialized JSON
+const jsonV2 = serializeTopicContentV3(TOPIC_CONTENT_V3);
+
+// Stage 3a: Deserialized V3 with live React nodes (renderable)
+const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
+
+// Stage 3b: Deserialized V3 raw node tree (no React elements) for inspection
+const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V3[];
+
+// Helper: visualize type sequence
+const originalTypes = TOPIC_CONTENT_V3.map((i) => i.type);
+
 
 
 const Thyroid = () => {
   return (
     <div>
-        {FirstTopicContent.definition && (
-          <DefinitionBox title={FirstTopicContent.definition.title} content={FirstTopicContent.definition.content} />
-        )}
-        {FirstTopicContent.tip && (
-          <TipBox title={FirstTopicContent.tip.title} content={FirstTopicContent.tip.content} />
-        )}
-        {FirstTopicContent.imageExplanation &&
-          Array.isArray(FirstTopicContent.imageExplanation) &&
-          FirstTopicContent.imageExplanation.map((image: ImageBoxProps, index: number) => (
-            <ImageExplanationBox
-              key={index}
-              title={image.title}
-              src={image.src}
-              imageAlt={image.imageAlt}
-              explanation={image.explanation}
-            />
-          ))}
+        <ContentRendererV3 content={TOPIC_CONTENT_V3} />
     </div>
   )
 }
