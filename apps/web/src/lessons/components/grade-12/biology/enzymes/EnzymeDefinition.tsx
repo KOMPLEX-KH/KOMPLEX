@@ -5,9 +5,11 @@ import "katex/dist/katex.min.css";
 import { InlineMath } from "react-katex";
 import { TopicContent_V3 } from "@/types/docs/topic";
 import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import { deserializeTopicContentV3, serializeTopicContentV3 } from '@/components/pages/docs/utils/ContentSerializerV2';
 
 
-const items: TopicContent_V3[] = [
+
+const Content: TopicContent_V3[] = [
   {
     type: "definition",
     title: "និយមន័យ",
@@ -89,7 +91,9 @@ const items: TopicContent_V3[] = [
 
 
 const EnzymeDefinition = () => {
-  return <ContentRendererV3 content={items} />;
+  const serialized = serializeTopicContentV3(Content);
+  const deserialized = deserializeTopicContentV3(serialized);
+  return <ContentRendererV3 content={deserialized} />;
 }
 
 export default EnzymeDefinition

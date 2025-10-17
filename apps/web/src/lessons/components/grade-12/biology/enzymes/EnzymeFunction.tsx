@@ -5,11 +5,12 @@ import "katex/dist/katex.min.css";
 import { InlineMath } from "react-katex";
 import { TopicContent_V3 } from "@/types/docs/topic";
 import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
-import { image } from 'framer-motion/client';
-import { div } from 'three/tsl';
 import { DefinitionBox } from '@/components/pages/docs/boxes/DefinitionBox';
+import { deserializeTopicContentV3, serializeTopicContentV3 } from '@/components/pages/docs/utils/ContentSerializerV2';
 
-const items: TopicContent_V3[] = [
+
+
+const Content: TopicContent_V3[] = [
   {
     type: "tip",
     title: "ចំណែកថ្នាក់អង់សុីម",
@@ -196,7 +197,9 @@ const items: TopicContent_V3[] = [
 ];
 
 const EnzymeFunction = () => {
-  return <ContentRendererV3 content={items} />
+  const serialized = serializeTopicContentV3(Content);
+  const deserialized = deserializeTopicContentV3(serialized);
+  return <ContentRendererV3 content={deserialized} />
 }
 
 export default EnzymeFunction

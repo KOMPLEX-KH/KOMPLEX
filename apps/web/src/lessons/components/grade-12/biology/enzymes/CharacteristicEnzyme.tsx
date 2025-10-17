@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import Image from 'next/image';
 import "katex/dist/katex.min.css";
 import { InlineMath } from "react-katex";
 import { TopicContent_V3 } from "@/types/docs/topic";
@@ -9,11 +8,11 @@ import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
 import image from '../../../../../../public/docs/grade-12/biology/Enzyme/GraphEnzyme.png';
 import image2 from '../../../../../../public/docs/grade-12/biology/Enzyme/GraphEnzymPh.png';
 import image3 from '../../../../../../public/docs/grade-12/biology/Enzyme/GraphOfEnzymActivities.png';
-
+import { deserializeTopicContentV3, serializeTopicContentV3 } from '@/components/pages/docs/utils/ContentSerializerV2';
 import { ImageExplanationBox } from '@/components/pages/docs/boxes/explanation-box/ImageExplanationBox';
 import { TipBox } from '@/components/pages/docs/boxes/TipBox';
 
-const items: TopicContent_V3[] = [
+const Content: TopicContent_V3[] = [
   {
     type: "tip",
     title: "លក្ខណៈរបស់អង់សុីម",
@@ -157,7 +156,9 @@ const items: TopicContent_V3[] = [
 
 
 const CharacteristicEnzyme = () => {
-  return <ContentRendererV3 content={items} />
+  const serialized = serializeTopicContentV3(Content);
+  const deserialized = deserializeTopicContentV3(serialized); 
+  return <ContentRendererV3 content={deserialized} />
 }
 
 export default CharacteristicEnzyme
