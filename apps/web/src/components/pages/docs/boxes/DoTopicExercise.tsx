@@ -57,9 +57,6 @@ export function DoTopicExercise({
                         <div className="w-20 h-20 bg-indigo-500  rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-500/25">
                             <BookOpen className="w-10 h-10 text-white" />
                         </div>
-                        {/* Decorative rings */}
-                        <div className="absolute inset-0 w-20 h-20 border-2 border-indigo-200 rounded-full mx-auto animate-pulse"></div>
-                        <div className="absolute inset-2 w-16 h-16 border border-indigo-300 rounded-full mx-auto animate-pulse" style={{ animationDelay: '0.5s' }}></div>
                     </div>
 
                     {/* Text Content */}
