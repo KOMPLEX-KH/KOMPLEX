@@ -1,28 +1,38 @@
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
-import { TopicContent } from "@/types/docs/topic";
+"use client";
+
+import React from "react";
 import { BlockMath, InlineMath } from "react-katex";
-import "katex/dist/katex.min.css";
-import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { div } from "three/tsl";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+    serializeTopicContentV3,
+    deserializeTopicContentV3,
+    deserializeTopicContentV3ToTree,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
 
 // ===== TOPIC CONTENT DATA =====
 
-const TOPIC_CONTENT: TopicContent = {
-    definition: {
-        title: "តេីសមីការឌីផែរ៉ង់ស្សែលគឺជាអ្វី?",
-        content:
-            "សមីការឌីផែរ៉ង់ស្សែលគឺជាជាសមីការដែលមានអនុគមន៍និងដេរីវេមួយឬច្រេីននៃអនុគមន៍នោះ។",
+const TOPIC_CONTENT_V3: TopicContent_V3[] = [
+    {
+            type: "definition",
+            title: "តេីសមីការឌីផែរ៉ង់ស្សែលគឺជាអ្វី?",
+            content: (
+                <div>
+                    សមីការឌីផែរ៉ង់ស្សែលគឺជាជាសមីការដែលមានអនុគមន៍និងដេរីវេមួយឬច្រេីននៃអនុគមន៍នោះ។
+                </div>
+            ),
     },
-    tip: {
+    {
+        type: "tip",
         title: "ចំណុចសំខាន់ៗ",
-        content:
-            "ដើម្បីសម្គាល់សមីការឌីផែរ៉ង់ស្សែល សូមពិនិត្យមើលថាតើវាមានដេរីវេ (Derivative) របស់អនុគមន៍ឬទេ។",
+        content: (
+            <div>
+                ដើម្បីសម្គាល់សមីការឌីផែរ៉ង់ស្សែល សូមពិនិត្យមើលថាតើវាមានដេរីវេ (Derivative) របស់អនុគមន៍ឬទេ។
+            </div>
+        ),
     },
-    example: {
+    {
+        type: "example",
         question: (
             <div className="flex flex-col items-start gap-3">
                 <p>សមីការ​ :</p>
@@ -35,72 +45,77 @@ const TOPIC_CONTENT: TopicContent = {
                     <span>,... សុទ្ធតែជាសមីការឌីផែរ៉ង់ស្សែល។</span>
                 </div>
             </div>
-        ),
+        ),        
     },
-    exercise: {
+    {
+        type: "exercise",
         questions: [
             {
                 id: "q1",
-                question: "y' + y = x  តើសមីការនេះជាសមីការឌីផែរ៉ង់ស្សែលឬទេ?",
+                question: (
+                    <span>
+                       y' + y = x  តើសមីការនេះជាសមីការឌីផែរ៉ង់ស្សែលឬទេ?
+                    </span>
+                ),
                 options: ["ត្រឹមត្រូវ", "មិនត្រឹមត្រូវ"],
                 correctAnswer: 0,
             },
             {
                 id: "q2",
-                question: "x² + y² = 25  តើសមីការនេះជាសមីការឌីផែរ៉ង់ស្សែលឬទេ?",
+                question: (
+                    <span>
+                        x² + y² = 25  តើសមីការនេះជាសមីការឌីផែរ៉ង់ស្សែលឬទេ?
+                    </span>
+                ),
                 options: ["ត្រឹមត្រូវ", "មិនត្រឹមត្រូវ"],
                 correctAnswer: 1,
             },
             {
                 id: "q3",
-                question: "dy/dx = 3x²  តើសមីការនេះជាសមីការឌីផែរ៉ង់ស្សែលឬទេ?",
+                question: (
+                    <span>
+                        តើ <InlineMath math="i^2" /> ស្មើអ្វី?
+                    </span>
+                ),
                 options: ["ត្រឹមត្រូវ", "មិនត្រឹមត្រូវ"],
                 correctAnswer: 0,
             },
             {
                 id: "q4",
-                question: "y = mx + b  តើសមីការនេះជាសមីការឌីផែរ៉ង់ស្សែលឬទេ?",
+                question: (
+                    <span>
+                        y = mx + b  តើសមីការនេះជាសមីការឌីផែរ៉ង់ស្សែលឬទេ?
+                    </span>
+                ),
                 options: ["ត្រឹមត្រូវ", "មិនត្រឹមត្រូវ"],
                 correctAnswer: 1,
             },
         ],
     },
-    warning: {
-        content:
-            "កុំច្រឡំសមីការដែលមានអថេរច្រើនជាសមីការឌីផែរ៉ង់ស្សែល បើសិនវាមិនមានដេរីវេទេ។",
-    },
-};
+
+    { type: "warning", content: "កុំច្រឡំសមីការដែលមានអថេរច្រើនជាសមីការឌីផែរ៉ង់ស្សែល បើសិនវាមិនមានដេរីវេទេ។", },
+];
+
+// Stage 2: Serialized JSON
+const jsonV2 = serializeTopicContentV3(TOPIC_CONTENT_V3);
+
+// Stage 3a: Deserialized V3 with live React nodes (renderable)
+const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
+
+// Stage 3b: Deserialized V3 raw node tree (no React elements) for inspection
+const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V3[];
+
+// Helper: visualize type sequence
+const originalTypes = TOPIC_CONTENT_V3.map((i) => i.type);
+
+
 
 const differentialdefinition = () => {
     return (
         <>
-            {TOPIC_CONTENT.definition && (
-                <DefinitionBox
-                    title={TOPIC_CONTENT.definition.title}
-                    content={TOPIC_CONTENT.definition.content}
-                />
-            )}
-            {TOPIC_CONTENT.tip && (
-                <TipBox
-                    title={TOPIC_CONTENT.tip.title}
-                    content={TOPIC_CONTENT.tip.content}
-                />
-            )}
-
-            {TOPIC_CONTENT.example && (
-                <ExampleBox
-                    question={TOPIC_CONTENT.example.question}
-                    steps={TOPIC_CONTENT.example.steps}
-                    answer={TOPIC_CONTENT.example.answer}
-                />
-            )}
-            {TOPIC_CONTENT.exercise && (
-                <ExerciseBox questions={TOPIC_CONTENT.exercise.questions} />
-            )}
-            {TOPIC_CONTENT.hint && <HintBox content={TOPIC_CONTENT.hint.content} />}
-            {TOPIC_CONTENT.warning && (
-                <WarningBox content={TOPIC_CONTENT.warning.content} />
-            )}
+            <div>
+                <ContentRendererV3 content={TOPIC_CONTENT_V3} />
+            </div>
         </>
     );
 };
