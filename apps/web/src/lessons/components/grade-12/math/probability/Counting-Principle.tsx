@@ -1,74 +1,54 @@
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
-import { TopicContent } from "@/types/docs/topic";
+"use client";
+
+import React from "react";
 import { BlockMath, InlineMath } from "react-katex";
 import "katex/dist/katex.min.css";
-import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { div } from "three/tsl";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+  deserializeTopicContentV3ToTree,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
 
-const FirstTopicContent: TopicContent = {
-  definition: {
+const CountingPrinciple_V3: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "គោលការណ៍ផលបូក",
     content: (
-      <>
-        <div className="flex flex-col items-start">
-          <div className="flex items-center gap-3 flex-wrap w-full">
-            <p>គោលការណ៍ផលបូកនិយាយអំពីការបូកចំនួននៃករណីផ្សេងៗគ្នា។</p>
-          </div>
-          <div className="flex items-center gap-3 flex-wrap w-full"></div>
-        </div>
-      </>
+      <div className="flex flex-col items-start">
+        <p>គោលការណ៍ផលបូកនិយាយអំពីការបូកចំនួននៃករណីផ្សេងៗគ្នា។</p>
+      </div>
     ),
   },
-  tip: {
+  {
+    type: "tip",
     title: "ជាទូទៅ",
     content: (
-      <>
-        <div className="flex  flex-col">
-          <p>
-            ចំពោះព្រឹត្តិការណ៍
-            <InlineMath math={"E_1, E_2,...,E_k"} /> គ្មានធាតុដូចគ្នា
-            នោះចំនួនរបៀបដែលកេីតឡេីងនៃ K កំណត់ដោយ:
-          </p>
-          <div>
-            <BlockMath math={"N= n(E_1) + n(E_2) + ... + n(E_k)"} />
-          </div>
-        </div>
-      </>
+      <div className="flex flex-col">
+        <p>
+          ចំពោះព្រឹត្តិការណ៍ <InlineMath math={"E_1, E_2,...,E_k"} /> គ្មាន
+         ធាតុដូចគ្នា នោះចំនួនរបៀបដែលកើតឡើងនៃ K កំណត់ដោយ:
+        </p>
+        <BlockMath math={"N = n(E_1) + n(E_2) + ... + n(E_k)"} />
+      </div>
     ),
   },
-
-  example: {
+  {
+    type: "example",
     question: [
-      <div className="flex flex-col items-start gap-3" key="q1">
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-3 flex-wrap">
-            <p>
-              គេបោះគ្រាប់ឡុកឡាក់មួយគ្រាប់ចំនួន២ដង។
-              រកចំនួនលទ្ធផលដែលអាចកេីតឡេីងបានបេី:
-            </p>
-          </div>
-          <div className="flex  gap-5 flex-col">
-            <p>ក. គ្រាប់ឡុកឡាក់ចេញមានផលបូកស្មេីរ ៣ឬ៤</p>
-            <p>ខ. គ្រាប់ឡុកឡាក់ចេញមានផលបូកស្មេីរ ធំជាង៩</p>
-          </div>
-        </div>
+      <div className="flex flex-col gap-3" key="ex1-q1">
+        <p>
+          គេបោះគ្រាប់ឡុកឡាក់មួយគ្រាប់ចំនួន២ដង។ រកចំនួនលទ្ធផលដែលអាចកើតឡើងបានបើ:
+        </p>
+        <p>ក. គ្រាប់ឡុកឡាក់ចេញមានផលបូកស្មើ ៣ ឬ ៤</p>
+        <p>ខ. គ្រាប់ឡុកឡាក់ចេញមានផលបូកស្មើធំជាង ៩</p>
       </div>,
     ],
     steps: [
       {
-        title: "រកចំនួនលទ្ធផលដែលកេីតឡេីង",
-        content: (
-          <div>
-            <p>
-              ដោយគ្រាប់ឡុកឡាក់មានមុខ៦ចុះលេខពី ១ដល់៦
-              ហេីយគេបោះគ្រាប់ឡុកឡាក់២ដងជាគូមានលំដាប់
-            </p>
-          </div>
-        ),
+        title: "រកចំនួនលទ្ធផលដែលកើតឡើង",
+        content: <p>ដោយគ្រាប់ឡុកឡាក់មានមុខ ៦ ចុះលេខពី ១ ដល់ ៦ ហើយគេបោះ ២ ដងជាគូមានលំដាប់។</p>,
       },
       {
         title: "ក. គ្រាប់ឡុកឡាក់ចេញមានផលបូកស្មេីរ ៣ឬ៤",
@@ -167,33 +147,19 @@ const FirstTopicContent: TopicContent = {
       },
     ],
     answer: (
-      <div>
-        <div className="flex items-center gap-3 flex-col">
-          <div className="flex items-center gap-3 flex-wrap">
-            <BlockMath math={" N_1= 5"} />
-            <p>របៀប​។</p>
-          </div>
-          <div className="flex items-center gap-3 flex-wrap">
-            <BlockMath math={"N_2= 6"} />
-            <p>របៀប​។</p>
-          </div>
-        </div>
+      <div className="flex flex-col gap-2 justify-center items-center">
+        <p>N_1 = 5 របៀប</p>
+        <p>N_2 = 6 របៀប</p>
       </div>
     ),
   },
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "q1",
         question: (
-          <>
-            <div className="flex flex-col gap-3">
-              <p>
-                គេបោះគ្រាប់ឡុកឡាក់មួយគ្រាប់ចំនួន២ដង។
-                រកចំនួនលទ្ធផលដែលមានផលបូកស្មើ ៥ ឬ ៦។
-              </p>
-            </div>
-          </>
+          <p>គេបោះគ្រាប់ឡុកឡាក់មួយគ្រាប់ចំនួន២ដង។ រកចំនួនលទ្ធផលដែលមានផលបូកស្មើ ៥ ឬ ៦។</p>
         ),
         options: [
           <p key="q1-o1">4 របៀប</p>,
@@ -206,73 +172,44 @@ const FirstTopicContent: TopicContent = {
       {
         id: "q2",
         question: (
-          <>
-            <div className="flex flex-col gap-3">
-              <p>
-                គេចង់បោះកាសែត ៣ ប្រភេទ។
-                តើចំនួនរបៀបជ្រើសរើសតែមួយចំនួនសម្រាប់សៀវភៅសៀរ៍ប៉ុន្មាន?
-              </p>
-            </div>
-          </>
+          <p>គេចង់បោះកាសែត ៣ ប្រភេទ។ តើចំនួនរបៀបជ្រើសរើសតែមួយចំនួនសម្រាប់សៀវភៅសៀរ៍ប៉ុន្មាន?</p>
         ),
         options: [
-          <p key="q4-o1">3 របៀប</p>,
-          <p key="q4-o2">6 របៀប</p>,
-          <p key="q4-o3">9 របៀប</p>,
-          <p key="q4-o4">12 របៀប</p>,
+          <p key="q2-o1">3 របៀប</p>,
+          <p key="q2-o2">6 របៀប</p>,
+          <p key="q2-o3">9 របៀប</p>,
+          <p key="q2-o4">12 របៀប</p>,
         ],
-        correctAnswer: 0, // 3 is correct
+        correctAnswer: 0,
       },
     ],
   },
-};
-
-const SecondTopic: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "គោលការណ៍ផលគុណ",
     content: (
-      <>
-        <div className="flex flex-col items-start">
-          <div className="flex items-center gap-3 flex-wrap w-full">
-            <p>គោលការណ៍ផលគុណនិយាយអំពីការគុណចំនួននៃករណីនីមួយៗរៀងគ្នាៗ។</p>
-          </div>
-        </div>
-      </>
+      <p>គោលការណ៍ផលគុណនិយាយអំពីការគុណចំនួននៃករណីនីមួយៗរៀងគ្នា។</p>
     ),
   },
-  tip: {
+  {
+    type: "tip",
     title: "ជាទូទៅ",
     content: (
-      <>
-        <div className="flex  flex-col">
-          <p>
-            ចំពោះព្រឹត្តិការណ៍
-            <InlineMath math={"E_1, E_2,...,E_k"} /> មានលទ្ធផលរៀងគ្នា
-            នោះចំនួនរបៀបដែលកេីតឡេីងនៃ K កំណត់ដោយ:
-          </p>
-          <div>
-            <BlockMath
-              math={"N= n(E_1) \\times n(E_2) \\times ... \\times n(E_k)"}
-            />
-          </div>
-        </div>
-      </>
+      <div>
+        <p>
+          ចំពោះព្រឹត្តិការណ៍ <InlineMath math={"E_1, E_2,...,E_k"} /> មានលទ្ធផលរៀងគ្នា
+          នោះចំនួនរបៀបដែលកើតឡើងនៃ K កំណត់ដោយ:
+        </p>
+        <BlockMath math={"N = n(E_1) \\times n(E_2) \\times ... \\times n(E_k)"} />
+      </div>
     ),
   },
-  example: {
+  {
+    type: "example",
     question: [
-      <div className="flex flex-col items-start gap-3" key="q2">
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-3 flex-wrap">
-            <p>
-              គេចង់បង្កេីតចំនួនលេខសម្ងាត់លេខ៤ខ្ទង់ខុសៗគ្នាដោយប្រេីលេងពី០ដល់៩។
-            </p>
-          </div>
-          <div className="flex  gap-5 flex-col">
-            <p>តេីគេអាចបង្កេីតលេខសម្ងាត់នេះបានប៉ុន្មានរបៀប?</p>
-          </div>
-        </div>
-      </div>,
+      <p key="ex2-q1">
+        គេចង់បង្កើតលេខសម្ងាត់លេខ៤ខ្ទង់ខុសៗគ្នាដោយប្រើលេខពី ០ ដល់ ៩។ តើគេអាចបង្កើតលេខសម្ងាត់នេះបានប៉ុន្មានរបៀប?
+      </p>,
     ],
     steps: [
       {
@@ -300,120 +237,57 @@ const SecondTopic: TopicContent = {
         ),
       },
     ],
-    answer: (
-      <div>
+    answer: 
+    <div>
         <div className="flex items-center gap-3 flex-col">
           <div className="flex items-center gap-3 flex-wrap">
             <BlockMath math={" N = 4536"} />
             <p>របៀប​។</p>
           </div>
         </div>
-      </div>
-    ),
+      </div>,
   },
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "ex2-q1",
         question: (
-          <>
-            <div className="flex flex-col gap-3">
-              <p>
-                អ្នកមានខ្សែពណ៌ ៤ ប្រភេទ និងប៊ូតុង ៣ ប្រភេទ។
-                តើចំនួនរបៀបកន្លែងសម្រាប់ជ្រើសរើសខ្សែពណ៌
-                និងប៊ូតុងផ្សេងគ្នាប៉ុន្មាន?
-              </p>
-            </div>
-          </>
+          <p>
+            អ្នកមានខ្សែពណ៌ ៤ ប្រភេទ និងប៊ូតុង ៣ ប្រភេទ។ តើចំនួនរបៀបកន្លែងសម្រាប់ជ្រើសរើសខ្សែពណ៌ និងប៊ូតុងផ្សេងគ្នាប៉ុន្មាន?
+          </p>
         ),
         options: [
-          <p key="q3-o1">7 របៀប</p>,
-          <p key="q3-o2">12 របៀប</p>,
-          <p key="q3-o3">24 របៀប</p>,
-          <p key="q3-o4">16 របៀប</p>,
+          <p key="ex2-q1-o1">7 របៀប</p>,
+          <p key="ex2-q1-o2">12 របៀប</p>,
+          <p key="ex2-q1-o3">24 របៀប</p>,
+          <p key="ex2-q1-o4">16 របៀប</p>,
         ],
         correctAnswer: 2,
       },
       {
         id: "ex2-q2",
         question: (
-          <>
-            <div className="flex flex-col gap-3">
-              <p>
-                បើមានប៊ូតុង ៣ ចំនួន សម្រាប់ជ្រើសរើសកូដ
-                តើចំនួនកូដដែលអាចបង្កើតបានប៉ុន្មាន
-                ប្រសិនបើគេអាចជ្រើសរើសប៊ូតុងមួយចំនួនជាមួយកំណត់លំដាប់?
-              </p>
-            </div>
-          </>
+          <p>
+            បើមានប៊ូតុង ៣ ចំនួន សម្រាប់ជ្រើសរើសកូដ តើចំនួនកូដដែលអាចបង្កើតបានប៉ុន្មាន ប្រសិនបើគេអាចជ្រើសរើសប៊ូតុងមួយចំនួនជាមួយកំណត់លំដាប់?
+          </p>
         ),
         options: [
-          <p key="q2-o1">6 របៀប</p>,
-          <p key="q2-o2">9 របៀប</p>,
-          <p key="q2-o3">3 របៀប</p>,
-          <p key="q2-o4">27 របៀប</p>,
+          <p key="ex2-q2-o1">6 របៀប</p>,
+          <p key="ex2-q2-o2">9 របៀប</p>,
+          <p key="ex2-q2-o3">3 របៀប</p>,
+          <p key="ex2-q2-o4">27 របៀប</p>,
         ],
         correctAnswer: 0,
       },
     ],
   },
-};
+];
 
-const CountingPrinciple = () => {
-  return (
-    <>
-      <div>
-        {FirstTopicContent.definition && (
-          <DefinitionBox
-            title={FirstTopicContent.definition.title}
-            content={FirstTopicContent.definition.content}
-          />
-        )}
-        {FirstTopicContent.tip && (
-          <TipBox
-            title={FirstTopicContent.tip.title}
-            content={FirstTopicContent.tip.content}
-          />
-        )}
+const jsonV2 = serializeTopicContentV3(CountingPrinciple_V3);
+const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
+const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V3[];
 
-        {FirstTopicContent.example && (
-          <ExampleBox
-            question={FirstTopicContent.example.question}
-            steps={FirstTopicContent.example.steps}
-            answer={FirstTopicContent.example.answer}
-          />
-        )}
-        {FirstTopicContent.exercise && (
-          <ExerciseBox questions={FirstTopicContent.exercise.questions} />
-        )}
-      </div>
-
-      <div>
-        {SecondTopic.definition && (
-          <DefinitionBox
-            title={SecondTopic.definition.title}
-            content={SecondTopic.definition.content}
-          />
-        )}
-        {SecondTopic.tip && (
-          <TipBox
-            title={SecondTopic.tip.title}
-            content={SecondTopic.tip.content}
-          />
-        )}
-        {SecondTopic.example && (
-          <ExampleBox
-            question={SecondTopic.example.question}
-            steps={SecondTopic.example.steps}
-            answer={SecondTopic.example.answer}
-          />
-        )}
-        {SecondTopic.exercise && (
-          <ExerciseBox questions={SecondTopic.exercise.questions} />
-        )}
-      </div>
-    </>
-  );
-};
+const CountingPrinciple = () => <ContentRendererV3 content={CountingPrinciple_V3} />;
 
 export default CountingPrinciple;

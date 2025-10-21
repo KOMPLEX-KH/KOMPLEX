@@ -1,87 +1,91 @@
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
-import { TopicContent } from "@/types/docs/topic";
-import { BlockMath, InlineMath } from "react-katex";
-import "katex/dist/katex.min.css";
-import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+"use client";
 
-const FirstTopicContent: TopicContent = {
-  definition: {
+import React from "react";
+import { BlockMath } from "react-katex";
+import "katex/dist/katex.min.css";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+  deserializeTopicContentV3ToTree,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+
+const ProbabCompound_V3: TopicContent_V3[] = [
+  // ---------------- Definition ----------------
+  {
+    type: "definition",
     title: "ព្រឹត្តការណ៍សមាស",
     content: (
-      <>
-        <div className="flex flex-col items-start">
-          <div className="flex items-center gap-3 flex-wrap w-full">
-            <p>
-              ព្រឹត្តការណ៍សមាសគឹជាព្រឹត្តការណ៍ដែលអាចសរសេរជាប្រជុំនៃព្រឹត្តការណ៍ផ្សេងៗ។
-            </p>
-          </div>
+      <div className="flex flex-col items-start">
+        <div className="flex items-center gap-3 flex-wrap w-full">
+          <p>
+            ព្រឹត្តការណ៍សមាសគឺជាព្រឹត្តការណ៍ដែលអាចសរសេរជាប្រជុំនៃព្រឹត្តការណ៍ផ្សេងៗ។
+          </p>
         </div>
-      </>
+      </div>
     ),
   },
-  tip: {
+
+  // ---------------- Tip ----------------
+  {
+    type: "tip",
     title: "ជាទូទៅ",
     content: (
-      <>
-        <div className="flex flex-col">
-          <p>
-            ប្រូបាបនៃព្រឹត្តការណ៍សមាស គេអាចគណនាដោយប្រើស្វីតផលគុណ និងស្វីតផលបូក៖
-          </p>
+      <div className="flex flex-col">
+        <p>
+          ប្រូបាបនៃព្រឹត្តការណ៍សមាស គេអាចគណនាដោយប្រើស្វីតផលគុណ និងស្វីតផលបូក៖
+        </p>
 
-          <p className="mt-2 font-semibold">
-            1. ស្វីតផលគុណ (ករណីព្រឹត្តការណ៍មិនទាក់ទងគ្នា)
-          </p>
-          <div className="pl-5">
-            <BlockMath math={"P(A \\cap B) = P(A) \\cdot P(B)"} />
-          </div>
-
-          <p className="mt-2 font-semibold">2. ស្វីតផលបូក</p>
-          <div className="pl-5">
-            <BlockMath math={"P(A \\cup B) = P(A) + P(B) - P(A \\cap B)"} />
-          </div>
-
-          <p className="mt-2">ក្នុងនោះ៖</p>
-          <p className="pl-5">P(A) គឺប្រូបាបនៃព្រឹត្តការណ៍ A</p>
-          <p className="pl-5">P(B) គឺប្រូបាបនៃព្រឹត្តការណ៍ B</p>
+        <p className="mt-2 font-semibold">
+          1. ស្វីតផលគុណ (ករណីព្រឹត្តការណ៍មិនទាក់ទងគ្នា)
+        </p>
+        <div className="pl-5">
+          <BlockMath math={"P(A \\cap B) = P(A) \\cdot P(B)"} />
         </div>
-      </>
+
+        <p className="mt-2 font-semibold">2. ស្វីតផលបូក</p>
+        <div className="pl-5">
+          <BlockMath math={"P(A \\cup B) = P(A) + P(B) - P(A \\cap B)"} />
+        </div>
+
+        <p className="mt-2">ក្នុងនោះ៖</p>
+        <p className="pl-5">P(A) គឺប្រូបាបនៃព្រឹត្តការណ៍ A</p>
+        <p className="pl-5">P(B) គឺប្រូបាបនៃព្រឹត្តការណ៍ B</p>
+      </div>
     ),
   },
 
-  example: {
+  // ---------------- Example ----------------
+  {
+    type: "example",
     question: [
-      <>
-        <div className="flex flex-col items-start gap-3" key="q1">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-3 flex-wrap">
-              <p>
-                ក្នុងថង់មួយមានឃ្លីក្រហម២ និងឃ្លីខៀវ៣។ គេចាប់ឃ្លី២
-                ចេញពីថង់ម្តងមួយៗដោយចៃដន្យ។
-              </p>
+      <div className="flex flex-col items-start gap-3" key="q1">
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
+            <p>
+              ក្នុងថង់មួយមានឃ្លីក្រហម ២ និងឃ្លីខៀវ ៣។ គេចាប់ឃ្លី ២
+              ចេញពីថង់ម្តងមួយៗដោយចៃដន្យ។
+            </p>
+          </div>
+          <div className="flex gap-5 flex-col">
+            <div className="flex flex-col gap-3">
+              <p>ក. ក្នុងករណីយកហេីយដាក់វិញ ចូររកប្រូបាបដែលចាប់បាន</p>
+              <p>_ ឃ្លីក្រហមមុន និងឃ្លីខៀវក្រោយ</p>
+              <p>_ ឃ្លីក្រហមមុន ឬឃ្លីខៀវក្រោយ</p>
             </div>
-            <div className="flex gap-5 flex-col">
-              <div className="flex  flex-col gap-3">
-                <p>ក. ក្នុងករណីយកហេីយដាក់វិញ ចូររកប្របាបដែលចាប់បាន</p>
-                <p>_ ឃ្លីក្រហមមុន និងឃ្លីខៀវក្រោយ</p>
-                <p>_ ឃ្លីក្រហមមុន ឬឃ្លីខៀវក្រោយ</p>
-              </div>
-              <div className="flex  flex-col gap-3">
-                <p>ខ. ក្នុងករណីយកហេីយមិនដាក់វិញ ចូររកប្របាបដែលចាប់បាន</p>
-                <p>_ ឃ្លីក្រហមមុន និងឃ្លីខៀវក្រោយ</p>
-                <p>_ ឃ្លីក្រហមមុន ឬឃ្លីខៀវក្រោយ</p>
-              </div>
+            <div className="flex flex-col gap-3">
+              <p>ខ. ក្នុងករណីយកហេីយមិនដាក់វិញ ចូររកប្រូបាបដែលចាប់បាន</p>
+              <p>_ ឃ្លីក្រហមមុន និងឃ្លីខៀវក្រោយ</p>
+              <p>_ ឃ្លីក្រហមមុន ឬឃ្លីខៀវក្រោយ</p>
             </div>
           </div>
         </div>
-      </>,
+      </div>,
     ],
     steps: [
       {
-        title: "ក. ក្នុងករណីហេីយដាក់វិញ",
+        title: "ក. ក្នុងករណីយកហេីយដាក់វិញ",
         content: (
           <div>
             <div className="flex flex-col gap-3">
@@ -93,13 +97,15 @@ const FirstTopicContent: TopicContent = {
             </div>
 
             <div className="mt-3 flex flex-col gap-3">
-              <p>គេបានចំនួនឃ្លីនៅក្នុងថង់សម្រាប់ចាប់មុន និងក្រោយស្មេីរគ្នា</p>
+              <p>គេបានចំនួនឃ្លីនៅក្នុងថង់សម្រាប់ចាប់មុន និងក្រោយស្មើគ្នា</p>
               <p>ដូចនេះការចាប់ឃ្លីទី១ និងទី២ ជាព្រឹត្តការណ៍២ មិនទាក់ទងគ្នាទេ</p>
               <p>គេបាន</p>
             </div>
+
             <div className="flex flex-col gap-3 items-start">
               <BlockMath math={"P(A) = \\frac{2}{5}, P(B) = \\frac{3}{5}"} />
             </div>
+
             <div className="flex flex-col">
               <p>
                 ព្រឹត្តការណ៍ចាប់បានឃ្លីក្រហមមុន
@@ -111,6 +117,7 @@ const FirstTopicContent: TopicContent = {
                 <BlockMath math={"= \\frac{6}{25}"} />
               </div>
             </div>
+
             <div className="flex flex-col">
               <p>
                 ព្រឹត្តការណ៍ចាប់បានឃ្លីក្រហមមុន ឬឃ្លីខៀវក្រោយជាព្រឹត្តការណ៍ផលបូក
@@ -128,12 +135,12 @@ const FirstTopicContent: TopicContent = {
         ),
       },
       {
-        title: "ក. ក្នុងករណីហេីយមិនដាក់វិញ",
+        title: "ខ. ក្នុងករណីយកហេីយមិនដាក់វិញ",
         content: (
           <div>
             <div className="flex flex-col gap-3">
               <p>តាងព្រឹត្តការណ៍</p>
-              <div className="flex flex-col ">
+              <div className="flex flex-col">
                 <p>A ចាប់បានឃ្លីក្រហមមុន</p>
                 <p>B ចាប់បានឃ្លីខៀវក្រោយ</p>
               </div>
@@ -141,21 +148,19 @@ const FirstTopicContent: TopicContent = {
 
             <div className="flex flex-col gap-3 mt-4">
               <p>
-                ចំនួន​ឃ្លីក្នុងថង់សម្រាប់ចាប់លេីកទី១ មាន៥ នោះះលេីកទី២ មានតែ៤។
+                ចំនួន​ឃ្លីក្នុងថង់សម្រាប់ចាប់លើកទី១ មាន ៥ នោះហើយលើកទី២ មានតែ ៤។
               </p>
 
               <div className="flex flex-col gap-3">
                 <p>+ ចាប់បានឃ្លីក្រហម និងចាប់បានឃ្លីខៀវ</p>
                 <div className="flex flex-wrap items-center gap-3">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <p>នោះប្រូបាបដែលចាប់បានឃ្លីក្រហមមុនគឺ</p>
-                    <BlockMath math={"\\frac{2}{5}"} />
-                    <p>និងប្រូបាបចាប់បានឃ្លីខៀវក្រោយគឺ</p>
-                    <BlockMath math={"\\frac{3}{4}"} />
-                    <p>ប្រូបាបនៃផលគុណ A និង B គឺ</p>
-                  </div>
+                  <p>នោះប្រូបាបដែលចាប់បានឃ្លីក្រហមមុនគឺ</p>
+                  <BlockMath math={"\\frac{2}{5}"} />
+                  <p>និងប្រូបាបចាប់បានឃ្លីខៀវក្រោយគឺ</p>
+                  <BlockMath math={"\\frac{3}{4}"} />
+                  <p>ប្រូបាបនៃផលគុណ A និង B គឺ</p>
                 </div>
-                <div className=" items-start flex flex-wrap">
+                <div className="items-start flex flex-wrap">
                   <BlockMath math={"P(A \\cap B) = P(A) \\cdot P(B)"} />
                   <BlockMath
                     math={
@@ -185,7 +190,10 @@ const FirstTopicContent: TopicContent = {
       },
     ],
   },
-  exercise: {
+
+  // ---------------- Exercise ----------------
+  {
+    type: "exercise",
     questions: [
       {
         id: "pc-q1",
@@ -199,10 +207,10 @@ const FirstTopicContent: TopicContent = {
           </div>
         ),
         options: [
-          <p key="pc-q3-o1">0.49</p>,
-          <p key="pc-q3-o2">0.70</p>,
-          <p key="pc-q3-o3">0.84</p>,
-          <p key="pc-q3-o4">0.21</p>,
+          <p key="pc-q1-o1">0.49</p>,
+          <p key="pc-q1-o2">0.70</p>,
+          <p key="pc-q1-o3">0.84</p>,
+          <p key="pc-q1-o4">0.21</p>,
         ],
         correctAnswer: 0,
       },
@@ -227,37 +235,14 @@ const FirstTopicContent: TopicContent = {
       },
     ],
   },
-};
+];
 
-const ProbabCompound = () => {
-  return (
-    <>
-      <div>
-        {FirstTopicContent.definition && (
-          <DefinitionBox
-            title={FirstTopicContent.definition.title}
-            content={FirstTopicContent.definition.content}
-          />
-        )}
-        {FirstTopicContent.tip && (
-          <TipBox
-            title={FirstTopicContent.tip.title}
-            content={FirstTopicContent.tip.content}
-          />
-        )}
-        {FirstTopicContent.example && (
-          <ExampleBox
-            question={FirstTopicContent.example.question}
-            steps={FirstTopicContent.example.steps}
-            answer={FirstTopicContent.example.answer}
-          />
-        )}
-        {FirstTopicContent.exercise && (
-          <ExerciseBox questions={FirstTopicContent.exercise.questions} />
-        )}
-      </div>
-    </>
-  );
-};
+const jsonV2 = serializeTopicContentV3(ProbabCompound_V3);
+const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
+const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V3[];
+
+const ProbabCompound = () => (
+  <ContentRendererV3 content={ProbabCompound_V3} />
+);
 
 export default ProbabCompound;

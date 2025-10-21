@@ -1,45 +1,49 @@
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
-import { TopicContent } from "@/types/docs/topic";
-import { BlockMath, InlineMath } from "react-katex";
-import "katex/dist/katex.min.css";
-import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+"use client";
 
-const FirstTopicContent: TopicContent = {
-  definition: {
+import React from "react";
+import { BlockMath } from "react-katex";
+import "katex/dist/katex.min.css";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+  deserializeTopicContentV3ToTree,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+
+const ProbabilityDefinition_V3: TopicContent_V3[] = [
+  // ---------------- Definition ----------------
+  {
+    type: "definition",
     title: "ប្រូបាប",
     content: (
-      <>
-        <div className="flex flex-col items-start">
-          <div className="flex items-center gap-3 flex-wrap w-full">
-            <p>
-              ប្រូបាបគឺជាផលធៀបរវាងចំនួនករណីស្របនិងចំនួនករណីអាចដែលនៅចន្លោះ 0 - 1។
-            </p>
-          </div>
+      <div className="flex flex-col items-start">
+        <div className="flex items-center gap-3 flex-wrap w-full">
+          <p>
+            ប្រូបាបគឺជាផលធៀបរវាងចំនួនករណីស្របនិងចំនួនករណីអាចដែលនៅចន្លោះ 0 - 1។
+          </p>
         </div>
-      </>
-    ),
-  },
-  tip: {
-    title: "ជាទូទៅ",
-    content: (
-      <>
-        <div className="flex  flex-col">
-          <p>គេកំណត់ប្រូបាបនៃព្រឹត្តការណ៍ A មួយដោយ:</p>
-          <div>
-            <BlockMath math={"P(A) = \\frac{n(A)}{n(s)}"} />
-          </div>
-          <p> n(A) គឺជាចំនួនករណីស្រប</p>
-          <p>n(s) គឺជាចំនួនករណីអាច</p>
-        </div>
-      </>
+      </div>
     ),
   },
 
-  example: {
+  // ---------------- Tip ----------------
+  {
+    type: "tip",
+    title: "ជាទូទៅ",
+    content: (
+      <div className="flex flex-col">
+        <p>គេកំណត់ប្រូបាបនៃព្រឹត្តការណ៍ A មួយដោយ:</p>
+        <BlockMath math={"P(A) = \\frac{n(A)}{n(s)}"} />
+        <p>n(A) គឺជាចំនួនករណីស្រប</p>
+        <p>n(s) គឺជាចំនួនករណីអាច</p>
+      </div>
+    ),
+  },
+
+  // ---------------- Example ----------------
+  {
+    type: "example",
     question: [
       <div className="flex flex-col items-start gap-3" key="q2">
         <div className="flex flex-col gap-3">
@@ -49,7 +53,7 @@ const FirstTopicContent: TopicContent = {
               និងសិស្សប្រុស ៣ នាក់។រកប្រូបាបដែល :
             </p>
           </div>
-          <div className="flex  gap-5 flex-col">
+          <div className="flex gap-5 flex-col">
             <p>ក. ប្រធានថ្នាក់ជាស្រី</p>
             <p>ខ. ប្រធានថ្នាក់ជាប្រុស</p>
           </div>
@@ -60,11 +64,9 @@ const FirstTopicContent: TopicContent = {
       {
         title: "រកចំនួនករណីអាច",
         content: (
-          <div>
-            <div className="flex flex-col items-start">
-              <p>សិស្សទាំងអស់មាន ៨ នាក់</p>
-              <BlockMath math={"\\Rightarrow n(s) = 8"} />
-            </div>
+          <div className="flex flex-col items-start">
+            <p>សិស្សទាំងអស់មាន ៨ នាក់</p>
+            <BlockMath math={"\\Rightarrow n(s) = 8"} />
           </div>
         ),
       },
@@ -76,7 +78,6 @@ const FirstTopicContent: TopicContent = {
               <p>សិស្សស្រីមាន ៥ នាក់</p>
               <BlockMath math={"\\Rightarrow n(A) = 5"} />
             </div>
-
             <div className="flex items-center gap-2 flex-wrap">
               <p>គេបាន</p>
               <BlockMath math={"P(A) = \\frac{n(A)}{n(s)} = \\frac{5}{8}"} />
@@ -85,14 +86,13 @@ const FirstTopicContent: TopicContent = {
         ),
       },
       {
-        title: "ក. ប្រធានថ្នាក់ជាប្រុស",
+        title: "ខ. ប្រធានថ្នាក់ជាប្រុស",
         content: (
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-3 flex-wrap">
               <p>សិស្សប្រុសមាន ៣ នាក់</p>
               <BlockMath math={"\\Rightarrow n(A) = 3"} />
             </div>
-
             <div className="flex items-center gap-3 flex-wrap">
               <p>គេបាន</p>
               <BlockMath math={"P(A) = \\frac{n(A)}{n(s)} = \\frac{3}{8}"} />
@@ -102,7 +102,10 @@ const FirstTopicContent: TopicContent = {
       },
     ],
   },
-  exercise: {
+
+  // ---------------- Exercise ----------------
+  {
+    type: "exercise",
     questions: [
       {
         id: "ex-q1",
@@ -160,38 +163,14 @@ const FirstTopicContent: TopicContent = {
       },
     ],
   },
-};
+];
 
-const ProbabilityDefinition = () => {
-  return (
-    <>
-      <div>
-        {FirstTopicContent.definition && (
-          <DefinitionBox
-            title={FirstTopicContent.definition.title}
-            content={FirstTopicContent.definition.content}
-          />
-        )}
-        {FirstTopicContent.tip && (
-          <TipBox
-            title={FirstTopicContent.tip.title}
-            content={FirstTopicContent.tip.content}
-          />
-        )}
+const jsonV2 = serializeTopicContentV3(ProbabilityDefinition_V3);
+const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
+const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V3[];
 
-        {FirstTopicContent.example && (
-          <ExampleBox
-            question={FirstTopicContent.example.question}
-            steps={FirstTopicContent.example.steps}
-            answer={FirstTopicContent.example.answer}
-          />
-        )}
-        {FirstTopicContent.exercise && (
-          <ExerciseBox questions={FirstTopicContent.exercise.questions} />
-        )}
-      </div>
-    </>
-  );
-};
+const ProbabilityDefinition = () => (
+  <ContentRendererV3 content={ProbabilityDefinition_V3} />
+);
 
 export default ProbabilityDefinition;
