@@ -7,8 +7,7 @@ import ModalRoot from "@components/common/ModalRoot";
 import Script from "next/script";
 import { AuthProvider } from "@hooks/useAuth";
 import { useEffect, useState } from "react";
-import { Grade } from "@core-types/docs/curriculum";
-import { feedLessonsService } from "@/services";
+import { feedCurriculumsService } from "@/services";
 import "katex/dist/katex.min.css";
 
 const geistSans = Geist({
@@ -48,7 +47,7 @@ export default function RootLayout({
     }
     const fetchCurriculum = async () => {
       try {
-        const curriculumData = await feedLessonsService.getCurriculum();
+        const curriculumData = await feedCurriculumsService.getCurriculum();
 
         localStorage.setItem('curriculum', JSON.stringify(curriculumData));
       } catch (error) {

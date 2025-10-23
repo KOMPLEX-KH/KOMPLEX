@@ -6,7 +6,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import { ChevronDown, Check } from 'lucide-react';
 import { Grade } from '@/types/docs/curriculum';
 import { ICON_MAP } from '@/utils/icon';
-import { feedLessonsService } from '@/services';
+import { feedCurriculumsService } from '@/services';
 
 interface DocHeaderProps {
     currentGrade?: { id: number };
@@ -40,7 +40,7 @@ export default function DocHeader({
         if (curriculum.length === 0) {
             const fetchCurriculum = async () => {
                 try {
-                    const curriculumData = await feedLessonsService.getCurriculum();
+                    const curriculumData = await feedCurriculumsService.getCurriculum();
                     setCurriculum(curriculumData);
                     localStorage.setItem('curriculum', JSON.stringify(curriculumData));
                 } catch (error) {
@@ -96,18 +96,18 @@ export default function DocHeader({
 
     if (!gradeData || !currentGrade || !currentSubject || !currentLesson || !currentTopic || curriculum.length === 0) return null;
 
-    const subjects = gradeData.content;
-    const grades = curriculum.map(g => ({ value: g.grade, label: g.gradeKhmer }));
+    const subjects = gradeData.subjects;
+    const grades = curriculum.map(g => ({ value: g.id, label: g.name }));
 
     // Get current selections
-    const currentGradeData = grades.find(g => g.value === gradeData.grade);
+    const currentGradeData = grades.find(g => g.value === gradeData.id);
     const currentSubjectData = subjects.find(s => s.id === currentSubject.id);
     const currentLessonData = currentSubjectData?.lessons.find(l => l.id === currentLesson.id);
 
-    const handleChangeGrade = (grade: string) => {
-        const gradeData = curriculum.find(g => g.grade === grade);
+    const handleChangeGrade = (grade: number) => {
+        const gradeData = curriculum.find(g => g.id === grade);
         if (gradeData) {
-            const subjects = gradeData.content;
+            const subjects = gradeData.subjects;
             const firstSubject = subjects[0];
             const firstLesson = firstSubject.lessons[0];
             const firstTopic = firstLesson.topics[0];
@@ -127,7 +127,7 @@ export default function DocHeader({
                                 const isActive = currentSubject.id === subject.id;
                                 return (
                                     <Link
-                                        key={subject.subject}
+                                        key={subject.id}
                                         href={`/docs/${gradeData.id}/${subject.id}/${subject.lessons[0].id}/${subject.lessons[0].topics[0].id}`}
                                         className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${isActive
                                             ? 'text-indigo-600 bg-indigo-50/90 border border-indigo-500/20 shadow-sm'
@@ -135,7 +135,7 @@ export default function DocHeader({
                                             }`}
                                     >
                                         <Icon size={18} />
-                                        {subject.title}
+                                        {subject.name}
                                     </Link>
                                 );
                             })}
@@ -143,7 +143,7 @@ export default function DocHeader({
                         {/* Grade select for desktop */}
                         <div className="hidden lg:flex items-center bg-indigo-50/50 p-1 gap-4 rounded-full">
                             {grades.map((grade) => {
-                                const isActive = gradeData.grade === grade.value;
+                                const isActive = gradeData.id === grade.value;
                                 return (
                                     <button
                                         key={grade.value}
@@ -221,7 +221,7 @@ export default function DocHeader({
                                 const isActive = currentSubject.id === subject.id;
                                 return (
                                     <Link
-                                        key={subject.subject}
+                                        key={subject.id}
                                         href={`/docs/${gradeData.id}/${subject.id}/${subject.lessons[0].id}/${subject.lessons[0].topics[0].id}`}
                                         className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-xs whitespace-nowrap flex-shrink-0 ${isActive
                                             ? 'text-indigo-600 bg-indigo-50/90 border border-indigo-500/20 shadow-sm'
@@ -229,7 +229,7 @@ export default function DocHeader({
                                             }`}
                                     >
                                         <Icon size={18} />
-                                        {subject.title}
+                                        {subject.name}
                                     </Link>
                                 );
                             })}
@@ -238,9 +238,9 @@ export default function DocHeader({
                         {/* Mobile Grade Dropdown */}
                         <Listbox value={currentGradeData} onChange={(grade) => {
                             if (grade) {
-                                const targetGrade = curriculum.find(g => g.grade === grade.value);
+                                const targetGrade = curriculum.find(g => g.id === grade.value);
                                 if (targetGrade) {
-                                    window.location.href = `/docs/${targetGrade.id}/${targetGrade.content[0].id}/${targetGrade.content[0].lessons[0].id}/${targetGrade.content[0].lessons[0].topics[0].id}`;
+                                    window.location.href = `/docs/${targetGrade.id}/${targetGrade.subjects[0].id}/${targetGrade.subjects[0].lessons[0].id}/${targetGrade.subjects[0].lessons[0].topics[0].id}`;
                                 }
                             }
                         }}>
@@ -296,7 +296,7 @@ export default function DocHeader({
                         }}>
                             <div className="relative">
                                 <Listbox.Button className="bg-white/95 border border-indigo-500/20 rounded-full px-2 py-2 text-xs font-medium text-gray-700 cursor-pointer transition-all duration-300 backdrop-blur-sm  focus:outline-none  flex items-center justify-between  max-w-[80px] min-w-[60px] ">
-                                    <span className="truncate">{currentLessonData?.title}</span>
+                                    <span className="truncate">{currentLessonData?.name}</span>
                                     <ChevronDown size={14} className="text-gray-500 flex-shrink-0" />
                                 </Listbox.Button>
                                 <Transition
@@ -310,7 +310,7 @@ export default function DocHeader({
                                     <Listbox.Options className="absolute left-0 mt-2 w-48 bg-white/95 rounded-3xl border border-indigo-500/20 shadow-lg backdrop-blur-sm z-50 max-h-60 overflow-auto scrollbar-hide p-1.5 focus:outline-none">
                                         {subjects.find(s => s.id === currentSubject.id)?.lessons.map(lesson => (
                                             <Listbox.Option
-                                                key={lesson.lesson}
+                                                key={lesson.id}
                                                 value={lesson}
                                                 className={({ active }) =>
                                                     `relative cursor-pointer select-none py-2 px-2 text-xs rounded-full ${active ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700'
@@ -319,7 +319,7 @@ export default function DocHeader({
                                             >
                                                 {({ selected }) => (
                                                     <div className="flex items-center justify-between">
-                                                        <span>{lesson.title}</span>
+                                                        <span>{lesson.name}</span>
                                                         {selected && <Check size={14} className="text-indigo-600" />}
                                                     </div>
                                                 )}
@@ -336,7 +336,7 @@ export default function DocHeader({
                                 const isActive = currentTopic.id === topic.id;
                                 return (
                                     <Link
-                                        key={topic.englishTitle}
+                                        key={topic.id}
                                         href={`/docs/${gradeData.id}/${currentSubject.id}/${currentLesson.id}/${topic.id}`}
                                         className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-xs whitespace-nowrap flex-shrink-0 ${isActive
                                             ? 'text-indigo-600 bg-indigo-50/90 border border-indigo-500/20 shadow-sm'
@@ -345,7 +345,7 @@ export default function DocHeader({
                                         data-topic-index={index}
                                         data-is-active={isActive}
                                     >
-                                        {topic.title}
+                                        {topic.name}
                                     </Link>
                                 );
                             })}

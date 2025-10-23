@@ -9,37 +9,35 @@ import { FC } from "react";
 // Grade level (e.g., Grade 12)
 export interface Grade {
   id: number;
-  grade: string; // English grade identifier (e.g., "grade-12")
-  gradeKhmer: string; // Khmer grade name (e.g., "ថ្នាក់ទី១២")
-  content: Content[]; // Subjects within this grade
+  name: string; // Khmer grade name (e.g., "ថ្នាក់ទី១២")
+  subjects: Subject[]; // Subjects within this grade
+  orderIndex: number;
 }
 
 // Subject within a grade (e.g., Mathematics, Physics)
-export interface Content {
+export interface Subject {
   id: number;
-  subject: string; // English subject identifier (e.g., "math")
-  title: string; // Khmer subject name (e.g., "គណិតវិទ្យា")
-  englishTitle: string; // English subject name (e.g., "Mathematics")
-  icon:  string; // Subject icon
+  name: string; // Khmer subject name (e.g., "គណិតវិទ្យា")
+  icon: string; // Subject icon
   lessons: Lesson[]; // Lessons within this subject
+  orderIndex: number;
 }
 
 // Lesson within a subject (e.g., Limits, Derivatives)
 export interface Lesson {
   id: number;
-  lesson: string; // English lesson identifier (e.g., "limits")
-  title: string; // Khmer lesson name (e.g., "លីមីត")
-  englishTitle: string; // English lesson name (e.g., "Limits")
+  name: string; // Khmer lesson name (e.g., "លីមីត")
   icon: string; // Lesson icon
   topics: Topic[]; // Topics within this lesson
+  orderIndex: number;
 }
 
 // Individual topic within a lesson (e.g., Zero over Zero, Infinity over Infinity)
 export interface Topic {
   id: number;
-  title: string; // Khmer topic name (e.g., "លីមីត ០/០")
-  englishTitle: string; // English topic identifier (e.g., "zero-over-zero")
+  name: string; // Khmer topic name (e.g., "លីមីត ០/០")
   component: string;
-  exerciseId: number;
-  subtopics?: Topic[]; // Optional subtopics within this topic
+  componentCode: string;
+  orderIndex: number;
+  exerciseId: number | null;
 }

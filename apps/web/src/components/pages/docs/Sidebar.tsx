@@ -6,7 +6,7 @@ import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Grade } from '@/types/docs/curriculum';
 import { ICON_MAP } from '@/utils/icon';
 import SidebarSkeleton from './SidebarSkeleton';
-import { feedLessonsService } from '@/services';
+import { feedCurriculumsService } from '@/services';
 
 interface SidebarProps {
     currentGrade?: { id: number };
@@ -36,7 +36,7 @@ export default function Sidebar({
         if (curriculum.length === 0) {
             const fetchCurriculum = async () => {
                 try {
-                    const curriculumData = await feedLessonsService.getCurriculum();
+                    const curriculumData = await feedCurriculumsService.getCurriculum();
                     setCurriculum(curriculumData);
                     localStorage.setItem('curriculum', JSON.stringify(curriculumData));
                 } catch (error) {
@@ -53,12 +53,12 @@ export default function Sidebar({
         const gradeData = curriculum.find(g => g.id === currentGrade.id);
         if (!gradeData) return;
 
-        const subjectData = gradeData.content.find(s => s.id === currentSubject.id);
+        const subjectData = gradeData.subjects.find(s => s.id === currentSubject.id);
         if (!subjectData) return;
 
         // Initialize all lessons as expanded, with current lesson highlighted
         const expandedState = subjectData.lessons.reduce((acc, lesson) => {
-            acc[lesson.lesson] = true; // All lessons expanded
+            acc[lesson.id] = true; // All lessons expanded
             return acc;
         }, {} as Record<string, boolean>);
 
@@ -92,7 +92,7 @@ export default function Sidebar({
         }
     };
 
-    const toggleLesson = (e: React.MouseEvent, lessonId: string) => {
+    const toggleLesson = (e: React.MouseEvent, lessonId: number) => {
         e.preventDefault(); // Prevent scroll to top
         setExpandedLessons(prev => ({
             ...prev,
@@ -108,7 +108,7 @@ export default function Sidebar({
     const gradeData = curriculum.find(g => g.id === currentGrade.id);
     if (!gradeData) return <SidebarSkeleton />;
 
-    const subjectData = gradeData.content.find(s => s.id === currentSubject.id);
+    const subjectData = gradeData.subjects.find(s => s.id === currentSubject.id);
     if (!subjectData) return <SidebarSkeleton />;
 
 
@@ -123,15 +123,15 @@ export default function Sidebar({
                     <div className="space-y-4">
                         {subjectData.lessons.map((lessonData) => {
                             const Icon = ICON_MAP[lessonData.icon];
-                            const isExpanded = expandedLessons[lessonData.lesson];
+                            const isExpanded = expandedLessons[lessonData.id];
                             const isActive = currentLesson?.id === lessonData.id;
 
                             return (
-                                <div key={lessonData.lesson} className="space-y-2">
+                                <div key={lessonData.id} className="space-y-2">
                                     {/* Lesson Header */}
                                     <button
                                         data-lesson={lessonData.id}
-                                        onClick={(e) => toggleLesson(e, lessonData.lesson)}
+                                        onClick={(e) => toggleLesson(e, lessonData.id)}
                                         className={`w-full flex items-center justify-between p-4 rounded-full shadow-lg shadow-indigo-500/15 ${isActive
                                             ? 'bg-indigo-50 text-indigo-600 border-l-4 border-indigo-500 '
                                             : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
@@ -140,7 +140,7 @@ export default function Sidebar({
                                         <div className="flex items-center gap-3">
                                             <Icon className='w-5 h-5 ' />
                                             <span className="font-semibold text-base">
-                                                {lessonData.title}
+                                                {lessonData.name}
                                             </span>
                                         </div>
                                         {isExpanded ? (
@@ -165,7 +165,7 @@ export default function Sidebar({
                                                             : 'text-gray-600 hover:text-indigo-500 hover:bg-indigo-50/60'
                                                             }`}
                                                     >
-                                                        {topicData.title}
+                                                        {topicData.name}
                                                     </Link>
                                                 );
                                             })}

@@ -1,7 +1,7 @@
 import type { AxiosInstance } from "axios";
 import type { Grade } from "../../types/docs/curriculum";
 
-export const createFeedLessonsService = (api: AxiosInstance) => {
+export const createFeedCurriculumsService = (api: AxiosInstance) => {
   return {
     // Get all curriculum data (grades, subjects, lessons, topics)
     getCurriculum: async (): Promise<Grade[]> => {

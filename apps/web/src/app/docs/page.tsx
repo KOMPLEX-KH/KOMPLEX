@@ -31,7 +31,7 @@ export default function Docs() {
     useEffect(() => {
         // Redirect after a short delay to show loading state
         const timer = setTimeout(() => {
-            router.push(`/docs/${curriculum[0].id}/${curriculum[0].content[0].id}/${curriculum[0].content[0].lessons[0].id}/${curriculum[0].content[0].lessons[0].topics[0].id}`);
+            router.push(`/docs/${curriculum[0].id}/${curriculum[0].subjects[0].id}/${curriculum[0].subjects[0].lessons[0].id}/${curriculum[0].subjects[0].lessons[0].topics[0].id}`);
         }, 1000);
 
         return () => clearTimeout(timer);

@@ -10,7 +10,7 @@ import { deserializeTopicContentV3 } from "@/components/pages/docs/utils/Content
 import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
 import ComingSoon from "@/components/pages/docs/ComingSoon";
 import Skeleton from "@/components/pages/docs/Skeleton";
-import { feedLessonsService } from "@/services";
+import { feedCurriculumsService } from "@/services";
 import { DoTopicExercise } from "@/components/pages/docs/boxes/DoTopicExercise";
 
 
@@ -19,7 +19,7 @@ type Params = { grade: string; subject: string; lesson: string; topic: string };
 // Get navigation data from curriculum
 const getNavigation = (curriculum: Grade[], params: Params) => {
     const grade = curriculum.find(g => g.id === parseInt(params.grade));
-    const subject = grade?.content.find(s => s.id === parseInt(params.subject));
+    const subject = grade?.subjects.find(s => s.id === parseInt(params.subject));
     const lesson = subject?.lessons.find(l => l.id === parseInt(params.lesson));
     const topic = lesson?.topics.find(t => t.id === parseInt(params.topic));
 
@@ -28,12 +28,12 @@ const getNavigation = (curriculum: Grade[], params: Params) => {
     const currentIndex = lesson.topics.findIndex(t => t.id === topic.id);
 
     const prev = currentIndex > 0 ? {
-        title: lesson.topics[currentIndex - 1].title,
+        title: lesson.topics[currentIndex - 1].name,
         link: `/docs/${grade.id}/${subject.id}/${lesson.id}/${lesson.topics[currentIndex - 1].id}`
     } : null;
 
     const next = currentIndex < lesson.topics.length - 1 ? {
-        title: lesson.topics[currentIndex + 1].title,
+        title: lesson.topics[currentIndex + 1].name,
         link: `/docs/${grade.id}/${subject.id}/${lesson.id}/${lesson.topics[currentIndex + 1].id}`
     } : null;
 
@@ -62,7 +62,7 @@ export default function Page() {
         if (curriculum.length === 0) {
             const fetchCurriculum = async () => {
                 try {
-                    const curriculumData = await feedLessonsService.getCurriculum();
+                    const curriculumData = await feedCurriculumsService.getCurriculum();
                     setCurriculum(curriculumData);
                     localStorage.setItem('curriculum', JSON.stringify(curriculumData));
                 } catch (error) {
@@ -79,7 +79,7 @@ export default function Page() {
         const fetchTopicComponent = async () => {
             try {
                 setIsLoadingTopic(true);
-                const topicData = await feedLessonsService.getTopicComponent(params.topic);
+                const topicData = await feedCurriculumsService.getTopicComponent(params.topic);
                 setTopicComponent(topicData ? JSON.stringify(topicData.component) : null);
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
@@ -95,7 +95,7 @@ export default function Page() {
             }
         };
 
-        if (curriculum.find(g => g.id === parseInt(params.grade))?.content.find(s => s.id === parseInt(params.subject))?.lessons.find(l => l.id === parseInt(params.lesson))?.topics.find(t => t.id === parseInt(params.topic))?.exerciseId) {
+        if (curriculum.find(g => g.id === parseInt(params.grade))?.subjects.find(s => s.id === parseInt(params.subject))?.lessons.find(l => l.id === parseInt(params.lesson))?.topics.find(t => t.id === parseInt(params.topic))?.exerciseId) {
             setIsExercise(true);
             return;
         }
@@ -114,7 +114,7 @@ export default function Page() {
     // Get topic info from curriculum
     const getTopicInfo = () => {
         const grade = curriculum.find(g => g.id === parseInt(params.grade));
-        const subject = grade?.content.find(s => s.id === parseInt(params.subject));
+        const subject = grade?.subjects.find(s => s.id === parseInt(params.subject));
         const lesson = subject?.lessons.find(l => l.id === parseInt(params.lesson));
         const topic = lesson?.topics.find(t => t.id === parseInt(params.topic));
 
@@ -139,7 +139,7 @@ export default function Page() {
                 />
                 <div className="w-full lg:ml-70 lg:mt-30 mt-40 p-5 lg:p-6">
                     <TopicWrapper
-                        title={getTopicInfo().topic?.title}
+                        title={getTopicInfo().topic?.name}
                         prev={navigation?.prev}
                         next={navigation?.next}
                     >
@@ -147,7 +147,7 @@ export default function Page() {
                             <Skeleton />
                         ) : (
                             <DoTopicExercise
-                                title={getTopicInfo().topic?.title}
+                                title={getTopicInfo().topic?.name}
                                 exerciseId={getTopicInfo().topic?.exerciseId}
                             />
                         )}
@@ -177,7 +177,7 @@ export default function Page() {
                 />
                 <div className="w-full lg:ml-70 lg:mt-30 mt-40 p-5 lg:p-6">
                     <TopicWrapper
-                        title={getTopicInfo().topic?.title}
+                        title={getTopicInfo().topic?.name}
                         prev={navigation?.prev}
                         next={navigation?.next}
                     >
@@ -206,7 +206,7 @@ export default function Page() {
             />
             <div className="w-full lg:ml-70 lg:mt-30 mt-40 p-5 lg:p-6">
                 <TopicWrapper
-                    title={getTopicInfo().topic?.title}
+                    title={getTopicInfo().topic?.name}
                     prev={navigation?.prev}
                     next={navigation?.next}
                 >

@@ -1,12 +1,12 @@
-import { Content } from "@/types/docs/curriculum";
+import { Subject } from "@/types/docs/curriculum";
 import { Leaf, Dna, FlaskConical, User, Sprout } from "lucide-react";
 import ComingSoon from "@components/pages/docs/ComingSoon";
 
-export const biology: Content = {
+export const biology: Subject = {
   subject: "biology",
-  title: "ជីវវិទ្យា",
-  englishTitle: "Biology",
+  name: "ជីវវិទ្យា",
   icon: Leaf,
+  orderIndex: 0,
   lessons: [
     {
       lesson: "diversity-living-organisms",
