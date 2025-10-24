@@ -10,7 +10,6 @@ import {
     deserializeTopicContentV3ToTree,
 } from "@/components/pages/docs/utils/ContentSerializerV2";
 
-// ===== TOPIC CONTENT DATA =====
 
 const TOPIC_CONTENT_V3: TopicContent_V3[] = [
     {
