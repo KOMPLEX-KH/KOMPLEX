@@ -1,25 +1,25 @@
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
-import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
-import { ImageExplanationBox } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
-import { TopicContent } from "@/types/docs/topic";
-import { InlineMath } from "react-katex";
+"use client";
 
-import { BlockMath } from "react-katex";
-import { GraphExplanationBox } from "@/components/pages/docs/boxes/explanation-box/GraphExplanationBox";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+import { InlineMath, BlockMath } from "react-katex";
+import { ImageExplanationBox } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
 
 // ===== TOPIC CONTENT DATA =====
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "ផ្ទៃក្រឡាត្រីកោណ",
     content: (
       <>
         <div mt-4>
           • ត្រីកោណ
-          គឺជារាងភ្លោះប្លង់ដែលកើតឡើងពីរចំណុចបី​មិនស្របគ្នា​តភ្ជាប់ដោយបន្ទាត់ត្រង់។{" "}
+          គឺជារាងភ្លោះប្លង់ដែលកើតឡើងពីរចំណុចបី មិនស្របគ្នា តភ្ជាប់ដោយបន្ទាត់ត្រង់។{" "}
           <br />
         </div>
         លក្ខណៈសំខាន់ៗរបស់ត្រីកោណមានដូចជា៖
@@ -47,10 +47,11 @@ const TOPIC_CONTENT: TopicContent = {
       </>
     ),
   },
-  example: {
+  {
+    type: "example",
     question: (
       <>
-        នៅក្នុងតម្រុយអរតូណម៉ាល់់មានទិសដៅវិជ្ជាមាន​{" "}
+        នៅក្នុងតម្រុយអរតូណម៉ាល់មានទិសដៅវិជ្ជាមាន{" "}
         <InlineMath math={"\\vec{i}, \\vec{j}, \\vec{k}"} /> គឲ្យមានចំណុ
         A(-1,4,4) ; B(1,2,3) និង C(3,2,4) ។<br />
         <b>គណនាផ្ទៃក្រឡានៃត្រីកោណ ABC</b>
@@ -61,17 +62,14 @@ const TOPIC_CONTENT: TopicContent = {
         title: "គណនាផ្ទៃក្រឡានៃត្រីកោណ ABC",
         content: (
           <>
-            គេមានពីរចំណុច <InlineMath math="A(1,4,4)" />,{" "}
+            គេមានពីរចំណុច <InlineMath math="A(-1,4,4)" />,{" "}
             <InlineMath math="B(1,2,3)" />
             និង <InlineMath math="C(3,2,4)" />
             ។
             <br />
-            តាមរូបមន្ត​​៖{" "}
+            តាមរូបមន្ត៖{" "}
             <InlineMath math="S = \frac{1}{2} |\overrightarrow{AB} \times \overrightarrow{AC}|" />
             <br />
-            {/* ​នាំឲ៖​​  <InlineMath math="S = \frac{1}{2} |(0, -2, -1) \times (2, -2, 0)|" />​ <br />
-            ​ដូចនេះយើង​បាន៖  <InlineMath math="S = \frac{1}{2} |(-2, -2, 4)|" />​ <br />
-            ​នាំឲ៖​​  <InlineMath math="S = \frac{1}{2} \sqrt{(-2)^2 + (-2)^2 + 4^2} = \frac{1}{2} \sqrt{24} = 2\sqrt{6}" />​ */}
           </>
         ),
       },
@@ -102,18 +100,19 @@ const TOPIC_CONTENT: TopicContent = {
         title: "ជួសតម្លៃចូលតាមរូបមន្ត",
         content: (
           <>
-            យើង​បាន៖​ <InlineMath math="S = \frac{1}{2} \times 2\sqrt{6}" />​{" "}
+            យើងបាន៖ <InlineMath math="S = \frac{1}{2} \times 2\sqrt{6}" />{" "}
             <br />
             <br />
             ដូចនេះផ្ទៃក្រឡានៃត្រីកោណ ABC គឺ{" "}
-            <InlineMath math="= \sqrt{6} ឯកតាផ្ទៃ" />។
+            <InlineMath math="= \sqrt{6} ឯកតាផ្ទៃ" />
           </>
         ),
       },
     ],
-    answer: <InlineMath math="S = 2\sqrt{6} ឯកតាផ្ទៃ " />,
+    answer: <InlineMath math="S = \sqrt{6} ឯកតាផ្ទៃ" />,
   },
-  hint: {
+  {
+    type: "hint",
     content: (
       <div>
         • ដើម្បីរកផ្ទៃក្រឡានៃត្រីកោណ ABC អ្នកអាចប្រើរូបមន្ត{" "}
@@ -124,9 +123,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-};
-const TOPIC_CONTENT_PARALLELOGRAM: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "ផ្ទៃក្រឡាប្រលេឡូក្រាម",
     content: (
       <>
@@ -155,7 +153,7 @@ const TOPIC_CONTENT_PARALLELOGRAM: TopicContent = {
               <BlockMath
                 math={String.raw`S = |\overrightarrow{AC} \times \overrightarrow{AD}|`}
               />
-              (​ដែល <InlineMath math="b" />: ជាបាត និង <InlineMath math="h" />:
+              (ដែល <InlineMath math="b" />: ជាបាត និង <InlineMath math="h" />:
               ជាកម្ពស់)
             </>
           }
@@ -163,14 +161,27 @@ const TOPIC_CONTENT_PARALLELOGRAM: TopicContent = {
       </>
     ),
   },
-  example: {
+  {
+    type: "hint",
+    content: (
+      <div className="ml-2">
+        • ដើម្បីរកផ្ទៃក្រឡាប្រលេឡូក្រាម ABCD អ្នកអាចប្រើរូបមន្ត{" "}
+        <InlineMath math="S = |\overrightarrow{AB} \times \overrightarrow{AD}|" />
+        ។ <br />
+        • ចូរបញ្ចូលតម្លៃនៃ <InlineMath math="\overrightarrow{AB}" /> និង{" "}
+        <InlineMath math="\overrightarrow{AD}" /> ដើម្បីគណនាផ្ទៃ។
+      </div>
+    ),
+  },
+  {
+    type: "example",
     question: (
       <>
         ក្នុងតម្រុយអរតូណរម៉ាល់មានទិសដៅវិជ្ជមាន{" "}
         <InlineMath math={"\\vec{i}, \\vec{j}, \\vec{k}"} /> គមានចំណុ A(2,2,1) ,
         B(4,-2,0) , C(3,1,1) និង D(1,5,2)។
         <br />
-        បង្ហាញថាចតុកោណ​ ABCD គឺជាក្រឡាប្រលេឡូក្រាម រួចរកផ្ទៃក្រឡាប្រលេឡូក្រាម
+        បង្ហាញថាចតុកោណ ABCD គឺជាក្រឡាប្រលេឡូក្រាម រួចរកផ្ទៃក្រឡាប្រលេឡូក្រាម
         ABCD ។<br />
       </>
     ),
@@ -203,11 +214,11 @@ const TOPIC_CONTENT_PARALLELOGRAM: TopicContent = {
         ),
       },
       {
-        title: "រកផ្ទៃក្រឡាប្រលេឡូក្រាម ABCD ",
+        title: "រកផ្ទៃក្រឡាប្រលេឡូក្រាម ABCD",
         content: (
           <>
             តាមរូបមន្ត៖
-            <InlineMath math="S = |\overrightarrow{AB} \times \overrightarrow{AC}| = |\overrightarrow{AB} \times \overrightarrow{AD}|" />{" "}
+            <InlineMath math="S = |\overrightarrow{AB} \times \overrightarrow{AD}|" />{" "}
             <br />
             <br />
             តាមកំពូលទាំងបួនខាងលើគេបាន៖ <br />
@@ -254,18 +265,8 @@ const TOPIC_CONTENT_PARALLELOGRAM: TopicContent = {
       </>
     ),
   },
-  hint: {
-    content: (
-      <div className="ml-2">
-        • ដើម្បីរកផ្ទៃក្រឡាប្រលេឡូក្រាម ABCD អ្នកអាចប្រើរូបមន្ត{" "}
-        <InlineMath math="S = |\overrightarrow{AB} \times \overrightarrow{AD}|" />
-        ។ <br />
-        • ចូរបញ្ចូលតម្លៃនៃ <InlineMath math="\overrightarrow{AB}" /> និង{" "}
-        <InlineMath math="\overrightarrow{AD}" /> ដើម្បីគណនាផ្ទៃ។
-      </div>
-    ),
-  },
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "ex1",
@@ -277,7 +278,7 @@ const TOPIC_CONTENT_PARALLELOGRAM: TopicContent = {
           "S = \\sqrt{6} ឯកតាផ្ទៃ",
           "S = 6 ឯកតាផ្ទៃ",
         ],
-        correctAnswer: "S = \\sqrt{6} ឯកតាផ្ទៃ",
+        correctAnswer: 2,
       },
       {
         id: "ex2",
@@ -289,7 +290,7 @@ const TOPIC_CONTENT_PARALLELOGRAM: TopicContent = {
           "S = 7 ឯកតាផ្ទៃ",
           "S = 8 ឯកតាផ្ទៃ",
         ],
-        correctAnswer: "S = 7 ឯកតាផ្ទៃ",
+        correctAnswer: 2,
       },
       {
         id: "ex3",
@@ -301,42 +302,18 @@ const TOPIC_CONTENT_PARALLELOGRAM: TopicContent = {
           "S = 10 ឯកតាផ្ទៃ",
           "S = 12 ឯកតាផ្ទៃ",
         ],
-        correctAnswer: "S = 6 ឯកតាផ្ទៃ",
+        correctAnswer: 0,
       },
     ],
   },
-};
+];
 
-const ShapeArea = () => {
-  return (
-    <div>
-      <DefinitionBox
-        title={TOPIC_CONTENT.definition?.title}
-        content={TOPIC_CONTENT.definition?.content}
-      />
-      <ExampleBox
-        question={TOPIC_CONTENT.example?.question}
-        steps={TOPIC_CONTENT.example?.steps}
-        answer={TOPIC_CONTENT.example?.answer}
-      />
-      <HintBox content={TOPIC_CONTENT.hint?.content} />
-      <DefinitionBox
-        title={TOPIC_CONTENT_PARALLELOGRAM.definition?.title}
-        content={TOPIC_CONTENT_PARALLELOGRAM.definition?.content}
-      />
-      <HintBox content={TOPIC_CONTENT_PARALLELOGRAM.hint?.content} />
-      <ExampleBox
-        question={TOPIC_CONTENT_PARALLELOGRAM.example?.question}
-        steps={TOPIC_CONTENT_PARALLELOGRAM.example?.steps}
-        answer={TOPIC_CONTENT_PARALLELOGRAM.example?.answer}
-      />
-      {TOPIC_CONTENT_PARALLELOGRAM.exercise && (
-        <ExerciseBox
-          questions={TOPIC_CONTENT_PARALLELOGRAM.exercise.questions}
-        />
-      )}
-    </div>
-  );
-};
+// Simulate database fetching
+const jsonV3 = serializeTopicContentV3(content);
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
 
-export default ShapeArea;
+// ===== MAIN COMPONENT =====
+
+export default function ShapeArea() {
+  return <ContentRendererV3 content={restoredContent} />;
+}

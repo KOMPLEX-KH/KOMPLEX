@@ -1,19 +1,34 @@
-import React from "react";
-import { TopicContent } from "@/types/docs/topic";
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { BlockMath, InlineMath } from "react-katex";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { ImageExplanationBox } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+"use client";
 
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+import { InlineMath } from "react-katex";
+
+// Stage 1: Original authoring shape (TopicContent_V3)
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "តើវ៉ិចទ័រគឺជាអ្វី?",
     content:
-      "វ៉ិចទ័រគឺជាអថេរដែលមាន​ទំហំ​ ទិស ទិសដៅ និងប្រវែង។ វាអាចត្រូវបានបង្ហាញដោយសមីការដូចជា v = ai + bj ដែល a និង b ជាចំនួនពិត។",
+      "វ៉ិចទ័រគឺជាអថេរដែលមានទំហំ ទិស ទិសដៅ និងប្រវែង។ វាអាចត្រូវបានបង្ហាញដោយសមីការដូចជា v = ai + bj ដែល a និង b ជាចំនួនពិត។",
   },
-  hint: {
+  {
+    type: "tip",
+    title: "ចំណុចសំខាន់ៗ",
+    content: (
+      <>
+        • វ៉ិចទ័រមានទិស និងប្រវែង។ <br />
+        • វ៉ិចទ័រអាចត្រូវបានបង្ហាញដោយសមីការដូចជា v = ai + bj។ <br />
+        • វ៉ិចទ័រអាចត្រូវបានគណនាដោយប្រើសមីការបូក និងដក។ <br />
+      </>
+    ),
+  },
+  {
+    type: "hint",
     content: (
       <>
         <ul>
@@ -28,20 +43,8 @@ const TOPIC_CONTENT: TopicContent = {
       </>
     ),
   },
-  tip: {
-    title: "ចំណុចសំខាន់ៗ",
-    content: (
-      <>
-        • វ៉ិចទ័រមានទិស និងប្រវែង។ <br />
-        • វ៉ិចទ័រអាចត្រូវបានបង្ហាញដោយសមីការដូចជា v = ai + bj។ <br />
-        • វ៉ិចទ័រអាចត្រូវបានគណនាដោយប្រើសមីការបូក និងដក។ <br />
-      </>
-    ),
-  },
-};
-
-const TOPIC_CONTENT_COMPLEX: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "វ៉ិចទ័រប្រាប់ទិស នៃបន្ទាត់",
     content: (
       <>
@@ -54,11 +57,12 @@ const TOPIC_CONTENT_COMPLEX: TopicContent = {
       </>
     ),
   },
-  tip: {
+  {
+    type: "tip",
     title: "លក្ខណៈនៃវ៉ិចទ័រប្រាប់ទិស",
     content: (
       <>
-        • វ៉ិចទ័រប្រាប់ទិសមានទិសដៅស្រប នឹងបន្ទាត់។
+        • វ៉ិចទ័រប្រាប់ទិសមានទិសដៅស្រប នឹងបន្ទាត់�।
         <br />
         • ប្រសិនបើបន្ទាត់ <InlineMath math="(D)" /> មានវ៉ិចទ័រប្រាប់ទិស{" "}
         <InlineMath math="\vec{u}" /> នោះគ្រប់វ៉ិចទ័រ{" "}
@@ -75,67 +79,31 @@ const TOPIC_CONTENT_COMPLEX: TopicContent = {
       </>
     ),
   },
-};
-const VectorDefinition = () => {
-  return (
-    <div>
-      {TOPIC_CONTENT.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT.definition.title}
-          content={TOPIC_CONTENT.definition.content}
-        />
-      )}
-      {TOPIC_CONTENT.tip && (
-        <TipBox
-          title={TOPIC_CONTENT.tip.title}
-          content={TOPIC_CONTENT.tip.content}
-        />
-      )}
-      {TOPIC_CONTENT.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example.question}
-          steps={TOPIC_CONTENT.example.steps}
-          answer={TOPIC_CONTENT.example.answer}
-        />
-      )}
-      {TOPIC_CONTENT_COMPLEX.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT_COMPLEX.definition.title}
-          content={TOPIC_CONTENT_COMPLEX.definition.content}
-        />
-      )}
-      {TOPIC_CONTENT_COMPLEX.tip && (
-        <TipBox
-          title={TOPIC_CONTENT_COMPLEX.tip.title}
-          content={TOPIC_CONTENT_COMPLEX.tip.content}
-        />
-      )}
-      {TOPIC_CONTENT_COMPLEX.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT_COMPLEX.example.question}
-          steps={TOPIC_CONTENT_COMPLEX.example.steps}
-          answer={TOPIC_CONTENT_COMPLEX.example.answer}
-        />
-      )}
-      <ImageExplanationBox
-        src="/vector-graph.png" // Remove 'public' since Next.js serves from public by default
-        imageAlt="ក្រាប"
-        explanation={
-          <div>
-            ក្នុងក្រាបខាងឆ្វេងនេះ ៖
-            <ul className="list-disc list-inside mt-2 space-y-1">
-              បន្ទាត់ពណ៌ក្រហម និង បន្ទាត់ពណ៌ខៀវមានមេគុណប្រាប់ទិស​ដូចគ្នា។
-              <br />
-              បន្ទាត់ពណ៌បៃតងកាត់បន្ទាត់ទាំងពីរ
-            </ul>
-          </div>
-        }
-      />
-      {TOPIC_CONTENT_COMPLEX.hint && (
-        <HintBox content={TOPIC_CONTENT_COMPLEX.hint.content} />
-      )}
-    </div>
-  );
-};
+  {
+    type: "imageExplanation",
+    src: "/vector-graph.png",
+    imageAlt: "ក្រាប",
+    explanation: (
+      <>
+        <div>
+          ក្នុងក្រាបខាងឆ្វេងនេះ ៖
+          <ul className="list-disc list-inside mt-2 space-y-1">
+            បន្ទាត់ពណ៌ក្រហម និង បន្ទាត់ពណ៌ខៀវមានមេគុណប្រាប់ទិសដូចគ្នា។
+            <br />
+            បន្ទាត់ពណ៌បៃតងកាត់បន្ទាត់ទាំងពីរ
+          </ul>
+        </div>
+      </>
+    ),
+  },
+];
 
-export default VectorDefinition;
+// Stage 2: Serialize to JSON
+const jsonV3 = serializeTopicContentV3(content);
+
+// Stage 3: Deserialize to restore renderable content
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
+
+export default function VectorDefinition() {
+  return <ContentRendererV3 content={restoredContent} />;
+}

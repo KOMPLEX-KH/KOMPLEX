@@ -1,15 +1,18 @@
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
-import { TopicContent } from "@/types/docs/topic";
+"use client";
+
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
 import { InlineMath } from "react-katex";
-import { GraphExplanationBox } from "@/components/pages/docs/boxes/explanation-box/GraphExplanationBox";
 
 // ===== TOPIC CONTENT DATA =====
 
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "អនុគមន៍លោការីត",
     content: (
       <div className="border-l-4 border-red-500 pl-4 bg-red-50 rounded">
@@ -21,8 +24,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  tip: {
+  {
+    type: "tip",
     title: "លក្ខណៈគ្រឹះ",
     content: (
       <div className="space-y-2">
@@ -57,9 +60,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-};
-const EQUATION: TopicContent = {
-  tip: {
+  {
+    type: "tip",
     title: "សមីការលោការីតនេពែ",
     content: (
       <div>
@@ -80,8 +82,27 @@ const EQUATION: TopicContent = {
       </div>
     ),
   },
-
-  example: {
+  {
+    type: "definition",
+    title: "វិសមីការលោការីតនេពែ",
+    content: (
+      <div className="ml-2">
+        <div>
+          <strong>រូបមន្ត:</strong>
+        </div>
+        <div>
+          ក. <InlineMath math="\ln x > \ln y" /> សមមូល{" "}
+          <InlineMath math="x > y" /> ដើម្បី <InlineMath math="x > 0, y > 0" />
+        </div>
+        <div>
+          ខ. <InlineMath math="\ln x < \ln y" /> សមមូល{" "}
+          <InlineMath math="x < y" /> ដើម្បី <InlineMath math="x > 0, y > 0" />
+        </div>
+      </div>
+    ),
+  },
+  {
+    type: "example",
     question: (
       <div>
         <div className="space-y-2">
@@ -129,7 +150,6 @@ const EQUATION: TopicContent = {
                 </div>
               </div>
             </div>
-
             <div className="space-y-2">
               <div>
                 <strong>ខ.</strong> <InlineMath math="ln(2x) = ln(8)" />
@@ -146,7 +166,6 @@ const EQUATION: TopicContent = {
                 </div>
               </div>
             </div>
-
             <div className="space-y-2">
               <div>
                 <strong>គ.</strong> <InlineMath math="ln(x+1) = ln(5)" />
@@ -163,7 +182,6 @@ const EQUATION: TopicContent = {
                 </div>
               </div>
             </div>
-
             <div className="space-y-2">
               <div>
                 <strong>ឃ.</strong> <InlineMath math="ln(x^2) = 2" />
@@ -181,7 +199,6 @@ const EQUATION: TopicContent = {
                 </div>
               </div>
             </div>
-
             <div className="space-y-2">
               <div>
                 <strong>ង.</strong> <InlineMath math="ln(3x-1) > ln(2)" />
@@ -203,7 +220,6 @@ const EQUATION: TopicContent = {
                 </div>
               </div>
             </div>
-
             <div className="space-y-2">
               <div>
                 <strong>ច.</strong> <InlineMath math="ln(x+3) \leq ln(7)" />
@@ -227,30 +243,8 @@ const EQUATION: TopicContent = {
     ],
     answer: "",
   },
-};
-
-const INEQUALITIES_CONTENT: TopicContent = {
-  definition: {
-    title: "វិសមីការលោការីតនេពែ",
-    content: (
-      <div className="ml-2">
-        <div>
-          <strong>រូបមន្ត:</strong>
-        </div>
-        <div>
-          ក. <InlineMath math="\ln x > \ln y" /> សមមូល{" "}
-          <InlineMath math="x > y" /> ដើម្បី <InlineMath math="x > 0, y > 0" />
-        </div>
-        <div>
-          ខ. <InlineMath math="\ln x < \ln y" /> សមមូល{" "}
-          <InlineMath math="x < y" /> ដើម្បី <InlineMath math="x > 0, y > 0" />
-        </div>
-      </div>
-    ),
-  },
-};
-const LIMITS_CONTENT: TopicContent = {
-  example: {
+  {
+    type: "example",
     question: (
       <div className="space-y-3">
         <div className="font-bold">ចំណាំ: គណនាលីមីតខាងក្រោម</div>
@@ -296,7 +290,6 @@ const LIMITS_CONTENT: TopicContent = {
                 <InlineMath math="= lim_{x \to +\infty} \frac{1 + \frac{\ln x}{x^2}}{3 - \frac{1}{x^2}} = \frac{1 + 0}{3 - 0} = \frac{1}{3}" />
               </div>
             </div>
-
             <div>
               <strong>ខ.</strong>{" "}
               <InlineMath math="lim_{x \to +\infty} \left(x \ln x - x^2 + 5\right)" />
@@ -307,7 +300,6 @@ const LIMITS_CONTENT: TopicContent = {
                 <InlineMath math="= (+\infty)(0 - 1 + 0) = -\infty" />
               </div>
             </div>
-
             <div>
               <strong>គ.</strong>{" "}
               <InlineMath math="lim_{x \to +\infty} \frac{\ln x + 1}{\ln x - 1}" />
@@ -318,7 +310,6 @@ const LIMITS_CONTENT: TopicContent = {
                 <InlineMath math="= lim_{x \to +\infty} \frac{1 + \frac{1}{\ln x}}{1 - \frac{1}{\ln x}} = \frac{1 + 0}{1 - 0} = 1" />
               </div>
             </div>
-
             <div>
               <strong>ឃ.</strong>{" "}
               <InlineMath math="lim_{x \to 0^+} \frac{\ln(1 + 7x)}{x}" />
@@ -326,7 +317,6 @@ const LIMITS_CONTENT: TopicContent = {
                 <InlineMath math="= lim_{x \to 0^+} \frac{7x}{x} = 7" />
               </div>
             </div>
-
             <div>
               <strong>ង.</strong>{" "}
               <InlineMath math="lim_{x \to 0^+} \ln\left(\frac{1 + 2x}{1 - 3x}\right)" />
@@ -334,7 +324,6 @@ const LIMITS_CONTENT: TopicContent = {
                 <InlineMath math="= \ln\left(\frac{1 + 0}{1 - 0}\right) = \ln 1 = 0" />
               </div>
             </div>
-
             <div>
               <strong>ច.</strong>{" "}
               <InlineMath math="lim_{x \to 0^+} \frac{\ln(1 + x) + \ln(1 + 2x)}{x}" />
@@ -351,13 +340,10 @@ const LIMITS_CONTENT: TopicContent = {
     ],
     answer: "",
   },
-};
-
-const ADVANCED_EXAMPLE: TopicContent = {
-  example: {
+  {
+    type: "example",
     question: (
       <div>
-        <div></div>
         <div className="space-y-3">
           <div>
             អនុគមន៍ <InlineMath math="f" /> កំណត់លើ{" "}
@@ -367,7 +353,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
             ក្នុងប្លង់ដោយតម្រុយអរតូណរម៉ាល់
             <InlineMath math="(O, \overrightarrow{i}, \overrightarrow{j})" />។
           </div>
-
           <div>
             <div>
               ១. ក. បង្ហាញថា
@@ -378,7 +363,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
               </div>
             </div>
           </div>
-
           <div>
             <div>
               ខ. ប្រើលទ្ធផលនេះដើម្បីគណនាលីមីតនៃអនុគមន៍
@@ -386,7 +370,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
               <InlineMath math="+\infty" />។
             </div>
           </div>
-
           <div>
             <div>
               ២. ក. កំណត់ដេរីវេ
@@ -400,10 +383,9 @@ const ADVANCED_EXAMPLE: TopicContent = {
               រួចសង់តារាងអថេរភាពរបស់វា
             </div>
           </div>
-
           <div>
             <div>
-              រកសមីការបបន្ទាត់ប៉ះ​ទៅនឹងក្រាប <InlineMath math="(C)" /> ត្រង់{" "}
+              រកសមីការបបន្ទាត់ប៉ះទៅនឹងក្រាប <InlineMath math="(C)" /> ត្រង់{" "}
               <InlineMath math="B" /> ដែលមានអាប់ស៊ីស = 1
             </div>
             <div className="ml-4">
@@ -414,7 +396,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
               </div>
             </div>
           </div>
-
           <div>
             <div>
               <strong>៤. សង់ក្រាប</strong> <InlineMath math="(C)" />{" "}
@@ -437,13 +418,12 @@ const ADVANCED_EXAMPLE: TopicContent = {
               </div>
               <div>
                 ដោយ:{" "}
-                <InlineMath math="f(x) = \frac{x^2-2}{x} - \ln x = \frac{x^2}{x} - \frac{2}{x} - \ln x = x - \frac{2}{x} - \ln x" />{" "}
+                <InlineMath math="f(x) = \frac{x^2-2}{x} - \ln x = \frac{x^2}{x} - \frac{2}{x} - \ln x = x - \frac{2}{x} - \ln x" />
               </div>
               <div>
                 ដូច្នេះ: <InlineMath math="f(x) = x - \frac{2}{x} - \ln x" />។
               </div>
             </div>
-
             <div>
               <div>
                 <strong>• បង្ហាញថា</strong>{" "}
@@ -459,7 +439,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
                 ដូច្នេះ: <InlineMath math="f(x) = x - \frac{2}{x} - \ln x" />។
               </div>
             </div>
-
             <div className="mt-4">
               <div>
                 <strong>• កំណត់លីមីត</strong> <InlineMath math="f" /> ត្រង់{" "}
@@ -468,12 +447,12 @@ const ADVANCED_EXAMPLE: TopicContent = {
               <div className="ml-4">
                 <div>
                   •{" "}
-                  <InlineMath math="lim_{x \to 0^+} f(x) = lim_{x \to 0^+} \left(x - \frac{2}{x} - \ln x\right) = 0 - (-\infty) - (-\infty) = +\infty" />{" "}
+                  <InlineMath math="lim_{x \to 0^+} f(x) = lim_{x \to 0^+} \left(x - \frac{2}{x} - \ln x\right) = 0 - (-\infty) - (-\infty) = +\infty" />
                   (ព្រោះ <InlineMath math="lim_{x \to 0^+} x\ln x = 0" />)
                 </div>
                 <div>
                   •{" "}
-                  <InlineMath math="lim_{x \to +\infty} f(x) = lim_{x \to +\infty} x\left(1 - \frac{\ln x}{x} - \frac{2}{x^2}\right) = +\infty" />{" "}
+                  <InlineMath math="lim_{x \to +\infty} f(x) = lim_{x \to +\infty} x\left(1 - \frac{\ln x}{x} - \frac{2}{x^2}\right) = +\infty" />
                   (ព្រោះ{" "}
                   <InlineMath math="lim_{x \to +\infty} \frac{\ln x}{x} = 0" />)
                 </div>
@@ -498,7 +477,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
             <div>
               ដូច្នេះ: <InlineMath math="f'(x) = \frac{x^2 - x + 2}{x^2}" />។
             </div>
-
             <div className="mt-4">
               <div>
                 <strong>• បង្ហាញថា</strong>f(x) មានសញ្ញាដូច{" "}
@@ -528,7 +506,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
                 </div>
               </div>
             </div>
-
             <div className="mt-4">
               <div>
                 <strong>• តារាងអថេរភាពនៃ f</strong>
@@ -545,7 +522,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
                         }}
                       >
                         <tbody>
-                          {/* First row: x values - 2 columns */}
                           <tr>
                             <td
                               className="border-2 border-black text-center font-normal bg-white"
@@ -567,7 +543,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
                                 verticalAlign: "middle",
                               }}
                             >
-                              {/* 0⁺ at left */}
                               <div
                                 className="absolute"
                                 style={{
@@ -578,8 +553,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
                               >
                                 0⁺
                               </div>
-
-                              {/* +∞ at right */}
                               <div
                                 className="absolute"
                                 style={{
@@ -592,8 +565,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
                               </div>
                             </td>
                           </tr>
-
-                          {/* Second row: f'(x) - 3 columns with vertical line */}
                           <tr>
                             <td
                               className="border-2 border-black text-center font-normal bg-white"
@@ -611,7 +582,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
                                 height: "45px",
                               }}
                             >
-                              {/* Double vertical lines at x=3 */}
                               <div
                                 className="absolute"
                                 style={{
@@ -623,8 +593,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
                                   transform: "translateX(-50%,-50%)",
                                 }}
                               ></div>
-
-                              {/* + sign centered */}
                               <div
                                 className="absolute"
                                 style={{
@@ -641,8 +609,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
                               </div>
                             </td>
                           </tr>
-
-                          {/* Third row: f(x) - 2 columns with arrows */}
                           <tr>
                             <td
                               className="border-2 border-black text-center font-normal bg-white"
@@ -654,7 +620,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
                             >
                               f(x)
                             </td>
-
                             <td
                               className="border-2 border-black bg-white relative"
                               style={{
@@ -672,8 +637,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
                                   transform: "translateX(-50%,-50%)",
                                 }}
                               ></div>
-
-                              {/* Arrow from -∞ to +∞ - full diagonal */}
                               <div
                                 className="absolute"
                                 style={{
@@ -712,8 +675,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
                                   />
                                 </svg>
                               </div>
-
-                              {/* -∞ at left bottom */}
                               <div
                                 className="absolute"
                                 style={{
@@ -724,8 +685,6 @@ const ADVANCED_EXAMPLE: TopicContent = {
                               >
                                 -∞
                               </div>
-
-                              {/* +∞ at right top */}
                               <div
                                 className="absolute"
                                 style={{
@@ -784,9 +743,9 @@ const ADVANCED_EXAMPLE: TopicContent = {
                 <div>
                   ដោយបន្ទាត់ប៉ះទៅនឹងក្រាប (C) ត្រង់ B មានមេគុណប្រាប់ទិស
                   <InlineMath math="f'(x_n) = \frac{x_n^2 - x_n + 2}{x_n^2}" />{" "}
-                  ហើយបន្ទាត់ប៉ះត្រង់ B ស្របនឺងបន្ទាត់ y = x
+                  ហើយបន្ទាត់ប៉ះត្រង់ B ស្របនឹងបន្ទាត់ y = x
                   ដែលមានមេគុណប្រាប់ទិសស្មើរ 1
-                  នោះមេគុណប្រាប់ទិសនៃបន្ទាត់ទាំងពីរស្មើគ្នា​។
+                  នោះមេគុណប្រាប់ទិសនៃបន្ទាត់ទាំងពីរស្មើគ្នា។
                 </div>
                 <div>
                   <InlineMath math="f'(x_n) = 1" />
@@ -813,159 +772,114 @@ const ADVANCED_EXAMPLE: TopicContent = {
     ],
     answer: <div></div>,
   },
-};
+  {
+    type: "graphExplanation",
+    expressions: [
+      {
+        id: "1",
+        latex: "f(x) = \\frac{x^2 -2}{x} - \\ln x",
+        color: "#FF4136",
+      },
+      { id: "2", latex: "y= 2x-3", color: "#FF413" },
+      { id: "3", latex: "y = x", color: "#FF413" },
+      { id: "4", latex: "y= x-1.7", color: "#FF413" },
+    ],
+    explanation: (
+      <>
+        <p>សំណង់ក្រាប</p>
+        <p>
+          យើងមានក្រាប
+          <InlineMath math="f(x) = \frac{x^2 -2}{x} - \ln x" />
+        </p>
+        <p>♦ (d): y= 2x-3 ជាបន្ទាត់ប៉ះនឹង (c) ​ត្រង់ A</p>
+        <p>តារាងតម្លៃលេខ</p>
+        <table className="table-auto border-collapse border border-gray-300 text-left my-4">
+          <thead>
+            <tr>
+              <th className="border border-gray-300 px-4 py-2 text-left font-bold">
+                x
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-left font-normal">
+                0
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-left font-normal">
+                2
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th className="border border-gray-300 px-4 py-2 text-left font-bold">
+                y
+              </th>
+              <td className="border border-gray-300 px-4 py-2 text-left">
+                <InlineMath math="-3" />
+              </td>
+              <td className="border border-gray-300 px-4 py-2 text-left">
+                <InlineMath math="1" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p>♦ (d&apos;): y = x ជាបន្ទាត់ដែលស្របនឹងបន្ទាត់ប៉ះត្រង់ B</p>
+        <p>♦ B(2,0.3) ជាចំណុចប៉ះ </p>
+        <p>♦ y = x-1.7 ជាបន្ទាត់ប៉ះនឹង (c) ​ត្រង់ B</p>
+        <p>តារាងតម្លៃលេខ</p>
+        <table className="table-auto border-collapse border border-gray-300 text-left my-4">
+          <thead>
+            <tr>
+              <th className="border border-gray-300 px-4 py-2 text-left font-bold">
+                x
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-left font-normal">
+                0
+              </th>
+              <th className="border border-gray-300 px-4 py-2 text-left font-normal">
+                2
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th className="border border-gray-300 px-4 py-2 text-left font-bold">
+                y
+              </th>
+              <td className="border border-gray-300 px-4 py-2 text-left">
+                <InlineMath math="1.7" />
+              </td>
+              <td className="border border-gray-300 px-4 py-2 text-left">
+                <InlineMath math="0.3" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </>
+    ),
+    options: {
+      showGrid: true,
+      expressions: true,
+      xAxisLabel: "x",
+      yAxisLabel: "y",
+    },
+  },
+  {
+    type: "hint",
+    content: (
+      <>
+        ចំណាំថា អនុគមន៍លោការីត <InlineMath math="\ln x" /> មានដែនកំណត់{" "}
+        <InlineMath math="(0, +\infty)" /> និង ដេរីវេរបស់វាគឺ{" "}
+        <InlineMath math="(\ln x)' = \frac{1}{x}" />។
+      </>
+    ),
+  },
+];
+
+// Simulate DB fetch
+const jsonV3 = serializeTopicContentV3(content);
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
 
 // ===== MAIN COMPONENT =====
 
 export default function LogarithmicFunction() {
-  return (
-    <>
-      {TOPIC_CONTENT.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT.definition.title}
-          content={TOPIC_CONTENT.definition.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.tip && (
-        <TipBox
-          title={TOPIC_CONTENT.tip.title}
-          content={TOPIC_CONTENT.tip.content}
-        />
-      )}
-      {EQUATION.tip && (
-        <TipBox title={EQUATION.tip.title} content={EQUATION.tip.content} />
-      )}
-
-      {INEQUALITIES_CONTENT.definition && (
-        <TipBox
-          title={INEQUALITIES_CONTENT.definition.title}
-          content={INEQUALITIES_CONTENT.definition.content}
-        />
-      )}
-
-      {EQUATION.example && (
-        <ExampleBox
-          question={EQUATION.example.question}
-          steps={EQUATION.example.steps}
-          answer={EQUATION.example.answer}
-        />
-      )}
-
-      {LIMITS_CONTENT.example && (
-        <ExampleBox
-          question={LIMITS_CONTENT.example.question}
-          steps={LIMITS_CONTENT.example.steps}
-          answer={LIMITS_CONTENT.example.answer}
-        />
-      )}
-
-      {ADVANCED_EXAMPLE.example && (
-        <ExampleBox
-          question={ADVANCED_EXAMPLE.example.question}
-          steps={ADVANCED_EXAMPLE.example.steps}
-          answer={ADVANCED_EXAMPLE.example.answer}
-        />
-      )}
-
-      <GraphExplanationBox
-        expressions={[
-          {
-            id: "1",
-            latex: "f(x) = \\frac{x^2 -2}{x} - \\ln x",
-            color: "#FF4136",
-          },
-          { id: "2", latex: "y= 2x-3", color: "#FF413" },
-          { id: "3", latex: "y = x", color: "#FF413" },
-          { id: "4", latex: "y= x-1.7", color: "#FF413" },
-        ]}
-        explanation={
-          <>
-            <p>សំណង់ក្រាប</p>
-            <p>
-              យើងមានក្រាប
-              <InlineMath math="f(x) = \frac{x^2 -2}{x} - \ln x" />
-            </p>
-            <p>♦ (d): y= 2x-3 ជាបន្ទាត់ប៉ះនឹង (c) ​ត្រង់ A</p>
-            <p>តារាងតម្លៃលេខ</p>
-            <table className="table-auto border-collapse border border-gray-300 text-left my-4">
-              <thead>
-                <tr>
-                  <th className="border border-gray-300 px-4 py-2 text-left font-bold">
-                    x
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 text-left font-normal">
-                    0
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 text-left font-normal">
-                    2
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th className="border border-gray-300 px-4 py-2 text-left font-bold">
-                    y
-                  </th>
-                  <td className="border border-gray-300 px-4 py-2 text-left">
-                    <InlineMath math="-3" />
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-left">
-                    <InlineMath math="1" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <p>♦ (d&apos;): y = x ជាបន្ទាត់ដែលស្របនឹងបន្ទាត់ប៉ះ​ត្រង់ B</p>
-            <p>♦ B(2,0.3)​ ជាចំណុចប៉ះ </p>
-            <p>♦ y = x-1.7 ជាបន្ទាត់ប៉ះនឹង (c) ​ត្រង់ B</p>
-            <p>តារាងតម្លៃលេខ</p>
-            <table className="table-auto border-collapse border border-gray-300 text-left my-4">
-              <thead>
-                <tr>
-                  <th className="border border-gray-300 px-4 py-2 text-left font-bold">
-                    x
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 text-left font-normal">
-                    0
-                  </th>
-                  <th className="border border-gray-300 px-4 py-2 text-left font-normal">
-                    2
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th className="border border-gray-300 px-4 py-2 text-left font-bold">
-                    y
-                  </th>
-                  <td className="border border-gray-300 px-4 py-2 text-left">
-                    <InlineMath math="1.7" />
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-left">
-                    <InlineMath math="0.3" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </>
-        }
-        options={{
-          showGrid: true,
-          expressions: true,
-          xAxisLabel: "x",
-          yAxisLabel: "y",
-        }}
-      />
-      <HintBox
-        content={
-          <>
-            ចំណាំថា អនុគមន៍លោការីត <InlineMath math="\ln x" /> មានដែនកំណត់{" "}
-            <InlineMath math="(0, +\infty)" /> និង ដេរីវេរបស់វាគឺ{" "}
-            <InlineMath math="(\ln x)' = \frac{1}{x}" />។
-          </>
-        }
-      />
-    </>
-  );
+  return <ContentRendererV3 content={restoredContent} />;
 }

@@ -1,29 +1,31 @@
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { TopicContent } from "@/types/docs/topic";
-import { BlockMath, InlineMath } from "react-katex";
-import { GraphExplanationBox } from "@/components/pages/docs/boxes/explanation-box/GraphExplanationBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+"use client";
+
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+import { InlineMath, BlockMath } from "react-katex";
 
 // ===== TOPIC CONTENT DATA =====
 
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "អនុគមន៍សនិទាន",
     content: (
       <>
         អនុគមន៍សនិទាន
-        <InlineMath math="f(x)" /> ជាអនុគមន៍ដែលមានភាគយកនិងភាគបែងជាពហុធា​នៃ x
+        <InlineMath math="f(x)" /> ជាអនុគមន៍ដែលមានភាគយកនិងភាគបែងជាពហុធានៃ x
         <br />
       </>
     ),
   },
-
-  tip: {
+  {
+    type: "tip",
     title: (
-      <div className="text-base">លក្ខណៈសម្គាល់ងាយៗ​ ពេលគិតដល់អាស៊ីមតូត</div>
+      <div className="text-base">លក្ខណៈសម្គាល់ងាយៗ ពេលគិតដល់អាស៊ីមតូត</div>
     ),
     content: (
       <>
@@ -36,16 +38,383 @@ const TOPIC_CONTENT: TopicContent = {
       </>
     ),
   },
-
-  example: {
+  {
+    type: "tip",
+    title: "លក្ខណៈសម្គាល់ងាយៗ ពេលសិក្សាសញ្ញាសមីការមានឬសតែមួយ",
+    content: (
+      <div>
+        <div>
+          <div>
+            ♦ បើសមីការមានឬសតែមួយដែលមានទម្រង់ <InlineMath math="ax+b" />
+          </div>
+          <div>♦ នោះការសិក្សាសញ្ញាគឺ (ធំដូចតូចផ្ទុយ)</div>
+          <p>♦ មានន័យថាបើធំជាងឬសមានសញ្ញាដូច a តូចជាងឬសមានសញ្ញាផ្ទុយ a</p>
+          <div>
+            ឧទាហរណ៍: f&apos;(x) យកសញ្ញាតាម <InlineMath math="-x +2 = 0" />
+            <br />
+            គេបាន x = 2
+          </div>
+          <div className="w-[60%] md:w-[25%] max-w-full overflow-hidden bg-white justify-start mt-2">
+            <div className="bg-white">
+              <table
+                className="w-full border-collapse min-w-0"
+                style={{
+                  fontSize: "clamp(14px, 4vw, 16px)",
+                  fontFamily: "serif",
+                }}
+              >
+                <tbody>
+                  <tr>
+                    <td
+                      className="border-2 border-black text-center font-normal bg-white"
+                      style={{
+                        width: "10%",
+                        minWidth: "40px",
+                        height: "45px",
+                        verticalAlign: "middle",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      x
+                    </td>
+                    <td
+                      className="border-2 border-black bg-white relative"
+                      style={{
+                        width: "90%",
+                        height: "45px",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      <div
+                        className="absolute"
+                        style={{
+                          left: "2%",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                        }}
+                      >
+                        −∞
+                      </div>
+                      <div
+                        className="absolute"
+                        style={{
+                          left: "50%",
+                          top: "50%",
+                          transform: "translate(-50%,-50%)",
+                        }}
+                      >
+                        2
+                      </div>
+                      <div
+                        className="absolute"
+                        style={{
+                          right: "5%",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                        }}
+                      >
+                        +∞
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      className="border-2 border-black text-center font-normal bg-white"
+                      style={{
+                        height: "45px",
+                        verticalAlign: "middle",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      f&apos;(x)
+                    </td>
+                    <td
+                      className="border-2 border-black bg-white relative"
+                      style={{
+                        height: "45px",
+                      }}
+                    >
+                      <div
+                        className="absolute"
+                        style={{
+                          left: "20%",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          fontSize: "clamp(16px, 5vw, 18px)",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        +
+                      </div>
+                      <div
+                        className="absolute"
+                        style={{
+                          left: "50%",
+                          top: "50%",
+                          transform: "translate(-50%, -50%)",
+                          fontSize: "clamp(16px, 5vw, 18px)",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        0
+                      </div>
+                      <div
+                        className="absolute"
+                        style={{
+                          left: "70%",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          fontSize: "clamp(16px, 5vw, 18px)",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        −
+                      </div>
+                      <div
+                        className="absolute"
+                        style={{
+                          left: "50%",
+                          top: "0",
+                          height: "100%",
+                          width: "2px",
+                          backgroundColor: "black",
+                          transform: "translateX(-50%)",
+                        }}
+                      ></div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <p>
+          • <InlineMath math="(-\infty,2)" /> គឺតូចជាងឬស
+        </p>
+        <p>
+          • <InlineMath math="(2,+\infty)" /> គឺធំជាងឬស
+        </p>
+      </div>
+    ),
+  },
+  {
+    type: "tip",
+    title: "លក្ខណៈសម្គាល់ងាយៗ ពេលសិក្សាសញ្ញាដែលមានឬស 2",
+    content: (
+      <div>
+        <div>
+          <div>
+            ♦ បើសមីការមានឬស2ដែលមានទម្រង់ <InlineMath math="ax^2+bx+c" />
+          </div>
+          <div>♦ នោះការសិក្សាសញ្ញាគឺ (ក្រៅដូចខូចក្នុង)</div>
+          <p>
+            ♦ មានន័យថាបើនៅក្រៅឬសគឺយកសញ្ញាដូច a ហើយបើនៅចន្លោះឬសគឺសញ្ញាផ្ទុយ a
+          </p>
+          <div>
+            ឧទាហរណ៍: f&apos;(x) យកសញ្ញាតាម <InlineMath math="x^2+2x-3 = 0" />
+            <br />
+            គេបាន x = 2
+          </div>
+          <div className="w-full max-w-full overflow-hidden justify-start mt-2">
+            <div className="w-[60%] md:w-[30%] max-w-full overflow-hidden justify-start mt-2">
+              <div className="bg-white">
+                <table
+                  className="w-full border-collapse min-w-0"
+                  style={{
+                    fontSize: "clamp(14px, 4vw, 16px)",
+                    fontFamily: "serif",
+                  }}
+                >
+                  <tbody>
+                    <tr>
+                      <td
+                        className="border-2 border-black text-center font-normal bg-white"
+                        style={{
+                          width: "10%",
+                          minWidth: "40px",
+                          height: "45px",
+                          verticalAlign: "middle",
+                          fontStyle: "italic",
+                        }}
+                      >
+                        x
+                      </td>
+                      <td
+                        className="border-2 border-black bg-white relative"
+                        style={{
+                          width: "90%",
+                          height: "45px",
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        <div
+                          className="absolute"
+                          style={{
+                            left: "2%",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                          }}
+                        >
+                          −∞
+                        </div>
+                        <div
+                          className="absolute"
+                          style={{
+                            left: "30%",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                          }}
+                        >
+                          1
+                        </div>
+                        <div
+                          className="absolute"
+                          style={{
+                            left: "60%",
+                            top: "50%",
+                            transform: "translate(-50%, -50%)",
+                          }}
+                        >
+                          -3
+                        </div>
+                        <div
+                          className="absolute"
+                          style={{
+                            left: "82%",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                          }}
+                        >
+                          +∞
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        className="border-2 border-black text-center font-normal bg-white"
+                        style={{
+                          height: "45px",
+                          verticalAlign: "middle",
+                          fontStyle: "italic",
+                        }}
+                      >
+                        f&apos;(x)
+                      </td>
+                      <td
+                        className="border-2 border-black bg-white relative"
+                        style={{
+                          height: "45px",
+                        }}
+                      >
+                        <div
+                          className="absolute"
+                          style={{
+                            left: "20%",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            fontSize: "clamp(16px, 5vw, 18px)",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          +
+                        </div>
+                        <div
+                          className="absolute"
+                          style={{
+                            left: "31%",
+                            top: "50%",
+                            transform: "translate(-50%, -50%)",
+                            fontSize: "clamp(16px, 5vw, 18px)",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          0
+                        </div>
+                        <div
+                          className="absolute"
+                          style={{
+                            left: "45%",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            fontSize: "clamp(16px, 5vw, 18px)",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          −
+                        </div>
+                        <div
+                          className="absolute"
+                          style={{
+                            left: "31%",
+                            top: "0",
+                            height: "100%",
+                            width: "2px",
+                            backgroundColor: "black",
+                            transform: "translateX(-50%)",
+                          }}
+                        ></div>
+                        <div
+                          className="absolute"
+                          style={{
+                            left: "60%",
+                            top: "0",
+                            height: "100%",
+                            width: "2px",
+                            backgroundColor: "black",
+                            transform: "translateX(-50%)",
+                          }}
+                        ></div>
+                        <div
+                          className="absolute"
+                          style={{
+                            left: "60%",
+                            top: "50%",
+                            transform: "translate(-50%, -50%)",
+                            fontSize: "clamp(16px, 5vw, 18px)",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          0
+                        </div>
+                        <div
+                          className="absolute"
+                          style={{
+                            left: "75%",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            fontSize: "clamp(16px, 5vw, 18px)",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          +
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p>
+          • <InlineMath math="(-\infty,1), (3,+\infty)" /> គឺក្រៅឬស
+        </p>
+        <p>
+          • <InlineMath math="(1,3)" /> គឺចន្លោះឬស
+        </p>
+      </div>
+    ),
+  },
+  {
+    type: "example",
     question: (
       <div>
         <div>
           គេមានអនុ <InlineMath math="f(x)= \frac{x^2-5x+10}{x-3}" /> តាង(C)
-          ជាក្រាបនៃ f(x)​ ។
+          ជាក្រាបនៃ f(x) ។
         </div>
         <div>
-          1.រកតម្លៃ m,n,p​ ដើម្បីបាន{" "}
+          1.រកតម្លៃ m,n,p ដើម្បីបាន{" "}
           <InlineMath math="f(x)=mx+n+ \frac{p}{x-3}" />
         </div>
         <div>
@@ -53,7 +422,7 @@ const TOPIC_CONTENT: TopicContent = {
           <InlineMath math="\lim_{x \to \infty} f(x)" />
         </div>
         <div>រួចទាញបញ្ជាក់សមីការនៃអាស៊ីមតូតឈរនៃក្រាប(C)</div>
-        <div>3.ស្រាយបញ្ជាក់ថា​ y = x-2 ជាអាស៊ីមតូតទ្រេត</div>
+        <div>3.ស្រាយបញ្ជាក់ថា y = x-2 ជាអាស៊ីមតូតទ្រេត</div>
         <div>
           4.បញ្ចាក់ថា
           <InlineMath math="f'(x) = \frac{x^2-6x+5}{(x-3)^2}" />
@@ -74,7 +443,7 @@ const TOPIC_CONTENT: TopicContent = {
             <InlineMath math="M" /> និង <InlineMath math="N" />{" "}
             រវាងបន្ទាត់(Δ&apos;) និង (Δ&quot;)ជាមួយខ្សែរកោង(C) ។
           </div>
-          <div>(គេដឹងថា(Δ&quot;)​ ជាបន្ទាត់ស្របនឺងអ័ក្សអាប់ស៊ីស)</div>
+          <div>(គេដឹងថា(Δ&quot;) ជាបន្ទាត់ស្របនឺងអ័ក្សអាប់ស៊ីស)</div>
           <div>
             5.3 ស្រាយថាបន្ទាត់(Δ&apos;) និង (Δ&quot;)ប្រសព្វបន្ទាត់(d)
             ត្រង់ចំណុច <InlineMath math="B" /> និង <InlineMath math="C" />{" "}
@@ -85,13 +454,12 @@ const TOPIC_CONTENT: TopicContent = {
             <InlineMath math="C" /> ។
           </div>
           <div>
-            5.4​ គណនាកូអរដោនេនៃចំណុច I និង​ ស្រាយថា I ជាផ្ចិតឆ្លុះនៃខ្សែរកោង (C)
+            5.4 គណនាកូអរដោនេនៃចំណុច I និង ស្រាយថា I ជាផ្ចិតឆ្លុះនៃខ្សែរកោង (C)
             រួចសង់ក្រាប។
           </div>
         </div>
       </div>
     ),
-
     steps: [
       {
         title: "1. រកតម្លៃ m, n, p",
@@ -106,7 +474,7 @@ const TOPIC_CONTENT: TopicContent = {
               <InlineMath math="\Rightarrow" />{" "}
               <InlineMath math="\frac{x^2-5x+10}{x-3} = mx + n + \frac{p}{x-3}" />
             </div>
-            <div>តម្រូវភាគបែងរួមរួចលុបចោល​គេនឹងបាន</div>
+            <div>តម្រូវភាគបែងរួមរួចលុបចោលគេនឹងបាន</div>
             <div>
               <InlineMath math="x^2-5x+10 = (x-3)(mx+n) + p" />
             </div>
@@ -192,7 +560,7 @@ const TOPIC_CONTENT: TopicContent = {
           <div className="space-y-2">
             <div>
               <div>
-                គេមានក្រាប(C)​{" "}
+                គេមានក្រាប(C){" "}
                 <InlineMath math="f(x) = x - 2 + \frac{4}{x-3}" />
               </div>
               <div>
@@ -217,14 +585,14 @@ const TOPIC_CONTENT: TopicContent = {
                 <InlineMath math="= \lim_{x \to \infty} \frac{4}{x-3} = 0" />
               </div>
             </div>
-            <div> នោះ​ y= x-2 ជាអាស៊ីមតូតទ្រេតនៃក្រាប(C)</div>
+            <div> នោះ y= x-2 ជាអាស៊ីមតូតទ្រេតនៃក្រាប(C)</div>
           </div>
         ),
       },
       {
         title: (
           <div>
-            បង្ហាញថា f&apos;(x)​ ={" "}
+            បង្ហាញថា f&apos;(x) ={" "}
             <InlineMath math="\frac{x^2-6x+5}{(x-3)^2}" /> និងគូសតារាងអថេរភាព
           </div>
         ),
@@ -243,7 +611,6 @@ const TOPIC_CONTENT: TopicContent = {
               នោះ
               <InlineMath math=" f'(x) = \frac{x^2-6x+5}{(x-3)^2}" />
             </div>
-
             <div>
               ដោយ <InlineMath math="(x-3)^2 > 0" /> គ្រប់{" "}
               <InlineMath math="x \neq 3" /> នោះ <InlineMath math="f'(x)" />{" "}
@@ -260,12 +627,12 @@ const TOPIC_CONTENT: TopicContent = {
               <InlineMath math="f(1) = 1 - 2 + \frac{4}{1-3} = -3" />
             </div>
             <div>
-              ចំពោះ​ <InlineMath math="x = 5" /> នោះ{" "}
+              ចំពោះ <InlineMath math="x = 5" /> នោះ{" "}
               <InlineMath math="f(5) = 5 - 2 + \frac{4}{5-3} = 5" />
             </div>
             <div>តារាងសញ្ញា</div>
             <div>
-              <div className=" bg-white justify-start mt-2">
+              <div className="bg-white justify-start mt-2">
                 <div className="w-full max-w-full overflow-hidden bg-white justify-start mt-2">
                   <div className="w-[100%] md:w-[50%] max-w-full overflow-hidden bg-white justify-start mt-2">
                     <div className="bg-white">
@@ -277,7 +644,6 @@ const TOPIC_CONTENT: TopicContent = {
                         }}
                       >
                         <tbody>
-                          {/* X row */}
                           <tr>
                             <td
                               className="border-2 border-black text-center font-normal bg-white"
@@ -299,7 +665,6 @@ const TOPIC_CONTENT: TopicContent = {
                                 verticalAlign: "middle",
                               }}
                             >
-                              {/* −∞ at far left */}
                               <div
                                 className="absolute"
                                 style={{
@@ -310,8 +675,6 @@ const TOPIC_CONTENT: TopicContent = {
                               >
                                 −∞
                               </div>
-
-                              {/* 1 positioned */}
                               <div
                                 className="absolute"
                                 style={{
@@ -322,8 +685,6 @@ const TOPIC_CONTENT: TopicContent = {
                               >
                                 1
                               </div>
-
-                              {/* 3 positioned at center */}
                               <div
                                 className="absolute"
                                 style={{
@@ -334,8 +695,6 @@ const TOPIC_CONTENT: TopicContent = {
                               >
                                 3
                               </div>
-
-                              {/* 5 positioned */}
                               <div
                                 className="absolute"
                                 style={{
@@ -346,8 +705,6 @@ const TOPIC_CONTENT: TopicContent = {
                               >
                                 5
                               </div>
-
-                              {/* +∞ at far right */}
                               <div
                                 className="absolute"
                                 style={{
@@ -360,8 +717,6 @@ const TOPIC_CONTENT: TopicContent = {
                               </div>
                             </td>
                           </tr>
-
-                          {/* f'(x) row */}
                           <tr>
                             <td
                               className="border-2 border-black text-center font-normal bg-white"
@@ -379,7 +734,6 @@ const TOPIC_CONTENT: TopicContent = {
                                 height: "45px",
                               }}
                             >
-                              {/* + sign in first interval */}
                               <div
                                 className="absolute"
                                 style={{
@@ -392,8 +746,6 @@ const TOPIC_CONTENT: TopicContent = {
                               >
                                 +
                               </div>
-
-                              {/* 0 at x=1 */}
                               <div
                                 className="absolute"
                                 style={{
@@ -406,8 +758,6 @@ const TOPIC_CONTENT: TopicContent = {
                               >
                                 0
                               </div>
-
-                              {/* - sign in second interval */}
                               <div
                                 className="absolute"
                                 style={{
@@ -420,8 +770,6 @@ const TOPIC_CONTENT: TopicContent = {
                               >
                                 −
                               </div>
-
-                              {/* Single vertical line at x=1 */}
                               <div
                                 className="absolute"
                                 style={{
@@ -433,8 +781,6 @@ const TOPIC_CONTENT: TopicContent = {
                                   transform: "translateX(-50%)",
                                 }}
                               ></div>
-
-                              {/* Double vertical lines at x=3 (discontinuity) */}
                               <div
                                 className="absolute"
                                 style={{
@@ -455,8 +801,6 @@ const TOPIC_CONTENT: TopicContent = {
                                   backgroundColor: "black",
                                 }}
                               ></div>
-
-                              {/* Single vertical line at x=5 */}
                               <div
                                 className="absolute"
                                 style={{
@@ -468,8 +812,6 @@ const TOPIC_CONTENT: TopicContent = {
                                   transform: "translateX(-50%)",
                                 }}
                               ></div>
-
-                              {/* - sign after the discontinuity */}
                               <div
                                 className="absolute"
                                 style={{
@@ -482,8 +824,6 @@ const TOPIC_CONTENT: TopicContent = {
                               >
                                 −
                               </div>
-
-                              {/* 0 at x=5 */}
                               <div
                                 className="absolute"
                                 style={{
@@ -496,8 +836,6 @@ const TOPIC_CONTENT: TopicContent = {
                               >
                                 0
                               </div>
-
-                              {/* + sign in last interval */}
                               <div
                                 className="absolute"
                                 style={{
@@ -528,7 +866,7 @@ const TOPIC_CONTENT: TopicContent = {
           <div>
             <div>ដោយ f&apos;(x) ប្ដូរសញ្ញាពី + ទៅ - ត្រង់ x = 1 </div>
             <div>
-              <InlineMath math="\Rightarrow f(x) មានតម្លៃអតិបរមា​ត្រង់ x = 1" />
+              <InlineMath math="\Rightarrow f(x) មានតម្លៃអតិបរមាត្រង់ x = 1" />
             </div>
             <div>ដោយ f&apos;(x) ប្ដូរសញ្ញាពី - ទៅ + ត្រង់ x = 5 </div>
             <div>
@@ -540,7 +878,7 @@ const TOPIC_CONTENT: TopicContent = {
       {
         title: "តារាងអថេរភាព",
         content: (
-          <div className="w-full flex justify-start ">
+          <div className="w-full flex justify-start">
             <div className="w-full md:w-[30%] bg-white">
               <table
                 className="border-collapse w-full"
@@ -550,7 +888,6 @@ const TOPIC_CONTENT: TopicContent = {
                 }}
               >
                 <tbody>
-                  {/* X row - Only 2 columns! */}
                   <tr>
                     <td
                       className="border-2 border-black text-center font-normal bg-white"
@@ -571,7 +908,6 @@ const TOPIC_CONTENT: TopicContent = {
                         verticalAlign: "middle",
                       }}
                     >
-                      {/* −∞ at far left */}
                       <div
                         className="absolute"
                         style={{
@@ -583,8 +919,6 @@ const TOPIC_CONTENT: TopicContent = {
                       >
                         −∞
                       </div>
-
-                      {/* 1 positioned above its location */}
                       <div
                         className="absolute"
                         style={{
@@ -596,8 +930,6 @@ const TOPIC_CONTENT: TopicContent = {
                       >
                         1
                       </div>
-
-                      {/* 3 positioned above the double lines */}
                       <div
                         className="absolute"
                         style={{
@@ -609,8 +941,6 @@ const TOPIC_CONTENT: TopicContent = {
                       >
                         3
                       </div>
-
-                      {/* 5 positioned above its location */}
                       <div
                         className="absolute"
                         style={{
@@ -622,8 +952,6 @@ const TOPIC_CONTENT: TopicContent = {
                       >
                         5
                       </div>
-
-                      {/* +∞ at far right */}
                       <div
                         className="absolute"
                         style={{
@@ -637,8 +965,6 @@ const TOPIC_CONTENT: TopicContent = {
                       </div>
                     </td>
                   </tr>
-
-                  {/* f'(x) row - Regular grid structure */}
                   <tr>
                     <td
                       className="border-2 border-black text-center font-normal bg-white"
@@ -656,7 +982,6 @@ const TOPIC_CONTENT: TopicContent = {
                         height: "40px",
                       }}
                     >
-                      {/* + sign in first interval */}
                       <div
                         className="absolute"
                         style={{
@@ -669,8 +994,6 @@ const TOPIC_CONTENT: TopicContent = {
                       >
                         +
                       </div>
-
-                      {/* 0 at x=1 */}
                       <div
                         className="absolute"
                         style={{
@@ -683,8 +1006,6 @@ const TOPIC_CONTENT: TopicContent = {
                       >
                         0
                       </div>
-
-                      {/* - sign in second interval */}
                       <div
                         className="absolute"
                         style={{
@@ -697,8 +1018,6 @@ const TOPIC_CONTENT: TopicContent = {
                       >
                         −
                       </div>
-
-                      {/* Vertical line at x=1 */}
                       <div
                         className="absolute"
                         style={{
@@ -710,21 +1029,6 @@ const TOPIC_CONTENT: TopicContent = {
                           backgroundColor: "black",
                         }}
                       ></div>
-
-                      {/* Vertical line at x=5 */}
-                      <div
-                        className="absolute"
-                        style={{
-                          left: "74%",
-                          top: "0",
-                          height: "100%",
-                          width: "2px",
-                          transform: "translateX(-50%)",
-                          backgroundColor: "black",
-                        }}
-                      ></div>
-
-                      {/* Double vertical lines at x=3 */}
                       <div
                         className="absolute"
                         style={{
@@ -745,8 +1049,6 @@ const TOPIC_CONTENT: TopicContent = {
                           backgroundColor: "black",
                         }}
                       ></div>
-
-                      {/* - sign after the lines */}
                       <div
                         className="absolute"
                         style={{
@@ -759,8 +1061,6 @@ const TOPIC_CONTENT: TopicContent = {
                       >
                         −
                       </div>
-
-                      {/* 0 at x=5 */}
                       <div
                         className="absolute"
                         style={{
@@ -773,8 +1073,6 @@ const TOPIC_CONTENT: TopicContent = {
                       >
                         0
                       </div>
-
-                      {/* + sign in last interval */}
                       <div
                         className="absolute"
                         style={{
@@ -789,8 +1087,6 @@ const TOPIC_CONTENT: TopicContent = {
                       </div>
                     </td>
                   </tr>
-
-                  {/* f(x) row - Complex behavior patterns */}
                   <tr>
                     <td
                       className="border-2 border-black text-center font-normal bg-white"
@@ -802,15 +1098,12 @@ const TOPIC_CONTENT: TopicContent = {
                     >
                       f(x)
                     </td>
-
                     <td
                       className="border-2 border-black bg-white relative"
                       style={{
                         height: "80px",
                       }}
                     >
-                      {/* Interval (-∞, 1): -∞ to maximum at -3 */}
-                      {/* Bottom left: -∞ */}
                       <div
                         className="absolute"
                         style={{
@@ -821,8 +1114,6 @@ const TOPIC_CONTENT: TopicContent = {
                       >
                         −∞
                       </div>
-
-                      {/* Top at x=1: -3 */}
                       <div
                         className="absolute"
                         style={{
@@ -834,45 +1125,6 @@ const TOPIC_CONTENT: TopicContent = {
                       >
                         −3
                       </div>
-
-                      {/* Increasing arrow from -∞ to -3 */}
-                      <div
-                        className="absolute"
-                        style={{
-                          left: "7%",
-                          top: "50%",
-                          transform: "translateY(-40%)",
-                        }}
-                      >
-                        <svg
-                          width="12%"
-                          height="35"
-                          viewBox="0 0 50 35"
-                          className="w-12 h-8 md:w-16 md:h-10"
-                        >
-                          <defs>
-                            <marker
-                              id="arrow1"
-                              markerWidth="8"
-                              markerHeight="6"
-                              refX="6"
-                              refY="3"
-                              orient="auto"
-                            >
-                              <polygon points="0 0, 8 3, 0 6" fill="black" />
-                            </marker>
-                          </defs>
-                          <path
-                            d="M5,35 L25,5"
-                            stroke="black"
-                            strokeWidth="1.5"
-                            markerEnd="url(#arrow1)"
-                          />
-                        </svg>
-                      </div>
-
-                      {/* Interval (1, 3): from -3 down to -∞ */}
-                      {/* Decreasing arrow from -3 to -∞ */}
                       <div
                         className="absolute"
                         style={{
@@ -907,8 +1159,6 @@ const TOPIC_CONTENT: TopicContent = {
                           />
                         </svg>
                       </div>
-
-                      {/* Bottom right of this interval: -∞ */}
                       <div
                         className="absolute"
                         style={{
@@ -919,8 +1169,6 @@ const TOPIC_CONTENT: TopicContent = {
                       >
                         −∞
                       </div>
-
-                      {/* Double vertical lines at x=3 */}
                       <div
                         className="absolute"
                         style={{
@@ -941,8 +1189,6 @@ const TOPIC_CONTENT: TopicContent = {
                           backgroundColor: "black",
                         }}
                       ></div>
-
-                      {/* Right side of asymptote: +∞ at top, decreasing */}
                       <div
                         className="absolute"
                         style={{
@@ -953,8 +1199,6 @@ const TOPIC_CONTENT: TopicContent = {
                       >
                         +∞
                       </div>
-
-                      {/* Decreasing arrow from +∞ to 5 */}
                       <div
                         className="absolute"
                         style={{
@@ -989,8 +1233,6 @@ const TOPIC_CONTENT: TopicContent = {
                           />
                         </svg>
                       </div>
-
-                      {/* At x=5: minimum value 5 */}
                       <div
                         className="absolute"
                         style={{
@@ -1002,8 +1244,6 @@ const TOPIC_CONTENT: TopicContent = {
                       >
                         5
                       </div>
-
-                      {/* Interval (5, +∞): increasing from 5 to +∞ */}
                       <div
                         className="absolute"
                         style={{
@@ -1038,8 +1278,6 @@ const TOPIC_CONTENT: TopicContent = {
                           />
                         </svg>
                       </div>
-
-                      {/* Top right: +∞ */}
                       <div
                         className="absolute"
                         style={{
@@ -1070,16 +1308,16 @@ const TOPIC_CONTENT: TopicContent = {
               សមីការនេះអាចសរសេរជា <InlineMath math="y - 5 = m(x + 1)" />
             </div>
             <div>
-              សមីការចុងកក្រោយនេះផ្ទៀងផ្ទាត់ជានិច្ចគ្រប់តម្លៃ m​ លុះត្រាតែ ៖
+              សមីការចុងកក្រោយនេះផ្ទៀងផ្ទាត់ជានិច្ចគ្រប់តម្លៃ m លុះត្រាតែ ៖
             </div>
             <div>
               <InlineMath
                 math="\begin{cases}
-								x + 1 = 0 \\
-								y - 5 = 0
-							\end{cases}"
+                  x + 1 = 0 \\
+                  y - 5 = 0
+                \end{cases}"
               />
-              សមមូល <InlineMath math="x = -1, y = 5" />
+              សមមួល <InlineMath math="x = -1, y = 5" />
             </div>
             <div>
               ដូច្នេះ​​ កូអរដោនេនៃចំណុច <InlineMath math="A(-1, 5)" />
@@ -1175,16 +1413,16 @@ const TOPIC_CONTENT: TopicContent = {
             <div>
               <InlineMath
                 math="\begin{cases}
-								y_B = x_B - 2 \\
-								y_B = -3x_B + 2
-							\end{cases}"
+                  y_B = x_B - 2 \\
+                  y_B = -3x_B + 2
+                \end{cases}"
               />
               និង
               <InlineMath
                 math="\begin{cases}
-								y_C = x_C - 2 \\
-								y_C = 5
-							\end{cases}"
+                  y_C = x_C - 2 \\
+                  y_C = 5
+                \end{cases}"
               />
             </div>
             <div>
@@ -1204,7 +1442,7 @@ const TOPIC_CONTENT: TopicContent = {
             </div>
             <div>
               គេមាន <InlineMath math="I \in (d)" /> នោះ I
-              ផ្ទៀងផ្ទាត់នឺងសមីការបន្ទាត់​(d)
+              ផ្ទៀងផ្ទាត់នឺងសមីការបន្ទាត់(d)
             </div>
             <div>
               គេបាន <InlineMath math="y_I = x_I - 2 \quad (1)" />
@@ -1245,12 +1483,12 @@ const TOPIC_CONTENT: TopicContent = {
             <p>
               តាមរូបមន្ត <InlineMath math="f(2a-x_o)+f(x_o) = 2b" />
             </p>
-            <p>I(3,1)​ ជាផ្ចិតឆ្លុះលុះត្រា</p>
+            <p>I(3,1) ជាផ្ចិតឆ្លុះលុះត្រា</p>
             <div className="flex flex-row item-center gap-2">
               <p>
                 <InlineMath math="f(6-x_o)+f(x_o) = 2 " />
               </p>
-              <p className="text-xs ">(ចំពោះ​ a = 3, b = 1)</p>
+              <p className="text-xs ">(ចំពោះ a = 3, b = 1)</p>
             </div>
             <p>
               គេមាន
@@ -1274,11 +1512,12 @@ const TOPIC_CONTENT: TopicContent = {
             <p>ដូច្នេះ I(3,1) ជាផ្ចិតឆ្លុះ</p>
           </div>
         ),
-      },
+      }
     ],
     answer: "",
   },
-  graphExplanation: {
+  {
+    type: "graphExplanation",
     expressions: [
       { id: "1", latex: "f(x) = \\frac{x^2-5x+10}{x-3}", color: "#FF4136" },
       { id: "2", latex: "y=x-2", color: "#F" },
@@ -1295,14 +1534,14 @@ const TOPIC_CONTENT: TopicContent = {
         <p>♦ អប្បបរមាត្រង់(5,5)</p>
         <p>♦ (Δ&apos;): y = -3x+2</p>
         <p>♦ (Δ&quot;): y = 5</p>
-        <p>♦ M(2,-4)​និង N(5,5) ជាកូអរដោនេចំណុចប៉ះ (c)</p>
+        <p>♦ M(2,-4)និង N(5,5) ជាកូអរដោនេចំណុចប៉ះ (c)</p>
         <p>♦ ចំណុចប្រសព្វ A(-1,5), B(1,-1), C(7,5)</p>
         <p>♦ I(3,1) ជាផ្ចិតឆ្លុះ</p>
       </div>
     ),
   },
-
-  hint: {
+  {
+    type: "hint",
     content: (
       <>
         សូមចងចាំថា អនុគមន៍សនិទាន <InlineMath math="f(x) = c" /> មានតម្លៃថេរ
@@ -1310,8 +1549,8 @@ const TOPIC_CONTENT: TopicContent = {
       </>
     ),
   },
-
-  warning: {
+  {
+    type: "warning",
     content: (
       <>
         កុំច្រឡំអនុគមន៍សនិទានជាមួយអនុគមន៍បន្ទាត់ទ្រេត{" "}
@@ -1320,454 +1559,14 @@ const TOPIC_CONTENT: TopicContent = {
       </>
     ),
   },
-};
-const KEY: TopicContent = {
-  tip: {
-    title: "លក្ខណៈសម្គាល់ងាយៗ​ ពេលសិក្សាសញ្ញាសមីការមានឬសតែមួយ",
-    content: (
-      <div>
-        <div>
-          <div>
-            ♦ បើសមីការមានឬសតែមួយដែលមានទម្រង់ <InlineMath math="ax+b" />
-          </div>
-          <div>♦ នោះការសិក្សាសញ្ញាគឺ (ធំដូចតូចផ្ទុយ)</div>
-          <p>♦ មានន័យថាបើធំជាងឬសមានសញ្ញាដូច a តូចជាងឬសមានសញ្ញាផ្ទុយ a</p>
-          <div>
-            ឧទាហរណ៍: f&apos;(x) យកសញ្ញាតាម <InlineMath math="-x +2 = 0" />
-            <br />
-            គេបាន x = 2
-          </div>
-          <div className="w-[60%] md:w-[25%] max-w-full overflow-hidden bg-white justify-start mt-2">
-            <div className="bg-white">
-              <table
-                className="w-full border-collapse min-w-0"
-                style={{
-                  fontSize: "clamp(14px, 4vw, 16px)",
-                  fontFamily: "serif",
-                }}
-              >
-                <tbody>
-                  {/* X row */}
-                  <tr>
-                    <td
-                      className="border-2 border-black text-center font-normal bg-white"
-                      style={{
-                        width: "10%",
-                        minWidth: "40px",
-                        height: "45px",
-                        verticalAlign: "middle",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      x
-                    </td>
-                    <td
-                      className="border-2 border-black bg-white relative"
-                      style={{
-                        width: "90%",
-                        height: "45px",
-                        verticalAlign: "middle",
-                      }}
-                    >
-                      {/* −∞ at far left */}
-                      <div
-                        className="absolute"
-                        style={{
-                          left: "2%",
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                        }}
-                      >
-                        −∞
-                      </div>
+];
 
-                      {/* 1 positioned */}
-                      <div
-                        className="absolute"
-                        style={{
-                          left: "50%",
-                          top: "50%",
-                          transform: "translate(-50%,-50%)",
-                        }}
-                      >
-                        2
-                      </div>
-
-                      {/* +∞ at far right */}
-                      <div
-                        className="absolute"
-                        style={{
-                          right: "5%",
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                        }}
-                      >
-                        +∞
-                      </div>
-                    </td>
-                  </tr>
-
-                  {/* f'(x) row */}
-                  <tr>
-                    <td
-                      className="border-2 border-black text-center font-normal bg-white"
-                      style={{
-                        height: "45px",
-                        verticalAlign: "middle",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      f&apos;(x)
-                    </td>
-                    <td
-                      className="border-2 border-black bg-white relative"
-                      style={{
-                        height: "45px",
-                      }}
-                    >
-                      {/* + sign in first interval */}
-                      <div
-                        className="absolute"
-                        style={{
-                          left: "20%",
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          fontSize: "clamp(16px, 5vw, 18px)",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        +
-                      </div>
-
-                      {/* 0 at x=1 */}
-                      <div
-                        className="absolute"
-                        style={{
-                          left: "50%",
-                          top: "50%",
-                          transform: "translate(-50%, -50%)",
-                          fontSize: "clamp(16px, 5vw, 18px)",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        0
-                      </div>
-
-                      {/* - sign in second interval */}
-                      <div
-                        className="absolute"
-                        style={{
-                          left: "70%",
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          fontSize: "clamp(16px, 5vw, 18px)",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        −
-                      </div>
-
-                      {/* Single vertical line at x=1 */}
-                      <div
-                        className="absolute"
-                        style={{
-                          left: "50%",
-                          top: "0",
-                          height: "100%",
-                          width: "2px",
-                          backgroundColor: "black",
-                          transform: "translateX(-50%)",
-                        }}
-                      ></div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <p>
-          • <InlineMath math="(-\infty,2)" /> គឺតូចជាងឬស
-        </p>
-        <p>
-          • <InlineMath math="(2,+\infty)" /> គឺធំជាងឬស
-        </p>
-      </div>
-    ),
-  },
-};
-const KEY2: TopicContent = {
-  tip: {
-    title: "លក្ខណៈសម្គាល់ងាយៗ​ ពេលសិក្សាសញ្ញាដែលមានឬស 2",
-    content: (
-      <div>
-        <div>
-          <div>
-            ♦ បើសមីការមានឬស2ដែលមានទម្រង់ <InlineMath math="ax^2+bx+c" />
-          </div>
-          <div>♦ នោះការសិក្សាសញ្ញាគឺ (ក្រៅដូចខូចក្នុង)</div>
-          <p>
-            ♦ មានន័យថាបើនៅក្រៅឬសគឺយកសញ្ញាដូច a ហើយបើនៅចន្លោះឬសគឺសញ្ញាផ្ទុយ a
-          </p>
-          <div>
-            ឧទាហរណ៍: f&apos;(x) យកសញ្ញាតាម <InlineMath math="x^2+2x-3 = 0" />
-            <br />
-            គេបាន x = 2
-          </div>
-          <div className="w-full max-w-full overflow-hidden  justify-start mt-2">
-            <div className="w-[60%] md:w-[30%] max-w-full overflow-hidden justify-start mt-2">
-              <div className="bg-white">
-                <table
-                  className="w-full border-collapse min-w-0"
-                  style={{
-                    fontSize: "clamp(14px, 4vw, 16px)",
-                    fontFamily: "serif",
-                  }}
-                >
-                  <tbody>
-                    {/* X row */}
-                    <tr>
-                      <td
-                        className="border-2 border-black text-center font-normal bg-white"
-                        style={{
-                          width: "10%",
-                          minWidth: "40px",
-                          height: "45px",
-                          verticalAlign: "middle",
-                          fontStyle: "italic",
-                        }}
-                      >
-                        x
-                      </td>
-                      <td
-                        className="border-2 border-black bg-white relative"
-                        style={{
-                          width: "90%",
-                          height: "45px",
-                          verticalAlign: "middle",
-                        }}
-                      >
-                        {/* −∞ at far left */}
-                        <div
-                          className="absolute"
-                          style={{
-                            left: "2%",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                          }}
-                        >
-                          −∞
-                        </div>
-
-                        {/* 1 positioned */}
-                        <div
-                          className="absolute"
-                          style={{
-                            left: "30%",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                          }}
-                        >
-                          1
-                        </div>
-
-                        {/* 3 positioned at center */}
-                        <div
-                          className="absolute"
-                          style={{
-                            left: "60%",
-                            top: "50%",
-                            transform: "translate(-50%, -50%)",
-                          }}
-                        >
-                          -3
-                        </div>
-
-                        {/* +∞ at far right */}
-                        <div
-                          className="absolute"
-                          style={{
-                            left: "82%",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                          }}
-                        >
-                          +∞
-                        </div>
-                      </td>
-                    </tr>
-
-                    {/* f'(x) row */}
-                    <tr>
-                      <td
-                        className="border-2 border-black text-center font-normal bg-white"
-                        style={{
-                          height: "45px",
-                          verticalAlign: "middle",
-                          fontStyle: "italic",
-                        }}
-                      >
-                        f&apos;(x)
-                      </td>
-                      <td
-                        className="border-2 border-black bg-white relative"
-                        style={{
-                          height: "45px",
-                        }}
-                      >
-                        {/* + sign in first interval */}
-                        <div
-                          className="absolute"
-                          style={{
-                            left: "20%",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            fontSize: "clamp(16px, 5vw, 18px)",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          +
-                        </div>
-
-                        {/* 0 at x=1 */}
-                        <div
-                          className="absolute"
-                          style={{
-                            left: "31%",
-                            top: "50%",
-                            transform: "translate(-50%, -50%)",
-                            fontSize: "clamp(16px, 5vw, 18px)",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          0
-                        </div>
-
-                        {/* - sign in second interval */}
-                        <div
-                          className="absolute"
-                          style={{
-                            left: "45%",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            fontSize: "clamp(16px, 5vw, 18px)",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          −
-                        </div>
-
-                        {/* Single vertical line at x=1 */}
-                        <div
-                          className="absolute"
-                          style={{
-                            left: "31%",
-                            top: "0",
-                            height: "100%",
-                            width: "2px",
-                            backgroundColor: "black",
-                            transform: "translateX(-50%)",
-                          }}
-                        ></div>
-
-                        {/* Single vertical line at x=5 */}
-                        <div
-                          className="absolute"
-                          style={{
-                            left: "60%",
-                            top: "0",
-                            height: "100%",
-                            width: "2px",
-                            backgroundColor: "black",
-                            transform: "translateX(-50%)",
-                          }}
-                        ></div>
-                        {/* 0 at x=5 */}
-                        <div
-                          className="absolute"
-                          style={{
-                            left: "60%",
-                            top: "50%",
-                            transform: "translate(-50%, -50%)",
-                            fontSize: "clamp(16px, 5vw, 18px)",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          0
-                        </div>
-
-                        {/* + sign in last interval */}
-                        <div
-                          className="absolute"
-                          style={{
-                            left: "75%",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            fontSize: "clamp(16px, 5vw, 18px)",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          +
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <p>
-          • <InlineMath math="(-\infty,1), (3,+\infty)" /> គឺក្រៅឬស
-        </p>
-        <p>
-          • <InlineMath math="(1,3)" /> គឺចន្លោះឬស
-        </p>
-      </div>
-    ),
-  },
-};
+// Simulate database fetching
+const jsonV3 = serializeTopicContentV3(content);
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
 
 // ===== MAIN COMPONENT =====
 
 export default function PolynomialFunction() {
-  return (
-    <>
-      {TOPIC_CONTENT.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT.definition.title}
-          content={TOPIC_CONTENT.definition.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.tip && (
-        <TipBox
-          title={TOPIC_CONTENT.tip.title}
-          content={TOPIC_CONTENT.tip.content}
-        />
-      )}
-      {KEY.tip && <TipBox title={KEY.tip.title} content={KEY.tip.content} />}
-      {KEY2.tip && <TipBox title={KEY2.tip.title} content={KEY2.tip.content} />}
-
-      {TOPIC_CONTENT.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example.question}
-          steps={TOPIC_CONTENT.example.steps}
-          answer={TOPIC_CONTENT.example.answer}
-        />
-      )}
-
-      {TOPIC_CONTENT.exercise && (
-        <ExerciseBox questions={TOPIC_CONTENT.exercise.questions} />
-      )}
-
-      {TOPIC_CONTENT.graphExplanation && (
-        <GraphExplanationBox
-          expressions={TOPIC_CONTENT.graphExplanation.expressions}
-          explanation={TOPIC_CONTENT.graphExplanation.explanation}
-        />
-      )}
-      {TOPIC_CONTENT.hint && <HintBox content={TOPIC_CONTENT.hint.content} />}
-    </>
-  );
+  return <ContentRendererV3 content={restoredContent} />;
 }

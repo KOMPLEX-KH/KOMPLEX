@@ -1,8 +1,18 @@
-import { TopicContent } from "@/types/docs/topic";
+"use client";
+
+import React from "react";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+	serializeTopicContentV3,
+	deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
 import { InlineMath } from "react-katex";
 
-const STUDY_METHODS: TopicContent = {
-	tip: {
+// Stage 1: Original authoring shape (TopicContent_V3)
+const content: TopicContent_V3[] = [
+	{
+		type: "tip",
 		title: "វិធីសាស្ត្រដើម្បីសិក្សាអនុគមន៍",
 		content: (
 			<div className="space-y-4">
@@ -73,12 +83,16 @@ const STUDY_METHODS: TopicContent = {
 			</div>
 		),
 	},
-};
-export default function FunctionAnalysisPlan() {
-	return (
-		<>
-			{STUDY_METHODS.tip?.content}
+];
 
-		</>
-	);
-}
+// Stage 2: Serialized JSON
+const jsonV3 = serializeTopicContentV3(content);
+
+// Stage 3: Deserialized V3 with live React nodes
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
+
+const FunctionAnalysisPlan = () => {
+	return <ContentRendererV3 content={restoredContent} />;
+};
+
+export default FunctionAnalysisPlan;

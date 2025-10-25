@@ -1,14 +1,16 @@
-import { TopicContent } from "@/types/docs/topic";
-import { BlockMath, InlineMath } from "react-katex";
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
-import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
+"use client";
 
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+import { TopicContent_V3 } from "@/types/docs/topic";
+import { BlockMath, InlineMath } from "react-katex";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "អាស៊ីមតូតនៃអនុគមន៍",
     content: (
       <div className="text-left">
@@ -55,8 +57,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  tip: {
+  {
+    type: "tip",
     title: "របៀបរកអាស៊ីមតូត",
     content: (
       <div className="text-left">
@@ -122,8 +124,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  example: {
+  {
+    type: "example",
     question: (
       <div className="text-left">
         រកអាស៊ីមតូតទាំងអស់នៃអនុគមន៍{" "}
@@ -199,8 +201,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  example2: {
+  {
+    type: "example",
     question: (
       <div className="text-left">
         រកអាស៊ីមតូតនៃអនុគមន៍{" "}
@@ -240,7 +242,7 @@ const TOPIC_CONTENT: TopicContent = {
         title: "រកអាស៊ីមតូតទ្រេត",
         content: (
           <div className="text-left space-y-2">
-            <div>មិនអាចចែករាងកាណូនិចបាន​នោះគ្មានអាស៊ីមតូតទ្រេតទេ</div>
+            <div>មិនអាចចែករាងកាណូនិចបាននោះគ្មានអាស៊ីមតូតទ្រេតទេ</div>
           </div>
         ),
       },
@@ -258,8 +260,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "q1",
@@ -355,8 +357,8 @@ const TOPIC_CONTENT: TopicContent = {
       },
     ],
   },
-
-  warning: {
+  {
+    type: "warning",
     content: (
       <div className="text-left">
         <div>
@@ -368,50 +370,11 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-};
+];
+
+const jsonV3 = serializeTopicContentV3(content);
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
 
 export default function LimitAsymptotes() {
-  return (
-    <>
-      {TOPIC_CONTENT.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT.definition.title}
-          content={TOPIC_CONTENT.definition.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.tip && (
-        <TipBox
-          title={TOPIC_CONTENT.tip.title}
-          content={TOPIC_CONTENT.tip.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example.question}
-          steps={TOPIC_CONTENT.example.steps}
-          answer={TOPIC_CONTENT.example.answer}
-        />
-      )}
-
-      {TOPIC_CONTENT.example2 && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example2.question}
-          steps={TOPIC_CONTENT.example2.steps}
-          answer={TOPIC_CONTENT.example2.answer}
-        />
-      )}
-
-      {TOPIC_CONTENT.exercise && (
-        <ExerciseBox questions={TOPIC_CONTENT.exercise.questions} />
-      )}
-
-      {TOPIC_CONTENT.hint && <HintBox content={TOPIC_CONTENT.hint.content} />}
-
-      {TOPIC_CONTENT.warning && (
-        <WarningBox content={TOPIC_CONTENT.warning.content} />
-      )}
-    </>
-  );
+  return <ContentRendererV3 content={restoredContent} />;
 }

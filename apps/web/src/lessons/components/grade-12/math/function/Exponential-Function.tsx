@@ -1,15 +1,18 @@
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { TopicContent } from "@/types/docs/topic";
+"use client";
+
+import React from "react";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
 import { InlineMath } from "react-katex";
-import { GraphExplanationBox } from "@/components/pages/docs/boxes/explanation-box/GraphExplanationBox";
 
-// ===== TOPIC CONTENT DATA =====
-
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+// Stage 1: Original authoring shape (TopicContent_V3)
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "អនុគមន៍អិចស្ប៉ូណង់ស្យែល",
     content: (
       <div className="border-l-4 border-red-500 pl-4 bg-red-50 rounded">
@@ -22,8 +25,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  tip: {
+  {
+    type: "tip",
     title: "លក្ខណៈគ្រឹះ",
     content: (
       <div className="space-y-2">
@@ -67,8 +70,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  example: {
+  {
+    type: "example",
     question: (
       <div>
         <div className="space-y-2">
@@ -222,8 +225,8 @@ const TOPIC_CONTENT: TopicContent = {
     ],
     answer: "",
   },
-
-  hint: {
+  {
+    type: "hint",
     content: (
       <>
         ចំណាំថា អនុគមន៍អិចស្ប៉ូណង់ស្យែល <InlineMath math="a^x" /> មានមូលដ្ឋាន{" "}
@@ -233,8 +236,8 @@ const TOPIC_CONTENT: TopicContent = {
       </>
     ),
   },
-
-  warning: {
+  {
+    type: "warning",
     content: (
       <>
         មិនកូវបង្កការចាំបងអនុគមន៍អិចស្ប៉ូណង់ស្យែលជាមួយនឺង{" "}
@@ -244,8 +247,8 @@ const TOPIC_CONTENT: TopicContent = {
       </>
     ),
   },
-
-  graphExplanation: {
+  {
+    type: "graphExplanation",
     expressions: [
       { id: "1", latex: "f(x) = x + \\frac{1-3e^x}{1+e^x}", color: "#FF4136" },
       { id: "2", latex: "d_1 = x + 1", color: "#0074D9" },
@@ -327,10 +330,9 @@ const TOPIC_CONTENT: TopicContent = {
       yAxisLabel: "y",
     },
   },
-};
-const EQUATION: TopicContent = {
-  tip: {
-    title: " សមីការអិចស្ប៉ូណង់ស្យែល",
+  {
+    type: "tip",
+    title: "សមីការអិចស្ប៉ូណង់ស្យែល",
     content: (
       <div>
         <div className="ml-2">
@@ -350,10 +352,8 @@ const EQUATION: TopicContent = {
       </div>
     ),
   },
-};
-
-const INEQUALITIES_CONTENT: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "វិសមីការអិចស្ប៉ូណង់ស្យែល",
     content: (
       <div className="space-y-2 ml-4">
@@ -377,10 +377,8 @@ const INEQUALITIES_CONTENT: TopicContent = {
       </div>
     ),
   },
-};
-
-const ADVANCED_ANALYSIS: TopicContent = {
-  example: {
+  {
+    type: "example",
     question: (
       <div>
         <div className="font-bold mb-3">៤. សិក្សាអនុគមន៍អ៊ិចស៉្បូណង់ស្យែល</div>
@@ -981,63 +979,17 @@ const ADVANCED_ANALYSIS: TopicContent = {
       },
     ],
     answer: "",
-  },
+  }
+];
+
+// Stage 2: Serialized JSON
+const jsonV3 = serializeTopicContentV3(content);
+
+// Stage 3: Deserialized V3 with live React nodes
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
+
+const ExponentialFunction = () => {
+  return <ContentRendererV3 content={restoredContent} />;
 };
 
-// ===== MAIN COMPONENT =====
-
-export default function ExponentialFunction() {
-  return (
-    <>
-      {TOPIC_CONTENT.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT.definition.title}
-          content={TOPIC_CONTENT.definition.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.tip && (
-        <TipBox
-          title={TOPIC_CONTENT.tip.title}
-          content={TOPIC_CONTENT.tip.content}
-        />
-      )}
-      {EQUATION.tip && (
-        <TipBox title={EQUATION.tip.title} content={EQUATION.tip.content} />
-      )}
-      {TOPIC_CONTENT.exercise && (
-        <ExerciseBox questions={TOPIC_CONTENT.exercise.questions} />
-      )}
-      {INEQUALITIES_CONTENT.definition && (
-        <TipBox
-          title={INEQUALITIES_CONTENT.definition.title}
-          content={INEQUALITIES_CONTENT.definition.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example.question}
-          steps={TOPIC_CONTENT.example.steps}
-          answer={TOPIC_CONTENT.example.answer}
-        />
-      )}
-
-      {ADVANCED_ANALYSIS.example && (
-        <ExampleBox
-          question={ADVANCED_ANALYSIS.example.question}
-          steps={ADVANCED_ANALYSIS.example.steps}
-          answer={ADVANCED_ANALYSIS.example.answer}
-        />
-      )}
-
-      {TOPIC_CONTENT.graphExplanation && (
-        <GraphExplanationBox
-          expressions={TOPIC_CONTENT.graphExplanation.expressions}
-          explanation={TOPIC_CONTENT.graphExplanation.explanation}
-          options={TOPIC_CONTENT.graphExplanation.options}
-        />
-      )}
-    </>
-  );
-}
+export default ExponentialFunction;

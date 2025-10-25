@@ -1,18 +1,24 @@
+"use client";
+
 import React from "react";
-import { TopicContent } from "@/types/docs/topic";
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
 import { InlineMath } from "react-katex";
 
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+// Stage 1: Original authoring shape (TopicContent_V3)
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "ទម្រង់ត្រីកោណមាត្រ",
     content:
       "ទម្រង់ត្រីកោណមាត្រនៃកុំផ្លិចគឺជាការបង្ហាញដោយប្រើប្រវែង (r) និងមុំ (θ) ជំនួសការបង្ហាញជា a+bi",
   },
-  tip: {
+  {
+    type: "tip",
     title: "ទម្រង់ទូទៅ",
     content: (
       <div className="text-[17.5px]">
@@ -26,13 +32,13 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-};
-const TOPIC_CONTENT_OPERATION: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "ប្រមាណវិធីលើទម្រង់ត្រីកោណមាត្រ",
     content: "ប្រមាណវិធីមានតែគុណ និង​ ចែកតែប៉ុណ្ណោះ",
   },
-  tip: {
+  {
+    type: "tip",
     title: (
       <div className="text-base flex flex-row gap-x-2">
         <div>បើ</div>
@@ -82,7 +88,8 @@ const TOPIC_CONTENT_OPERATION: TopicContent = {
       </div>
     ),
   },
-  example: {
+  {
+    type: "example",
     question: (
       <div>
         គេមានសមីការ <InlineMath math="z= 4+\sqrt{5}i" /> <br /> សរសេរ z
@@ -111,13 +118,13 @@ const TOPIC_CONTENT_OPERATION: TopicContent = {
       },
     ],
   },
-};
-const SPECIAL_FORM: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "ករណីទម្រង់មុំពិសេស",
     content: "ក្នុងករណីចូលទម្រង់មុំពិសេសគេមានវិធីធ្វើលឿនដើម្បីចំណេញពេល",
   },
-  tip: {
+  {
+    type: "tip",
     title: "ចំណាំ !",
     content: (
       <div>
@@ -127,7 +134,8 @@ const SPECIAL_FORM: TopicContent = {
       </div>
     ),
   },
-  example: {
+  {
+    type: "example",
     question: (
       <div>
         ករណី a និង​ b មានតម្លៃដូចគ្នាដូចជា <InlineMath math="z = 4 - 4i" /> ឬ{" "}
@@ -174,9 +182,8 @@ const SPECIAL_FORM: TopicContent = {
       },
     ],
   },
-};
-const SPECIAL_FORM_2: TopicContent = {
-  example: {
+  {
+    type: "example",
     question: (
       <div>
         ករណី a និង​ b មានតម្លៃដូចគ្នា​ ឬ​មានតម្លៃមួយមាន{" "}
@@ -223,7 +230,8 @@ const SPECIAL_FORM_2: TopicContent = {
       },
     ],
   },
-  warning: {
+  {
+    type: "warning",
     content: (
       <div>
         ទម្រង់ត្រីកោណមាត្រ <InlineMath math=" z = (\cos\theta + i\sin\theta)" />{" "}
@@ -235,7 +243,8 @@ const SPECIAL_FORM_2: TopicContent = {
       </div>
     ),
   },
-  tip: {
+  {
+    type: "tip",
     title: (
       <div>
         ករណី <InlineMath math=" z = (\sin\theta + i\ cos\theta)" />
@@ -256,133 +265,16 @@ const SPECIAL_FORM_2: TopicContent = {
       </div>
     ),
   },
-};
+];
 
-const NEGATIVE_SIN_COS: TopicContent = {
-  tip: {
-    title: <b>វិធីងាយៗក្នុងការបំបែកមុំ</b>,
-    content: (
-      <div className="text-[16px] flex flex-col gap-y-1.5">
-        <div className="text-[16px] flex flex-col gap-y-2">
-          <div>
-            <b>
-              ឧទាហរណ៍ គេមាន
-              <InlineMath math=" z = (\cos\frac{\pi}{3} + i\sin\frac{\pi}{3})" />{" "}
-              ជាគោលសម្រាប់បំបែក
-            </b>
-          </div>
+// Stage 2: Serialized JSON
+const jsonV3 = serializeTopicContentV3(content);
 
-          <div>
-            បើ​{" "}
-            <InlineMath math=" z = (\cos\frac{\pi}{3} - i\sin\frac{\pi}{3})" />{" "}
-            ប្រើរូបមន្តដូចខាងលើ
-          </div>
-
-          <div>
-            បើ​{" "}
-            <InlineMath math=" z = (-\cos\frac{\pi}{3} + i\sin\frac{\pi}{3})" />{" "}
-            ខាងលើតូចជាងខាងក្រោមមួយលេខ
-          </div>
-
-          <div>
-            គេបាន​{" "}
-            <InlineMath math=" z = (-\cos\frac{\pi}{3} + i\sin\frac{\pi}{3})" />
-            <br /> <InlineMath math="\Rightarrow" />{" "}
-            <InlineMath math=" z = (\cos\frac{2\pi}{3} + i\sin\frac{2\pi}{3})" />
-          </div>
-
-          <div>
-            បើ​{" "}
-            <InlineMath math=" z = (-\cos\frac{\pi}{3} - i\sin\frac{\pi}{3})" />{" "}
-            ខាងលើធំជាងខាងក្រោមមួយលេខវិញ
-          </div>
-
-          <div>
-            គេបាន​{" "}
-            <InlineMath math=" z = (-\cos\frac{\pi}{3} - i\sin\frac{\pi}{3})" />
-            <br /> <InlineMath math="\Rightarrow" />{" "}
-            <InlineMath math=" z = (\cos\frac{4\pi}{3} + i\sin\frac{4\pi}{3})" />
-          </div>
-        </div>
-      </div>
-    ),
-  },
-};
+// Stage 3: Deserialized V3 with live React nodes (renderable)
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
 
 const TrigonometricForm = () => {
-  return (
-    <>
-      {TOPIC_CONTENT.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT.definition.title}
-          content={TOPIC_CONTENT.definition.content}
-        />
-      )}
-      {TOPIC_CONTENT.tip && (
-        <TipBox
-          title={TOPIC_CONTENT.tip.title}
-          content={TOPIC_CONTENT.tip.content}
-        />
-      )}
-      {TOPIC_CONTENT_OPERATION.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT_OPERATION.definition.title}
-          content={TOPIC_CONTENT_OPERATION.definition.content}
-        />
-      )}
-      {TOPIC_CONTENT_OPERATION.tip && (
-        <TipBox
-          title={TOPIC_CONTENT_OPERATION.tip.title}
-          content={TOPIC_CONTENT_OPERATION.tip.content}
-        />
-      )}
-      {TOPIC_CONTENT_OPERATION.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT_OPERATION.example.question}
-          steps={TOPIC_CONTENT_OPERATION.example.steps}
-        />
-      )}
-      {SPECIAL_FORM.definition && (
-        <DefinitionBox
-          title={SPECIAL_FORM.definition.title}
-          content={SPECIAL_FORM.definition.content}
-        />
-      )}
-      {SPECIAL_FORM.tip && (
-        <TipBox
-          title={SPECIAL_FORM.tip.title}
-          content={SPECIAL_FORM.tip.content}
-        />
-      )}
-      {SPECIAL_FORM.example && (
-        <ExampleBox
-          question={SPECIAL_FORM.example.question}
-          steps={SPECIAL_FORM.example.steps}
-        />
-      )}
-      {SPECIAL_FORM_2.example && (
-        <ExampleBox
-          question={SPECIAL_FORM_2.example.question}
-          steps={SPECIAL_FORM_2.example.steps}
-        />
-      )}
-      {SPECIAL_FORM_2.warning && (
-        <WarningBox content={SPECIAL_FORM_2.warning.content} />
-      )}
-      {SPECIAL_FORM_2.tip && (
-        <TipBox
-          title={SPECIAL_FORM_2.tip.title}
-          content={SPECIAL_FORM_2.tip.content}
-        />
-      )}
-      {NEGATIVE_SIN_COS.tip && (
-        <TipBox
-          title={NEGATIVE_SIN_COS.tip.title}
-          content={NEGATIVE_SIN_COS.tip.content}
-        />
-      )}
-    </>
-  );
+  return <ContentRendererV3 content={restoredContent} />;
 };
 
 export default TrigonometricForm;

@@ -1,18 +1,24 @@
-import React from "react";
-import { TopicContent } from "@/types/docs/topic";
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { BlockMath, InlineMath } from "react-katex";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
+"use client";
 
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+import React from "react";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+import { InlineMath } from "react-katex";
+
+// Stage 1: Original authoring shape (TopicContent_V3)
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "ប្រមាណវិធីបូក និង ដកចំនួនកុំផ្លិច",
     content:
       "​ការបូក​ ដក ចំនួនកុំផ្លិចគឺត្រូវធ្វើប្រមាណវិធី​តាមផ្នែកពិតជាមួយផ្នែកពិត​ ផ្នែកនិមិត្តជាមួយផ្នែកនិមិត្ត ",
   },
-  tip: {
+  {
+    type: "tip",
     title: (
       <div>
         <div className="text-sm">
@@ -37,7 +43,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-  example: {
+  {
+    type: "example",
     question: (
       <div className="flex flex-col ">
         <div className="flex flex-row justify-start items-center gap-2">
@@ -58,7 +65,6 @@ const TOPIC_CONTENT: TopicContent = {
         </div>
       </div>
     ),
-
     steps: [
       {
         title: "ពិនិត្យមើលទម្រង់",
@@ -115,7 +121,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "q1",
@@ -187,36 +194,16 @@ const TOPIC_CONTENT: TopicContent = {
       },
     ],
   },
-};
+];
+
+// Stage 2: Serialized JSON
+const jsonV3 = serializeTopicContentV3(content);
+
+// Stage 3: Deserialized V3 with live React nodes (renderable)
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
 
 const ComplexOperations = () => {
-  return (
-    <>
-      {TOPIC_CONTENT.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT.definition.title}
-          content={TOPIC_CONTENT.definition.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.tip && (
-        <TipBox
-          title={TOPIC_CONTENT.tip.title}
-          content={TOPIC_CONTENT.tip.content}
-        />
-      )}
-      {TOPIC_CONTENT.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example.question}
-          steps={TOPIC_CONTENT.example.steps}
-          answer={TOPIC_CONTENT.example.answer}
-        />
-      )}
-      {TOPIC_CONTENT.exercise && (
-        <ExerciseBox questions={TOPIC_CONTENT.exercise.questions} />
-      )}
-    </>
-  );
+  return <ContentRendererV3 content={restoredContent} />;
 };
 
 export default ComplexOperations;

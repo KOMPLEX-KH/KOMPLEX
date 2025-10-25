@@ -1,16 +1,19 @@
-import { TopicContent } from "@/types/docs/topic";
-import { BlockMath, InlineMath } from "react-katex";
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+"use client";
 
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+import { BlockMath, InlineMath } from "react-katex";
+
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "ករណីអនុគមន៍សនិទាន ∞-∞",
     content: (
-      <div className="text-left​ text-lg">
+      <div className="text-left text-lg">
         <div>
           នៅពេលដែលយើងគណនាលីមីត ប្រសិនបើការជំនួសតម្លៃដោយផ្ទាល់ធ្វើឱ្យបាន{" "}
           <InlineMath math="\infty - \infty" />
@@ -24,7 +27,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-  tip: {
+  {
+    type: "tip",
     title: "វិធីដោះស្រាយ",
     content: (
       <div className="text-left">
@@ -58,7 +62,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-  example: {
+  {
+    type: "example",
     question: (
       <div className="text-left text-lg">
         គណនា <InlineMath math="lim_{x \to \infty} (x^3 - 4x^2 + 12)" />
@@ -71,7 +76,7 @@ const TOPIC_CONTENT: TopicContent = {
     ),
     steps: [
       {
-        title: "ជំនួសតម្លៃ x​ចូលដើម្បីពិនិត្យមើលទម្រង់",
+        title: "ជំនួសតម្លៃ x ចូលដើម្បីពិនិត្យមើលទម្រង់",
         content: (
           <div className="text-left space-y-2 text-lg">
             <div>នៅពេល x → ∞:</div>
@@ -132,7 +137,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-  hint: {
+  {
+    type: "hint",
     content: (
       <div className="text-left">
         <div className="space-y-3 text-[16px]">
@@ -153,7 +159,6 @@ const TOPIC_CONTENT: TopicContent = {
               <InlineMath math="e^x > n \ln x" />
             </div>
           </div>
-
           <div className="mt-6">
             <div className="font-semibold mb-3">ឧទាហរណ៍ពីឯកសារ:</div>
             <div className="space-y-3 ml-4">
@@ -170,7 +175,6 @@ const TOPIC_CONTENT: TopicContent = {
                 <InlineMath math="D = lim_{x \to \infty} \left[e^{2x} - 2x - \ln^2(x^2 + 1)\right]" />
               </div>
             </div>
-
             <div className="mt-4">
               <div className="font-semibold mb-2">ឧទាហរណ៍ A ការគណនាលម្អិត:</div>
               <div className="ml-4 space-y-2">
@@ -192,7 +196,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "q1",
@@ -278,27 +283,12 @@ const TOPIC_CONTENT: TopicContent = {
       },
     ],
   },
-};
+];
+
+// Simulate DB fetching
+const jsonV3 = serializeTopicContentV3(content);
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
 
 export default function LimitInfinityMinusInfinity() {
-  return (
-    <>
-      <DefinitionBox
-        title={TOPIC_CONTENT.definition?.title}
-        content={TOPIC_CONTENT.definition?.content}
-      />
-      <TipBox
-        title={TOPIC_CONTENT.tip?.title}
-        content={TOPIC_CONTENT.tip?.content}
-      />
-      <ExampleBox
-        question={TOPIC_CONTENT.example?.question}
-        content={TOPIC_CONTENT.example?.content}
-        steps={TOPIC_CONTENT.example?.steps}
-        answer={TOPIC_CONTENT.example?.answer}
-      />
-      <HintBox content={TOPIC_CONTENT.hint?.content} />
-      <ExerciseBox questions={TOPIC_CONTENT.exercise?.questions || []} />
-    </>
-  );
+  return <ContentRendererV3 content={restoredContent} />;
 }

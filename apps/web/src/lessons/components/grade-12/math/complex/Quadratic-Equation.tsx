@@ -1,18 +1,23 @@
-import React from "react";
-import { TopicContent } from "@/types/docs/topic";
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+"use client";
 
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { BlockMath, InlineMath } from "react-katex";
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+import React from "react";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+import { InlineMath } from "react-katex";
+
+// Stage 1: Original authoring shape (TopicContent_V3)
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "សមីការដឺក្រេទី២នៃកុំផ្លិចជាអ្វី?",
-    content:
-      "សមីការដឺក្រេទី២នៃកុំផ្លិច គឺជាសមីការដឺក្រេទី២ដែលមានមេគុណជាកុំផ្លិច និងមានចំនួនជាកុំផ្លិចជាមួយនឹងមេគុណជាកុំផ្លិច",
+    content: "សមីការដឺក្រេទី២នៃកុំផ្លិច គឺជាសមីការដឺក្រេទី២ដែលមានមេគុណជាកុំផ្លិច និងមានចំនួនជាកុំផ្លិចជាមួយនឹងមេគុណជាកុំផ្លិច",
   },
-  tip: {
+  {
+    type: "tip",
     title: "ជាទូទៅ",
     content: (
       <div className="flex flex-col items-start text-xl gap-x-2">
@@ -32,7 +37,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-  example: {
+  {
+    type: "example",
     question: (
       <div>
         បើ <InlineMath math="\Delta = b^2 - 4ac" /> ជាការេប្រាកដ
@@ -99,13 +105,13 @@ const TOPIC_CONTENT: TopicContent = {
       },
     ],
   },
-};
-const TOPIC_CONTENT_EXERCISE: TopicContent = {
-  tip: {
+  {
+    type: "tip",
     title: "តើគេត្រូវដោះស្រាយបែបណា ?",
     content: "លំហាត់បែបនេះវិធីដោះស្រាយគឺដូចតែសមីការដឺក្រេទី2តែប៉ុណ្ណោះ",
   },
-  example: {
+  {
+    type: "example",
     question: (
       <div className="text-lg ml-2">
         គេមានសមីការ <InlineMath math="z^2 + 4z + 16 = 0" /> រកឬសនៃសមីការនេះ
@@ -166,51 +172,20 @@ const TOPIC_CONTENT_EXERCISE: TopicContent = {
       </div>
     ),
   },
-  warning: {
-    content:
-      "គប្បីសិក្សាឡើងវិញនូវវិធីដោះស្រាយសមីការដឺក្រេទី2 ក្នុងករណីសិស្សមិនទាន់ចេះឬមិនទាន់យល់ច្បាស់",
+  {
+    type: "warning",
+    content: "គប្បីសិក្សាឡើងវិញនូវវិធីដោះស្រាយសមីការដឺក្រេទី2 ក្នុងករណីសិស្សមិនទាន់ចេះឬមិនទាន់យល់ច្បាស់",
   },
-};
+];
+
+// Stage 2: Serialized JSON
+const jsonV3 = serializeTopicContentV3(content);
+
+// Stage 3: Deserialized V3 with live React nodes
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
 
 const QuadraticEquation = () => {
-  return (
-    <>
-      {TOPIC_CONTENT.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT.definition.title}
-          content={TOPIC_CONTENT.definition.content}
-        />
-      )}
-      {TOPIC_CONTENT.tip && (
-        <TipBox
-          title={TOPIC_CONTENT.tip.title}
-          content={TOPIC_CONTENT.tip.content}
-        />
-      )}
-      {TOPIC_CONTENT.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example.question}
-          steps={TOPIC_CONTENT.example.steps}
-        />
-      )}
-      {TOPIC_CONTENT_EXERCISE.tip && (
-        <TipBox
-          title={TOPIC_CONTENT_EXERCISE.tip.title}
-          content={TOPIC_CONTENT_EXERCISE.tip.content}
-        />
-      )}
-      {TOPIC_CONTENT_EXERCISE.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT_EXERCISE.example.question}
-          steps={TOPIC_CONTENT_EXERCISE.example.steps}
-          answer={TOPIC_CONTENT_EXERCISE.example.answer}
-        />
-      )}
-      {TOPIC_CONTENT_EXERCISE.warning && (
-        <WarningBox content={TOPIC_CONTENT_EXERCISE.warning.content} />
-      )}
-    </>
-  );
+  return <ContentRendererV3 content={restoredContent} />;
 };
 
 export default QuadraticEquation;

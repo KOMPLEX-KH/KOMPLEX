@@ -1,15 +1,23 @@
-import { TopicContent } from "@/types/docs/topic";
-import { BlockMath, InlineMath } from "react-katex";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-const TOPIC_CONTENT: TopicContent = {
-  tip: {
+"use client";
+
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+import { InlineMath, BlockMath } from "react-katex";
+
+// ===== TOPIC CONTENT DATA =====
+
+const content: TopicContent_V3[] = [
+  {
+    type: "tip",
     title: "ប្រមាណវិធីលើលីមីត",
     content: (
       <div className="text-left text-sm">
         បើ <InlineMath math="lim_{x \to c} f(x) = L" /> និង{" "}
-        <InlineMath math="lim_{x \to c} g(x) = M" /> ហើយ​ (L , M & k ជាចំនួនពិត)
+        <InlineMath math="lim_{x \to c} g(x) = M" /> ហើយ (L , M & k ជាចំនួនពិត)
         នោះគេបាន៖
         <ol className="space-y-2 mt-3">
           <li className="flex items-center gap-2">
@@ -37,7 +45,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-  example: {
+  {
+    type: "example",
     question: "គណនាលីមីតនៃអនុគមន៍ខាងក្រោម៖",
     content: (
       <div className="text-left ml-2">
@@ -46,7 +55,7 @@ const TOPIC_CONTENT: TopicContent = {
     ),
     steps: [
       {
-        title: "ជំនួស x = 2 ចូលគ្រប់តម្លៃ​ x ",
+        title: "ជំនួស x = 2 ចូលគ្រប់តម្លៃ x ",
         content: (
           <div className="text-left space-y-1">
             <div>
@@ -66,10 +75,10 @@ const TOPIC_CONTENT: TopicContent = {
         ),
       },
     ],
+    answer: "",
   },
-};
-const TOPIC_CONTENT_EXERCISE: TopicContent = {
-  example: {
+  {
+    type: "example",
     question: (
       <div className="text-left text-sm">
         គេមានលីមីត
@@ -84,7 +93,7 @@ const TOPIC_CONTENT_EXERCISE: TopicContent = {
     ),
     steps: [
       {
-        title: "គណនា​ f(x)",
+        title: "គណនា f(x)",
         content: (
           <div>
             <InlineMath math="f(x) = \lim_{x \to 2} 2(x^2 + 3x - 2)" />
@@ -99,7 +108,7 @@ const TOPIC_CONTENT_EXERCISE: TopicContent = {
         ),
       },
       {
-        title: "គណនា​ g(x)",
+        title: "គណនា g(x)",
         content: (
           <div>
             <InlineMath math="g(x) = \lim_{x \to 2} (x^2 + 3x - 2)" />
@@ -128,14 +137,16 @@ const TOPIC_CONTENT_EXERCISE: TopicContent = {
         ),
       },
     ],
+    answer: "",
   },
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "q1",
         question: (
           <div className="text-base">
-            គណនា <InlineMath math="f(x) = \lim_{x \to -1} (2x^2 + 3x +4)" />
+            គណនា <InlineMath math="f(x) = \lim_{x \to -1} (2x^2 + 3x + 4)" />
           </div>
         ),
         options: ["1", "3", "0", "2"],
@@ -181,7 +192,6 @@ const TOPIC_CONTENT_EXERCISE: TopicContent = {
         options: ["1", "3", "2", "4"],
         correctAnswer: 2,
       },
-
       {
         id: "q6",
         question: (
@@ -253,34 +263,14 @@ const TOPIC_CONTENT_EXERCISE: TopicContent = {
       },
     ],
   },
-};
+];
+
+// Simulate database fetching
+const jsonV3 = serializeTopicContentV3(content);
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
+
+// ===== MAIN COMPONENT =====
 
 export default function LimitPorformation() {
-  return (
-    <>
-      {TOPIC_CONTENT.tip && (
-        <TipBox
-          title={TOPIC_CONTENT.tip.title}
-          content={TOPIC_CONTENT.tip.content}
-        />
-      )}
-      {TOPIC_CONTENT.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example.question}
-          content={TOPIC_CONTENT.example.content}
-          steps={TOPIC_CONTENT.example.steps}
-        />
-      )}
-      {TOPIC_CONTENT_EXERCISE.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT_EXERCISE.example.question}
-          content={TOPIC_CONTENT_EXERCISE.example.content}
-          steps={TOPIC_CONTENT_EXERCISE.example.steps}
-        />
-      )}
-      {TOPIC_CONTENT_EXERCISE.exercise && (
-        <ExerciseBox questions={TOPIC_CONTENT_EXERCISE.exercise.questions} />
-      )}
-    </>
-  );
+  return <ContentRendererV3 content={restoredContent} />;
 }

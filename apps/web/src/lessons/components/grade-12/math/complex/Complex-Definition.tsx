@@ -1,18 +1,23 @@
 "use client";
 
 import React from "react";
-import { TopicContent } from "@/types/docs/topic";
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
 import { BlockMath, InlineMath } from "react-katex";
 
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+// Stage 1: Original authoring shape (TopicContent_V3)
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "តើកុំផ្លិចជាអ្វី?",
     content: "ចំនួនកុំផ្លិច គឺជាចំនួនដែលមានរាង a + bi ដែល a និង b ជាចំនួនពិត ",
   },
-  tip: {
+  {
+    type: "tip",
     title: "ចំណាំ !",
     content: (
       <div>
@@ -27,10 +32,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-};
-
-const TOPIC_CONTENT_OPOSITE: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "កុំផ្លិចឆ្លាស់ជាអ្វី?",
     content: (
       <div>
@@ -39,7 +42,8 @@ const TOPIC_CONTENT_OPOSITE: TopicContent = {
       </div>
     ),
   },
-  tip: {
+  {
+    type: "tip",
     title: "ទម្រង់នៃចំនួនកុំផ្លិចឆ្លាស់",
     content: (
       <div className="text-center">
@@ -60,15 +64,14 @@ const TOPIC_CONTENT_OPOSITE: TopicContent = {
       </div>
     ),
   },
-};
-
-const TOPIC_CONTENT_COMPLEX: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "កុំផ្លិចពីរស្មើគ្នា",
     content:
       "កាលណាកុំផ្លិចពីរស្មើគ្នាគេបានផ្នែកពិតនៃកុំផ្លិចទាំងពីរស្មើគ្នា និងផ្នែកនិមិត្តនៃកុំផ្លិចទាំងពីរស្មើគ្នា",
   },
-  tip: {
+  {
+    type: "tip",
     title: "ជាទូទៅបើ",
     content: (
       <div className="flex justify-start text-sm gap-2">
@@ -83,7 +86,8 @@ const TOPIC_CONTENT_COMPLEX: TopicContent = {
       </div>
     ),
   },
-  example: {
+  {
+    type: "example",
     question: (
       <div className="flex flex-col gap-2">
         <div className="flex flex-row text-[14px] gap-2">
@@ -165,58 +169,16 @@ const TOPIC_CONTENT_COMPLEX: TopicContent = {
       </div>
     ),
   },
-};
+];
+
+// Stage 2: Serialized JSON
+const jsonV3 = serializeTopicContentV3(content);
+
+// Stage 3: Deserialized V3 with live React nodes (renderable)
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
 
 const ComplexDefinition = () => {
-  return (
-    <>
-      {TOPIC_CONTENT.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT.definition.title}
-          content={TOPIC_CONTENT.definition.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.tip && (
-        <TipBox
-          title={TOPIC_CONTENT.tip.title}
-          content={TOPIC_CONTENT.tip.content}
-        />
-      )}
-      {TOPIC_CONTENT_OPOSITE.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT_OPOSITE.definition.title}
-          content={TOPIC_CONTENT_OPOSITE.definition.content}
-        />
-      )}
-      {TOPIC_CONTENT_OPOSITE.tip && (
-        <TipBox
-          title={TOPIC_CONTENT_OPOSITE.tip.title}
-          content={TOPIC_CONTENT_OPOSITE.tip.content}
-        />
-      )}
-
-      {TOPIC_CONTENT_COMPLEX.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT_COMPLEX.definition.title}
-          content={TOPIC_CONTENT_COMPLEX.definition.content}
-        />
-      )}
-      {TOPIC_CONTENT_COMPLEX.tip && (
-        <TipBox
-          title={TOPIC_CONTENT_COMPLEX.tip.title}
-          content={TOPIC_CONTENT_COMPLEX.tip.content}
-        />
-      )}
-      {TOPIC_CONTENT_COMPLEX.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT_COMPLEX.example.question}
-          steps={TOPIC_CONTENT_COMPLEX.example.steps}
-          answer={TOPIC_CONTENT_COMPLEX.example.answer}
-        />
-      )}
-    </>
-  );
+  return <ContentRendererV3 content={restoredContent} />;
 };
 
 export default ComplexDefinition;

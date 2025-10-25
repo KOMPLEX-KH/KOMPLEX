@@ -1,14 +1,17 @@
-import { TopicContent } from "@/types/docs/topic";
-import { BlockMath, InlineMath } from "react-katex";
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
-import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
+"use client";
 
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+import { InlineMath } from "react-katex";
+
+// Stage 1: Original authoring shape (TopicContent_V3)
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "ក្បួនរបស់ឡូពីតាល់ (L'Hôpital's Rule)",
     content: (
       <div className="text-left">
@@ -16,14 +19,12 @@ const TOPIC_CONTENT: TopicContent = {
           <div>
             ក្បួនរបស់ ល៍ ហូពីតាល់ ប្រើសម្រាប់គណនាលីមីតដែលបានទម្រង់មិនកំណត់។
           </div>
-
           <div className="bg-blue-50 p-4 rounded-lg">
             <div className="font-semibold text-blue-800 mb-2">ក្បួនចម្បង៖</div>
             <div className="flex justify-start">
               <InlineMath math="\lim_{x \to x_0} \frac{f(x)}{g(x)} = \lim_{x \to x_0} \frac{f'(x)}{g'(x)} = \lim_{x \to x_0} \frac{f''(x)}{g''(x)} = \ldots = \lim_{x \to x_0} \frac{f^{(n)}(x)}{g^{(n)}(x)} = A" />
             </div>
           </div>
-
           <div className="bg-green-50 p-4 rounded-lg">
             <div className="font-semibold text-green-800 mb-2">
               លក្ខខណ្ឌប្រើប្រាស់៖
@@ -50,8 +51,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  tip: {
+  {
+    type: "tip",
     title: "ទម្រង់មិនកំណត់",
     content: (
       <div className="text-left">
@@ -74,7 +75,6 @@ const TOPIC_CONTENT: TopicContent = {
               </div>
             </div>
           </div>
-
           <div className="bg-orange-50 p-4 rounded-lg">
             <div className="font-semibold mb-2">ទម្រង់មិនកំណត់ផ្សេងទៀត៖</div>
             <div className="grid grid-cols-3 gap-2 text-sm">
@@ -101,7 +101,6 @@ const TOPIC_CONTENT: TopicContent = {
               </div>
             </div>
           </div>
-
           <div className="bg-pink-50 p-4 rounded-lg">
             <div className="font-semibold mb-2">របៀបបំលែងទម្រង់៖</div>
             <div className="space-y-2">
@@ -118,7 +117,6 @@ const TOPIC_CONTENT: TopicContent = {
               </div>
             </div>
           </div>
-
           <div className="bg-red-50 p-4 rounded-lg">
             <div className="font-semibold mb-2">សំគាល់៖</div>
             <div>
@@ -130,8 +128,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  example: {
+  {
+    type: "example",
     question: (
       <div className="text-left">
         គណនាលីមីត <InlineMath math="\lim_{x \to 0} \frac{\sin x - x}{x^3}" />
@@ -222,8 +220,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  example2: {
+  {
+    type: "example",
     question: (
       <div className="text-left">
         គណនាលីមីត <InlineMath math="\lim_{x \to +\infty} \frac{e^x}{x^2}" />
@@ -292,8 +290,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "q1",
@@ -377,8 +375,8 @@ const TOPIC_CONTENT: TopicContent = {
       },
     ],
   },
-
-  hint: {
+  {
+    type: "hint",
     content: (
       <div className="text-left">
         <div className="space-y-3">
@@ -397,8 +395,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  warning: {
+  {
+    type: "warning",
     content: (
       <div className="text-left">
         <div>
@@ -412,49 +410,14 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-};
+];
+
+// Stage 2: Serialize to JSON
+const jsonV3 = serializeTopicContentV3(content);
+
+// Stage 3: Deserialize to restore renderable content
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
+
 export default function LHopitalRule() {
-  return (
-    <>
-      {TOPIC_CONTENT.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT.definition.title}
-          content={TOPIC_CONTENT.definition.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.tip && (
-        <TipBox
-          title={TOPIC_CONTENT.tip.title}
-          content={TOPIC_CONTENT.tip.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example.question}
-          steps={TOPIC_CONTENT.example.steps}
-          answer={TOPIC_CONTENT.example.answer}
-        />
-      )}
-
-      {TOPIC_CONTENT.example2 && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example2.question}
-          steps={TOPIC_CONTENT.example2.steps}
-          answer={TOPIC_CONTENT.example2.answer}
-        />
-      )}
-
-      {TOPIC_CONTENT.exercise && (
-        <ExerciseBox questions={TOPIC_CONTENT.exercise.questions} />
-      )}
-
-      {TOPIC_CONTENT.hint && <HintBox content={TOPIC_CONTENT.hint.content} />}
-
-      {TOPIC_CONTENT.warning && (
-        <WarningBox content={TOPIC_CONTENT.warning.content} />
-      )}
-    </>
-  );
+  return <ContentRendererV3 content={restoredContent} />;
 }

@@ -1,20 +1,22 @@
-import { TopicContent } from "@/types/docs/topic";
-import { BlockMath, InlineMath } from "react-katex";
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
-import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
+"use client";
 
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+import { BlockMath, InlineMath } from "react-katex";
+
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "ភាពជាប់ត្រង់មួយចំណុច",
     content: (
       <div className="text-left">
         <div className="space-y-3">
           <div>
-            អនុគមន៍ <InlineMath math="​ y = f(x)" />​ មានភាពជាប់ត្រង់មួយចំណុច{" "}
+            អនុគមន៍ <InlineMath math=" y = f(x)" /> មានភាពជាប់ត្រង់មួយចំណុច{" "}
             <InlineMath math="x = c " /> ប្រសិនបើលក្ខខណ្ឌទាំង ៣ ខាងក្រោមពេញលេញ៖
           </div>
           <div className="bg-blue-50 p-4 rounded-lg space-y-2">
@@ -38,7 +40,7 @@ const TOPIC_CONTENT: TopicContent = {
               អនុវត្តន៍បន្លាយនៃភាពជាប់៖
             </div>
             <div>
-              បើ <InlineMath math="f" /> ជាអនុគមន៍មិនកំណត់ត្រង់​{" "}
+              បើ <InlineMath math="f" /> ជាអនុគមន៍មិនកំណត់ត្រង់{" "}
               <InlineMath math="x = a" /> និងមាន
               <div className="flex flex-col">
                 <div>
@@ -62,8 +64,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  tip: {
+  {
+    type: "tip",
     title: "លក្ខណៈនៃអនុគមន៍ជាប់",
     content: (
       <div className="text-left">
@@ -72,7 +74,7 @@ const TOPIC_CONTENT: TopicContent = {
             <div className="font-semibold mb-2">
               ប្រសិនបើ f និង g ជាអនុគមន៍ជាប់ត្រង់ x = a នោះ ៖
             </div>
-            <div className="space-y-2​ text-sm">
+            <div className="space-y-2 text-sm">
               <div>
                 <strong>១.</strong> <InlineMath math="f(x) + g(x)" />{" "}
                 ជាអនុគមន៍ជាប់ត្រង់ <InlineMath math="x = a" />
@@ -97,7 +99,6 @@ const TOPIC_CONTENT: TopicContent = {
               </div>
             </div>
           </div>
-
           <div className="bg-purple-50 p-4 rounded-lg">
             <div className="font-semibold mb-2">ភាពជាប់លើចន្លោះ៖</div>
             <div className="space-y-2">
@@ -119,8 +120,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  example: {
+  {
+    type: "example",
     question: (
       <div className="text-left">
         ពិនិត្យសនិទានភាពនៃអនុគមន៍ <InlineMath math="f" /> នៅចំណុច{" "}
@@ -189,8 +190,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  example2: {
+  {
+    type: "example",
     question: (
       <div className="text-left">
         រកតម្លៃ <InlineMath math="a" /> ដើម្បីឱ្យអនុគមន៍{" "}
@@ -274,8 +275,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "q1",
@@ -373,8 +374,8 @@ const TOPIC_CONTENT: TopicContent = {
       },
     ],
   },
-
-  hint: {
+  {
+    type: "hint",
     content: (
       <div className="text-left">
         <div className="space-y-3">
@@ -392,50 +393,12 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-};
+];
+
+// Simulate database fetching
+const jsonV3 = serializeTopicContentV3(content);
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
 
 export default function LimitContinuity() {
-  return (
-    <>
-      {TOPIC_CONTENT.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT.definition.title}
-          content={TOPIC_CONTENT.definition.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.tip && (
-        <TipBox
-          title={TOPIC_CONTENT.tip.title}
-          content={TOPIC_CONTENT.tip.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example.question}
-          steps={TOPIC_CONTENT.example.steps}
-          answer={TOPIC_CONTENT.example.answer}
-        />
-      )}
-
-      {TOPIC_CONTENT.example2 && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example2.question}
-          steps={TOPIC_CONTENT.example2.steps}
-          answer={TOPIC_CONTENT.example2.answer}
-        />
-      )}
-
-      {TOPIC_CONTENT.exercise && (
-        <ExerciseBox questions={TOPIC_CONTENT.exercise.questions} />
-      )}
-
-      {TOPIC_CONTENT.hint && <HintBox content={TOPIC_CONTENT.hint.content} />}
-
-      {TOPIC_CONTENT.warning && (
-        <WarningBox content={TOPIC_CONTENT.warning.content} />
-      )}
-    </>
-  );
+  return <ContentRendererV3 content={restoredContent} />;
 }

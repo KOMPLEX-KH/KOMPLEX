@@ -1,16 +1,18 @@
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
-import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
-import { TopicContent } from "@/types/docs/topic";
+"use client";
+
+import React from "react";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
 import { InlineMath } from "react-katex";
 
-// ===== TOPIC CONTENT DATA =====
-
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+// Stage 1: Original authoring shape (TopicContent_V3)
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "អនុគមន៍សនិទាន",
     content: (
       <>
@@ -19,8 +21,8 @@ const TOPIC_CONTENT: TopicContent = {
       </>
     ),
   },
-
-  tip: {
+  {
+    type: "tip",
     title: "ដែនកំណត់",
     content: (
       <>
@@ -28,8 +30,8 @@ const TOPIC_CONTENT: TopicContent = {
       </>
     ),
   },
-
-  example: {
+  {
+    type: "example",
     question: (
       <div className="ml-2">
         រកដែនកំណត់នៃអនុគមន៍ <InlineMath math="f(x) = - \frac{1}{2x+3}" />
@@ -70,8 +72,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "q1",
@@ -106,12 +108,12 @@ const TOPIC_CONTENT: TopicContent = {
       },
     ],
   },
-
-  hint: {
+  {
+    type: "hint",
     content: <>ក្នុងអនុគមន៍សនិទានដែនកំណត់​គឺជាអាស៊ីមតូតឈរ</>,
   },
-
-  warning: {
+  {
+    type: "warning",
     content: (
       <>
         កុំច្រឡំអនុគមន៍សនិទានជាមួយអនុគមន៍បន្ទាត់ទ្រេត{" "}
@@ -120,10 +122,9 @@ const TOPIC_CONTENT: TopicContent = {
       </>
     ),
   },
-
-  graphExplanation: {
+  {
+    type: "graphExplanation",
     expressions: [{ id: "1", latex: "f(x)=5", color: "#FF4136" }],
-
     explanation: (
       <>
         ក្រាបបង្ហាញអនុគមន៍ <InlineMath math="f(x) = 5" />{" "}
@@ -137,9 +138,8 @@ const TOPIC_CONTENT: TopicContent = {
       yAxisLabel: "y",
     },
   },
-};
-const INCREASE_DECREASE: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "អនុគមន៍កើន",
     content: (
       <div className="space-y-2">
@@ -161,8 +161,8 @@ const INCREASE_DECREASE: TopicContent = {
       </div>
     ),
   },
-
-  tip: {
+  {
+    type: "tip",
     title: "អនុគមន៍ចុះ",
     content: (
       <div className="space-y-2">
@@ -184,10 +184,8 @@ const INCREASE_DECREASE: TopicContent = {
       </div>
     ),
   },
-};
-
-const EXTREMA_VALUES: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "អតិបរមាធៀប",
     content: (
       <div className="space-y-2">
@@ -207,8 +205,8 @@ const EXTREMA_VALUES: TopicContent = {
       </div>
     ),
   },
-
-  tip: {
+  {
+    type: "tip",
     title: "អប្បបរមាធៀប",
     content: (
       <div className="space-y-2">
@@ -228,72 +226,16 @@ const EXTREMA_VALUES: TopicContent = {
       </div>
     ),
   },
+];
+
+// Stage 2: Serialized JSON
+const jsonV3 = serializeTopicContentV3(content);
+
+// Stage 3: Deserialized V3 with live React nodes
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
+
+const AnukomSanitean = () => {
+  return <ContentRendererV3 content={restoredContent} />;
 };
 
-// ===== MAIN COMPONENT =====
-
-export default function AnukomSanitean() {
-  return (
-    <>
-      {TOPIC_CONTENT.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT.definition.title}
-          content={TOPIC_CONTENT.definition.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.tip && (
-        <TipBox
-          title={TOPIC_CONTENT.tip.title}
-          content={TOPIC_CONTENT.tip.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example.question}
-          steps={TOPIC_CONTENT.example.steps}
-          answer={TOPIC_CONTENT.example.answer}
-        />
-      )}
-
-      {TOPIC_CONTENT.exercise && (
-        <ExerciseBox questions={TOPIC_CONTENT.exercise.questions} />
-      )}
-
-      {TOPIC_CONTENT.hint && <HintBox content={TOPIC_CONTENT.hint.content} />}
-
-      {TOPIC_CONTENT.warning && (
-        <WarningBox content={TOPIC_CONTENT.warning.content} />
-      )}
-
-      {INCREASE_DECREASE.definition && (
-        <TipBox
-          title={INCREASE_DECREASE.definition.title}
-          content={INCREASE_DECREASE.definition.content}
-        />
-      )}
-
-      {INCREASE_DECREASE.tip && (
-        <TipBox
-          title={INCREASE_DECREASE.tip.title}
-          content={INCREASE_DECREASE.tip.content}
-        />
-      )}
-
-      {EXTREMA_VALUES.definition && (
-        <TipBox
-          title={EXTREMA_VALUES.definition.title}
-          content={EXTREMA_VALUES.definition.content}
-        />
-      )}
-
-      {EXTREMA_VALUES.tip && (
-        <TipBox
-          title={EXTREMA_VALUES.tip.title}
-          content={EXTREMA_VALUES.tip.content}
-        />
-      )}
-    </>
-  );
-}
+export default AnukomSanitean;

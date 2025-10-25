@@ -1,13 +1,17 @@
-import { TopicContent } from "@/types/docs/topic";
-import { BlockMath, InlineMath } from "react-katex";
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
+"use client";
 
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+import { InlineMath } from "react-katex";
+
+// Stage 1: Original authoring shape (TopicContent_V3)
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "លីមីតនៃអនុគមន៍ត្រីកោណមាត្រ",
     content: (
       <div className="text-left">
@@ -41,8 +45,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  tip: {
+  {
+    type: "tip",
     title: "រូបមន្តសំខាន់ៗ",
     content: (
       <div className="text-left">
@@ -73,7 +77,6 @@ const TOPIC_CONTENT: TopicContent = {
               </div>
             </div>
           </div>
-
           <div className="bg-green-50 p-4 rounded-lg">
             <div className="space-y-2">
               <div>
@@ -84,7 +87,6 @@ const TOPIC_CONTENT: TopicContent = {
               </div>
             </div>
           </div>
-
           <div className="bg-purple-50 p-4 rounded-lg">
             <div className="space-y-2">
               <div>
@@ -98,7 +100,6 @@ const TOPIC_CONTENT: TopicContent = {
               </div>
             </div>
           </div>
-
           <div className="bg-red-50 p-4 rounded-lg">
             <div className="font-semibold mb-2">សំគាល់៖</div>
             <div>
@@ -109,8 +110,162 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
+  {
+    type: "imageExplanation",
+    src: "/tri.png",
+    imageAlt: "ការបកស្រាយធរណីមាត្រនៃលីមីត sin x/x = 1",
 
-  example: {
+    explanation: (
+      <div className="text-gray-700 text-base">
+        <div className="text-left">
+          <div className="space-y-4">
+            <div className="font-semibold text-lg">
+              ការបកស្រាយធរណីមាត្រ នៃ lim(x→0) sin x/x = 1
+            </div>
+            <div className="space-y-3">
+              <div>
+                <strong>តាង:</strong> φ ជាមុំគិតជារ៉ាដ្យង់ ដែល{" "}
+                <InlineMath math="0 < \varphi < \frac{\pi}{2}" />
+              </div>
+              <div>
+                តាង <InlineMath math="S_{OAP}" />,{" "}
+                <InlineMath math="S_{ធ្នូ}" /> និង{" "}
+                <InlineMath math="S_{OAT}" /> រៀងគ្នាជាផ្ទៃក្រឡានៃត្រីកោណ
+                OAT, ផ្ទៃក្រឡាចំរៀកថាស OAP និងផ្ទៃក្រឡានៃត្រីកោណ OAP។
+              </div>
+              <div className="bg-blue-50 p-3 rounded-lg">
+                <div>
+                  តាមរូបមន្តខាងលើ យើងមាន:{" "}
+                  <InlineMath math="S_{OAP} \leq S_{ធ្នូ} \leq S_{OAT}" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div>
+                  <strong>គណនាផ្ទៃនីមួយៗ:</strong>
+                </div>
+                <div>
+                  •{" "}
+                  <InlineMath math="S_{OAT} = \frac{1}{2} \times 1 \times {\tan \varphi}" />
+                </div>
+                <div>
+                  •{" "}
+                  <InlineMath math="S_{ធ្នូ} = \frac{1}{2} \times 1^2 \times \varphi = \frac{\varphi}{2}" />
+                </div>
+                <div>
+                  •{" "}
+                  <InlineMath math="S_{OAP} = \frac{1}{2} \cdot {\sin{\alpha}}" />
+                </div>
+              </div>
+              <div>
+                នោះគេបាន:{" "}
+                <InlineMath math="\frac{1}{2} {\tan\varphi} \leq \frac{\varphi}{2} \leq \frac{1}{2} {\sin\varphi}" />
+              </div>
+              <div>
+                ឬ{" "}
+                <InlineMath math="{\tan\varphi} \leq \varphi \leq {\sin\varphi}" />
+              </div>
+              <div>
+                ដោយ{" "}
+                <InlineMath math="{\tan \varphi} =\frac{\sin\varphi}{\cos\varphi}" />{" "}
+                នោះ{" "}
+                <InlineMath math="\frac{\sin\varphi}{\cos\varphi} \geq \frac{\sin\varphi}{\varphi}" />
+              </div>
+              <div>
+                នោះគេទាញ:{" "}
+                <InlineMath math="1 \geq \frac{\sin\varphi}{\varphi} \geq {\cos\varphi}" />
+              </div>
+              <div>
+                បើ <InlineMath math="0 < \varphi < -\frac{\pi}{2}" /> នោះ{" "}
+                <InlineMath math="0 < \varphi < \frac{\pi}{2}" />
+              </div>
+              <div>នោះវិសមភាពខាងលើអាចសរសេរទៅជា:</div>
+              <div>
+                <InlineMath math="{\cos\varphi} \leq \frac{\sin\varphi}{\varphi} \leq 1" />
+              </div>
+              <div>
+                ហេតុនេះគេបាន:{" "}
+                <InlineMath math="{\cos\varphi} \leq \frac{\sin\varphi}{\varphi} \leq 1" />{" "}
+                ចំពោះគ្រប់{" "}
+                <InlineMath math="\varphi \in (-\frac{\pi}{2}, 0) \cup (0, \frac{\pi}{2})" />
+              </div>
+              <div>
+                ដោយ{" "}
+                <InlineMath math="lim_{\varphi \to 0} \cos \varphi = 1" />{" "}
+                នោះ{" "}
+                <InlineMath math="\lim_{x\to 0} \frac{\sin \varphi}{\varphi} = 1" />
+              </div>
+              <div className="bg-green-50 p-3 rounded-lg space-y-2">
+                <div>
+                  <strong>សន្និដ្ឋាន:</strong>
+                </div>
+                <div>
+                  ដោយជំនួស φ ជា x នោះយើងបាន:{" "}
+                  <InlineMath math="\lim_{x \to 0} \frac{\sin x}{x} = 1" />{" "}
+                  ពិត។
+                </div>
+              </div>
+              <div>
+                ម៉្យាងទៀត{" "}
+                <InlineMath math="lim_{x \to 0} \frac{1 - \cos x}{x} = \lim_{x \to 0} \frac{(1 - \cos x)(1 + \cos x)}{x(1 + \cos x)}" />
+              </div>
+              <div>
+                <InlineMath math="= lim_{x \to 0} \frac{1 - \cos^2 x}{x(1 + \cos x)} = \lim_{x \to 0} \frac{\sin^2 x}{x(1 + \cos x)}" />
+              </div>
+              <div>
+                <InlineMath math="= lim_{x \to 0} \frac{\sin x}{x} \cdot \frac{\sin x}{1 + \cos x} = 1 \cdot \frac{0}{1 + 1} = 0" />
+              </div>
+              <div className="bg-green-50 p-3 rounded-lg flex flex-row gap-2">
+                <div>ដូច្នេះ</div>
+                <div>
+                  <InlineMath math="lim_{x \to 0} \frac{1 - \cos x}{x} = 0" />{" "}
+                  ពិត
+                </div>
+              </div>
+              <div>
+                តាមរូបមន្ត{" "}
+                <InlineMath math="\tan x = \frac{\sin x}{\cos x}" />
+              </div>
+              <div>
+                នោះគេបាន{" "}
+                <InlineMath math="lim_{x \to 0} \frac{\tan x}{x} = \lim_{x \to 0} \frac{\sin x}{x \cos x}" />
+              </div>
+              <div>
+                <InlineMath math="= lim_{x \to 0} \frac{\sin x}{x} \cdot \frac{1}{\cos x} = 1 \cdot \frac{1}{1} = 1" />
+              </div>
+              <div className="bg-green-50 p-3 rounded-lg flex flex-row gap-2">
+                <div>ដូច្នេះ</div>
+                <div>
+                  <InlineMath math="lim_{x \to 0} \frac{\tan x}{x} = 1" />{" "}
+                  ពិត
+                </div>
+              </div>
+              <div>លីមីតទូទៅ:</div>
+              <div>
+                • <InlineMath math="lim_{x \to 0} \frac{\sin ax}{x} = a" />{" "}
+                (a ≠ 0)
+              </div>
+              <div>
+                • <InlineMath math="lim_{x \to 0} \frac{\tan ax}{x} = a" />{" "}
+                (a ≠ 0)
+              </div>
+              <div>
+                •{" "}
+                <InlineMath math="lim_{x \to 0} \frac{1 - \cos ax}{x^2} = \frac{a^2}{2}" />{" "}
+                (a ≠ 0)
+              </div>
+              <div>
+                •{" "}
+                <InlineMath math="lim_{x \to 0} \frac{\sin ax}{\sin bx} = \frac{a}{b}" />{" "}
+                (a,b ≠ 0)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    type: "example",
     question: (
       <div className="text-left">
         គណនា{" "}
@@ -181,8 +336,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  example2: {
+  {
+    type: "example",
     question: (
       <div className="text-left">
         គណនា{" "}
@@ -215,11 +370,11 @@ const TOPIC_CONTENT: TopicContent = {
               <InlineMath math="lim_{x \to 0}\frac{\sqrt{3}\sin( x- \frac{\pi}{3})}{(\frac{\pi}{3} -x)}" />
             </div>
             <div>
-              តាង​ <InlineMath math="u = x- \frac{\pi}{3}" /> និង{" "}
+              តាង <InlineMath math="u = x- \frac{\pi}{3}" /> និង{" "}
               <InlineMath math="x = u + \frac{\pi}{3}" />
             </div>
             <div>
-              បើ​ <InlineMath math="x \to \frac{\pi}{3}" /> នោះ{" "}
+              បើ <InlineMath math="x \to \frac{\pi}{3}" /> នោះ{" "}
               <InlineMath math="u \to 0" />
             </div>
           </div>
@@ -252,8 +407,8 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "q1",
@@ -340,8 +495,8 @@ const TOPIC_CONTENT: TopicContent = {
       },
     ],
   },
-
-  hint: {
+  {
+    type: "hint",
     content: (
       <div className="text-left">
         <div className="space-y-3">
@@ -368,225 +523,14 @@ const TOPIC_CONTENT: TopicContent = {
       </div>
     ),
   },
-};
+];
+
+// Stage 2: Serialize to JSON
+const jsonV3 = serializeTopicContentV3(content);
+
+// Stage 3: Deserialize to restore renderable content
+const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
 
 export default function LimitTrigonometric() {
-  return (
-    <>
-      {TOPIC_CONTENT.definition && (
-        <DefinitionBox
-          title={TOPIC_CONTENT.definition.title}
-          content={TOPIC_CONTENT.definition.content}
-        />
-      )}
-
-      {TOPIC_CONTENT.tip && (
-        <TipBox
-          title={TOPIC_CONTENT.tip.title}
-          content={TOPIC_CONTENT.tip.content}
-        />
-      )}
-
-      <div className="bg-indigo-50/80 border border-indigo-600 p-6 rounded-2xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm my-6">
-        {/* Image on top */}
-        <div className="flex justify-center mb-6">
-          <img
-            src="/tri.png"
-            alt="ការបកស្រាយធរណីមាត្រនៃលីមីត sin x/x = 1"
-            className="rounded-lg shadow-md h-auto w-full max-w-2xl object-contain"
-          />
-        </div>
-
-        {/* Explanation below */}
-        <div className="w-full">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="text-indigo-600">🖼️</div>
-            <h3 className="text-xl font-bold text-gray-900">ការពន្យល់</h3>
-          </div>
-          <div className="text-gray-700 text-base">
-            <div className="text-left">
-              <div className="space-y-4">
-                <div className="font-semibold text-lg">
-                  ការបកស្រាយធរណីមាត្រ នៃ lim(x→0) sin x/x = 1
-                </div>
-
-                <div className="space-y-3">
-                  <div>
-                    <strong>តាង:</strong> φ ជាមុំគិតជារ៉ាដ្យង់ ដែល{" "}
-                    <InlineMath math="0 < \varphi < \frac{\pi}{2}" />
-                  </div>
-
-                  <div>
-                    តាង <InlineMath math="S_{OAP}" />,{" "}
-                    <InlineMath math="S_{ធ្នូ}" /> និង{" "}
-                    <InlineMath math="S_{OAT}" /> រៀងគ្នាជាផ្ទៃក្រឡានៃត្រីកោណ
-                    OAT, ផ្ទៃក្រឡាចំរៀកថាស OAP និងផ្ទៃក្រឡានៃត្រីកោណ OAP។
-                  </div>
-
-                  <div className="bg-blue-50 p-3 rounded-lg">
-                    <div>
-                      តាមរូបមន្តខាងលើ យើងមាន:{" "}
-                      <InlineMath math="S_{OAP} \leq S_{ធ្នូ} \leq S_{OAT}" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <div>
-                      <strong>គណនាផ្ទៃនីមួយៗ:</strong>
-                    </div>
-                    <div>
-                      •{" "}
-                      <InlineMath math="S_{OAT} = \frac{1}{2} \times 1 \times {\tan \varphi}" />
-                    </div>
-                    <div>
-                      •{" "}
-                      <InlineMath math="S_{ធ្នូ} = \frac{1}{2} \times 1^2 \times \varphi = \frac{\varphi}{2}" />
-                    </div>
-                    <div>
-                      •{" "}
-                      <InlineMath math="S_{OAP} = \frac{1}{2} \cdot {\sin{\alpha}}" />
-                    </div>
-                  </div>
-
-                  <div>
-                    នោះគេបាន:{" "}
-                    <InlineMath math="\frac{1}{2} {\tan\varphi} \leq \frac{\varphi}{2} \leq \frac{1}{2} {\sin\varphi}" />
-                  </div>
-
-                  <div>
-                    ឬ{" "}
-                    <InlineMath math="{\tan\varphi} \leq \varphi \leq {\sin\varphi}" />
-                  </div>
-
-                  <div>
-                    ដោយ{" "}
-                    <InlineMath math="{\tan \varphi} =\frac{\sin\varphi}{\cos\varphi}" />{" "}
-                    នោះ{" "}
-                    <InlineMath math="\frac{\sin\varphi}{\cos\varphi} \geq \frac{\sin\varphi}{\varphi}" />
-                  </div>
-
-                  <div>
-                    នោះគេទាញ:{" "}
-                    <InlineMath math="1 \geq \frac{\sin\varphi}{\varphi} \geq {\cos\varphi}" />
-                  </div>
-
-                  <div>
-                    បើ <InlineMath math="0 < \varphi < -\frac{\pi}{2}" /> នោះ{" "}
-                    <InlineMath math="0 < \varphi < \frac{\pi}{2}" />{" "}
-                  </div>
-                  <div>នោះវិសមភាពខាងលើអាចសរសេរទៅជា:</div>
-                  <div>
-                    <InlineMath math="{\cos\varphi} \leq \frac{\sin\varphi}{\varphi} \leq 1" />
-                  </div>
-                  <div>
-                    ហេតុនេះគេបាន:{" "}
-                    <InlineMath math="{\cos\varphi} \leq \frac{\sin\varphi}{\varphi} \leq 1" />{" "}
-                    ចំពោះគ្រប់{" "}
-                    <InlineMath math="\varphi \in (-\frac{\pi}{2}, 0) \cup (0, \frac{\pi}{2})" />
-                  </div>
-
-                  <div>
-                    ដោយ{" "}
-                    <InlineMath math="lim_{\varphi \to 0} \cos \varphi = 1" />{" "}
-                    នោះ{" "}
-                    <InlineMath math="\lim_{x\to 0} \frac{\sin \varphi}{\varphi} = 1" />
-                  </div>
-
-                  <div className="bg-green-50 p-3 rounded-lg space-y-2">
-                    <div>
-                      <strong>សន្និដ្ឋាន:</strong>
-                    </div>
-                    <div>
-                      ដោយជំនួស φ ជា x នោះយើងបាន:{" "}
-                      <InlineMath math="\lim_{x \to 0} \frac{\sin x}{x} = 1" />{" "}
-                      ពិត។
-                    </div>
-                  </div>
-
-                  <div>
-                    ម៉្យាងទៀត{" "}
-                    <InlineMath math="lim_{x \to 0} \frac{1 - \cos x}{x} = \lim_{x \to 0} \frac{(1 - \cos x)(1 + \cos x)}{x(1 + \cos x)}" />
-                  </div>
-                  <div>
-                    <InlineMath math="= lim_{x \to 0} \frac{1 - \cos^2 x}{x(1 + \cos x)} = \lim_{x \to 0} \frac{\sin^2 x}{x(1 + \cos x)}" />
-                  </div>
-                  <div>
-                    <InlineMath math="= lim_{x \to 0} \frac{\sin x}{x} \cdot \frac{\sin x}{1 + \cos x} = 1 \cdot \frac{0}{1 + 1} = 0" />
-                  </div>
-                  <div className="bg-green-50 p-3 rounded-lg flex flex-row gap-2 ">
-                    <div>ដូច្នេះ</div>
-                    <div>
-                      <InlineMath math="lim_{x \to 0} \frac{1 - \cos x}{x} = 0" />{" "}
-                      ពិត
-                    </div>
-                  </div>
-
-                  <div>
-                    តាមរូបមន្ត{" "}
-                    <InlineMath math="\tan x = \frac{\sin x}{\cos x}" />
-                  </div>
-                  <div>
-                    នោះគេបាន{" "}
-                    <InlineMath math="lim_{x \to 0} \frac{\tan x}{x} = \lim_{x \to 0} \frac{\sin x}{x \cos x}" />
-                  </div>
-                  <div>
-                    <InlineMath math="= lim_{x \to 0} \frac{\sin x}{x} \cdot \frac{1}{\cos x} = 1 \cdot \frac{1}{1} = 1" />
-                  </div>
-                  <div className="bg-green-50 p-3 rounded-lg flex flex-row gap-2 ">
-                    <div>ដូច្នេះ</div>
-                    <div>
-                      <InlineMath math="lim_{x \to 0} \frac{\tan x}{x} = 1" />{" "}
-                      ពិត
-                    </div>
-                  </div>
-
-                  <div>លីមីតទូទៅ:</div>
-                  <div>
-                    • <InlineMath math="lim_{x \to 0} \frac{\sin ax}{x} = a" />{" "}
-                    (a ≠ 0)
-                  </div>
-                  <div>
-                    • <InlineMath math="lim_{x \to 0} \frac{\tan ax}{x} = a" />{" "}
-                    (a ≠ 0)
-                  </div>
-                  <div>
-                    •{" "}
-                    <InlineMath math="lim_{x \to 0} \frac{1 - \cos ax}{x^2} = \frac{a^2}{2}" />{" "}
-                    (a ≠ 0)
-                  </div>
-                  <div>
-                    •{" "}
-                    <InlineMath math="lim_{x \to 0} \frac{\sin ax}{\sin bx} = \frac{a}{b}" />{" "}
-                    (a,b ≠ 0)
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {TOPIC_CONTENT.example && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example.question}
-          steps={TOPIC_CONTENT.example.steps}
-          answer={TOPIC_CONTENT.example.answer}
-        />
-      )}
-
-      {TOPIC_CONTENT.example2 && (
-        <ExampleBox
-          question={TOPIC_CONTENT.example2.question}
-          steps={TOPIC_CONTENT.example2.steps}
-          answer={TOPIC_CONTENT.example2.answer}
-        />
-      )}
-
-      {TOPIC_CONTENT.exercise && (
-        <ExerciseBox questions={TOPIC_CONTENT.exercise.questions} />
-      )}
-
-      {TOPIC_CONTENT.hint && <HintBox content={TOPIC_CONTENT.hint.content} />}
-    </>
-  );
+  return <ContentRendererV3 content={restoredContent} />;
 }
