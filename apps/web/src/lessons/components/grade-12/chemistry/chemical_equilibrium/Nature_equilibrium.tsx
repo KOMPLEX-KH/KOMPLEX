@@ -4,6 +4,12 @@ import React from "react";
 import { BlockMath, InlineMath } from "react-katex";
 import { TopicContent_V3 } from "@/types/docs/topic";
 import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+    serializeTopicContentV3,
+    deserializeTopicContentV3,
+    deserializeTopicContentV3ToTree,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+
 
 const TOPIC_CONTENT_V3: TopicContent_V3[] = [
   {
@@ -306,6 +312,19 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
     ],
   },
 ];
+
+// Stage 2: Serialized JSON
+const jsonV2 = serializeTopicContentV3(TOPIC_CONTENT_V3);
+
+// Stage 3a: Deserialized V3 with live React nodes (renderable)
+const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
+
+// Stage 3b: Deserialized V3 raw node tree (no React elements) for inspection
+const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V3[];
+
+// Helper: visualize type sequence
+const originalTypes = TOPIC_CONTENT_V3.map((i) => i.type);
+
 
 const NatureEquilibriumV3 = () => {
   return <ContentRendererV3 content={TOPIC_CONTENT_V3} />;
