@@ -1,169 +1,134 @@
+"use client";
+
 import React from "react";
-
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
-import { TopicContent } from "@/types/docs/topic";
 import { BlockMath, InlineMath } from "react-katex";
-import "katex/dist/katex.min.css";
-import { div } from "three/tsl";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
 
-const FirstTopicContent: TopicContent = {
-  definition: {
+const TOPIC_CONTENT_V3: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "១. ប្រតិកម្មទៅមក",
     content: (
-      <>
-        <div className="flex flex-col items-start">
-          <p>
-            ប្រតិកម្មទៅមកគឺជាប្រតិកម្មដែលក្នុងនោះអង្គធាតុកកេីត (ផលិតផល)
-            អាចមានប្រតិកម្មជាមួយគ្នាបង្កេីតអង្គធាតុប្រតិករវិញ ។
-          </p>
-        </div>
-      </>
+      <div>
+        ប្រតិកម្មទៅមកគឺជាប្រតិកម្មដែលក្នុងនោះអង្គធាតុកកើត (ផលិតផល)
+        អាចមានប្រតិកម្មជាមួយគ្នាបង្កើតអង្គធាតុប្រតិករវិញ ។
+      </div>
     ),
   },
-  tip: {
+  {
+    type: "tip",
     title: "ជាទូទៅ",
     content: (
-      <>
-        <ul className="list-disc pl-5 flex flex-col items-start gap-4">
-          <div className="flex flex-col gap-3">
-            <li>
-              ប្រតិកម្មចំហេះម៉ាញេស្យូមក្នុងខ្យល់បង្កេីតបានម៉ាញេស្យូមអុកសុីត​ ។
-            </li>
-            <span className="text-[15px]">
-              <InlineMath math="2Mg(s) + O_{2} (g) \rightarrow 2MgO (s)" />
-            </span>
-            <p>
-              ក្នុងប្រតិកម្មនេះ
-              ម៉ាញេស្យូមអុកសុីតមិនអាចប្រតិកម្មជាមួយគ្នាបង្កេីតជា ម៉ាញេស្យូមនិង
-              អុកសុីសែនវិញទេ ។
-            </p>
-          </div>
-          <div className="flex flex-col gap-3">
-            <li>
-              នៅពេលដុតកម្តៅ បារត (II) អុកសុីត បំបែកជា បារត និងឧស្ម័នអុកសុីសែន ។
-            </li>
-            <span className="text-[15px]">
-              <InlineMath math="2HgO (s) \rightarrow 2Hg (l) + O_{2} (g) (1)" />
-            </span>
-            <p>
-              ក្នុងពេលប្រតិកម្មបំបែកកំពុងប្រព្រឹត្តទៅ បារតមានអំពេីជាមួយ
-              អុកសុីសែន​ឲផលជាបារត (II) អុកសុីតវិញ
-            </p>
-            <span className="text-[15px]">
-              <InlineMath math="2Hg (l) + O_{2} \rightarrow 2HgO (s)" />
-            </span>
-            <p>ប្រតិកម្មបែបនេះ ហៅថាប្រតិកម្មទៅមកដែលអាចសរសេរជា</p>
-            <span className="text-[15px]">
-              <InlineMath math="2HgO (s) \xrightleftharpoons[(2)]{(1)} 2Hg (l) + O_{2} (g)" />
-            </span>
-          </div>
-        </ul>
-      </>
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <p>
+            ប្រតិកម្មចំហេះម៉ាញេស្យូមក្នុងខ្យល់បង្កើតបានម៉ាញេស្យូមអុកសុីត​ ។
+          </p>
+          <InlineMath math="2Mg(s) + O_{2} (g) \rightarrow 2MgO (s)" />
+          <p>
+            ក្នុងប្រតិកម្មនេះ ម៉ាញេស្យូមអុកសុីតមិនអាចប្រតិកម្មជាមួយគ្នាបង្កើតជា
+            ម៉ាញេស្យូមនិងអុកស៊ីសែនវិញទេ ។
+          </p>
+        </div>
+        <div className="flex flex-col gap-2">
+          <p>
+            នៅពេលដុតកម្តៅ បារត (II) អុកសុីត បំបែកជា បារត និងឧស្ម័នអុកស៊ីសែន ។
+          </p>
+          <InlineMath math="2HgO (s) \rightarrow 2Hg (l) + O_{2} (g) (1)" />
+          <p>
+            ក្នុងពេលប្រតិកម្មបំបែកកំពុងប្រព្រឹត្តទៅ បារតមានអំពើជាមួយអុកស៊ីសែន
+            ​ឲផលជាបារត (II) អុកសុីតវិញ
+          </p>
+          <InlineMath math="2Hg (l) + O_{2} \rightarrow 2HgO (s)" />
+          <p>ប្រតិកម្មបែបនេះ ហៅថាប្រតិកម្មទៅមកដែលអាចសរសេរជា</p>
+          <InlineMath math="2HgO (s) \xrightleftharpoons[(2)]{(1)} 2Hg (l) + O_{2} (g)" />
+        </div>
+      </div>
     ),
   },
-};
-
-const SecondTopicContent: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "២. លំនឹងគីមី",
     content: (
-      <>
-        <div className="flex flex-col items-start">
-          <p>
-            លំនឹងគីមីជាច្រេីន ជាប្រតិកម្មទៅមកនៅក្រោមលក្ខខណ្ឌសីតុណ្ហភាព
-            និងកំហាប់ប្រក្រតី ។ ប្រតិកម្មទាំងនោះទៅដល់ស្ថានភាពលំនឹង
-            បេីគ្មានសារធាតុមួយត្រូវបានរំដោះចេញពីប្រព័ន្ធគីមី ។
-          </p>
-        </div>
-      </>
+      <div>
+        លំនឹងគីមីជាច្រើន ជាប្រតិកម្មទៅមកនៅក្រោមលក្ខខណ្ឌសីតុណ្ហភាព
+        និងកំហាប់ប្រក្រតី ។ ប្រតិកម្មទាំងនោះទៅដល់ស្ថានភាពលំនឹង
+        បើគ្មានសារធាតុមួយត្រូវបានរំដោះចេញពីប្រព័ន្ធគីមី ។
+      </div>
     ),
   },
-  tip: {
+  {
+    type: "tip",
     title: "ជាទូទៅ",
     content: (
-      <>
-        <ul className="list-disc pl-5 flex flex-col items-start gap-4">
-          <div className="flex flex-col gap-3">
-            <li>
-              ករណីខ្លះ ប្រតិកម្មតាមទិសបណ្តោយប្រព្រឹត្តទៅស្ទេីរទាំងស្រុង
-              ទេីបមានប្រតិកម្មតាមទិសច្រាសកេីតឡេីង ។ ដូចនេះនៅពេលមានលំនឹងគីមី
-              កំហាប់អង្គធាតុកកេីតធំជាង អង្គធាតុប្រតិករ ។ គេថាលំនឹងទោរទៅខាងស្តាំ
-              ជាប្រតិកម្មនាំមុខ ។
-            </li>
-            <div className="flex items-center gap-2 flex-wrap">
-              <p>ឧទាហរណ៍. </p>
-              <span className="text-[14px]">
-                <InlineMath math="2SO_{2} (g) + O_{2} (g) \rightleftharpoons 2SO_{3} (g)" />
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col gap-3">
-            <li>
-              ករណីខ្លះ ប្រតិកម្មតាមទិសបណ្តោយប្រព្រឹត្តទៅដោយលំបាក
-              និងប្រតិកម្មតាមទិសច្រាសប្រព្រឹត្តទៅងាយស្រួល ។
-              ដូចនេះនៅពេលមានលំនឹងគីមី កំហាប់អង្គធាតុប្រតិករធំជាងអង្គធាតុកកេីត ។
-              គេថា លំនឹងទោរទៅខាងឆ្វេង ជាប្រតិកម្មនាំមុខ ។
-            </li>
-            <div className="flex items-center gap-2 flex-wrap">
-              <p>ឧទាហរណ៍. </p>
-              <span className="text-[14px]">
-                <InlineMath math="H_{2}CO_{3} (aq) + H_{2}O (l) \rightleftharpoons H_{3}O^{+} (aq) + HCO_{3}^{-} (aq)" />
-              </span>
-            </div>
-          </div>
-        </ul>
-      </>
+      <div className="flex flex-col gap-4">
+        <p>
+          ករណីខ្លះ ប្រតិកម្មតាមទិសបណ្តោយប្រព្រឹត្តទៅស្ទើរទាំងស្រុង ទើបមានប្រតិកម្មតាមទិសច្រាសកើតឡើង ។ ដូចនេះនៅពេលមានលំនឹងគីមី កំហាប់អង្គធាតុកើតធំជាង អង្គធាតុប្រតិករ គេថាលំនឹងទោរទៅខាងស្តាំ ជាប្រតិកម្មនាំមុខ ។
+        </p>
+        <div className="flex items-center gap-2 flex-wrap">
+          <p>ឧទាហរណ៍. </p>
+          <span className="text-[14px]">
+            <InlineMath math="2SO_{2} (g) + O_{2} (g) \rightleftharpoons 2SO_{3} (g)" />
+          </span>
+        </div>
+        <p>
+          ករណីខ្លះ ប្រតិកម្មតាមទិសបណ្តោយប្រព្រឹត្តទៅដោយលំបាក និងប្រតិកម្មតាមទិសច្រាសប្រព្រឹត្តទៅងាយស្រួល ។ ដូចនេះនៅពេលមានលំនឹងគីមី កំហាប់អង្គធាតុប្រតិករធំជាងអង្គធាតុកើត គេថា លំនឹងទោរទៅខាងឆ្វេង ជាប្រតិកម្មនាំមុខ ។
+        </p>
+        <div className="flex items-center gap-2 flex-wrap">
+          <p>ឧទាហរណ៍. </p>
+          <span className="text-[14px]">
+            <InlineMath math="H_{2}CO_{3} (aq) + H_{2}O (l) \rightleftharpoons H_{3}O^{+} (aq) + HCO_{3}^{-} (aq)" />
+          </span>
+        </div>
+      </div>
     ),
   },
-};
-
-const ThirdTopicContent: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "៣. កន្សោមថេរលំនឹង",
     content: (
-      <>
-        <div className="flex flex-col items-start"></div>
-      </>
-    ),
-  },
-  tip: {
-    title: "ជាទូទៅ",
-    content: (
-      <>
-        <div className="flex items-start gap-3 flex-col">
-          <p>
-            ឧបមាថា គេមានអង្គធាតុ A និង B មានប្រតិកម្មនឹងគ្នា
-            បង្កេីតបានជាអង្គធាតុ C និង​ D ហេីយអង្គធាតុ C និង D
-            មានប្រតិកម្មជាមួយគ្នាបង្កេីតបានជាអង្គធាតុ A និង​ B វិញ ។
-            នៅពេលលំនឹងគីមី គេបានសមីការតុល្យការ :
-          </p>
-          <InlineMath math="aA + bB \rightleftharpoons cC + dD" />
-          <div className="flex items-center flex-wrap gap-3">
-            <p>គេបានកន្សោមថេរលំនឹង</p>
-            <div className="flex items-center gap-2">
-              <InlineMath math="K = " />
-              <div className="text-[17px]">
-                <InlineMath math="\frac{[C]^{c} \cdot [D]^{d}}{[A]^{a} \cdot [B]^{b}} " />
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <p>
-              ថេរ K ឬថេរលំនឹង K ជាទំហំគ្មានខ្នាត ឯកំហាប់ប្រភេទគីមី គិតជា{" "}
-              <InlineMath math="mol.L^{-1}" /> ។
-            </p>
-          </div>
-          <p>ថេរ K មិនអាស្រ័យនឹងកំហាប់ប្រភេទគីមីទេ តែអាស្រ័យនឹងសីតុណ្ហភាព ។</p>
-        </div>
-      </>
-    ),
-  },
+      <div>
 
-  example: {
-    question: [
+      </div>
+    ),
+  },
+  {
+    type: "tip",
+    title: "កន្សោមថេរលំនឹង",
+    content: (
+      <div>
+          <div className="flex items-start gap-3 flex-col">
+              <p>
+                ឧបមាថា គេមានអង្គធាតុ A និង B មានប្រតិកម្មនឹងគ្នា
+                បង្កេីតបានជាអង្គធាតុ C និង​ D ហេីយអង្គធាតុ C និង D
+                មានប្រតិកម្មជាមួយគ្នាបង្កេីតបានជាអង្គធាតុ A និង​ B វិញ ។
+                នៅពេលលំនឹងគីមី គេបានសមីការតុល្យការ :
+              </p>
+              <InlineMath math="aA + bB \rightleftharpoons cC + dD" />
+              <div className="flex items-center flex-wrap gap-3">
+                <p>គេបានកន្សោមថេរលំនឹង</p>
+                <div className="flex items-center gap-2">
+                  <InlineMath math="K = " />
+                  <div className="text-[17px]">
+                    <InlineMath math="\frac{[C]^{c} \cdot [D]^{d}}{[A]^{a} \cdot [B]^{b}} " />
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <p>
+                  ថេរ K ឬថេរលំនឹង K ជាទំហំគ្មានខ្នាត ឯកំហាប់ប្រភេទគីមី គិតជា{" "}
+                  <InlineMath math="mol.L^{-1}" /> ។
+                </p>
+              </div>
+              <p>ថេរ K មិនអាស្រ័យនឹងកំហាប់ប្រភេទគីមីទេ តែអាស្រ័យនឹងសីតុណ្ហភាព ។</p>
+            </div>
+      </div>
+    ),
+  },
+  {
+    type: "example",
+    question: (
       <div className="flex flex-col items-start gap-3" key="q1">
         <p>គេមានប្រតិកម្មមួយស្ថិតក្នុងភាពលំនឹង :</p>
         <span className="text-[13px]">
@@ -171,8 +136,8 @@ const ThirdTopicContent: TopicContent = {
         </span>
 
         <p>ចូរសរសេរកន្សោមថេរលំនឹងនៃប្រតិកម្មខាងលេី ។</p>
-      </div>,
-    ],
+    </div>
+    ),
     steps: [
       {
         title: "កន្សោមថេរលំនឹង",
@@ -198,8 +163,9 @@ const ThirdTopicContent: TopicContent = {
       },
     ],
   },
-  example2: {
-    question: [
+  {
+    type: "example",
+    question: (
       <div className="flex flex-col items-start gap-3" key="q2">
         <div className="flex items-center gap-2 flex-wrap">
           <p>ល្បាយនៃ </p>
@@ -227,8 +193,8 @@ const ThirdTopicContent: TopicContent = {
           </span>
           <p>នៅពេលលំនឹង ។ </p>
         </div>
-      </div>,
-    ],
+      </div>
+    ),
     steps: [
       {
         title: "",
@@ -339,77 +305,10 @@ const ThirdTopicContent: TopicContent = {
       </div>,
     ],
   },
-  exercise: {
-    questions: [],
-  },
+];
+
+const NatureEquilibriumV3 = () => {
+  return <ContentRendererV3 content={TOPIC_CONTENT_V3} />;
 };
 
-const Nature_equilibrium = () => {
-  return (
-    <div>
-      <div>
-        {FirstTopicContent.definition && (
-          <DefinitionBox
-            title={FirstTopicContent.definition.title}
-            content={FirstTopicContent.definition.content}
-          />
-        )}
-        {FirstTopicContent.tip && (
-          <TipBox
-            title={FirstTopicContent.tip.title}
-            content={FirstTopicContent.tip.content}
-          />
-        )}
-        {FirstTopicContent.example && (
-          <ExampleBox question={FirstTopicContent.example.question} />
-        )}
-      </div>
-      <div>
-        {SecondTopicContent.definition && (
-          <DefinitionBox
-            title={SecondTopicContent.definition.title}
-            content={SecondTopicContent.definition.content}
-          />
-        )}
-        {SecondTopicContent.tip && (
-          <TipBox
-            title={SecondTopicContent.tip.title}
-            content={SecondTopicContent.tip.content}
-          />
-        )}
-        {SecondTopicContent.example && (
-          <ExampleBox question={SecondTopicContent.example.question} />
-        )}
-      </div>
-      <div>
-        {ThirdTopicContent.definition && (
-          <DefinitionBox
-            title={ThirdTopicContent.definition.title}
-            content={ThirdTopicContent.definition.content}
-          />
-        )}
-        {ThirdTopicContent.tip && (
-          <TipBox
-            title={ThirdTopicContent.tip.title}
-            content={ThirdTopicContent.tip.content}
-          />
-        )}
-        {ThirdTopicContent.example && (
-          <ExampleBox
-            question={ThirdTopicContent.example.question}
-            steps={ThirdTopicContent.example.steps}
-          />
-        )}
-        {ThirdTopicContent.example2 && (
-          <ExampleBox
-            question={ThirdTopicContent.example2.question}
-            steps={ThirdTopicContent.example2.steps}
-            answer={ThirdTopicContent.example2.answer}
-          />
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default Nature_equilibrium;
+export default NatureEquilibriumV3;
