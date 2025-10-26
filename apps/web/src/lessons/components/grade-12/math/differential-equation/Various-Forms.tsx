@@ -1,13 +1,18 @@
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { TopicContent } from "@/types/docs/topic";
-import { BlockMath, InlineMath } from "react-katex";
-import "katex/dist/katex.min.css";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+"use client";
 
-const FirstTopicContent: TopicContent = {
-  definition: {
+import React from "react";
+import { BlockMath, InlineMath } from "react-katex";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+    serializeTopicContentV3,
+    deserializeTopicContentV3,
+    deserializeTopicContentV3ToTree,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+
+const VariousForms_V3: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: (
       <div className="flex items-center gap-2 sm:flex-row flex-col">
         <p>សមីការឌីផែរ៉ង់ស្សែលរាង </p>
@@ -16,17 +21,17 @@ const FirstTopicContent: TopicContent = {
     ),
     content: <></>,
   },
-  tip: {
+  {
+    type: "tip",
     title: "ជាទូទៅ",
     content: (
       <>
-        <p>ដេីម្បីដោះស្រាយសមីការ</p>
-        <p>គេបំពាក់អាំងតេក្រាលលេីអង្គទាំងពីរ រួចគណនាអាំងតេក្រាលនោះ</p>
+        <p>ដេីម្បីដោះស្រាយសមីការ គេបំពាក់អាំងតេក្រាលលេីអង្គទាំងពីរ រួចគណនាអាំងតេក្រាលនោះ</p>
       </>
     ),
   },
-
-  example: {
+  {
+    type: "example",
     question: [
       <>
         <div className="flex flex-col items-start gap-3">
@@ -36,7 +41,6 @@ const FirstTopicContent: TopicContent = {
               <div className="flex items-center gap-2">
                 1. <BlockMath math="y' = 3x^2 -e^x + 1" />
               </div>
-
               <div className="flex items-center gap-2">
                 2. <BlockMath math="y' = xe^{x^2} + 2" />
               </div>
@@ -84,30 +88,18 @@ const FirstTopicContent: TopicContent = {
       },
     ],
     answer: (
-      <>
-        <div className="flex flex-col items-start">
-          <div className="flex flex-col items-start">
-            <BlockMath math="y = y = x^3 - e^x + x + c " />
-            <BlockMath math="y = \frac{1}{2} e^{x^2}  + 2x + c" />
-          </div>
-        </div>
-      </>
+      <div className="flex flex-col items-start">
+        <BlockMath math="y = x^3 - e^x + x + c" />
+        <BlockMath math="y = \frac{1}{2} e^{x^2}  + 2x + c" />
+      </div>
     ),
   },
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "q1",
-        question: (
-          <>
-            <div className="flex flex-col gap-3">
-              <p>ដោះស្រាយសមីការ</p>
-              <div className="flex items-center justify-center gap-3 flex-wrap">
-                <InlineMath math={"y' = 3x^2 - e^x + 1"} />
-              </div>
-            </div>
-          </>
-        ),
+        question: <InlineMath math={"y' = 3x^2 - e^x + 1"} />,
         options: [
           <InlineMath key="q1-o1" math={"y = 3x^3 - e^x + C"} />,
           <InlineMath key="q1-o2" math={"y = x^3 - e^x + x + C"} />,
@@ -118,16 +110,7 @@ const FirstTopicContent: TopicContent = {
       },
       {
         id: "q2",
-        question: (
-          <>
-            <div className="flex flex-col gap-3">
-              <p>ដោះស្រាយសមីការ</p>
-              <div className="flex items-center justify-center gap-3 flex-wrap">
-                <InlineMath math={"y' = x e^{x^2} + 2"} />
-              </div>
-            </div>
-          </>
-        ),
+        question: <InlineMath math={"y' = x e^{x^2} + 2"} />,
         options: [
           <InlineMath key="q2-o1" math={"y = \\frac{1}{2} e^{x^2} + 2x + C"} />,
           <InlineMath key="q2-o2" math={"y = e^{x^2} + 2x + C"} />,
@@ -138,36 +121,32 @@ const FirstTopicContent: TopicContent = {
       },
     ],
   },
-};
-
-const SecondTopic: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "សមីការឌីផែរ៉ង់ស្សែលដែលញែកអថេរបាន",
     content: (
       <>
         <p>
           សមីការដែលក្រោយពីសម្រួលរួចមានទម្រង់{" "}
           <InlineMath math={"\\frac{d_y}{d_x} = \\frac{M(x)}{N(y)}"} />{" "}
+          ហៅថាសមីការញែកអថេរបាន ហើយមានចម្លើយទូទៅគឺ
+          <InlineMath math={"\\int N(y)d_y = \\int M(x)d_x + C "} />
         </p>
-        <p>ហៅថាសមីការញែកអថេរបានហេីយមានចម្លេីយទូទៅគឺ​​ </p>
-        <InlineMath math={"\\int N(y)d_y = \\int M(x)d_x + C "} />
       </>
     ),
   },
-  example: {
+  {
+    type: "example",
     question: [
       <>
         <div className="flex flex-col items-start gap-3">
-          <div className="flex flex-col gap-3">
-            <p>ដោះស្រាយសមីការឌីផែរ៉ង់ស្សែល</p>
-            <div className="flex items-center gap-5 flex-wrap">
-              <div className="flex items-center gap-2">
-                1. <BlockMath math="\frac{d_y}{d_x} = e^{x+y}" />
-              </div>
-              <div className="flex items-center gap-2">
-                2. <BlockMath math="\frac{d_y}{d_x} = \frac{y^2 -1}{x}" />
-                <p>បេី y(1)=2</p>
-              </div>
+          <p>ដោះស្រាយសមីការឌីផែរ៉ង់ស្សែល</p>
+          <div className="flex items-center gap-5 flex-wrap">
+            <div className="flex items-center gap-2">
+              1. <BlockMath math="\frac{d_y}{d_x} = e^{x+y}" />
+            </div>
+            <div className="flex items-center gap-2">
+              2. <BlockMath math="\frac{d_y}{d_x} = \frac{y^2 -1}{x}" /> បើ y(1)=2
             </div>
           </div>
         </div>
@@ -251,17 +230,14 @@ const SecondTopic: TopicContent = {
       },
     ],
     answer: (
-      <>
-        <div className="flex flex-col items-start">
-          <div className="justify-center items-start flex flex-col">
-            <BlockMath math="y = - \ln|-e^x + c | ,\ c \in \mathbb{R}" />
-            <BlockMath math="\frac{1}{2} \ln\left|\frac{y-1}{y+1}\right| =  \ln|x| - \frac{1}{2} \ln3" />
-          </div>
-        </div>
-      </>
+      <div className="flex flex-col items-start">
+        <BlockMath math="y = - \ln|-e^x + c | ,\ c \in \mathbb{R}" />
+        <BlockMath math="\frac{1}{2} \ln\left|\frac{y-1}{y+1}\right| =  \ln|x| - \frac{1}{2} \ln3" />
+      </div>
     ),
   },
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "q1",
@@ -325,64 +301,16 @@ const SecondTopic: TopicContent = {
       },
     ],
   },
-};
+];
 
-const VariousForms = () => {
-  return (
-    <>
-      <div>
-        {FirstTopicContent.definition && (
-          <DefinitionBox
-            title={FirstTopicContent.definition.title}
-            content={FirstTopicContent.definition.content}
-          />
-        )}
-        {FirstTopicContent.tip && (
-          <TipBox
-            title={FirstTopicContent.tip.title}
-            content={FirstTopicContent.tip.content}
-          />
-        )}
+const jsonV2 = serializeTopicContentV3(VariousForms_V3);
 
-        {FirstTopicContent.example && (
-          <ExampleBox
-            question={FirstTopicContent.example.question}
-            steps={FirstTopicContent.example.steps}
-            answer={FirstTopicContent.example.answer}
-          />
-        )}
-        {FirstTopicContent.example2 && (
-          <ExampleBox
-            question={FirstTopicContent.example2.question}
-            steps={FirstTopicContent.example2.steps}
-            answer={FirstTopicContent.example2.answer}
-          />
-        )}
-        {FirstTopicContent.exercise && (
-          <ExerciseBox questions={FirstTopicContent.exercise.questions} />
-        )}
-      </div>
+// Stage 3a: Deserialized V3 with live React nodes (renderable)
+const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
 
-      <div>
-        {SecondTopic.definition && (
-          <DefinitionBox
-            title={SecondTopic.definition.title}
-            content={SecondTopic.definition.content}
-          />
-        )}
-        {SecondTopic.example && (
-          <ExampleBox
-            question={SecondTopic.example.question}
-            steps={SecondTopic.example.steps}
-            answer={SecondTopic.example.answer}
-          />
-        )}
-        {SecondTopic.exercise && (
-          <ExerciseBox questions={SecondTopic.exercise.questions} />
-        )}
-      </div>
-    </>
-  );
-};
+// Stage 3b: Deserialized V3 raw node tree (no React elements) for inspection
+const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V3[];
+
+const VariousForms = () => <ContentRendererV3 content={VariousForms_V3} />;
 
 export default VariousForms;

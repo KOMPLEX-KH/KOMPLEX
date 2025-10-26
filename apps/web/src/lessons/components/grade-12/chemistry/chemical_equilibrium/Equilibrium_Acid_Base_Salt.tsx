@@ -1,67 +1,63 @@
+"use client";
+
 import React from "react";
-
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
-import { TopicContent } from "@/types/docs/topic";
 import { BlockMath, InlineMath } from "react-katex";
-import "katex/dist/katex.min.css";
-import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { div } from "three/tsl";
-import { p } from "framer-motion/client";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+    serializeTopicContentV3,
+    deserializeTopicContentV3,
+    deserializeTopicContentV3ToTree,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
 
-const FirstTopicContent: TopicContent = {
-  definition: {
+const TOPIC_CONTENT_V3: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "១. ថេរអុីយ៉ុងកម្មនៃអាសុីតខ្សោយ",
     content: (
-      <>
-        <div className="flex flex-col items-start"></div>
-      </>
+      <div className="flex flex-col items-start"></div>
     ),
   },
-  tip: {
+  {
+    type: "tip",
     title: "ចំណុចសំខាន់",
     content: (
-      <>
-        <div className="flex flex-col items-start gap-3">
-          <p>អាសុីតអាសេទិច ជាអាសុីតខ្សោយ វាបំបែកក្នុងទឹកតាមសមីការតុល្យការ :</p>
+      <div className="flex flex-col items-start gap-3">
+        <p>អាសុីតអាសេទិច ជាអាសុីតខ្សោយ វាបំបែកក្នុងទឹកតាមសមីការតុល្យការ :</p>
+        <span className="text-[13px]">
+          <InlineMath math="CH_{3}COOH (aq) + H_{2}O (l) \xrightleftharpoons[(2)]{(1)} CH_{3}COO^{-} + H_{3}O^{+} (aq)" />
+        </span>
+        <p>កន្សោមថេរលំនឹងសរសេរ </p>
+        <div className="flex items-center gap-2 flex-wrap">
           <span className="text-[13px]">
-            <InlineMath math="CH_{3}COOH (aq) + H_{2}O (l) \xrightleftharpoons[(2)]{(1)} CH_{3}COO^{-} + H_{3}O^{+} (aq)" />
+            <InlineMath math="K_{a} = " />
           </span>
-          <p>កន្សោមថេរលំនឹងសរសេរ </p>
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[13px]">
-              <InlineMath math="K_{a} = " />
-            </span>
-            <div className="text-[16px]">
-              <InlineMath math="\frac{[CH_{3}COO^{-}] \cdot [H_{3}O^{+}]}{[CH_{3}COOH]}" />
-            </div>
-          </div>
-          <div className="flex items-center gap-1 flex-wrap">
-            <span className="text-[13px]">
-              <InlineMath math="K_{a} = " />
-            </span>
-            <p>ហៅថាអុីយ៉ុងកម្មអាសុីត​ ឬថេរអាសុីត ។</p>
+          <div className="text-[16px]">
+            <InlineMath math="\frac{[CH_{3}COO^{-}] \cdot [H_{3}O^{+}]}{[CH_{3}COOH]}" />
           </div>
         </div>
-      </>
+        <div className="flex items-center gap-1 flex-wrap">
+          <span className="text-[13px]">
+            <InlineMath math="K_{a} = " />
+          </span>
+          <p>ហៅថាអុីយ៉ុងកម្មអាសុីត​ ឬថេរអាសុីត ។</p>
+        </div>
+      </div>
     ),
   },
-  example: {
-    question: [
-      <div className="flex flex-col items-start gap-3" key="q1">
+  {
+    type: "example",
+    question: (
+      <div className="flex flex-col items-start gap-3">
         <p>សូលុយស្យុងអាសុីត HA មួយនៅកំហាប់ 0.1 M មាន pH = 2.2 ។</p>
         <div className="flex items-center gap-2 flex-wrap">
           <p>ចូរកំណត់ថេរអុីយ៉ុងកម្មអាសុីតនេះ ។ គេឲ :</p>
           <span className="text-[13px]">
-            {" "}
-            <InlineMath math="10^{0.8} = 6.3" />{" "}
+            <InlineMath math="10^{0.8} = 6.3" />
           </span>
         </div>
-      </div>,
-    ],
+      </div>
+    ),
     steps: [
       {
         title: "រកថេរអុីយ៉ុងកម្មអាសុីត",
@@ -150,105 +146,87 @@ const FirstTopicContent: TopicContent = {
       },
     ],
   },
-};
-
-const SecondTopicContent: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "២. ថេរអុីយ៉ុងកម្មនៃទឹក",
     content: (
-      <>
-        <div className="flex flex-col items-start"></div>
-      </>
+      <div className="flex flex-col items-start"></div>
     ),
   },
-  tip: {
+  {
+    type: "tip",
     title: "ចំណុចសំខាន់",
     content: (
-      <>
-        <div className="flex flex-col items-start gap-3">
-          <p>ទឹកមានអំពេីជាមួយគ្នាតាមសមីការតុល្យការ :</p>
+      <div className="flex flex-col items-start gap-3">
+        <p>ទឹកមានអំពេីជាមួយគ្នាតាមសមីការតុល្យការ :</p>
+        <span className="text-[13px]">
+          <InlineMath math="H_{2}O (l) + H_{2}O (l) \xrightleftharpoons[(2)]{(1)} H_{3}O^{+} (aq) + OH^{-} (aq)" />
+        </span>
+        <p>ប្រតិកម្មនេះហៅថា ប្រតិកម្មស្វ័យអុីយ៉ុងកម្មអូតូប្រូលីសនៃទឹក ។ </p>
+        <p>កន្សោមថេរអុីយ៉ុងកម្មនៃទឹកសរសេរ :</p>
+        <div className="flex items-center gap-2 flex-wrap">
           <span className="text-[13px]">
-            <InlineMath math="H_{2}O (l) + H_{2}O (l) \xrightleftharpoons[(2)]{(1)} H_{3}O^{+} (aq) + OH^{-} (aq)" />
+            <InlineMath math="K_{e} = [H_{3}O^{+}] \cdot [OH^{-}] = K_{w} = 10^{-14}" />
           </span>
-
-          <p>ប្រតិកម្មនេះហៅថា ប្រតិកម្មស្វ័យអុីយ៉ុងកម្មអូតូប្រូលីសនៃទឹក ។ </p>
-          <p>កន្សោមថេរអុីយ៉ុងកម្មនៃទឹកសរសេរ :</p>
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[13px]">
-              <InlineMath math="K_{e} = [H_{3}O^{+}] \cdot [OH^{-}] = K_{w} = 10^{-14}" />
-            </span>
-
-            <p>នៅសីតុណ្ហភាព 25 °C</p>
-          </div>
+          <p>នៅសីតុណ្ហភាព 25 °C</p>
         </div>
-      </>
+      </div>
     ),
   },
-};
-
-const ThirdTopicContent: TopicContent = {
-  definition: {
+  {
+    type: "definition",
     title: "៣. អុីយ៉ុងកម្មនៃអំបិល",
     content: (
-      <>
-        <div className="flex flex-col items-start"></div>
-      </>
+      <div className="flex flex-col items-start"></div>
     ),
   },
-  tip: {
+  {
+    type: "tip",
     title: "ចំណុចសំខាន់",
     content: (
-      <>
-        <ul className="list-disc pl-5 flex flex-col items-start gap-4">
-          <div className="flex items-center gap-1 flex-wrap">
-            <li>
-              អំបិលជាផលិតផលនៃប្រតិកម្មបន្សាបរវាងអាសុីត និងបាស ។
-              ពេលអំបិលរលាយក្នុងទឹកវាបំបែកជា អុីយ៉ុង (កាចុង និងអាញ៉ុង) ។
-              អំបិលខ្លះរលាយក្នុងទឹក ឲផលជាសូលុយស្យុងណឺតមាន pH=7 ។{" "}
-            </li>
-            <p>
-              អំបិល{" "}
-              <span className="text-[13px]">
-                <InlineMath math="Na_{2}CO_{3} " />
-              </span>{" "}
-              រលាយក្នុងទឹកឲផលជាសូលុយស្យុងបាសមាន pH ធំជាង 7 ។ អំបិល{" "}
-              <span className="text-[13px]">
-                <InlineMath math="NH_{4}Cl" />រ
-              </span>
-              លាយក្នុងទឹកឲផលជាសូលុយស្យុងបាសមាន pH តូចជាង 7 ។{" "}
-            </p>
-          </div>
-          <div className="flex items-center gap-1 flex-wrap">
-            <li>
-              អុីយ៉ុងដែលបានពីអាសុីតខ្សោយ
-              ឬបាសខ្សោយមានអំពេីជាមួយទឹកឲផលជាសូលុយស្យុងមាន pH ធំជាង ឬតូចជាង 7 ។
-            </li>
-          </div>
-        </ul>
-      </>
-    ),
-  },
-};
-
-const FourthTopicContent: TopicContent = {
-  definition: {
-    title: "៣.១ អុីដ្រូលីសនៃអាញ៉ុង",
-    content: (
-      <>
-        <div className="flex flex-col items-start">
+      <ul className="list-disc pl-5 flex flex-col items-start gap-4">
+        <div className="flex items-center gap-1 flex-wrap">
+          <li>
+            អំបិលជាផលិតផលនៃប្រតិកម្មបន្សាបរវាងអាសុីត និងបាស ។
+            ពេលអំបិលរលាយក្នុងទឹកវាបំបែកជា អុីយ៉ុង (កាចុង និងអាញ៉ុង) ។
+            អំបិលខ្លះរលាយក្នុងទឹក ឲផលជាសូលុយស្យុងណឺតមាន pH=7 ។{" "}
+          </li>
           <p>
-            អុីដ្រូលីសនៃអាញ៉ុង ជាអំពេីរវាងអុីយ៉ុងអវិជ្ជមានជាមួយទឹក
-            ឲផលជាសូលុយស្យុងបាស ។{" "}
+            អំបិល{" "}
+            <span className="text-[13px]">
+              <InlineMath math="Na_{2}CO_{3} " />
+            </span>{" "}
+            រលាយក្នុងទឹកឲផលជាសូលុយស្យុងបាសមាន pH ធំជាង 7 ។ អំបិល{" "}
+            <span className="text-[13px]">
+              <InlineMath math="NH_{4}Cl" />រ
+            </span>
+            លាយក្នុងទឹកឲផលជាសូលុយស្យុងបាសមាន pH តូចជាង 7 ។{" "}
           </p>
         </div>
-      </>
+        <div className="flex items-center gap-1 flex-wrap">
+          <li>
+            អុីយ៉ុងដែលបានពីអាសុីតខ្សោយ
+            ឬបាសខ្សោយមានអំពេីជាមួយទឹកឲផលជាសូលុយស្យុងមាន pH ធំជាង ឬតូចជាង 7 ។
+          </li>
+        </div>
+      </ul>
     ),
   },
-  tip: {
-    title: "ចំណុចសំខាន់",
-    content: (
-      <>
-        <div className="flex items-start flex-col gap-3">
+  {
+      type: "definition",
+      title: "៣.១ អុីដ្រូលីសនៃអាញ៉ុង",
+      content: (
+          <div>
+              អុីដ្រូលីសនៃអាញ៉ុង ជាអំពើរវាងអុីយ៉ុងអវិជ្ជមានជាមួយទឹក
+              ឲ្យផលជាសូលុយស្យុងបាស។
+          </div>
+      ),
+  },
+  {
+      type: "tip",
+      title: "ចំណុចសំខាន់",
+      content: (
+          <div className="flex items-start flex-col gap-3">
           <div className="flex items-center gap-1 flex-wrap">
             <p>
               តាង HA ជាអាសុីតខ្សោយដែលមានអំពេីជាមួយទឹក ឲផលជាអាញ៉ុង{" "}
@@ -306,64 +284,58 @@ const FourthTopicContent: TopicContent = {
             កាន់តែខ្លាំង ។
           </p>
         </div>
-      </>
-    ),
+      ),
   },
-  example: {
-    question: [
-      <div className="flex flex-col items-start gap-4" key="q1">
-        <p>
-          សូដ្យូមកាបូណាត <InlineMath math="Na_{2}CO_{3}" /> ជាបាស
-        </p>
-        <div className="text-[13px] flex flex-col gap-2">
-          <InlineMath math="Na_{2}CO_{3} (s) \rightarrow 2Na^{+} (aq) + CO_{3}^{2-} (aq)" />
-          <InlineMath math="Na^{+} (aq) + H_{2}O \rightarrow គ្មាន" />
-          <InlineMath math="CO_{3}^{2-} (aq) \rightarrow HCO_{3}^{-} (g) + OH^{-} (aq)" />
-        </div>
-
-        <p>
-          អុីដ្រូលីស{" "}
-          <span className="text-[13px]">
-            <InlineMath math="CO_{3}^{2-} " />
-          </span>{" "}
-          ដែលបានមកពី{" "}
-          <span className="text-[13px]">
-            <InlineMath math="Na_{2}CO_{3}" />
-          </span>{" "}
-          បង្កេីតបាន{" "}
-          <span className="text-[13px]">
-            <InlineMath math="OH^{-}" />
-          </span>{" "}
-          ក្នុងសូលុយស្យុង ។ ដូចនេះសូលុយស្យុង{" "}
-          <span className="text-[13px]">
-            <InlineMath math="Na_{2}CO_{3}" />
-          </span>{" "}
-          ជាបាស ។
-        </p>
-      </div>,
-    ],
+  {
+      type: "example",
+      question: (
+          <div className="flex flex-col items-start gap-4" key="q1">
+            <p>
+              សូដ្យូមកាបូណាត <InlineMath math="Na_{2}CO_{3}" /> ជាបាស
+            </p>
+            <div className="text-[13px] flex flex-col gap-2">
+              <InlineMath math="Na_{2}CO_{3} (s) \rightarrow 2Na^{+} (aq) + CO_{3}^{2-} (aq)" />
+              <InlineMath math="Na^{+} (aq) + H_{2}O \rightarrow គ្មាន" />
+              <InlineMath math="CO_{3}^{2-} (aq) \rightarrow HCO_{3}^{-} (g) + OH^{-} (aq)" />
+            </div>
+    
+            <p>
+              អុីដ្រូលីស{" "}
+              <span className="text-[13px]">
+                <InlineMath math="CO_{3}^{2-} " />
+              </span>{" "}
+              ដែលបានមកពី{" "}
+              <span className="text-[13px]">
+                <InlineMath math="Na_{2}CO_{3}" />
+              </span>{" "}
+              បង្កេីតបាន{" "}
+              <span className="text-[13px]">
+                <InlineMath math="OH^{-}" />
+              </span>{" "}
+              ក្នុងសូលុយស្យុង ។ ដូចនេះសូលុយស្យុង{" "}
+              <span className="text-[13px]">
+                <InlineMath math="Na_{2}CO_{3}" />
+              </span>{" "}
+              ជាបាស ។
+            </p>
+          </div>
+      ),
   },
-};
-
-const FifthTopicContent: TopicContent = {
-  definition: {
-    title: "៣.២ អុីដ្រូលីសនៃកាចុង",
-    content: (
-      <>
-        <div className="flex flex-col items-start">
-          <p>
-            អុីដ្រូលីសនៃកាចុង ជាអំពេីរវាងអុីយ៉ុងវិជ្ជមានជាមួយទឹក
-            ឲផលជាសូលុយស្យុងអាសុីត ។{" "}
-          </p>
-        </div>
-      </>
-    ),
+  {
+      type: "definition",
+      title: "៣.២ អុីដ្រូលីសនៃកាចុង",
+      content: (
+          <div>
+              អុីដ្រូលីសនៃកាចុង ជាអំពើរវាងអុីយ៉ុងវិជ្ជមានជាមួយទឹក
+              ឲ្យផលជាសូលុយស្យុងអាសុីត។
+          </div>
+      ),
   },
-  tip: {
-    title: "ចំណុចសំខាន់",
-    content: (
-      <>
-        <div className="flex items-start flex-col gap-3">
+  {
+      type: "tip",
+      title: "ចំណុចសំខាន់",
+      content: (
+          <div className="flex items-start flex-col gap-3">
           <div className="flex items-center gap-1 flex-wrap">
             <p>
               តាង B ជាបាសខ្សោយដែលមានអំពេីជាមួយទឹក ឲផលជាអាញ៉ុង{" "}
@@ -414,208 +386,112 @@ const FifthTopicContent: TopicContent = {
             កាន់តែខ្លាំង
           </p>
         </div>
-      </>
-    ),
+      ),
   },
-  example: {
-    question: [
-      <div className="flex flex-col items-start gap-4" key="q1">
-        <p>
-          អាម៉ូញូមក្លរួ{" "}
-          <span className="text-[13px]">
-            <InlineMath math="NH_{4}Cl" />
-          </span>{" "}
-          ជាអាសុីត
-        </p>
-        <div className="flex flex-col gap-2 text-[13px]">
-          <InlineMath math="NH_{4}Cl (s) \rightarrow NH_{4}^{+} (aq) + Cl^{-} (aq)" />
-          <InlineMath math="Cl^{-} (aq) + H_{2}O \rightarrow គ្មាន" />
-          <InlineMath math="NH_{4}^{+} (aq) + H_{2}O (l) \rightarrow NH_{3} (g) + H_{3}O^{+}" />
-        </div>
-
-        <p>
-          ដូចនេះសូលុយស្យុង{" "}
-          <span className="text-[13px]">
-            <InlineMath math="NH_{4}Cl" />
-          </span>{" "}
-          ជាអាសុីតព្រោះវាបានបង្កេីតបាន{" "}
-          <span className="text-[13px]">
-            <InlineMath math="H_{3}O^{+}" />
-          </span>{" "}
-          ក្នុងសូលុយស្យុង ។
-        </p>
-      </div>,
-    ],
-  },
-};
-
-const SixthTopicContent: TopicContent = {
-  definition: {
-    title: "៤. សូលុយស្យុងតំប៉ុង",
-    content: <></>,
-  },
-  tip: {
-    title: "ចំណុចសំខាន់",
-    content: (
-      <>
-        <ul className="list-disc pl-5 flex flex-col items-start gap-4">
-          <div>
-            <li>
-              សូលុយស្យុងតំប៉ុង ជាសូលុយស្យុងដែលផ្សំឡេីងដោយអាសុីតខ្សោយ
-              និងបាសឆ្លាស់របស់វា ឬសូលុយស្យុងបាសខ្សោយ និងអាសុីតឆ្លាស់របស់វា
-              ហេីយមានកំហាប់ស្មេីរគ្នា។
-            </li>
+  {
+      type: "example",
+      question: (
+          <div className="flex flex-col items-start gap-4" key="q1">
+            <p>
+              អាម៉ូញូមក្លរួ{" "}
+              <span className="text-[13px]">
+                <InlineMath math="NH_{4}Cl" />
+              </span>{" "}
+              ជាអាសុីត
+            </p>
+            <div className="flex flex-col gap-2 text-[13px]">
+              <InlineMath math="NH_{4}Cl (s) \rightarrow NH_{4}^{+} (aq) + Cl^{-} (aq)" />
+              <InlineMath math="Cl^{-} (aq) + H_{2}O \rightarrow គ្មាន" />
+              <InlineMath math="NH_{4}^{+} (aq) + H_{2}O (l) \rightarrow NH_{3} (g) + H_{3}O^{+}" />
+            </div>
+    
+            <p>
+              ដូចនេះសូលុយស្យុង{" "}
+              <span className="text-[13px]">
+                <InlineMath math="NH_{4}Cl" />
+              </span>{" "}
+              ជាអាសុីតព្រោះវាបានបង្កេីតបាន{" "}
+              <span className="text-[13px]">
+                <InlineMath math="H_{3}O^{+}" />
+              </span>{" "}
+              ក្នុងសូលុយស្យុង ។
+            </p>
           </div>
+      ),
+  },
+  {
+      type: "definition",
+      title: "៤. សូលុយស្យុងតំប៉ុង",
+      content: (
           <div>
-            <li>
-              សូលុយស្យុងតំប៉ុង មានបម្រែបម្រួល pH តិចតួច
-              កាលណាគេបន្ថែមអាសុីតខ្លាំង ឬបាសខ្លាំងបន្តិចចូល ។
-            </li>
+              សូលុយស្យុងតំប៉ុង គឺជាសូលុយស្យុងដែលមានអាសុីតខ្សោយ និងបាសឆ្លាស់របស់វា
+              ឬបាសខ្សោយ និងអាសុីតឆ្លាស់របស់វា ដែលមានកំហាប់ស្មើគ្នា។
           </div>
-        </ul>
-      </>
-    ),
+      ),
   },
-  example: {
-    question: [
-      <>
-        <p>
-          សូលុយស្យុងមាន 0.1mol នៃ{" "}
-          <span className="text-[13px]">
-            <InlineMath math="CH_{3}COOH " />
-          </span>
-          និង​{" "}
-          <span className="text-[13px]">
-            <InlineMath math="CH_{3}COONa" />
-          </span>{" "}
-          ជាសូលុយស្យុងតំប៉ុង ព្រោះក្នុងសូលុយស្យុងនេះមាន{" "}
-          <span className="text-[13px]">
-            <InlineMath math="CH_{3}COOH " />
-          </span>{" "}
-          និង{" "}
-          <span className="text-[13px]">
-            <InlineMath math="CH_{3}COO^{-} " />
-          </span>{" "}
-          មានបរិមាណ 0.1mol ដូចគ្នា ។
-        </p>
-      </>,
-    ],
+  {
+      type: "tip",
+      title: "ចំណុចសំខាន់",
+      content: (
+          <ul className="list-disc pl-5 flex flex-col items-start gap-4">
+            <div>
+              <li>
+                សូលុយស្យុងតំប៉ុង ជាសូលុយស្យុងដែលផ្សំឡេីងដោយអាសុីតខ្សោយ
+                និងបាសឆ្លាស់របស់វា ឬសូលុយស្យុងបាសខ្សោយ និងអាសុីតឆ្លាស់របស់វា
+                ហេីយមានកំហាប់ស្មេីរគ្នា។
+              </li>
+            </div>
+            <div>
+              <li>
+                សូលុយស្យុងតំប៉ុង មានបម្រែបម្រួល pH តិចតួច
+                កាលណាគេបន្ថែមអាសុីតខ្លាំង ឬបាសខ្លាំងបន្តិចចូល ។
+              </li>
+            </div>
+          </ul>
+      ),
   },
+  {
+      type: "example",
+      question: (
+          <>
+            <p>
+              សូលុយស្យុងមាន 0.1mol នៃ{" "}
+              <span className="text-[13px]">
+                <InlineMath math="CH_{3}COOH " />
+              </span>
+              និង​{" "}
+              <span className="text-[13px]">
+                <InlineMath math="CH_{3}COONa" />
+              </span>{" "}
+              ជាសូលុយស្យុងតំប៉ុង ព្រោះក្នុងសូលុយស្យុងនេះមាន{" "}
+              <span className="text-[13px]">
+                <InlineMath math="CH_{3}COOH " />
+              </span>{" "}
+              និង{" "}
+              <span className="text-[13px]">
+                <InlineMath math="CH_{3}COO^{-} " />
+              </span>{" "}
+              មានបរិមាណ 0.1mol ដូចគ្នា ។
+            </p>
+          </>
+      ),
+  },
+];
+
+const jsonV2 = serializeTopicContentV3(TOPIC_CONTENT_V3);
+
+// Stage 3a: Deserialized V3 with live React nodes (renderable)
+const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
+
+// Stage 3b: Deserialized V3 raw node tree (no React elements) for inspection
+const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V3[];
+
+// Helper: visualize type sequence
+const originalTypes = TOPIC_CONTENT_V3.map((i) => i.type);
+
+
+const Equilibrium_Acid_Base_Salt_V3 = () => {
+  return <ContentRendererV3 content={TOPIC_CONTENT_V3} />;
 };
 
-const Equilibrium_Acid_Base_Salt = () => {
-  return (
-    <div>
-      <div>
-        {FirstTopicContent.definition && (
-          <DefinitionBox
-            title={FirstTopicContent.definition.title}
-            content={FirstTopicContent.definition.content}
-          />
-        )}
-        {FirstTopicContent.tip && (
-          <TipBox
-            title={FirstTopicContent.tip.title}
-            content={FirstTopicContent.tip.content}
-          />
-        )}
-        {FirstTopicContent.example && (
-          <ExampleBox
-            question={FirstTopicContent.example.question}
-            steps={FirstTopicContent.example.steps}
-          />
-        )}
-      </div>
-      <div>
-        {SecondTopicContent.definition && (
-          <DefinitionBox
-            title={SecondTopicContent.definition.title}
-            content={SecondTopicContent.definition.content}
-          />
-        )}
-        {SecondTopicContent.tip && (
-          <TipBox
-            title={SecondTopicContent.tip.title}
-            content={SecondTopicContent.tip.content}
-          />
-        )}
-      </div>
-      <div>
-        {ThirdTopicContent.definition && (
-          <DefinitionBox
-            title={ThirdTopicContent.definition.title}
-            content={ThirdTopicContent.definition.content}
-          />
-        )}
-        {ThirdTopicContent.tip && (
-          <TipBox
-            title={ThirdTopicContent.tip.title}
-            content={ThirdTopicContent.tip.content}
-          />
-        )}
-      </div>
-      <div>
-        {FourthTopicContent.definition && (
-          <DefinitionBox
-            title={FourthTopicContent.definition.title}
-            content={FourthTopicContent.definition.content}
-          />
-        )}
-        {FourthTopicContent.tip && (
-          <TipBox
-            title={FourthTopicContent.tip.title}
-            content={FourthTopicContent.tip.content}
-          />
-        )}
-        {FourthTopicContent.example && (
-          <ExampleBox
-            question={FourthTopicContent.example.question}
-            steps={FourthTopicContent.example.steps}
-          />
-        )}
-      </div>
-      <div>
-        {FifthTopicContent.definition && (
-          <DefinitionBox
-            title={FifthTopicContent.definition.title}
-            content={FifthTopicContent.definition.content}
-          />
-        )}
-        {FifthTopicContent.tip && (
-          <TipBox
-            title={FifthTopicContent.tip.title}
-            content={FifthTopicContent.tip.content}
-          />
-        )}
-        {FifthTopicContent.example && (
-          <ExampleBox
-            question={FifthTopicContent.example.question}
-            steps={FifthTopicContent.example.steps}
-          />
-        )}
-      </div>
-      <div>
-        {SixthTopicContent.definition && (
-          <DefinitionBox
-            title={SixthTopicContent.definition.title}
-            content={SixthTopicContent.definition.content}
-          />
-        )}
-        {SixthTopicContent.tip && (
-          <TipBox
-            title={SixthTopicContent.tip.title}
-            content={SixthTopicContent.tip.content}
-          />
-        )}
-        {SixthTopicContent.example && (
-          <ExampleBox
-            question={SixthTopicContent.example.question}
-            steps={SixthTopicContent.example.steps}
-          />
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default Equilibrium_Acid_Base_Salt;
+export default Equilibrium_Acid_Base_Salt_V3;

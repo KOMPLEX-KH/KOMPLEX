@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
-import TipBox from "./TipBox";
+import {TipBox} from "./TipBox";
 
 export interface SummarySection {
     key?: string;

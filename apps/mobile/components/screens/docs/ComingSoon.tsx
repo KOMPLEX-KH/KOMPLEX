@@ -5,7 +5,7 @@ import { Text } from "@/components/common/Text";
 import { BookOpen } from "lucide-react-native";
 import { TAILWIND_COLORS } from "@/constants/styles/tailwind-colors";
 import DefinitionBox from "./boxes/DefinitionBox";
-import TipBox from "./boxes/TipBox";
+import {TipBox} from "./boxes/TipBox";
 import { HintBox } from "./boxes/HintBox";
 import WarningBox from "./boxes/WarningBox";
 import { SummaryBox } from "./boxes/SummaryBox";

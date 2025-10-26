@@ -1,46 +1,40 @@
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
-import { TopicContent } from "@/types/docs/topic";
+"use client";
+
+import React from "react";
 import { BlockMath, InlineMath } from "react-katex";
 import "katex/dist/katex.min.css";
-import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+  deserializeTopicContentV3ToTree,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
 
-const FirstTopicContent: TopicContent = {
-  definition: {
+const ProbabilityPermutation_V3: TopicContent_V3[] = [
+  // ---------------- First Topic ----------------
+  {
+    type: "definition",
     title: "ចម្លាស់ច្រំដែល",
     content: (
-      <>
-        <div className="flex flex-col items-start">
-          <div className="flex items-center gap-3 flex-wrap w-full">
-            <p>
-              ចម្លាស់ច្រំដែលគឺជាតម្រៀបធាតុតាមលំដាប់ហេីយ
-              អាចមានធាតុច្រំដែលច្រើនជាងមួយ។
-            </p>
-          </div>
-          <div className="flex items-center gap-3 flex-wrap w-full"></div>
-        </div>
-      </>
+      <div className="flex flex-col items-start">
+        <p>
+          ចម្លាស់ច្រំដែលគឺជាតម្រៀបធាតុតាមលំដាប់ហើយ អាចមានធាតុច្រំដែលច្រើនជាងមួយ។
+        </p>
+      </div>
     ),
   },
-  example: {
+  {
+    type: "example",
     question: [
-      <>
-        <div className="flex flex-col items-start gap-3" key="q1">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-3 flex-wrap">
-              <p>គេបោះគ្រាប់ឡុកឡាក់មួយគ្រាប់ចំនួន២ដង។</p>
-            </div>
-            <div className="flex  gap-5 flex-col">
-              <p>ក. រកប្រូបាបដែលបោះបានទាំងពីរលេីកមានលេខខុសគ្នា</p>
-              <p>ខ. រកប្រូបាបដែលបោះបានទាំងពីរលេីកមានលេខគូ</p>
-              <p>គ. រកប្រូបាបដែលបោះបានទាំងពីរលេីកមានលេខខុសគ្នា និង ជាលេខគូ</p>
-            </div>
-          </div>
+      <div key="ex1-q1" className="flex flex-col gap-3">
+        <p>គេបោះគ្រាប់ឡុកឡាក់មួយគ្រាប់ចំនួន២ដង។</p>
+        <div className="flex flex-col gap-3">
+          <p>ក. រកប្រូបាបដែលបោះបានទាំងពីរលើកមានលេខខុសគ្នា</p>
+          <p>ខ. រកប្រូបាបដែលបោះបានទាំងពីរលើកមានលេខគូ</p>
+          <p>គ. រកប្រូបាបដែលបោះបានទាំងពីរលើកមានលេខខុសគ្នា និងជាលេខគូ</p>
         </div>
-      </>,
+      </div>,
     ],
     steps: [
       {
@@ -103,18 +97,15 @@ const FirstTopicContent: TopicContent = {
       },
     ],
   },
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "fp-q1",
         question: (
-          <div className="flex flex-col gap-3">
-            <p>
-              ក្នុងប្រអប់មួយមានបាល់ពណ៌ក្រហម ៤ និងបាល់ពណ៌ខៀវ ២។ ចាប់យកបាល់ពីរ
-              ដោយដាក់ត្រឡប់វិញក្រោយពេលចាប់យក។
-              រកប្រូបាបដែលចាប់បានបាល់ពណ៌ដូចគ្នាទាំងពីរលើក។
-            </p>
-          </div>
+          <p>
+            ក្នុងប្រអប់មួយមានបាល់ពណ៌ក្រហម ៤ និងបាល់ពណ៌ខៀវ ២។ ចាប់យកបាល់ពីរ ដោយដាក់ត្រឡប់វិញក្រោយពេលចាប់យក។ រកប្រូបាបដែលចាប់បានបាល់ពណ៌ដូចគ្នាទាំងពីរលើក។
+          </p>
         ),
         options: [
           <p key="fp-q1-o1">4/9</p>,
@@ -126,11 +117,7 @@ const FirstTopicContent: TopicContent = {
       },
       {
         id: "fp-q2",
-        question: (
-          <div className="flex flex-col gap-3">
-            <p>គេបោះគ្រាប់ឡុកឡាក់ ២ ដង។ រកប្រូបាបដែលលេខទាំងពីរខុសគ្នា។</p>
-          </div>
-        ),
+        question: <p>គេបោះគ្រាប់ឡុកឡាក់ ២ ដង។ រកប្រូបាបដែលលេខទាំងពីរខុសគ្នា។</p>,
         options: [
           <p key="fp-q2-o1">5/6</p>,
           <p key="fp-q2-o2">1/6</p>,
@@ -141,37 +128,27 @@ const FirstTopicContent: TopicContent = {
       },
     ],
   },
-};
 
-const SecondTopic: TopicContent = {
-  definition: {
+  // ---------------- Second Topic ----------------
+  {
+    type: "definition",
     title: "ចម្លាស់នៃ r ធាតុក្នុង n ធាតុ",
-    content: <></>,
-  },
-  tip: {
-    title: "ជាទូទៅ",
     content: (
-      <>
-        <div className="flex  flex-col">
-          <p>
-            តម្រៀបនៃ r ធាតុយកចេញពី n ធាតុដោយគិតលំដាប់ហៅថាចម្លាស់ដែលកំណត់សរសេរដោយ
-          </p>
-          <BlockMath math={"P(n,r) = \\frac{n!}{(n-r)!}"} />
-        </div>
-      </>
+      <div className="flex flex-col">
+        <p>
+          តម្រៀបនៃ r ធាតុយកចេញពី n ធាតុដោយគិតលំដាប់ ហៅថា ចម្លាស់ដែលកំណត់សរសេរដោយ
+        </p>
+        <BlockMath math={"P(n,r) = \\frac{n!}{(n-r)!}"} />
+      </div>
     ),
   },
-  example: {
+  {
+    type: "example",
     question: [
-      <div className="flex flex-col items-start gap-3" key="q2">
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-3 flex-wrap">
-            <p>
-              ក្មេងប្រុស៤នាក់និងស្រី៥នាក់ឈរតម្រង់ជួរគ្នាដេីម្បីទិញការ៉េមបេីដឹងថាក្មេងស្រីត្រូវឈរចុងសងខាងនៃការតម្រងជួរនោះ។
-              តេីគេអាចឈរបានប៉ុន្មានរបៀប?
-            </p>
-          </div>
-        </div>
+      <div key="ex2-q1" className="flex flex-col gap-3">
+        <p>
+          ក្មេងប្រុស៤នាក់និងស្រី៥នាក់ឈរតម្រង់ជួរគ្នាដើម្បីទិញការ៉េម បើដឹងថាក្មេងស្រីត្រូវឈរចុងសងខាងនៃជួរនោះ តើគេអាចឈរបានប៉ុន្មានរបៀប?
+        </p>
       </div>,
     ],
     steps: [
@@ -200,19 +177,14 @@ const SecondTopic: TopicContent = {
       },
     ],
     answer: (
-      <>
-        <div>
-          <div className="flex items-center gap-3 flex-col">
-            <div className="flex items-center gap-3 flex-wrap">
-              <BlockMath math={" N= 100800"} />
-              <p>របៀប​។</p>
-            </div>
-          </div>
-        </div>
-      </>
+      <div className="flex items-center gap-3">
+        <BlockMath math={"N = 100800"} />
+        <p>របៀប។</p>
+      </div>
     ),
   },
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       {
         id: "sp-q1",
@@ -249,63 +221,14 @@ const SecondTopic: TopicContent = {
       },
     ],
   },
-};
+];
 
-const ProbabilityPermutation = () => {
-  return (
-    <>
-      <div>
-        {FirstTopicContent.definition && (
-          <DefinitionBox
-            title={FirstTopicContent.definition.title}
-            content={FirstTopicContent.definition.content}
-          />
-        )}
-        {FirstTopicContent.tip && (
-          <TipBox
-            title={FirstTopicContent.tip.title}
-            content={FirstTopicContent.tip.content}
-          />
-        )}
+const jsonV2 = serializeTopicContentV3(ProbabilityPermutation_V3);
+const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
+const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V3[];
 
-        {FirstTopicContent.example && (
-          <ExampleBox
-            question={FirstTopicContent.example.question}
-            steps={FirstTopicContent.example.steps}
-            answer={FirstTopicContent.example.answer}
-          />
-        )}
-        {FirstTopicContent.exercise && (
-          <ExerciseBox questions={FirstTopicContent.exercise.questions} />
-        )}
-      </div>
+const ProbabilityPermutationDefinition = () => (
+  <ContentRendererV3 content={ProbabilityPermutation_V3} />
+);
 
-      <div>
-        {SecondTopic.definition && (
-          <DefinitionBox
-            title={SecondTopic.definition.title}
-            content={SecondTopic.definition.content}
-          />
-        )}
-        {SecondTopic.tip && (
-          <TipBox
-            title={SecondTopic.tip.title}
-            content={SecondTopic.tip.content}
-          />
-        )}
-        {SecondTopic.example && (
-          <ExampleBox
-            question={SecondTopic.example.question}
-            steps={SecondTopic.example.steps}
-            answer={SecondTopic.example.answer}
-          />
-        )}
-        {SecondTopic.exercise && (
-          <ExerciseBox questions={SecondTopic.exercise.questions} />
-        )}
-      </div>
-    </>
-  );
-};
-
-export default ProbabilityPermutation;
+export default ProbabilityPermutationDefinition;
