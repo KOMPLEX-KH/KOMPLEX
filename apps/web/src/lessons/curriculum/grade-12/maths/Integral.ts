@@ -23,7 +23,7 @@ export const Integral: Topic[] = [
     title: "អាំងតេក្រាលកំណត់",
     englishTitle: "definite",
     component: () =>
-      import("@/lessons/components/grade-12/math/integral/integral-Definition"),
+      import("@/lessons/components/grade-12/math/integral/Definite-Integral"),
   },
   {
     title: "លំហាត់អនុវត្ត",

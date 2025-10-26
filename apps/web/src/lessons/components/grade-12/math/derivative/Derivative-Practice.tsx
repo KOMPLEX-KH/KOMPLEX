@@ -1,1078 +1,1503 @@
-'use client'
+"use client";
 
-import React, { useMemo, useState, useEffect, useCallback } from "react";
-import { BlockMath, InlineMath } from "react-katex";
+// ----- NEW IMPORTS -----
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
 
-/** Math line helper: left-align + mobile horizontal scroll */
-const MathLine = ({ math }: { math: string }) => (
-  <div className="-mx-1 px-1 overflow-x-auto [&_.katex-display]:text-left [&_.katex-display]:my-1 [&_.katex]:text-[1.06rem]">
-    <BlockMath math={math} />
-  </div>
-);
+// ----- KEPT IMPORTS -----
+import { InlineMath } from "react-katex";
+import {
+  BookAIcon,
+  ChartBarIcon,
+  ClipboardListIcon,
+  LightbulbIcon,
+} from "lucide-react";
+import { PracticeExercise, SummarySection } from "@/types/docs/topic";
 
-type Level = "ងាយ" | "មធ្យម" | "ពិបាក";
-type Tag =
-  | "មូលដ្ឋាន"
-  | "ខ្សែសង្វាក់"
-  | "គុណ/ចែក"
-  | "ត្រីកោណ"
-  | "អិចស្បូណង់ស្យែល"
-  | "ឡូការីត"
-  | "អនុគមន៍បញ្ច្រាស"
-  | "អនិស្ស័យ/សមីការ"
-  | "បន្ទាត់ប៉ះ"
-  | "លំដាប់ខ្ពស់";
-
-type Exercise = {
-  id: string;
-  title: string;
-  level: Level;
-  tags: Tag[];
-  question: React.ReactNode;
-  hint?: React.ReactNode;
-  steps: React.ReactNode;
-  finalAnswer: React.ReactNode;
-};
-
-/** Difficulty badge */
-const LevelBadge = ({ level }: { level: Level }) => {
-  const map: Record<Level, string> = {
-    "ងាយ": "bg-emerald-100 text-emerald-800",
-    "មធ្យម": "bg-amber-100 text-amber-800",
-    "ពិបាក": "bg-rose-100 text-rose-800",
-  };
-  return (
-    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${map[level]}`}>
-      {level}
-    </span>
-  );
-};
-
-/** Tag chip */
-const TagChip = ({ tag, active, onClick }: { tag: Tag; active: boolean; onClick: () => void }) => (
-  <button
-    onClick={onClick}
-    className={`px-2.5 py-1 rounded-full text-xs border transition
-      ${active ? "bg-sky-600 text-white border-sky-600" : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"}`}
-    aria-pressed={active}
-  >
-    {tag}
-  </button>
-);
-
-/** Modal */
-const Modal = ({
-  open,
-  onClose,
-  children,
-  title,
-}: {
-  open: boolean;
-  onClose: () => void;
-  title: React.ReactNode;
-  children: React.ReactNode;
-}) => {
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
-
-  if (!open) return null;
-  return (
-    <div
-      className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-[1px] flex items-start sm:items-center justify-center p-2 sm:p-6"
-      role="dialog"
-      aria-modal="true"
-      onClick={onClose}
-    >
-      <div
-        className="w-full sm:max-w-3xl lg:max-w-4xl bg-white rounded-2xl shadow-xl border border-slate-200 max-h-[92vh] overflow-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b">
-          <h3 className="text-base sm:text-lg font-semibold text-slate-800">{title}</h3>
-          <button
-            onClick={onClose}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-slate-100"
-            aria-label="Close"
-          >
-            ✕
-          </button>
-        </div>
-        <div className="p-4 sm:p-6">{children}</div>
-      </div>
-    </div>
-  );
-};
-
-// --- NEW Collapsible with tone + defaultOpen -------------------------------
-type Tone = "hint" | "info" | "warning" | "success";
-
-const TONES: Record<Tone, { root: string; head: string; icon: string }> = {
-  hint: {
-    root: "border-amber-200 bg-amber-50/70",
-    head: "text-amber-800",
-    icon: "💡",
-  },
-  info: {
-    root: "border-sky-200 bg-sky-50/70",
-    head: "text-sky-800",
-    icon: "ℹ️",
-  },
-  warning: {
-    root: "border-rose-200 bg-rose-50/70",
-    head: "text-rose-800",
-    icon: "⚠️",
-  },
-  success: {
-    root: "border-emerald-200 bg-emerald-50/70",
-    head: "text-emerald-800",
-    icon: "✅",
-  },
-};
-
-const Collapsible = ({
-  title,
-  children,
-  tone = "info",
-  defaultOpen = false,
-}: {
-  title: React.ReactNode;
-  children: React.ReactNode;
-  tone?: Tone;
-  defaultOpen?: boolean;
-}) => {
-  const [open, setOpen] = React.useState(defaultOpen);
-  const t = TONES[tone];
-
-  return (
-    <section className={`rounded-xl border ${t.root}`}>
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="w-full px-3 sm:px-4 py-2.5 flex items-center justify-between"
-      >
-        <span className={`flex items-center gap-2 font-semibold ${t.head}`}>
-          <span aria-hidden>{t.icon}</span>
-          <span>{title}</span>
-        </span>
-        <span className={`${t.head}`}>{open ? "−" : "+"}</span>
-      </button>
-
-      {open && (
-        <div className="px-3 sm:px-4 pb-3 sm:pb-4">
-          <div className="[&_.katex-display]:text-left [&_.katex-display]:my-1 [&_.katex]:text-[1.03rem]">
-            {children}
-          </div>
-        </div>
-      )}
-    </section>
-  );
-};
-
-
-/* -------------------------------------------------------------------------- */
-/*                               BASE EXERCISES                               */
-/* -------------------------------------------------------------------------- */
-
-const BASE: Exercise[] = [
+// ===== TOPIC CONTENT DATA (Thermo Practice) =====
+const summary: SummarySection[] = [
   {
-    id: "B01",
-    title: "Power & Sum",
-    level: "ងាយ",
-    tags: ["មូលដ្ឋាន"],
-    question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\big(3x^4-5x^2+2\big)`} />,
-    hint: <MathLine math={String.raw`\frac{d}{dx}[x^n]=n\,x^{n-1},\ \ \frac{d}{dx}[c]=0`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`(3x^4)'=12x^3,\ (-5x^2)'=-10x,\ (2)'=0`} />
-        <MathLine math={String.raw`សរុប \Rightarrow\ 12x^3-10x`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`12x^3-10x`} />,
-  },
-  {
-    id: "B02",
-    title: "Root & Reciprocal",
-    level: "ងាយ",
-    tags: ["មូលដ្ឋាន"],
-    question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\!\left(\sqrt{x}+\frac{1}{x}\right)`} />,
-    hint: <MathLine math={String.raw`\sqrt{x}=x^{1/2},\ \ (x^{-1})'=-x^{-2}`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`(\sqrt{x})'=\tfrac{1}{2}x^{-1/2}=\tfrac{1}{2\sqrt{x}}`} />
-        <MathLine math={String.raw`(x^{-1})'=-x^{-2}=-\tfrac{1}{x^2}`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`\tfrac{1}{2\sqrt{x}}-\tfrac{1}{x^2}`} />,
-  },
-
-  // Chain
-  {
-    id: "C01",
-    title: "Chain — ln(x^2+1)",
-    level: "មធ្យម",
-    tags: ["ខ្សែសង្វាក់", "ឡូការីត"],
-    question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\big(\ln(x^2+1)\big)`} />,
-    hint: <MathLine math={String.raw`(\ln u)'=\frac{u'}{u}`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`u=x^2+1 \Rightarrow u'=2x`} />
-        <MathLine math={String.raw`\frac{d}{dx}\ln u=\frac{2x}{x^2+1}`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`\frac{2x}{x^2+1}`} />,
-  },
-  {
-    id: "C02",
-    title: "Chain — e^{2x-1}",
-    level: "មធ្យម",
-    tags: ["ខ្សែសង្វាក់", "អិចស្បូណង់ស្យែល"],
-    question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\big(e^{2x-1}\big)`} />,
-    hint: <MathLine math={String.raw`(e^{u})'=u'\,e^{u}`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`u=2x-1 \Rightarrow u'=2`} />
-        <MathLine math={String.raw`(e^{u})'=2\,e^{2x-1}`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`2e^{2x-1}`} />,
-  },
-
-  // Product / Quotient
-  {
-    id: "PQ01",
-    title: "Product rule",
-    level: "មធ្យម",
-    tags: ["គុណ/ចែក", "អិចស្បូណង់ស្យែល"],
-    question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\big( (x^2+1)\,e^{x}\big)`} />,
-    hint: <MathLine math={String.raw`(uv)'=u'v+uv'`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`u=x^2+1,\ u'=2x;\ \ v=e^x,\ v'=e^x`} />
-        <MathLine math={String.raw`(uv)'=2x\,e^x+(x^2+1)e^x=e^x(x^2+2x+1)`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`e^x(x^2+2x+1)`} />,
-  },
-  {
-    id: "PQ02",
-    title: "Quotient rule",
-    level: "មធ្យម",
-    tags: ["គុណ/ចែក"],
-    question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\left(\frac{3x-1}{x^2+1}\right)`} />,
-    hint: <MathLine math={String.raw`\left(\frac{u}{v}\right)'=\frac{u'v-u\,v'}{v^2}`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`u=3x-1,u'=3;\ \ v=x^2+1,v'=2x`} />
-        <MathLine math={String.raw`\frac{3(x^2+1)-(3x-1)\,2x}{(x^2+1)^2}=\frac{-3x^2+2x+3}{(x^2+1)^2}`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`\frac{-3x^2+2x+3}{(x^2+1)^2}`} />,
-  },
-
-  // Trig
-  {
-    id: "T01",
-    title: "Trig — multiple angles",
-    level: "មធ្យម",
-    tags: ["ត្រីកោណ"],
-    question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\big(\sin(2x)+\cos(3x)\big)`} />,
-    hint: <MathLine math={String.raw`(\sin u)'=u'\cos u,\ (\cos u)'=-u'\sin u`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`(\sin(2x))'=2\cos(2x),\quad (\cos(3x))'=-3\sin(3x)`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`2\cos(2x)-3\sin(3x)`} />,
-  },
-  {
-    id: "T02",
-    title: "Trig — tan/cot",
-    level: "មធ្យម",
-    tags: ["ត្រីកោណ"],
-    question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\big(\tan x-2\cot(3x)\big)`} />,
-    hint: <MathLine math={String.raw`(\tan u)'=u'(1+\tan^2 u),\ (\cot u)'=-u'(1+\cot^2 u)`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`(\tan x)'=1+\tan^2 x,\ (\cot(3x))'=-3(1+\cot^2(3x))`} />
-        <MathLine math={String.raw`y'=1+\tan^2 x+6(1+\cot^2(3x))`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`1+\tan^2 x+6\big(1+\cot^2(3x)\big)`} />,
-  },
-
-  // Exp/Log
-  {
-    id: "EL01",
-    title: "Exponential mix",
-    level: "មធ្យម",
-    tags: ["អិចស្បូណង់ស្យែល"],
-    question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\big(e^{2x}-4e^{-x}+3\cdot 5^{x}\big)`} />,
-    hint: <MathLine math={String.raw`(e^{kx})'=k\,e^{kx},\ (a^x)'=a^x\ln a`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`(e^{2x})'=2e^{2x},\ (-4e^{-x})'=4e^{-x},\ (3\cdot5^x)'=3\ln(5)\,5^x`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`2e^{2x}+4e^{-x}+3\ln(5)\,5^x`} />,
-  },
-  {
-    id: "EL02",
-    title: "Log composition",
-    level: "មធ្យម",
-    tags: ["ឡូការីត", "ខ្សែសង្វាក់"],
-    question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\big(\ln(2x)+(\ln x)^2\big)`} />,
-    hint: <MathLine math={String.raw`(\ln u)'=\frac{u'}{u},\ ((\ln x)^2)'=2\ln x\cdot \frac{1}{x}`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`(\ln(2x))'=\frac{1}{x},\quad ((\ln x)^2)'=\frac{2\ln x}{x}`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`\frac{1}{x}+\frac{2\ln x}{x}`} />,
-  },
-
-  // Inverse trig
-  {
-    id: "IT01",
-    title: "Inverse trig + chain",
-    level: "មធ្យម",
-    tags: ["អនុគមន៍បញ្ច្រាស", "ត្រីកោណ", "ខ្សែសង្វាក់"],
-    question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\big(\arcsin(3x)+\arctan(2x-1)\big)`} />,
-    hint: <MathLine math={String.raw`(\arcsin u)'=\frac{u'}{\sqrt{1-u^2}},\ (\arctan u)'=\frac{u'}{1+u^2}`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`(\arcsin(3x))'=\frac{3}{\sqrt{1-9x^2}},\quad (\arctan(2x-1))'=\frac{2}{1+(2x-1)^2}`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`\frac{3}{\sqrt{1-9x^2}}+\frac{2}{1+(2x-1)^2}`} />,
-  },
-
-  // Implicit
-  {
-    id: "IM01",
-    title: "Implicit — circle",
-    level: "ងាយ",
-    tags: ["អនិស្ស័យ/សមីការ"],
-    question: <MathLine math={String.raw`x^2+y^2=1\ \ \Rightarrow\ \ y' \ \ ?`} />,
-    hint: <MathLine math={String.raw`(y^n)'=n y^{n-1} y' \ \text{(treat y=y(x))}`} />,
-    steps: <MathLine math={String.raw`2x+2y\,y'=0 \Rightarrow y'=-\frac{x}{y}`} />,
-    finalAnswer: <MathLine math={String.raw`-\dfrac{x}{y}`} />,
-  },
-
-  // Tangent line
-  {
-    id: "TG01",
-    title: "Tangent line at x=1 (y=x^2)",
-    level: "ងាយ",
-    tags: ["បន្ទាត់ប៉ះ"],
-    question: <MathLine math={String.raw`\text{រកបន្ទាត់ប៉ះ } y=x^2 \text{ ត្រង់ } x=1`} />,
-    hint: <MathLine math={String.raw`y'=2x,\ \ y(1)=1,\ \ \text{tangent: } y-y_0=m(x-x_0)`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`m=y'(1)=2,\ \ (x_0,y_0)=(1,1)`} />
-        <MathLine math={String.raw`y-1=2(x-1)\ \Rightarrow\ y=2x-1`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`y=2x-1`} />,
-  },
-
-  // Higher order
-  {
-    id: "HO01",
-    title: "Second/third derivative",
-    level: "មធ្យម",
-    tags: ["លំដាប់ខ្ពស់"],
-    question: <MathLine math={String.raw`\text{រក } f''(x),\,f^{(3)}(x) \text{ សម្រាប់ } f(x)=x^4-2x^3+x`} />,
-    hint: <MathLine math={String.raw`គណនាជាបន្តបន្ទាប់: f', f'', f^{(3)}`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`f'(x)=4x^3-6x^2+1`} />
-        <MathLine math={String.raw`f''(x)=12x^2-12x`} />
-        <MathLine math={String.raw`f^{(3)}(x)=24x-12`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`f''(x)=12x^2-12x,\quad f^{(3)}(x)=24x-12`} />,
-  },
-  {
-    id: "HO02",
-    title: "Mix e^x sin x → y′, y″",
-    level: "ពិបាក",
-    tags: ["លំដាប់ខ្ពស់", "គុណ/ចែក", "ត្រីកោណ", "អិចស្បូណង់ស្យែល"],
-    question: <MathLine math={String.raw`\text{សម្រាប់ } y=e^{x}\sin x,\ \text{រក } y',\,y''`} />,
-    hint: <MathLine math={String.raw`(uv)'=u'v+uv'`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`y'=e^x\sin x+e^x\cos x=e^x(\sin x+\cos x)`} />
-        <MathLine math={String.raw`y''=e^x(\sin x+\cos x)+e^x(\cos x-\sin x)=2e^x\cos x`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`y'=e^x(\sin x+\cos x),\quad y''=2e^x\cos x`} />,
-  },
-
-  // Evaluate at a point
-  {
-    id: "EV01",
-    title: "Evaluate at π/6 (tan)",
-    level: "ងាយ",
-    tags: ["ត្រីកោណ"],
-    question: <MathLine math={String.raw`\text{គណនា } \ y'\!\left(\tfrac{\pi}{6}\right)\ \text{សម្រាប់ } y=\tan x`} />,
-    hint: <MathLine math={String.raw`(\tan x)'=1+\tan^2 x,\ \ \tan(\tfrac{\pi}{6})=\tfrac{1}{\sqrt{3}}`} />,
-    steps: <MathLine math={String.raw`y'(\tfrac{\pi}{6})=1+\tfrac{1}{3}=\tfrac{4}{3}`} />,
-    finalAnswer: <MathLine math={String.raw`\tfrac{4}{3}`} />,
-  },
-  {
-    id: "UV01",
-    title: "u^v form: x^x",
-    level: "ពិបាក",
-    tags: ["ខ្សែសង្វាក់", "ឡូការីត"],
-    question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\big(x^{x}\big)\ (x>0)`} />,
-    hint: <MathLine math={String.raw`x^x=e^{x\ln x}\Rightarrow (x^x)'=x^x\left(\ln x+1\right)`} />,
-    steps: (
-      <>
-        <MathLine math={String.raw`y=x^x=e^{x\ln x}`} />
-        <MathLine math={String.raw`y'=e^{x\ln x}\cdot (\ln x+1)=x^x(\ln x+1)`} />
-      </>
-    ),
-    finalAnswer: <MathLine math={String.raw`x^x(\ln x+1)`} />,
-  },
-];
-
-/* -------------------------------------------------------------------------- */
-/*                        PROGRAMMATICALLY GENERATED SETS                      */
-/* -------------------------------------------------------------------------- */
-
-const genPowerSet = (): Exercise[] => {
-  const res: Exercise[] = [];
-  let idx = 1;
-  for (let n = 2; n <= 8; n++) {
-    const id = `GP${String(idx++).padStart(2, "0")}`;
-    const q = String.raw`\frac{d}{dx}\big(x^{${n}}+${n}x\big)`;
-    const ans = String.raw`${n}x^{${n - 1}}+${n}`;
-    res.push({
-      id,
-      title: `Power rule #${n - 1}`,
-      level: "ងាយ",
-      tags: ["មូលដ្ឋាន"],
-      question: <MathLine math={String.raw`\text{រក } \ ${q}`} />,
-      hint: <MathLine math={String.raw`(x^m)'=m\,x^{m-1}`} />,
-      steps: (
-        <>
-          <MathLine math={String.raw`(x^{${n}})'=${n}x^{${n - 1}}`} />
-          <MathLine math={String.raw`(${n}x)'=${n}`} />
-        </>
-      ),
-      finalAnswer: <MathLine math={ans} />,
-    });
-  }
-  return res;
-};
-
-const genChainLnSet = (): Exercise[] => {
-  const res: Exercise[] = [];
-  let idx = 1;
-  const pairs = [
-    [2, 1],
-    [3, -1],
-    [4, 5],
-    [5, -2],
-    [7, 3],
-    [9, -4],
-  ];
-  for (const [a, b] of pairs) {
-    const id = `CL${String(idx++).padStart(2, "0")}`;
-    res.push({
-      id,
-      title: `Chain — ln(${a}x${b >= 0 ? "+" + b : b})`,
-      level: "ងាយ",
-      tags: ["ខ្សែសង្វាក់", "ឡូការីត"],
-      question: (
-        <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\ln(${a}x${b >= 0 ? "+" + b : b})`} />
-      ),
-      hint: <MathLine math={String.raw`(\ln u)'=\frac{u'}{u}`} />,
-      steps: (
-        <>
-          <MathLine math={String.raw`u=${a}x${b >= 0 ? "+" + b : b}\Rightarrow u'=${a}`} />
-          <MathLine math={String.raw`\frac{u'}{u}=\frac{${a}}{{${a}x${b >= 0 ? "+" + b : b}}}`} />
-        </>
-      ),
-      finalAnswer: (
-        <MathLine math={String.raw`\dfrac{${a}}{{${a}x${b >= 0 ? "+" + b : b}}}`} />
-      ),
-    });
-  }
-  return res;
-};
-
-const genChainSqrtSet = (): Exercise[] => {
-  const res: Exercise[] = [];
-  let idx = 1;
-  const pairs = [
-    [2, 3],
-    [3, -2],
-    [4, 1],
-    [5, -5],
-    [6, 7],
-    [7, 0],
-  ];
-  for (const [a, b] of pairs) {
-    const id = `SQ${String(idx++).padStart(2, "0")}`;
-    const inner = `${a}x${b >= 0 ? "+" + b : b}`;
-    res.push({
-      id,
-      title: `Chain — √(${inner})`,
-      level: "ងាយ",
-      tags: ["ខ្សែសង្វាក់", "មូលដ្ឋាន"],
-      question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\sqrt{${inner}}`} />,
-      hint: <MathLine math={String.raw`\sqrt{u}=u^{1/2}\Rightarrow (\sqrt{u})'=\frac{u'}{2\sqrt{u}}`} />,
-      steps: (
-        <>
-          <MathLine math={String.raw`u=${inner},\ u'=${a}`} />
-          <MathLine math={String.raw`\frac{u'}{2\sqrt{u}}=\frac{${a}}{2\sqrt{${inner}}}`} />
-        </>
-      ),
-      finalAnswer: <MathLine math={String.raw`\dfrac{${a}}{2\sqrt{${inner}}}`} />,
-    });
-  }
-  return res;
-};
-
-const genChainTrigSet = (): Exercise[] => {
-  const res: Exercise[] = [];
-  let idx = 1;
-  const triples = [
-    ["sin", 2, 1],
-    ["sin", 5, -2],
-    ["cos", 3, 0],
-    ["cos", 4, -1],
-    ["tan", 2, 2],
-    ["tan", 6, -3],
-  ] as const;
-  for (const [fn, k, b] of triples) {
-    const id = `CT${String(idx++).padStart(2, "0")}`;
-    const arg = `${k}x${b >= 0 ? "+" + b : b}`;
-    let ans = "";
-    let hint = "";
-    switch (fn) {
-      case "sin":
-        ans = String.raw`${k}\cos(${arg})`;
-        hint = String.raw`(\sin u)'=u'\cos u`;
-        break;
-      case "cos":
-        ans = String.raw`-${k}\sin(${arg})`;
-        hint = String.raw`(\cos u)'=-u'\sin u`;
-        break;
-      case "tan":
-        ans = String.raw`${k}(1+\tan^2(${arg}))`;
-        hint = String.raw`(\tan u)'=u'(1+\tan^2 u)`;
-        break;
-    }
-    res.push({
-      id,
-      title: `Chain — ${fn}(${arg})`,
-      level: "មធ្យម",
-      tags: ["ខ្សែសង្វាក់", "ត្រីកោណ"],
-      question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\ ${fn}(${arg})`} />,
-      hint: <MathLine math={hint} />,
-      steps: (
-        <>
-          <MathLine math={String.raw`u=${arg}\Rightarrow u'=${k}`} />
-          <MathLine math={String.raw`y'=${ans}`} />
-        </>
-      ),
-      finalAnswer: <MathLine math={ans} />,
-    });
-  }
-  return res;
-};
-
-const genProductExpSet = (): Exercise[] => {
-  const res: Exercise[] = [];
-  let idx = 1;
-  const items = [
-    [1, 2],
-    [2, 1],
-    [3, 2],
-    [4, -1],
-    [5, 3],
-    [6, -2],
-  ];
-  for (const [p, a] of items) {
-    const id = `PE${String(idx++).padStart(2, "0")}`;
-    const title = `Product — x^${p} e^{${a}x}`;
-    res.push({
-      id,
-      title,
-      level: "មធ្យម",
-      tags: ["គុណ/ចែក", "អិចស្បូណង់ស្យែល"],
-      question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\big(x^{${p}}e^{${a}x}\big)`} />,
-      hint: <MathLine math={String.raw`(uv)'=u'v+uv',\ (e^{ax})'=a e^{ax}`} />,
-      steps: (
-        <>
-          <MathLine math={String.raw`u=x^{${p}}\Rightarrow u'=${p}x^{${p - 1}}`} />
-          <MathLine math={String.raw`v=e^{${a}x}\Rightarrow v'=${a}e^{${a}x}`} />
-          <MathLine math={String.raw`y'=${p}x^{${p - 1}}e^{${a}x}+${a}x^{${p}}e^{${a}x}=e^{${a}x}\big(${p}x^{${p - 1}}+${a}x^{${p}}\big)`} />
-        </>
-      ),
-      finalAnswer: (
-        <MathLine math={String.raw`e^{${a}x}\left(${p}x^{${p - 1}}+${a}x^{${p}}\right)`} />
-      ),
-    });
-  }
-  return res;
-};
-
-const genQuotientLinearSet = (): Exercise[] => {
-  const res: Exercise[] = [];
-  let idx = 1;
-  const items = [
-    [2, 1, 1, 3],
-    [3, -1, 2, 1],
-    [5, 4, -2, 1],
-    [7, -3, 1, -2],
-    [4, 2, 3, -5],
-    [6, -2, -1, 4],
-  ];
-  for (const [a, b, c, d] of items) {
-    const id = `QL${String(idx++).padStart(2, "0")}`;
-    const num = `${a}x${b >= 0 ? "+" + b : b}`;
-    const den = `${c}x${d >= 0 ? "+" + d : d}`;
-    const ad_bc = a * d - b * c;
-    res.push({
-      id,
-      title: `Quotient — (${num})/(${den})`,
-      level: "មធ្យម",
-      tags: ["គុណ/ចែក"],
-      question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\left(\frac{${num}}{${den}}\right)`} />,
-      hint: <MathLine math={String.raw`\left(\frac{u}{v}\right)'=\frac{u'v-u v'}{v^2}`} />,
-      steps: (
-        <>
-          <MathLine math={String.raw`u'=${a},\ v'=${c}`} />
-          <MathLine
-            math={String.raw`\frac{a(${den})-(${num})\,c}{(${den})^2}=\frac{${ad_bc}}{(${den})^2}`}
-          />
-        </>
-      ),
-      finalAnswer: <MathLine math={String.raw`\dfrac{${ad_bc}}{(${den})^2}`} />,
-    });
-  }
-  return res;
-};
-
-const genTrigMixSet = (): Exercise[] => {
-  const res: Exercise[] = [];
-  let idx = 1;
-  const items = [
-    ["sin", "cos"],
-    ["cos", "sin"],
-    ["sin", "sin"],
-    ["cos", "cos"],
-    ["tan", "sin"],
-    ["sin", "tan"],
-  ] as const;
-  for (const [f, g] of items) {
-    const id = `TM${String(idx++).padStart(2, "0")}`;
-    const expr = `${f}(x)${g === "tan" ? " + " : ""}${g === "tan" ? " \\tan x" : g === "sin" ? " + \\sin x" : " + \\cos x"}`;
-    const title = `Trig — ${f}(x) + ${g}(x)`;
-    let d1 = "";
-    let d2 = "";
-    if (f === "sin") d1 = "\\cos x";
-    if (f === "cos") d1 = "-\\sin x";
-    if (f === "tan") d1 = "1+\\tan^2 x";
-    if (g === "sin") d2 = "+\\cos x";
-    if (g === "cos") d2 = "-\\sin x";
-    if (g === "tan") d2 = "+(1+\\tan^2 x)";
-    res.push({
-      id,
-      title,
-      level: "ងាយ",
-      tags: ["ត្រីកោណ"],
-      question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\big(${expr}\big)`} />,
-      hint: (
-        <MathLine
-          math={String.raw`(\sin x)'=\cos x,\ (\cos x)'=-\sin x,\ (\tan x)'=1+\tan^2 x`}
-        />
-      ),
-      steps: <MathLine math={String.raw`y'=${d1}${d2}`} />,
-      finalAnswer: <MathLine math={String.raw`${d1}${d2}`} />,
-    });
-  }
-  return res;
-};
-
-const genExpLogSet = (): Exercise[] => {
-  const res: Exercise[] = [];
-  let idx = 1;
-  const items = [
-    ["e^{3x}", "3e^{3x}"],
-    ["5^{x}", "\\ln(5)\\,5^{x}"],
-    ["2^{2x-1}", "2\\ln(2)\\,2^{2x-1}"],
-    ["e^{-4x}", "-4e^{-4x}"],
-    ["7^{x+2}", "\\ln(7)\\,7^{x+2}"],
-    ["e^{x}+\\ln x", "e^{x}+\\tfrac{1}{x}"],
-  ];
-  for (const [expr, ans] of items) {
-    const id = `EL${String(idx++ + 2).padStart(2, "0")}`;
-    res.push({
-      id,
-      title: `Exp/Log mix #${idx}`,
-      level: "ងាយ",
-      tags: ["អិចស្បូណង់ស្យែល", "ឡូការីត"],
-      question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\big(${expr}\big)`} />,
-      hint: (
-        <MathLine
-          math={String.raw`(e^{kx})'=k\,e^{kx},\ (a^x)'=a^x\ln a,\ (\ln x)'=\frac{1}{x}`}
-        />
-      ),
-      steps: <MathLine math={String.raw`y'=${ans}`} />,
-      finalAnswer: <MathLine math={String.raw`${ans}`} />,
-    });
-  }
-  return res;
-};
-
-const genInverseTrigSet = (): Exercise[] => {
-  const res: Exercise[] = [];
-  let idx = 1;
-  const items = [
-    ["\\arcsin(2x)", "\\dfrac{2}{\\sqrt{1-4x^2}}"],
-    ["\\arccos(1-x)", "-\\dfrac{-1}{\\sqrt{1-(1-x)^2}}=\\dfrac{1}{\\sqrt{2x-x^2}}"],
-    ["\\arctan(3x+1)", "\\dfrac{3}{1+(3x+1)^2}"],
-    ["\\arcsin(x^2)", "\\dfrac{2x}{\\sqrt{1-x^4}}"],
-    ["\\arccos(2x-3)", "-\\dfrac{2}{\\sqrt{1-(2x-3)^2}}"],
-    ["\\arctan(\\sin x)", "\\dfrac{\\cos x}{1+\\sin^2 x}"],
-  ];
-  for (const [expr, ans] of items) {
-    const id = `IT${String(idx++ + 1).padStart(2, "0")}`;
-    res.push({
-      id,
-      title: `Inverse trig #${idx - 1}`,
-      level: "មធ្យម",
-      tags: ["អនុគមន៍បញ្ច្រាស", "ខ្សែសង្វាក់", "ត្រីកោណ"],
-      question: <MathLine math={String.raw`\text{រក } \ \frac{d}{dx}\,${expr}`} />,
-      hint: (
-        <MathLine
-          math={String.raw`(\arcsin u)'=\frac{u'}{\sqrt{1-u^2}},\ (\arccos u)'=-\frac{u'}{\sqrt{1-u^2}},\ (\arctan u)'=\frac{u'}{1+u^2}`}
-        />
-      ),
-      steps: <MathLine math={String.raw`y'=${ans}`} />,
-      finalAnswer: <MathLine math={String.raw`${ans}`} />,
-    });
-  }
-  return res;
-};
-
-const genImplicitSet = (): Exercise[] => {
-  const res: Exercise[] = [];
-  let idx = 1;
-  const items = [
-    ["x^2+y^2=9", "-\\dfrac{x}{y}"],
-    ["xy=1", "-\\dfrac{y}{x}"],
-    ["x^2-xy+y^2=3", "\\dfrac{2x-y-2y y'}{x-2y} \\text{ (ដោះស្រាយទៀត)}"],
-  ];
-  for (const [eq, ans] of items) {
-    const id = `IM${String(idx++ + 1).padStart(2, "0")}`;
-    res.push({
-      id,
-      title: `Implicit #${idx - 1}`,
-      level: idx === 2 ? "ងាយ" : "មធ្យម",
-      tags: ["អនិស្ស័យ/សមីការ"],
-      question: <MathLine math={String.raw`\text{សមីការ } ${eq}\ \Rightarrow\ y' \ \ ?`} />,
-      hint: <MathLine math={String.raw`ប្រើ d/dx ទាំងសមីការ ហើយចាត់ទុក y=y(x)`} />,
-      steps: <MathLine math={String.raw`y'=${ans}`} />,
-      finalAnswer: <MathLine math={String.raw`${ans}`} />,
-    });
-  }
-  return res;
-};
-
-const genTangentSet = (): Exercise[] => {
-  const res: Exercise[] = [];
-  const items: Array<[string, string, string, string]> = [
-    ["y=x^3", "x=2", "m=3x^2\\Rightarrow m=12", "y-8=12(x-2)"],
-    ["y=\\sin x", "x=\\tfrac{\\pi}{4}", "m=\\cos x\\Rightarrow m=\\tfrac{\\sqrt{2}}{2}", "y-\\tfrac{\\sqrt{2}}{2}=\\tfrac{\\sqrt{2}}{2}(x-\\tfrac{\\pi}{4})"],
-    ["y=e^{2x}", "x=0", "m=2e^{2x}\\Rightarrow m=2", "y-1=2(x-0)"],
-  ];
-  let idx = 1;
-  for (const [f, at, slope, line] of items) {
-    const id = `TG${String(idx++ + 1).padStart(2, "0")}`;
-    res.push({
-      id,
-      title: `Tangent — ${f} at ${at}`,
-      level: "ងាយ",
-      tags: ["បន្ទាត់ប៉ះ"],
-      question: <MathLine math={String.raw`\text{រកបន្ទាត់ប៉ះ } ${f}\ \text{ ត្រង់ } ${at}`} />,
-      hint: <MathLine math={String.raw`បណ្តោយ៖ y-y_0=m(x-x_0),\ \ m=f'(a)`} />,
-      steps: (
-        <>
-          <MathLine math={String.raw`${slope}`} />
-          <MathLine math={String.raw`${line}`} />
-        </>
-      ),
-      finalAnswer: <MathLine math={String.raw`${line}`} />,
-    });
-  }
-  return res;
-};
-
-const genHigherOrderSet = (): Exercise[] => {
-  const res: Exercise[] = [];
-  let idx = 1;
-  const items = [
-    ["e^{3x}", "n", "3^{n}e^{3x}"],
-    ["e^{-x}", "n", "(-1)^{n}e^{-x}"],
-    ["\\sin x", "n", "\\sin\\left(x+\\tfrac{n\\pi}{2}\\right)"],
-    ["\\cos x", "n", "\\cos\\left(x+\\tfrac{n\\pi}{2}\\right)"],
-    ["e^{2x}\\cos x", "2", "y''=5e^{2x}\\cos x+4e^{2x}\\sin x"],
-  ];
-  for (const [expr, nlabel, ans] of items) {
-    const id = `HO${String(idx++ + 2).padStart(2, "0")}`;
-    res.push({
-      id,
-      title: `Higher order — ${expr}`,
-      level: "លំដាប់ខ្ពស់" as Level,
-      tags: ["លំដាប់ខ្ពស់"],
-      question: <MathLine math={String.raw`\text{រកដេរីវេលំដាប់ } ${nlabel}\ \text{ សម្រាប់ } y=${expr}`} />,
-      hint: (
-        <MathLine
-          math={String.raw`(e^{ax})^{(n)}=a^n e^{ax},\ \ \sin^{(n)}(x)=\sin\!\left(x+\frac{n\pi}{2}\right),\ \ \cos^{(n)}(x)=\cos\!\left(x+\frac{n\pi}{2}\right)`}
-        />
-      ),
-      steps: <MathLine math={String.raw`${ans}`} />,
-      finalAnswer: <MathLine math={String.raw`${ans}`} />,
-    });
-  }
-  return res;
-};
-
-/* -------------------------------------------------------------------------- */
-/*                              BUILD THE BIG BANK                             */
-/* -------------------------------------------------------------------------- */
-
-const BANK: Exercise[] = [
-  ...BASE,
-  ...genPowerSet(),
-  ...genChainLnSet(),
-  ...genChainSqrtSet(),
-  ...genChainTrigSet(),
-  ...genProductExpSet(),
-  ...genQuotientLinearSet(),
-  ...genTrigMixSet(),
-  ...genExpLogSet(),
-  ...genInverseTrigSet(),
-  ...genImplicitSet(),
-  ...genTangentSet(),
-  ...genHigherOrderSet(),
-];
-
-/** ALL TAGS for filter bar */
-const ALL_TAGS: Tag[] = [
-  "មូលដ្ឋាន",
-  "ខ្សែសង្វាក់",
-  "គុណ/ចែក",
-  "ត្រីកោណ",
-  "អិចស្បូណង់ស្យែល",
-  "ឡូការីត",
-  "អនុគមន៍បញ្ច្រាស",
-  "អនិស្ស័យ/សមីការ",
-  "បន្ទាត់ប៉ះ",
-  "លំដាប់ខ្ពស់",
-];
-
-/* -------------------------------------------------------------------------- */
-/*                               MAIN COMPONENT                                */
-/* -------------------------------------------------------------------------- */
-
-export default function DerivativePractice() {
-  const [q, setQ] = useState("");
-  const [activeTags, setActiveTags] = useState<Tag[]>([]);
-  const [selected, setSelected] = useState<Exercise | null>(null);
-  const [visibleCount, setVisibleCount] = useState(24);
-
-  const toggleTag = (t: Tag) =>
-    setActiveTags((prev) => (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]));
-
-  const filtered = useMemo(() => {
-    const term = q.trim().toLowerCase();
-    return BANK.filter((ex) => {
-      const inTitle = ex.title.toLowerCase().includes(term);
-      const inTags =
-        activeTags.length === 0 || activeTags.every((t) => ex.tags.includes(t));
-      return (term.length === 0 || inTitle) && inTags;
-    });
-  }, [q, activeTags]);
-
-  const visible = filtered.slice(0, visibleCount);
-
-  const closeModal = useCallback(() => setSelected(null), []);
-  const canLoadMore = visibleCount < filtered.length;
-
-  const shuffle = () => {
-    // Fisher–Yates on a copy
-    const copy = [...filtered];
-    for (let i = copy.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [copy[i], copy[j]] = [copy[j], copy[i]];
-    }
-    // show first N after shuffle
-    setVisibleCount(24);
-    // quick hack: change query to trigger recompute visually
-    setQ((s) => s); // keep same but forces render along with setVisibleCount
-  };
-
-  const showRandom10 = () => setVisibleCount(10);
-
-  return (
-    <div className="space-y-5">
-      {/* Header / Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    key: "kinetic-theory",
+    title: "ទ្រឹស្ដីសុីនេទិច",
+    icon: BookAIcon,
+    content: (
+      <div className="space-y-4">
+        {/* Mass, Moles, Avogadro */}
         <div>
-          <h2 className="text-lg sm:text-xl font-bold text-slate-800">លំហាត់អនុគមន៍ដេរីវេ</h2>
-          <p className="text-sm text-slate-600">
-            សំណួរ​សរុប: <span className="font-semibold">{filtered.length}</span>{" "}
-            <span className="text-slate-400">/ ទាំងអស់ {BANK.length}</span>
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="ស្វែងរកលំហាត់ (បញ្ចូលពាក្យគន្លឹះ)..."
-            className="w-full sm:w-72 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-sky-400"
-          />
-          <button
-            onClick={shuffle}
-            className="rounded-lg border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50"
-          >
-            Randomize
-          </button>
-          <button
-            onClick={showRandom10}
-            className="rounded-lg border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50"
-          >
-            Quick 10
-          </button>
-        </div>
-      </div>
-
-      {/* Filter chips */}
-      <div className="flex flex-wrap gap-2">
-        {ALL_TAGS.map((t) => (
-          <TagChip key={t} tag={t} active={activeTags.includes(t)} onClick={() => toggleTag(t)} />
-        ))}
-        {activeTags.length > 0 && (
-          <button
-            onClick={() => setActiveTags([])}
-            className="text-xs underline text-slate-600 hover:text-slate-800"
-          >
-            សម្អាតតម្រង
-          </button>
-        )}
-      </div>
-
-      {/* Grid of exercises */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-        {visible.map((ex) => (
-          <button
-            key={ex.id}
-            onClick={() => setSelected(ex)}
-            className="text-left rounded-xl border-l-4 border-sky-500 bg-white shadow-sm hover:shadow-md transition border border-slate-200/70 p-3 sm:p-4"
-            aria-label={`បើកលំហាត់ ${ex.id}`}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 text-xs rounded-full bg-sky-100 text-sky-800">{ex.id}</span>
-                <LevelBadge level={ex.level} />
-              </div>
-              <div className="hidden sm:flex flex-wrap gap-1">
-                {ex.tags.map((t) => (
-                  <span key={t} className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px]">
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <p className="font-semibold text-slate-800 mb-1">{ex.title}</p>
-            <div className="[&_.katex-display]:text-left [&_.katex]:text-[1.02rem]">
-              {ex.question}
-            </div>
-            <p className="text-xs text-slate-500 mt-2">ចុចដើម្បីមើលចម្លើយពេញលេញ</p>
-          </button>
-        ))}
-      </div>
-
-      {/* Load more */}
-      {canLoadMore && (
-        <div className="flex justify-center">
-          <button
-            className="px-4 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-sm"
-            onClick={() => setVisibleCount((n) => n + 24)}
-          >
-            ផ្ទុកបន្ថែម +24
-          </button>
-        </div>
-      )}
-
-      {/* Empty state */}
-      {filtered.length === 0 && (
-        <div className="rounded-lg border border-slate-200 bg-white p-6 text-center text-slate-600">
-          មិនមានលទ្ធផលតាមការស្វែងរក/តម្រងទេ។
-        </div>
-      )}
-
-      {/* Modal with full solution */}
-      <Modal
-        open={!!selected}
-        onClose={closeModal}
-        title={
-          selected ? (
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 text-xs rounded-full bg-sky-100 text-sky-800">{selected.id}</span>
-              <span className="font-semibold text-slate-800">{selected.title}</span>
-              <LevelBadge level={selected.level} />
-            </div>
-          ) : null
-        }
-      >
-        {selected && (
-          <div className="space-y-4">
-            {/* Tags (mobile visible here) */}
-            <div className="sm:hidden flex flex-wrap gap-1">
-              {selected.tags.map((t) => (
-                <span key={t} className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px]">
-                  {t}
-                </span>
-              ))}
-            </div>
-
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-indigo-600">•</span>
             <div>
-              <p className="font-medium text-slate-800 mb-1">សំណួរ</p>
-              {selected.question}
+              <span className="font-medium">
+                ម៉ាសម៉ូល: <InlineMath math={String.raw`M = m \cdot N_A`} />
+              </span>
             </div>
-
-            {selected.hint && (
-              <Collapsible tone="hint" defaultOpen title="សំណើចង្អុលបង្ហាញ (Hint)">
-                {selected.hint}
-              </Collapsible>
-            )}
-
-            <div>
-              <p className="font-medium text-slate-800 mb-1">ដំណោះស្រាយ</p>
-              <div className="space-y-2 [&_.katex-display]:text-left [&_.katex]:text-[1.03rem]">
-                {selected.steps}
+          </div>
+        </div>
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-indigo-600">•</span>
+            <span className="font-medium">
+              ម៉ាសម៉ូលគុណ: <InlineMath math={String.raw`m = \frac{M}{N_A}`} />
+            </span>
+          </div>
+        </div>
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-indigo-600">•</span>
+            <span className="font-medium">
+              ចំនួនម៉ូល:{" "}
+              <InlineMath
+                math={String.raw`n = \frac{m}{M} \quad \text{ឬ} \quad n = \frac{N}{N_A}`}
+              />
+            </span>
+          </div>
+        </div>
+        {/* Ideal Gas Law */}
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-indigo-600">•</span>
+            <span className="font-medium">
+              សមីការឧស្ម័នបរិសុទ្ឋ :{" "}
+              <InlineMath math={String.raw`PV = k_B N T `} />
+            </span>
+          </div>
+          <div className="ml-6">
+            <InlineMath math={String.raw`\text{ឬ} P V = n R T`} />
+          </div>
+        </div>
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-indigo-600">•</span>
+            <span className="font-medium">
+              ថេរឧស្ម័នសកល:{" "}
+              <InlineMath math={String.raw`R = N_A \cdot k_B`} />
+            </span>
+          </div>
+        </div>
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-indigo-600">•</span>
+            <span className="font-medium">
+              សីតុណ្ហភាព: <InlineMath math={String.raw`T = t + 273`} />
+            </span>
+          </div>
+        </div>
+        {/* Kinetic Energy */}
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-indigo-600">•</span>
+            <span className="font-medium">
+              តម្លៃមធ្យមនៃថាមពលសុីនេទិច:{" "}
+              <InlineMath math={String.raw`K_{av} = \frac{1}{2} m v_{rms}^2`} />
+            </span>
+          </div>
+          <div className="ml-6">
+            <InlineMath math={String.raw`\text{ឬ} K_{av} = \frac{3}{2} k_B T`} />
+          </div>
+        </div>
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-indigo-600">•</span>
+            <span className="font-medium">
+              ថាមពលសុីនេទិចសរុប:{" "}
+              <InlineMath math={String.raw`K = N k_{av} `} />
+            </span>
+          </div>
+          <div className="ml-6">
+            <InlineMath
+              math={String.raw`\text{ឬ} K = \frac{3}{2} PV = \frac{3}{2} N k_B T = \frac{3}{2} nRT`}
+            />
+          </div>
+        </div>
+        {/* Root mean square speed */}
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-indigo-600">•</span>
+            <span className="font-medium">
+              ល្បឿនប្រសិទ្ធ:{" "}
+              <InlineMath
+                math={String.raw`v_{rms} = \sqrt{\frac{3k_B T}{m}} = \sqrt{\frac{3RT}{M}}`}
+              />
+            </span>
+          </div>
+        </div>
+        <div>
+          <div className="flex items-start gap-2 mb-1">
+            <span className="text-indigo-600 mt-1">•</span>
+            <span className="font-medium">
+              សម្ពាធបរិយាកាស :{" "}
+              <InlineMath math={String.raw`1\,atm = 76\,cmHg = 10^5\,Pa`} />
+            </span>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    key: "first-law-thermodynamics",
+    title: "ច្បាប់ទីមួយទែម៉ូឌីណាមិច",
+    icon: ChartBarIcon,
+    content: (
+      <div className="space-y-4">
+        {/* First Law Statement */}
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <div>
+            <span className="font-medium">ច្បាប់ទី១ ទែម៉ូឌីណាមិច: </span>
+            <div className="ml-4">
+              <InlineMath math={String.raw`Q = \Delta U + W`} />
+            </div>
+          </div>
+        </div>
+        {/* Work Formulas */}
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <div>
+            <span className="font-medium">
+              <b>កម្មន្ត</b> បំពេញក្នុងពេលមាឌប្រែប្រួល
+            </span>
+            <div className="ml-2 space-y-1">
+              <div>សម្ពាធ P ថេរ (លំនាំអុីសូបា) : </div>
+              <div className="ml-4">
+                <InlineMath
+                  math={String.raw`W = P \Delta V = P(V_f - V_i)`}
+                />{" "}
               </div>
-            </div>
-
-            <div className="rounded-lg bg-emerald-50/70 border border-emerald-200 p-3">
-              <p className="font-semibold text-emerald-800 mb-1">ចម្លើយចុងក្រោយ</p>
-              <div className="[&_.katex-display]:text-left [&_.katex]:text-[1.06rem]">
-                {selected.finalAnswer}
+              <br />
+              <div>សម្ពាធ P ប្រែប្រួល (លំនាំអុីសូករ) : </div>
+              <div className="ml-4">
+                <InlineMath
+                  math={String.raw`W = P_{av}(V_f - V_i),\ P_{av} = \frac{P_i + P_f}{2}`}
+                />
+              </div>
+              <br />
+              <div>សីតុណ្ហភាព T ថេរ (លំនាំអុីសូទែម) : </div>
+              <div className="ml-4">
+                <InlineMath
+                  math={String.raw`W = nRT \ln \left(\frac{V_f}{V_i}\right)`}
+                />
               </div>
             </div>
           </div>
-        )}
-      </Modal>
-    </div>
-  );
+        </div>
+        {/* Internal Energy */}
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <div>
+            <span className="font-medium">ថាមពលក្នុង :</span>
+            <div className="ml-2 space-y-1">
+              <span className="ml-4"></span>
+              <InlineMath
+                math={String.raw`U = \frac{3}{2} nRT = \frac{3}{2} PV = \frac{3}{2} Nk_B T`}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <div>
+            <span className="font-medium">បម្រែបម្រួលថាមពលក្នុង :</span>
+            <div className="ml-2 space-y-1">
+              <InlineMath
+                math={String.raw`\Delta U = \frac{3}{2} nR \Delta T = \frac{3}{2} R (T_f - T_i)`}
+              />
+              <br />
+              <br />
+              <InlineMath math={String.raw`V_f: \text{ល្បឿនដើម}`} />
+              <br />
+              <InlineMath math={String.raw`V_i: \text{ល្បឿនស្រេច}`} />
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    key: "machines",
+    title: "ម៉ាសុីន",
+    icon: BookAIcon,
+    content: (
+      <div className="space-y-4">
+        {/* Carnot/Heat Engine */}
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <div>
+            <span className="font-medium">
+              ម៉ាស៊ីនកម្ដៅ និងម៉ាស៊ីនកានូត{" "}
+            </span>
+            <div className="ml-2 space-y-1 mt-">
+              <div>តារាងលំហូរថាមពល : </div>
+              <div className="ml-4 ">
+                <InlineMath math={String.raw`W = Q_h - Q_c`} />
+              </div>
+              <div>ទិន្នផលកម្ដៅ : </div>
+              <div className="ml-4 ">
+                <InlineMath
+                  math={String.raw`e = \frac{W}{Q_h} = 1 - \frac{Q_c}{Q_h}`}
+                />
+              </div>
+              <div>ទិន្នផលកានូត : </div>
+              <div className="ml-4">
+                <InlineMath
+                  math={String.raw`\frac{Q_c}{Q_h} = \frac{T_c}{T_h} \implies e = 1 - \frac{T_c}{T_h}`}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Gasoline/Diesel Engines */}
+        <div>
+          <div className="flex items-start gap-2 mb-1">
+            <span className="text-indigo-600 mt-1">•</span>
+            <span className="font-medium">ម៉ាស៊ីនសាំង និងម៉ាស៊ូត :</span>
+          </div>
+          <div className="ml-7">
+            <div>កម្មន្តមេកានិច : </div>
+            <div className="ml-4">
+              {" "}
+              <InlineMath math={String.raw`W_M = Q_h - Q_c`} />
+            </div>
+            <br />
+            <div>
+              ទិន្នផលកម្ដៅ :{" "}
+              <InlineMath math={String.raw`e_c = \frac{W_M}{Q_h}`} />
+            </div>
+            <br />
+            <div>
+              ទិន្នផលមេកានិច :{" "}
+              <InlineMath math={String.raw`e_M = \frac{W_U}{W_M}`} />
+            </div>
+            <br />
+            <div>
+              ទិន្នផលសរុប :{" "}
+              <InlineMath
+                math={String.raw`e = \frac{W_U}{Q_h} = e_M \times e_c`}
+              />
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="flex items-start gap-2 mb-1">
+            <span className="text-indigo-600 mt-1">•</span>
+            <span className="font-medium">
+              អេឡិចត្រុងវ៉ុល :{" "}
+              <InlineMath math={String.raw`1\,eV = 1.6 \times 10^{-19}\,J`} />
+            </span>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    key: "notes_and_memory",
+    title: "ចំណាំ​និងចងចាំ",
+    icon: BookAIcon,
+    content: (
+      <div className="space-y-4">
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <div>
+            <span>
+              <b>សញ្ញា និងការបកស្រាយ:</b>
+            </span>
+            <br />
+            <div className="ml-2 space-y-1">
+              <b>Q (កម្ដៅ):</b>
+              <div>Q &gt; 0: ប្រព័ន្ធទទួលកម្ដៅ (+)</div>
+              <div>Q &lt; 0: ប្រព័ន្ធបញ្ចេញកម្ដៅ (-)</div>
+              <div>Q = 0: លំនាំអាដ្យាបាទិច</div>
+              <b>ΔU (ថាមពលក្នុង):</b>
+              <div>ΔU &gt; 0: ថាមពលក្នុងនៃប្រព័ន្ធកើនឡើង (+)</div>
+              <div>ΔU &lt; 0: ថាមពលក្នុងនៃប្រព័ន្ធថយចុះ (-)</div>
+              <div>ΔU = 0: លំនាំអ៊ីសូទែម(សីតុណ្ហភាពថេរ)</div>
+              <b>W (កម្មន្ត):</b>
+              <div>W &gt; 0: ប្រព័ន្ធធ្វើកម្មន្ត (ពង្រីក) (+)</div>
+              <div>W &lt; 0: ក្រៅធ្វើលើប្រព័ន្ធ (បង្រួម) (-)</div>
+              <div>W = 0: លំនាំអុីសូករ(មាឌថេរ)</div>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <div>
+            <span>
+              <b>សម្គាល់ថាមពលម៉ាស៊ីនកម្ដៅ:</b>
+            </span>
+            <div className="ml-2 text-sm text-gray-700 space-y-1">
+              <div>
+                <b>
+                  Q<sub>h</sub> (កម្ដៅក្តៅ):
+                </b>{" "}
+                កម្ដៅដែលម៉ាស៊ីនស្រូបយកឬទទួលពីប្រភពក្ដៅ
+              </div>
+              <div>
+                <b>
+                  Q<sub>c</sub> (កម្ដៅត្រជាក់):
+                </b>{" "}
+                កម្ដៅដែលម៉ាស៊ីនបញ្ចេញឬផ្ដល់ទៅប្រភពត្រជាក់
+              </div>
+              <div>
+                <b>W (កម្មន្ត):</b>{" "}
+                កម្មន្តដែលមានប្រយោជន៍ដែលម៉ាស៊ីនធ្វើឬផលិតបាន
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    key: "si_units",
+    title: "ខ្នាតអត្តរជាតិ​(SI)",
+    icon: ClipboardListIcon,
+    content: (
+      <div className="space-y-2">
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>សម្ពាធ :</b> P — Pa (ប៉ាស្កាល់)
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>មាឌ :</b> V — m³ (ម៉ែត្រគូប)
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>សីតុណ្ហភាព :</b> T — K (កែលវីន)
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>ចំនួនម៉ូល :</b> n — mol (ម៉ូល)
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>ចំនួនម៉ូលេគុល :</b> N — ម៉ូលេគុល
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>ម៉ាសសរុប :</b> m — kg (គីឡូក្រាម)
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>ម៉ាសម៉ូល :</b> M — kg/mol (គីឡូក្រាមក្នុងមួយម៉ូល)
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>ម៉ាសម៉ូលេគុល :</b> m<sub>o</sub> — kg (គីឡូក្រាម)
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>ថាមពល (K, U, Q, W):</b> J (ស៊ូល)
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>ល្បឿន :</b> v — m/s (ម៉ែត្រក្នុងមួយវិនាទី)
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>ថេរឧស្ម័ន :</b> R — J/(mol·K) (ស៊ូលក្នុងមួយម៉ូល-កែលវីន)
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>ថេរ :</b> k<sub>B</sub> — J/K (ស៊ូលក្នុងមួយកែលវីន)
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>ទិន្នផល :</b> e — % (ភាគរយ)
+          </span>
+        </div>
+      </div>
+    ),
+  },
+  {
+    key: "tips",
+    title: "គន្លឹះអនុវត្ត",
+    icon: LightbulbIcon,
+    content: (
+      <div className="space-y-2">
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>ព្យាយាមដោះស្រាយលំហាត់ដោយខ្លួនឯងមុនពេលមើលចម្លើយ</span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>បម្លែងឯកតា:</b>{" "}
+            ត្រូវប្រាកដថាឯកតារបស់តម្លៃទាំងអស់ត្រឹមត្រូវតាមប្រព័ន្ធអន្តរជាតិ (SI)។
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>កំណត់អថេរ:</b>{" "}
+            ត្រូវដឹងថាតើលំហាត់មានអថេរអ្វីខ្លះដូចជា P, V, T, n, N។
+            ជ្រើសរើសរូបមន្តត្រឹមត្រូវ។
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>វិភាគដំណើរការ:</b>{" "}
+            កំណត់ប្រភេទដំណើរការ ដើម្បីដឹងថាតើអថេរណាដែលថេរ។
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>ចងចាំ:</b>{" "}
+            ត្រូវបម្លែងសីតុណ្ហភាព T ទៅជា Kelvin (K)
+            ជានិច្ចនៅពេលប្រើរូបមន្តទិន្នផលកានូត។
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            <b>ដំណើរការដោះស្រាយ:</b>{" "}
+            ពេលដោះស្រាយលំហាត់
+            សូមព្យាយាមសរសេរអ្វីដែលអ្នកដឹង (តម្លៃដែលបានផ្ដល់)
+            និងអ្វីដែលអ្នកត្រូវរកជាមុនសិន។
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <span>
+            ម៉ាសម៉ូល (M) ពេលខ្លះត្រូវបានផ្ដល់ជា <b>g/mol</b>{" "}
+            ដូច្នេះត្រូវបម្លែងវាទៅជា <b>kg/mol</b>{" "}
+            មុនប្រើក្នុងរូបមន្តដូចជា{" "}
+            <InlineMath
+              math={String.raw`v_{rms} = \sqrt{\frac{3RT}{M}}`}
+            />
+            ។
+          </span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-indigo-600 mt-1">•</span>
+          <div>
+            <span>តម្លៃលេខ</span>
+            <br />
+            <span className="font-minimum">
+              {" "}
+              <InlineMath
+                math={String.raw`k_B = 1.38 \times 10^{-23} \, J/K`}
+              />
+            </span>
+            <br />
+            <span className="font-minimum">
+              {" "}
+              <InlineMath
+                math={String.raw`R = 8.31 \, J/(mol \cdot K)`}
+              />
+            </span>
+            <br />
+            <span className="font-minimum">
+              {" "}
+              <InlineMath
+                math={String.raw`N_A = 6.022 \times 10^{23} \, mol^{-1}`}
+              />
+            </span>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+];
+
+// This content array now holds the summary and practice exercises
+// in a format that ContentRendererV3 can process.
+const content: TopicContent_V3[] = [
+  {
+    type: "summary",
+    title: "រូបមន្តគន្លឹះ និងវិធីដោះស្រាយសមីការឌីផេរ៉ង់ស្យែល",
+    sections: summary, // <--- THIS IS THE FIX. No extra [ ]
+  },
+  {
+    type: "practice",
+    exercises: [
+      {
+        id: "ex1",
+        title: "លំហាត់អនុវត្តទី ១",
+        description: "ដំណោះស្រាយលំហាត់ទែម៉ូឌីណាមិច",
+        problemType: "Solutions to thermodynamics exercises",
+        problems: [
+          <div key="ex1-0">
+            រកតម្លៃមធ្យមនៃថាមពលសុីនេទិចរបស់ម៉ូលេគុលអុកស៊ីសែនីមួយៗ
+            ក្នុងខ្យល់នៅក្នុងបន្ទប់មានសីតុណ្ហភាព 300K គិតជា អេឡិចត្រុងវ៉ុល
+            (eV)។
+            <span className="text-sm text-gray-700">
+              គេឱ្យ <InlineMath math={String.raw`1\,eV = 1.6 \times 10^{-19}\,J`} />
+              និង{" "}
+              <InlineMath
+                math={String.raw`k_B =1.38 \times 10^{-23}\,J/K`}
+              />
+            </span>
+          </div>,
+          <div key="ex1-2">
+            គណនាមាឌឧស្ម័នអុកស៊ីសែន 3.2g
+            ដែលផ្ទុកក្នុងធុងនៅសម្ពាធ 76cmHg និងសីតុណ្ហភាព 27°C។
+          </div>,
+          <div key="ex1-3">
+            រកល្បឿនដែលប្រសិទ្ធ (
+            <InlineMath math={String.raw`v_{rms}`} />)
+            នៃម៉ូលេគុលអាសូតដោយម៉ាសម៉ូល M = 28g/mol នៅសីតុណ្ហភាព 300K។
+            <span className="text-sm text-gray-700">
+              គេឱ្យ​
+              <InlineMath math={String.raw`R = 8.31J/mol.K`} />។
+            </span>
+          </div>,
+          <div key="ex1-4">
+            គណនាសីតុណ្ហភាពដែលធ្វើឱ្យល្បឿនប្រសិទ្ធនៃម៉ូលេគុល​អ៊ីដ្រូសែនស្មើ
+            331 m/s។
+            <span className="text-sm text-gray-700">
+              គេឱ្យ​
+              <InlineMath math={String.raw`M_{H_2} = 2.0 g/mol`} />។
+            </span>
+          </div>,
+          <div key="ex1-5">
+            ម៉ូលេគុលនីដ្រូសែនមួយនៅពេលស្ថិតលើផ្ទៃផែនដីវាកើតមានល្បឿនប្រសិទ្ធនៅសីតុណ្ហភាព
+            0°C។
+            ប្រសិនបើវាផ្លាស់ទីឡើងត្រង់ទៅលើដោយគ្មានទង្គិចនឹងម៉ូលេគុលផ្សេងទៀត​​
+            ចូរគណនាកម្ពស់ដែលវា​ឡើងដល់។
+            <span className="text-sm text-gray-700">
+              គេឱ្យម៉ាសមួយម៉ូលេគុលនីដ្រូសែន{" "}
+              <InlineMath math={String.raw`m = 4.65 \times 10^{-26}\,kg`} /> និង{" "}
+              <InlineMath math={String.raw`g = 10\,m/s^2`} />។
+            </span>
+          </div>,
+        ],
+        answers: [
+          <div key="a0" className="space-y-2 ml-2">
+            <p>
+              <b>
+                រកតម្លៃមធ្យមនៃថាមពលសុីនេទិចរបស់ម៉ូលេគុលអុកស៊ីសែនមួយៗ
+              </b>
+            </p>
+            <p>តាមរូបមន្តថាមពលសុីនេទិចមធ្យម៖</p>
+            <p>
+              <InlineMath math={String.raw`K_{av} = \frac{3}{2} k_B T`} />
+            </p>
+            <p>
+              ដោយ{" "}
+              <InlineMath math={String.raw`k_B = 1.38 \times 10^{-23}\,J/K`} />
+            </p>
+            <p className="ml-8">
+              <InlineMath math={String.raw`T = 300\,K`} />
+            </p>
+            <p>គេបាន: </p>
+            <p>
+              <InlineMath
+                math={String.raw`K_{av} = \frac{3}{2} \times (1.38 \times 10^{-23}) \times 300`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`K_{av} = \frac{3}{2} \times 4.14 \times 10^{-21}`}
+              />
+            </p>
+            <p>
+              <InlineMath math={String.raw`K_{av} = 6.21 \times 10^{-21}\,J`} />
+            </p>
+            <p>បម្លែងទៅជាអេឡិចត្រុងវ៉ុល៖</p>
+            <p>
+              <InlineMath math={String.raw`1\,eV = 1.6 \times 10^{-19}\,J`} />
+            </p>
+            <p className="ml-4">
+              <InlineMath
+                math={String.raw`1\,J = \frac{1}{1.6 \times 10^{-19}}\,eV`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`K_{av} = \frac{6.21 \times 10^{-21}}{1.6 \times 10^{-19}}`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`K_{av} = 0.0388 = 3.88 \times 10^{-2}\,eV`}
+              />
+            </p>
+            <p>
+              <b>ដូចនេះ</b> តម្លៃមធ្យមនៃថាមពលសុីនេទិចគឺ{" "}
+              <InlineMath math={String.raw`3.88 \times 10^{-2}\,eV`} />។
+            </p>
+          </div>,
+          <div key="a1" className="space-y-2 ml-2">
+            <p>
+              <b>គណនាមាឌឧស្ម័នអុកស៊ីសែន​</b>
+            </p>
+            <p>
+              តាមរូបមន្តឧស្ម័នបរិសុទ្ឋ៖{" "}
+              <InlineMath math={String.raw`PV = nRT`} />
+            </p>
+            <p>
+              តែ៖ <InlineMath math={String.raw`n = \frac{m}{M}`} />
+            </p>
+            <p>
+              នោះ <InlineMath math={String.raw`PV = \frac{m}{M} RT`} />
+            </p>
+            <p>
+              នាំឲ៖ <InlineMath math={String.raw`V = \frac{m}{PM} RT`} />
+            </p>
+            <p>ដោយ៖</p>
+            <p>
+              <InlineMath math={String.raw`m = 3.2\,g`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`M_{O_2} = 32\,g/mol`} />{" "}
+            </p>
+            <p>
+              <InlineMath math={String.raw`R = 8.31\,J/(mol \cdot K)`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`T = 27 + 273 = 300\,K`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`P = 76\,cmHg = 1\,atm = 10^5\,Pa`} />
+            </p>
+            <p>
+              គេបាន:{" "}
+              <InlineMath
+                math={String.raw`V = \frac{3.2}{10^5 \times 32} 8.31 \times 300`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`V = \frac{0.1 \times 8.31 \times 300}{10^5}`}
+              />
+            </p>
+            <p>
+              <InlineMath math={String.raw`V = \frac{249.3}{100000}`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`V = 0.002493\,m^3`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`V = 2.493\,L`} />
+            </p>
+            <p>
+              <b>ដូចនេះ</b> មាឌឧស្ម័នអុកស៊ីសែនគឺ{" "}
+              <InlineMath math={String.raw`2.5\,L`} />។
+            </p>
+          </div>,
+          <div key="a2" className="space-y-2 ml-2">
+            <p>
+              <b>រកល្បឿនដែលប្រសិទ្ធ (vrms) នៃម៉ូលេគុលអាសូត</b>
+            </p>
+            <p>តាមរូបមន្តល្បឿនប្រសិទ្ធ៖</p>
+            <p>
+              <InlineMath math={String.raw`v_{rms} = \sqrt{\frac{3RT}{M}}`} />
+            </p>
+            <p>ដោយ៖</p>
+            <p>
+              <InlineMath math={String.raw`R = 8.31\,J/(mol \cdot K)`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`T = 300\,K`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`M = 28\,g/mol = 0.028\,kg/mol`} />{" "}
+              (ត្រូវបម្លែងទៅជា kg/mol)
+            </p>
+            <p>គេបាន: </p>
+            <p>
+              <InlineMath
+                math={String.raw`v_{rms} = \sqrt{\frac{3 \times 8.31 \times 300}{28\times 10^{-3}}}`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`v_{rms} = \sqrt{\frac{7479}{28\times 10^{-3}}}`}
+              />
+            </p>
+            <p>
+              <InlineMath math={String.raw`v_{rms} = \sqrt{267107.14}`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`v_{rms} = 5.2\times 10^{2}\,m/s`} />
+            </p>
+            <p>
+              <b>ដូចនេះ</b> ល្បឿនដែលប្រសិទ្ធនៃម៉ូលេគុលអាសូតគឺ{" "}
+              <InlineMath math={String.raw`5.2\times 10^{2}\,m/s`} />។
+            </p>
+          </div>,
+          <div key="a3" className="space-y-2 ml-2">
+            <p>
+              <b>គណនាសីតុណ្ហភាព</b>
+            </p>
+            <p>
+              តាមរូបមន្តល្បឿនប្រសិទ្ធ៖{" "}
+              <InlineMath math={String.raw`v_{rms} = \sqrt{\frac{3RT}{M}}`} />
+            </p>
+            <p>
+              សមមូល៖ <InlineMath math={String.raw`v_{rms}^2 = \frac{3RT}{M}`} />
+            </p>
+            <p>
+              នាំឲ៖ <InlineMath math={String.raw`T = \frac{Mv_{rms}^2}{3R}`} />
+            </p>
+            <p>ដោយ៖</p>
+            <p>
+              <InlineMath math={String.raw`v = 331\,m/s`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`R = 8.31\,J/(mol \cdot K)`} />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`M = 2\,g/mol = 2 \times 10^{-3}\,kg/mol`}
+              />{" "}
+              (ត្រូវបម្លែងទៅជា kg/mol)
+            </p>
+            <p>យើងបាន: </p>
+            <p>
+              <InlineMath
+                math={String.raw`T = \frac{(2 \times 10^{-3}) (331)^2}{3 \times 8.31}`}
+              />
+            </p>
+            <p>
+              <InlineMath math={String.raw`T = \frac{219.122}{24.93}`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`T = 8.8\,K`} />
+            </p>
+            <p>
+              <b>ដូចនេះ</b> សីតុណ្ហភាព គឺ{" "}
+              <InlineMath math={String.raw`8.8\,K`} />។
+            </p>
+          </div>,
+          <div key="a4" className="space-y-2 ml-2">
+            <p>
+              <b>គណនាកម្ពស់ដែលម៉ូលេគុលអ៊ីដ្រូសែន​ឡើងដល់</b>
+            </p>
+            <p>
+              ​តាមច្បាប់រក្សាថាមពលមេកានិច៖ <InlineMath math="K_{av} = U" />
+            </p>
+            <p>
+              តែ៖ <InlineMath math="K_{av} = \frac{3}{2} k_B T" /> ,{" "}
+              <InlineMath math="U = mgh" />
+            </p>
+            <p>
+              នោះ : <InlineMath math={String.raw`\frac{3}{2} k_B T = mgh`} />
+            </p>
+            <p>
+              នាំឲ៖ <InlineMath math={String.raw`h = \frac{3 k_B T}{2mg}`} />
+            </p>
+            <p>ដោយ៖</p>
+            <p>
+              <InlineMath math={String.raw`T = 0 + 273 = 273\,K`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`k_B = 1.38 \times 10^{-23}\,J/K`} />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`m = m_o = 4.65 \times 10^{-26}\,kg`}
+              />
+            </p>
+            <p>
+              <InlineMath math={String.raw`g = 10\,m/s^2`} />
+            </p>
+            <p>យើងបាន: </p>
+            <p>
+              <InlineMath
+                math={String.raw`h = \frac{3 \times 1.38 \times 10^{-23} \times 272}{2 \times 4.65 \times 10^{-26} \times 10}`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`h = \frac{1.13022 \times 10^{-20}}{9.3 \times 10^{-25}}`}
+              />
+            </p>
+            <p>
+              <InlineMath math={String.raw`h = 12.2 \times 10^3\,m`} />
+            </p>
+            <p>
+              <b>ដូចនេះ</b> កម្ពស់ដែលម៉ូលេគុលនីដ្រូសែនឡើងដល់គឺ{" "}
+              <InlineMath math={String.raw`12.2 \times 10^3\,m`} />។
+            </p>
+          </div>,
+        ],
+      },
+      {
+        id: "ex2",
+        title: "លំហាត់អនុវត្តទី ២",
+        description: "ដំណោះស្រាយលំហាត់ច្បាប់ទីមួយទែម៉ូឌីណាមិច៖",
+        problemType: "Solutions to the first law of thermodynamics exercises",
+        problems: [
+          <div key="ex2-1">
+            គេធ្វើកម្មន្ត​ 2.5 kJ លើប្រព័ន្ធឧស្ម័ន​។ ក្រោយមក​កម្ដៅ 1.5 kcal
+            បានភាយចេញពីប្រព័ន្ធ ។ គណនាបម្រែបម្រួលថាមពលក្នុង ។ (
+            <InlineMath math="1cal = 4.186J" />)
+          </div>,
+          <div key="ex2-2">
+            <p>
+              មួយម៉ូលេគុលនៃឧស្ម័ន <InlineMath math={String.raw`O_2`} />{" "}
+              (សន្មតថាជាឧស្ម័នបរិសុទ្ធ)។
+            </p>
+            <p>
+              ក- ឧស្ម័នរីកមាឌនៅសីតុណ្ហភាពថេរ T = 310K ពីមាឌដើម{" "}
+              <InlineMath math={String.raw`V_i =12L`} /> ទៅ{" "}
+              <InlineMath math={String.raw`V_f =19L`} /> ។
+              គណនាកម្មន្តក្នុងដំណើរការរីកមាឧរបស់ស្ម័ន។
+            </p>
+            <p>
+              ខ- ឧស្ម័នរួមមាឌនៅសីតុណ្ហភាពថេរពីមាឌ{" "}
+              <InlineMath math={String.raw`V_i =19L`} /> ទៅ{" "}
+              <InlineMath math={String.raw`V_f = 12L`} /> ។
+              គណនាកម្មន្តក្នុងដំណើរការរួមមាឌ។
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`\ln 19 = 2.9,\ \ln 12 = 2.4,\ \ln \frac{19}{12} = 0.46,\ \ln \frac{12}{19} = -0.46,\ R = 8.31\,J/(mol \cdot K)`}
+              />
+            </p>
+          </div>,
+          <div key="ex2-3">
+            <p>ចូរគណនា​បម្រែបម្រួលថាមពលក្នុងរបស់ប្រព័ន្ធ៖</p>
+            <p>ក- ប្រព័ន្ធ​ស្រូបបរិមាណ​កម្ដៅ 500 cal និងធ្វើកម្មន្ត 400 J</p>
+            <p>ខ- ប្រព័ន្ធ​ស្រូបបរិមាណ​កម្ដៅ 300 cal និងទទួលកម្មន្ត 420 J</p>
+            <p>
+              គ- បរិមាណ​កម្ដៅ 1200 cal
+              ត្រូវបានរំភាយចេញពីប្រព័ន្ធនៅពេលមាឌថេរ ។{" "}
+            </p>
+            <span className="text-sm text-gray-700">គេឱ្យ 1cal = 4.19 J</span>
+          </div>,
+          <div key="ex2-4">
+            <p>ចូរគណនាបម្រែបម្រួលថាមពលក្នុងរបស់ប្រព័ន្ធ៖</p>
+            <p>ក- ប្រព័ន្ធធ្វើកម្មន្ត 5.0 J ខណៈវារីកអាដ្យាបាទិច</p>
+            <p>
+              ខ- ខណៈប្រព័ន្ធរួមអាដ្យាបាទិច កម្មន្ត 80 J ត្រូវបានធ្វើលើឧស្ម័ន។
+            </p>
+          </div>,
+        ],
+        answers: [
+          <div key="a1" className="space-y-2 gap-2">
+            <p>គណនាបម្រែបម្រួលថាមពលក្នុង</p>
+            <p>តាមច្បាប់ទី១ទែម៉ូឌីណាមិច:</p>
+            <p>
+              <InlineMath
+                math={String.raw`Q = \Delta U + W \implies \Delta U = Q - W`}
+              />
+            </p>
+            <p>ដោយ:</p>
+            <p>
+              <InlineMath
+                math={String.raw`W = -25\, \text{kJ} = -25 \times 10^3 \, \text{J}`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`Q = -1.5\, \text{kcal} = -1.5 \times 10^3 \text{cal}`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`1cal = 4.186 \, \text{J} = -6.279 \times 10^3 \, \text{J}`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`\implies Q = 1.5 \times 4.186 \times 10^3 = -6.279 \times 10^3 \, \text{J}`}
+              />
+            </p>
+            <p>យើងបាន:</p>
+            <p>
+              <InlineMath
+                math={String.raw`\Delta U = -6.279 \times 10^3 - (-25 \times 10^3)`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`\Delta U = 18.721 \times 10^3 \, \text{J}`}
+              />
+            </p>
+            <p>
+              ដូច្នេះ បម្រែបម្រួលថាមពលក្នុងគឺ{" "}
+              <InlineMath
+                math={String.raw` 18.721 \times 10^3 \, \text{J}`}
+              />
+            </p>
+            <p></p>
+          </div>,
+          <div key="a2" className="space-y-2 gap-2">
+            <p>ក- គណនាកម្មន្តក្នុងដំណើរការរីកមាឧ​</p>
+            <p>ដោយ T ថេរ នោះវាជាលំនាំអុីសូទែម​</p>
+            <p>
+              គេបាន :{" "}
+              <InlineMath
+                math={String.raw`W = nRT \ln \left(\frac{V_f}{V_i}\right)`}
+              />
+            </p>
+            <p>ដោយ :</p>
+            <p>
+              <InlineMath math={String.raw`R = 8.31\,J/(mol \cdot K)`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`T = 310\,K`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`n = 1.0\,mol`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`V_f = 19\,L, \, V_i = 12\,L`} />
+            </p>
+            <p>
+              គេបាន :{" "}
+              <InlineMath
+                math={String.raw`W = 1.0 \times 8.31 \times 310 \times \ln \left(\frac{19}{12}\right)`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`W = 1.2 \times 10^3 \, \text{J}`}
+              />
+            </p>
+            <p>
+              ដូច្នេះ កម្មន្តក្នុងដំណើរការរីកមាឧរបស់ស្ម័នគឺ{" "}
+              <InlineMath
+                math={String.raw`1.2 \times 10^3 \, \text{J}`}
+              />
+              ។
+            </p>
+            <p>ខ- គណនាកម្មន្តក្នុងដំណើរការរួមមាឧ​</p>
+            <p>
+              តាមរូបមន្ត :{" "}
+              <InlineMath
+                math={String.raw`W = nRT \ln \left(\frac{V_f}{V_i}\right)`}
+              />
+            </p>
+            <p>
+              ដោយ :{" "}
+              <InlineMath
+                math={String.raw`V_f = 12 \, \text{L}, \, V_i = 19 \, \text{L}`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`W = 1.0 \times 8.31 \times 310 \times \ln \left(\frac{12}{19}\right)`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`W = 1.2 \times 10^3 \, \text{J}`}
+              />{" "}
+              (ដោយវារួមមាឌ)
+            </p>
+            <p>
+              នោះ{" "}
+              <InlineMath
+                math={String.raw`W = -1.2 \times 10^3 \, \text{J}`}
+              />
+            </p>
+            <p>
+              ដូច្នេះ កម្មន្តក្នុងដំណើរការរួមមាឧរបស់ស្ម័នគឺ{" "}
+              <InlineMath
+                math={String.raw`-1.2 \times 10^3 \, \text{J}`}
+              />
+              ។
+            </p>
+          </div>,
+          <div key="a3" className="space-y-2">
+            <p>ក- គណនាបម្រែបម្រួលថាមពលក្នុង</p>
+            <p>តាមច្បាប់ទី១ទែម៉ូឌីណាមិច:</p>
+            <p>
+              <InlineMath
+                math={String.raw`Q = \Delta U + W \implies \Delta U = Q - W`}
+              />
+            </p>
+            <p>ដោយ:</p>
+            <p>
+              <InlineMath math={String.raw`W = 400\, \text{J}`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`Q = 500\, \text{cal}`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`1cal = 4.19 \, \text{J}`} />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`\implies Q = 500 \times 4.19 = 2095 \text{J}`}
+              />
+            </p>
+            <p>យើងបាន:</p>
+            <p>
+              <InlineMath math={String.raw`\Delta U = 2095 - (400)`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`\Delta U = 1695 \, \text{J}`} />
+            </p>
+            <p>
+              ដូច្នេះ បម្រែបម្រួលថាមពលក្នុងគឺ{" "}
+              <InlineMath math={String.raw` 1695 \, \text{J}`} /> ។
+            </p>
+            <p>ខ- គណនាបម្រែបម្រួលថាមពលក្នុង</p>
+            <p>តាមច្បាប់ទី១ទែម៉ូឌីណាមិច:</p>
+            <p>
+              <InlineMath
+                math={String.raw`Q = \Delta U + W \implies \Delta U = Q - W`}
+              />
+            </p>
+            <p>ដោយ:</p>
+            <p>
+              <InlineMath math={String.raw`W = -420\, \text{J}`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`Q = 300\, \text{cal}`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`1cal = 4.19 \, \text{J}`} />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`\implies Q = 300 \times 4.19 = 1257 \text{J}`}
+              />
+            </p>
+            <p>យើងបាន:</p>
+            <p>
+              <InlineMath math={String.raw`\Delta U = 1257 - (-420)`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`\Delta U = 1677 \, \text{J}`} />
+            </p>
+            <p>
+              ដូច្នេះ បម្រែបម្រួលថាមពលក្នុងគឺ{" "}
+              <InlineMath math={String.raw` 1677 \, \text{J}`} /> ។
+            </p>
+            <p>គ. គណនាបម្រែបម្រួលថាមពលក្នុង</p>
+            <p>
+              ដោយ: <InlineMath math="Q = -1200 \, \text{J}" />
+            </p>
+            <p>
+              <InlineMath math={String.raw`1cal = 4.19 \, \text{J}`} />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`\implies Q = -1200 \times 4.19 = -5028 \text{J}`}
+              />
+            </p>
+            <p>
+              តែមាឌថេរ(លំនាំអុីសូករ) <InlineMath math="\implies W = 0 " />
+            </p>
+            <p>យើងបាន:</p>
+            <p>
+              <InlineMath math={String.raw`\Delta U = -5028 - 0`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`\Delta U = -5028 \, \text{J}`} />
+            </p>
+            <p>
+              ដូច្នេះ បម្រែបម្រួលថាមពលក្នុងគឺ{" "}
+              <InlineMath math={String.raw` -5028 \, \text{J}`} /> ។
+            </p>
+          </div>,
+          <div key="a5" className="space-y-2">
+            <p>ក- គណនាបម្រែបម្រួលថាមពលក្នុងខណៈវារីកអាដ្យាបាទិច</p>
+            <p>តាមច្បាប់ទី១ទែម៉ូឌីណាមិច:</p>
+            <p>
+              <InlineMath
+                math={String.raw`Q = \Delta U + W \implies \Delta U = Q - W`}
+              />
+            </p>
+            <p>ដោយ :</p>
+            <div className="ml-4">
+              <p>
+                <InlineMath math={String.raw`Q = 0(លំនាំអាដ្យាបាទិច)`} />
+              </p>
+              <p>
+                <InlineMath math={String.raw`W = 5.0\,J`} />
+              </p>
+            </div>
+            <p>
+              យើងបាន :
+              <InlineMath math={String.raw`\Delta U = 0 - 5.0 = -5.0\,J`} />
+            </p>
+            <p>
+              ដូចនេះ បម្រែបម្រួលថាមពលក្នុងខណៈវារីកអាដ្យាបាទិចគឺ{" "}
+              <InlineMath math={String.raw`\Delta U = -5.0\,J`} />
+            </p>
+            <p>ខ- គណនាបម្រែបម្រួលថាមពលក្នុងខណៈប្រព័ន្ធរួមអាដ្យាបាទិច</p>
+            <p>តាមច្បាប់ទី១ទែម៉ូឌីណាមិច:</p>
+            <p>
+              <InlineMath
+                math={String.raw`Q = \Delta U + W \implies \Delta U = Q - W`}
+              />
+            </p>
+            <p>ដោយ :</p>
+            <p>
+              <InlineMath math={String.raw`Q = 0(លំនាំអាដ្យាបាទិច)`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`W = 80\,J`} />
+            </p>
+            <p>
+              យើងបាន :
+              <InlineMath math={String.raw`\Delta U = 0 - 80 = -80\,J`} />
+            </p>
+            <p>
+              ដូចនេះ បម្រែបម្រួលថាមពលក្នុងខណៈប្រព័ន្ធរួមអាដ្យាបាទិចគឺ{" "}
+              <InlineMath math={String.raw`\Delta U = -80\,J`} />
+            </p>
+          </div>,
+        ],
+      },
+      {
+        id: "ex3",
+        title: "លំហាត់អនុវត្តទី ៣",
+        description: "ដំណោះស្រាយលំហាត់ម៉ាសុីន៖",
+        problemType: "Solutions to the machines exercises",
+        problems: [
+          <div key="ex3-1">
+            <p>
+              ម៉ាស៊ីនកម្ដៅស្រូបកម្ដៅ​ 200J
+              ពីធុងក្ដៅដើម្បីធ្វើកម្មន្ត និងបំភាយកម្ដៅ 160J ទៅធុងត្រជាក់។
+              គណនាទិន្នផលកម្តៅនៃម៉ាស៊ីន។
+            </p>
+          </div>,
+          <div key="ex3-2">
+            <p>
+              ម៉ាស៊ីនកាណូតធ្វើការ​រវាងធុងក្តៅពីរ​នៅ{" "}
+              <InlineMath math={String.raw`500\,K`} /> និង{" "}
+              <InlineMath math={String.raw`300\,K`} />។
+            </p>
+            <p>ក- រកទិន្នផលកម្តៅនៃម៉ាស៊ីនកាកណូ។</p>
+            <p>
+              ខ- ប្រសិនបើវាស្រូបកម្តៅ 200kJ ពីធុងក្តៅ។
+              គណនាកម្មន្តដែលបានធ្វើ។
+            </p>
+          </div>,
+          <div key="ex3-3">
+            <p>
+              ម៉ូទ័រម៉ាស៊ីនម៉ាសូតនៃរថយន្តមួយដែលមានទិន្នផលកម្តៅ 0.43
+              ហើយវាស្រូបបរិមាណកម្តៅ 4.0MJ ​។ គណនា :
+            </p>
+            <p>ក- កម្មន្តមេកានិចដែលបានពី​ពីស្តុង។</p>
+            <p>ខ- បរិមាណកម្តៅ​ដែលបញ្ចេញទៅ​ក្នុងបរិយាកាស។</p>
+            <p>គ- កម្មន្តបានការ​ បើគេដឹងថាទិន្នផលគ្រឿងបញ្ជូន​ 0.82។</p>
+          </div>,
+          <div key="ex3-4">
+            <p>
+              គណនាទិន្នផលអតិបរមា របស់ម៉ាស៊ីនកម្ដៅដែលធ្វើការ​រវាងសីតុណ្ហភាព{" "}
+              <InlineMath math={String.raw`100^\circ C`} /> និង{" "}
+              <InlineMath math={String.raw`400^\circ C`} />។
+            </p>
+          </div>,
+          <div key="ex3-5">
+            <p>
+              ម៉ាស៊ីនចំហាយទឹកធ្វើការ​រវាងសីតុណ្ហភាព{" "}
+              <InlineMath math={String.raw`220^\circ C`} /> និង{" "}
+              <InlineMath math={String.raw`35^\circ C`} /> បានផ្តល់អានុភាព
+              8.0hp។ ប្រសិនបើទិន្នផល​របស់វាស្មើនឹង 30%
+              នៃទន្និផលម៉ាសុីនកាកណូដែលបានធ្វើរវាងសីតុណ្ហភាពពីរដូចខាងលើ។
+              តើមានបរិមាណកម្ដៅប៉ុន្មានកាឡូរី
+              ដែលស្រូបដោយធុងទឹកក្ដៅរាល់វិនាទី?
+              តើបរិមាណកម្តៅប៉ុន្មានកាឡូរី
+              ដែលបានបញ្ចេញទៅធុងត្រជាក់​រាល់វិនាទី?
+            </p>
+            <span className="text-sm text-gray-700">
+              គេឱ្យ 1.0hp = 786W និង 1.0cal = 4.2J
+            </span>
+          </div>,
+        ],
+        answers: [
+          <div key="a1" className="space-y-2 gap-2">
+            <p>គណនាទិន្នផលកម្តៅនៃម៉ាស៊ីន</p>
+            <p>
+              តាមរូបមន្ត : <InlineMath math={String.raw`e = 1 - \frac{Q_c}{Q_h}`} />
+            </p>
+            <p>ដោយ :</p>
+            <p>
+              <InlineMath math={String.raw`Q_c = 160\,J`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`Q_h = 200\,J`} />
+            </p>
+            <p>យើងបាន :</p>
+            <p>
+              <InlineMath
+                math={String.raw`e = 1 - \frac{160}{200} = 1 - 0.8 = 0.2 = 20\%`}
+              />
+            </p>
+            <p>
+              ដូចនេះ​ ទិន្នផលកម្តៅនៃម៉ាស៊ីនគឺ{" "}
+              <InlineMath math={String.raw`20\%`} /> ។
+            </p>
+          </div>,
+          <div key="a2" className="space-y-2 gap-2">
+            <p>ក- រកទិន្នផលកម្តៅ</p>
+            <p>
+              តាមរូបមន្ត : <InlineMath math={String.raw`e = 1 - \frac{T_c}{T_h}`} />
+            </p>
+            <p>
+              ដោយ :{" "}
+              <InlineMath math={String.raw`T_c = 300\,K,\ T_h = 500\,K`} />
+            </p>
+            <p>
+              យើងបាន : <InlineMath math={String.raw`e = 1 - \frac{300}{500}`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`e = 1 - 0.6`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`e = 0.4 = 40\%`} />
+            </p>
+            <p>ដូចនេះ ទិន្នផលកម្តៅគឺ 40%</p>
+            <p>ខ- រកកម្មន្តដែលបានធ្វើ</p>
+            <p>
+              តាមរូបមន្ត : <InlineMath math={String.raw`e = \frac{W}{Q_h}`} />
+            </p>
+            <p>
+              នាំឲ្យ : <InlineMath math={String.raw`W = e \times Q_h`} />
+            </p>
+            <p>ដោយ : </p>
+            <p>
+              <InlineMath math={String.raw`e = 0.4`} />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`Q_h = 200\,kJ = 200 \times 10^3\,J`}
+              />
+            </p>
+            <p>
+              យើងបាន :{" "}
+              <InlineMath
+                math={String.raw`W = 0.4 \times 200 \times 10^3 = 8\times 10^4\,J`}
+              />
+            </p>
+            <p>
+              ដូចនេះ កម្មន្តដែលបានធ្វើគឺ{" "}
+              <InlineMath math={String.raw` 8 \times 10^4\,J`} />
+            </p>
+          </div>,
+          <div key="a3" className="space-y-2 gap-2">
+            <p>ក- គណនាកម្មន្តមេកានិចដែលបានពី​ពីស្តុង</p>
+            <p>
+              តាមរូបមន្ត : <InlineMath math={String.raw`e_c = \frac{W_M}{Q_h}`} />
+            </p>
+            <p>
+              នាំឲ្យ : <InlineMath math={String.raw`W_M = e_c \times Q_h`} />
+            </p>
+            <p>
+              ដោយ : <InlineMath math={String.raw`e_c = 43\% = 0.43`} />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`Q_h = 4.0\,MJ = 4.0 \times 10^6\,J`}
+              />
+            </p>
+            <p>
+              យើងបាន :{" "}
+              <InlineMath
+                math={String.raw`W_M = 0.43 \times 4.0 \times 10^6 `}
+              />
+            </p>
+            <p>
+              <InlineMath math={String.raw`W_M = 1.72 \times 10^6\,J`} />
+            </p>
+            <p>
+              ដូចនេះ កម្មន្តមេកានិចដែលបានពីពីស្តុងគឺ{" "}
+              <InlineMath math={String.raw`1.72 \times 10^6\,J`} />
+            </p>
+            <p>ខ- គណនាបរិមាណកម្តៅដែលបញ្ចេញ</p>
+            <p>
+              តាមរូបមន្ត : <InlineMath math={String.raw`W_M = Q_h - Q_c`} />
+            </p>
+            <p>
+              នាំឲ្យ : <InlineMath math={String.raw`Q_c = Q_h - W_M`} />
+            </p>
+            <p>
+              ដោយ : <InlineMath math={String.raw`Q_h = 4.0 \times 10^6\,J`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`W_M = 1.72 \times 10^6\,J`} />
+            </p>
+            <p>
+              យើងបាន :{" "}
+              <InlineMath
+                math={String.raw`Q_c = 4.0 \times 10^6 - 1.72 \times 10^6 `}
+              />
+            </p>
+            <p>
+              <InlineMath math={String.raw`Q_c = 2.28 \times 10^6\,J`} />
+            </p>
+            <p>
+              ដូចនេះ បរិមាណកម្តៅដែលបញ្ចេញទៅក្នុងបរិយាកាសគឺ{" "}
+              <InlineMath math={String.raw`2.28 \times 10^6\,J`} />
+            </p>
+            <p>គ- គណនាកម្មន្តបានការ</p>
+            <p>
+              តាមរូបមន្ត : <InlineMath math={String.raw`e_M = \frac{W_U}{W_M}`} />
+            </p>
+            <p>
+              នាំឲ្យ : <InlineMath math={String.raw`W_U = e_M \times W_M`} />
+            </p>
+            <p>
+              ដោយ : <InlineMath math={String.raw`e_M = 0.82`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`W_M = 1.72 \times 10^6\,J`} />
+            </p>
+            <p>
+              យើងបាន :{" "}
+              <InlineMath
+                math={String.raw`W_U = 0.82 \times 1.72 \times 10^6 `}
+              />
+            </p>
+            <p>
+              <InlineMath math={String.raw`W_U = 1.41 \times 10^6\,J`} />
+            </p>
+            <p>
+              ដូចនេះ កម្មន្តបានការគឺ{" "}
+              <InlineMath math={String.raw` 1.41 \times 10^6\,J`} />
+            </p>
+          </div>,
+          <div key="a4" className="space-y-2 gap-2">
+            <p>គណនាទិន្នផលអតិបរមារបស់ម៉ាស៊ីនកម្ដៅ</p>
+            <p>
+              តាមរូបមន្ត : <InlineMath math={String.raw`e = 1 - \frac{T_c}{T_h}`} />
+            </p>
+            <p>
+              ដោយ :{" "}
+              <InlineMath
+                math={String.raw`T_c = 100^\circ C + 273 = 373\,K`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`T_h = 400^\circ C + 273 = 673\,K`}
+              />
+            </p>
+            <p>
+              យើងបាន : <InlineMath math={String.raw`e = 1 - \frac{373}{673} `} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`e = 1 - 0.554`} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`e = 0.446 = 45\%`} />
+            </p>
+            <p>
+              ដូចនេះ ទិន្នផលអតិបរមារបស់ម៉ាស៊ីនកម្ដៅគឺ{" "}
+              <InlineMath math={String.raw` 45\%`} />
+            </p>
+          </div>,
+          <div key="a5" className="space-y-2 gap-2">
+            <p>គណនាបរិមាណកម្តៅដែលបញ្ចេញក្នុងមួយវិនាទី</p>
+            <p>
+              ដោយបរិមាណកម្តៅនៃចំហាយទឹក​ស្មើនឹង 30%
+              នៃទិន្នផលកម្ដៅនៃម៉ាសុីនកាកណូ​
+            </p>
+            <p>
+              យើងបាន : <InlineMath math={String.raw`e' = 30\%\ e = 0.3e`} />
+            </p>
+            <p>
+              នោះ​{" "}
+              <InlineMath
+                math={String.raw`e' = 0.3(1 - \frac {T_c}{T_h})`}
+              />
+            </p>
+            <p>
+              ដោយ :{" "}
+              <InlineMath
+                math={String.raw`T_c = 35^\circ C + 273 = 308\,K`}
+              />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`T_h = 220^\circ C + 273 = 493\,K`}
+              />
+            </p>
+            <p>
+              យើងបាន :{" "}
+              <InlineMath
+                math={String.raw`e' = 0.3(1 - \frac {308}{493})`}
+              />
+            </p>
+            <p>
+              <InlineMath math={String.raw`e' = 0.3(1 - 0.624) `} />
+            </p>
+            <p>
+              <InlineMath math={String.raw`e' = 0.3 \times 0.376 = 0.1125`} />
+            </p>
+            <p>
+              តែ៖ <InlineMath math="W = P \times t" />
+            </p>
+            <p>
+              ដោយ :{" "}
+              <InlineMath
+                math={String.raw`P = 8.0hp = 5968\,W\ , t = 1\,s`}
+              />
+            </p>
+            <p>
+              យើងបាន : <InlineMath math={String.raw`W = 5968 \times 1 = 5968\,J`} />
+            </p>
+            <p>
+              ម្យ៉ាងទៀត : <InlineMath math={String.raw`e' = \frac{W}{Q_h} `} />
+            </p>
+            <p>
+              នាំឲ៖ : <InlineMath math={String.raw`Q_h = \frac{W}{e'}`} />
+            </p>
+            <p>
+              <InlineMath
+                math={String.raw`Q_h = \frac{5968}{0.1125} = 53048\,J`}
+              />
+            </p>
+            <p>
+              តាមរូបមន្ត : <InlineMath math={String.raw`Q_h = W + Q_c `} />
+            </p>
+            <p>
+              នាំឲ៖ : <InlineMath math={String.raw`Q_c = Q_h - W`} />
+            </p>
+            <p>
+              នោះ : <InlineMath math={String.raw`Q_c = 53,048 - 5968 = 47080\,J`} />
+            </p>
+            <p>
+              ដូចនេះ បរិមាណកម្តៅដែលបញ្ចេញទៅក្នុងបរិយាកាសគឺ{" "}
+              <InlineMath math={String.raw`47080\,J`} />
+            </p>
+          </div>,
+        ],
+      },
+    ] as PracticeExercise[], // Casting to PracticeExercise[] which is compatible
+  },
+];
+
+// ===== MAIN COMPONENT =====
+export default function ThermoPractice() {
+  // Stage 2: Serialized JSON
+  // We assume serializeTopicContentV3 knows how to handle
+  // { type: "summary", ... } and { type: "practice", ... }
+  const jsonV3 = serializeTopicContentV3(content);
+
+  // Stage 3: Deserialized V3 with live React nodes (renderable)
+  const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
+
+  // Render
+  return <ContentRendererV3 content={restoredContent} />;
 }

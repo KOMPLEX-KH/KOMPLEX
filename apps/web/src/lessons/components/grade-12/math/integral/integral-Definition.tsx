@@ -1,10 +1,14 @@
-import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
-import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";
-import { TipBox } from "@/components/pages/docs/boxes/TipBox";
-import { ExerciseBox } from "@/components/pages/docs/boxes/ExerciseBox";
-import { HintBox } from "@/components/pages/docs/boxes/HintBox";
-import { WarningBox } from "@/components/pages/docs/boxes/WarningBox";
-import { TopicContent } from "@/types/docs/topic";
+"use client";
+
+// ----- NEW IMPORTS -----
+import { TopicContent_V3 } from "@/types/docs/topic";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import {
+  serializeTopicContentV3,
+  deserializeTopicContentV3,
+} from "@/components/pages/docs/utils/ContentSerializerV2";
+
+// ----- KEPT IMPORTS -----
 import { BlockMath, InlineMath } from "react-katex";
 
 /** ជំនួយ UI: បង្ហាញសមីការ​ឲ្យអូសបានលើទូរស័ព្ទ និងតម្រៀបឆ្វេង */
@@ -15,8 +19,11 @@ const MathLine = ({ math }: { math: string }) => (
 );
 
 // ===== TOPIC CONTENT DATA (អាំងតេក្រាលកំណត់) =====
-const TOPIC_CONTENT: TopicContent = {
-  definition: {
+
+// Renamed to `content` and typed as `TopicContent_V3[]`
+const content: TopicContent_V3[] = [
+  {
+    type: "definition",
     title: "និយមន័យអាំងតេក្រាល (Definite Integral)",
     content: (
       <div className="space-y-5">
@@ -79,8 +86,8 @@ x_i^*\in[x_{i-1},x_i]
       </div>
     ),
   },
-
-  tip: {
+  {
+    type: "tip",
     title: "ចំណុចសំខាន់ៗ (លក្ខណៈ​មូលដ្ឋាន និងច្បាប់ជួយគណនា)",
     content: (
       <div className="space-y-3">
@@ -144,8 +151,8 @@ x_i^*\in[x_{i-1},x_i]
       </div>
     ),
   },
-
-  example: {
+  {
+    type: "example",
     question: (
       <MathLine
         math={String.raw`\text{គណនា } \ \int_{0}^{2}\big(x^2+3x\big)\,dx \quad\text{និង}\quad \int_{0}^{\tfrac{\pi}{2}}\sin(2x)\,dx`}
@@ -156,7 +163,9 @@ x_i^*\in[x_{i-1},x_i]
         title: "ឧទាហរណ៍ ១ — បញ្ចូលខ្ទង់តាម FTC",
         content: (
           <div>
-            <MathLine math={String.raw`F(x)=\frac{x^3}{3}+\frac{3}{2}x^2`} />
+            <MathLine
+              math={String.raw`F(x)=\frac{x^3}{3}+\frac{3}{2}x^2`}
+            />
             <MathLine
               math={String.raw`\int_{0}^{2} (x^2+3x)\,dx=F(2)-F(0)=\frac{26}{3}`}
             />
@@ -168,8 +177,9 @@ x_i^*\in[x_{i-1},x_i]
         content: (
           <div>
             <p>
-              កំណត់ <InlineMath math="u=2x" /> ⟹ <InlineMath math="du=2\,dx" />{" "}
-              ⟹ <InlineMath math="dx=\tfrac{1}{2}du" />។
+              កំណត់ <InlineMath math="u=2x" /> ⟹{" "}
+              <InlineMath math="du=2\,dx" /> ⟹{" "}
+              <InlineMath math="dx=\tfrac{1}{2}du" />។
             </p>
             <p>ព្រំដែន៖ x=0 ⟹ u=0, x=π/2 ⟹ u=π។</p>
             <MathLine
@@ -196,11 +206,17 @@ x_i^*\in[x_{i-1},x_i]
         ),
       },
     ],
-    answer:
-      "∫₀² (x²+3x) dx = 26/3,  ∫₀^{π/2} sin(2x) dx = 1,  តំបន់រវាង y=x និង y=x² (0→1) = 1/6",
+    // Converted string answer to JSX
+    answer: (
+      <p>
+        <InlineMath math="\int_{0}^{2}(x^2+3x) dx = 26/3" />,{" "}
+        <InlineMath math="\int_{0}^{\pi/2} \sin(2x) dx = 1" />,
+        តំបន់រវាង y=x និង y=x² (0→1) = 1/6
+      </p>
+    ),
   },
-
-  exercise: {
+  {
+    type: "exercise",
     questions: [
       // 1
       {
@@ -211,12 +227,8 @@ x_i^*\in[x_{i-1},x_i]
             <MathLine math={String.raw`\int_{0}^{1} (2x+1)\,dx`} />
           </div>
         ),
-        options: [
-          <MathLine key="dq1o0" math={String.raw`1`} />,
-          <MathLine key="dq1o1" math={String.raw`2`} />,
-          <MathLine key="dq1o2" math={String.raw`\tfrac{3}{2}`} />,
-          <MathLine key="dq1o3" math={String.raw`0`} />,
-        ],
+        // Converted JSX options to string[]
+        options: ["1", "2", String.raw`\tfrac{3}{2}`, "0"],
         correctAnswer: 1,
       },
       // 2
@@ -229,12 +241,8 @@ x_i^*\in[x_{i-1},x_i]
             <p>ស្មើ?</p>
           </div>
         ),
-        options: [
-          <MathLine key="dq2o0" math={String.raw`0`} />,
-          <MathLine key="dq2o1" math={String.raw`8`} />,
-          <MathLine key="dq2o2" math={String.raw`-8`} />,
-          <MathLine key="dq2o3" math={String.raw`16`} />,
-        ],
+        // Converted JSX options to string[]
+        options: ["0", "8", "-8", "16"],
         correctAnswer: 0,
       },
       // 3
@@ -246,12 +254,8 @@ x_i^*\in[x_{i-1},x_i]
             <MathLine math={String.raw`\int_{0}^{\pi} \sin x\,dx`} />
           </div>
         ),
-        options: [
-          <MathLine key="dq3o0" math={String.raw`2`} />,
-          <MathLine key="dq3o1" math={String.raw`1`} />,
-          <MathLine key="dq3o2" math={String.raw`0`} />,
-          <MathLine key="dq3o3" math={String.raw`\pi`} />,
-        ],
+        // Converted JSX options to string[]
+        options: ["2", "1", "0", String.raw`\pi`],
         correctAnswer: 0,
       },
       // 4
@@ -263,11 +267,12 @@ x_i^*\in[x_{i-1},x_i]
             <MathLine math={String.raw`\int_{0}^{1} \frac{1}{1+x}\,dx`} />
           </div>
         ),
+        // Converted JSX options to string[]
         options: [
-          <MathLine key="dq4o0" math={String.raw`\ln 2`} />,
-          <MathLine key="dq4o1" math={String.raw`1-\ln 2`} />,
-          <MathLine key="dq4o2" math={String.raw`2`} />,
-          <MathLine key="dq4o3" math={String.raw`\tfrac{1}{2}`} />,
+          String.raw`\ln 2`,
+          String.raw`1-\ln 2`,
+          "2",
+          String.raw`\tfrac{1}{2}`,
         ],
         correctAnswer: 0,
       },
@@ -277,14 +282,17 @@ x_i^*\in[x_{i-1},x_i]
         question: (
           <div>
             <p>គណនា (u-substitution)</p>
-            <MathLine math={String.raw`\int_{0}^{2} \frac{2x}{1+x^2}\,dx`} />
+            <MathLine
+              math={String.raw`\int_{0}^{2} \frac{2x}{1+x^2}\,dx`}
+            />
           </div>
         ),
+        // Converted JSX options to string[]
         options: [
-          <MathLine key="dq5o0" math={String.raw`\ln(5)`} />,
-          <MathLine key="dq5o1" math={String.raw`\ln(2)`} />,
-          <MathLine key="dq5o2" math={String.raw`\tfrac{1}{2}\ln(5)`} />,
-          <MathLine key="dq5o3" math={String.raw`\ln(1+x^2)\big|_0^2`} />,
+          String.raw`\ln(5)`,
+          String.raw`\ln(2)`,
+          String.raw`\tfrac{1}{2}\ln(5)`,
+          String.raw`\ln(1+x^2)\big|_0^2`,
         ],
         correctAnswer: 0, // ln(1+x^2)|0..2 = ln 5
       },
@@ -298,18 +306,19 @@ x_i^*\in[x_{i-1},x_i]
             <p>ស្មើ?</p>
           </div>
         ),
+        // Converted JSX options to string[]
         options: [
-          <MathLine key="dq6o0" math={String.raw`\tfrac{1}{4}`} />,
-          <MathLine key="dq6o1" math={String.raw`\tfrac{1}{2}`} />,
-          <MathLine key="dq6o2" math={String.raw`\tfrac{3}{4}`} />,
-          <MathLine key="dq6o3" math={String.raw`1`} />,
+          String.raw`\tfrac{1}{4}`,
+          String.raw`\tfrac{1}{2}`,
+          String.raw`\tfrac{3}{4}`,
+          "1",
         ],
         correctAnswer: 1, // split at x=1/2 -> total 1/2
       },
     ],
   },
-
-  hint: {
+  {
+    type: "hint",
     content: (
       <div className="space-y-3">
         <div className="rounded-lg border-l-4 border-sky-500 bg-sky-50/70 p-3 shadow-sm">
@@ -338,8 +347,8 @@ x_i^*\in[x_{i-1},x_i]
       </div>
     ),
   },
-
-  warning: {
+  {
+    type: "warning",
     content: (
       <div className="space-y-1.5">
         <p>
@@ -357,33 +366,16 @@ x_i^*\in[x_{i-1},x_i]
       </div>
     ),
   },
-};
+];
 
 // ===== MAIN COMPONENT =====
 export default function DefiniteIntegral() {
-  return (
-    <>
-      <DefinitionBox
-        title={TOPIC_CONTENT.definition!.title}
-        content={TOPIC_CONTENT.definition!.content}
-      />
+  // Stage 2: Serialized JSON
+  const jsonV3 = serializeTopicContentV3(content);
 
-      <TipBox
-        title={TOPIC_CONTENT.tip!.title}
-        content={TOPIC_CONTENT.tip!.content}
-      />
+  // Stage 3: Deserialized V3 with live React nodes (renderable)
+  const restoredContent = deserializeTopicContentV3(jsonV3) as TopicContent_V3[];
 
-      <ExampleBox
-        question={TOPIC_CONTENT.example!.question}
-        steps={TOPIC_CONTENT.example!.steps}
-        answer={TOPIC_CONTENT.example!.answer}
-      />
-
-      <ExerciseBox questions={TOPIC_CONTENT.exercise!.questions} />
-
-      <HintBox content={TOPIC_CONTENT.hint!.content} />
-
-      <WarningBox content={TOPIC_CONTENT.warning!.content} />
-    </>
-  );
+  // Render
+  return <ContentRendererV3 content={restoredContent} />;
 }

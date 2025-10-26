@@ -28,6 +28,8 @@ import { HintBoxProps } from "@/components/pages/docs/boxes/HintBox";
 import { WarningBoxProps } from "@/components/pages/docs/boxes/WarningBox";
 import { CustomBoxProps } from "@/components/pages/docs/boxes/CustomBox";
 import { GraphBoxProps } from "@/components/pages/docs/boxes/GraphBox";
+import { SummaryBoxProps } from "@/components/pages/docs/boxes/SummaryBox";
+import { TopicPracticeBoxProps } from "@/components/pages/docs/boxes/TopicPracticeBox";
 
 // Explanation Box Props
 import { ImageBoxProps } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
@@ -147,6 +149,12 @@ export interface TopicContent_V2 {
 
   // 3D explanation section - 3D content with explanation
   threeDExplanation?: ThreeDExplanationBoxProps[];
+
+  //Summary section 
+  summary?: SummaryBoxProps[];
+
+  //Practice section
+  practice?: TopicPracticeBoxProps[];
 }
 
 export type TopicContent_V3 =
@@ -165,7 +173,7 @@ export type TopicContent_V3 =
   | { type: "hint"} & HintBoxProps 
 
   // Warning section - important cautions or common mistakes
-  | { type: "warning"} & WarningBoxProps 
+  | { type: "warning"} & WarningBoxProps
 
   // Custom section - flexible custom content
   | { type: "custom"} & CustomBoxProps 
@@ -190,4 +198,12 @@ export type TopicContent_V3 =
   | { type: "graphExplanation"} & GraphExplanationBoxProps 
 
   // 3D explanation section - 3D content with explanation
-  | { type: "threeDExplanation"} & ThreeDExplanationBoxProps ;
+  | { type: "threeDExplanation"} & ThreeDExplanationBoxProps 
+
+  // Summary section
+  | {type: "summary"} & SummaryBoxProps 
+
+  //practice section
+  | {type: "practice"} & TopicPracticeBoxProps;
+
+  

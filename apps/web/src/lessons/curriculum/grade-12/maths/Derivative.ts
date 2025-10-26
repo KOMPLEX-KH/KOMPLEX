@@ -16,11 +16,11 @@ export const Derivative: Topic[] = [
       ),
   },
   {
-    title: "ដេរីវេពីជគណិត",
-    englishTitle: "derivative-geometric",
+    title: "ដេរីវេត្រង់ចំណុច",
+    englishTitle: "derivative-at-a-point",
     component: () =>
       import(
-        "@/lessons/components/grade-12/math/derivative/derivative-Geometry"
+        "@/lessons/components/grade-12/math/derivative/erivative-at-a-point"
       ),
   },
   {

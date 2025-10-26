@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { PracticeExercise } from "@/types/docs/topic";
 
-interface TopicPracticeBoxProps {
+export interface TopicPracticeBoxProps {
   exercises: PracticeExercise[];
 }
 
