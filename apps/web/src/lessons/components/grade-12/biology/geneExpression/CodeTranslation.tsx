@@ -14,7 +14,7 @@ import {
 import { BlockMath, InlineMath } from "react-katex";
 import "katex/dist/katex.min.css";
 
-const FirstTopicContent: TopicContent = {
+export const FirstTopicContent: TopicContent = {
   definition: {
     title: "៤.១ រីបូសូម",
     content: (

@@ -11,15 +11,15 @@ import {
 } from "@/components/pages/docs/utils/ContentSerializerV2";
 
 
-const TOPIC_CONTENT_V3: TopicContent_V3[] = [
+const content: TopicContent_V3[] = [
     {
-            type: "definition",
-            title: "តេីសមីការឌីផែរ៉ង់ស្សែលគឺជាអ្វី?",
-            content: (
-                <div>
-                    សមីការឌីផែរ៉ង់ស្សែលគឺជាជាសមីការដែលមានអនុគមន៍និងដេរីវេមួយឬច្រេីននៃអនុគមន៍នោះ។
-                </div>
-            ),
+        type: "definition",
+        title: "តេីសមីការឌីផែរ៉ង់ស្សែលគឺជាអ្វី?",
+        content: (
+            <div>
+                សមីការឌីផែរ៉ង់ស្សែលគឺជាជាសមីការដែលមានអនុគមន៍និងដេរីវេមួយឬច្រេីននៃអនុគមន៍នោះ។
+            </div>
+        ),
     },
     {
         type: "tip",
@@ -44,7 +44,7 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
                     <span>,... សុទ្ធតែជាសមីការឌីផែរ៉ង់ស្សែល។</span>
                 </div>
             </div>
-        ),        
+        ),
     },
     {
         type: "exercise",
@@ -53,7 +53,7 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
                 id: "q1",
                 question: (
                     <span>
-                       y' + y = x  តើសមីការនេះជាសមីការឌីផែរ៉ង់ស្សែលឬទេ?
+                        y&apos; + y = x  តើសមីការនេះជាសមីការឌីផែរ៉ង់ស្សែលឬទេ?
                     </span>
                 ),
                 options: ["ត្រឹមត្រូវ", "មិនត្រឹមត្រូវ"],
@@ -63,7 +63,7 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
                 id: "q2",
                 question: (
                     <span>
-                        x² + y² = 25  តើសមីការនេះជាសមីការឌីផែរ៉ង់ស្សែលឬទេ?
+                        x&apos;² + y&apos;² = 25  តើសមីការនេះជាសមីការឌីផែរ៉ង់ស្សែលឬទេ?
                     </span>
                 ),
                 options: ["ត្រឹមត្រូវ", "មិនត្រឹមត្រូវ"],
@@ -73,7 +73,7 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
                 id: "q3",
                 question: (
                     <span>
-                        តើ <InlineMath math="i^2" /> ស្មើអ្វី?
+                        តើ <InlineMath math="i&apos;^2" /> ស្មើអ្វី?
                     </span>
                 ),
                 options: ["ត្រឹមត្រូវ", "មិនត្រឹមត្រូវ"],
@@ -83,7 +83,7 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
                 id: "q4",
                 question: (
                     <span>
-                        y = mx + b  តើសមីការនេះជាសមីការឌីផែរ៉ង់ស្សែលឬទេ?
+                        y&apos; = mx + b  តើសមីការនេះជាសមីការឌីផែរ៉ង់ស្សែលឬទេ?
                     </span>
                 ),
                 options: ["ត្រឹមត្រូវ", "មិនត្រឹមត្រូវ"],
@@ -96,27 +96,21 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
 ];
 
 // Stage 2: Serialized JSON
-const jsonV2 = serializeTopicContentV3(TOPIC_CONTENT_V3);
+const jsonV2 = serializeTopicContentV3(content);
 
 // Stage 3a: Deserialized V3 with live React nodes (renderable)
 const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
 
-// Stage 3b: Deserialized V3 raw node tree (no React elements) for inspection
-const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V3[];
-
-// Helper: visualize type sequence
-const originalTypes = TOPIC_CONTENT_V3.map((i) => i.type);
 
 
-
-const differentialdefinition = () => {
+const DifferentialDefinition = () => {
     return (
         <>
             <div>
-                <ContentRendererV3 content={TOPIC_CONTENT_V3} />
+                <ContentRendererV3 content={content} />
             </div>
         </>
     );
 };
 
-export default differentialdefinition;
+export default DifferentialDefinition;

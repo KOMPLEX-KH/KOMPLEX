@@ -7,7 +7,7 @@ import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
 
 // ===== TOPIC CONTENT DATA =====
 
-const TOPIC_CONTENT_V3: TopicContent_V3[] = [
+const content: TopicContent_V3[] = [
   // ===== First Topic: Homogeneous LDE =====
   {
     type: "definition",
@@ -453,7 +453,7 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
 const DifferentialEquations = () => {
   return (
     <div>
-      <ContentRendererV3 content={TOPIC_CONTENT_V3} />
+      <ContentRendererV3 content={content} />
     </div>
   );
 };

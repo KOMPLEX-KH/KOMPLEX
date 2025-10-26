@@ -2,17 +2,10 @@
 
 import React from "react";
 import { BlockMath } from "react-katex";
-import "katex/dist/katex.min.css";
 import { TopicContent_V3 } from "@/types/docs/topic";
 import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
-import {
-  serializeTopicContentV3,
-  deserializeTopicContentV3,
-  deserializeTopicContentV3ToTree,
-} from "@/components/pages/docs/utils/ContentSerializerV2";
 
-const ProbabilityDefinition_V3: TopicContent_V3[] = [
-  // ---------------- Definition ----------------
+const content: TopicContent_V3[] = [
   {
     type: "definition",
     title: "ប្រូបាប",
@@ -165,12 +158,8 @@ const ProbabilityDefinition_V3: TopicContent_V3[] = [
   },
 ];
 
-const jsonV2 = serializeTopicContentV3(ProbabilityDefinition_V3);
-const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
-const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V3[];
-
 const ProbabilityDefinition = () => (
-  <ContentRendererV3 content={ProbabilityDefinition_V3} />
+  <ContentRendererV3 content={content} />
 );
 
 export default ProbabilityDefinition;

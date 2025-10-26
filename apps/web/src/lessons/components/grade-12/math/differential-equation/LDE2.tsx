@@ -12,7 +12,7 @@ import {
 
 // ===== TOPIC CONTENT DATA =====
 
-const TOPIC_CONTENT_V3: TopicContent_V3[] = [
+const content: TopicContent_V3[] = [
     {
         type: "definition",
         title: "សមីការអូម៉ូសែន",
@@ -453,7 +453,7 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
 ];
 
 // Stage 2: Serialized JSON
-const jsonV2 = serializeTopicContentV3(TOPIC_CONTENT_V3);
+const jsonV2 = serializeTopicContentV3(content);
 
 // Stage 3a: Deserialized V3 with live React nodes (renderable)
 const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
@@ -464,7 +464,7 @@ const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V
 const LDE2_V3 = () => {
     return (
         <div>
-            <ContentRendererV3 content={TOPIC_CONTENT_V3} />
+            <ContentRendererV3 content={content} />
         </div>
     );
 };

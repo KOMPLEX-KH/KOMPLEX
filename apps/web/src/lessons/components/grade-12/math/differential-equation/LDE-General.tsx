@@ -543,7 +543,7 @@ import {
 } from "@/components/pages/docs/utils/ContentSerializerV2";
 
 // ===== TOPIC CONTENT DATA =====
-const TOPIC_CONTENT_V3: TopicContent_V3[] = [
+const content: TopicContent_V3[] = [
   // ----- First Topic -----
   {
     type: "definition",
@@ -749,14 +749,14 @@ const TOPIC_CONTENT_V3: TopicContent_V3[] = [
 ];
 
 // ===== SERIALIZATION (OPTIONAL) =====
-const jsonV2 = serializeTopicContentV3(TOPIC_CONTENT_V3);
+const jsonV2 = serializeTopicContentV3(content);
 const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
 const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V3[];
 
 const DifferentialDefinition = () => {
   return (
     <div>
-      <ContentRendererV3 content={TOPIC_CONTENT_V3} />
+      <ContentRendererV3 content={content} />
     </div>
   );
 };

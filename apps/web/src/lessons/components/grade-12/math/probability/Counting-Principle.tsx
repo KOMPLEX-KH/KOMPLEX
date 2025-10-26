@@ -5,13 +5,9 @@ import { BlockMath, InlineMath } from "react-katex";
 import "katex/dist/katex.min.css";
 import { TopicContent_V3 } from "@/types/docs/topic";
 import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
-import {
-  serializeTopicContentV3,
-  deserializeTopicContentV3,
-  deserializeTopicContentV3ToTree,
-} from "@/components/pages/docs/utils/ContentSerializerV2";
+import { serializeTopicContentV3 } from "@/components/pages/docs/utils/ContentSerializerV2";
 
-const CountingPrinciple_V3: TopicContent_V3[] = [
+const content: TopicContent_V3[] = [
   {
     type: "definition",
     title: "គោលការណ៍ផលបូក",
@@ -284,10 +280,8 @@ const CountingPrinciple_V3: TopicContent_V3[] = [
   },
 ];
 
-const jsonV2 = serializeTopicContentV3(CountingPrinciple_V3);
-const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
-const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V3[];
+const jsonV2 = serializeTopicContentV3(content);
 
-const CountingPrinciple = () => <ContentRendererV3 content={CountingPrinciple_V3} />;
+const CountingPrinciple = () => <ContentRendererV3 content={content} />;
 
 export default CountingPrinciple;

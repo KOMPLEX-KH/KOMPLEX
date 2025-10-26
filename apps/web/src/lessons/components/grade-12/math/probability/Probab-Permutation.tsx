@@ -5,13 +5,9 @@ import { BlockMath, InlineMath } from "react-katex";
 import "katex/dist/katex.min.css";
 import { TopicContent_V3 } from "@/types/docs/topic";
 import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
-import {
-  serializeTopicContentV3,
-  deserializeTopicContentV3,
-  deserializeTopicContentV3ToTree,
-} from "@/components/pages/docs/utils/ContentSerializerV2";
+import { serializeTopicContentV3 } from "@/components/pages/docs/utils/ContentSerializerV2";
 
-const ProbabilityPermutation_V3: TopicContent_V3[] = [
+const content: TopicContent_V3[] = [
   // ---------------- First Topic ----------------
   {
     type: "definition",
@@ -223,12 +219,10 @@ const ProbabilityPermutation_V3: TopicContent_V3[] = [
   },
 ];
 
-const jsonV2 = serializeTopicContentV3(ProbabilityPermutation_V3);
-const restoredV3 = deserializeTopicContentV3(jsonV2) as TopicContent_V3[];
-const restoredV3Tree = deserializeTopicContentV3ToTree(jsonV2) as TopicContent_V3[];
+const jsonV2 = serializeTopicContentV3(content);
 
 const ProbabilityPermutationDefinition = () => (
-  <ContentRendererV3 content={ProbabilityPermutation_V3} />
+  <ContentRendererV3 content={content} />
 );
 
 export default ProbabilityPermutationDefinition;
