@@ -1,6 +1,6 @@
 'use client';
 
-import AuthModal from '@components/pages/auth/AuthModal';
+import AuthModal from '@/components/pages/auth/AuthModal';
 import { useAuth } from '@hooks/useAuth';
 
 export default function ModalRoot() {

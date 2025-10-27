@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Eye, Plus, Book } from 'lucide-react';
-import Sidebar from '@components/pages/me/Sidebar';
-import ContentError from '@components/common/ContentError';
+import Sidebar from '@/components/pages/me/Sidebar';
+import ContentError from '@/components/common/ContentError';
 import { Blog } from '@/types/content/blogs';
 import { meBlogService } from '@/services/index';
-import MeSkeleton from '@components/pages/me/MeSkeleton';
+import MeSkeleton from '@/components/pages/me/MeSkeleton';
 import { useAuth } from '@hooks/useAuth';
 
 export default function MyBlogs() {

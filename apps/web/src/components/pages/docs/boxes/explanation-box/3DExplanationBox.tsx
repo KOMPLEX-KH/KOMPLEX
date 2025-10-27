@@ -3,7 +3,7 @@
 import { Box, Maximize2, X } from 'lucide-react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
-import { ThreeD } from '@components/helper/ThreeD'
+import { ThreeD } from '@/components/helper/ThreeD'
 import { ThreeDTextItem, TwoDTextItem } from '@/types/docs/threeD'
 
 export interface ThreeDExplanationBoxProps {

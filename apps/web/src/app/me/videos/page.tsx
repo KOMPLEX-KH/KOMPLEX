@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
-import Sidebar from '@components/pages/me/Sidebar';
+import Sidebar from '@/components/pages/me/Sidebar';
 import {
     Video,
     Plus,
@@ -16,9 +16,9 @@ import {
 } from 'lucide-react';
 import { meVideoService } from '@/services/index';
 import { VideoPost } from '@/types/content/videos';
-import ContentError from '@components/common/ContentError';
-import MeSkeleton from '@components/pages/me/MeSkeleton';
-import VideoHistoryComponent from '@components/pages/me/videos/VideoHistory';
+import ContentError from '@/components/common/ContentError';
+import MeSkeleton from '@/components/pages/me/MeSkeleton';
+import VideoHistoryComponent from '@/components/pages/me/videos/VideoHistory';
 import { useAuth } from '@hooks/useAuth';
 
 export default function MyVideos() {

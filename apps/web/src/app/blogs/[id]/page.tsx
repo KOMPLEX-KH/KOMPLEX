@@ -4,13 +4,13 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Bookmark, UserPlus, UserCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import Carousel from '@components/common/Carousel';
+import Carousel from '@/components/common/Carousel';
 import { Blog } from '@/types/content/blogs';
 import { feedBlogService, meBlogService, meFollowService } from '@/services/index';
 import { BlogPostSkeleton } from '@/components/pages/blogs/BlogPostSkeleton';
-import ContentError from '@components/common/ContentError';
+import ContentError from '@/components/common/ContentError';
 import { useAuth } from '@hooks/useAuth';
-import MarkdownRenderer from '@components/helper/MarkDownRenderer';
+import MarkdownRenderer from '@/components/helper/MarkDownRenderer';
 import { BackButton } from '@/components/common/BackButton';
 export default function BlogPost() {
     const params = useParams();

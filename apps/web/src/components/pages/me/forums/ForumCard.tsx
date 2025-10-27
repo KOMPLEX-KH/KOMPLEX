@@ -2,11 +2,11 @@
 
 import { ForumPost } from '@/types/content/forums';
 import { Media } from '@/types/content/media';
-import Carousel from '@components/common/Carousel';
+import Carousel from '@/components/common/Carousel';
 import { useRouter } from 'next/navigation';
 import { Eye, MessageCircle, Heart, ThumbsUp } from 'lucide-react';
 import Link from 'next/link';
-import MarkDownRenderer from '@components/helper/MarkDownRenderer';
+import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
 
 interface ForumCardProps {
     post: ForumPost;

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Eye } from 'lucide-react';
-import ContentError from '@components/common/ContentError';
+import ContentError from '@/components/common/ContentError';
 import BlogSkeleton from '@/components/pages/blogs/BlogsSkeleton';
 import { userBlogService } from '@/services/index';
 

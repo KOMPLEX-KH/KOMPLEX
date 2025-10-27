@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Eye, ThumbsUp, MessageCircle, Calendar } from 'lucide-react';
-import ContentError from '@components/common/ContentError';
+import ContentError from '@/components/common/ContentError';
 import { userForumService } from '@/services/index';
-import Carousel from '@components/common/Carousel';
-import MarkDownRenderer from '@components/helper/MarkDownRenderer';
+import Carousel from '@/components/common/Carousel';
+import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
 
 
 interface Forum {

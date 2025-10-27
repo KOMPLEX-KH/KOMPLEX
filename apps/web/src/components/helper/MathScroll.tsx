@@ -14,3 +14,4 @@ export const MathScroll = ({ math }: { math: string }) => (
     <BlockMath math={math} />
   </div>
 );
+ 

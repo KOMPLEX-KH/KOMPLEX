@@ -1,10 +1,10 @@
 'use client'
 
-import BulletList from '@components/helper/BulletList';
+
 import { FunctionSquare, Maximize2, X } from 'lucide-react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import Graph, { Expression } from '@components/helper/Graph';
+import Graph, { Expression } from '@/components/helper/Graph';
 import { CalculatorOptions } from 'desmos';
 
 export interface GraphExplanationBoxProps {
@@ -42,9 +42,7 @@ export const GraphExplanationBox = ({ expressions, options, explanation }: Graph
                             <p className="text-gray-700 text-base">
                                 {explanation}
                             </p>
-                        ) : Array.isArray(explanation) ? (
-                            <BulletList content={explanation} />
-                        ) : (
+                        )  : (
                             <div className="text-gray-700 text-base">
                                 {explanation}
                             </div>
@@ -62,8 +60,6 @@ export const GraphExplanationBox = ({ expressions, options, explanation }: Graph
                                 <p className="text-gray-700 leading-relaxed text-base">
                                     {explanation}
                                 </p>
-                            ) : Array.isArray(explanation) ? (
-                                <BulletList content={explanation} />
                             ) : (
                                 <div className="text-gray-700 leading-relaxed text-base">
                                     {explanation}

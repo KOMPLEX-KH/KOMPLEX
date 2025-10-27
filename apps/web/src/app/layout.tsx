@@ -2,8 +2,8 @@
 
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
-import Header from "@components/common/Header";
-import ModalRoot from "@components/common/ModalRoot";
+import Header from "@/components/common/Header";
+import ModalRoot from "@/components/common/ModalRoot";
 import Script from "next/script";
 import { AuthProvider } from "@hooks/useAuth";
 import { useEffect, useState } from "react";

@@ -3,10 +3,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { ArrowLeft, Clock, Flag } from "lucide-react";
 import { useParams } from "next/navigation";
-import ExerciseBox  from "@/components/pages/exercises/ExerciseBox";
+import ExerciseBox from "@/components/pages/exercises/ExerciseBox";
 import PracticeInfo from "@/components/pages/exercises/ExerciseInfo";
 import PracticeResult from "@/components/pages/exercises/ExerciseResult";
-import ContentError from "@components/common/ContentError";
+import ContentError from "@/components/common/ContentError";
 import {
   ExerciseWithQuestions,
   ExerciseSection,
@@ -416,11 +416,10 @@ export default function LessonPage() {
             <button
               key={section.id}
               onClick={() => handleSectionChange(index)}
-              className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                index === currentSection
+              className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${index === currentSection
                   ? "bg-indigo-600 text-white shadow-md"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-sm"
-              }`}
+                }`}
             >
               {section.title}
             </button>

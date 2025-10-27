@@ -5,7 +5,7 @@ import { History, Settings, Search, ChevronDown, BarChart3 } from 'lucide-react'
 import Link from 'next/link';
 import { Listbox, Transition } from '@headlessui/react';
 import PracticeCard from '@/components/pages/exercises/ExerciseCard';
-import ContentError from '@components/common/ContentError';
+import ContentError from '@/components/common/ContentError';
 import { Subject } from '@/types/content/exercises';
 import { feedExerciseService } from '@/services/index';
 import {

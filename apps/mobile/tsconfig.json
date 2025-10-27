@@ -28,7 +28,7 @@
       "@/*": [
         "./*"
       ],
-      "@components/*": [
+      "@/components/*": [
         "./components/*"
       ],
       "@services/*": [

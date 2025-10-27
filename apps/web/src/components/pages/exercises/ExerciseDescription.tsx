@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { BookOpen, Clock, Target, User } from 'lucide-react';
-import MarkDownRenderer from '@components/helper/MarkDownRenderer';
+import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
 import type { ExerciseWithQuestions } from '@/types/content/exercises';
 
 interface ExerciseDescriptionProps {

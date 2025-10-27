@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Play, Eye, ThumbsUp, Clock } from 'lucide-react';
-import ContentError from '@components/common/ContentError';
+import ContentError from '@/components/common/ContentError';
 import { userVideoService } from '@/services/index';
 
 

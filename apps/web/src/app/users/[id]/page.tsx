@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { UserPlus, UserCheck, BookOpen, Video, MessageSquare } from 'lucide-react';
-import ContentError from '@components/common/ContentError';
-import Blogs from '@components/pages/users/Blogs';
+import ContentError from '@/components/common/ContentError';
+import Blogs from '@/components/pages/users/Blogs';
 import VideoTab from '@/components/pages/users/Videos';
-import Forums from '@components/pages/users/Forums';
+import Forums from '@/components/pages/users/Forums';
 import { userProfileService } from '@/services/index';
 import { User } from '@core-types/content/profile';
 import { useAuth } from '@hooks/useAuth';

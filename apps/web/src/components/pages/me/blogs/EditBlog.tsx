@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { Blog } from '@/types/content/blogs';
 import { Media } from '@/types/content/media';
 import { meBlogService, feedBlogService } from '@/services/index';
-import BlogEditor from '@components/common/Editor';
-import MarkDownRenderer from '@components/helper/MarkDownRenderer';
+import BlogEditor from '@/components/common/Editor';
+import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
 import { BackButton } from '@/components/common/BackButton';
 
 interface EditBlogProps {
@@ -197,7 +197,7 @@ export default function EditBlog({ blog, onSave, onCancel }: EditBlogProps) {
     return (
         <div className=" mx-auto p-5">
             {/* Header */}
-                <BackButton href="/me/blogs" />
+            <BackButton href="/me/blogs" />
             <div className="mb-6 flex items-center justify-end">
                 <button
                     onClick={() => {

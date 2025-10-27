@@ -1,4 +1,4 @@
-import BulletList from "@components/helper/BulletList";
+
 import { Lightbulb } from "lucide-react";
 
 export interface HintBoxProps {

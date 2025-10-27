@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Blog } from "@/types/content/blogs";
 import { feedBlogService, feedSearchBlogService } from "@/services/index";
 import BlogsSkeleton from "@/components/pages/blogs/BlogsSkeleton";
-import BlogError from "@components/common/ContentError";
+import BlogError from "@/components/common/ContentError";
 import Sidebar from "@/components/pages/blogs/Sidebar";
 
 // ! TO CHANGE TOPIC AND TYPE FILTERING

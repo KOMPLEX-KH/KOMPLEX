@@ -1,16 +1,16 @@
 'use client';
 
 import { Edit, Trash, Eye } from 'lucide-react';
-import ForumCard from '@components/pages/me/forums/ForumCard';
-import Comments from '@components/common/comments/Comments';
-import EditForum from '@components/pages/me/forums/EditForum';
-import ContentError from '@components/common/ContentError';
-import DeleteConfirm from '@components/common/DeleteConfirm';
+import ForumCard from '@/components/pages/me/forums/ForumCard';
+import Comments from '@/components/common/comments/Comments';
+import EditForum from '@/components/pages/me/forums/EditForum';
+import ContentError from '@/components/common/ContentError';
+import DeleteConfirm from '@/components/common/DeleteConfirm';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ForumPost } from '@/types/content/forums';
 import { feedForumService, meForumService } from '@/services/index';
-import Sidebar from '@components/pages/me/Sidebar';
+import Sidebar from '@/components/pages/me/Sidebar';
 import { useAuth } from '@hooks/useAuth';
 import { BackButton } from '@/components/common/BackButton';
 

@@ -3,8 +3,8 @@
 import React, { Fragment, useState } from "react";
 import { Box, Maximize2, X } from "lucide-react";
 import { Dialog, Transition } from "@headlessui/react";
-import BulletList from "@components/helper/BulletList";
-import { ThreeD } from "@components/helper/ThreeD";
+import BulletList from "@/components/helper/BulletList";
+import { ThreeD } from "@/components/helper/ThreeD";
 import { ThreeDTextItem, TwoDTextItem } from "@/types/docs/threeD";
 
 export interface ThreeDBoxProps {
@@ -64,8 +64,6 @@ export function ThreeDBox({
               <div className="leading-relaxed text-base text-gray-700">
                 {content}
               </div>
-            ) : Array.isArray(content) ? (
-              <BulletList content={content} />
             ) : (
               <div className="leading-relaxed text-base text-gray-700">
                 {content}

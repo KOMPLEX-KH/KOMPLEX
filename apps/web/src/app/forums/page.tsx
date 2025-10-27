@@ -1,12 +1,12 @@
 "use client";
 
-import ForumCard from "@components/pages/forums/ForumCard";
-import ForumSkeleton from "@components/pages/forums/ForumSkeleton";
-import ContentError from "@components/common/ContentError";
+import ForumCard from "@/components/pages/forums/ForumCard";
+import ForumSkeleton from "@/components/pages/forums/ForumSkeleton";
+import ContentError from "@/components/common/ContentError";
 import { useState, useEffect } from "react";
 import { ForumPost } from "@/types/content/forums";
 import { feedForumService, feedSearchForumService, meForumService } from "@/services/index";
-import Sidebar from "@components/pages/forums/Sidebar";
+import Sidebar from "@/components/pages/forums/Sidebar";
 
 export default function Forum() {
 	const [searchQuery, setSearchQuery] = useState("");

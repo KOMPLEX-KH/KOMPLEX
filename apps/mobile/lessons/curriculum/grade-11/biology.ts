@@ -10,7 +10,7 @@ import {
   Sprout,
   HeartPulse,
 } from "lucide-react";
-import ComingSoon from "@components/screens/docs/ComingSoon";
+import ComingSoon from "@/components/screens/docs/ComingSoon";
 
 export const biology: Content = {
   subject: "biology",
@@ -27,17 +27,17 @@ export const biology: Content = {
         {
           title: "សមាសធាតុគីមីក្នុងកោសិកា",
           englishTitle: "Chemical-Composition-of-Cells",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "រូបផ្តុំនិងនាទីកោសិកា",
           englishTitle: "Cell-Structure-and-Function",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ដំណុះដំណាលកោសិកានិងរូបផ្តុំសារពាង្គកាយរស់",
           englishTitle: "Cell-Development-and-Organization-of-Living-Organisms",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -50,12 +50,12 @@ export const biology: Content = {
         {
           title: "កំណកោសិកាបន្តពូជ",
           englishTitle: "Reproductive-Cells",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ការលូតលាស់របស់អំប្រ៊ីយ៉ុង",
           englishTitle: "Embryonic-Development",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -68,12 +68,12 @@ export const biology: Content = {
         {
           title: "ច្បាប់តំណពូជ",
           englishTitle: "Principles-of-Heredity",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ក្រូម៉ូសូម",
           englishTitle: "Chromosomes",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -86,12 +86,12 @@ export const biology: Content = {
         {
           title: "អាហារ",
           englishTitle: "Nutrition",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ការរំលាយអាហារ",
           englishTitle: "Digestion",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -104,12 +104,12 @@ export const biology: Content = {
         {
           title: "បណ្តូរឧស្ម័នរបស់សត្វ",
           englishTitle: "Gas-Exchange-in-Animals",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ការបញ្ចេញចោល",
           englishTitle: "Excretion",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -122,12 +122,12 @@ export const biology: Content = {
         {
           title: "របត់ឈាមនិងភាពស៊ាំ",
           englishTitle: "Blood-Circulation-and-Immunity",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ថេរលំនឹង",
           englishTitle: "Homeostasis",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -140,17 +140,17 @@ export const biology: Content = {
         {
           title: "ជាលិការុក្ខជាតិ",
           englishTitle: "Plant-Tissues",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ប្ញស",
           englishTitle: "Roots",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ដើមនិងស្លឹក",
           englishTitle: "Stems-and-Leaves",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -163,12 +163,12 @@ export const biology: Content = {
         {
           title: "ការប្រយុទ្ធប្រឆាំងនឹងជំងឺ",
           englishTitle: "Disease-Prevention-and-Control",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "អាហារនិងសុខភាព",
           englishTitle: "Nutrition-and-Health",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },

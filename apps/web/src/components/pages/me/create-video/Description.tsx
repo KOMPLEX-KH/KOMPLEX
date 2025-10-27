@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FileText } from 'lucide-react';
-import BlogEditor from '@components/common/Editor';
+import BlogEditor from '@/components/common/Editor';
 
 interface DescriptionProps {
     title: string;

@@ -3,12 +3,12 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, MessageCircle, Trash, Tag, X, Plus } from 'lucide-react';
-import Sidebar from '@components/pages/me/Sidebar';
+import Sidebar from '@/components/pages/me/Sidebar';
 import { meForumService } from '@/services/index';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@hooks/useAuth';
-import BlogEditor from '@components/common/Editor';
+import BlogEditor from '@/components/common/Editor';
 import { BackButton } from '@/components/common/BackButton';
 
 export default function CreateForum() {

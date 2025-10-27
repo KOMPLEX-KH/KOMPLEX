@@ -1,6 +1,6 @@
 import { Content } from "@core-types/docs/curriculum";
 import { Leaf, Dna, FlaskConical, User, Sprout } from "lucide-react";
-import ComingSoon from "@components/screens/docs/ComingSoon";
+import ComingSoon from "@/components/screens/docs/ComingSoon";
 
 export const biology: Content = {
   subject: "biology",
@@ -17,32 +17,32 @@ export const biology: Content = {
         {
           title: "ចំណែកថ្នាក់និងដើមឈើ មែកធាងពូជអម្បូរ",
           englishTitle: "Classification-and-Phylogenetic-Trees",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "វីរុសនិងបាក់តេរី",
           englishTitle: "Viruses-and-Bacteria",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ប្រូទីស",
           englishTitle: "Protists",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ផ្សិត",
           englishTitle: "Fungi",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "រុក្ខជាតិ",
           englishTitle: "Plants",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "សត្វ",
           englishTitle: "Animals",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -55,12 +55,12 @@ export const biology: Content = {
         {
           title: "កោសិកា",
           englishTitle: "Cells",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ប្រការីយ៉ូតនិងអឺការីយ៉ូត",
           englishTitle: "Prokaryotes-and-Eukaryotes",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -73,12 +73,12 @@ export const biology: Content = {
         {
           title: "រស្មីសំយោគ",
           englishTitle: "Photosynthesis",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ដង្ហើមកោសិកា",
           englishTitle: "Cellular-Respiration",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -91,12 +91,12 @@ export const biology: Content = {
         {
           title: "ប្រព័ន្ធគ្រោងឆ្អឹង",
           englishTitle: "Skeletal-System",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ប្រព័ន្ធសាច់ដុំ",
           englishTitle: "Muscular-System",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -109,12 +109,12 @@ export const biology: Content = {
         {
           title: "ជី",
           englishTitle: "Fertilizers",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ការបង្កាត់",
           englishTitle: "Breeding",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },

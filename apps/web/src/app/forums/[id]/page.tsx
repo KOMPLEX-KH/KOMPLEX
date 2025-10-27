@@ -2,16 +2,16 @@
 
 import Link from 'next/link';
 import { ArrowLeft, ChevronLeft } from 'lucide-react';
-import ForumCard from '@components/pages/forums/ForumCard';
-import ForumSkeleton from '@components/pages/forums/ForumSkeleton';
-import ContentError from '@components/common/ContentError';
-import Comments from '@components/common/comments/Comments';
+import ForumCard from '@/components/pages/forums/ForumCard';
+import ForumSkeleton from '@/components/pages/forums/ForumSkeleton';
+import ContentError from '@/components/common/ContentError';
+import Comments from '@/components/common/comments/Comments';
 import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { ForumPost } from '@/types/content/forums';
 import { feedForumService, meForumService } from '@/services/index';
 import { useAuth } from '@hooks/useAuth';
-import { BackButton } from '@components/common/BackButton';
+import { BackButton } from '@/components/common/BackButton';
 
 export default function ForumDiscussion() {
     const params = useParams();

@@ -2,7 +2,7 @@
 import { FunctionSquare, Maximize2, X } from "lucide-react";
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import Graph, { Expression } from "@components/helper/Graph";
+import Graph, { Expression } from "@/components/helper/Graph";
 import { CalculatorOptions } from "desmos";
 
 export interface GraphBoxProps {
@@ -10,7 +10,7 @@ export interface GraphBoxProps {
     options?: Partial<CalculatorOptions>;
 }
 
-export  function GraphBox({ expressions, options }: GraphBoxProps) {
+export function GraphBox({ expressions, options }: GraphBoxProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (

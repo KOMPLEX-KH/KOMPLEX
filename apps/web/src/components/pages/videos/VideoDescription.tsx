@@ -7,7 +7,7 @@ import { VideoPost } from '@/types/content/videos';
 import Link from 'next/link';
 import { meFollowService } from '@/services/index';
 import { useAuth } from '@hooks/useAuth';
-import MarkDownRenderer from '@components/helper/MarkDownRenderer';
+import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
 
 interface VideoDescriptionProps {
     video: VideoPost;

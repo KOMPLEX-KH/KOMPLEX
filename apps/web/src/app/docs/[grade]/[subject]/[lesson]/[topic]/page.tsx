@@ -1,8 +1,8 @@
 'use client';
 
-import DocHeader from "@components/pages/docs/DocHeader";
-import Sidebar from "@components/pages/docs/Sidebar";
-import TopicWrapper from "@components/pages/docs/TopicWrapper";
+import DocHeader from "@/components/pages/docs/DocHeader";
+import Sidebar from "@/components/pages/docs/Sidebar";
+import TopicWrapper from "@/components/pages/docs/TopicWrapper";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Grade } from "@/types/docs/curriculum";

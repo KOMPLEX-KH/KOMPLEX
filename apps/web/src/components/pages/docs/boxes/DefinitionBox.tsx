@@ -1,6 +1,6 @@
 'use client'
 
-import BulletList from '@components/helper/BulletList'
+import BulletList from '@/components/helper/BulletList'
 
 export interface DefinitionBoxProps {
     title: string | React.ReactNode
@@ -13,8 +13,6 @@ export function DefinitionBox({ title, content }: DefinitionBoxProps) {
             <h4 className="text-black font-bold text-2xl">{title}</h4>
             {typeof content === 'string' ? (
                 <div className="text-gray-700 leading-relaxed text-base">{content}</div>
-            ) : Array.isArray(content) ? (
-                <BulletList content={content} />
             ) : (
                 <div className="text-gray-700 leading-relaxed text-base">
                     {content}

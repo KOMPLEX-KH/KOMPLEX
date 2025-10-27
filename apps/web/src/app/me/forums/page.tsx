@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Sidebar from '@components/pages/me/Sidebar';
-import ContentError from '@components/common/ContentError';
+import Sidebar from '@/components/pages/me/Sidebar';
+import ContentError from '@/components/common/ContentError';
 import {
     MessageSquare,
     Plus,
@@ -14,8 +14,8 @@ import {
 } from 'lucide-react';
 import { ForumPost } from '@/types/content/forums';
 import { meForumService } from '@/services/index';
-import ForumCard from '@components/pages/me/forums/ForumCard';
-import MeSkeleton from '@components/pages/me/MeSkeleton';
+import ForumCard from '@/components/pages/me/forums/ForumCard';
+import MeSkeleton from '@/components/pages/me/MeSkeleton';
 import { useAuth } from '@hooks/useAuth';
 
 export default function MyForums() {

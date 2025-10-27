@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { BookOpen, CheckCircle, XCircle, ChevronLeft, ChevronRight } from 'lucide-react';
-import MarkDownRenderer from '@components/helper/MarkDownRenderer';
+import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
 import type { VideoExercise } from '@/types/content/videos';
 
 interface ExerciseProps {

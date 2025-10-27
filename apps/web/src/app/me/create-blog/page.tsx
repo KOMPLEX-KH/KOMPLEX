@@ -5,9 +5,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft, Book, Trash, Plus, Tag, X } from 'lucide-react';
 import { meBlogService } from '@/services/index';
-import Sidebar from '@components/pages/me/Sidebar';
+import Sidebar from '@/components/pages/me/Sidebar';
 import { useAuth } from '@hooks/useAuth';
-import BlogEditor from '@components/common/Editor';
+import BlogEditor from '@/components/common/Editor';
 import { useRouter } from 'next/navigation';
 
 export default function CreateBlog() {

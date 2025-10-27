@@ -12,6 +12,8 @@ import { ImageExplanationBox } from "@/components/pages/docs/boxes/explanation-b
 import { VideoExplanationBox } from "@/components/pages/docs/boxes/explanation-box/VideoExplanationBox";
 import { GraphExplanationBox } from "@/components/pages/docs/boxes/explanation-box/GraphExplanationBox";
 import { ThreeDExplanationBox } from "@/components/pages/docs/boxes/explanation-box/3DExplanationBox";
+import {SummaryBox} from "@/components/pages/docs/boxes/SummaryBox";
+import {TopicPracticeBox} from "@/components/pages/docs/boxes/TopicPracticeBox"
 
 export default function ContentRendererV3({ content }: { content: TopicContent_V3[] }) {
     return content.map((item, index) => (
@@ -29,6 +31,8 @@ export default function ContentRendererV3({ content }: { content: TopicContent_V
             {item.type === "videoExplanation" && <VideoExplanationBox {...item} />}
             {item.type === "graphExplanation" && <GraphExplanationBox {...item} />}
             {item.type === "threeDExplanation" && <ThreeDExplanationBox {...item} />}
+            {item.type === "summary" && <SummaryBox {...item} />}
+            {item.type === "practice" && <TopicPracticeBox {...item} />}
         </div>
     ));
 }

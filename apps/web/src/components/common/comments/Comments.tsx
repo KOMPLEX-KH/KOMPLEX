@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { ForumComment } from '@/types/content/forums';
 import { VideoComment } from '@/types/content/videos';
 import CommentComponent from './Comment';
-import ContentError from '@components/common/ContentError';
+import ContentError from '@/components/common/ContentError';
 import { feedVideoCommentService, meForumCommentService, meVideoCommentService, feedForumCommentService } from '@/services/index';
 import { useAuth } from '@hooks/useAuth';
 

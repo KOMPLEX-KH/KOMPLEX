@@ -3,14 +3,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Play, MessageSquare, BookOpen } from 'lucide-react';
 import { useParams } from 'next/navigation';
-import Comments from '@components/common/comments/Comments';
-import Exercise from '@components/pages/videos/Exercise';
-import VideoCard from '@components/pages/videos/VideoCard';
-import VideoSkeleton from '@components/pages/videos/VideoSkeleton';
-import ContentError from '@components/common/ContentError';
+import Comments from '@/components/common/comments/Comments';
+import Exercise from '@/components/pages/videos/Exercise';
+import VideoCard from '@/components/pages/videos/VideoCard';
+import VideoSkeleton from '@/components/pages/videos/VideoSkeleton';
+import ContentError from '@/components/common/ContentError';
 import type { VideoPost } from '@/types/content/videos';
 import { feedVideoService, meVideoService } from '@/services/index';
-import VideoDescription from '@components/pages/videos/VideoDescription';
+import VideoDescription from '@/components/pages/videos/VideoDescription';
 import { useAuth } from '@hooks/useAuth';
 
 

@@ -1,7 +1,6 @@
 'use client'
 
-import BulletList from '@components/helper/BulletList';
-import { VideoPlayer } from '@components/helper/VideoPlayer';
+import { VideoPlayer } from '@/components/helper/VideoPlayer';
 import { Video, Maximize2, X } from 'lucide-react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from 'react';
@@ -59,9 +58,7 @@ export const VideoExplanationBox = ({ src, videoTitle, explanation }: VideoBoxPr
                             <p className="text-gray-700 text-base">
                                 {explanation}
                             </p>
-                        ) : Array.isArray(explanation) ? (
-                            <BulletList content={explanation} />
-                        ) : (
+                        )  : (
                             <div className="text-gray-700 text-base">
                                 {explanation}
                             </div>
@@ -79,9 +76,7 @@ export const VideoExplanationBox = ({ src, videoTitle, explanation }: VideoBoxPr
                                 <p className="text-gray-700 leading-relaxed text-base">
                                     {explanation}
                                 </p>
-                            ) : Array.isArray(explanation) ? (
-                                <BulletList content={explanation} />
-                            ) : (
+                            )  : (
                                 <div className="text-gray-700 leading-relaxed text-base">
                                     {explanation}
                                 </div>

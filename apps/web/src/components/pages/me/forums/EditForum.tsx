@@ -6,8 +6,8 @@ import { ForumPost } from '@/types/content/forums';
 import { Media } from '@/types/content/media';
 import { meForumService, feedForumService } from '@/services/index';
 import { useRouter } from 'next/navigation';
-import BlogEditor from '@components/common/Editor';
-import MarkDownRenderer from '@components/helper/MarkDownRenderer';
+import BlogEditor from '@/components/common/Editor';
+import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
 
 interface EditForumProps {
     forum: ForumPost;

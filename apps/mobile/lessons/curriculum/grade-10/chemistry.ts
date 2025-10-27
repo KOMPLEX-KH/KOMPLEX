@@ -1,6 +1,6 @@
 import { Content } from "@core-types/docs/curriculum";
 import { FlaskConical, Atom, Table, Link, Leaf } from "lucide-react";
-import ComingSoon from "@components/screens/docs/ComingSoon";
+import ComingSoon from "@/components/screens/docs/ComingSoon";
 
 export const chemistry: Content = {
   subject: "chemistry",
@@ -17,12 +17,12 @@ export const chemistry: Content = {
         {
           title: "ទ្រឹស្តីអាតូម",
           englishTitle: "Atomic-Theory",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ទម្រង់អាតូម",
           englishTitle: "Atomic-Structure",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -35,12 +35,12 @@ export const chemistry: Content = {
         {
           title: "លក្ខណៈនៃតារាងខួប",
           englishTitle: "Characteristics-of-the-Periodic-Table",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "សិក្សាធាតុតាមក្រុម",
           englishTitle: "Study-of-Elements-by-Group",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -53,12 +53,12 @@ export const chemistry: Content = {
         {
           title: "សម្ព័ន្ធគីមី",
           englishTitle: "Chemical-Bonds",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ទម្រង់អង្គធាតុរឹង",
           englishTitle: "Solid-Structures",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -71,27 +71,27 @@ export const chemistry: Content = {
         {
           title: "ប្រេងកាតនិងឥន្ធនៈ",
           englishTitle: "Petroleum-and-Fuels",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "អ៊ីដ្រូកាបួឆ្អែត : អាល់កាន",
           englishTitle: "Saturated-Hydrocarbons-Alkanes",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "អ៊ីដ្រូកាបួមិនទាន់ឆ្អែត",
           englishTitle: "Unsaturated-Hydrocarbons",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "អ៊ីដ្រូកាបួប្រហើរ : បង់សែន",
           englishTitle: "Aromatic-Hydrocarbons-Benzene",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ជីគីមី",
           englishTitle: "Chemical-Fertilizers",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },

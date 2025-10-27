@@ -16,12 +16,12 @@ export const chemistry: Content = {
         {
           title: "តារាងខួបនៃធាតុគីមី",
           englishTitle: "Periodic-Table-of-Chemical-Elements",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "លក្ខណៈធាតុតាមក្រុម",
           englishTitle: "Characteristics-of-Elements-by-Group",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -34,17 +34,17 @@ export const chemistry: Content = {
         {
           title: "កាបួន",
           englishTitle: "Carbon",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "អុកស៊ីសែន",
           englishTitle: "Oxygen",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "អ៊ីដ្រូសែន",
           englishTitle: "Hydrogen",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -57,22 +57,22 @@ export const chemistry: Content = {
         {
           title: "អុកស៊ីត",
           englishTitle: "Oxide",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "អាស៊ីត",
           englishTitle: "Acid",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "បាស",
           englishTitle: "Base",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "អំបិល",
           englishTitle: "Salt",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
