@@ -38,8 +38,6 @@ import { CustomBox } from "@/components/pages/docs/boxes/CustomBox";
 import { GraphBox } from "@/components/pages/docs/boxes/GraphBox";
 import { ThreeDBox } from "@/components/pages/docs/boxes/3DBox";
 import { SummaryBox } from "@/components/pages/docs/boxes/SummaryBox";
-import { ExamQuestionBox } from "@/components/pages/docs/boxes/ExamQuestionBox";
-import { ExerciseCreationBox } from "@/components/pages/docs/boxes/ExerciseCreationBox";
 import { TopicPracticeBox } from "@/components/pages/docs/boxes/TopicPracticeBox";
 import { ThreeDExplanationBox } from "@/components/pages/docs/boxes/explanation-box/3DExplanationBox";
 import { GraphExplanationBox } from "@/components/pages/docs/boxes/explanation-box/GraphExplanationBox";
@@ -76,8 +74,6 @@ const CUSTOM_COMPONENTS = new Map<unknown, string>([
   [GraphBox, "GraphBox"],
   [ThreeDBox, "ThreeDBox"],
   [SummaryBox, "SummaryBox"],
-  // [ExamQuestionBox, "ExamQuestionBox"],
-  // [ExerciseCreationBox, "ExerciseCreationBox"],
   [TopicPracticeBox, "TopicPracticeBox"],
   [ThreeDExplanationBox, "ThreeDExplanationBox"],
   [GraphExplanationBox, "GraphExplanationBox"],
@@ -316,8 +312,6 @@ function deserializeElementValue(
     GraphBox,
     ThreeDBox,
     SummaryBox,
-    ExamQuestionBox,
-    ExerciseCreationBox,
     TopicPracticeBox,
     ThreeDExplanationBox,
     GraphExplanationBox,
