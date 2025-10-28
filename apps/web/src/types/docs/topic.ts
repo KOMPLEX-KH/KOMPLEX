@@ -100,8 +100,8 @@ export interface SummarySection {
 export interface PracticeExercise {
   id: string;
   title: string;
-  description: string;
-  problemType: string;
+  description?: string;
+  problemType?: string;
   problems: string[] | ReactNode[];
   answers?: ReactNode[];
 }
