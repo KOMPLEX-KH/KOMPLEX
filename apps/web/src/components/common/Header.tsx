@@ -58,10 +58,32 @@ export default function Header() {
 
     const [showFeedbackModal, setShowFeedbackModal] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const [isScrollingDown, setIsScrollingDown] = useState(false);
+    const [lastScrollY, setLastScrollY] = useState(0);
 
     useEffect(() => {
         setMounted(true);
     }, []);
+
+    // Handle scroll direction detection for mobile header hiding
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                // Scrolling down and past initial 50px
+                setIsScrollingDown(true);
+            } else if (currentScrollY < lastScrollY || currentScrollY <= 50) {
+                // Scrolling up or near top
+                setIsScrollingDown(false);
+            }
+
+            setLastScrollY(currentScrollY);
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [lastScrollY]);
 
     const handleLogout = async () => {
         try {
@@ -76,7 +98,7 @@ export default function Header() {
 
     return (
         <>
-            <div className="bg-white/95 backdrop-blur-md border-b border-indigo-500/10 fixed top-0 left-0 right-0 z-50 w-full">
+            <div className={`bg-white/95 backdrop-blur-md border-b border-indigo-500/10 fixed top-0 left-0 right-0 z-50 w-full transition-transform duration-300 ${isScrollingDown ? 'md:translate-y-0 -translate-y-full' : 'translate-y-0'}`}>
                 <div className="max-w-full px-6 py-2 flex justify-between items-center">
                     {/* Logo */}
                     <Link href="/" className="text-decoration-none flex items-center gap-2">

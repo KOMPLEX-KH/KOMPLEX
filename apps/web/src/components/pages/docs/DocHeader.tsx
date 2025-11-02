@@ -7,6 +7,7 @@ import { ChevronDown, Check } from 'lucide-react';
 import { Grade } from '@/types/docs/curriculum';
 import { ICON_MAP } from '@/utils/icon';
 import { feedCurriculumsService } from '@/services';
+import DocHeaderSkeleton from './DocHeaderSkeleton';
 
 interface DocHeaderProps {
     currentGrade?: { id: number };
@@ -24,7 +25,7 @@ export default function DocHeader({
 
     const topicsScrollRef = useRef<HTMLDivElement>(null);
     const [isScrollingDown, setIsScrollingDown] = useState(false);
-    const [lastScrollY, setLastScrollY] = useState(0);
+    const lastScrollYRef = useRef(0);
     const [curriculum, setCurriculum] = useState<Grade[]>(
         () => {
             if (typeof window !== 'undefined') {
@@ -78,23 +79,24 @@ export default function DocHeader({
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
+            const lastScrollY = lastScrollYRef.current;
 
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                // Scrolling down and past initial 100px
+            if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                // Scrolling down and past initial 50px
                 setIsScrollingDown(true);
-            } else if (currentScrollY < lastScrollY) {
-                // Scrolling up
+            } else if (currentScrollY < lastScrollY || currentScrollY <= 50) {
+                // Scrolling up or near top
                 setIsScrollingDown(false);
             }
 
-            setLastScrollY(currentScrollY);
+            lastScrollYRef.current = currentScrollY;
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [lastScrollY]);
+    }, []);
 
-    if (!gradeData || !currentGrade || !currentSubject || !currentLesson || !currentTopic || curriculum.length === 0) return null;
+    if (!gradeData || !currentGrade || !currentSubject || !currentLesson || !currentTopic || curriculum.length === 0) return <DocHeaderSkeleton />;
 
     const subjects = gradeData.subjects;
     const grades = curriculum.map(g => ({ value: g.id, label: g.name }));
@@ -211,7 +213,7 @@ export default function DocHeader({
             </div>
 
             {/* Mobile Subject Navigation */}
-            <div className={`lg:hidden fixed w-full top-14 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-full' : 'translate-y-0'
+            <div className={`lg:hidden fixed w-full top-14 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-[300%]' : 'translate-y-0'
                 }`}>
                 <div className="max-w-full mx-auto px-5 py-2">
                     <div className="flex items-center justify-between gap-3">
@@ -284,7 +286,7 @@ export default function DocHeader({
             </div>
 
             {/* Mobile Content Navigation */}
-            <div className={`lg:hidden fixed w-full top-27 z-30 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-full' : 'translate-y-0'
+            <div className={`lg:hidden fixed w-full top-27 z-30 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-[300%]' : 'translate-y-0'
                 }`}>
                 <div className="max-w-full mx-auto px-5 py-2">
                     <div className="flex items-center justify-start gap-3">
