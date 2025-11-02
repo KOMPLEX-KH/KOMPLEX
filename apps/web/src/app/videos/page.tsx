@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Search, Menu } from "lucide-react";
 import { useRouter } from "next/navigation";
 import VideoCard from "@/components/pages/videos/VideoCard";
@@ -20,6 +20,9 @@ export default function VideoPage() {
 	const [error, setError] = useState<string | null>(null);
 	const [match, setMatch] = useState(false);
 	const [hasSearched, setHasSearched] = useState(false); // NEW
+	const [isScrollingDown, setIsScrollingDown] = useState(false);
+	const lastScrollYRef = useRef(0);
+	const scrollUpThresholdRef = useRef(0);
 
 	const fetchVideos = async () => {
 		try {
@@ -77,6 +80,38 @@ export default function VideoPage() {
 		fetchVideos();
 	}, []);
 
+	// Handle scroll direction detection for mobile search bar hiding
+	useEffect(() => {
+		const handleScroll = () => {
+			const currentScrollY = window.scrollY;
+			const lastScrollY = lastScrollYRef.current;
+
+			if (currentScrollY > lastScrollY && currentScrollY > 50) {
+				// Scrolling down and past initial 50px
+				setIsScrollingDown(true);
+				scrollUpThresholdRef.current = 0; // Reset threshold
+			} else if (currentScrollY < lastScrollY) {
+				// Scrolling up - accumulate threshold
+				scrollUpThresholdRef.current += (lastScrollY - currentScrollY);
+
+				// Only show when scrolling up by at least 100px
+				if (scrollUpThresholdRef.current >= 100 || currentScrollY <= 100) {
+					setIsScrollingDown(false);
+					scrollUpThresholdRef.current = 0; // Reset after showing
+				}
+			} else if (currentScrollY <= 100) {
+				// Near top - always show
+				setIsScrollingDown(false);
+				scrollUpThresholdRef.current = 0;
+			}
+
+			lastScrollYRef.current = currentScrollY;
+		};
+
+		window.addEventListener('scroll', handleScroll, { passive: true });
+		return () => window.removeEventListener('scroll', handleScroll);
+	}, []);
+
 	const handleVideoClick = (videoId: string) => {
 		router.push(`/videos/${videoId}`);
 	};
@@ -88,7 +123,7 @@ export default function VideoPage() {
 			<div className="flex h-screen bg-gray-50 pt-15">
 				<Sidebar sidebarOpen={sidebarOpen} onSidebarToggle={() => setSidebarOpen(!sidebarOpen)} />
 				<div className="flex-1 overflow-y-scroll relative">
-					<div className="bg-white shadow-sm border-b border-gray-200 lg:p-2 py-2 px-5 sticky top-0 z-10">
+					<div className={`bg-white shadow-sm border-b border-gray-200 lg:p-2 py-2 px-5 sticky top-0 z-10 transition-transform duration-300 ${isScrollingDown ? 'lg:translate-y-0 -translate-y-full' : 'translate-y-0'}`}>
 						<div className="flex justify-center items-center gap-2">
 							<button
 								onClick={() => setSidebarOpen(true)}
@@ -130,7 +165,7 @@ export default function VideoPage() {
 			<div className="flex h-screen bg-gray-50 pt-15">
 				<Sidebar sidebarOpen={sidebarOpen} onSidebarToggle={() => setSidebarOpen(!sidebarOpen)} />
 				<div className="flex-1 overflow-y-scroll relative">
-					<div className="bg-white shadow-sm border-b border-gray-200 lg:p-2 py-2 px-5 sticky top-0 z-10">
+					<div className={`bg-white shadow-sm border-b border-gray-200 lg:p-2 py-2 px-5 sticky top-0 z-10 transition-transform duration-300 ${isScrollingDown ? 'lg:translate-y-0 -translate-y-full' : 'translate-y-0'}`}>
 						<div className="flex justify-center items-center gap-2">
 							<button
 								onClick={() => setSidebarOpen(true)}
@@ -172,7 +207,7 @@ export default function VideoPage() {
 			{/* Main Content */}
 			<div className="flex-1 overflow-y-scroll relative">
 				{/* Header */}
-				<div className="bg-white border-b border-gray-200 lg:p-2 py-2 px-5 sticky top-0 z-10">
+				<div className={`bg-white border-b border-gray-200 lg:p-2 py-2 px-5 sticky top-0 z-10 transition-transform duration-300 ${isScrollingDown ? 'lg:translate-y-0 -translate-y-full' : 'translate-y-0'}`}>
 					<div className="flex justify-center items-center gap-2">
 						{/* Mobile Menu Button */}
 						<button
