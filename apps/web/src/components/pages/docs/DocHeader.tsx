@@ -76,6 +76,8 @@ export default function DocHeader({
     }, [currentTopic, currentLesson, currentSubject, currentGrade, gradeData]);
 
     // Handle scroll direction detection for mobile header hiding
+    const scrollUpThresholdRef = useRef(0);
+
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
@@ -84,9 +86,20 @@ export default function DocHeader({
             if (currentScrollY > lastScrollY && currentScrollY > 50) {
                 // Scrolling down and past initial 50px
                 setIsScrollingDown(true);
-            } else if (currentScrollY < lastScrollY || currentScrollY <= 50) {
-                // Scrolling up or near top
+                scrollUpThresholdRef.current = 0; // Reset threshold
+            } else if (currentScrollY < lastScrollY) {
+                // Scrolling up - accumulate threshold
+                scrollUpThresholdRef.current += (lastScrollY - currentScrollY);
+
+                // Only show when scrolling up by at least 20px
+                if (scrollUpThresholdRef.current >= 100 || currentScrollY <= 100) {
+                    setIsScrollingDown(false);
+                    scrollUpThresholdRef.current = 0; // Reset after showing
+                }
+            } else if (currentScrollY <= 50) {
+                // Near top - always show
                 setIsScrollingDown(false);
+                scrollUpThresholdRef.current = 0;
             }
 
             lastScrollYRef.current = currentScrollY;

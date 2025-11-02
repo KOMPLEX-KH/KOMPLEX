@@ -8,7 +8,7 @@ import FeedbackModal from '../pages/feedbacks/FeedbackModal';
 import { useAuth } from '@hooks/useAuth';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/configs/firebase';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Logo } from './Logo';
 
 const navLinks = [
@@ -59,7 +59,8 @@ export default function Header() {
     const [showFeedbackModal, setShowFeedbackModal] = useState(false);
     const [mounted, setMounted] = useState(false);
     const [isScrollingDown, setIsScrollingDown] = useState(false);
-    const [lastScrollY, setLastScrollY] = useState(0);
+    const lastScrollYRef = useRef(0);
+    const scrollUpThresholdRef = useRef(0);
 
     useEffect(() => {
         setMounted(true);
@@ -69,21 +70,33 @@ export default function Header() {
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
+            const lastScrollY = lastScrollYRef.current;
 
             if (currentScrollY > lastScrollY && currentScrollY > 50) {
                 // Scrolling down and past initial 50px
                 setIsScrollingDown(true);
-            } else if (currentScrollY < lastScrollY || currentScrollY <= 50) {
-                // Scrolling up or near top
+                scrollUpThresholdRef.current = 0; // Reset threshold
+            } else if (currentScrollY < lastScrollY) {
+                // Scrolling up - accumulate threshold
+                scrollUpThresholdRef.current += (lastScrollY - currentScrollY);
+
+                // Only show when scrolling up by at least 20px
+                if (scrollUpThresholdRef.current >= 100 || currentScrollY <= 100) {
+                    setIsScrollingDown(false);
+                    scrollUpThresholdRef.current = 0; // Reset after showing
+                }
+            } else if (currentScrollY <= 50) {
+                // Near top - always show
                 setIsScrollingDown(false);
+                scrollUpThresholdRef.current = 0;
             }
 
-            setLastScrollY(currentScrollY);
+            lastScrollYRef.current = currentScrollY;
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [lastScrollY]);
+    }, []);
 
     const handleLogout = async () => {
         try {

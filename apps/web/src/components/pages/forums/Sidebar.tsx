@@ -3,7 +3,7 @@
 import { Search } from 'lucide-react';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface SidebarProps {
     onSearch?: (query: string) => void;
@@ -11,6 +11,9 @@ interface SidebarProps {
 
 export default function Sidebar({ onSearch }: SidebarProps) {
     const [searchTerm, setSearchTerm] = useState('');
+    const [isScrollingDown, setIsScrollingDown] = useState(false);
+    const lastScrollYRef = useRef(0);
+    const scrollUpThresholdRef = useRef(0);
 
     const subjects = ['ទាំងអស់', 'គណិតវិទ្យា', 'រូបវិទ្យា', 'គីមីវិទ្យា', 'ជីវវិទ្យា'];
     const types = ['ទាំងអស់', 'សំណួរ', 'ចែករំលែក', 'ពិភាក្សា'];
@@ -26,15 +29,47 @@ export default function Sidebar({ onSearch }: SidebarProps) {
         }
     };
 
+    // Handle scroll direction detection for mobile sidebar hiding
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+            const lastScrollY = lastScrollYRef.current;
+
+            if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                // Scrolling down and past initial 50px
+                setIsScrollingDown(true);
+                scrollUpThresholdRef.current = 0; // Reset threshold
+            } else if (currentScrollY < lastScrollY) {
+                // Scrolling up - accumulate threshold
+                scrollUpThresholdRef.current += (lastScrollY - currentScrollY);
+
+                // Only show when scrolling up by at least 20px
+                if (scrollUpThresholdRef.current >= 100 || currentScrollY <= 100) {
+                    setIsScrollingDown(false);
+                    scrollUpThresholdRef.current = 0; // Reset after showing
+                }
+            } else if (currentScrollY <= 50) {
+                // Near top - always show
+                setIsScrollingDown(false);
+                scrollUpThresholdRef.current = 0;
+            }
+
+            lastScrollYRef.current = currentScrollY;
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
         <>
             {/* Mobile/Tablet Secondary Bar */}
-            <div className="lg:hidden fixed top-14 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 px-4 py-3">
+            <div className={`lg:hidden fixed top-14 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 px-4 py-3 transition-transform duration-300 ${isScrollingDown ? '-translate-y-[300%]' : 'translate-y-0'}`}>
                 <div className="flex items-center gap-3">
                     <div className="flex-1">
                         <input
                             type="text"
-                            
+
                             placeholder="ស្វែងរកការពិភាក្សា..."
                             className="w-full py-2 px-3 border border-indigo-500/20 rounded-3xl text-sm bg-white/80 transition-all duration-300 focus:outline-none focus:border-indigo-600 focus:shadow-lg focus:shadow-indigo-500/10"
                             value={searchTerm}
@@ -68,7 +103,7 @@ export default function Sidebar({ onSearch }: SidebarProps) {
                     </label>
                     <input
                         type="text"
-                        
+
                         id="search-input"
                         className="w-full py-3 px-4 border border-indigo-500/20 rounded-3xl text-sm bg-white/80 transition-all duration-300 focus:outline-none focus:border-indigo-600 focus:shadow-lg focus:shadow-indigo-500/10"
                         placeholder="ស្វែងរកការពិភាក្សា..."
