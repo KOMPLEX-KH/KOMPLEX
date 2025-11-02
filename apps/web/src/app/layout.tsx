@@ -63,6 +63,11 @@ export default function RootLayout({
       <head>
         <meta charSet="utf-8" />
         <link rel="icon" href="/app/favicon.ico" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;500;700&display=swap&subset=khmer"
+          rel="stylesheet"
+        />
+
         <title>KOMPLEX</title>
       </head>
       <body
