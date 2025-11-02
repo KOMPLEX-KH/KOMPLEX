@@ -2,7 +2,7 @@
 
 import { Plus, Trash2, XCircle, BookOpen } from "lucide-react";
 import { ExerciseQuestion } from "@/types/docs/topic";
-import BlogEditor from "@components/common/Editor";
+import BlogEditor from "@/components/common/Editor";
 
 export interface ExerciseCreationBoxProps {
   questions: ExerciseQuestion[];
@@ -107,7 +107,7 @@ export function ExerciseCreationBox({
   };
 
   return (
-    <div className="lg:bg-white bg-gray-50 rounded-3xl lg:shadow-sm lg:p-6">
+    <div className="lg:bg-white bg-gray-50 rounded-3xl lg:shadow-sm lg:p-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-6 pb-4 ">
         <div className="text-indigo-600 font-semibold text-xl flex gap-3 items-center">

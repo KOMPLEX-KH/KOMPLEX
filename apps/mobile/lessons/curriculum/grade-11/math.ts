@@ -9,7 +9,7 @@ import {
   Percent,
   PieChart,
 } from "lucide-react";
-import ComingSoon from "@components/screens/docs/ComingSoon";
+import ComingSoon from "@/components/screens/docs/ComingSoon";
 
 export const math: Content = {
   subject: "math",
@@ -26,17 +26,17 @@ export const math: Content = {
         {
           title: "ស្វីតចំនួនពិត",
           englishTitle: "real-number-sequences",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ស្វីតនព្វន្ត",
           englishTitle: "arithmetic-sequences",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ស្វ៊ីតធរណីមាត្រ",
           englishTitle: "geometric-sequences",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -49,12 +49,12 @@ export const math: Content = {
         {
           title: "អនុគមន៍អិចស្ប៉ូណង់ស្យែល",
           englishTitle: "exponential-functions",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "អនុគមន៍លោការីត",
           englishTitle: "logarithmic-functions",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -67,17 +67,17 @@ export const math: Content = {
         {
           title: "អនុគមន៍ត្រីកោណមាត្រ",
           englishTitle: "trigonometric-functions",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "រូបមន្តត្រីកោណមាត្រ",
           englishTitle: "trigonometric-formulas",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "សមីការនិងវិសមីការត្រីកោណមាត្រ",
           englishTitle: "trigonometric-equations-and-inequalities",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -90,12 +90,12 @@ export const math: Content = {
         {
           title: "ម៉ាទ្រីស",
           englishTitle: "matrices",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ដេទែរមីណង់",
           englishTitle: "determinants",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -108,17 +108,17 @@ export const math: Content = {
         {
           title: "លីមីតនិងដេរីវេ",
           englishTitle: "limits-and-derivatives",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "អនុវត្តន៍នៃដេរីវេ",
           englishTitle: "applications-of-derivatives",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "អថិរភាពនិងក្រាបនៃអនុគមន៍",
           englishTitle: "variations-and-graphs-of-functions",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -131,7 +131,7 @@ export const math: Content = {
         {
           title: "ប្រូបាប",
           englishTitle: "probability",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -144,17 +144,17 @@ export const math: Content = {
         {
           title: "ការបែងចែកទិន្នន័យជាភាគរយ",
           englishTitle: "data-distribution-in-percentages",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "រង្វាស់នៃគម្លាត",
           englishTitle: "measures-of-dispersion",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "គំនូសតាងបំណែងចែក",
           englishTitle: "distribution-charts",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },

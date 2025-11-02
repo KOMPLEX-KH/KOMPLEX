@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Sidebar from '@components/pages/me/Sidebar';
+import Sidebar from '@/components/pages/me/Sidebar';
 import {
     BookOpen,
     MessageSquare,
@@ -13,7 +13,7 @@ import {
 import { formatToKhmerDate } from '@core-utils/formater';
 import api from '@/configs/axios';
 import { useAuth } from '@hooks/useAuth';
-import MeSkeleton from '@components/pages/me/MeSkeleton';
+import MeSkeleton from '@/components/pages/me/MeSkeleton';
 
 
 interface RecentActivity {

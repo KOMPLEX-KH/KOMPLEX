@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { PracticeExercise } from "@/types/docs/topic";
 
-interface TopicPracticeBoxProps {
+export interface TopicPracticeBoxProps {
   exercises: PracticeExercise[];
 }
 
@@ -29,7 +29,7 @@ export function TopicPracticeBox({ exercises }: TopicPracticeBoxProps) {
           className="bg-white rounded-3xl border border-indigo-200 shadow-sm overflow-hidden"
         >
           {/* Exercise Header */}
-          <div className="bg-indigo-50 px-6 py-4">
+          <div className="bg-indigo-50 px-4 py-4">
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-indigo-900">
                 {exercise.description}

@@ -1,171 +1,129 @@
-import { InlineMath } from 'react-katex'
-import { serializeContent, deserializeContent } from '@/components/pages/docs/utils/ContentSerializer'
-import { TipBox } from '@/components/pages/docs/boxes/TipBox'
-import { DefinitionBox } from '@/components/pages/docs/boxes/DefinitionBox'
-import { ExampleBox } from '@/components/pages/docs/boxes/ExampleBox'
-import { GraphBox } from '@/components/pages/docs/boxes/GraphBox'
-import { ThreeDBox } from '@/components/pages/docs/boxes/3DBox'
+'use client'
+
+import { ThreeDExplanationBox } from '@/components/pages/docs/boxes/explanation-box/3DExplanationBox'
+import { TopicContent_V3 } from '@/types/docs/topic';
+import { InlineMath } from 'react-katex';
+import { Calculator } from 'lucide-react';
+import { deserializeTopicContentV3, serializeTopicContentV3 } from '@/components/pages/docs/utils/ContentSerializerV2';
+import ContentRendererV3 from '@/components/pages/docs/utils/ContentRendererV2';
+
+const content: TopicContent_V3[] = [
+    {
+        type: "definition",
+        title: "តើចំនួនកុំផ្លិចជាអ្វី?",
+        content: (
+            <div>
+                ចំនួនកុំផ្លិចមានរាង <InlineMath math="z = a + bi" />
+            </div>
+        ),
+    },
+    {
+        type: "tip",
+        title: "ចំណាំ",
+        content: (
+            <div>
+                i គឺ <InlineMath math="i^2 = -1" />
+            </div>
+        ),
+    },
+    {
+        type: "example",
+        question: (
+            <span>
+                គណនា <InlineMath math="(2+3i) + (1-2i)" />
+            </span>
+        ),
+        steps: [
+            { title: "បូកផ្នែកពិត", content: <InlineMath math="2+1=3" /> },
+            { title: "បូកផ្នែកនិមិត្ត", content: <InlineMath math="3i+(-2i)=i" /> },
+        ],
+        answer: <InlineMath math="3 + i" />,
+    },
+    {
+        type: "exercise",
+        questions: [
+            {
+                id: "q1",
+                question: (
+                    <span>
+                        តើ <InlineMath math="i^2" /> ស្មើអ្វី?
+                    </span>
+                ),
+                options: ["1", "-1", "i", "2i"],
+                correctAnswer: 1,
+            },
+        ],
+    },
+    {
+        type: "hint",
+        content: (
+            <div>
+                ចងចាំថា <InlineMath math="\\overline{a+bi}=a-bi" />
+                <Calculator size={16} color="red"></Calculator>
+                <Calculator size={16} color="red"></Calculator>
+                <Calculator size={16} color="red"></Calculator>
+            </div>
+        ),
+    },
+    { type: "warning", content: "កុំបន្លំ a និង b ជាមួយគ្នា" },
+    {
+        type: "custom",
+        title: "ប្លុកផ្ទាល់ខ្លួន",
+        content: <div>ខ្លឹមសារតាមតម្រូវការ</div>,
+        backgroundColor: "bg-white",
+        borderColor: "border-gray-200",
+    },
+    {
+        type: "threeD",
+        src: "/test.glb",
+        title: "គំរូ 3D",
+        content: "ការពន្យល់អំពីរូបភាព 3D",
+        height: 300,
+    },
+    {
+        type: "graph",
+        expressions: [
+            { id: "1", latex: "y=x^2", color: "#2563eb" },
+            { id: "2", latex: "y=2x+1", color: "#dc2626" },
+        ],
+    },
+    {
+        type: "imageExplanation",
+        src: "/triangle.png",
+        imageAlt: "រូបភាព",
+        explanation: "នេះជាការពន្យល់អំពីរូបភាព",
+        title: "រូបភាព",
+    },
+    {
+        type: "videoExplanation",
+        src: "/test.mp4",
+        videoTitle: "វីដេអូ",
+        explanation: "ពន្យល់អំពីវីដេអូ",
+    },
+    {
+        type: "graphExplanation",
+        expressions: [{ id: "1", latex: "y=\\sin(x)", color: "#16a34a" }],
+        explanation: (
+            <div>
+                ក្រាប <InlineMath math="y=\\sin(x)" /> មានរយៈពេល <InlineMath math="2\\pi" />
+            </div>
+        ),
+    },
+    {
+        type: "threeDExplanation",
+        src: "/plant-cell.glb",
+        explanation: "ការពន្យល់អំពីគំរូ 3D",
+        height: 600,
+    },
+];
 
 export default function SerializationTest() {
-    // Test 1: Simple content with KaTeX
-    const simpleContent = (
-        <div>
-            i ហៅថាតម្លៃនិមិត្ត ដែល <InlineMath math="i^2 = -1" /> និង <InlineMath math="i = \sqrt{-1}" />
-            <br />
-            សំណុំចំនួនកុំផ្លិចតាងដោយ​​ C
-        </div>
-    )
-
-    // Test 2: Complete TipBox component
-    const tipBoxComponent = (
-        <TipBox
-            title="ចំណាំសំខាន់!"
-            content={
-                <div>
-                    i ហៅថាតម្លៃនិមិត្ត ដែល <InlineMath math="i^2 = -1" />
-                </div>
-            }
-        />
-    )
-
-    // Test 3: DefinitionBox component
-    const definitionBoxComponent = (
-        <DefinitionBox
-            title="កុំផ្លិច"
-            content={
-                <div>
-                    ចំនួនកុំផ្លិច គឺជាចំនួនដែលមានរាង <InlineMath math="z = a + bi" />
-                </div>
-            }
-        />
-    )
-
-    // Test 4: ExampleBox with complex structure
-    const exampleBoxComponent = (
-        <ExampleBox
-            question={<span>គណនារកតម្លៃនៃ <InlineMath math="(2+3i) + (1-2i)" /></span>}
-            steps={[
-                { title: "បូកផ្នែកពិត", content: <InlineMath math="2 + 1 = 3" /> },
-                { title: "បូកផ្នែកនិមិត្ត", content: <InlineMath math="3i + (-2i) = i" /> }
-            ]}
-            answer={<InlineMath math="3 + i" />}
-        />
-    )
-
-    // Test 5: GraphBox with expressions
-    const graphBoxComponent = (
-        <GraphBox
-            expressions={[
-                { id: '1', latex: 'y=x^2', color: '#2563eb' },
-                { id: '2', latex: 'y=2x+1', color: '#dc2626' }
-            ]}
-        />
-    )
-
-    const threeDBoxComponent = (
-        <ThreeDBox
-            src="/test.glb"
-            scale={0.1}
-            target={[0, 0, 0]}
-            title="រូបភាព 3D"
-            content={<InlineMath math="x^2 + y^2 + z^2 = 1" />}
-            // canvasBackground={<div>រូបភាព 3D</div>}
-            canvasBackgroundColor="black"
-            // threeDText={[{ content: 'x', position: [0, 0, 0], fontSize: 0.1, color: '#2563eb' }]}
-            // twoDText={[{ content: 'x', position: [0, 0, 0], fontSize: 0.1, color: '#2563eb' }]}
-            height={500}
-        />
-    )
-
-    // Serialize all tests
-    const tests = [
-        { name: "Simple Content", component: simpleContent },
-        { name: "TipBox Component", component: tipBoxComponent },
-        { name: "DefinitionBox Component", component: definitionBoxComponent },
-        { name: "ExampleBox Component", component: exampleBoxComponent },
-        { name: "GraphBox Component", component: graphBoxComponent },
-        { name: "ThreeDBox Component", component: threeDBoxComponent },
-    ]
-
+    const serialized = serializeTopicContentV3(content);
+    const deserialized = deserializeTopicContentV3(serialized);
     return (
-        <div className="p-20 space-y-12">
-            <h1 className="text-3xl font-bold mb-8">Content Serialization Test</h1>
-
-            {tests.map((test, index) => {
-                try {
-                    const serialized = serializeContent(test.component)
-                    const deserialized = deserializeContent(serialized)
-
-                    return (
-                        <div key={index} className="border-t pt-8">
-                            <h2 className="text-2xl font-bold mb-4">{test.name}</h2>
-
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                <div>
-                                    <h3 className="text-lg font-semibold mb-2">Original:</h3>
-                                    {test.component}
-                                </div>
-
-                                <div>
-                                    <h3 className="text-lg font-semibold mb-2">Deserialized (from JSON):</h3>
-                                    {deserialized}
-                                </div>
-                            </div>
-
-                            <details className="mt-4">
-                                <summary className="cursor-pointer text-sm font-medium text-indigo-600 hover:text-indigo-800">
-                                    Show JSON
-                                </summary>
-                                <pre className="bg-gray-100 p-4 rounded-lg overflow-auto text-xs mt-2">
-                                    {serialized}
-                                </pre>
-                            </details>
-                        </div>
-                    )
-                } catch (error) {
-                    return (
-                        <div key={index} className="border-t pt-8 bg-red-50 p-4 rounded-lg">
-                            <h2 className="text-2xl font-bold mb-4 text-red-600">{test.name} - ERROR</h2>
-                            <p className="text-red-700">
-                                {error instanceof Error ? error.message : String(error)}
-                            </p>
-                            <details className="mt-4">
-                                <summary className="cursor-pointer text-sm font-medium text-red-600">
-                                    Show Stack
-                                </summary>
-                                <pre className="bg-red-100 p-4 rounded-lg overflow-auto text-xs mt-2">
-                                    {error instanceof Error ? error.stack : String(error)}
-                                </pre>
-                            </details>
-                        </div>
-                    )
-                }
-            })}
-
-            <div className="border-t pt-8">
-                <h2 className="text-xl font-bold mb-4">Database Usage:</h2>
-                <pre className="bg-gray-100 p-4 rounded-lg overflow-auto text-sm">
-                    {`// 1. Save to database
-const content = (
-  <TipBox 
-    title="Example" 
-    content={<div>Text with <InlineMath math="x^2" /></div>}
-  />
-);
-const jsonString = serializeContent(content);
-await db.lessons.insert({ 
-  id: "lesson-1", 
-  content: jsonString 
-});
-
-// 2. Load from database
-const lesson = await db.lessons.findOne({ id: "lesson-1" });
-const content = deserializeContent(lesson.content);
-
-// 3. Render
-return <div>{content}</div>;`}
-                </pre>
-            </div>
-        </div>
+        <>
+            <ContentRendererV3 content={content} />
+            <ContentRendererV3 content={deserialized} />
+        </>
     )
 }

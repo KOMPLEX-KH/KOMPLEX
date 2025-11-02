@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { Search, Menu } from "lucide-react";
 import { useRouter } from "next/navigation";
-import VideoCard from "@components/pages/videos/VideoCard";
-import VideoCardSkeleton from "@components/pages/videos/VideoCardSkeleton";
-import Sidebar from "@components/pages/videos/Sidebar";
-import ContentError from "@components/common/ContentError";
+import VideoCard from "@/components/pages/videos/VideoCard";
+import VideoCardSkeleton from "@/components/pages/videos/VideoCardSkeleton";
+import Sidebar from "@/components/pages/videos/Sidebar";
+import ContentError from "@/components/common/ContentError";
 import { VideoPost } from "@/types/content/videos";
 import { feedVideoService, feedSearchVideoService } from "@/services/index";
 

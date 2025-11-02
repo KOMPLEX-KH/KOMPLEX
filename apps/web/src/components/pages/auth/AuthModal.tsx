@@ -11,9 +11,9 @@ import {
     validateLoginForm,
     validateSignupForm,
 } from '@core-utils/validator';
-import LogIn from '@components/pages/auth/LogIn';
-import SignUp from '@components/pages/auth/SignUp';
-import Header from '@components/common/Header';
+import LogIn from '@/components/pages/auth/LogIn';
+import SignUp from '@/components/pages/auth/SignUp';
+import Header from '@/components/common/Header';
 
 type ProviderKey = 'google' | 'github' | 'microsoft';
 

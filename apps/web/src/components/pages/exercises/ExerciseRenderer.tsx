@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, BookOpen, CheckCircle, XCircle } from 'lucide-react';
-import MarkDownRenderer from '@components/helper/MarkDownRenderer';
+import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
 import type { Question } from '@/types/content/exercises';
 
 interface ExerciseRendererProps {

@@ -3,16 +3,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Trash, Edit } from 'lucide-react';
-import Sidebar from '@components/pages/me/Sidebar';
-import Carousel from '@components/common/Carousel';
-import EditBlog from '@components/pages/me/blogs/EditBlog';
-import ContentError from '@components/common/ContentError';
-import DeleteConfirm from '@components/common/DeleteConfirm';
+import Sidebar from '@/components/pages/me/Sidebar';
+import Carousel from '@/components/common/Carousel';
+import EditBlog from '@/components/pages/me/blogs/EditBlog';
+import ContentError from '@/components/common/ContentError';
+import DeleteConfirm from '@/components/common/DeleteConfirm';
 import { Blog } from '@/types/content/blogs';
 import { feedBlogService, meBlogService } from '@/services/index';
 import { BlogPostSkeleton } from '@/components/pages/blogs/BlogPostSkeleton';
 import { useAuth } from '@hooks/useAuth';
-import MarkDownRenderer from '@components/helper/MarkDownRenderer';
+import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
 import { BackButton } from '@/components/common/BackButton';
 
 

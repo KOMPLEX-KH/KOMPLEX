@@ -1,6 +1,6 @@
 import { tw } from "@/utils/styles";
 import { Pressable, View } from "react-native";
-import { Text } from '@components/common/Text'
+import { Text } from '@/components/common/Text'
 import { Href, useRouter } from "expo-router";
 
 interface props {

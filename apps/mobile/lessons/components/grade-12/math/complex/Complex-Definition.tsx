@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, ScrollView } from 'react-native'
-import { Text } from '@components/common/Text'
+import { Text } from '@/components/common/Text'
 import DefinitionBox from '@/components/screens/docs/boxes/DefinitionBox'
-import TipBox from '@/components/screens/docs/boxes/TipBox'
+import { TipBox } from '@/components/screens/docs/boxes/TipBox'
 import { tw } from '@/utils/styles'
 
 const ComplexDefinition = () => {

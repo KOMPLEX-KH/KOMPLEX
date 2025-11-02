@@ -15,7 +15,7 @@ import {
   ArrowRight,
   RotateCcw,
 } from "lucide-react";
-import ComingSoon from "@components/screens/docs/ComingSoon";
+import ComingSoon from "@/components/screens/docs/ComingSoon";
 
 export const math: Content = {
   subject: "math",
@@ -32,17 +32,17 @@ export const math: Content = {
         {
           title: "តក្កវិទ្យា",
           englishTitle: "Logic",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "សំណុំ",
           englishTitle: "Sets",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ចំនួន",
           englishTitle: "Numbers",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -55,12 +55,12 @@ export const math: Content = {
         {
           title: "ពហុធា",
           englishTitle: "Polynomials",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ប្រមាណវិធីចែកពហុធា",
           englishTitle: "Polynomial-Division-Operations",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -73,17 +73,17 @@ export const math: Content = {
         {
           title: "សមីការដឺក្រេទី 2មានមួយអញ្ញាតិ",
           englishTitle: "Quadratic-Equations-with-One-Variable",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ប្រព័ន្ធសមីការដឺក្រេលំដាប់ខ្ពស់",
           englishTitle: "Systems-of-Higher-Degree-Equations",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "វិសមីការ",
           englishTitle: "Inequalities",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -96,22 +96,22 @@ export const math: Content = {
         {
           title: "កូអរដោនេនៃចំណុច",
           englishTitle: "Coordinates-of-a-Point",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "សមីការបន្ទាត់",
           englishTitle: "Equation-of-a-Line",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "សមីការរង្វង់",
           englishTitle: "Equation-of-a-Circle",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ដំណោះស្រាយវិសមីការតាមក្រាប",
           englishTitle: "Graphical-Solutions-of-Inequalities",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -124,17 +124,17 @@ export const math: Content = {
         {
           title: "អនុគមន៍ និងក្រាបនៃអនុគមន៍",
           englishTitle: "Functions-and-Graphs-of-Functions",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "អនុគមន៍ដឺក្រេទី 2 និងក្រាបរបស់វា",
           englishTitle: "Quadratic-Functions-and-Their-Graphs",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "អនុគមន៍សនិទាន អនុគមន៍អសនិទាន",
           englishTitle: "Rational-Functions-Irrational-Functions",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -147,12 +147,12 @@ export const math: Content = {
         {
           title: "ផលធៀបត្រីកោណមាត្រ",
           englishTitle: "Trigonometric-Ratios",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ការអនុវត្តនៃផលធៀបត្រីកោណមាត្រ",
           englishTitle: "Application-of-Trigonometric-Ratios",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -165,12 +165,12 @@ export const math: Content = {
         {
           title: "បំណែងចែកប្រេកង់និងការតាងក្រាប",
           englishTitle: "Frequency-Distribution-and-Graphing",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "រង្វាស់ទីតាំង",
           englishTitle: "Measures-of-Position",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -183,12 +183,12 @@ export const math: Content = {
         {
           title: "ចម្លាស់",
           englishTitle: "Permutations",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "បន្សំ",
           englishTitle: "Combinations",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -201,12 +201,12 @@ export const math: Content = {
         {
           title: "វ៉ិចទ័រនិងប្រមាណវិធីលើវ៉ិចទ័រ",
           englishTitle: "Vectors-and-Operations-on-Vectors",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ការអនុវត្តនៃវ៉ិចទ័រ",
           englishTitle: "Application-of-Vectors",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -219,22 +219,22 @@ export const math: Content = {
         {
           title: "បំលែងកិល",
           englishTitle: "Translation",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "បំលែងឆ្លុះ",
           englishTitle: "Reflection",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "បំលែងវិល",
           englishTitle: "Rotation",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "បំលែងចាំង",
           englishTitle: "Dilation",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -247,17 +247,17 @@ export const math: Content = {
         {
           title: "រូបធរណីមាត្រក្នុងលំហ",
           englishTitle: "Geometric-Figures-in-Space",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "បន្ទាត់និងប្លង់ស្របក្នុងលំហ",
           englishTitle: "Parallel-Lines-and-Planes-in-Space",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ភាពអរតួកូណាល់ក្នុងលំហ",
           englishTitle: "Orthogonality-in-Space",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },

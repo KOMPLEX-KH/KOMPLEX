@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Text } from "@components/common/Text"
+import { Text } from "@/components/common/Text"
 import { useNavigation } from "@react-navigation/native"
 import { useLayoutEffect } from "react"
 import { HEADER_CONFIG } from "@/constants/header-config"

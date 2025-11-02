@@ -4,28 +4,56 @@ import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { ChevronDown, Check } from 'lucide-react';
-import { curriculum } from '@/lessons/curriculum';
+import { Grade } from '@/types/docs/curriculum';
+import { ICON_MAP } from '@/utils/icon';
+import { feedCurriculumsService } from '@/services';
+import DocHeaderSkeleton from './DocHeaderSkeleton';
 
 interface DocHeaderProps {
-    currentGrade?: string;
-    currentSubject?: string;
-    currentLesson?: string;
-    currentTopic?: string;
+    currentGrade?: { id: number };
+    currentSubject?: { id: number };
+    currentLesson?: { id: number };
+    currentTopic?: { id: number };
 }
 
 export default function DocHeader({
-    currentGrade = 'grade-12',
-    currentSubject = 'math',
-    currentLesson = 'limits',
-    currentTopic = 'zero-over-zero'
+    currentGrade,
+    currentSubject,
+    currentLesson,
+    currentTopic
 }: DocHeaderProps) {
 
     const topicsScrollRef = useRef<HTMLDivElement>(null);
     const [isScrollingDown, setIsScrollingDown] = useState(false);
-    const [lastScrollY, setLastScrollY] = useState(0);
+    const lastScrollYRef = useRef(0);
+    const [curriculum, setCurriculum] = useState<Grade[]>(
+        () => {
+            if (typeof window !== 'undefined') {
+                const stored = localStorage.getItem("curriculum");
+                return stored ? JSON.parse(stored) : [];
+            }
+            return [];
+        }
+    );
+
+    // Fallback fetch if curriculum is empty (shouldn't happen with layout.tsx)
+    useEffect(() => {
+        if (curriculum.length === 0) {
+            const fetchCurriculum = async () => {
+                try {
+                    const curriculumData = await feedCurriculumsService.getCurriculum();
+                    setCurriculum(curriculumData);
+                    localStorage.setItem('curriculum', JSON.stringify(curriculumData));
+                } catch (error) {
+                    console.error('Error fetching curriculum:', error);
+                }
+            };
+            fetchCurriculum();
+        }
+    }, [curriculum.length]);
 
     // Find the current grade and subject data
-    const gradeData = curriculum.find(g => g.grade === currentGrade);
+    const gradeData = curriculum.find(g => g.id === currentGrade?.id);
 
     // Scroll to selected topic on mount and when topic changes
     useEffect(() => {
@@ -51,40 +79,41 @@ export default function DocHeader({
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
+            const lastScrollY = lastScrollYRef.current;
 
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                // Scrolling down and past initial 100px
+            if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                // Scrolling down and past initial 50px
                 setIsScrollingDown(true);
-            } else if (currentScrollY < lastScrollY) {
-                // Scrolling up
+            } else if (currentScrollY < lastScrollY || currentScrollY <= 50) {
+                // Scrolling up or near top
                 setIsScrollingDown(false);
             }
 
-            setLastScrollY(currentScrollY);
+            lastScrollYRef.current = currentScrollY;
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [lastScrollY]);
+    }, []);
 
-    if (!gradeData) return null;
+    if (!gradeData || !currentGrade || !currentSubject || !currentLesson || !currentTopic || curriculum.length === 0) return <DocHeaderSkeleton />;
 
-    const subjects = gradeData.content;
-    const grades = curriculum.map(g => ({ value: g.grade, label: g.gradeKhmer }));
+    const subjects = gradeData.subjects;
+    const grades = curriculum.map(g => ({ value: g.id, label: g.name }));
 
     // Get current selections
-    const currentGradeData = grades.find(g => g.value === currentGrade);
-    const currentSubjectData = subjects.find(s => s.subject === currentSubject);
-    const currentLessonData = currentSubjectData?.lessons.find(l => l.lesson === currentLesson);
+    const currentGradeData = grades.find(g => g.value === gradeData.id);
+    const currentSubjectData = subjects.find(s => s.id === currentSubject.id);
+    const currentLessonData = currentSubjectData?.lessons.find(l => l.id === currentLesson.id);
 
-    const handleChangeGrade = (grade: string) => {
-        const gradeData = curriculum.find(g => g.grade === grade);
+    const handleChangeGrade = (grade: number) => {
+        const gradeData = curriculum.find(g => g.id === grade);
         if (gradeData) {
-            const subjects = gradeData.content;
+            const subjects = gradeData.subjects;
             const firstSubject = subjects[0];
             const firstLesson = firstSubject.lessons[0];
             const firstTopic = firstLesson.topics[0];
-            window.location.href = `/docs/${grade}/${firstSubject.subject}/${firstLesson.lesson}/${firstTopic.englishTitle}`;
+            window.location.href = `/docs/${gradeData.id}/${firstSubject.id}/${firstLesson.id}/${firstTopic.id}`;
         }
     }
 
@@ -96,19 +125,19 @@ export default function DocHeader({
                     <div className="flex items-center justify-between gap-5">
                         <div className="flex items-center gap-4">
                             {subjects.map((subject) => {
-                                const Icon = subject.icon;
-                                const isActive = currentSubject === subject.subject;
+                                const Icon = ICON_MAP[subject.icon];
+                                const isActive = currentSubject.id === subject.id;
                                 return (
                                     <Link
-                                        key={subject.subject}
-                                        href={`/docs/${currentGrade}/${subject.subject}/${subject.lessons[0].lesson}/${subject.lessons[0].topics[0].englishTitle}`}
+                                        key={subject.id}
+                                        href={`/docs/${gradeData.id}/${subject.id}/${subject.lessons[0].id}/${subject.lessons[0].topics[0].id}`}
                                         className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${isActive
                                             ? 'text-indigo-600 bg-indigo-50/90 border border-indigo-500/20 shadow-sm'
                                             : 'text-gray-600 bg-white/80 backdrop-blur-sm border border-indigo-500/10 hover:text-indigo-600 hover:bg-indigo-50/90'
                                             }`}
                                     >
                                         <Icon size={18} />
-                                        {subject.title}
+                                        {subject.name}
                                     </Link>
                                 );
                             })}
@@ -116,7 +145,7 @@ export default function DocHeader({
                         {/* Grade select for desktop */}
                         <div className="hidden lg:flex items-center bg-indigo-50/50 p-1 gap-4 rounded-full">
                             {grades.map((grade) => {
-                                const isActive = currentGrade === grade.value;
+                                const isActive = gradeData.id === grade.value;
                                 return (
                                     <button
                                         key={grade.value}
@@ -184,25 +213,25 @@ export default function DocHeader({
             </div>
 
             {/* Mobile Subject Navigation */}
-            <div className={`lg:hidden fixed w-full top-13 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-full' : 'translate-y-0'
+            <div className={`lg:hidden fixed w-full top-14 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-[300%]' : 'translate-y-0'
                 }`}>
                 <div className="max-w-full mx-auto px-5 py-2">
                     <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
                             {subjects.map((subject) => {
-                                const Icon = subject.icon;
-                                const isActive = currentSubject === subject.subject;
+                                const Icon = ICON_MAP[subject.icon];
+                                const isActive = currentSubject.id === subject.id;
                                 return (
                                     <Link
-                                        key={subject.subject}
-                                        href={`/docs/${currentGrade}/${subject.subject}/${subject.lessons[0].lesson}/${subject.lessons[0].topics[0].englishTitle}`}
+                                        key={subject.id}
+                                        href={`/docs/${gradeData.id}/${subject.id}/${subject.lessons[0].id}/${subject.lessons[0].topics[0].id}`}
                                         className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-xs whitespace-nowrap flex-shrink-0 ${isActive
                                             ? 'text-indigo-600 bg-indigo-50/90 border border-indigo-500/20 shadow-sm'
                                             : 'text-gray-600 bg-white/80 backdrop-blur-sm border border-indigo-500/10 hover:text-indigo-600 hover:bg-indigo-50/90'
                                             }`}
                                     >
-                                        <Icon size={16} />
-                                        {subject.title}
+                                        <Icon size={18} />
+                                        {subject.name}
                                     </Link>
                                 );
                             })}
@@ -211,7 +240,10 @@ export default function DocHeader({
                         {/* Mobile Grade Dropdown */}
                         <Listbox value={currentGradeData} onChange={(grade) => {
                             if (grade) {
-                                window.location.href = `/docs/${grade.value}/${subjects[0].subject}/${subjects[0].lessons[0].lesson}/${subjects[0].lessons[0].topics[0].englishTitle}`;
+                                const targetGrade = curriculum.find(g => g.id === grade.value);
+                                if (targetGrade) {
+                                    window.location.href = `/docs/${targetGrade.id}/${targetGrade.subjects[0].id}/${targetGrade.subjects[0].lessons[0].id}/${targetGrade.subjects[0].lessons[0].topics[0].id}`;
+                                }
                             }
                         }}>
                             <div className="relative">
@@ -254,19 +286,19 @@ export default function DocHeader({
             </div>
 
             {/* Mobile Content Navigation */}
-            <div className={`lg:hidden fixed w-full top-25.5 z-30 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-full' : 'translate-y-0'
+            <div className={`lg:hidden fixed w-full top-27 z-30 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-[300%]' : 'translate-y-0'
                 }`}>
                 <div className="max-w-full mx-auto px-5 py-2">
                     <div className="flex items-center justify-start gap-3">
                         {/* Mobile Lesson Dropdown */}
                         <Listbox value={currentLessonData} onChange={(lesson) => {
                             if (lesson) {
-                                window.location.href = `/docs/${currentGrade}/${currentSubject}/${lesson.lesson}/${lesson.topics[0].englishTitle}`;
+                                window.location.href = `/docs/${gradeData.id}/${currentSubject.id}/${lesson.id}/${lesson.topics[0].id}`;
                             }
                         }}>
                             <div className="relative">
                                 <Listbox.Button className="bg-white/95 border border-indigo-500/20 rounded-full px-2 py-2 text-xs font-medium text-gray-700 cursor-pointer transition-all duration-300 backdrop-blur-sm  focus:outline-none  flex items-center justify-between  max-w-[80px] min-w-[60px] ">
-                                    <span className="truncate">{currentLessonData?.title}</span>
+                                    <span className="truncate">{currentLessonData?.name}</span>
                                     <ChevronDown size={14} className="text-gray-500 flex-shrink-0" />
                                 </Listbox.Button>
                                 <Transition
@@ -278,9 +310,9 @@ export default function DocHeader({
                                     leaveTo="transform scale-95 opacity-0"
                                 >
                                     <Listbox.Options className="absolute left-0 mt-2 w-48 bg-white/95 rounded-3xl border border-indigo-500/20 shadow-lg backdrop-blur-sm z-50 max-h-60 overflow-auto scrollbar-hide p-1.5 focus:outline-none">
-                                        {subjects.find(s => s.subject === currentSubject)?.lessons.map(lesson => (
+                                        {subjects.find(s => s.id === currentSubject.id)?.lessons.map(lesson => (
                                             <Listbox.Option
-                                                key={lesson.lesson}
+                                                key={lesson.id}
                                                 value={lesson}
                                                 className={({ active }) =>
                                                     `relative cursor-pointer select-none py-2 px-2 text-xs rounded-full ${active ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700'
@@ -289,7 +321,7 @@ export default function DocHeader({
                                             >
                                                 {({ selected }) => (
                                                     <div className="flex items-center justify-between">
-                                                        <span>{lesson.title}</span>
+                                                        <span>{lesson.name}</span>
                                                         {selected && <Check size={14} className="text-indigo-600" />}
                                                     </div>
                                                 )}
@@ -302,12 +334,12 @@ export default function DocHeader({
 
                         {/* Mobile Topics */}
                         <div ref={topicsScrollRef} className="flex items-center gap-2 overflow-x-auto scrollbar-hide" id="topics-scroll-container">
-                            {subjects.find(s => s.subject === currentSubject)?.lessons.find(l => l.lesson === currentLesson)?.topics.map((topic, index) => {
-                                const isActive = currentTopic === topic.englishTitle;
+                            {subjects.find(s => s.id === currentSubject.id)?.lessons.find(l => l.id === currentLesson.id)?.topics.map((topic, index) => {
+                                const isActive = currentTopic.id === topic.id;
                                 return (
                                     <Link
-                                        key={topic.englishTitle}
-                                        href={`/docs/${currentGrade}/${currentSubject}/${currentLesson}/${topic.englishTitle}`}
+                                        key={topic.id}
+                                        href={`/docs/${gradeData.id}/${currentSubject.id}/${currentLesson.id}/${topic.id}`}
                                         className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-xs whitespace-nowrap flex-shrink-0 ${isActive
                                             ? 'text-indigo-600 bg-indigo-50/90 border border-indigo-500/20 shadow-sm'
                                             : 'text-gray-600 bg-white/80 backdrop-blur-sm border border-indigo-500/10 hover:text-indigo-600 hover:bg-indigo-50/90'
@@ -315,7 +347,7 @@ export default function DocHeader({
                                         data-topic-index={index}
                                         data-is-active={isActive}
                                     >
-                                        {topic.title}
+                                        {topic.name}
                                     </Link>
                                 );
                             })}

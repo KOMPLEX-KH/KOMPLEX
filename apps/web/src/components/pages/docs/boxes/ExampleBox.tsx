@@ -20,7 +20,7 @@ function AnswerBox({ answer }: { answer: string | React.ReactNode }) {
 
 export  function ExampleBox({ question, content, steps, answer }: ExampleBoxProps) {
     return (
-        <div className="bg-amber-50/90 border-2 border-amber-500 rounded-3xl p-6 my-6 shadow-lg shadow-amber-500/15">
+        <div className="bg-amber-50/90 border-2 border-amber-500 rounded-3xl p-4 my-6 shadow-lg shadow-amber-500/15">
             {/* Header */}
             <div className="flex items-center gap-3 mb-4">
                 <Search size={20} className="text-amber-600" />

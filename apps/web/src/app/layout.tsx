@@ -1,12 +1,14 @@
-import type { Metadata } from "next";
+'use client';
+
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
-import Header from "@components/common/Header";
-import ModalRoot from "@components/common/ModalRoot";
+import Header from "@/components/common/Header";
+import ModalRoot from "@/components/common/ModalRoot";
 import Script from "next/script";
 import { AuthProvider } from "@hooks/useAuth";
+import { useEffect, useState } from "react";
+import { feedCurriculumsService } from "@/services";
 import "katex/dist/katex.min.css";
-
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,24 +26,44 @@ const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
 });
 
-export const metadata: Metadata = {
-  title: "KOMPLEX",
-  description: "KOMPLEX is a platform for learning and teaching mathematics and physics.",
-  icons: {
-    icon: "/logo.png",
-  },
-};
+// export const metadata: Metadata = {
+//   title: "KOMPLEX",
+//   description: "KOMPLEX is a platform for learning and teaching mathematics and physics.",
+//   icons: {
+//     icon: "/logo.png",
+//   },
+// };
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  useEffect(() => {
+    const stored = localStorage.getItem("curriculum");
+    if (stored) {
+      return;
+    }
+    const fetchCurriculum = async () => {
+      try {
+        const curriculumData = await feedCurriculumsService.getCurriculum();
+
+        localStorage.setItem('curriculum', JSON.stringify(curriculumData));
+      } catch (error) {
+        console.error('Error fetching curriculum:', error);
+      }
+    };
+    fetchCurriculum();
+  }, []);
+
+
   return (
     <html lang="kh" className={poppins.className}>
       <head>
         <meta charSet="utf-8" />
         <link rel="icon" href="/app/favicon.ico" />
+        <title>KOMPLEX</title>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}

@@ -16,17 +16,17 @@ export const biology: Content = {
         {
           title: "រូបផ្តុំនៃស្លឹករុក្ខជាតិ",
           englishTitle: "Structure-of-Plant-Leaves",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ដំណើររស្មីសំយោគ",
           englishTitle: "Process-of-Photosynthesis",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ដង្ហើមរុក្ខជាតិ",
           englishTitle: "Plant-Respiration",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -39,17 +39,17 @@ export const biology: Content = {
         {
           title: "ណឺរ៉ូន",
           englishTitle: "Neuron",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "មជ្ឈមណ្ឌលប្រសាទ",
           englishTitle: "Central-Nervous-System",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "បរិមណ្ឌលប្រសាទ",
           englishTitle: "Peripheral-Nervous-System",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -62,12 +62,12 @@ export const biology: Content = {
         {
           title: "កិច្ចការពារសារពាង្គកាយ",
           englishTitle: "Body-Defense-Mechanisms",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ប្រព័ន្ធស៊ាំ",
           englishTitle: "Immune-System",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -80,17 +80,17 @@ export const biology: Content = {
         {
           title: "ភ្នាក់ងារបង្ករោគ",
           englishTitle: "Pathogens",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ជំងឺឆ្លង",
           englishTitle: "Infectious-Diseases",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ជំងឺមិនឆ្លង",
           englishTitle: "Non-communicable-Diseases",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },
@@ -103,12 +103,12 @@ export const biology: Content = {
         {
           title: "អំពើរបស់មនុស្សលើបរិស្ថាន",
           englishTitle: "Human-Actions-on-Environment",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
         {
           title: "ការបំពុលបរិស្ថាន",
           englishTitle: "Environmental-Pollution",
-          component: () => import("@components/screens/docs/ComingSoon"),
+          component: () => import("@/components/screens/docs/ComingSoon"),
         },
       ],
     },

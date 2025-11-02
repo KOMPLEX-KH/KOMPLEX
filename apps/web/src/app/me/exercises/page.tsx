@@ -2,15 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Sidebar from '@components/pages/me/Sidebar';
+import Sidebar from '@/components/pages/me/Sidebar';
 import {
     BookOpen,
     CheckCircle,
     BarChart3
 } from 'lucide-react';
 import { ExerciseDashboard } from '@/types/user-content/exercise';
-import ExerciseHistoryComponent from '@components/pages/me/exercises/ExerciseHistory';
-import ExerciseReportComponent from '@components/pages/me/exercises/ExerciseReport';
+import ExerciseHistoryComponent from '@/components/pages/me/exercises/ExerciseHistory';
+import ExerciseReportComponent from '@/components/pages/me/exercises/ExerciseReport';
 import { useAuth } from '@hooks/useAuth';
 import api from '@/configs/axios';
 

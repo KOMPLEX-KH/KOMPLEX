@@ -1,7 +1,7 @@
 'use client';
 
-import Sidebar from '@components/pages/me/Sidebar';
-import ContentError from '@components/common/ContentError';
+import Sidebar from '@/components/pages/me/Sidebar';
+import ContentError from '@/components/common/ContentError';
 import { authService } from '@/services/index';
 import { User } from '@/types/auth';
 import Link from 'next/link';
@@ -155,7 +155,7 @@ export default function ProfilePage() {
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar />
             <div className="flex-1 lg:ml-64 pt-32 lg:pt-20">
-                <div className=" mx-auto p-6">  
+                <div className=" mx-auto p-6">
                     {/* Header */}
                     <div className="mb-8">
                         <div className="flex items-center gap-3 mb-2">

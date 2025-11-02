@@ -5,7 +5,7 @@ ROOT_DIR="lessons/components"
 
 # Placeholder content
 PLACEHOLDER="import { View } from 'react-native'
-import { Text } from '@components/common/Text'
+import { Text } from '@/components/common/Text'
 
 export default function PlaceHolder() {
     return (

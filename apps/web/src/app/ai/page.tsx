@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Bot, ChevronUp, Copy, Check, RefreshCw, Square, ChevronDown } from 'lucide-react';
 import { Listbox, Transition } from '@headlessui/react';
 import { meAiService } from '@/services/index';
-import MarkdownRenderer from '@components/helper/MarkDownRenderer';
+import MarkdownRenderer from '@/components/helper/MarkDownRenderer';
 import { useAuth } from '@hooks/useAuth';
 import { Message, AIHistoryItem } from '@/types/content/ai';
 import { useRouter } from 'next/navigation';

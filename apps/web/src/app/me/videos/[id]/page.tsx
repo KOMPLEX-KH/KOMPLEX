@@ -5,15 +5,15 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Trash, Edit, Eye, Clock, MessageSquare, BookOpen } from 'lucide-react';
 import { feedVideoService, meVideoService } from '@/services/index';
-import Sidebar from '@components/pages/me/Sidebar';
-import Comments from '@components/common/comments/Comments';
-import EditVideo from '@components/pages/me/videos/EditVideo';
-import ContentError from '@components/common/ContentError';
-import DeleteConfirm from '@components/common/DeleteConfirm';
-import Exercise from '@components/pages/videos/Exercise';
+import Sidebar from '@/components/pages/me/Sidebar';
+import Comments from '@/components/common/comments/Comments';
+import EditVideo from '@/components/pages/me/videos/EditVideo';
+import ContentError from '@/components/common/ContentError';
+import DeleteConfirm from '@/components/common/DeleteConfirm';
+import Exercise from '@/components/pages/videos/Exercise';
 import type { VideoPost } from '@/types/content/videos';
 import { useAuth } from '@hooks/useAuth';
-import MarkDownRenderer from '@components/helper/MarkDownRenderer';
+import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
 import { BackButton } from '@/components/common/BackButton';
 
 // Skeleton Loading Component for Display Mode

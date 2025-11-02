@@ -3,7 +3,7 @@
 import { Box, Maximize2, X } from 'lucide-react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
-import { ThreeD } from '@components/helper/ThreeD'
+import { ThreeD } from '@/components/helper/ThreeD'
 import { ThreeDTextItem, TwoDTextItem } from '@/types/docs/threeD'
 
 export interface ThreeDExplanationBoxProps {
@@ -40,7 +40,7 @@ export const ThreeDExplanationBox = ({
     return (
         <>
             <div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-6 gap-2 my-6'>
-                <div className="bg-indigo-50/80 border border-indigo-600 p-6 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+                <div className="bg-indigo-50/80 border border-indigo-600 p-4 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
                     <div className="grid grid-cols-1 gap-6">
                         <div className="w-full relative group bg-white rounded-3xl">
                             <ThreeD
