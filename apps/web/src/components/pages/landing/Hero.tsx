@@ -96,18 +96,10 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
-                    className="text-4xl md:text-7xl font-extrabold mb-5 leading-tight"
+                    className="text-5xl md:text-8xl font-extrabold mb-5 leading-tight"
                 >
                     បង្កើតឡើងដោយសិស្សកម្ពុជា
                 </motion.h1>
-                <motion.p
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                    className="text-xl opacity-90 max-w-2xl mx-auto mb-10"
-                >
-                    រៀន អនុវត្តន៍ និងស្វែងយល់ ជាមួយ <b>KOMPLEX</b> ដោយឥតគិតថ្លៃ
-                </motion.p>
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}

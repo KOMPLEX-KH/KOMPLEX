@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Menu, FileText, MessageSquare, BookOpen, Bot, Camera, Pencil, LogOut, BookMarked, MessageCircle, UserIcon, CircleEllipsis, CircleChevronDown, RectangleEllipsis, EllipsisVertical } from 'lucide-react';
+import { FileText, MessageSquare, Bot, Camera, Pencil, LogOut, BookMarked, MessageCircle, UserIcon, EllipsisVertical } from 'lucide-react';
 import { Menu as HeadlessMenu, Transition } from '@headlessui/react';
 import FeedbackModal from '../pages/feedbacks/FeedbackModal';
 import { useAuth } from '@hooks/useAuth';
@@ -20,7 +20,6 @@ const navLinks = [
     },
     // {
     //     label: 'អនុវត្តន៍',
-    //     href: '/exercises',
     //     icon: Pencil,
     //     style: "bg-transparent  hover:text-indigo-600 hover:bg-indigo-50/90 "
     // },
@@ -30,12 +29,12 @@ const navLinks = [
         icon: MessageSquare,
         style: "bg-transparent  hover:text-indigo-600 hover:bg-indigo-50/90 "
     },
-    {
-        label: 'អត្ថបទ',
-        href: '/blogs',
-        icon: BookOpen,
-        style: "bg-transparent  hover:text-indigo-600 hover:bg-indigo-50/90 "
-    },
+    // {
+    //     label: 'អត្ថបទ',
+    //     href: '/blogs',
+    //     icon: BookOpen,
+    //     style: "bg-transparent  hover:text-indigo-600 hover:bg-indigo-50/90 "
+    // },
     {
         label: 'វីដេអូ',
         href: '/videos',
@@ -136,23 +135,32 @@ export default function Header() {
                                 <div className="space-y-1">
                                     {navLinks.map((link) => {
                                         const Icon = link.icon;
-                                        // Get the first segment after the domain (e.g., "blogs" from "/blogs" or "me" from "/me/blogs")
+                                        // Get the first segment after the domain (e.g., "forums" from "/forums" or "me" from "/me/forums")
                                         const pathSegment = pathname.split("/")[1];
-                                        const linkSegment = link.href.split("/")[1];
-                                        const isActive = pathSegment === linkSegment;
+                                        const linkSegment = link.href ? link.href.split("/")[1] : null;
+                                        const isActive = linkSegment ? pathSegment === linkSegment : false;
                                         return (
-                                            <HeadlessMenu.Item key={link.href}>
+                                            <HeadlessMenu.Item key={link.href || link.label}>
                                                 {() => (
-                                                    <Link
-                                                        href={link.href}
-                                                        className={`flex items-center gap-3 bg-transparent w-full text-left px-4 py-3 rounded-full text-sm text-gray-600 no-underline font-medium  transition-all duration-300 ${isActive
-                                                            ? 'text-indigo-600   '
-                                                            : 'hover:text-indigo-600  bg-transparent'
-                                                            }`}
-                                                    >
-                                                        <Icon size={18} />
-                                                        {link.label}
-                                                    </Link>
+                                                    link.href ? (
+                                                        <Link
+                                                            href={link.href}
+                                                            className={`flex items-center gap-3 bg-transparent w-full text-left px-4 py-3 rounded-full text-sm text-gray-600 no-underline font-medium  transition-all duration-300 ${isActive
+                                                                ? 'text-indigo-600   '
+                                                                : 'hover:text-indigo-600  bg-transparent'
+                                                                }`}
+                                                        >
+                                                            <Icon size={18} />
+                                                            {link.label}
+                                                        </Link>
+                                                    ) : (
+                                                        <div
+                                                            className={`flex items-center gap-3 bg-transparent w-full text-left px-4 py-3 rounded-full text-sm text-gray-600 no-underline font-medium  transition-all duration-300 cursor-default opacity-60`}
+                                                        >
+                                                            <Icon size={18} />
+                                                            {link.label}
+                                                        </div>
+                                                    )
                                                 )}
                                             </HeadlessMenu.Item>
                                         );
@@ -245,11 +253,11 @@ export default function Header() {
                     <div className="hidden md:flex gap-1 items-center">
                         {navLinks.map((link) => {
                             const Icon = link.icon;
-                            // Get the first segment after the domain (e.g., "blogs" from "/blogs" or "me" from "/me/blogs")
+                            // Get the first segment after the domain (e.g., "forums" from "/forums" or "me" from "/me/forums")
                             const pathSegment = pathname.split("/")[1];
-                            const linkSegment = link.href.split("/")[1];
-                            const isActive = pathSegment === linkSegment;
-                            return (
+                            const linkSegment = link.href ? link.href.split("/")[1] : null;
+                            const isActive = linkSegment ? pathSegment === linkSegment : false;
+                            return link.href ? (
                                 <Link
                                     key={link.href}
                                     href={link.href}
@@ -258,6 +266,14 @@ export default function Header() {
                                     <Icon size={18} />
                                     {link.label}
                                 </Link>
+                            ) : (
+                                <div
+                                    key={link.label}
+                                    className={`flex items-center gap-2 text-gray-600 no-underline font-semibold  text-sm px-3 py-2.5 rounded-full transition-all duration-300 relative cursor-default opacity-60 ${link.style}`}
+                                >
+                                    <Icon size={18} />
+                                    {link.label}
+                                </div>
                             );
                         })}
 

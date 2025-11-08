@@ -19,11 +19,11 @@ const navItems = [
         icon: LayoutDashboard
     },
 
-    {
-        label: 'អត្ថបទ',
-        href: '/me/blogs',
-        icon: BookOpen
-    },
+    // {
+    //     label: 'អត្ថបទ',
+    //     href: '/me/blogs',
+    //     icon: BookOpen
+    // },
     {
         label: 'ពិភាក្សា',
         href: '/me/forums',

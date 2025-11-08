@@ -1,10 +1,11 @@
+import { Facebook } from "lucide-react"
 import Link from "next/link"
 
 const FEATURES_LINKS = [
-    { href: "/docs", text: "មេរៀនអន្តរកម្ម" },
-    { href: "/forums", text: "វេទិកាពិភាក្សា" },
-    { href: "/blogs", text: "ប្លុកបទពិសោធន៍" },
-    { href: "/exercises", text: "អនុវត្តន៍" },
+    { href: "/docs", text: "មេរៀន" },
+    { href: "/forums", text: "ពិភាក្សា" },
+    // { href: "/blogs", text: "ប្លុកបទពិសោធន៍" },
+    // { href: "/exercises", text: "អនុវត្តន៍" },
     { href: "/ai", text: "តារា AI" }
 ]
 
@@ -23,7 +24,7 @@ export default function Footer() {
                     <div>
                         <h3 className="text-xl font-bold mb-5 text-indigo-600 flex items-center gap-2"><img src="/logo.png" alt="KOMPLEX" className="w-6 h-6" />KOMPLEX</h3>
                         <p className="text-gray-900 leading-relaxed">
-                            ប្រព័ន្ធសិក្សា សម្រាប់សិស្សខ្មែរ បង្កើតឡើងដោយសិស្សកម្ពុជា
+                            ប្រព័ន្ធសិក្សា សម្រាប់សិស្សកម្ពុជា បង្កើតឡើងដោយសិស្សកម្ពុជា
                         </p>
                     </div>
 
@@ -58,11 +59,11 @@ export default function Footer() {
                     </div>
 
                     <div>
-                        <h3 className="text-xl font-bold mb-5 text-indigo-600">Open Source</h3>
+                        <h3 className="text-xl font-bold mb-5 text-indigo-600">ស្វែងរក</h3>
                         <p className="text-gray-900 leading-relaxed">
-                            KOMPLEX គឺជាប្រភពបើកចំហ ដែលអាចរួមចំណែក និងពង្រីកមេរៀនបាន។ យើងជឿថាការអប់រំគួរតែឥតគិតថ្លៃ និងអាចចូលដំណើរការបានសម្រាប់គ្រប់គ្នា។
+
                         </p>
-                        <a href="https://github.com/KOMPLEX-KH" className="text-indigo-600 hover:text-indigo-700 transition-colors">Github Repository</a>
+                        <Link href="https://www.facebook.com/profile.php?id=61579280685130" className=" flex items-center gap-2 "><Facebook className="w-6 h-6" />Facebook Page</Link>
                     </div>
                 </div>
 

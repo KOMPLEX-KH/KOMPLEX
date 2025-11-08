@@ -24,7 +24,7 @@ interface RecentActivity {
 
 interface ContentStats {
     dashboardData: {
-        numOfBlogs: number;
+        // numOfBlogs: number;
         numOfForums: number;
         numOfVideos: number;
         numOfExercises: number;
@@ -34,10 +34,10 @@ interface ContentStats {
 
 const getContentTypeIcon = (contentType: string) => {
     switch (contentType) {
-        case 'blog':
-            return <div className="p-2 rounded-full bg-indigo-100">
-                <BookOpen className={`w-4 h-4`} />
-            </div>;
+        // case 'blog':
+        //     return <div className="p-2 rounded-full bg-indigo-100">
+        //         <BookOpen className={`w-4 h-4`} />
+        //     </div>;
         case 'video':
             return <div className="p-2 rounded-full bg-green-100">
                 <Video className={`w-4 h-4`} />
@@ -62,7 +62,7 @@ export default function MyContent() {
     const router = useRouter();
     const [stats, setStats] = useState<ContentStats>({
         dashboardData: {
-            numOfBlogs: 0,
+            // numOfBlogs: 0,
             numOfForums: 0,
             numOfVideos: 0,
             numOfExercises: 0,
@@ -120,9 +120,9 @@ export default function MyContent() {
                     </div>
 
                     {/* Stats Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                         {/* Blogs */}
-                        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
+                        {/* <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
                             <div className="flex items-center justify-between">
                                 <div>
                                     <p className="text-sm font-medium text-gray-600">ប្លុក</p>
@@ -132,7 +132,7 @@ export default function MyContent() {
                                     <BookOpen className="w-6 h-6 text-indigo-600" />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Videos */}
                         <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
