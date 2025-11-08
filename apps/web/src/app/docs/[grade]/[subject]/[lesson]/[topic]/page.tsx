@@ -85,10 +85,8 @@ export default function Page() {
             } catch (error: any) {
                 // If we get an error, handle 404 or others properly for redirect
                 if (error.response && error.response.status === 404) {
-                    window.location.href = "/not-found";
                 } else {
                     console.error('Error fetching topic component:', error);
-                    window.location.href = "/not-found";
                 }
             } finally {
                 setIsLoadingTopic(false);
