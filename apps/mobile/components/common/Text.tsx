@@ -1,5 +1,5 @@
 import { getFontWeightName, tw } from '@/utils/styles';
-import { Text as RNText, StyleProp, StyleSheet, TextProps, TextStyle, View } from 'react-native';
+import { Text as RNText, StyleProp, StyleSheet, TextProps, TextStyle } from 'react-native';
 
 function renderMixedText(input: string, props: TextProps, weight: number, isItalic: boolean) {
     const khmerRegex = /[\u1780-\u17FF]/;
@@ -32,9 +32,16 @@ function resolveNumericWeight(style: StyleProp<TextStyle>): number {
 
 export function Text(props: TextProps & { children: string | React.ReactNode }) {
     const { children, style, ...rest } = props;
+
+    // If children is not a string, use React Native Text directly
+    if (typeof children !== 'string') {
+        return <RNText style={style} {...rest}>{children}</RNText>;
+    }
+
+    // If children is a string, use the mixed text renderer for Khmer font support
     const weight = resolveNumericWeight(style as StyleProp<TextStyle>);
     const flattenedStyle = StyleSheet.flatten(style) as TextStyle | undefined;
     const isItalic = flattenedStyle?.fontStyle === 'italic';
-    const renderedText = renderMixedText(children as string, { ...rest, style }, weight, isItalic);
+    const renderedText = renderMixedText(children, { ...rest, style }, weight, isItalic);
     return <RNText style={tw("flex-row gap-0")}>{renderedText}</RNText>;
 }

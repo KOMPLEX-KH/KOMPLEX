@@ -1,15 +1,11 @@
 import { View } from 'react-native';
-import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
-
-export interface DefinitionBoxProps {
-    title: string | React.ReactNode;
-    content: string | string[] | React.ReactNode;
-}
+import { tw } from '@/utils/styles';
+import { DefinitionBoxProps } from '@core-types/docs/boxProps';
 
 export default function DefinitionBox({ title, content }: DefinitionBoxProps) {
     return (
-        <View style={tw(" gap-4")}>
+        <View style={tw("my-6 gap-4")}>
             <Text style={tw("text-black font-bold text-2xl")}>{title}</Text>
             {typeof content === 'string' ? (
                 <Text style={tw("text-gray-700 leading-relaxed text-base")}>{content}</Text>
@@ -26,5 +22,5 @@ export default function DefinitionBox({ title, content }: DefinitionBoxProps) {
                 <Text style={tw("text-gray-700 leading-relaxed text-base")}>{content}</Text>
             )}
         </View>
-    )
+    );
 }
