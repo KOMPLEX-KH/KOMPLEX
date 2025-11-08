@@ -191,29 +191,31 @@ export default function Page() {
     }
 
     if (error) {
-        <div className="flex bg-gray-50 min-h-screen">
-            <Sidebar
-                currentGrade={{ id: parseInt(params.grade) }}
-                currentSubject={{ id: parseInt(params.subject) }}
-                currentLesson={{ id: parseInt(params.lesson) }}
-                currentTopic={{ id: parseInt(params.topic) }}
-            />
-            <DocHeader
-                currentGrade={{ id: parseInt(params.grade) }}
-                currentSubject={{ id: parseInt(params.subject) }}
-                currentLesson={{ id: parseInt(params.lesson) }}
-                currentTopic={{ id: parseInt(params.topic) }}
-            />
-            <div className="w-full lg:ml-70 lg:mt-30 mt-40 p-5 lg:p-6">
-                <TopicWrapper
-                    title={getTopicInfo().topic?.name}
-                    prev={navigation?.prev}
-                    next={navigation?.next}
-                >
-                    <ContentError type="error" message="មានបញ្ហាក្នុងការទាញយកមេរៀន"></ContentError>
-                </TopicWrapper>
+        return (
+            <div className="flex bg-gray-50 min-h-screen">
+                <Sidebar
+                    currentGrade={{ id: parseInt(params.grade) }}
+                    currentSubject={{ id: parseInt(params.subject) }}
+                    currentLesson={{ id: parseInt(params.lesson) }}
+                    currentTopic={{ id: parseInt(params.topic) }}
+                />
+                <DocHeader
+                    currentGrade={{ id: parseInt(params.grade) }}
+                    currentSubject={{ id: parseInt(params.subject) }}
+                    currentLesson={{ id: parseInt(params.lesson) }}
+                    currentTopic={{ id: parseInt(params.topic) }}
+                />
+                <div className="w-full lg:ml-70 lg:mt-30 mt-40 p-5 lg:p-6">
+                    <TopicWrapper
+                        title={getTopicInfo().topic?.name}
+                        prev={navigation?.prev}
+                        next={navigation?.next}
+                    >
+                        <ContentError type="error" message="មានបញ្ហាក្នុងការទាញយកមេរៀន"></ContentError>
+                    </TopicWrapper>
+                </div>
             </div>
-        </div>
+        )
     }
 
     const Component = topicComponent ? deserializeTopicContentV3(topicComponent as string) : null;
