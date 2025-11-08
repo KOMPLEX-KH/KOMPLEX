@@ -12,6 +12,7 @@ import ComingSoon from "@/components/pages/docs/ComingSoon";
 import Skeleton from "@/components/pages/docs/Skeleton";
 import { feedCurriculumsService } from "@/services";
 import { DoTopicExercise } from "@/components/pages/docs/boxes/DoTopicExercise";
+import ContentError from "@/components/common/ContentError";
 
 
 type Params = { grade: string; subject: string; lesson: string; topic: string };
@@ -48,6 +49,7 @@ export default function Page() {
     const [navigation, setNavigation] = useState<{ prev: { title: string; link: string } | null; next: { title: string; link: string } | null } | null>(null);
     const [isLoadingTopic, setIsLoadingTopic] = useState(true);
     const [isExercise, setIsExercise] = useState(false);
+    const [error, setError] = useState(false);
     // Curriculum state (for sidebar only) - initialized from localStorage
     const [curriculum, setCurriculum] = useState<Grade[]>(() => {
         if (typeof window !== 'undefined') {
@@ -85,8 +87,10 @@ export default function Page() {
             } catch (error: any) {
                 // If we get an error, handle 404 or others properly for redirect
                 if (error.response && error.response.status === 404) {
+                    setError(true);
                 } else {
                     console.error('Error fetching topic component:', error);
+                    setError(true);
                 }
             } finally {
                 setIsLoadingTopic(false);
@@ -184,6 +188,32 @@ export default function Page() {
                 </div>
             </div>
         )
+    }
+
+    if (error) {
+        <div className="flex bg-gray-50 min-h-screen">
+            <Sidebar
+                currentGrade={{ id: parseInt(params.grade) }}
+                currentSubject={{ id: parseInt(params.subject) }}
+                currentLesson={{ id: parseInt(params.lesson) }}
+                currentTopic={{ id: parseInt(params.topic) }}
+            />
+            <DocHeader
+                currentGrade={{ id: parseInt(params.grade) }}
+                currentSubject={{ id: parseInt(params.subject) }}
+                currentLesson={{ id: parseInt(params.lesson) }}
+                currentTopic={{ id: parseInt(params.topic) }}
+            />
+            <div className="w-full lg:ml-70 lg:mt-30 mt-40 p-5 lg:p-6">
+                <TopicWrapper
+                    title={getTopicInfo().topic?.name}
+                    prev={navigation?.prev}
+                    next={navigation?.next}
+                >
+                    <ContentError type="error" message="មានបញ្ហាក្នុងការទាញយកមេរៀន"></ContentError>
+                </TopicWrapper>
+            </div>
+        </div>
     }
 
     const Component = topicComponent ? deserializeTopicContentV3(topicComponent as string) : null;
