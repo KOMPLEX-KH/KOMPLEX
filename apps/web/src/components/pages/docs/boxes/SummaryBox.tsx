@@ -1,14 +1,9 @@
 // src/components/pages/docs/boxes/SummaryBox.tsx
 import React from "react";
-import { SummarySection } from "@/types/docs/topic";
+import { SummarySection } from "@core-types/docs/boxProps";
+import { SummaryBoxProps } from "@core-types/docs/boxProps";
 import * as Icons from "lucide-react";
 import { Lightbulb } from "lucide-react";
-
-export interface SummaryBoxProps {
-  title?: string | React.ReactNode;
-  icon?: string;
-  sections: SummarySection[];
-}
 
 export function SummaryBox({
   title,

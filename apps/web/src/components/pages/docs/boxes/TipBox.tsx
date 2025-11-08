@@ -1,12 +1,7 @@
 'use client'
 
 import { Lightbulb } from 'lucide-react'
-
-export interface TipBoxProps {
-    title?: string | React.ReactNode
-    icon?: React.ComponentType<{ size?: number; className?: string }>
-    content: string | string[] | React.ReactNode
-}
+import { TipBoxProps } from '@core-types/docs/boxProps'
 
 export function TipBox({
     title,
@@ -25,7 +20,7 @@ export function TipBox({
             )}
             {typeof content === 'string' ? (
                 <div className="text-gray-700 leading-relaxed text-base">{content}</div>
-            )  : (
+            ) : (
                 <div className="text-gray-700 leading-relaxed text-base">
                     {content}
                 </div>

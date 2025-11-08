@@ -1,10 +1,6 @@
 
 import { Lightbulb } from "lucide-react";
-
-export interface HintBoxProps {
-    content: string | string[] | React.ReactNode;
-    title?: string;
-}
+import { HintBoxProps } from "@core-types/docs/boxProps";
 
 export function HintBox({ content, title = "សំគាល់" }: HintBoxProps) {
     return (

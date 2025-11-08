@@ -13,11 +13,11 @@ const MAIN_FEATURES = [
         icon: <BookOpen size={28} color={"white"} />,
         href: '/docs',
     },
-    {
-        title: 'អនុវត្តន៍',
-        icon: <Edit size={28} color={"white"} />,
-        href: '/exercises',
-    },
+    // {
+    //     title: 'អនុវត្តន៍',
+    //     icon: <Edit size={28} color={"white"} />,
+    //     href: '/exercises',
+    // },
     {
         title: 'តារា AI',
         icon: <Bot size={28} color={"white"} />,
@@ -28,11 +28,11 @@ const MAIN_FEATURES = [
         icon: <MessageSquare size={28} color={"white"} />,
         href: '/forums',
     },
-    {
-        title: 'អត្ថបទ',
-        icon: <BookOpen size={28} color={"white"} />,
-        href: '/blogs',
-    },
+    // {
+    //     title: 'អត្ថបទ',
+    //     icon: <BookOpen size={28} color={"white"} />,
+    //     href: '/blogs',
+    // },
     {
         title: 'វីដេអូ',
         icon: <Camera size={28} color={"white"} />,

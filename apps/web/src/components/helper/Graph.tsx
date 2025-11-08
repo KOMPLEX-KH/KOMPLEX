@@ -2,13 +2,10 @@
 
 import { useEffect, useRef } from 'react';
 import { CalculatorOptions } from 'desmos';
+import { Expression } from '@core-types/docs/boxProps';
 
-export type Expression = {
-    id: string;
-    latex: string;
-    color?: string;
-    hidden?: boolean;
-};
+// Re-export for backwards compatibility
+export type { Expression };
 
 export type DesmosGraphProps = {
     expressions: Expression[];

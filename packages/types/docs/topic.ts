@@ -1,105 +1,149 @@
-// import { ThreeDBoxProps } from "@/components/pages/docs/boxes/3DBox";
-// // ===== TOPIC CONTENT TYPES =====
-// // These types define the structure for educational topic content
-// // Each type corresponds to a specific box component used in topic pages
+// packages/types/docs/topic.ts
+// ===== TOPIC CONTENT TYPES =====
+// These types define the structure for educational topic content
+// Each type corresponds to a specific box component used in topic pages
 
-// // Basic content types used across different topic sections
-// export interface Step {
-//   title?: string | React.ReactNode;
-//   content?: string | string[] | React.ReactNode;
-// }
+// Import all box prop interfaces from shared types
+import {
+  DefinitionBoxProps,
+  TipBoxProps,
+  ExampleBoxProps,
+  ExerciseBoxProps,
+  HintBoxProps,
+  WarningBoxProps,
+  CustomBoxProps,
+  GraphBoxProps,
+  ThreeDBoxProps,
+  SummaryBoxProps,
+  TopicPracticeBoxProps,
+  ImageBoxProps,
+  VideoBoxProps,
+  GraphExplanationBoxProps,
+  ThreeDExplanationBoxProps,
+  Step,
+  ExerciseQuestion,
+  SummarySection,
+  PracticeExercise,
+} from "./boxProps";
 
-// export interface ExerciseQuestion {
-//   id: string;
-//   question: string | React.ReactNode;
-//   options: string[] | React.ReactNode[];
-//   correctAnswer: number | React.ReactNode;
-// }
+// Re-export supporting types for convenience
+export type { Step, ExerciseQuestion, SummarySection, PracticeExercise };
 
-// // ===== BOX COMPONENT PROP INTERFACES =====
-// // Import prop interfaces from box components to ensure type safety
-// // Each interface matches exactly what its corresponding component expects
+// ===== MAIN TOPIC CONTENT INTERFACE =====
+// This interface defines the complete structure for a topic's content
+// Each field is optional, allowing topics to use only the sections they need
+// All fields use the exact prop interfaces from their corresponding box components
 
-// import { DefinitionBoxProps } from "@/components/pages/docs/boxes/DefinitionBox";
-// import { TipBoxProps } from "@/components/pages/docs/boxes/TipBox";
-// import { ExampleBoxProps } from "@/components/pages/docs/boxes/ExampleBox";
-// import { ExerciseBoxProps } from "@/components/pages/docs/boxes/ExerciseBox";
-// import { HintBoxProps } from "@/components/pages/docs/boxes/HintBox";
-// import { WarningBoxProps } from "@/components/pages/docs/boxes/WarningBox";
-// import { CustomBoxProps } from "@/components/pages/docs/boxes/CustomBox";
-// import { GraphBoxProps } from "@/components/pages/docs/boxes/GraphBox";
+export interface TopicContent {
+  // Definition section - explains the core concept
+  definition?: DefinitionBoxProps;
 
-// // Explanation Box Props
-// import { ImageBoxProps } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
-// import { VideoBoxProps } from "@/components/pages/docs/boxes/explanation-box/VideoExplanationBox";
-// import { GraphExplanationBoxProps } from "@/components/pages/docs/boxes/explanation-box/GraphExplanationBox";
-// import { ThreeDExplanationBoxProps } from "@/components/pages/docs/boxes/explanation-box/3DExplanationBox";
-// import { ReactNode } from "react";
+  // Tip section - provides helpful hints or tips
+  tip?: TipBoxProps;
 
-// // ===== MAIN TOPIC CONTENT INTERFACE =====
-// // This interface defines the complete structure for a topic's content
-// // Each field is optional, allowing topics to use only the sections they need
-// // All fields use the exact prop interfaces from their corresponding box components
+  // Example section - shows worked examples with steps
+  example?: ExampleBoxProps;
 
-// export interface TopicContent {
-//   // Definition section - explains the core concept
-//   definition?: DefinitionBoxProps;
+  example2?: ExampleBoxProps;
 
-//   // Tip section - provides helpful hints or tips
-//   tip?: TipBoxProps;
+  // Exercise section - interactive practice questions
+  exercise?: ExerciseBoxProps;
 
-//   // Example section - shows worked examples with steps
-//   example?: ExampleBoxProps;
+  // Hint section - additional guidance or notes
+  hint?: HintBoxProps;
 
-//   example2?: ExampleBoxProps;
+  // Warning section - important cautions or common mistakes
+  warning?: WarningBoxProps;
 
-//   // Exercise section - interactive practice questions
-//   exercise?: ExerciseBoxProps;
+  // Custom section - flexible custom content
+  custom?: CustomBoxProps;
 
-//   // Hint section - additional guidance or notes
-//   hint?: HintBoxProps;
+  // 3D section - 3D model with wrapper
+  threeD?: ThreeDBoxProps;
 
-//   // Warning section - important cautions or common mistakes
-//   warning?: WarningBoxProps;
+  // Graph section - mathematical graph with wrapper
+  graph?: GraphBoxProps;
 
-//   // Custom section - flexible custom content
-//   custom?: CustomBoxProps;
+  // ===== EXPLANATION BOXES =====
+  // These boxes have content on the left and explanation on the right
+  // They are responsive and follow a specific layout pattern
 
-//   // 3D section - 3D model with wrapper
-//   threeD?: ThreeDBoxProps;
+  // Image explanation section - image with explanation
+  imageExplanation?: ImageBoxProps | ImageBoxProps[];
 
-//   // Graph section - mathematical graph with wrapper
-//   graph?: GraphBoxProps;
+  // Video explanation section - video with explanation
+  videoExplanation?: VideoBoxProps;
 
-//   // ===== EXPLANATION BOXES =====
-//   // These boxes have content on the left and explanation on the right
-//   // They are responsive and follow a specific layout pattern
+  // Graph explanation section - Desmos graph with explanation
+  graphExplanation?: GraphExplanationBoxProps;
 
-//   // Image explanation section - image with explanation
-//   imageExplanation?: ImageBoxProps | ImageBoxProps[];
+  // 3D explanation section - 3D content with explanation
+  threeDExplanation?: ThreeDExplanationBoxProps | ThreeDExplanationBoxProps[];
+}
 
-//   // Video explanation section - video with explanation
-//   videoExplanation?: VideoBoxProps;
+export interface TopicContent_V2 {
+  definition?: DefinitionBoxProps[];
 
-//   // Graph explanation section - Desmos graph with explanation
-//   graphExplanation?: GraphExplanationBoxProps;
+  // Tip section - provides helpful hints or tips
+  tip?: TipBoxProps[];
 
-//   // 3D explanation section - 3D content with explanation
-//   threeDExplanation?: ThreeDExplanationBoxProps | ThreeDExplanationBoxProps[];
-// }
+  // Example section - shows worked examples with steps
+  example?: ExampleBoxProps[];
 
-// export interface SummarySection {
-//   key?: string;
-//   title: string | React.ReactNode;
-//   icon?: React.ComponentType<{ size?: number; className?: string }>;
-//   content: React.ReactNode; // supports strings, elements, KaTeX, etc.
-// }
+  // Exercise section - interactive practice questions
+  exercise?: ExerciseBoxProps[];
 
-// export interface PracticeExercise {
-//   id: string;
-//   title: string;
-//   description: string;
-//   problemType: string;
-//   problems: string[] | ReactNode[];
-//   answers?: ReactNode[];
-// }
+  // Hint section - additional guidance or notes
+  hint?: HintBoxProps[];
+
+  // Warning section - important cautions or common mistakes
+  warning?: WarningBoxProps[];
+
+  // Custom section - flexible custom content
+  custom?: CustomBoxProps[];
+
+  // 3D section - 3D model with wrapper
+  threeD?: ThreeDBoxProps[];
+
+  // Graph section - mathematical graph with wrapper
+  graph?: GraphBoxProps[];
+
+  // ===== EXPLANATION BOXES =====
+  // These boxes have content on the left and explanation on the right
+  // They are responsive and follow a specific layout pattern
+
+  // Image explanation section - image with explanation
+  imageExplanation?: ImageBoxProps[];
+
+  // Video explanation section - video with explanation
+  videoExplanation?: VideoBoxProps[];
+
+  // Graph explanation section - Desmos graph with explanation
+  graphExplanation?: GraphExplanationBoxProps[];
+
+  // 3D explanation section - 3D content with explanation
+  threeDExplanation?: ThreeDExplanationBoxProps[];
+
+  //Summary section
+  summary?: SummaryBoxProps[];
+
+  //Practice section
+  practice?: TopicPracticeBoxProps[];
+}
+
+export type TopicContent_V3 =
+  | ({ type: "definition" } & DefinitionBoxProps)
+  | ({ type: "tip" } & TipBoxProps)
+  | ({ type: "example" } & ExampleBoxProps)
+  | ({ type: "exercise" } & ExerciseBoxProps)
+  | ({ type: "hint" } & HintBoxProps)
+  | ({ type: "warning" } & WarningBoxProps)
+  | ({ type: "custom" } & CustomBoxProps)
+  | ({ type: "threeD" } & ThreeDBoxProps)
+  | ({ type: "graph" } & GraphBoxProps)
+  | ({ type: "imageExplanation" } & ImageBoxProps)
+  | ({ type: "videoExplanation" } & VideoBoxProps)
+  | ({ type: "graphExplanation" } & GraphExplanationBoxProps)
+  | ({ type: "threeDExplanation" } & ThreeDExplanationBoxProps)
+  | ({ type: "summary" } & SummaryBoxProps)
+  | ({ type: "practice" } & TopicPracticeBoxProps);

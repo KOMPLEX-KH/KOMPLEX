@@ -4,13 +4,7 @@ import { Image as ImageIcon, Maximize2, X } from 'lucide-react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import Image from 'next/image'
-
-export interface ImageBoxProps {
-    src?: string
-    imageAlt: string
-    explanation: string | string[] | React.ReactNode
-    title?: string
-}
+import { ImageBoxProps } from "@core-types/docs/boxProps";
 
 export const ImageExplanationBox = ({ src, imageAlt, explanation, title }: ImageBoxProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false)

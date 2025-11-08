@@ -39,4 +39,5 @@ export interface Topic {
   component: string;
   componentCode: string;
   orderIndex: number;
+  exerciseId: number | null;
 }

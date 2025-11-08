@@ -5,6 +5,7 @@ import { Canvas } from '@react-three/fiber';
 import { useGLTF, OrbitControls, Text, Html, useProgress } from '@react-three/drei';
 import { Object3D, Mesh } from 'three';
 import { ThreeDProps } from '@/types/docs/threeD';
+import { ThreeDTextItem, TwoDTextItem } from '@core-types/docs/boxProps';
 import { Logo } from '../common/Logo';
 
 // Error Boundary for catching React rendering errors

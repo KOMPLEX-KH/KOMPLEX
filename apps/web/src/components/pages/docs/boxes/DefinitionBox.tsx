@@ -1,11 +1,6 @@
 'use client'
 
-import BulletList from '@/components/helper/BulletList'
-
-export interface DefinitionBoxProps {
-    title: string | React.ReactNode
-    content: string | string[] | React.ReactNode
-}
+import { DefinitionBoxProps } from '@core-types/docs/boxProps'
 
 export function DefinitionBox({ title, content }: DefinitionBoxProps) {
     return (

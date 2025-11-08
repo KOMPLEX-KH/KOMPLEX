@@ -4,20 +4,7 @@ import { Box, Maximize2, X } from 'lucide-react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { ThreeD } from '@/components/helper/ThreeD'
-import { ThreeDTextItem, TwoDTextItem } from '@/types/docs/threeD'
-
-export interface ThreeDExplanationBoxProps {
-    src?: string | React.ReactNode
-    explanation: string | string[] | React.ReactNode
-    scale?: number
-    target?: [number, number, number]
-    canvasBackground?: React.ReactNode
-    canvasBackgroundColor?: string
-    threeDText?: ThreeDTextItem | ThreeDTextItem[]
-    twoDText?: TwoDTextItem | TwoDTextItem[]
-    height?: number
-    title?: string
-}
+import { ThreeDExplanationBoxProps } from "@core-types/docs/boxProps";
 
 export const ThreeDExplanationBox = ({
     src,

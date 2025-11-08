@@ -9,12 +9,9 @@ import {
   BookAIcon,
   RotateCcw,
 } from "lucide-react";
-import { ExerciseQuestion } from "@/types/docs/topic";
+import { ExerciseQuestion } from "@core-types/docs/boxProps";
+import { ExerciseBoxProps } from "@core-types/docs/boxProps";
 import { InlineMath } from "react-katex";
-
-export interface ExerciseBoxProps {
-  questions: ExerciseQuestion[];
-}
 
 // Shuffle array using Fisher-Yates algorithm
 function shuffleArray<T>(array: T[]): T[] {

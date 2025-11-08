@@ -4,16 +4,13 @@
 import { FunctionSquare, Maximize2, X } from 'lucide-react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import Graph, { Expression } from '@/components/helper/Graph';
+import Graph from '@/components/helper/Graph';
+import { GraphExplanationBoxProps } from "@core-types/docs/boxProps";
 import { CalculatorOptions } from 'desmos';
 
-export interface GraphExplanationBoxProps {
-    expressions: Expression[];
-    options?: Partial<CalculatorOptions>;
-    explanation: string | string[] | React.ReactNode;
-}
-
 export const GraphExplanationBox = ({ expressions, options, explanation }: GraphExplanationBoxProps) => {
+    // Type assertion for desmos options (web-specific)
+    const desmosOptions = options as Partial<CalculatorOptions> | undefined;
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
@@ -23,7 +20,7 @@ export const GraphExplanationBox = ({ expressions, options, explanation }: Graph
                     <div className="grid grid-cols-1 gap-6">
                         <div className="w-full">
                             <div className="relative group bg-white rounded-3xl">
-                                <Graph expressions={expressions} options={options} />
+                                <Graph expressions={expressions} options={desmosOptions} />
                                 <button
                                     onClick={() => setIsModalOpen(true)}
                                     className="absolute -top-2 -right-2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-200"
@@ -42,7 +39,7 @@ export const GraphExplanationBox = ({ expressions, options, explanation }: Graph
                             <p className="text-gray-700 text-base">
                                 {explanation}
                             </p>
-                        )  : (
+                        ) : (
                             <div className="text-gray-700 text-base">
                                 {explanation}
                             </div>
@@ -105,7 +102,7 @@ export const GraphExplanationBox = ({ expressions, options, explanation }: Graph
                                             <X size={20} />
                                         </button>
                                         <div className="h-[80vh] flex flex-col justify-center items-center p-4">
-                                            <Graph expressions={expressions} options={options} />
+                                            <Graph expressions={expressions} options={desmosOptions} />
                                         </div>
                                     </div>
                                 </Dialog.Panel>

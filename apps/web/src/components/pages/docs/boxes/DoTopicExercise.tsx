@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { DefinitionBox } from "./DefinitionBox";
 import { TipBox } from "./TipBox";
 import { ExerciseBox } from "./ExerciseBox";
-import { ExerciseQuestion } from "@/types/docs/topic";
+import { ExerciseQuestion } from "@core-types/docs/topic";
 
 export function DoTopicExercise({
     title,
