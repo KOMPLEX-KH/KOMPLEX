@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Edit } from "lucide-react";
 import { PracticeExercise } from "@/types/docs/topic";
 
 export interface TopicPracticeBoxProps {
@@ -21,24 +21,32 @@ export function TopicPracticeBox({ exercises }: TopicPracticeBoxProps) {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 border-t border-indigo-200 pt-4">
+      <div className="  py-4">
+        <div className="flex-1">
+          <h3 className="text-2xl font-semibold text-indigo-600 flex items-center gap-2">
+            <Edit />
+            លំហាត់គំរូ
+          </h3>
+        </div>
+      </div>
       {/* Exercises */}
       {exercises.map((exercise) => (
         <div
           key={exercise.id}
-          className="bg-white rounded-3xl border border-indigo-200 shadow-sm overflow-hidden"
+          className="lg:bg-white lg:rounded-3xl lg:border lg:border-indigo-200 lg:shadow-sm overflow-hidden"
         >
           {/* Exercise Header */}
-          <div className="bg-indigo-50 px-4 py-4">
+          <div className="lg:bg-indigo-50 lg:p-4 py-4">
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-indigo-900">
+              <h3 className="text-xl font-semibold text-indigo-600">
                 {exercise.description}
               </h3>
             </div>
           </div>
 
           {/* Exercise Content */}
-          <div className="p-4 space-y-4">
+          <div className="lg:p-4 py-4 space-y-4">
             <div className="space-y-4">
               {exercise.problems.map((problem, index) => {
                 const questionId = `${exercise.id}-${index}`;
