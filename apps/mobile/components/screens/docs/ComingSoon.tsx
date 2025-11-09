@@ -19,6 +19,7 @@ import ImageExplanationBox from "./boxes/explanation-box/ImageExplanationBox";
 import VideoExplanationBox from "./boxes/explanation-box/VideoExplanationBox";
 import GraphExplanationBox from "./boxes/explanation-box/GraphExplanationBox";
 import ThreeDExplanationBox from "./boxes/explanation-box/3DExplanationBox";
+import ThreeDExplanationBox2 from "./boxes/explanation-box/3DExplanationBox2";
 
 export default function ComingSoon() {
     // Mock data for all box components
@@ -84,16 +85,6 @@ export default function ComingSoon() {
         borderColor: "border-blue-500",
         titleColor: "text-blue-900",
         iconColor: "text-blue-600"
-    };
-
-    const mockThreeD = {
-        src: "/test2.glb",
-        scale: 1, // Changed from 0.1 to 1 for better visibility
-        target: [0, 0, 0] as [number, number, number],
-        title: "រូបភាព 3D",
-        content: "នេះគឺជាការបង្ហាញរូបភាព 3D សម្រាប់ជួយក្នុងការយល់ដឹង។",
-        height: 400,
-        canvasBackgroundColor: "grey" // Changed to grey so we can see if model is rendering
     };
 
     const mockGraph = {
@@ -168,9 +159,8 @@ export default function ComingSoon() {
     };
 
     const mockThreeDExplanation = {
-        src: "/test2.glb",
         explanation: "រូបភាព 3D នេះជួយក្នុងការយល់ដឹងអំពីលីមីត។",
-        scale: 0.7,
+        scale: 1,
         target: [0, 0, 0] as [number, number, number],
         height: 400
     };
@@ -193,6 +183,15 @@ export default function ComingSoon() {
                     ការបង្ហាញប្រអប់ទាំងអស់
                 </Text>
             </View>
+
+            {/* 3D Explanation Box */}
+            <ThreeDExplanationBox2
+                showTestObject={true}
+                explanation={mockThreeDExplanation.explanation}
+                scale={mockThreeDExplanation.scale}
+                target={mockThreeDExplanation.target}
+                height={mockThreeDExplanation.height}
+            />
 
             {/* Definition Box */}
             <DefinitionBox
@@ -233,16 +232,6 @@ export default function ComingSoon() {
                 iconColor={mockCustom.iconColor}
             />
 
-            {/* 3D Box */}
-            <ThreeDBox
-                src={mockThreeD.src}
-                scale={mockThreeD.scale}
-                target={mockThreeD.target}
-                title={mockThreeD.title}
-                content={mockThreeD.content}
-                height={mockThreeD.height}
-            />
-
             {/* Graph Box */}
             <GraphBox
                 expressions={mockGraph.expressions}
@@ -279,14 +268,7 @@ export default function ComingSoon() {
                 explanation={mockGraphExplanation.explanation}
             />
 
-            {/* 3D Explanation Box */}
-            <ThreeDExplanationBox
-                src={mockThreeDExplanation.src}
-                explanation={mockThreeDExplanation.explanation}
-                scale={mockThreeDExplanation.scale}
-                target={mockThreeDExplanation.target}
-                height={mockThreeDExplanation.height}
-            />
+
 
             {/* Footer spacing */}
             <View style={tw("h-8")} />

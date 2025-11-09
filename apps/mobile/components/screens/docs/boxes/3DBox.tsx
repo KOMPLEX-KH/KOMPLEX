@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { View, Modal, Pressable } from "react-native";
-import { Maximize2, X } from "lucide-react-native";
-import ThreeD from "@/components/helper/ThreeD";
+import { View, TouchableOpacity, Modal, Pressable } from "react-native";
+import { Eye, X } from "lucide-react-native";
+import ThreeD2 from "@/components/helper/ThreeD2";
 import { ThreeDBoxProps } from "@core-types/docs/boxProps";
 import { Text } from "@/components/common/Text";
 import { tw } from "@/utils/styles";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ThreeDBox({
   src = "/test.glb",
@@ -19,28 +20,32 @@ export default function ThreeDBox({
   height = 500,
 }: ThreeDBoxProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const modelSrc = typeof src === 'string' ? src : undefined;
 
   return (
     <>
       <View style={tw("bg-indigo-50 border border-indigo-600 my-6 rounded-3xl p-4")}>
-        {/* 3D Canvas */}
-        <View style={tw("relative bg-white rounded-3xl")}>
-          <ThreeD
-            src={src}
+        {/* 3D Canvas - Non-interactive */}
+        <View style={tw("relative bg-white rounded-3xl overflow-hidden")}>
+          <ThreeD2
+            src={modelSrc}
             scale={scale}
             target={target}
-            canvasBackground={canvasBackground}
-            canvasBackgroundColor={canvasBackgroundColor}
-            threeDText={threeDText}
-            twoDText={twoDText}
             height={height}
+            interactive={false}
+            canvasBackgroundColor={canvasBackgroundColor}
           />
-          <Pressable
+          {/* Overlay button to open modal */}
+          <TouchableOpacity
             onPress={() => setIsModalOpen(true)}
-            style={tw("absolute -top-2 -right-2 bg-black/50 p-2 rounded-full")}
+            style={tw("absolute inset-0 items-center justify-center bg-black/20")}
+            activeOpacity={0.8}
           >
-            <Maximize2 size={16} color="#ffffff" />
-          </Pressable>
+            <View style={tw("bg-white/90 px-4 py-2 rounded-full flex-row items-center gap-2")}>
+              <Eye size={18} color="#4f46e5" />
+              <Text style={tw("text-indigo-600 font-semibold")}>View 3D Model</Text>
+            </View>
+          </TouchableOpacity>
         </View>
 
         {/* Content Section */}
@@ -61,35 +66,40 @@ export default function ThreeDBox({
         )}
       </View>
 
-      {/* Fullscreen Modal */}
+      {/* Fullscreen Popup Modal */}
       <Modal
         visible={isModalOpen}
         animationType="fade"
         transparent={true}
         onRequestClose={() => setIsModalOpen(false)}
       >
-        <View style={tw("flex-1 bg-black/80 items-center justify-center p-4")}>
-          <View style={tw("bg-white rounded-3xl w-full h-[80vh] relative")}>
+        <Pressable
+          style={tw("flex-1 bg-black/95")}
+          onPress={() => setIsModalOpen(false)}
+        >
+          <SafeAreaView style={tw("flex-1")} edges={['top', 'bottom']}>
+            {/* Close button */}
             <Pressable
               onPress={() => setIsModalOpen(false)}
-              style={tw("absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full")}
+              style={tw("absolute top-4 right-4 z-50 bg-black/70 p-3 rounded-full")}
             >
-              <X size={20} color="#ffffff" />
+              <X size={24} color="#ffffff" />
             </Pressable>
-            <View style={tw("h-full")}>
-              <ThreeD
-                src={src}
-                scale={scale * 1.2}
-                target={target}
-                canvasBackground={canvasBackground}
-                canvasBackgroundColor={canvasBackgroundColor}
-                threeDText={threeDText}
-                twoDText={twoDText}
-                height={600}
-              />
+
+            {/* Centered 3D view with padding */}
+            <View style={tw("flex-1 justify-center px-4 py-8")}>
+              <Pressable onPress={(e) => e.stopPropagation()}>
+                <ThreeD2
+                  src={modelSrc}
+                  scale={scale * 1.2}
+                  target={target}
+                  interactive={true}
+                  canvasBackgroundColor={canvasBackgroundColor || 'grey'}
+                />
+              </Pressable>
             </View>
-          </View>
-        </View>
+          </SafeAreaView>
+        </Pressable>
       </Modal>
     </>
   );
