@@ -1,20 +1,25 @@
 import React, { useRef, useState, useEffect, Suspense } from 'react';
-import { View, StyleSheet, PanResponder, Pressable } from 'react-native';
+import { View, StyleSheet, PanResponder, Pressable, ActivityIndicator } from 'react-native';
 import { Canvas, useFrame, useThree } from '@react-three/fiber/native';
 import * as THREE from 'three';
 import { Asset } from 'expo-asset';
 import { loadAsync } from 'expo-three';
-import { ZoomIn, ZoomOut } from 'lucide-react-native';
+import { ZoomIn, ZoomOut, ArrowLeft, ArrowRight, ArrowUp, ArrowDown } from 'lucide-react-native';
 import { tw } from '@/utils/styles';
 import Slider from '@react-native-community/slider';
+import { Text } from '@/components/common/Text';
 
 // Camera controller component to update camera position in render loop
 // Uses a ref callback to get the latest distance value
 function CameraController({
     distanceRef,
+    positionXRef,
+    positionYRef,
     cameraRef
 }: {
     distanceRef: React.MutableRefObject<number>;
+    positionXRef: React.MutableRefObject<number>;
+    positionYRef: React.MutableRefObject<number>;
     cameraRef: React.MutableRefObject<THREE.PerspectiveCamera | null>;
 }) {
     const { camera } = useThree();
@@ -24,18 +29,34 @@ function CameraController({
     useEffect(() => {
         if (camera && 'fov' in camera && typeof (camera as any).updateProjectionMatrix === 'function') {
             cameraRef.current = camera as THREE.PerspectiveCamera;
-            console.log('[CameraController] Camera ref set, position.z:', camera.position.z);
+            console.log('[CameraController] Camera ref set, position:', camera.position.toArray());
         }
     }, [camera, cameraRef]);
 
     useFrame(() => {
-        // Update camera position every frame based on distanceRef
-        // This ensures smooth zoom updates even if state hasn't updated yet
+        // Update camera position every frame based on refs
+        // This ensures smooth updates even if state hasn't updated yet
         if (camera && 'fov' in camera) {
             const targetDistance = distanceRef.current;
-            // Only update if distance changed (avoid unnecessary updates)
+            const targetX = positionXRef.current;
+            const targetY = positionYRef.current;
+
+            // Update position if changed
+            let needsUpdate = false;
             if (Math.abs(camera.position.z - targetDistance) > 0.001) {
                 camera.position.z = targetDistance;
+                needsUpdate = true;
+            }
+            if (Math.abs(camera.position.x - targetX) > 0.001) {
+                camera.position.x = targetX;
+                needsUpdate = true;
+            }
+            if (Math.abs(camera.position.y - targetY) > 0.001) {
+                camera.position.y = targetY;
+                needsUpdate = true;
+            }
+
+            if (needsUpdate) {
                 (camera as any).updateProjectionMatrix();
             }
         }
@@ -59,16 +80,21 @@ function Model({
     scale = 1,
     target = [0, 0, 0],
     rotation,
-    interactive
+    interactive,
+    onLoad,
+    onError
 }: {
     url: string;
     scale?: number;
     target?: [number, number, number];
     rotation?: { x: number; y: number };
     interactive?: boolean;
+    onLoad?: () => void;
+    onError?: (error: string) => void;
 }) {
     const [scene, setScene] = useState<THREE.Group | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const sceneRef = useRef<THREE.Group | null>(null);
 
     useEffect(() => {
@@ -163,15 +189,27 @@ function Model({
 
                     setScene(modelScene);
                     sceneRef.current = modelScene;
+                    if (isMounted) {
+                        setLoading(false);
+                        setError(null);
+                        onLoad?.();
+                    }
                 } catch (err) {
                     console.error = originalError;
-                    throw err;
+                    const errorMessage = err instanceof Error ? err.message : String(err);
+                    if (isMounted) {
+                        setLoading(false);
+                        setError(errorMessage);
+                        onError?.(errorMessage);
+                    }
                 }
             } catch (err) {
+                const errorMessage = err instanceof Error ? err.message : String(err);
                 console.error('Error loading model:', err);
-            } finally {
                 if (isMounted) {
                     setLoading(false);
+                    setError(errorMessage);
+                    onError?.(errorMessage);
                 }
             }
         };
@@ -181,7 +219,8 @@ function Model({
         return () => {
             isMounted = false;
         };
-    }, [url, scale, target]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [url, scale, target]); // onLoad and onError are stable refs, no need to include
 
     // Apply rotation when interactive
     useEffect(() => {
@@ -191,8 +230,12 @@ function Model({
         }
     }, [rotation, interactive]);
 
+    if (error) {
+        return null; // Error will be handled by parent component
+    }
+
     if (loading || !scene) {
-        return null;
+        return null; // Loading will be handled by parent component
     }
 
     return <primitive object={scene} />;
@@ -218,20 +261,41 @@ export default function ThreeD2({
 }: ThreeD2Props) {
     const [rotation, setRotation] = useState({ x: 0, y: 0 });
     const [cameraDistance, setCameraDistance] = useState(5); // Zoom level (2-20)
+    const [cameraX, setCameraX] = useState(0); // Camera X position
+    const [cameraY, setCameraY] = useState(0); // Camera Y position
+    const [loading, setLoading] = useState(!!src); // Loading state
+    const [error, setError] = useState<string | null>(null); // Error state
+    const [modelKey, setModelKey] = useState(0); // Key to force Model re-render on retry
+
     const cameraDistanceRef = useRef(5); // Ref to store current distance for useFrame
+    const cameraXRef = useRef(0); // Ref to store current X position for useFrame
+    const cameraYRef = useRef(0); // Ref to store current Y position for useFrame
     const lastTouch = useRef({ x: 0, y: 0 });
     const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
     const showTestCube = !src;
 
-    // Keep ref in sync with state
+    // Keep refs in sync with state
     useEffect(() => {
         cameraDistanceRef.current = cameraDistance;
     }, [cameraDistance]);
+
+    useEffect(() => {
+        cameraXRef.current = cameraX;
+    }, [cameraX]);
+
+    useEffect(() => {
+        cameraYRef.current = cameraY;
+    }, [cameraY]);
 
     // Zoom limits
     const MIN_ZOOM = 2;
     const MAX_ZOOM = 20;
     const ZOOM_STEP = 0.5;
+
+    // Camera position limits
+    const MIN_POSITION = -10;
+    const MAX_POSITION = 10;
+    const POSITION_STEP = 0.5;
 
     // Zoom functions
     // Note: Lower camera distance = closer = more zoomed in
@@ -269,6 +333,83 @@ export default function ThreeD2({
 
         // Update state (triggers useEffect as backup)
         setCameraDistance(clampedValue);
+    };
+
+    // Camera position functions
+    const moveCameraLeft = () => {
+        setCameraX((prev) => {
+            const newX = Math.max(MIN_POSITION, prev - POSITION_STEP);
+            cameraXRef.current = newX;
+            return newX;
+        });
+    };
+
+    const moveCameraRight = () => {
+        setCameraX((prev) => {
+            const newX = Math.min(MAX_POSITION, prev + POSITION_STEP);
+            cameraXRef.current = newX;
+            return newX;
+        });
+    };
+
+    const moveCameraUp = () => {
+        setCameraY((prev) => {
+            const newY = Math.min(MAX_POSITION, prev + POSITION_STEP);
+            cameraYRef.current = newY;
+            return newY;
+        });
+    };
+
+    const moveCameraDown = () => {
+        setCameraY((prev) => {
+            const newY = Math.max(MIN_POSITION, prev - POSITION_STEP);
+            cameraYRef.current = newY;
+            return newY;
+        });
+    };
+
+    const handleXPositionChange = (value: number) => {
+        // Slider value is 0-100, map to MIN_POSITION-MAX_POSITION
+        const positionValue = MIN_POSITION + (value / 100) * (MAX_POSITION - MIN_POSITION);
+        const clampedValue = Math.max(MIN_POSITION, Math.min(MAX_POSITION, positionValue));
+        cameraXRef.current = clampedValue;
+        setCameraX(clampedValue);
+    };
+
+    const handleYPositionChange = (value: number) => {
+        // Slider value is 0-100, map to MIN_POSITION-MAX_POSITION
+        const positionValue = MIN_POSITION + (value / 100) * (MAX_POSITION - MIN_POSITION);
+        const clampedValue = Math.max(MIN_POSITION, Math.min(MAX_POSITION, positionValue));
+        cameraYRef.current = clampedValue;
+        setCameraY(clampedValue);
+    };
+
+    const getXSliderValue = () => {
+        const value = ((cameraX - MIN_POSITION) / (MAX_POSITION - MIN_POSITION)) * 100;
+        return Math.max(0, Math.min(100, value));
+    };
+
+    const getYSliderValue = () => {
+        const value = ((cameraY - MIN_POSITION) / (MAX_POSITION - MIN_POSITION)) * 100;
+        return Math.max(0, Math.min(100, value));
+    };
+
+    // Model loading handlers
+    const handleModelLoad = useRef(() => {
+        setLoading(false);
+        setError(null);
+    }).current;
+
+    const handleModelError = useRef((errorMessage: string) => {
+        setLoading(false);
+        setError(errorMessage);
+    }).current;
+
+    const handleRetry = () => {
+        setError(null);
+        setLoading(true);
+        // Force re-render of Model component by updating key
+        setModelKey((prev) => prev + 1);
     };
 
     // Get slider value from camera distance
@@ -326,89 +467,198 @@ export default function ThreeD2({
     }, [cameraDistance]);
 
     return (
-        <View style={[styles.container, height ? { height } : styles.flexContainer]}>
-            <View style={styles.canvasContainer} {...containerProps}>
-                <Canvas
-                    camera={{ position: [0, 0, cameraDistance], fov: 60 }}
-                    onCreated={({ scene, camera }) => {
-                        scene.background = new THREE.Color(getBackgroundColor());
-                        // Check if camera has PerspectiveCamera properties (fov, aspect, etc.)
-                        // This avoids instanceof issues with multiple Three.js instances
-                        if (camera && 'fov' in camera && typeof (camera as any).updateProjectionMatrix === 'function') {
-                            cameraRef.current = camera as THREE.PerspectiveCamera;
-                            camera.position.z = cameraDistance;
-                            (camera as any).updateProjectionMatrix();
-                            console.log('[Canvas] Camera ref set, position.z:', camera.position.z);
-                        }
-                    }}
-                >
-                    {/* Camera controller to update zoom continuously */}
-                    <CameraController distanceRef={cameraDistanceRef} cameraRef={cameraRef} />
-                    {/* @ts-ignore - R3F light props are valid */}
-                    <ambientLight intensity={0.6} />
-                    {/* @ts-ignore - R3F light props are valid */}
-                    <directionalLight position={[5, 5, 5]} intensity={1} />
+        <>
+            <View style={[styles.container, height ? { height } : styles.flexContainer]}>
+                {/* Canvas Container - Takes full space */}
+                <View style={styles.canvasContainer} {...containerProps}>
+                    <Canvas
+                        camera={{ position: [cameraX, cameraY, cameraDistance], fov: 60 }}
+                        onCreated={({ scene, camera }) => {
+                            scene.background = new THREE.Color(getBackgroundColor());
+                            // Check if camera has PerspectiveCamera properties (fov, aspect, etc.)
+                            // This avoids instanceof issues with multiple Three.js instances
+                            if (camera && 'fov' in camera && typeof (camera as any).updateProjectionMatrix === 'function') {
+                                cameraRef.current = camera as THREE.PerspectiveCamera;
+                                camera.position.set(cameraX, cameraY, cameraDistance);
+                                (camera as any).updateProjectionMatrix();
+                                console.log('[Canvas] Camera ref set, position:', camera.position.toArray());
+                            }
+                        }}
+                    >
+                        {/* Camera controller to update zoom and position continuously */}
+                        <CameraController
+                            distanceRef={cameraDistanceRef}
+                            positionXRef={cameraXRef}
+                            positionYRef={cameraYRef}
+                            cameraRef={cameraRef}
+                        />
+                        {/* @ts-ignore - R3F light props are valid */}
+                        <ambientLight intensity={0.6} />
+                        {/* @ts-ignore - R3F light props are valid */}
+                        <directionalLight position={[5, 5, 5]} intensity={1} />
 
-                    {showTestCube ? (
-                        <TestCube rotation={interactive ? rotation : undefined} />
-                    ) : (
-                        <Suspense fallback={null}>
-                            <Model
-                                url={src}
-                                scale={scale}
-                                target={target}
-                                rotation={interactive ? rotation : undefined}
-                                interactive={interactive}
-                            />
-                        </Suspense>
+                        {showTestCube ? (
+                            <TestCube rotation={interactive ? rotation : undefined} />
+                        ) : (
+                            <Suspense fallback={null} key={modelKey}>
+                                <Model
+                                    url={src!}
+                                    scale={scale}
+                                    target={target}
+                                    rotation={interactive ? rotation : undefined}
+                                    interactive={interactive}
+                                    onLoad={handleModelLoad}
+                                    onError={handleModelError}
+                                />
+                            </Suspense>
+                        )}
+                    </Canvas>
+
+                    {/* Loading Overlay */}
+                    {loading && src && (
+                        <View style={styles.loadingContainer} pointerEvents="none">
+                            <ActivityIndicator size="large" color="#4f46e5" />
+                            <Text style={tw("text-white mt-4")}>កំពុងទាញយកម៉ូឌែល 3D...</Text>
+                        </View>
                     )}
-                </Canvas>
+
+                    {/* Error Overlay */}
+                    {error && (
+                        <View style={styles.errorContainer} pointerEvents="box-none">
+                            <Text style={tw("text-red-600 text-center mb-4")}>{error}</Text>
+                            <Pressable
+                                onPress={handleRetry}
+                                style={tw("bg-red-600 px-4 py-2 rounded-lg")}
+                            >
+                                <Text style={tw("text-white")}>ព្យាយាមម្តងទៀត</Text>
+                            </Pressable>
+                        </View>
+                    )}
+                </View>
             </View>
 
-            {/* Zoom Controls - Only show when interactive */}
+            {/* Camera Controls - Floating below, detached from container */}
             {interactive && (
-                <View style={tw("flex-row items-center gap-3 px-4 py-3 bg-white/10 rounded-lg mx-4 mb-2")}>
-                    {/* Zoom Out Button */}
-                    <Pressable
-                        onPress={zoomOut}
-                        style={tw("p-2 rounded-full bg-black/50")}
-                        disabled={cameraDistance >= MAX_ZOOM}
-                    >
-                        <ZoomOut
-                            size={20}
-                            color={cameraDistance >= MAX_ZOOM ? "#666" : "#fff"}
-                        />
-                    </Pressable>
+                <View style={tw("px-3 py-2 gap-2")}>
+                    {/* Zoom Controls */}
+                    <View style={tw("flex-row items-center gap-2")}>
+                        <Pressable
+                            onPress={zoomOut}
+                            style={tw("w-8 h-8 rounded-full border border-indigo-600 bg-indigo-50 justify-center items-center")}
+                            disabled={cameraDistance >= MAX_ZOOM}
+                        >
+                            <ZoomOut
+                                size={16}
+                                color={cameraDistance >= MAX_ZOOM ? "#9ca3af" : "#4f46e5"}
+                            />
+                        </Pressable>
 
-                    {/* Zoom Slider */}
-                    <View style={tw("flex-1")}>
-                        <Slider
-                            style={tw("w-full h-8")}
-                            minimumValue={0}
-                            maximumValue={100}
-                            value={getSliderValue()}
-                            onValueChange={handleZoomChange}
-                            onSlidingComplete={handleZoomChange}
-                            minimumTrackTintColor="#4f46e5"
-                            maximumTrackTintColor="#e5e7eb"
-                            thumbTintColor="#4f46e5"
-                        />
+                        <View style={tw("flex-1 h-6 justify-center")}>
+                            <Slider
+                                style={tw("w-full h-5")}
+                                minimumValue={0}
+                                maximumValue={100}
+                                value={getSliderValue()}
+                                onValueChange={handleZoomChange}
+                                onSlidingComplete={handleZoomChange}
+                                minimumTrackTintColor="#4f46e5"
+                                maximumTrackTintColor="#e5e7eb"
+                                thumbTintColor="#4f46e5"
+                            />
+                        </View>
+
+                        <Pressable
+                            onPress={zoomIn}
+                            style={tw("w-8 h-8 rounded-full border border-indigo-600 bg-indigo-50 justify-center items-center")}
+                            disabled={cameraDistance <= MIN_ZOOM}
+                        >
+                            <ZoomIn
+                                size={16}
+                                color={cameraDistance <= MIN_ZOOM ? "#9ca3af" : "#4f46e5"}
+                            />
+                        </Pressable>
                     </View>
 
-                    {/* Zoom In Button */}
-                    <Pressable
-                        onPress={zoomIn}
-                        style={tw("p-2 rounded-full bg-black/50")}
-                        disabled={cameraDistance <= MIN_ZOOM}
-                    >
-                        <ZoomIn
-                            size={20}
-                            color={cameraDistance <= MIN_ZOOM ? "#666" : "#fff"}
-                        />
-                    </Pressable>
+                    {/* X Position Controls */}
+                    <View style={tw("flex-row items-center gap-2")}>
+                        <Pressable
+                            onPress={moveCameraLeft}
+                            style={tw("w-8 h-8 rounded-full border border-indigo-600 bg-indigo-50 justify-center items-center")}
+                            disabled={cameraX <= MIN_POSITION}
+                        >
+                            <ArrowLeft
+                                size={16}
+                                color={cameraX <= MIN_POSITION ? "#9ca3af" : "#4f46e5"}
+                            />
+                        </Pressable>
+
+                        <View style={tw("flex-1 h-6 justify-center")}>
+                            <Slider
+                                style={tw("w-full h-5")}
+                                minimumValue={0}
+                                maximumValue={100}
+                                value={getXSliderValue()}
+                                onValueChange={handleXPositionChange}
+                                onSlidingComplete={handleXPositionChange}
+                                minimumTrackTintColor="#4f46e5"
+                                maximumTrackTintColor="#e5e7eb"
+                                thumbTintColor="#4f46e5"
+                            />
+                        </View>
+
+                        <Pressable
+                            onPress={moveCameraRight}
+                            style={tw("w-8 h-8 rounded-full border border-indigo-600 bg-indigo-50 justify-center items-center")}
+                            disabled={cameraX >= MAX_POSITION}
+                        >
+                            <ArrowRight
+                                size={16}
+                                color={cameraX >= MAX_POSITION ? "#9ca3af" : "#4f46e5"}
+                            />
+                        </Pressable>
+                    </View>
+
+                    {/* Y Position Controls */}
+                    <View style={tw("flex-row items-center gap-2")}>
+                        <Pressable
+                            onPress={moveCameraDown}
+                            style={tw("w-8 h-8 rounded-full border border-indigo-600 bg-indigo-50 justify-center items-center")}
+                            disabled={cameraY <= MIN_POSITION}
+                        >
+                            <ArrowDown
+                                size={16}
+                                color={cameraY <= MIN_POSITION ? "#9ca3af" : "#4f46e5"}
+                            />
+                        </Pressable>
+
+                        <View style={tw("flex-1 h-6 justify-center")}>
+                            <Slider
+                                style={tw("w-full h-5")}
+                                minimumValue={0}
+                                maximumValue={100}
+                                value={getYSliderValue()}
+                                onValueChange={handleYPositionChange}
+                                onSlidingComplete={handleYPositionChange}
+                                minimumTrackTintColor="#4f46e5"
+                                maximumTrackTintColor="#e5e7eb"
+                                thumbTintColor="#4f46e5"
+                            />
+                        </View>
+
+                        <Pressable
+                            onPress={moveCameraUp}
+                            style={tw("w-8 h-8 rounded-full border border-indigo-600 bg-indigo-50 justify-center items-center")}
+                            disabled={cameraY >= MAX_POSITION}
+                        >
+                            <ArrowUp
+                                size={16}
+                                color={cameraY >= MAX_POSITION ? "#9ca3af" : "#4f46e5"}
+                            />
+                        </Pressable>
+                    </View>
                 </View>
             )}
-        </View>
+        </>
     );
 }
 
@@ -418,11 +668,35 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 12,
         overflow: 'hidden',
+        position: 'relative',
     },
     flexContainer: {
         flex: 1,
     },
     canvasContainer: {
         flex: 1,
+    },
+    loadingContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        zIndex: 10,
+    },
+    errorContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        zIndex: 10,
+        padding: 20,
     },
 });

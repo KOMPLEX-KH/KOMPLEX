@@ -160,7 +160,8 @@ export default function ComingSoon() {
 
     const mockThreeDExplanation = {
         explanation: "រូបភាព 3D នេះជួយក្នុងការយល់ដឹងអំពីលីមីត។",
-        scale: 1,
+        src: "/test2.glb",
+        scale: 8,
         target: [0, 0, 0] as [number, number, number],
         height: 400
     };
@@ -186,8 +187,8 @@ export default function ComingSoon() {
 
             {/* 3D Explanation Box */}
             <ThreeDExplanationBox2
-                showTestObject={true}
                 explanation={mockThreeDExplanation.explanation}
+                src={mockThreeDExplanation.src}
                 scale={mockThreeDExplanation.scale}
                 target={mockThreeDExplanation.target}
                 height={mockThreeDExplanation.height}

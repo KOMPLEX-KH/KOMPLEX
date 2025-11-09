@@ -19,7 +19,7 @@ export default function ThreeDExplanationBox({
   height = 400,
   title = "ការពន្យល់",
   ...rest
-}: ThreeDExplanationBoxProps & { showTestObject?: boolean }) {
+}: ThreeDExplanationBoxProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modelSrc = typeof src === 'string' ? src : undefined;
 
