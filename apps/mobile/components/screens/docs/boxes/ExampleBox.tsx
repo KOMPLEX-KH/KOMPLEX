@@ -16,18 +16,18 @@ function AnswerBox({ answer }: { answer: string | React.ReactNode }) {
 
 export default function ExampleBox({ question, content, steps, answer }: ExampleBoxProps) {
     return (
-        <View style={tw("bg-amber-50 border-2 border-amber-500 rounded-3xl p-4 my-6")}>
+        <View style={tw("bg-yellow-50 border-2 border-yellow-500 rounded-3xl p-4 my-6")}>
             {/* Header */}
             <View style={tw("flex-row items-center gap-3 mb-4")}>
                 <Search size={20} color="#d97706" />
-                <Text style={tw("text-amber-800 font-semibold text-lg")}>
+                <Text style={tw("text-yellow-800 font-semibold text-lg")}>
                     ឧទាហរណ៍
                 </Text>
             </View>
 
             {/* Question */}
             <View style={tw("mb-4")}>
-                <Text style={tw("text-gray-800 font-medium")}>{question}</Text>
+                <Text style={tw("text-yellow-800 font-medium")}>{question}</Text>
             </View>
 
             {/* Content */}

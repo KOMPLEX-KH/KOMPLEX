@@ -32,7 +32,7 @@ export default function TopicPracticeBox({ exercises }: TopicPracticeBoxProps) {
           style={tw("bg-white rounded-3xl border border-indigo-200")}
         >
           {/* Exercise Header */}
-          <View style={tw("bg-indigo-50 p-4")}>
+          <View style={tw("bg-indigo-50 p-4 rounded-t-3xl")}>
             <Text style={tw("text-xl font-semibold text-indigo-600")}>
               {exercise.description}
             </Text>

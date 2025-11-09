@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
-import { Video, ResizeMode } from 'expo-av';
+import { VideoView, useVideoPlayer } from 'expo-video';
 import { Play, Pause } from 'lucide-react-native';
 
 interface VideoPlayerProps {
@@ -22,50 +22,98 @@ export default function VideoPlayer({
     onEnded,
     onTimeUpdate,
 }: VideoPlayerProps) {
-    const videoRef = useRef<Video>(null);
-    const [isPlaying, setIsPlaying] = useState(false);
+    const player = useVideoPlayer({ uri: src });
+
     const [showButton, setShowButton] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
 
-    const togglePlay = async () => {
-        if (videoRef.current) {
-            if (isPlaying) {
-                await videoRef.current.pauseAsync();
-                setIsPlaying(false);
-                onPause?.();
+    // Configure player settings
+    useEffect(() => {
+        if (player) {
+            player.loop = false;
+            player.muted = false;
+        }
+    }, [player]);
+
+    // Update source when src changes
+    useEffect(() => {
+        if (player && src) {
+            player.replace({ uri: src });
+        }
+    }, [src, player]);
+
+    // Monitor player state
+    useEffect(() => {
+        if (!player) return;
+
+        // Track loading and playback state
+        const updateInterval = setInterval(() => {
+            // Check if video is loaded (has duration)
+            if (player.duration > 0 && isLoading) {
+                setIsLoading(false);
+            }
+
+            // Track time updates
+            if (player.currentTime > 0) {
+                onTimeUpdate?.(player.currentTime);
+            }
+
+            // Check if video ended
+            if (player.duration > 0 && player.currentTime >= player.duration - 0.1) {
+                if (player.playing) {
+                    player.pause();
+                    onEnded?.();
+                }
+            }
+        }, 200);
+
+        return () => {
+            clearInterval(updateInterval);
+        };
+    }, [player, isLoading, onTimeUpdate, onEnded]);
+
+    // Auto-hide button after playing starts
+    useEffect(() => {
+        if (player?.playing) {
+            onPlay?.();
+            const timer = setTimeout(() => {
+                setShowButton(false);
+            }, 2000);
+            return () => clearTimeout(timer);
+        } else if (player && !player.playing) {
+            onPause?.();
+            setShowButton(true);
+        }
+    }, [player?.playing, onPlay, onPause]);
+
+    const togglePlay = () => {
+        if (player) {
+            if (player.playing) {
+                player.pause();
             } else {
-                await videoRef.current.playAsync();
-                setIsPlaying(true);
-                onPlay?.();
-                // Auto-hide button after 2 seconds
-                setTimeout(() => {
-                    setShowButton(false);
-                }, 2000);
+                player.play();
             }
         }
     };
 
+    if (!player) {
+        return (
+            <View style={[styles.container, style]}>
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#ffffff" />
+                </View>
+            </View>
+        );
+    }
+
     return (
         <View style={[styles.container, style]}>
-            <Video
-                ref={videoRef}
-                source={{ uri: src }}
+            <VideoView
+                player={player}
                 style={styles.video}
-                resizeMode={ResizeMode.CONTAIN}
-                useNativeControls={false}
-                onPlaybackStatusUpdate={(status) => {
-                    if (status.isLoaded) {
-                        setIsLoading(false);
-                        if (status.isPlaying !== isPlaying) {
-                            setIsPlaying(status.isPlaying || false);
-                        }
-                        if (status.didJustFinish) {
-                            setIsPlaying(false);
-                            onEnded?.();
-                        }
-                        onTimeUpdate?.(status.positionMillis / 1000);
-                    }
-                }}
+                contentFit="contain"
+                nativeControls={false}
+                allowsFullscreen={false}
             />
 
             {isLoading && (
@@ -82,7 +130,7 @@ export default function VideoPlayer({
                 ]}
                 onPressIn={() => setShowButton(true)}
             >
-                {isPlaying ? (
+                {player.playing ? (
                     <Pause size={20} color="#ffffff" />
                 ) : (
                     <Play size={20} color="#ffffff" />

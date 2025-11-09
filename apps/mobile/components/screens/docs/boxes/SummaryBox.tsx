@@ -11,7 +11,7 @@ export default function SummaryBox({
   icon = "Lightbulb",
   sections,
 }: SummaryBoxProps) {
-  const SectionIcon = Icons[icon as keyof typeof Icons] as React.ComponentType<{
+  const SectionIcon = (Icons as any)[icon as keyof typeof Icons] as React.ComponentType<{
     size?: number;
     color?: string;
   }> || Lightbulb;
@@ -24,32 +24,30 @@ export default function SummaryBox({
           <Text style={tw("text-indigo-600 font-semibold text-xl")}>{title}</Text>
         </View>
       )}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View style={tw("flex-row gap-4")}>
-          {sections.map((section, index) => (
-            <View
-              key={section.key ?? index}
-              style={tw("bg-white p-4 rounded-3xl border border-indigo-100 w-80")}
-            >
-              <View style={tw("flex-row items-center gap-2 mb-3")}>
-                {SectionIcon && <SectionIcon size={20} color="#4f46e5" />}
-                <Text style={tw("font-semibold text-indigo-800")}>{section.title}</Text>
-              </View>
-              <View style={tw("gap-2")}>
-                {typeof section.content === 'string' ? (
-                  <Text style={tw("text-sm")}>{section.content}</Text>
-                ) : Array.isArray(section.content) ? (
-                  section.content.map((item, i) => (
-                    <Text key={i} style={tw("text-sm")}>{item}</Text>
-                  ))
-                ) : (
-                  section.content
-                )}
-              </View>
+      <View style={tw("flex gap-4")}>
+        {sections.map((section, index) => (
+          <View
+            key={section.key ?? index}
+            style={tw("bg-white p-4 rounded-3xl border border-indigo-100 w-full")}
+          >
+            <View style={tw("flex-row items-center gap-2 mb-3")}>
+              {SectionIcon && <SectionIcon size={20} color="#4f46e5" />}
+              <Text style={tw("font-semibold text-indigo-800")}>{section.title}</Text>
             </View>
-          ))}
-        </View>
-      </ScrollView>
+            <View style={tw("gap-2")}>
+              {typeof section.content === 'string' ? (
+                <Text style={tw("text-sm")}>{section.content}</Text>
+              ) : Array.isArray(section.content) ? (
+                section.content.map((item, i) => (
+                  <Text key={i} style={tw("text-sm")}>{item}</Text>
+                ))
+              ) : (
+                section.content
+              )}
+            </View>
+          </View>
+        ))}
+      </View>
     </View>
   );
 }
