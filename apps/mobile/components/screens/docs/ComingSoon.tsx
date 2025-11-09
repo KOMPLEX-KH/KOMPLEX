@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text as RNText, ScrollView } from "react-native";
 import { tw } from "@/utils/styles";
 import { BookOpen } from "lucide-react-native";
 
@@ -20,12 +20,13 @@ import VideoExplanationBox from "./boxes/explanation-box/VideoExplanationBox";
 import GraphExplanationBox from "./boxes/explanation-box/GraphExplanationBox";
 import ThreeDExplanationBox from "./boxes/explanation-box/3DExplanationBox";
 import ThreeDExplanationBox2 from "./boxes/explanation-box/3DExplanationBox2";
+import { Text } from "@/components/common/Text";
 
 export default function ComingSoon() {
     // Mock data for all box components
     const mockDefinition = {
         title: "លីមីត",
-        content: "លីមីតគឺជាតម្លៃដែលអនុគមន៍មួយចង់ទៅដល់នៅពេលអថេរចូលជិតតម្លៃជាក់លាក់មួយ។ វាជាគំនិតគ្រឹះក្នុងការគណនាដេរីវេ។"
+        content: "លីមីតគឺជាតម្លៃដែលអនុគមន៍មួយចង់ទៅដល់នៅពេលអថេរចូលជិតតម្លៃជាក់លាក់មួយ។ វាជាគំនិតគ្រឹះក្នុងការគណនាដេរីវេ។ដោយដេាយ"
     };
 
     const mockTip = {
@@ -178,11 +179,11 @@ export default function ComingSoon() {
                     <BookOpen size={40} color="white" />
                 </View>
                 <Text style={tw("text-2xl font-bold text-gray-800 text-center mb-2")}>
-                    Box Components Showcase
+                    ដោយដោយដៅ
                 </Text>
-                <Text style={tw("text-gray-600 text-center")}>
-                    ការបង្ហាញប្រអប់ទាំងអស់
-                </Text>
+                <RNText style={{ fontFamily: "Noto-Sans-Regular" }}>
+                ដោយដោយដៅ
+                </RNText>
             </View>
 
             {/* 3D Explanation Box */}
@@ -273,6 +274,6 @@ export default function ComingSoon() {
 
             {/* Footer spacing */}
             <View style={tw("h-8")} />
-        </ScrollView>
+        </ScrollView >
     );
 }
