@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
-import { View, Text, Image, Pressable, Linking } from "react-native";
+import { View, Image, Pressable, Linking } from "react-native";
+import { Text } from "@/components/common/Text";
 import * as LucideIcons from "lucide-react-native";
 import MathRenderer from "@/components/helper/MathRenderer";
 import { tw } from "@/utils/styles";
@@ -118,26 +119,35 @@ function convertPropsToRN(props: Record<string, unknown> = {}): Record<string, a
 }
 
 /**
+ * Check if a component type is a text component
+ */
+function isTextComponent(componentType: string): boolean {
+    const textTypes = ['span', 'p', 'strong', 'em', 'b', 'i', 'code', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+    return textTypes.includes(componentType);
+}
+
+/**
  * Deserialize a serialized content node to React Native elements
  */
 function deserializeElementValue(
     obj: SerializedContent | SerializedContent[] | string | number | null | undefined,
-    key?: string | number
+    key?: string | number,
+    parentIsText: boolean = false
 ): ReactNode {
     if (obj === null || obj === undefined) return null;
 
     // Handle primitives
     if (typeof obj === "string" || typeof obj === "number") {
-        return obj;
+        // If parent is Text component, return as-is, otherwise wrap
+        return parentIsText ? obj : <Text key={key}>{obj}</Text>;
     }
 
     // Handle arrays
     if (Array.isArray(obj)) {
-        return obj.map((item, index) => (
-            <React.Fragment key={index}>
-                {deserializeElementValue(item, index)}
-            </React.Fragment>
-        ));
+        return obj.map((item, index) => {
+            // Recursively deserialize each item
+            return deserializeElementValue(item, key !== undefined ? `${key}-${index}` : index, parentIsText);
+        });
     }
 
     // Handle objects
@@ -146,7 +156,11 @@ function deserializeElementValue(
 
         // Handle text nodes
         if (serialized.type === "text") {
-            return serialized.value as ReactNode;
+            const value = serialized.value;
+            if (parentIsText) {
+                return value as ReactNode;
+            }
+            return <Text key={key}>{value}</Text>;
         }
 
         // Handle InlineMath
@@ -182,8 +196,9 @@ function deserializeElementValue(
         if (Component) {
             const { children, ...restProps } = serialized.props || {};
             const rnProps = convertPropsToRN(restProps);
+            const isTextComponentType = isTextComponent(serialized.type);
             const childrenNode = children
-                ? deserializeElementValue(children as SerializedContent | SerializedContent[], key)
+                ? deserializeElementValue(children as SerializedContent | SerializedContent[], key, isTextComponentType)
                 : null;
 
             // Special handling for specific HTML elements
@@ -239,16 +254,29 @@ function deserializeElementValue(
                                 const bullet = serialized.type === "ul" ? "•" : `${index + 1}.`;
                                 const liItem = item as SerializedContent;
                                 const liChildren = liItem.props?.children;
+                                const liChildrenNode = liChildren ? deserializeElementValue(liChildren as SerializedContent, `${key}-li-${index}`, false) : null;
+                                // Wrap text content in list items
+                                const wrappedLiChildren = React.Children.toArray(liChildrenNode).map((child, idx) => {
+                                    if (typeof child === "string" || typeof child === "number") {
+                                        return <Text key={`li-content-${key}-${index}-${idx}`}>{child}</Text>;
+                                    }
+                                    return child;
+                                });
                                 return (
                                     <View key={index} style={tw("flex-row items-start gap-2 mb-2")}>
                                         <Text style={tw("text-indigo-600 font-bold")}>{bullet}</Text>
                                         <View style={tw("flex-1")}>
-                                            {liChildren ? deserializeElementValue(liChildren as SerializedContent, index) : null}
+                                            {wrappedLiChildren}
                                         </View>
                                     </View>
                                 );
                             }
-                            return <React.Fragment key={index}>{deserializeElementValue(item as SerializedContent, index)}</React.Fragment>;
+                            const deserialized = deserializeElementValue(item as SerializedContent, `${key}-item-${index}`, false);
+                            // Wrap if it's a string
+                            if (typeof deserialized === "string" || typeof deserialized === "number") {
+                                return <Text key={index}>{deserialized}</Text>;
+                            }
+                            return <React.Fragment key={index}>{deserialized}</React.Fragment>;
                         })}
                     </View>
                 );
@@ -256,17 +284,83 @@ function deserializeElementValue(
 
             if (serialized.type === "li") {
                 // List items are handled by parent ul/ol, but handle standalone li
+                // Wrap text content properly
+                const wrappedChildren = React.Children.toArray(childrenNode).map((child, idx) => {
+                    if (typeof child === "string" || typeof child === "number") {
+                        return <Text key={`li-${key}-${idx}`}>{child}</Text>;
+                    }
+                    return child;
+                });
                 return (
                     <View key={key} style={tw("flex-row items-start gap-2 mb-2")}>
                         <Text style={tw("text-indigo-600 font-bold")}>•</Text>
                         <View style={tw("flex-1")}>
-                            {childrenNode}
+                            {wrappedChildren}
                         </View>
                     </View>
                 );
             }
 
             if (serialized.type === "p") {
+                // Check if children contain non-text elements (like inline math)
+                const childrenArray = React.Children.toArray(childrenNode);
+                const hasNonTextChildren = childrenArray.some(child => {
+                    return React.isValidElement(child) &&
+                        typeof (child as any).type === 'function' &&
+                        (child as any).type.name !== 'Text';
+                });
+
+                if (hasNonTextChildren) {
+                    // Process children to group consecutive text nodes and intersperse with math
+                    const processedChildren: ReactNode[] = [];
+                    let textBuffer: (string | number)[] = [];
+
+                    childrenArray.forEach((child) => {
+                        const isText = typeof child === "string" || typeof child === "number";
+
+                        if (isText) {
+                            textBuffer.push(child as string | number);
+                        } else {
+                            // Flush text buffer before adding non-text element
+                            if (textBuffer.length > 0) {
+                                processedChildren.push(
+                                    <Text key={`p-text-${key}-${processedChildren.length}`}>
+                                        {textBuffer.join('')}
+                                    </Text>
+                                );
+                                textBuffer = [];
+                            }
+                            // Add the non-text element (like MathRenderer)
+                            if (React.isValidElement(child)) {
+                                processedChildren.push(
+                                    React.cloneElement(child, { key: `p-elem-${key}-${processedChildren.length}` })
+                                );
+                            } else if (child !== null && child !== undefined) {
+                                // Handle other non-text, non-element children
+                                processedChildren.push(child);
+                            }
+                        }
+                    });
+
+                    // Flush remaining text buffer
+                    if (textBuffer.length > 0) {
+                        processedChildren.push(
+                            <Text key={`p-text-${key}-${processedChildren.length}`}>
+                                {textBuffer.join('')}
+                            </Text>
+                        );
+                    }
+
+                    // Render as View with flex-row for inline flow
+                    // Use flex-wrap and align-items baseline for natural text flow
+                    return (
+                        <View key={key} style={[tw("mb-2 flex-row flex-wrap"), { alignItems: 'baseline' }, rnProps.style]}>
+                            {processedChildren}
+                        </View>
+                    );
+                }
+
+                // Pure text content - use Text component
                 return (
                     <Text key={key} style={[tw("mb-2"), rnProps.style]}>
                         {childrenNode}
@@ -326,14 +420,37 @@ function deserializeElementValue(
             }
 
             if (serialized.type === "blockquote") {
+                // Wrap text content in blockquote
+                const wrappedChildren = React.Children.toArray(childrenNode).map((child, idx) => {
+                    if (typeof child === "string" || typeof child === "number") {
+                        return <Text key={`blockquote-${key}-${idx}`}>{child}</Text>;
+                    }
+                    return child;
+                });
                 return (
                     <View key={key} style={[tw("border-l-4 border-gray-300 pl-4 my-2"), rnProps.style]}>
-                        {childrenNode}
+                        {wrappedChildren}
                     </View>
                 );
             }
 
             // Generic HTML element
+            // If Component is View and children contain text, wrap text in Text component
+            if (Component === View && childrenNode) {
+                // Check if childrenNode contains strings that need wrapping
+                const processedChildren = React.Children.toArray(childrenNode).map((child, idx) => {
+                    if (typeof child === "string" || typeof child === "number") {
+                        return <Text key={`${key}-wrapped-${idx}`}>{child}</Text>;
+                    }
+                    return child;
+                });
+                return (
+                    <Component key={key} {...rnProps}>
+                        {processedChildren}
+                    </Component>
+                );
+            }
+
             return (
                 <Component key={key} {...rnProps}>
                     {childrenNode}
@@ -343,7 +460,7 @@ function deserializeElementValue(
 
         // Unknown element type - try to render children
         if (serialized.props && 'children' in serialized.props) {
-            return deserializeElementValue(serialized.props.children as SerializedContent, key);
+            return deserializeElementValue(serialized.props.children as SerializedContent, key, parentIsText);
         }
     }
 

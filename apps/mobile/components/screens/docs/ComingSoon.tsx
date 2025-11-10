@@ -34,25 +34,25 @@ export default function ComingSoon() {
         content: "ពេលគណនាលីមីត សូមចងចាំពិនិត្យមើលថាតើមានការបែងចែកដោយសូន្យ ឬរូបមន្តមិនកំណត់ដែរឬទេ។"
     };
 
-    const mockExample = {
-        question: "គណនាលីមីត: lim(x→2) (x² - 4)/(x - 2)",
-        content: "យើងត្រូវប្រើប្រាស់កត្តាកំណត់ដើម្បីគណនាលីមីតនេះ។",
-        steps: [
-            {
-                title: "កត្តាកំណត់",
-                content: "(x² - 4) = (x - 2)(x + 2)"
-            },
-            {
-                title: "សម្រួល",
-                content: "lim(x→2) (x - 2)(x + 2)/(x - 2) = lim(x→2) (x + 2)"
-            },
-            {
-                title: "គណនា",
-                content: "= 2 + 2 = 4"
-            }
-        ],
-        answer: "4"
-    };
+    // const mockExample = {
+    //     question: "គណនាលីមីត: lim(x→2) (x² - 4)/(x - 2)",
+    //     content: "យើងត្រូវប្រើប្រាស់កត្តាកំណត់ដើម្បីគណនាលីមីតនេះ។",
+    //     steps: [
+    //         {
+    //             title: "កត្តាកំណត់",
+    //             content: "(x² - 4) = (x - 2)(x + 2)"
+    //         },
+    //         {
+    //             title: "សម្រួល",
+    //             content: "lim(x→2) (x - 2)(x + 2)/(x - 2) = lim(x→2) (x + 2)"
+    //         },
+    //         {
+    //             title: "គណនា",
+    //             content: "= 2 + 2 = 4"
+    //         }
+    //     ],
+    //     answer: "4"
+    // };
 
     const mockExercise = {
         questions: [
@@ -207,13 +207,13 @@ export default function ComingSoon() {
                 content={mockTip.content}
             />
 
-            {/* Example Box */}
+            {/* Example Box
             <ExampleBox
                 question={mockExample.question}
                 content={mockExample.content}
                 steps={mockExample.steps}
                 answer={mockExample.answer}
-            />
+            /> */}
 
             {/* Exercise Box */}
             <ExerciseBox questions={mockExercise.questions} />

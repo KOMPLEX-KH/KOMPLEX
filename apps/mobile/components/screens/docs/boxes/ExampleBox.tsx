@@ -43,7 +43,7 @@ export default function ExampleBox({ question, content, steps, answer }: Example
                     {steps.map((step, index) =>
                         step.content && (
                             <View key={index} style={tw("gap-2")}>
-                                <Text style={tw("font-semibold text-black")}>
+                                <Text style={tw("text-black")}>
                                     ជំហានទី{index + 1}៖ {step.title}
                                 </Text>
                                 <View style={tw("bg-white rounded-3xl border-2 border-gray-200 p-3")}>
