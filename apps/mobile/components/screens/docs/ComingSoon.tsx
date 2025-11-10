@@ -174,7 +174,7 @@ export default function ComingSoon() {
             showsVerticalScrollIndicator={false}
         >
             {/* Header */}
-            <View style={tw("items-center mb-8")}>
+            {/* <View style={tw("items-center mb-8")}>
                 <View style={tw("w-20 h-20 bg-indigo-500 rounded-full items-center justify-center mb-4")}>
                     <BookOpen size={40} color="white" />
                 </View>
@@ -184,16 +184,16 @@ export default function ComingSoon() {
                 <RNText style={{ fontFamily: "Noto-Sans-Regular" }}>
                 ដោយដោយដៅ
                 </RNText>
-            </View>
+            </View> */}
 
             {/* 3D Explanation Box */}
-            <ThreeDExplanationBox2
+            {/* <ThreeDExplanationBox2
                 explanation={mockThreeDExplanation.explanation}
                 src={mockThreeDExplanation.src}
                 scale={mockThreeDExplanation.scale}
                 target={mockThreeDExplanation.target}
                 height={mockThreeDExplanation.height}
-            />
+            /> */}
 
             {/* Definition Box */}
             <DefinitionBox
@@ -235,40 +235,40 @@ export default function ComingSoon() {
             />
 
             {/* Graph Box */}
-            <GraphBox
+            {/* <GraphBox
                 expressions={mockGraph.expressions}
-            />
+            /> */}
 
             {/* Summary Box */}
-            <SummaryBox
+            {/* <SummaryBox
                 title={mockSummary.title}
                 icon={mockSummary.icon}
                 sections={mockSummary.sections}
-            />
+            /> */}
 
             {/* Topic Practice Box */}
-            <TopicPracticeBox exercises={mockPractice.exercises} />
+            {/* <TopicPracticeBox exercises={mockPractice.exercises} /> */}
 
             {/* Image Explanation Box */}
-            <ImageExplanationBox
+            {/* <ImageExplanationBox
                 src={mockImageExplanation.src}
                 imageAlt={mockImageExplanation.imageAlt}
                 title={mockImageExplanation.title}
                 explanation={mockImageExplanation.explanation}
-            />
+            /> */}
 
             {/* Video Explanation Box */}
-            <VideoExplanationBox
+            {/* <VideoExplanationBox
                 src={mockVideoExplanation.src}
                 videoTitle={mockVideoExplanation.videoTitle}
                 explanation={mockVideoExplanation.explanation}
-            />
+            /> */}
 
             {/* Graph Explanation Box */}
-            <GraphExplanationBox
+            {/* <GraphExplanationBox
                 expressions={mockGraphExplanation.expressions}
                 explanation={mockGraphExplanation.explanation}
-            />
+            /> */}
 
 
 
