@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { ExerciseQuestion } from "@core-types/docs/boxProps";
 import { ExerciseBoxProps } from "@core-types/docs/boxProps";
-import { InlineMath } from "react-katex";
+import { InlineMath } from "@/components/helper/InlineMath";
 
 // Shuffle array using Fisher-Yates algorithm
 function shuffleArray<T>(array: T[]): T[] {

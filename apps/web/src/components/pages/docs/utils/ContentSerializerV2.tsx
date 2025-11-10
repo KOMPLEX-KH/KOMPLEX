@@ -25,7 +25,9 @@ function resolveLucideNameFromType(type: unknown): string | null {
   }
   return null;
 }
-import { InlineMath, BlockMath } from "react-katex";
+
+import { InlineMath } from "@/components/helper/InlineMath";
+import { BlockMath } from "react-katex";
 
 // Import all box components for type checking
 import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
