@@ -389,7 +389,7 @@ export default function TopicScreen() {
                 currentLesson={memoizedParams.lesson}
                 currentTopic={memoizedParams.topic}
             />
-            <ScrollView contentContainerStyle={tw("py-36 px-4")}>
+            <ScrollView contentContainerStyle={tw("py-40 px-4")}>
                 <TopicWrapper
                     title={topicInfo.topic?.name || ""}
                     prev={navigationData?.prev || null}

@@ -8,8 +8,10 @@ function AnswerBox({ answer }: { answer: string | React.ReactNode }) {
     return (
         <View style={tw("bg-green-50 border-2 border-green-500 rounded-3xl p-5 my-4")}>
             <Text style={tw("text-green-800 font-semibold")}>
-                ចម្លើយៈ {answer}
+                ចម្លើយៈ
+                {"\n"}
             </Text>
+            {answer}
         </View>
     );
 }

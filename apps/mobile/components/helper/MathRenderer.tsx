@@ -194,16 +194,56 @@ function normalizeMathOnly(math: string): string {
     }
 
     // Step 2: Add backslashes to commands
+    // Process Greek letters first (they're common and need special handling)
+    const greekLetters = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'eta', 'theta',
+        'iota', 'kappa', 'lambda', 'mu', 'nu', 'xi', 'pi', 'rho', 'sigma',
+        'tau', 'upsilon', 'phi', 'chi', 'psi', 'omega',
+        'Gamma', 'Delta', 'Theta', 'Lambda', 'Xi', 'Pi', 'Sigma', 'Upsilon',
+        'Phi', 'Psi', 'Omega', 'varepsilon', 'vartheta', 'varpi', 'varrho',
+        'varsigma', 'varphi'];
+
+    // First pass: Handle Greek letters with careful pattern matching
+    // Process in reverse order (longest first) to avoid partial matches
+    const sortedGreek = greekLetters.sort((a, b) => b.length - a.length);
+    for (const greek of sortedGreek) {
+        // Match Greek letters that aren't already escaped
+        // Pattern: (start of string OR non-backslash char) + word boundary + greek + word boundary
+        const greekPattern = new RegExp(`(^|[^\\\\])\\b${greek}\\b(?!\\w)`, 'g');
+        normalized = normalized.replace(greekPattern, (match, prefix) => {
+            // Check if the match already starts with backslash (shouldn't happen with our pattern, but safety check)
+            if (match.includes(`\\${greek}`)) {
+                return match; // Already escaped
+            }
+            // prefix is either empty string (start) or a single character (non-backslash)
+            // If prefix is empty, we're at start of string, so just add backslash
+            // If prefix exists, it's part of the match, so include it in replacement
+            if (!prefix || prefix === '') {
+                return `\\${greek}`;
+            }
+            return `${prefix}\\${greek}`;
+        });
+    }
+
+    // Second pass: Handle other commands
     for (const cmd of latexCommands) {
+        // Skip if already processed as Greek letter
+        if (greekLetters.includes(cmd)) continue;
+
+        // For other commands, use patterns that avoid already-escaped commands
         const patterns = [
-            new RegExp(`\\b${cmd}(?=[({])`, 'g'),
-            new RegExp(`\\b${cmd}\\s+(?=[({])`, 'g'),
-            new RegExp(`\\b${cmd}(?=\\s*[=+\\-*/^_|&<>]|\\s*$)`, 'g'),
+            new RegExp(`(^|[^\\\\])\\b${cmd}(?=[({])`, 'g'),
+            new RegExp(`(^|[^\\\\])\\b${cmd}\\s+(?=[({])`, 'g'),
+            new RegExp(`(^|[^\\\\])\\b${cmd}(?=\\s*[=+\\-*/^_|&<>]|\\s*$)`, 'g'),
         ];
 
         patterns.forEach(pattern => {
-            normalized = normalized.replace(pattern, (match) => {
-                return match.trim().replace(new RegExp(`^${cmd}`), `\\${cmd}`);
+            normalized = normalized.replace(pattern, (match, prefix) => {
+                // Only add backslash if not already escaped
+                if (match.startsWith('\\')) {
+                    return match; // Already escaped
+                }
+                // Replace the command part with escaped version
+                return `${prefix}\\${cmd}`;
             });
         });
     }
@@ -318,7 +358,7 @@ const styles = StyleSheet.create({
         minHeight: undefined,
         // Small margin for spacing
         marginHorizontal: 2,
-        marginVertical: 0,
+        marginVertical: 2,
     },
     blockContainer: {
         marginVertical: 12,
@@ -331,7 +371,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginHorizontal: 2,
-        marginVertical: 0,
-        gap: 2,
+        marginVertical: 1,
+        gap: 1,
     },
 });
