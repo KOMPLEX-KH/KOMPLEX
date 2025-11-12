@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 // @ts-ignore - react-native-math-view source imports
-import MathView from 'react-native-math-view/src/fallback';
+import MathView from 'react-native-math-view';
 
 interface MathRendererProps {
     math: string;
