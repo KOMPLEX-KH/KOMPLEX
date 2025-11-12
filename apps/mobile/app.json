@@ -48,13 +48,7 @@
           }
         }
       ],
-      "expo-video",
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "The app accesses your photos to let you upload your profile image."
-        }
-      ]
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true,

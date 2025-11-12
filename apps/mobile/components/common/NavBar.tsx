@@ -4,10 +4,14 @@ import { useRouter, usePathname, Href } from 'expo-router';
 import {
     Home,
     BookOpen,
+    Edit,
+    Bot,
     MessageSquare,
+    User,
+    Search,
     BotIcon,
     Video,
-    Library,
+    Clapperboard
 } from 'lucide-react-native';
 import { TAILWIND_COLORS } from '@/constants/styles/tailwind-colors';
 import { BlurView } from 'expo-blur';
@@ -15,11 +19,11 @@ import { BlurView } from 'expo-blur';
 const NAV_ITEMS = [
     { name: 'home', icon: Home, href: '/' },
     { name: 'lessons', icon: BookOpen, href: '/docs' },
-    // { name: 'exercises', icon: Edit, href: '/exercises' },
+    { name: 'exercises', icon: Edit, href: '/exercises' },
     // { name: 'search', icon: Search, href: '/search' },
     { name: 'community', icon: MessageSquare, href: '/forums' },
-    { name: 'videos', icon: Video, href: '/videos' },
-    { name: 'utilities', icon: Library, href: '/utilities' },
+    { name: 'profile2', icon: Clapperboard, href: '/profile' },
+    { name: 'profile', icon: User, href: '/profile' },
 ];
 
 export default function NavBar() {

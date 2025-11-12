@@ -2,11 +2,10 @@ import { FlatList, Pressable, TextInput, View } from 'react-native';
 import { tw } from '@/utils/styles';
 import Logo from '@/components/common/Logo';
 import { Text } from '@/components/common/Text';
-import { ArrowRight, Bell, BookOpen, Bot, Camera, Edit, Library, MessageSquare, Search, User } from 'lucide-react-native'
+import { ArrowRight, Bell, BookOpen, Bot, Camera, Edit, MessageSquare, Search } from 'lucide-react-native'
 import FeatureCard from '@/components/screens/home/featureCard';
 import PostCard from '@/components/screens/home/postCard';
 import { TAILWIND_COLORS } from '@/constants/styles/tailwind-colors';
-import { useRouter } from 'expo-router';
 
 const MAIN_FEATURES = [
     {
@@ -14,31 +13,35 @@ const MAIN_FEATURES = [
         icon: <BookOpen size={28} color={"white"} />,
         href: '/docs',
     },
+    // {
+    //     title: 'អនុវត្តន៍',
+    //     icon: <Edit size={28} color={"white"} />,
+    //     href: '/exercises',
+    // },
     {
         title: 'តារា AI',
         icon: <Bot size={28} color={"white"} />,
         href: '/ai'
     },
     {
-        title: 'វីដេអូ',
-        icon: <Camera size={28} color={"white"} />,
-        href: '/videos'
-    },
-    {
         title: 'ពិភាក្សា',
         icon: <MessageSquare size={28} color={"white"} />,
         href: '/forums',
     },
+    // {
+    //     title: 'អត្ថបទ',
+    //     icon: <BookOpen size={28} color={"white"} />,
+    //     href: '/blogs',
+    // },
     {
-        title: 'ធនធានជំនួយ',
-        icon: <Library size={28} color={"white"} />,
-        href: '/utilities'
+        title: 'វីដេអូ',
+        icon: <Camera size={28} color={"white"} />,
+        href: '/videos'
     },
 
 ]
 
 export default function HomeScreen() {
-    const router = useRouter();
     return (
         <FlatList
             data={MAIN_FEATURES}
@@ -51,8 +54,8 @@ export default function HomeScreen() {
                 <>
                     <View style={tw("flex-row items-center justify-between mb-6")}>
                         <Logo />
-                        <Pressable style={tw("rounded-full bg-indigo-600 p-2")} onPress={() => router.push('/auth')}>
-                            <User size={20} color="white" />
+                        <Pressable style={tw("rounded-full bg-indigo-600 p-2")}>
+                            <Bell size={20} color="white" />
                         </Pressable>
                     </View>
                     {/* <View style={tw("flex-row items-center justify-between mb-6")}>

@@ -49,34 +49,34 @@ export const Dropdown = ({
         disabledTextStyles: tw("text-gray-400"),
     };
 
-    // if (multiple) {
-    //     return (
-    //         <SelectMultiple
-    //             setSelected={setSelected}
-    //             data={data}
-    //             save="key"
-    //             placeholder={placeholder}
-    //             search={searchable}
-    //             searchPlaceholder={commonStyles.searchPlaceholder}
-    //             notFoundText={commonStyles.notFoundText}
-    //             defaultOption={defaultOption}
-    //             disabled={disabled}
-    //             inputStyles={commonStyles.inputStyles}
-    //             boxStyles={commonStyles.boxStyles}
-    //             dropdownStyles={commonStyles.dropdownStyles}
-    //             placeholderStyle={commonStyles.placeholderStyle}
-    //             selectedItemStyles={commonStyles.selectedItemStyles}
-    //             selectedTextStyles={commonStyles.selectedTextStyles}
-    //             disabledItemStyles={commonStyles.disabledItemStyles}
-    //             disabledTextStyles={commonStyles.disabledTextStyles}
-    //             badgeStyles={tw("bg-indigo-600 rounded-full px-2 py-1")}
-    //             badgeTextStyles={tw("text-white text-xs")}
-    //             closeicon={<ChevronDown size={16} color="#6b7280" />}
-    //             searchicon={<ChevronDown size={16} color="#6b7280" />}
-    //             arrowicon={<ChevronDown size={16} color="#6b7280" />}
-    //         />
-    //     );
-    // }
+    if (multiple) {
+        return (
+            <SelectMultiple
+                setSelected={setSelected}
+                data={data}
+                save="key"
+                placeholder={placeholder}
+                search={searchable}
+                searchPlaceholder={commonStyles.searchPlaceholder}
+                notFoundText={commonStyles.notFoundText}
+                defaultOption={defaultOption}
+                disabled={disabled}
+                inputStyles={commonStyles.inputStyles}
+                boxStyles={commonStyles.boxStyles}
+                dropdownStyles={commonStyles.dropdownStyles}
+                placeholderStyle={commonStyles.placeholderStyle}
+                selectedItemStyles={commonStyles.selectedItemStyles}
+                selectedTextStyles={commonStyles.selectedTextStyles}
+                disabledItemStyles={commonStyles.disabledItemStyles}
+                disabledTextStyles={commonStyles.disabledTextStyles}
+                badgeStyles={tw("bg-indigo-600 rounded-full px-2 py-1")}
+                badgeTextStyles={tw("text-white text-xs")}
+                closeicon={<ChevronDown size={16} color="#6b7280" />}
+                searchicon={<ChevronDown size={16} color="#6b7280" />}
+                arrowicon={<ChevronDown size={16} color="#6b7280" />}
+            />
+        );
+    }
 
     return (
         <SelectList
