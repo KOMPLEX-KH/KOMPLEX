@@ -35,7 +35,7 @@ export default function ReplyComponent({
     isReadOnly = false,
 }: ReplyComponentProps) {
     const router = useRouter();
-    const { user, openLoginModal } = useAuth();
+    const { user } = useAuth();
 
     const [replyUpvoted, setReplyUpvoted] = useState(reply.isLiked || false);
     const [likeCount, setLikeCount] = useState(
@@ -55,7 +55,7 @@ export default function ReplyComponent({
         event.stopPropagation();
 
         if (!user) {
-            openLoginModal();
+            router.replace("/auth");
             return;
         }
         if (isLiking) return;
@@ -83,7 +83,7 @@ export default function ReplyComponent({
 
     const handleSubmitReply = async () => {
         if (!user) {
-            openLoginModal();
+            router.replace("/auth");
             return;
         }
 
@@ -133,7 +133,7 @@ export default function ReplyComponent({
                     )}
                 </Pressable>
 
-            <View style={tw("flex-1")}>
+                <View style={tw("flex-1")}>
                     <View style={tw("flex-row items-center gap-2 mb-1")}>
                         <Pressable onPress={handleNavigateToUser}>
                             <Text style={tw("text-sm font-kh-semibold text-gray-900")}>
@@ -155,8 +155,7 @@ export default function ReplyComponent({
                                     onPress={handleReplyLike}
                                     disabled={isLiking}
                                     style={tw(
-                                        `flex-row items-center gap-1 px-2 py-1.5 rounded-full ${
-                                            replyUpvoted ? "bg-indigo-50" : "bg-gray-100"
+                                        `flex-row items-center gap-1 px-2 py-1.5 rounded-full ${replyUpvoted ? "bg-indigo-50" : "bg-gray-100"
                                         }`
                                     )}
                                 >
@@ -166,8 +165,7 @@ export default function ReplyComponent({
                                     />
                                     <Text
                                         style={tw(
-                                            `text-xs font-kh-medium ${
-                                                replyUpvoted ? "text-indigo-600" : "text-gray-600"
+                                            `text-xs font-kh-medium ${replyUpvoted ? "text-indigo-600" : "text-gray-600"
                                             }`
                                         )}
                                     >
@@ -214,8 +212,7 @@ export default function ReplyComponent({
                             onPress={handleSubmitReply}
                             disabled={!replyText.trim()}
                             style={tw(
-                                `px-3 py-2 rounded-full ${
-                                    replyText.trim() ? "bg-indigo-600" : "bg-gray-300"
+                                `px-3 py-2 rounded-full ${replyText.trim() ? "bg-indigo-600" : "bg-gray-300"
                                 }`
                             )}
                         >

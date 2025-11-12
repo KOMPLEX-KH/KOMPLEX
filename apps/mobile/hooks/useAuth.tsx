@@ -1,71 +1,94 @@
-'use client';
-
 import {
   createContext,
   useContext,
   useEffect,
   useState,
-  useCallback,
   useMemo,
   ReactNode,
 } from "react";
 import { User as UserType } from "@core-types/user-content/user";
-import { usePathname } from "next/navigation";
+import { useRouter, usePathname } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { auth } from "@/configs/firebase";
 
 interface AuthContextType {
   user: UserType | null;
   loading: boolean;
-  isLoginOpen: boolean;
-  openLoginModal: () => void;
-  closeLoginModal: () => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
-  isLoginOpen: false,
-  openLoginModal: () => { },
-  closeLoginModal: () => { },
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const router = useRouter();
   const pathname = usePathname();
-  const [user, setUser] = useState<UserType | null>(() => {
-    try {
-      const storedUserJson = typeof window !== 'undefined' ? localStorage.getItem("user") : null;
-      return storedUserJson ? JSON.parse(storedUserJson) : null;
-    } catch {
-      return null;
-    }
-  });
-  const [loading, setLoading] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [user, setUser] = useState<UserType | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const openLoginModal = useCallback(() => setIsLoginOpen(true), []);
-  const closeLoginModal = useCallback(() => setIsLoginOpen(false), []);
-
+  // Load user from AsyncStorage and Firebase auth
   useEffect(() => {
-    // Re-sync on route change in case auth state changed elsewhere
-    try {
-      const storedUserJson = typeof window !== 'undefined' ? localStorage.getItem("user") : null;
-      setUser(storedUserJson ? JSON.parse(storedUserJson) : null);
-    } catch {
-      setUser(null);
-    }
-    // Always close login modal on route change to avoid it sticking
-    setIsLoginOpen(false);
-  }, [pathname]);
+    const loadUser = async () => {
+      try {
+        setLoading(true);
+        const userData = await AsyncStorage.getItem("user");
+        const currentUser = auth.currentUser;
 
-  // Close modal once authenticated
+        if (!currentUser || !userData) {
+          setUser(null);
+          // Redirect to auth if not on auth page
+          if (pathname !== "/auth") {
+            router.replace("/auth");
+          }
+          return;
+        }
+
+        setUser(JSON.parse(userData));
+      } catch (error) {
+        console.error("Error loading user:", error);
+        setUser(null);
+        if (pathname !== "/auth") {
+          router.replace("/auth");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
+  }, [router, pathname]);
+
+  // Re-sync on route change in case auth state changed elsewhere
   useEffect(() => {
-    if (user) {
-      setIsLoginOpen(false);
-    }
-  }, [user]);
+    const syncUser = async () => {
+      try {
+        const userData = await AsyncStorage.getItem("user");
+        const currentUser = auth.currentUser;
+
+        if (!currentUser || !userData) {
+          setUser(null);
+          if (pathname !== "/auth") {
+            router.replace("/auth");
+          }
+          return;
+        }
+
+        setUser(JSON.parse(userData));
+      } catch {
+        setUser(null);
+        if (pathname !== "/auth") {
+          router.replace("/auth");
+        }
+      }
+    };
+
+    syncUser();
+  }, [pathname, router]);
 
   const value = useMemo(
-    () => ({ user, loading, isLoginOpen, openLoginModal, closeLoginModal }),
-    [user, loading, isLoginOpen, openLoginModal, closeLoginModal]
+    () => ({ user, loading }),
+    [user, loading]
   );
 
   return (

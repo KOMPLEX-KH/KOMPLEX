@@ -37,7 +37,7 @@ export default function CommentComponent({
     isReadOnly = false,
 }: CommentComponentProps) {
     const router = useRouter();
-    const { user, openLoginModal } = useAuth();
+    const { user } = useAuth();
 
     const [commentUpvoted, setCommentUpvoted] = useState(comment.isLiked || false);
     const [likeCount, setLikeCount] = useState(
@@ -93,7 +93,7 @@ export default function CommentComponent({
         event.stopPropagation();
 
         if (!user) {
-            openLoginModal();
+            router.replace("/auth");
             return;
         }
         if (isLiking) return;
@@ -122,7 +122,7 @@ export default function CommentComponent({
     const handleSubmitReply = async (replyToId: number, description: string) => {
         try {
             if (!user) {
-                openLoginModal();
+                router.replace("/auth");
                 return;
             }
 
@@ -146,7 +146,7 @@ export default function CommentComponent({
 
     const handleSubmitDirectReply = () => {
         if (!user) {
-            openLoginModal();
+            router.replace("/auth");
             return;
         }
 

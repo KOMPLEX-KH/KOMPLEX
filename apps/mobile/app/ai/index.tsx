@@ -1,19 +1,16 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { View, ScrollView, TextInput, Pressable, KeyboardAvoidingView, Platform, ActivityIndicator, Alert } from 'react-native';
+import { useState, useCallback, useEffect, useRef, useLayoutEffect } from 'react';
+import { View, ScrollView, TextInput, Pressable, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { Text } from '@/components/common/Text';
-import { useLayoutEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { HEADER_CONFIG } from '@/constants/header-config';
-import { useRouter } from 'expo-router';
 import { tw } from '@/utils/styles';
 import { meAiService } from '@/services/index';
 // import MarkdownRenderer from '@/components/helper/MarkDownRenderer';
 import { Dropdown } from '@/components/common/Dropdown';
 import { Send, Bot, Copy, Check, RefreshCw, Square } from 'lucide-react-native';
 import { Message, AIHistoryItem } from '@/types/content/ai';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { auth } from '@/configs/firebase';
 import * as Clipboard from 'expo-clipboard';
+import { useAuth } from '@/hooks/useAuth';
 
 const languages = [
     { key: 'khmer', value: 'ភាសាខ្មែរ' },
@@ -29,7 +26,7 @@ const languages = [
 
 export default function AiScreen() {
     const navigation = useNavigation();
-    const router = useRouter();
+    const { user, loading: isAuthLoading } = useAuth();
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputMessage, setInputMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -43,8 +40,6 @@ export default function AiScreen() {
     const [hasMoreHistory, setHasMoreHistory] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
-    const [user, setUser] = useState<any>(null);
-    const [isAuthLoading, setIsAuthLoading] = useState(true);
 
     const streamingRafRef = useRef<number | null>(null);
     const scrollViewRef = useRef<ScrollView>(null);
@@ -56,30 +51,6 @@ export default function AiScreen() {
             headerTitle: 'តារា AI',
         });
     }, [navigation]);
-
-    // Check authentication
-    useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                const userData = await AsyncStorage.getItem('user');
-                const currentUser = auth.currentUser;
-
-                if (!currentUser || !userData) {
-                    router.replace('/auth');
-                    return;
-                }
-
-                setUser(JSON.parse(userData));
-            } catch (error) {
-                console.error('Error checking auth:', error);
-                router.replace('/auth');
-            } finally {
-                setIsAuthLoading(false);
-            }
-        };
-
-        checkAuth();
-    }, [router]);
 
     const convertHistoryToMessages = (historyItems: AIHistoryItem[]): Message[] => {
         const messages: Message[] = [];

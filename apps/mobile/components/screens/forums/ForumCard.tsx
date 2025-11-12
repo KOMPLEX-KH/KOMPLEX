@@ -66,7 +66,7 @@ export default function ForumCard({
     onLikeClick,
 }: ForumCardProps) {
     const router = useRouter();
-    const { user, openLoginModal } = useAuth();
+    const { user } = useAuth();
 
     const [upvoted, setUpvoted] = useState(post.isLiked);
     const [upvoteCount, setUpvoteCount] = useState(post.likeCount);
@@ -105,7 +105,7 @@ export default function ForumCard({
         event.stopPropagation();
 
         if (!user) {
-            openLoginModal();
+            router.replace("/auth");
             return;
         }
 
@@ -133,7 +133,7 @@ export default function ForumCard({
         event.stopPropagation();
 
         if (!user) {
-            openLoginModal();
+            router.replace("/auth");
             return;
         }
 

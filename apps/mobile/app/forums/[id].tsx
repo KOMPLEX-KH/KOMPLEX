@@ -15,7 +15,7 @@ import { HEADER_CONFIG } from "@/constants/header-config";
 export default function ForumDetailScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const router = useRouter();
-    const { user, openLoginModal } = useAuth();
+    const { user } = useAuth();
 
     const [isCommentInputActive, setIsCommentInputActive] = useState(false);
     const [post, setPost] = useState<ForumPost | null>(null);
@@ -60,7 +60,7 @@ export default function ForumDetailScreen() {
     const handleLikeClick = async (postId: number, isLiked: boolean) => {
         try {
             if (!user) {
-                openLoginModal();
+                router.replace("/auth");
                 return;
             }
             await meForumService.toggleForumLike(postId.toString(), isLiked);

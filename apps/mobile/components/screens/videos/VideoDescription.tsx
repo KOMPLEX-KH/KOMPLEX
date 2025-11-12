@@ -64,7 +64,7 @@ export default function VideoDescription({
     onBookmark,
 }: VideoDescriptionProps) {
     const router = useRouter();
-    const { user, openLoginModal } = useAuth();
+    const { user } = useAuth();
 
     const [showFullDescription, setShowFullDescription] = useState(false);
     const [copied, setCopied] = useState(false);
@@ -94,7 +94,7 @@ export default function VideoDescription({
 
     const handleFollow = async () => {
         if (!user) {
-            openLoginModal();
+            router.replace("/auth");
             return;
         }
 
@@ -155,11 +155,11 @@ export default function VideoDescription({
                     onPress={handleNavigateToUser}
                     style={tw("flex-row items-center gap-3")}
                 >
-                        {video.profileImage ? (
+                    {video.profileImage ? (
                         <Image
                             source={{ uri: video.profileImage }}
                             style={tw("w-10 h-10 rounded-full border-2 border-indigo-500")}
-                            />
+                        />
                     ) : (
                         <View
                             style={tw(
@@ -177,23 +177,21 @@ export default function VideoDescription({
                 <Pressable
                     onPress={handleFollow}
                     style={tw(
-                        `flex-row items-center gap-2 px-4 py-2 rounded-full ${
-                            isFollowing ? "bg-indigo-50" : "bg-indigo-600"
+                        `flex-row items-center gap-2 px-4 py-2 rounded-full ${isFollowing ? "bg-indigo-50" : "bg-indigo-600"
                         }`
                     )}
-                        disabled={isFollowLoading}
-                    >
-                        {isFollowLoading ? (
+                    disabled={isFollowLoading}
+                >
+                    {isFollowLoading ? (
                         <ActivityIndicator size="small" color={isFollowing ? "#4338CA" : "#FFFFFF"} />
-                        ) : isFollowing ? (
+                    ) : isFollowing ? (
                         <UserCheck size={16} color={isFollowing ? "#4338CA" : "#FFFFFF"} />
-                        ) : (
+                    ) : (
                         <UserPlus size={16} color="#FFFFFF" />
                     )}
                     <Text
                         style={tw(
-                            `text-xs font-kh-medium ${
-                                isFollowing ? "text-indigo-700" : "text-white"
+                            `text-xs font-kh-medium ${isFollowing ? "text-indigo-700" : "text-white"
                             }`
                         )}
                     >
@@ -206,16 +204,14 @@ export default function VideoDescription({
                 <Pressable
                     onPress={() => onLike(video.id, video.isLiked, video)}
                     style={tw(
-                        `flex-row items-center gap-2 px-4 py-2 rounded-full ${
-                            video.isLiked ? "bg-indigo-50" : "bg-gray-100"
+                        `flex-row items-center gap-2 px-4 py-2 rounded-full ${video.isLiked ? "bg-indigo-50" : "bg-gray-100"
                         }`
                     )}
-                    >
+                >
                     <ThumbsUp size={18} color={video.isLiked ? "#4F46E5" : "#6B7280"} />
                     <Text
                         style={tw(
-                            `text-sm font-kh-medium ${
-                                video.isLiked ? "text-indigo-600" : "text-gray-700"
+                            `text-sm font-kh-medium ${video.isLiked ? "text-indigo-600" : "text-gray-700"
                             }`
                         )}
                     >
@@ -226,16 +222,14 @@ export default function VideoDescription({
                 <Pressable
                     onPress={() => onBookmark(video.id, video.isSave, video)}
                     style={tw(
-                        `flex-row items-center gap-2 px-4 py-2 rounded-full ${
-                            video.isSave ? "bg-indigo-50" : "bg-gray-100"
+                        `flex-row items-center gap-2 px-4 py-2 rounded-full ${video.isSave ? "bg-indigo-50" : "bg-gray-100"
                         }`
                     )}
-                    >
+                >
                     <Bookmark size={18} color={video.isSave ? "#4F46E5" : "#6B7280"} />
                     <Text
                         style={tw(
-                            `text-sm font-kh-medium ${
-                                video.isSave ? "text-indigo-600" : "text-gray-700"
+                            `text-sm font-kh-medium ${video.isSave ? "text-indigo-600" : "text-gray-700"
                             }`
                         )}
                     >
@@ -254,12 +248,12 @@ export default function VideoDescription({
                 <Pressable
                     onPress={handleCopyLink}
                     style={tw("flex-row items-center gap-2 px-4 py-2 rounded-full bg-gray-100")}
-                                        >
-                                            {copied ? (
+                >
+                    {copied ? (
                         <Check size={18} color="#10B981" />
-                                            ) : (
+                    ) : (
                         <Link2 size={18} color="#4F46E5" />
-                                            )}
+                    )}
                     <Text
                         style={tw(
                             `text-sm font-kh-medium ${copied ? "text-emerald-600" : "text-gray-700"}`

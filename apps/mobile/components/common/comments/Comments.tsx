@@ -20,6 +20,7 @@ import { ForumComment } from "@/types/content/forums";
 import { VideoComment } from "@/types/content/videos";
 import { useAuth } from "@/hooks/useAuth";
 import { tw } from "@/utils/styles";
+import { useRouter } from "expo-router";
 
 interface CommentProps {
     type: "forum" | "video";
@@ -47,9 +48,10 @@ export default function Comments({
     isReadOnly = false,
     onClose,
 }: CommentProps) {
-    const { user, openLoginModal } = useAuth();
+    const { user } = useAuth();
+    const router = useRouter();
 
-    const [comments, setComments] = useState<Array<ForumComment | VideoComment>>([]);
+    const [comments, setComments] = useState<(ForumComment | VideoComment)[]>([]);
     const [newComment, setNewComment] = useState("");
     const [isCommentActive, setIsCommentActive] = useState(focusInput);
     const [error, setError] = useState<string>("");
@@ -92,7 +94,7 @@ export default function Comments({
 
     const handleSubmitComment = async () => {
         if (!user) {
-            openLoginModal();
+            router.replace("/auth");
             return;
         }
         if (!newComment.trim()) {
@@ -161,7 +163,7 @@ export default function Comments({
 
     const renderContent = () => {
         if (isLoading) {
-    return (
+            return (
                 <View style={tw("gap-3")}>
                     <CommentSkeleton />
                     <CommentSkeleton />
@@ -185,14 +187,14 @@ export default function Comments({
 
         return (
             <View style={tw("gap-4")}>
-                    {comments.map((comment, index) => (
-                        <CommentComponent
-                            key={`${type}-${comment.id || `temp-${index}`}-${comment.createdAt || Date.now()}`}
-                            comment={comment as ForumComment | VideoComment}
-                            commentType={type}
-                            isReadOnly={isReadOnly}
-                        />
-                    ))}
+                {comments.map((comment, index) => (
+                    <CommentComponent
+                        key={`${type}-${comment.id || `temp-${index}`}-${comment.createdAt || Date.now()}`}
+                        comment={comment as ForumComment | VideoComment}
+                        commentType={type}
+                        isReadOnly={isReadOnly}
+                    />
+                ))}
             </View>
         );
     };
@@ -244,10 +246,9 @@ export default function Comments({
                                     onPress={handleSubmitComment}
                                     disabled={!newComment.trim() || isSubmitting}
                                     style={tw(
-                                        `px-4 py-2 rounded-full flex-row items-center gap-2 ${
-                                            newComment.trim() && !isSubmitting
-                                                ? "bg-indigo-600"
-                                                : "bg-gray-300"
+                                        `px-4 py-2 rounded-full flex-row items-center gap-2 ${newComment.trim() && !isSubmitting
+                                            ? "bg-indigo-600"
+                                            : "bg-gray-300"
                                         }`
                                     )}
                                 >
