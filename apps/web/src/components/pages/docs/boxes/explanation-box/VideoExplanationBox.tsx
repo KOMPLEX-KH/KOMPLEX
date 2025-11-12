@@ -4,12 +4,7 @@ import { VideoPlayer } from '@/components/helper/VideoPlayer';
 import { Video, Maximize2, X } from 'lucide-react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from 'react';
-
-export interface VideoBoxProps {
-    src?: string;
-    videoTitle?: string;
-    explanation: string | string[] | React.ReactNode;
-}
+import { VideoBoxProps } from "@core-types/docs/boxProps";
 
 export const VideoExplanationBox = ({ src, videoTitle, explanation }: VideoBoxProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);

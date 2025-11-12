@@ -1,4 +1,4 @@
-import { TopicContent_V3 } from "@/types/docs/topic";
+import { TopicContent_V3 } from "@core-types/docs/topic";
 import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
 import { TipBox } from "@/components/pages/docs/boxes/TipBox";
 import { ExampleBox } from "@/components/pages/docs/boxes/ExampleBox";

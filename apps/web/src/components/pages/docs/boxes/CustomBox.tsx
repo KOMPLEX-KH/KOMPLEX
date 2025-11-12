@@ -1,47 +1,4 @@
-export interface CustomBoxProps {
-  // Content
-  content: string | string[] | React.ReactNode;
-
-  // Title and Icon
-  title?: string;
-  titleIcon?: React.ComponentType<{ size?: number; className?: string }>;
-
-  // Colors (with defaults)
-  backgroundColor?: string;
-  borderColor?: string;
-  titleColor?: string;
-  iconColor?: string;
-  contentColor?: string;
-
-  // Styling
-  showTitle?: boolean;
-  showIcon?: boolean;
-  borderWidth?: "1" | "2" | "4";
-  shadow?: "sm" | "md" | "lg" | "xl" | "2xl";
-  padding?: "2" | "4" | "6" | "8";
-  margin?: "2" | "4" | "6" | "8";
-  rounded?: "lg" | "xl" | "2xl" | "3xl";
-
-  // Additional features
-  backdropBlur?: boolean;
-  gradient?: boolean;
-  gradientFrom?: string;
-  gradientTo?: string;
-  gradientDirection?:
-    | "to-r"
-    | "to-l"
-    | "to-t"
-    | "to-b"
-    | "to-tr"
-    | "to-tl"
-    | "to-br"
-    | "to-bl";
-
-  // Interactive
-  hoverEffect?: boolean;
-  clickable?: boolean;
-  onClick?: () => void;
-}
+import { CustomBoxProps } from "@core-types/docs/boxProps";
 
 export function CustomBox({
   content,

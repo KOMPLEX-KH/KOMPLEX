@@ -1,9 +1,5 @@
 import { AlertTriangle } from "lucide-react";
-
-export interface WarningBoxProps {
-  icon?: React.ComponentType<{ size?: number; className?: string }>;
-  content: string | string[] | React.ReactNode;
-}
+import { WarningBoxProps } from "@core-types/docs/boxProps";
 
 export function WarningBox({
   content,

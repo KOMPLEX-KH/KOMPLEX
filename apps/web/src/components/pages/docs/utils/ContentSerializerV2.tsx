@@ -25,7 +25,9 @@ function resolveLucideNameFromType(type: unknown): string | null {
   }
   return null;
 }
-import { InlineMath, BlockMath } from "react-katex";
+
+import { InlineMath } from "@/components/helper/InlineMath";
+import { BlockMath } from "react-katex";
 
 // Import all box components for type checking
 import { DefinitionBox } from "@/components/pages/docs/boxes/DefinitionBox";
@@ -43,7 +45,7 @@ import { ThreeDExplanationBox } from "@/components/pages/docs/boxes/explanation-
 import { GraphExplanationBox } from "@/components/pages/docs/boxes/explanation-box/GraphExplanationBox";
 import { ImageExplanationBox } from "@/components/pages/docs/boxes/explanation-box/ImageExplanationBox";
 import { VideoExplanationBox } from "@/components/pages/docs/boxes/explanation-box/VideoExplanationBox";
-import { TopicContent_V3 } from "@/types/docs/topic";
+import { TopicContent_V3 } from "@core-types/docs/topic";
 
 interface SerializedContent {
   type: string;

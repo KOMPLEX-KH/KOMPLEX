@@ -2,11 +2,7 @@
 
 import { useState } from "react";
 import { ChevronDown, ChevronUp, Edit } from "lucide-react";
-import { PracticeExercise } from "@/types/docs/topic";
-
-export interface TopicPracticeBoxProps {
-  exercises: PracticeExercise[];
-}
+import { TopicPracticeBoxProps } from "@core-types/docs/boxProps";
 
 export function TopicPracticeBox({ exercises }: TopicPracticeBoxProps) {
   const [expandedQuestions, setExpandedQuestions] = useState<

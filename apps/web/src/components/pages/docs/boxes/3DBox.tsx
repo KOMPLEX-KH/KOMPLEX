@@ -3,22 +3,8 @@
 import React, { Fragment, useState } from "react";
 import { Box, Maximize2, X } from "lucide-react";
 import { Dialog, Transition } from "@headlessui/react";
-import BulletList from "@/components/helper/BulletList";
 import { ThreeD } from "@/components/helper/ThreeD";
-import { ThreeDTextItem, TwoDTextItem } from "@/types/docs/threeD";
-
-export interface ThreeDBoxProps {
-  src?: string | React.ReactNode;
-  scale?: number;
-  target?: [number, number, number];
-  title?: string;
-  content?: string | string[] | React.ReactNode;
-  canvasBackground?: React.ReactNode;
-  canvasBackgroundColor?: string;
-  threeDText?: ThreeDTextItem | ThreeDTextItem[];
-  twoDText?: TwoDTextItem | TwoDTextItem[];
-  height?: number;
-}
+import { ThreeDBoxProps } from "@core-types/docs/boxProps";
 
 export function ThreeDBox({
   src = "/test.glb",

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { ChevronDown, Check } from 'lucide-react';
-import { Grade } from '@/types/docs/curriculum';
+import { Grade } from '@core-types/docs/curriculum';
 import { ICON_MAP } from '@/utils/icon';
 import { feedCurriculumsService } from '@/services';
 import DocHeaderSkeleton from './DocHeaderSkeleton';

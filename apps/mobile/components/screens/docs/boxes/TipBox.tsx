@@ -1,13 +1,8 @@
 import { View } from 'react-native';
-import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
+import { tw } from '@/utils/styles';
 import { Lightbulb } from 'lucide-react-native';
-
-export interface TipBoxProps {
-    title?: string | React.ReactNode;
-    icon?: React.ComponentType<{ size?: number; color?: string }>;
-    content: string | string[] | React.ReactNode;
-}
+import { TipBoxProps } from '@core-types/docs/boxProps';
 
 export default function TipBox({
     title,
@@ -15,7 +10,7 @@ export default function TipBox({
     icon: Icon = Lightbulb
 }: TipBoxProps) {
     return (
-        <View style={tw("bg-indigo-50/80 border-l-4 border-indigo-600 p-4 rounded-r-3xl shadow-lg")}>
+        <View style={tw("bg-indigo-50 border-l-4 border-indigo-600 p-4 my-6 rounded-r-3xl")}>
             {title && (
                 <View style={tw("flex-row items-center gap-3 mb-3")}>
                     <Icon size={20} color="#4f46e5" />
@@ -25,22 +20,17 @@ export default function TipBox({
                 </View>
             )}
             {typeof content === 'string' ? (
-                <Text style={tw("text-gray-700 leading-relaxed text-base")}>
-                    {content}
-                </Text>
+                <Text style={tw("text-gray-700 leading-relaxed text-base")}>{content}</Text>
             ) : Array.isArray(content) ? (
-                <View style={tw("space-y-2")}>
+                <View style={tw("gap-2")}>
                     {content.map((item, index) => (
-                        <View key={index} style={tw("flex-row items-start gap-2")}>
-                            <Text style={tw("text-indigo-600 font-bold")}>•</Text>
-                            <Text style={tw("text-gray-700 leading-relaxed text-base flex-1")}>{item}</Text>
-                        </View>
+                        <Text key={index} style={tw("text-gray-700 leading-relaxed text-base")}>{item}</Text>
                     ))}
                 </View>
             ) : (
-                <Text style={tw("text-gray-700 leading-relaxed text-base")}>
+                <View>
                     {content}
-                </Text>
+                </View>
             )}
         </View>
     );

@@ -1,12 +1,5 @@
-import { Step } from '@/types/docs/topic';
 import { Search } from 'lucide-react';
-
-export interface ExampleBoxProps {
-    question: string | React.ReactNode;
-    content?: string | string[] | React.ReactNode;
-    steps?: Step[];
-    answer?: string | React.ReactNode;
-}
+import { ExampleBoxProps } from '@core-types/docs/boxProps';
 
 function AnswerBox({ answer }: { answer: string | React.ReactNode }) {
     return (
@@ -18,7 +11,7 @@ function AnswerBox({ answer }: { answer: string | React.ReactNode }) {
     );
 }
 
-export  function ExampleBox({ question, content, steps, answer }: ExampleBoxProps) {
+export function ExampleBox({ question, content, steps, answer }: ExampleBoxProps) {
     return (
         <div className="bg-amber-50/90 border-2 border-amber-500 rounded-3xl p-4 my-6 shadow-lg shadow-amber-500/15">
             {/* Header */}

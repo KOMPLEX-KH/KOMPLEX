@@ -1,7 +1,7 @@
 "use client";
 
 import { Plus, Trash2, XCircle, BookOpen } from "lucide-react";
-import { ExerciseQuestion } from "@/types/docs/topic";
+import { ExerciseQuestion } from "@core-types/docs/topic";
 import BlogEditor from "@/components/common/Editor";
 
 export interface ExerciseCreationBoxProps {

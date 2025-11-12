@@ -43,12 +43,12 @@ export default function Skeleton() {
     return (
         <View style={tw("flex-1 p-4")}>
             {/* Logo at the center */}
-            <View style={tw("items-center justify-center mb-8")}>
+            <View style={tw("items-center justify-center absolute top-1/4 left-1/4  z-10 ")}>
                 <Logo size="xl" isVertical isLoading />
             </View>
 
             {/* Content skeleton */}
-            <View style={tw("space-y-6")}>
+            <View style={tw("flex-col gap-6")}>
                 {/* Title skeleton */}
                 <SkeletonBlock width="75%" height={24} />
 

@@ -2,20 +2,11 @@
 // These types define the structure for 3D content and text elements
 // Used across ThreeD, 3DBox, and 3DExplanationBox components
 
-// 3D Text item for positioning text in 3D space
-export interface ThreeDTextItem {
-  content: string;
-  position?: [number, number, number];
-  fontSize?: number;
-  color?: string;
-  rotation?: [number, number, number];
-}
+// Import shared types
+import { ThreeDTextItem, TwoDTextItem } from "@core-types/docs/boxProps";
 
-// 2D Text item for HTML overlay text
-export interface TwoDTextItem {
-  content: string;
-  style?: React.CSSProperties;
-}
+// Re-export for backwards compatibility
+export type { ThreeDTextItem, TwoDTextItem };
 
 // Props interface for the ThreeD component
 export interface ThreeDProps {

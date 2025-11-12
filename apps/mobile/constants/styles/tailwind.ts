@@ -91,6 +91,16 @@ export const TAILWIND_CLASSES = {
   "top-72": { top: 288 },
   "top-80": { top: 320 },
   "top-96": { top: 384 },
+
+  // Fractional top values (relative)
+  "top-1/2": { top: "50%" },
+  "top-1/3": { top: "33.333333%" },
+  "top-2/3": { top: "66.666667%" },
+  "top-1/4": { top: "25%" },
+  "top-2/4": { top: "50%" },
+  "top-3/4": { top: "75%" },
+  "top-full": { top: "100%" },
+
   // Negative top
   "-top-0": { top: 0 },
   "-top-1": { top: -4 },
@@ -123,6 +133,15 @@ export const TAILWIND_CLASSES = {
   "-top-80": { top: -320 },
   "-top-96": { top: -384 },
 
+  // Negative fractional top values (relative)
+  "-top-1/2": { top: "-50%" },
+  "-top-1/3": { top: "-33.333333%" },
+  "-top-2/3": { top: "-66.666667%" },
+  "-top-1/4": { top: "-25%" },
+  "-top-2/4": { top: "-50%" },
+  "-top-3/4": { top: "-75%" },
+  "-top-full": { top: "-100%" },
+
   "right-0": { right: 0 },
   "right-1": { right: 4 },
   "right-2": { right: 8 },
@@ -153,6 +172,16 @@ export const TAILWIND_CLASSES = {
   "right-72": { right: 288 },
   "right-80": { right: 320 },
   "right-96": { right: 384 },
+
+  // Fractional right values (relative)
+  "right-1/2": { right: "50%" },
+  "right-1/3": { right: "33.333333%" },
+  "right-2/3": { right: "66.666667%" },
+  "right-1/4": { right: "25%" },
+  "right-2/4": { right: "50%" },
+  "right-3/4": { right: "75%" },
+  "right-full": { right: "100%" },
+
   // Negative right
   "-right-0": { right: 0 },
   "-right-1": { right: -4 },
@@ -185,6 +214,15 @@ export const TAILWIND_CLASSES = {
   "-right-80": { right: -320 },
   "-right-96": { right: -384 },
 
+  // Negative fractional right values (relative)
+  "-right-1/2": { right: "-50%" },
+  "-right-1/3": { right: "-33.333333%" },
+  "-right-2/3": { right: "-66.666667%" },
+  "-right-1/4": { right: "-25%" },
+  "-right-2/4": { right: "-50%" },
+  "-right-3/4": { right: "-75%" },
+  "-right-full": { right: "-100%" },
+
   "bottom-0": { bottom: 0 },
   "bottom-1": { bottom: 4 },
   "bottom-2": { bottom: 8 },
@@ -215,6 +253,16 @@ export const TAILWIND_CLASSES = {
   "bottom-72": { bottom: 288 },
   "bottom-80": { bottom: 320 },
   "bottom-96": { bottom: 384 },
+
+  // Fractional bottom values (relative)
+  "bottom-1/2": { bottom: "50%" },
+  "bottom-1/3": { bottom: "33.333333%" },
+  "bottom-2/3": { bottom: "66.666667%" },
+  "bottom-1/4": { bottom: "25%" },
+  "bottom-2/4": { bottom: "50%" },
+  "bottom-3/4": { bottom: "75%" },
+  "bottom-full": { bottom: "100%" },
+
   // Negative bottom
   "-bottom-0": { bottom: 0 },
   "-bottom-1": { bottom: -4 },
@@ -247,6 +295,15 @@ export const TAILWIND_CLASSES = {
   "-bottom-80": { bottom: -320 },
   "-bottom-96": { bottom: -384 },
 
+  // Negative fractional bottom values (relative)
+  "-bottom-1/2": { bottom: "-50%" },
+  "-bottom-1/3": { bottom: "-33.333333%" },
+  "-bottom-2/3": { bottom: "-66.666667%" },
+  "-bottom-1/4": { bottom: "-25%" },
+  "-bottom-2/4": { bottom: "-50%" },
+  "-bottom-3/4": { bottom: "-75%" },
+  "-bottom-full": { bottom: "-100%" },
+
   "left-0": { left: 0 },
   "left-1": { left: 4 },
   "left-2": { left: 8 },
@@ -277,6 +334,16 @@ export const TAILWIND_CLASSES = {
   "left-72": { left: 288 },
   "left-80": { left: 320 },
   "left-96": { left: 384 },
+
+  // Fractional left values (relative)
+  "left-1/2": { left: "50%" },
+  "left-1/3": { left: "33.333333%" },
+  "left-2/3": { left: "66.666667%" },
+  "left-1/4": { left: "25%" },
+  "left-2/4": { left: "50%" },
+  "left-3/4": { left: "75%" },
+  "left-full": { left: "100%" },
+
   // Negative left
   "-left-0": { left: 0 },
   "-left-1": { left: -4 },
@@ -308,6 +375,15 @@ export const TAILWIND_CLASSES = {
   "-left-72": { left: -288 },
   "-left-80": { left: -320 },
   "-left-96": { left: -384 },
+
+  // Negative fractional left values (relative)
+  "-left-1/2": { left: "-50%" },
+  "-left-1/3": { left: "-33.333333%" },
+  "-left-2/3": { left: "-66.666667%" },
+  "-left-1/4": { left: "-25%" },
+  "-left-2/4": { left: "-50%" },
+  "-left-3/4": { left: "-75%" },
+  "-left-full": { left: "-100%" },
 
   // Spacing - Padding
   "p-0": { padding: 0 },
@@ -4980,15 +5056,104 @@ export const TAILWIND_CLASSES = {
   "text-indigo-900": { color: "#312e81" },
 
   // Border Radius
+  // All
   "rounded-none": { borderRadius: 0 },
   "rounded-sm": { borderRadius: 2 },
-  rounded: { borderRadius: 4 },
+  "rounded": { borderRadius: 4 },
   "rounded-md": { borderRadius: 6 },
   "rounded-lg": { borderRadius: 8 },
   "rounded-xl": { borderRadius: 12 },
   "rounded-2xl": { borderRadius: 16 },
   "rounded-3xl": { borderRadius: 24 },
   "rounded-full": { borderRadius: 9999 },
+
+  // Top Left
+  "rounded-tl-none": { borderTopLeftRadius: 0 },
+  "rounded-tl-sm": { borderTopLeftRadius: 2 },
+  "rounded-tl": { borderTopLeftRadius: 4 },
+  "rounded-tl-md": { borderTopLeftRadius: 6 },
+  "rounded-tl-lg": { borderTopLeftRadius: 8 },
+  "rounded-tl-xl": { borderTopLeftRadius: 12 },
+  "rounded-tl-2xl": { borderTopLeftRadius: 16 },
+  "rounded-tl-3xl": { borderTopLeftRadius: 24 },
+  "rounded-tl-full": { borderTopLeftRadius: 9999 },
+
+  // Top Right
+  "rounded-tr-none": { borderTopRightRadius: 0 },
+  "rounded-tr-sm": { borderTopRightRadius: 2 },
+  "rounded-tr": { borderTopRightRadius: 4 },
+  "rounded-tr-md": { borderTopRightRadius: 6 },
+  "rounded-tr-lg": { borderTopRightRadius: 8 },
+  "rounded-tr-xl": { borderTopRightRadius: 12 },
+  "rounded-tr-2xl": { borderTopRightRadius: 16 },
+  "rounded-tr-3xl": { borderTopRightRadius: 24 },
+  "rounded-tr-full": { borderTopRightRadius: 9999 },
+
+  // Bottom Left
+  "rounded-bl-none": { borderBottomLeftRadius: 0 },
+  "rounded-bl-sm": { borderBottomLeftRadius: 2 },
+  "rounded-bl": { borderBottomLeftRadius: 4 },
+  "rounded-bl-md": { borderBottomLeftRadius: 6 },
+  "rounded-bl-lg": { borderBottomLeftRadius: 8 },
+  "rounded-bl-xl": { borderBottomLeftRadius: 12 },
+  "rounded-bl-2xl": { borderBottomLeftRadius: 16 },
+  "rounded-bl-3xl": { borderBottomLeftRadius: 24 },
+  "rounded-bl-full": { borderBottomLeftRadius: 9999 },
+
+  // Bottom Right
+  "rounded-br-none": { borderBottomRightRadius: 0 },
+  "rounded-br-sm": { borderBottomRightRadius: 2 },
+  "rounded-br": { borderBottomRightRadius: 4 },
+  "rounded-br-md": { borderBottomRightRadius: 6 },
+  "rounded-br-lg": { borderBottomRightRadius: 8 },
+  "rounded-br-xl": { borderBottomRightRadius: 12 },
+  "rounded-br-2xl": { borderBottomRightRadius: 16 },
+  "rounded-br-3xl": { borderBottomRightRadius: 24 },
+  "rounded-br-full": { borderBottomRightRadius: 9999 },
+
+  // Top
+  "rounded-t-none": { borderTopLeftRadius: 0, borderTopRightRadius: 0 },
+  "rounded-t-sm": { borderTopLeftRadius: 2, borderTopRightRadius: 2 },
+  "rounded-t": { borderTopLeftRadius: 4, borderTopRightRadius: 4 },
+  "rounded-t-md": { borderTopLeftRadius: 6, borderTopRightRadius: 6 },
+  "rounded-t-lg": { borderTopLeftRadius: 8, borderTopRightRadius: 8 },
+  "rounded-t-xl": { borderTopLeftRadius: 12, borderTopRightRadius: 12 },
+  "rounded-t-2xl": { borderTopLeftRadius: 16, borderTopRightRadius: 16 },
+  "rounded-t-3xl": { borderTopLeftRadius: 24, borderTopRightRadius: 24 },
+  "rounded-t-full": { borderTopLeftRadius: 9999, borderTopRightRadius: 9999 },
+
+  // Bottom
+  "rounded-b-none": { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 },
+  "rounded-b-sm": { borderBottomLeftRadius: 2, borderBottomRightRadius: 2 },
+  "rounded-b": { borderBottomLeftRadius: 4, borderBottomRightRadius: 4 },
+  "rounded-b-md": { borderBottomLeftRadius: 6, borderBottomRightRadius: 6 },
+  "rounded-b-lg": { borderBottomLeftRadius: 8, borderBottomRightRadius: 8 },
+  "rounded-b-xl": { borderBottomLeftRadius: 12, borderBottomRightRadius: 12 },
+  "rounded-b-2xl": { borderBottomLeftRadius: 16, borderBottomRightRadius: 16 },
+  "rounded-b-3xl": { borderBottomLeftRadius: 24, borderBottomRightRadius: 24 },
+  "rounded-b-full": { borderBottomLeftRadius: 9999, borderBottomRightRadius: 9999 },
+
+  // Left
+  "rounded-l-none": { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 },
+  "rounded-l-sm": { borderTopLeftRadius: 2, borderBottomLeftRadius: 2 },
+  "rounded-l": { borderTopLeftRadius: 4, borderBottomLeftRadius: 4 },
+  "rounded-l-md": { borderTopLeftRadius: 6, borderBottomLeftRadius: 6 },
+  "rounded-l-lg": { borderTopLeftRadius: 8, borderBottomLeftRadius: 8 },
+  "rounded-l-xl": { borderTopLeftRadius: 12, borderBottomLeftRadius: 12 },
+  "rounded-l-2xl": { borderTopLeftRadius: 16, borderBottomLeftRadius: 16 },
+  "rounded-l-3xl": { borderTopLeftRadius: 24, borderBottomLeftRadius: 24 },
+  "rounded-l-full": { borderTopLeftRadius: 9999, borderBottomLeftRadius: 9999 },
+
+  // Right
+  "rounded-r-none": { borderTopRightRadius: 0, borderBottomRightRadius: 0 },
+  "rounded-r-sm": { borderTopRightRadius: 2, borderBottomRightRadius: 2 },
+  "rounded-r": { borderTopRightRadius: 4, borderBottomRightRadius: 4 },
+  "rounded-r-md": { borderTopRightRadius: 6, borderBottomRightRadius: 6 },
+  "rounded-r-lg": { borderTopRightRadius: 8, borderBottomRightRadius: 8 },
+  "rounded-r-xl": { borderTopRightRadius: 12, borderBottomRightRadius: 12 },
+  "rounded-r-2xl": { borderTopRightRadius: 16, borderBottomRightRadius: 16 },
+  "rounded-r-3xl": { borderTopRightRadius: 24, borderBottomRightRadius: 24 },
+  "rounded-r-full": { borderTopRightRadius: 9999, borderBottomRightRadius: 9999 },
 
   // Border Width
   "border-0": { borderWidth: 0 },

@@ -2,22 +2,20 @@
 import { FunctionSquare, Maximize2, X } from "lucide-react";
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import Graph, { Expression } from "@/components/helper/Graph";
+import Graph from "@/components/helper/Graph";
+import { GraphBoxProps, Expression } from "@core-types/docs/boxProps";
 import { CalculatorOptions } from "desmos";
 
-export interface GraphBoxProps {
-    expressions: Expression[];
-    options?: Partial<CalculatorOptions>;
-}
-
 export function GraphBox({ expressions, options }: GraphBoxProps) {
+    // Type assertion for desmos options (web-specific)
+    const desmosOptions = options as Partial<CalculatorOptions> | undefined;
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
         <>
             <div className="bg-indigo-50/80 border border-indigo-600 my-6 rounded-3xl p-4 shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
                 <div className="relative group bg-white rounded-3xl">
-                    <Graph expressions={expressions} options={options} />
+                    <Graph expressions={expressions} options={desmosOptions} />
                     <button
                         onClick={() => setIsModalOpen(true)}
                         className="absolute -top-2 -right-2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-200"
@@ -62,7 +60,7 @@ export function GraphBox({ expressions, options }: GraphBoxProps) {
                                             <X size={20} />
                                         </button>
                                         <div className="h-[80vh]">
-                                            <Graph expressions={expressions} options={options} />
+                                            <Graph expressions={expressions} options={desmosOptions} />
                                         </div>
                                     </div>
                                 </Dialog.Panel>
