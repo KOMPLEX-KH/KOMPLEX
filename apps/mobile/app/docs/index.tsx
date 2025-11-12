@@ -17,13 +17,8 @@ export default function LessonsScreen() {
         if (pathname === "/docs" && !hasRedirectedRef.current && !hasRedirected) {
             hasRedirectedRef.current = true
             hasRedirected = true
+            router.replace("/docs/1/1/1/1" as any)
             
-            // Small delay to ensure router is ready
-            const timer = setTimeout(() => {
-                router.replace("/docs/1/1/1/1" as any)
-            }, 50)
-            
-            return () => clearTimeout(timer)
         }
     }, [pathname, router])
 

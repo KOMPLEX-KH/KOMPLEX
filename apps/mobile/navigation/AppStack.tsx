@@ -50,42 +50,34 @@ export default function AppStack() {
 
             <Stack.Screen
                 name="docs"
-
             />
 
             <Stack.Screen
                 name="ai"
-
             />
 
             <Stack.Screen
                 name="blogs"
-
             />
 
             <Stack.Screen
                 name="exercises"
-
             />
 
             <Stack.Screen
                 name="forums"
-
             />
 
             <Stack.Screen
                 name="videos"
-
             />
 
             <Stack.Screen
-                name="search"
-
+                name="utilities"
             />
 
             <Stack.Screen
-                name="profile"
-
+                name="auth"
             />
 
             {/* Dynamic routes for docs */}
