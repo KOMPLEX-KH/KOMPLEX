@@ -13,7 +13,7 @@ export default function VideoCardSkeleton({ count = 6 }: VideoCardSkeletonProps)
                     key={index}
                     style={tw("rounded-3xl bg-white border border-indigo-50 overflow-hidden")}
                 >
-                    <View style={tw("aspect-video bg-gray-100")} />
+                    <View style={tw("w-full h-48 bg-gray-100")} />
                     <View style={tw("p-4 flex-row gap-3")}>
                         <View style={tw("w-10 h-10 rounded-full bg-gray-200")} />
                         <View style={tw("flex-1 gap-2")}>

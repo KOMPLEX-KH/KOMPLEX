@@ -1,12 +1,13 @@
 import { FlatList, Pressable, TextInput, View } from 'react-native';
 import { tw } from '@/utils/styles';
-import Logo from '@/components/common/Logo';
 import { Text } from '@/components/common/Text';
 import { ArrowRight, Bell, BookOpen, Bot, Camera, Edit, Library, MessageSquare, Search, User } from 'lucide-react-native'
 import FeatureCard from '@/components/screens/home/FeatureCard';
 import PostCard from '@/components/screens/home/PostCard';
 import { TAILWIND_COLORS } from '@/constants/styles/tailwind-colors';
 import { useRouter } from 'expo-router';
+import Header from '@/components/common/Header';
+import HomeHeader from '@/components/screens/home/HomeHeader';
 
 const MAIN_FEATURES = [
     {
@@ -38,7 +39,6 @@ const MAIN_FEATURES = [
 ]
 
 export default function HomeScreen() {
-    const router = useRouter();
     return (
         <FlatList
             data={MAIN_FEATURES}
@@ -48,21 +48,7 @@ export default function HomeScreen() {
             contentContainerStyle={tw("px-4 py-6 pb-20")}
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={
-                <>
-                    <View style={tw("flex-row items-center justify-between mb-6")}>
-                        <Logo />
-                        <Pressable style={tw("rounded-full bg-indigo-600 p-2")} onPress={() => router.push('/auth')}>
-                            <User size={20} color="white" />
-                        </Pressable>
-                    </View>
-                    {/* <View style={tw("flex-row items-center justify-between mb-6")}>
-                        <Text style={tw("text-3xl font-extrabold italic")}>សួស្ដី រក្សា!</Text>
-                        <Pressable style={tw("rounded-full bg-indigo-600 px-5 py-3 flex-row items-center gap-2")}>
-                            <Text style={tw("text-white font-bold italic")}>បន្តមេរៀន</Text>
-                            <ArrowRight size={18} color="white" />
-                        </Pressable>
-                    </View> */}
-                </>
+                <HomeHeader />
             }
             renderItem={({ item }) => (
                 <View style={tw("flex-1 py-2 px-1")}>

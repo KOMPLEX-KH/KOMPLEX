@@ -1,13 +1,13 @@
 import { useState } from "react";
 import {
     View,
-    Text,
     Pressable,
     TextInput,
     Image,
     ActivityIndicator,
     GestureResponderEvent,
 } from "react-native";
+import {Text} from '@/components/common/Text'
 import { ThumbsUp, MessageCircle } from "lucide-react-native";
 import ReplyComponent from "./Reply";
 import { ForumComment, ForumReply } from "@/types/content/forums";

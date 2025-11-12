@@ -91,6 +91,16 @@ export const TAILWIND_CLASSES = {
   "top-72": { top: 288 },
   "top-80": { top: 320 },
   "top-96": { top: 384 },
+
+  // Fractional top values (relative)
+  "top-1/2": { top: "50%" },
+  "top-1/3": { top: "33.333333%" },
+  "top-2/3": { top: "66.666667%" },
+  "top-1/4": { top: "25%" },
+  "top-2/4": { top: "50%" },
+  "top-3/4": { top: "75%" },
+  "top-full": { top: "100%" },
+
   // Negative top
   "-top-0": { top: 0 },
   "-top-1": { top: -4 },
@@ -123,6 +133,15 @@ export const TAILWIND_CLASSES = {
   "-top-80": { top: -320 },
   "-top-96": { top: -384 },
 
+  // Negative fractional top values (relative)
+  "-top-1/2": { top: "-50%" },
+  "-top-1/3": { top: "-33.333333%" },
+  "-top-2/3": { top: "-66.666667%" },
+  "-top-1/4": { top: "-25%" },
+  "-top-2/4": { top: "-50%" },
+  "-top-3/4": { top: "-75%" },
+  "-top-full": { top: "-100%" },
+
   "right-0": { right: 0 },
   "right-1": { right: 4 },
   "right-2": { right: 8 },
@@ -153,6 +172,16 @@ export const TAILWIND_CLASSES = {
   "right-72": { right: 288 },
   "right-80": { right: 320 },
   "right-96": { right: 384 },
+
+  // Fractional right values (relative)
+  "right-1/2": { right: "50%" },
+  "right-1/3": { right: "33.333333%" },
+  "right-2/3": { right: "66.666667%" },
+  "right-1/4": { right: "25%" },
+  "right-2/4": { right: "50%" },
+  "right-3/4": { right: "75%" },
+  "right-full": { right: "100%" },
+
   // Negative right
   "-right-0": { right: 0 },
   "-right-1": { right: -4 },
@@ -185,6 +214,15 @@ export const TAILWIND_CLASSES = {
   "-right-80": { right: -320 },
   "-right-96": { right: -384 },
 
+  // Negative fractional right values (relative)
+  "-right-1/2": { right: "-50%" },
+  "-right-1/3": { right: "-33.333333%" },
+  "-right-2/3": { right: "-66.666667%" },
+  "-right-1/4": { right: "-25%" },
+  "-right-2/4": { right: "-50%" },
+  "-right-3/4": { right: "-75%" },
+  "-right-full": { right: "-100%" },
+
   "bottom-0": { bottom: 0 },
   "bottom-1": { bottom: 4 },
   "bottom-2": { bottom: 8 },
@@ -215,6 +253,16 @@ export const TAILWIND_CLASSES = {
   "bottom-72": { bottom: 288 },
   "bottom-80": { bottom: 320 },
   "bottom-96": { bottom: 384 },
+
+  // Fractional bottom values (relative)
+  "bottom-1/2": { bottom: "50%" },
+  "bottom-1/3": { bottom: "33.333333%" },
+  "bottom-2/3": { bottom: "66.666667%" },
+  "bottom-1/4": { bottom: "25%" },
+  "bottom-2/4": { bottom: "50%" },
+  "bottom-3/4": { bottom: "75%" },
+  "bottom-full": { bottom: "100%" },
+
   // Negative bottom
   "-bottom-0": { bottom: 0 },
   "-bottom-1": { bottom: -4 },
@@ -247,6 +295,15 @@ export const TAILWIND_CLASSES = {
   "-bottom-80": { bottom: -320 },
   "-bottom-96": { bottom: -384 },
 
+  // Negative fractional bottom values (relative)
+  "-bottom-1/2": { bottom: "-50%" },
+  "-bottom-1/3": { bottom: "-33.333333%" },
+  "-bottom-2/3": { bottom: "-66.666667%" },
+  "-bottom-1/4": { bottom: "-25%" },
+  "-bottom-2/4": { bottom: "-50%" },
+  "-bottom-3/4": { bottom: "-75%" },
+  "-bottom-full": { bottom: "-100%" },
+
   "left-0": { left: 0 },
   "left-1": { left: 4 },
   "left-2": { left: 8 },
@@ -277,6 +334,16 @@ export const TAILWIND_CLASSES = {
   "left-72": { left: 288 },
   "left-80": { left: 320 },
   "left-96": { left: 384 },
+
+  // Fractional left values (relative)
+  "left-1/2": { left: "50%" },
+  "left-1/3": { left: "33.333333%" },
+  "left-2/3": { left: "66.666667%" },
+  "left-1/4": { left: "25%" },
+  "left-2/4": { left: "50%" },
+  "left-3/4": { left: "75%" },
+  "left-full": { left: "100%" },
+
   // Negative left
   "-left-0": { left: 0 },
   "-left-1": { left: -4 },
@@ -308,6 +375,15 @@ export const TAILWIND_CLASSES = {
   "-left-72": { left: -288 },
   "-left-80": { left: -320 },
   "-left-96": { left: -384 },
+
+  // Negative fractional left values (relative)
+  "-left-1/2": { left: "-50%" },
+  "-left-1/3": { left: "-33.333333%" },
+  "-left-2/3": { left: "-66.666667%" },
+  "-left-1/4": { left: "-25%" },
+  "-left-2/4": { left: "-50%" },
+  "-left-3/4": { left: "-75%" },
+  "-left-full": { left: "-100%" },
 
   // Spacing - Padding
   "p-0": { padding: 0 },

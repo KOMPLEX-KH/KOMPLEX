@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
     View,
-    Text,
     Pressable,
     Image,
     ScrollView,
@@ -26,6 +25,7 @@ import { useRouter, Href } from "expo-router";
 import * as Clipboard from "expo-clipboard";
 import { useAuth } from "@/hooks/useAuth";
 import { meForumService, meFollowService } from "@/services/index";
+import {Text} from '@/components/common/Text'
 
 const SHARE_BASE_URL = process.env.EXPO_PUBLIC_WEB_URL ?? "https://komplex.app";
 

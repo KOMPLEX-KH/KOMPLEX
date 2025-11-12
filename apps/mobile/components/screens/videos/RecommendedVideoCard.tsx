@@ -1,7 +1,8 @@
-import { View, Text, Pressable, Image } from "react-native";
+import { View,  Pressable, Image } from "react-native";
 import { Play, Eye, Clock } from "lucide-react-native";
 import { useRouter, Href } from "expo-router";
 import { tw } from "@/utils/styles";
+import {Text} from '@/components/common/Text'
 
 interface RecommendedVideoCardProps {
     video: {

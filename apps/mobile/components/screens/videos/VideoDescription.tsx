@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
     View,
-    Text,
     Pressable,
     Share as NativeShare,
     ActivityIndicator,
     Image,
 } from "react-native";
+import { Text } from '@/components/common/Text'
 import {
     ThumbsUp,
     Share2,

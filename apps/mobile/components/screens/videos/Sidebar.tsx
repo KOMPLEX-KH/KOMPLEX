@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Pressable } from "react-native";
 import {
     Home,
     Play,
@@ -9,6 +9,7 @@ import {
 } from "lucide-react-native";
 import { useRouter, Href } from "expo-router";
 import { tw } from "@/utils/styles";
+import {Text} from '@/components/common/Text'
 
 const videoSidebar = [
     { href: "/video", label: "ទំព័រដើម", icon: Home, disabled: false },

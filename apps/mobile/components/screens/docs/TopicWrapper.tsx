@@ -61,7 +61,7 @@ export default function TopicWrapper({ title, children, prev, next, onNavigate }
                 {next ? (
                     <Pressable
                         onPress={() => handleNavigation(next.link)}
-                        style={tw("flex-row items-center bg-black px-4 py-2 rounded-full")}
+                        style={tw("flex-row items-center bg-indigo-500 px-4 py-2 rounded-full")}
                     >
                         <Text style={tw("text-white mr-2")} numberOfLines={1}>{next.title}</Text>
                         <ArrowRight size={16} color="white" />

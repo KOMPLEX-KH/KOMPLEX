@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { View, Text, TextInput, Pressable } from "react-native";
+import { View, TextInput, Pressable } from "react-native";
 import { Search, Plus } from "lucide-react-native";
 import { useRouter, Href } from "expo-router";
 import { tw } from "@/utils/styles";
+import {Text} from '@/components/common/Text'
 
 interface SidebarProps {
     onSearch?: (query: string) => void;

@@ -8,6 +8,7 @@ import { VideoPost } from "@/types/content/videos";
 import { feedVideoService } from "@/services/index";
 import { useNavigation } from "expo-router";
 import { HEADER_CONFIG } from "@/constants/header-config";
+import { Scroll } from "lucide-react-native";
 
 export default function VideosScreen() {
     const navigation = useNavigation();
@@ -55,18 +56,12 @@ export default function VideosScreen() {
     if (loading) {
         return (
             <View style={tw("flex-1 bg-gray-50")}>
-                <FlatList
-                    data={[1, 2, 3, 4, 5, 6]}
-                    renderItem={() => (
-                        <View style={tw("p-4")}>
-                            <VideoCardSkeleton />
-                        </View>
-                    )}
-                    keyExtractor={(item) => item.toString()}
-                    numColumns={2}
-                    columnWrapperStyle={tw("gap-4")}
-                    contentContainerStyle={tw("p-4")}
-                />
+                <ScrollView
+                    style={tw("flex-1")}
+                    contentContainerStyle={tw("px-4 py-20")}
+                >
+                    <VideoCardSkeleton count={6} />
+                </ScrollView>
             </View>
         );
     }
@@ -76,7 +71,7 @@ export default function VideosScreen() {
             <View style={tw("flex-1 bg-gray-50")}>
                 <ScrollView
                     style={tw("flex-1")}
-                    contentContainerStyle={tw("p-4")}
+                    contentContainerStyle={tw("px-4 py-20")}
                 >
                     <ContentError
                         type={error === "រកមិនឃើញវីដេអូ" ? "no-results" : "error"}
@@ -89,26 +84,23 @@ export default function VideosScreen() {
 
     return (
         <View style={tw("flex-1 bg-gray-50")}>
-            <FlatList
-                data={videos}
-                renderItem={({ item }) => (
-                    <View style={tw("flex-1 p-2")}>
-                        <VideoCard video={item} variant="compact" />
-                    </View>
-                )}
-                keyExtractor={(item) => item.id.toString()}
-                numColumns={2}
-                columnWrapperStyle={tw("gap-2")}
-                contentContainerStyle={tw("p-4")}
+            <ScrollView
+                style={tw("flex-1")}
+                contentContainerStyle={tw("px-4 py-20")}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
-                ListEmptyComponent={
-                    <View style={tw("p-4")}>
+            >
+                <View >
+                    {videos.length > 0 ? (
+                        videos.map((video) => (
+                            <VideoCard key={video.id} video={video} variant="compact" />
+                        ))
+                    ) : (
                         <ContentError type="no-results" message="រកមិនឃើញវីដេអូ" />
-                    </View>
-                }
-            />
+                    )}
+                </View>
+            </ScrollView>
         </View>
     );
 }

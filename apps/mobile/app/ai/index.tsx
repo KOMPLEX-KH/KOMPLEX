@@ -11,6 +11,7 @@ import { Send, Bot, Copy, Check, RefreshCw, Square } from 'lucide-react-native';
 import { Message, AIHistoryItem } from '@/types/content/ai';
 import * as Clipboard from 'expo-clipboard';
 import { useAuth } from '@/hooks/useAuth';
+import { router } from 'expo-router';
 
 const languages = [
     { key: 'khmer', value: 'ភាសាខ្មែរ' },
@@ -100,6 +101,14 @@ export default function AiScreen() {
         } finally {
             setIsLoadingHistory(false);
             setIsLoadingMore(false);
+        }
+    }, [user]);
+
+    useEffect(() => {
+        if (!user) {
+            setTimeout(() => {
+                router.replace("/auth");
+            }, 500);
         }
     }, [user]);
 

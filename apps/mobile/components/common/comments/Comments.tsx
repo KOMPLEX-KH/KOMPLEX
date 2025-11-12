@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import {
     View,
-    Text,
     Pressable,
     TextInput,
     ActivityIndicator,
     ScrollView,
 } from "react-native";
+import {Text} from '@/components/common/Text'
 import { AlertCircle } from "lucide-react-native";
 import CommentComponent from "./Comment";
 import ContentError from "@/components/common/ContentError";
