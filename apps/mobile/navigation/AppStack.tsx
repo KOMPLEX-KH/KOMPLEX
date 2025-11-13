@@ -85,6 +85,13 @@ export default function AppStack() {
                 name="docs/[grade]/[subject]/[lesson]/[topic]"
 
             />
+
+            <Stack.Screen
+                name="(modal)/ai"
+                options={{
+                    presentation: 'modal',
+                }}
+            />
         </Stack>
     );
 }

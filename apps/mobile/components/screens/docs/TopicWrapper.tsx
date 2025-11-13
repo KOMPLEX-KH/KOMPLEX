@@ -43,7 +43,7 @@ export default function TopicWrapper({ title, children, prev, next, onNavigate }
                 {prev ? (
                     <Pressable
                         onPress={() => handleNavigation(prev.link)}
-                        style={tw("flex flex-row items-center bg-indigo-500 px-4 py-2 rounded-full")}
+                        style={tw("flex flex-row items-center max-w-36 bg-indigo-500 px-4 py-2 rounded-full")}
                     >
                         <ArrowLeft size={16} color="white" />
                         <Text style={tw("text-white ml-2")} numberOfLines={1}>{prev.title}</Text>
@@ -51,7 +51,7 @@ export default function TopicWrapper({ title, children, prev, next, onNavigate }
                 ) : (
                     <Pressable
                         disabled
-                        style={tw("flex-row items-center bg-gray-200 px-4 py-2 rounded-full")}
+                        style={tw("flex-row items-center max-w-36 bg-gray-200 px-4 py-2 rounded-full")}
                     >
                         <ArrowLeft size={16} color="#9CA3AF" />
                         <Text style={tw("text-gray-400 ml-2")}>មុន</Text>
@@ -61,7 +61,7 @@ export default function TopicWrapper({ title, children, prev, next, onNavigate }
                 {next ? (
                     <Pressable
                         onPress={() => handleNavigation(next.link)}
-                        style={tw("flex-row items-center bg-indigo-500 px-4 py-2 rounded-full")}
+                        style={tw("flex-row items-center max-w-36 bg-indigo-500 px-4 py-2 rounded-full")}
                     >
                         <Text style={tw("text-white mr-2")} numberOfLines={1}>{next.title}</Text>
                         <ArrowRight size={16} color="white" />
@@ -69,7 +69,7 @@ export default function TopicWrapper({ title, children, prev, next, onNavigate }
                 ) : (
                     <Pressable
                         disabled
-                        style={tw("flex-row items-center bg-gray-200 px-4 py-2 rounded-full")}
+                        style={tw("flex-row items-center max-w-36 bg-gray-200 px-4 py-2 rounded-full")}
                     >
                         <Text style={tw("text-gray-400 mr-2")}>បន្ទាប់</Text>
                         <ArrowRight size={16} color="#9CA3AF" />
