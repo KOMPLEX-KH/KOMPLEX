@@ -229,12 +229,16 @@ export default function AuthPage() {
         }
     };
 
+    // Note: For React Native, signInWithRedirect will open a browser
+    // The auth state listener in useAuth.tsx will handle the result automatically
+    // when the user returns from the browser after authentication
+
     const handleSocialLogin = async (providerKey: ProviderKey) => {
         setFormError(null);
         setIsSubmitting(true);
         try {
             if (Platform.OS === 'web') {
-                // For web, use redirect flow
+                // For web, use Firebase's signInWithRedirect
                 const provider =
                     providerKey === 'google' ? googleProvider :
                         providerKey === 'github' ? githubProvider :
@@ -243,20 +247,25 @@ export default function AuthPage() {
                 return;
             }
 
-            // For native, use expo-auth-session
+            // For native, we need to use expo-auth-session to get OAuth tokens
+            // Then create Firebase credentials and sign in
             const redirectUri = AuthSession.makeRedirectUri();
             let discovery: AuthSession.DiscoveryDocument;
             let request: AuthSession.AuthRequest;
 
             // Configure OAuth based on provider
+            // Note: These client IDs should be configured in your Firebase project
+            // and can be obtained from Firebase Console > Authentication > Sign-in method
             if (providerKey === 'google') {
                 discovery = {
                     authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
                     tokenEndpoint: 'https://oauth2.googleapis.com/token',
                     revocationEndpoint: 'https://oauth2.googleapis.com/revoke',
                 };
+                // For Google, you can use the Firebase project's OAuth client ID
+                // Get it from Firebase Console > Project Settings > General > Your apps
                 request = new AuthSession.AuthRequest({
-                    clientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID || '',
+                    clientId: process.env.EXPO_PUBLIC_FIREBASE_GOOGLE_CLIENT_ID || process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID || '',
                     scopes: ['openid', 'profile', 'email'],
                     responseType: AuthSession.ResponseType.Code,
                     redirectUri,
@@ -287,6 +296,10 @@ export default function AuthPage() {
                 throw new Error('Unsupported provider');
             }
 
+            if (!request.clientId) {
+                throw new Error(`Missing OAuth client ID for ${providerKey}. Please configure it in your environment variables.`);
+            }
+
             // Start the OAuth flow
             const result = await request.promptAsync(discovery);
 
@@ -295,7 +308,7 @@ export default function AuthPage() {
                 return;
             }
 
-            // Exchange code for token using fetch
+            // Exchange code for token
             const tokenRequestParams = new URLSearchParams();
             tokenRequestParams.append('client_id', request.clientId);
             tokenRequestParams.append('code', result.params.code);
@@ -332,49 +345,22 @@ export default function AuthPage() {
                     accessToken: tokenData.access_token,
                 });
             } else if (providerKey === 'github') {
-                // For GitHub, we need to use the access token directly
-                // GitHub doesn't provide idToken, so we'll create a custom token via backend
-                // For now, use the access token with GitHub provider
+                // GitHub doesn't provide idToken, use access token
                 credential = GithubAuthProvider.credential(tokenData.access_token);
             } else {
                 throw new Error('Unsupported provider');
             }
 
-            // Sign in with Firebase
+            // Sign in with Firebase using the credential
             const firebaseResult = await signInWithCredential(auth, credential);
             await firebaseResult.user.getIdToken(true);
 
-            // Get or create user in backend
-            let userData;
-            try {
-                userData = await authService.getCurrentUser();
-            } catch {
-                // User doesn't exist in backend, create via social login
-                const email = firebaseResult.user.email || '';
-                const displayName = firebaseResult.user.displayName || '';
-                const nameParts = displayName.split(' ');
-                const firstName = nameParts[0] || '';
-                const lastName = nameParts.slice(1).join(' ') || '';
-                const photoURL = firebaseResult.user.photoURL || null;
-
-                userData = await authService.socialLogin({
-                    provider: providerKey,
-                    email,
-                    username: email.split('@')[0] + '_' + Date.now().toString().slice(-6),
-                    uid: firebaseResult.user.uid,
-                    firstName,
-                    lastName,
-                    dateOfBirth: null,
-                    phone: '',
-                    profileImage: photoURL,
-                    profileImageKey: null,
-                });
-            }
-
-            await AsyncStorage.setItem("user", JSON.stringify(userData));
-            router.replace('/');
+            // The auth state listener in useAuth.tsx will handle user creation
+            // if the user doesn't exist in the backend
+            setIsSubmitting(false);
         } catch (error: unknown) {
             console.error('Social login error:', error);
+            setIsSubmitting(false);
 
             // Handle special case for account exists with different credential
             if (isFirebaseAuthError(error) && error.code === "auth/account-exists-with-different-credential") {
@@ -388,11 +374,9 @@ export default function AuthPage() {
                     setFormError(getErrorMessage(error, 'social'));
                 }
             } else {
-                setFormError(getErrorMessage(error, 'social'));
+                const errorMessage = error instanceof Error ? error.message : 'មានបញ្ហាក្នុងការចូលដោយប្រើគណនីសង្គម';
+                setFormError(errorMessage);
             }
-        }
-        finally {
-            setIsSubmitting(false);
         }
     };
 

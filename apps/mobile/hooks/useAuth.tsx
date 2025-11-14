@@ -41,7 +41,56 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setUser(userData);
           } catch (error) {
             console.error("Error fetching user data:", error);
-            // If backend call fails, try to use stored data
+
+            // If user doesn't exist in backend, check if it's a social login
+            // and create the user via socialLogin
+            const providerData = firebaseUser.providerData;
+            if (providerData && providerData.length > 0) {
+              const providerId = providerData[0].providerId;
+
+              // Check if it's a social provider (not email/password)
+              if (providerId !== 'password') {
+                try {
+                  // Determine provider type
+                  let provider: 'google' | 'github' | 'microsoft' = 'google';
+                  if (providerId.includes('github')) {
+                    provider = 'github';
+                  } else if (providerId.includes('microsoft')) {
+                    provider = 'microsoft';
+                  }
+
+                  // Get user info from Firebase
+                  const email = firebaseUser.email || '';
+                  const displayName = firebaseUser.displayName || '';
+                  const nameParts = displayName.split(' ') || [];
+                  const firstName = nameParts[0] || '';
+                  const lastName = nameParts.slice(1).join(' ') || '';
+                  const photoURL = firebaseUser.photoURL || null;
+
+                  // Create user via social login
+                  const userData = await authService.socialLogin({
+                    provider,
+                    email,
+                    username: email.split('@')[0] + '_' + Date.now().toString().slice(-6),
+                    uid: firebaseUser.uid,
+                    firstName,
+                    lastName,
+                    dateOfBirth: null,
+                    phone: '',
+                    profileImage: photoURL,
+                    profileImageKey: null,
+                  });
+
+                  await AsyncStorage.setItem("user", JSON.stringify(userData));
+                  setUser(userData);
+                  return;
+                } catch (socialError) {
+                  console.error("Error creating social login user:", socialError);
+                }
+              }
+            }
+
+            // If backend call fails and not a social login, try to use stored data
             const storedData = await AsyncStorage.getItem("user");
             if (storedData) {
               setUser(JSON.parse(storedData));
