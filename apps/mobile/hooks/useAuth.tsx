@@ -10,6 +10,8 @@ import { User as UserType } from "@core-types/user-content/user";
 import { useRouter, usePathname } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { auth } from "@/configs/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { authService } from "@/services/index";
 
 interface AuthContextType {
   user: UserType | null;
@@ -27,26 +29,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Load user from AsyncStorage and Firebase auth
+  // Firebase auth state listener
   useEffect(() => {
-    const loadUser = async () => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       try {
-        setLoading(true);
-        const userData = await AsyncStorage.getItem("user");
-        const currentUser = auth.currentUser;
-
-        if (!currentUser || !userData) {
+        if (firebaseUser) {
+          // User is signed in, fetch user data from backend
+          try {
+            const userData = await authService.getCurrentUser();
+            await AsyncStorage.setItem("user", JSON.stringify(userData));
+            setUser(userData);
+          } catch (error) {
+            console.error("Error fetching user data:", error);
+            // If backend call fails, try to use stored data
+            const storedData = await AsyncStorage.getItem("user");
+            if (storedData) {
+              setUser(JSON.parse(storedData));
+            } else {
+              setUser(null);
+            }
+          }
+        } else {
+          // User is signed out
+          await AsyncStorage.removeItem("user");
           setUser(null);
-          // Redirect to auth if not on auth page
           if (pathname !== "/auth") {
             router.replace("/auth");
           }
-          return;
         }
-
-        setUser(JSON.parse(userData));
       } catch (error) {
-        console.error("Error loading user:", error);
+        console.error("Error in auth state listener:", error);
         setUser(null);
         if (pathname !== "/auth") {
           router.replace("/auth");
@@ -54,37 +66,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } finally {
         setLoading(false);
       }
-    };
+    });
 
-    loadUser();
+    return () => unsubscribe();
   }, [router, pathname]);
-
-  // Re-sync on route change in case auth state changed elsewhere
-  useEffect(() => {
-    const syncUser = async () => {
-      try {
-        const userData = await AsyncStorage.getItem("user");
-        const currentUser = auth.currentUser;
-
-        if (!currentUser || !userData) {
-          setUser(null);
-          if (pathname !== "/auth") {
-            router.replace("/auth");
-          }
-          return;
-        }
-
-        setUser(JSON.parse(userData));
-      } catch {
-        setUser(null);
-        if (pathname !== "/auth") {
-          router.replace("/auth");
-        }
-      }
-    };
-
-    syncUser();
-  }, [pathname, router]);
 
   const value = useMemo(
     () => ({ user, loading }),

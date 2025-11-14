@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import * as FileSystem from 'expo-file-system';
 import { tw } from '@/utils/styles';
 import { auth, googleProvider, microsoftProvider, githubProvider } from '@/configs/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithRedirect, getAuth, fetchSignInMethodsForEmail } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithCredential, signInWithRedirect, getAuth, fetchSignInMethodsForEmail, OAuthProvider, GoogleAuthProvider, GithubAuthProvider } from 'firebase/auth';
 import { authService } from '@/services/index';
 import {
     validateLoginForm,
@@ -17,6 +17,11 @@ import Logo from '@/components/common/Logo';
 import { Text } from '@/components/common/Text';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Svg, { Path } from 'react-native-svg';
+import * as AuthSession from 'expo-auth-session';
+import * as WebBrowser from 'expo-web-browser';
+
+// Complete auth session for proper cleanup
+WebBrowser.maybeCompleteAuthSession();
 
 type ProviderKey = 'google' | 'github' | 'microsoft';
 
@@ -228,22 +233,146 @@ export default function AuthPage() {
         setFormError(null);
         setIsSubmitting(true);
         try {
-            const provider =
-                providerKey === 'google' ? googleProvider :
-                    providerKey === 'github' ? githubProvider :
-                        microsoftProvider;
-
-            // For React Native, we need to use signInWithRedirect or a native solution
-            // This is a placeholder - you'll need to implement proper social auth for React Native
-            // For web/Expo Web, signInWithRedirect might work
             if (Platform.OS === 'web') {
+                // For web, use redirect flow
+                const provider =
+                    providerKey === 'google' ? googleProvider :
+                        providerKey === 'github' ? githubProvider :
+                            microsoftProvider;
                 await signInWithRedirect(auth, provider);
+                return;
+            }
+
+            // For native, use expo-auth-session
+            const redirectUri = AuthSession.makeRedirectUri();
+            let discovery: AuthSession.DiscoveryDocument;
+            let request: AuthSession.AuthRequest;
+
+            // Configure OAuth based on provider
+            if (providerKey === 'google') {
+                discovery = {
+                    authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
+                    tokenEndpoint: 'https://oauth2.googleapis.com/token',
+                    revocationEndpoint: 'https://oauth2.googleapis.com/revoke',
+                };
+                request = new AuthSession.AuthRequest({
+                    clientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID || '',
+                    scopes: ['openid', 'profile', 'email'],
+                    responseType: AuthSession.ResponseType.Code,
+                    redirectUri,
+                });
+            } else if (providerKey === 'microsoft') {
+                discovery = {
+                    authorizationEndpoint: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+                    tokenEndpoint: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+                };
+                request = new AuthSession.AuthRequest({
+                    clientId: process.env.EXPO_PUBLIC_MICROSOFT_CLIENT_ID || '',
+                    scopes: ['openid', 'profile', 'email'],
+                    responseType: AuthSession.ResponseType.Code,
+                    redirectUri,
+                });
+            } else if (providerKey === 'github') {
+                discovery = {
+                    authorizationEndpoint: 'https://github.com/login/oauth/authorize',
+                    tokenEndpoint: 'https://github.com/login/oauth/access_token',
+                };
+                request = new AuthSession.AuthRequest({
+                    clientId: process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID || '',
+                    scopes: ['read:user', 'user:email'],
+                    responseType: AuthSession.ResponseType.Code,
+                    redirectUri,
+                });
             } else {
-                // For native, you'll need expo-auth-session or react-native-firebase
-                setFormError('សូមប្រើប្រាស់កំណែវែបសម្រាប់ការចូលដោយប្រើគណនីសង្គម');
+                throw new Error('Unsupported provider');
+            }
+
+            // Start the OAuth flow
+            const result = await request.promptAsync(discovery);
+
+            if (result.type !== 'success') {
                 setIsSubmitting(false);
                 return;
             }
+
+            // Exchange code for token using fetch
+            const tokenRequestParams = new URLSearchParams();
+            tokenRequestParams.append('client_id', request.clientId);
+            tokenRequestParams.append('code', result.params.code);
+            tokenRequestParams.append('redirect_uri', redirectUri);
+            tokenRequestParams.append('grant_type', 'authorization_code');
+
+            // Add client secret if available (for some providers)
+            if (providerKey === 'github' && process.env.EXPO_PUBLIC_GITHUB_CLIENT_SECRET) {
+                tokenRequestParams.append('client_secret', process.env.EXPO_PUBLIC_GITHUB_CLIENT_SECRET);
+            }
+
+            const tokenResponse = await fetch(discovery.tokenEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    Accept: 'application/json',
+                },
+                body: tokenRequestParams.toString(),
+            });
+
+            const tokenData = await tokenResponse.json();
+
+            if (!tokenData.access_token) {
+                throw new Error('Failed to get access token');
+            }
+
+            // Create Firebase credential from OAuth token
+            let credential;
+            if (providerKey === 'google') {
+                credential = GoogleAuthProvider.credential(tokenData.id_token || tokenData.access_token);
+            } else if (providerKey === 'microsoft') {
+                credential = new OAuthProvider('microsoft.com').credential({
+                    idToken: tokenData.id_token || tokenData.access_token,
+                    accessToken: tokenData.access_token,
+                });
+            } else if (providerKey === 'github') {
+                // For GitHub, we need to use the access token directly
+                // GitHub doesn't provide idToken, so we'll create a custom token via backend
+                // For now, use the access token with GitHub provider
+                credential = GithubAuthProvider.credential(tokenData.access_token);
+            } else {
+                throw new Error('Unsupported provider');
+            }
+
+            // Sign in with Firebase
+            const firebaseResult = await signInWithCredential(auth, credential);
+            await firebaseResult.user.getIdToken(true);
+
+            // Get or create user in backend
+            let userData;
+            try {
+                userData = await authService.getCurrentUser();
+            } catch {
+                // User doesn't exist in backend, create via social login
+                const email = firebaseResult.user.email || '';
+                const displayName = firebaseResult.user.displayName || '';
+                const nameParts = displayName.split(' ');
+                const firstName = nameParts[0] || '';
+                const lastName = nameParts.slice(1).join(' ') || '';
+                const photoURL = firebaseResult.user.photoURL || null;
+
+                userData = await authService.socialLogin({
+                    provider: providerKey,
+                    email,
+                    username: email.split('@')[0] + '_' + Date.now().toString().slice(-6),
+                    uid: firebaseResult.user.uid,
+                    firstName,
+                    lastName,
+                    dateOfBirth: null,
+                    phone: '',
+                    profileImage: photoURL,
+                    profileImageKey: null,
+                });
+            }
+
+            await AsyncStorage.setItem("user", JSON.stringify(userData));
+            router.replace('/');
         } catch (error: unknown) {
             console.error('Social login error:', error);
 
