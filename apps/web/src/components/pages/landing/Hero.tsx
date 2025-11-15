@@ -88,7 +88,7 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
-                    className="text-5xl md:text-8xl font-extrabold mb-5 leading-tight"
+                    className="text-5xl md:text-8xl font-extrabold mt-10 leading-tight"
                 >
                     ប្រព័ន្ធសិក្សា សម្រាប់សិស្សកម្ពុជា
                 </motion.h1>
@@ -96,15 +96,7 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
-                    className="text-5xl md:text-8xl font-extrabold mb-5 leading-tight"
-                >
-                    បង្កើតឡើងដោយសិស្សកម្ពុជា
-                </motion.h1>
-                <motion.h1
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                    className="text-3xl md:text-8xl font-extrabold mb-5 leading-tight"
+                    className="text-2xl md:text-5xl font-extrabold mt-10 leading-tight"
                 >
                     យោងតាមកម្មវិធីសិក្សា ក្រសួងអប់រំ យុវជន និងកីឡា
                 </motion.h1>
@@ -112,7 +104,7 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.6 }}
-                    className="flex gap-5 justify-center flex-wrap"
+                    className="flex gap-5 justify-center flex-wrap mt-20"
                 >
                     <Link
                         href="/docs"

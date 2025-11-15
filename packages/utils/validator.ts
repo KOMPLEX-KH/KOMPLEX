@@ -118,15 +118,10 @@ export const validateSignupForm = (formData: {
     formData.email.trim().length > 0 &&
     formData.password.trim().length > 0 &&
     formData.confirmPassword.trim().length > 0 &&
-    formData.dateOfBirth.length > 0 &&
-    formData.phone.trim().length > 0 &&
     isValidUsername(formData.username) &&
     isValidEmail(formData.email) &&
     isValidPassword(formData.password) &&
-    formData.password === formData.confirmPassword &&
-    isValidPhone(formData.phone) &&
-    isValidDate(formData.dateOfBirth) &&
-    isValidAge(formData.dateOfBirth)
+    formData.password === formData.confirmPassword
   );
 };
 

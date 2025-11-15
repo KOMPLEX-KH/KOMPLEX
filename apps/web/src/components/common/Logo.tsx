@@ -27,7 +27,7 @@ export const Logo = ({ isVertical = false, size = "md", isLoading = false, varia
         xl: {
             image: 'lg:w-24 lg:h-24 w-16 h-16',
             text: 'lg:text-[70px] text-[40px]',
-            gap: 'gap-4'
+            gap: 'gap-0'
         }
     };
 
