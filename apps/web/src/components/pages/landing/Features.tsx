@@ -89,7 +89,7 @@ export default function Features() {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.6, delay: index * 0.1 }}
-                                    className={`${feature.bgColor} ${feature.borderColor} border-2 rounded-3xl lg:p-8 p-4 shadow-lg transition-all duration-300 backdrop-blur-sm ${feature.href ? 'hover:scale-105 cursor-pointer' : 'cursor-default opacity-60'} w-full  sm:flex-1`}
+                                    className={`${feature.bgColor} ${feature.borderColor} border-2 rounded-3xl lg:p-8 p-4 shadow-lg transition-all duration-300 backdrop-blur-sm ${feature.href ? 'hover:scale-105 cursor-pointer' : 'hover:scale-105 cursor-default opacity-60'} w-full  sm:flex-1`}
                                 >
                                     {feature.href ? (
                                         <Link href={feature.href}>
