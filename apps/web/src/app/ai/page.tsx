@@ -1,33 +1,34 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Bot, ChevronUp, Copy, Check, RefreshCw, Square, ChevronDown } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { Send, Bot, ChevronUp, Copy, Check, RefreshCw, Square, ChevronDown, Loader2, PenTool } from 'lucide-react';
 import { Listbox, Transition } from '@headlessui/react';
 import { meAiService } from '@/services/index';
 import MarkdownRenderer from '@/components/helper/MarkDownRenderer';
 import { useAuth } from '@hooks/useAuth';
-import { Message, AIHistoryItem } from '@/types/content/ai';
+import { Message, AIHistoryItem, AIResponseType } from '@/types/content/ai';
 import { useRouter } from 'next/navigation';
+import ContentRendererV3 from '@/components/pages/docs/utils/ContentRendererV2';
+import { deserializeTopicContentV3 } from '@/components/pages/docs/utils/ContentSerializerV2';
 
-const languages = [
-    { id: 'khmer', name: 'ភាសាខ្មែរ', acronym: 'KH' },
-    { id: 'english', name: 'English', acronym: 'ENG' },
-    { id: 'chinese', name: '中文', acronym: 'CH' },
-    { id: 'japanese', name: '日本語', acronym: 'JAP' },
-    { id: 'korean', name: '한국어', acronym: 'KOR' },
-    { id: 'vietnamese', name: 'Tiếng Việt', acronym: 'VN' },
-    { id: 'french', name: 'Français', acronym: 'FR' },
-    { id: 'german', name: 'Deutsch', acronym: 'DE' },
-    { id: 'spanish', name: 'Español', acronym: 'ES' },
-];
+const responseTypeOptions = [
+    { id: 'normal', name: 'ធម្មតា', description: 'បង្ហាញជាទម្រង់ Markdown' },
+    { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ទាក់ទាញ' }
+] as const satisfies ReadonlyArray<{
+    id: AIResponseType;
+    name: string;
+    description: string;
+}>;
 
-// Simplified Language Option Component for better performance
-const LanguageOption = React.memo(({ language, isSelected, isActive }: {
-    language: typeof languages[0];
+type ResponseTypeOption = typeof responseTypeOptions[number];
+
+// Simplified Response Type Option Component for better performance
+const ResponseTypeOptionItem = React.memo(({ option, isSelected, isActive }: {
+    option: ResponseTypeOption;
     isSelected: boolean;
     isActive: boolean;
 }) => {
-    const baseClasses = "relative cursor-pointer select-none px-3 py-2 text-sm transition-colors duration-75";
+    const baseClasses = "relative cursor-pointer select-none px-4 py-2 text-sm transition-colors duration-75 rounded-3xl";
     const selectedClasses = "bg-indigo-50 text-indigo-600 font-medium";
     const activeClasses = "bg-gray-50 text-gray-700";
     const defaultClasses = "text-gray-700";
@@ -38,12 +39,13 @@ const LanguageOption = React.memo(({ language, isSelected, isActive }: {
 
     return (
         <div className={className}>
-            {language.name}
+            <div className="text-sm font-medium">{option.name}</div>
+            <div className="text-xs text-gray-500">{option.description}</div>
         </div>
     );
 });
 
-LanguageOption.displayName = 'LanguageOption';
+ResponseTypeOptionItem.displayName = 'ResponseTypeOptionItem';
 
 // Memoized Message Component to prevent unnecessary re-renders
 const MessageItem = React.memo(({
@@ -55,20 +57,41 @@ const MessageItem = React.memo(({
     onCopyMessage: (messageId: string, content: string) => void;
     copiedMessageId: string | null;
 }) => {
+    const isKomplexMessage = message.responseType === 'komplex';
+
+    const { komplexContent, canRenderKomplex } = useMemo(() => {
+        if (!isKomplexMessage) {
+            return { komplexContent: null, canRenderKomplex: false };
+        }
+        try {
+            return {
+                komplexContent: deserializeTopicContentV3(message.content),
+                canRenderKomplex: true
+            };
+        } catch (err) {
+            console.error('Failed to deserialize KOMPLEX content', err);
+            return { komplexContent: null, canRenderKomplex: false };
+        }
+    }, [isKomplexMessage, message.content]);
+
     return (
         <div className="mb-8">
             {message.sender === 'user' ? (
                 // User message
                 <div className="flex justify-end">
                     <div className="bg-indigo-600 text-white rounded-2xl px-4 py-3 max-w-[70%]">
-                        <p className="text-sm leading-relaxed">{message.content}</p>
+                        <p className="text-md  font-medium">{message.content}</p>
                     </div>
                 </div>
             ) : (
                 // AI message
                 <div className="w-full">
-                    <div className="relative">
-                        <MarkdownRenderer content={message.content} />
+                    <div className="relative bg-white border border-gray-200 rounded-3xl p-4 shadow-sm">
+                        {canRenderKomplex ? (
+                            <ContentRendererV3 content={komplexContent} />
+                        ) : (
+                            <MarkdownRenderer content={message.content} />
+                        )}
                         <div className="flex items-center justify-between mt-2">
                             <button
                                 onClick={() => onCopyMessage(message.id, message.content)}
@@ -87,6 +110,9 @@ const MessageItem = React.memo(({
                                     </div>
                                 )}
                             </button>
+                            <div className="text-xs text-gray-500">
+                                <span className="text-purple-600">KOM</span><span className="text-black font-bold">PLEX</span> Beta - <span className="font-medium">តារា AI</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -139,11 +165,51 @@ const ChatSkeleton = React.memo(() => {
 
 ChatSkeleton.displayName = 'ChatSkeleton';
 
+const ResponseLoadingState = React.memo(({ responseType }: { responseType: AIResponseType }) => {
+    if (responseType === 'komplex') {
+        return (
+            <div className="w-full">
+                <div className="bg-white border border-gray-200 rounded-3xl p-5 shadow-sm space-y-4 animate-pulse">
+                    <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                    <div className="space-y-2">
+                        <div className="h-3 bg-gray-100 rounded w-full"></div>
+                        <div className="h-3 bg-gray-100 rounded w-5/6"></div>
+                        <div className="h-3 bg-gray-100 rounded w-2/3"></div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="h-20 bg-gray-50 rounded-xl"></div>
+                        <div className="h-20 bg-gray-50 rounded-xl"></div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="w-full">
+            <div className="flex items-start gap-3 bg-white border border-gray-200 rounded-3xl p-4 shadow-sm">
+                <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center">
+                    <Loader2 className="w-4 h-4 text-indigo-500 animate-spin" />
+                </div>
+                <div className="flex-1 space-y-2">
+                    <div className="h-3 bg-gray-200 rounded w-2/3 animate-pulse"></div>
+                    <div className="h-3 bg-gray-200 rounded w-full animate-pulse"></div>
+                    <div className="h-3 bg-gray-200 rounded w-4/5 animate-pulse"></div>
+                </div>
+            </div>
+        </div>
+    );
+});
+
+ResponseLoadingState.displayName = 'ResponseLoadingState';
+
+const isKomplexType = (responseType?: AIResponseType | null) => responseType === 'komplex';
+
 export default function AIChat() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputMessage, setInputMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
+    const [selectedResponseType, setSelectedResponseType] = useState<ResponseTypeOption>(responseTypeOptions[0]);
     const [isMultiLine, setIsMultiLine] = useState(false);
     const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -156,6 +222,7 @@ export default function AIChat() {
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [showScrollButton, setShowScrollButton] = useState(false);
     const [isInputDisabled, setIsInputDisabled] = useState(false);
+    const [pendingResponseType, setPendingResponseType] = useState<AIResponseType | null>(null);
     const streamingIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const streamingRafRef = useRef<number | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -190,7 +257,8 @@ export default function AIChat() {
                 content: item.aiResult,
                 sender: 'ai',
                 timestamp: new Date(item.createdAt),
-                isFromHistory: true
+                isFromHistory: true,
+                responseType: item.responseType ?? 'normal'
             });
         });
         return messages;
@@ -219,10 +287,10 @@ export default function AIChat() {
             setCurrentPage(page);
         } catch (error) {
             console.error('Error loading AI history:', error);
+            setError('មានបញ្ហាក្នុងការផ្ទុកប្រវត្តិសន្ទនា។ សូមព្យាយាមម្តងទៀត។');
         } finally {
             setIsLoadingHistory(false);
             setIsLoadingMore(false);
-            setError('មានបញ្ហាក្នុងការផ្ទុកប្រវត្តិសន្ទនា។ សូមព្យាយាមម្តងទៀត។');
         }
     }, [user]);
 
@@ -302,22 +370,44 @@ export default function AIChat() {
 
         setMessages(prev => [...prev, userMessage]);
         const currentInput = inputMessage;
+        const responseType = selectedResponseType.id;
         setInputMessage('');
         setIsLoading(true);
         setIsRequestInProgress(true);
+        setPendingResponseType(responseType);
         setError(null); // Clear any previous errors
 
         try {
-            const response = await meAiService.callAiAndWriteToHistory(currentInput, selectedLanguage.id);
+            const response = await meAiService.callAiAndWriteToHistory(currentInput, {
+                responseType
+            });
             setIsLoading(false);
             setIsRequestInProgress(false);
 
-            // Start streaming animation
-            streamText(response.data);
+            const resolvedResponseType =
+                response.responseType ??
+                (response as { format?: AIResponseType }).format ??
+                'normal';
+
+            if (isKomplexType(resolvedResponseType)) {
+                const aiResponse: Message = {
+                    id: (Date.now() + 1).toString(),
+                    content: response.data,
+                    sender: 'ai',
+                    timestamp: new Date(),
+                    responseType: resolvedResponseType
+                };
+                setMessages(prev => [...prev, aiResponse]);
+                setPendingResponseType(null);
+            } else {
+                // Start streaming animation
+                streamText(response.data, resolvedResponseType);
+            }
         } catch (error) {
             console.error('Error calling AI:', error);
             setIsLoading(false);
             setIsRequestInProgress(false);
+            setPendingResponseType(null);
             setError('មានបញ្ហាក្នុងការទាក់ទងតារា។ សូមព្យាយាមម្តងទៀត។');
         }
     };
@@ -339,7 +429,8 @@ export default function AIChat() {
         }
     }, []);
 
-    const streamText = (text: string) => {
+    const streamText = (text: string, responseType: AIResponseType) => {
+        if (responseType !== 'normal') return;
         setIsStreaming(true);
         setStreamingMessage('');
         let index = 0;
@@ -367,10 +458,12 @@ export default function AIChat() {
                     id: (Date.now() + 1).toString(),
                     content: text,
                     sender: 'ai',
-                    timestamp: new Date()
+                    timestamp: new Date(),
+                    responseType
                 };
                 setMessages(prev => [...prev, aiResponse]);
                 setStreamingMessage('');
+                setPendingResponseType(null);
 
                 // No need to refresh history - the new message is already added to the UI
             }
@@ -418,21 +511,47 @@ export default function AIChat() {
     }, [inputMessage, debouncedAutoResize]);
 
     const handleTryAgain = async () => {
+        if (!messages.length) {
+            setError(null);
+            return;
+        }
+        const responseType = selectedResponseType.id;
         setIsLoading(true);
         setIsRequestInProgress(true);
+        setPendingResponseType(responseType);
         setError(null);
 
         try {
-            const response = await meAiService.callAiAndWriteToHistory(messages[messages.length - 1].content, selectedLanguage.id);
+            const response = await meAiService.callAiAndWriteToHistory(messages[messages.length - 1].content, {
+                responseType
+            });
             setIsLoading(false);
             setIsRequestInProgress(false);
 
-            // Start streaming animation
-            streamText(response.data);
+            const resolvedResponseType =
+                response.responseType ??
+                (response as { format?: AIResponseType }).format ??
+                'normal';
+
+            if (isKomplexType(resolvedResponseType)) {
+                const aiResponse: Message = {
+                    id: (Date.now() + 1).toString(),
+                    content: response.data,
+                    sender: 'ai',
+                    timestamp: new Date(),
+                    responseType: resolvedResponseType
+                };
+                setMessages(prev => [...prev, aiResponse]);
+                setPendingResponseType(null);
+            } else {
+                // Start streaming animation
+                streamText(response.data, resolvedResponseType);
+            }
         } catch (error) {
             console.error('Error calling AI:', error);
             setIsLoading(false);
             setIsRequestInProgress(false);
+            setPendingResponseType(null);
             setError('មានបញ្ហាក្នុងការទាក់ទងតារា។ សូមព្យាយាមម្តងទៀត។');
         }
     };
@@ -442,6 +561,7 @@ export default function AIChat() {
             // Case 1: Stop the actual API request (if still in progress)
             setIsRequestInProgress(false);
             setIsLoading(false);
+            setPendingResponseType(null);
             setError('បានបញ្ឈប់ការស្នើសុំ។');
         } else if (isStreaming) {
             // Case 2: Stop the fake streaming and keep what has been streamed
@@ -461,11 +581,13 @@ export default function AIChat() {
                     id: (Date.now() + 1).toString(),
                     content: streamingMessage,
                     sender: 'ai',
-                    timestamp: new Date()
+                    timestamp: new Date(),
+                    responseType: 'normal'
                 };
                 setMessages(prev => [...prev, aiResponse]);
             }
             setStreamingMessage('');
+            setPendingResponseType(null);
 
             // No need to refresh history - the partial message is already added to the UI
         }
@@ -502,7 +624,7 @@ export default function AIChat() {
                                     <button
                                         onClick={loadMoreHistory}
                                         disabled={isLoadingMore}
-                                        className="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {isLoadingMore ? (
                                             <div className="flex items-center gap-2">
@@ -526,22 +648,18 @@ export default function AIChat() {
                             ))}
 
                             {isLoading && (
-                                <div className="w-full h-96">
-                                    <div className="flex items-center gap-2">
-                                        <div className="flex space-x-1">
-                                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                                        </div>
-                                        <span className="text-sm text-gray-500">កំពុងគិត...</span>
-                                    </div>
-                                </div>
+                                <ResponseLoadingState responseType={(pendingResponseType ?? selectedResponseType.id)} />
                             )}
 
                             {isStreaming && (
                                 <div className="w-full">
-                                    <div className="relative">
+                                    <div className="relative bg-white border border-gray-200 rounded-3xl p-4 shadow-sm">
                                         <MarkdownRenderer content={streamingMessage} />
+                                        <div className="flex items-center justify-end mt-2">
+                                            <div className="text-xs text-gray-500">
+                                                <span className="text-purple-600">KOM</span><span className="text-black font-bold">PLEX</span> Beta - <span className="font-medium">តារា AI</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             )}
@@ -586,24 +704,25 @@ export default function AIChat() {
             <div className="fixed bottom-0 left-0 right-0 px-4 py-2">
                 <div className="max-w-4xl mx-auto">
                     {/* Input Container */}
-                    <div className={`bg-white shadow-lg border border-gray-200 p-2 mb-2 transition-all duration-200 ${isMultiLine ? 'rounded-2xl' : 'rounded-full'}`}>
+                    <div className={`bg-white shadow-lg border border-gray-200 p-2 mb-2 transition-all duration-200 ${isMultiLine ? 'rounded-3xl' : 'rounded-full'}`}>
                         {/* Single line layout - show when not multi-line */}
                         <div className={`flex items-center gap-2`}>
-                            {/* Language Dropdown */}
+                            {/* Response Format Dropdown */}
                             <div className={`relative flex-shrink-0 ${isMultiLine ? 'hidden' : 'flex'}`}>
                                 <Listbox
-                                    value={selectedLanguage}
-                                    onChange={setSelectedLanguage}
+                                    value={selectedResponseType}
+                                    onChange={setSelectedResponseType}
                                     disabled={isInputDisabled}
                                 >
                                     <Listbox.Button
                                         disabled={isInputDisabled}
-                                        className={`flex items-center gap-1 px-3 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all ${isInputDisabled
+                                        className={`flex items-center gap-2 px-2 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all ${isInputDisabled
                                             ? 'bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed'
                                             : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
                                             }`}
                                     >
-                                        <span className="text-xs font-medium">{selectedLanguage.acronym}</span>
+                                        <PenTool className="w-4 h-4 rotate-180" />
+                                        <span className="text-xs font-medium">{selectedResponseType.name}</span>
                                         <ChevronUp size={14} className={`transition-transform ui-open:rotate-180 ${isInputDisabled ? 'text-gray-400' : 'text-gray-500'
                                             }`} />
                                     </Listbox.Button>
@@ -616,15 +735,15 @@ export default function AIChat() {
                                         leaveFrom="transform scale-100 opacity-100"
                                         leaveTo="transform scale-95 opacity-0"
                                     >
-                                        <Listbox.Options className="absolute bottom-full mb-2 left-0 w-32 bg-white rounded-lg border border-gray-200 shadow-lg z-50 focus:outline-none max-h-48 overflow-y-auto">
-                                            {languages.map((language) => (
+                                        <Listbox.Options className="absolute bottom-full mb-2 left-0 w-48 p-2 bg-white rounded-3xl border border-gray-200 shadow-lg z-50 focus:outline-none max-h-48 overflow-y-auto">
+                                            {responseTypeOptions.map((option) => (
                                                 <Listbox.Option
-                                                    key={language.id}
-                                                    value={language}
+                                                    key={option.id}
+                                                    value={option}
                                                 >
                                                     {({ active, selected }) => (
-                                                        <LanguageOption
-                                                            language={language}
+                                                        <ResponseTypeOptionItem
+                                                            option={option}
                                                             isActive={active}
                                                             isSelected={selected}
                                                         />
@@ -681,24 +800,25 @@ export default function AIChat() {
 
                             {/* Controls row */}
                             <div className="flex items-center justify-between">
-                                {/* Language Dropdown */}
+                                {/* Response Format Dropdown */}
                                 <div className="relative">
                                     <Listbox
-                                        value={selectedLanguage}
-                                        onChange={setSelectedLanguage}
+                                        value={selectedResponseType}
+                                        onChange={setSelectedResponseType}
                                         disabled={isInputDisabled}
                                     >
                                         <Listbox.Button
                                             disabled={isInputDisabled}
-                                            className={`flex items-center gap-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all ${isInputDisabled
+                                            className={`flex items-center gap-1 px-3 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all ${isInputDisabled
                                                 ? 'bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed'
                                                 : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
                                                 }`}
                                         >
-                                            <span className="text-xs font-medium">{selectedLanguage.acronym}</span>
+                                            <PenTool className="w-4 h-4 rotate-180" />
+                                            <span className="text-xs font-medium">{selectedResponseType.name}</span>
                                             <ChevronUp size={14} className={`transition-transform ui-open:rotate-180 ${isInputDisabled ? 'text-gray-400' : 'text-gray-500'
                                                 }`} />
-                                        </Listbox.Button>
+                                        </Listbox.Button>  
 
                                         <Transition
                                             enter="transition duration-100 ease-out"
@@ -708,15 +828,15 @@ export default function AIChat() {
                                             leaveFrom="transform scale-100 opacity-100"
                                             leaveTo="transform scale-95 opacity-0"
                                         >
-                                            <Listbox.Options className="absolute bottom-full mb-2 left-0 w-32 bg-white rounded-lg border border-gray-200 shadow-lg z-50 max-h-48 overflow-y-auto">
-                                                {languages.map((language) => (
+                                            <Listbox.Options className="absolute bottom-full mb-2 left-0 w-48 p-2 bg-white rounded-3xl border border-gray-200 shadow-lg z-50 max-h-48 overflow-y-auto">
+                                                {responseTypeOptions.map((option) => (
                                                     <Listbox.Option
-                                                        key={language.id}
-                                                        value={language}
+                                                        key={option.id}
+                                                        value={option}
                                                     >
                                                         {({ active, selected }) => (
-                                                            <LanguageOption
-                                                                language={language}
+                                                            <ResponseTypeOptionItem
+                                                                option={option}
                                                                 isActive={active}
                                                                 isSelected={selected}
                                                             />
@@ -733,14 +853,14 @@ export default function AIChat() {
                                     <button
                                         onClick={handleSendMessage}
                                         disabled={!inputMessage.trim() || isInputDisabled}
-                                        className="p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="p-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         <Send className="w-4 h-4" />
                                     </button>
                                 ) : (
                                     <button
                                         onClick={handleStopStreaming}
-                                        className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
+                                        className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors duration-200"
                                         title={isRequestInProgress ? "បញ្ឈប់ការស្នើសុំ" : "បញ្ឈប់ការសរសេរ"}
                                     >
                                         <Square className="w-4 h-4" />

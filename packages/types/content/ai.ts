@@ -1,6 +1,9 @@
+export type AIResponseType = "normal" | "komplex";
+
 export interface AIResponse {
   prompt: string;
   data: string;
+  responseType: AIResponseType;
 }
 
 export interface AIHistoryItem {
@@ -8,6 +11,7 @@ export interface AIHistoryItem {
   userId: number;
   prompt: string;
   aiResult: string;
+  responseType?: AIResponseType;
   createdAt: string;
   updatedAt: string;
 }
@@ -23,4 +27,5 @@ export interface Message {
   sender: "user" | "ai";
   timestamp: Date;
   isFromHistory?: boolean;
+  responseType?: AIResponseType;
 }
