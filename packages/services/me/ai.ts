@@ -58,5 +58,46 @@ export const createMeAiService = (api: AxiosInstance) => {
         throw new Error("Failed to get AI history");
       }
     },
+
+    getAiTopicHistory: async (
+      topicId: number,
+      page: number = 1,
+      limit: number = 20
+    ): Promise<AIHistoryResponse> => {
+      try {
+        const response = await api.get<AIHistoryResponse>(
+          `/me/ai/topics/${topicId}`,
+          {
+            params: {
+              page,
+              limit,
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching AI topic history:", error);
+        throw new Error("Failed to get AI topic history");
+      }
+    },
+    callAiTopicAndWriteToTopicHistory: async (
+      prompt: string,
+      topicId: number,
+      responseType: AIResponseType
+    ): Promise<AIResponse> => {
+      try {
+        const response = await api.post<AIResponse>(
+          `/me/ai/topics/${topicId}`,
+          {
+            prompt,
+            responseType,
+          }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error calling AI topic:", error);
+        throw new Error("Failed to get AI topic response");
+      }
+    },
   };
 };

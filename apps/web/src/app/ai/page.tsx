@@ -1,207 +1,23 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { Send, Bot, ChevronUp, Copy, Check, RefreshCw, Square, ChevronDown, Loader2, PenTool } from 'lucide-react';
-import { Listbox, Transition } from '@headlessui/react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Send, Bot, RefreshCw, Square, ChevronDown } from 'lucide-react';
 import { meAiService } from '@/services/index';
 import MarkdownRenderer from '@/components/helper/MarkDownRenderer';
 import { useAuth } from '@hooks/useAuth';
 import { Message, AIHistoryItem, AIResponseType } from '@/types/content/ai';
 import { useRouter } from 'next/navigation';
-import ContentRendererV3 from '@/components/pages/docs/utils/ContentRendererV2';
-import { deserializeTopicContentV3 } from '@/components/pages/docs/utils/ContentSerializerV2';
+import MessageItem from '../../components/pages/ai/MessageItem';
+import ChatSkeleton from '../../components/pages/ai/ChatSkeleton';
+import ResponseLoadingState from '../../components/pages/ai/ResponseLoadingState';
+import ResponseTypeDropdown, { ResponseTypeOption } from '../../components/pages/ai/ResponseTypeDropdown';
+import PromptTextarea from '../../components/pages/ai/PromptTextarea';
 
-const responseTypeOptions = [
+const responseTypeOptions: readonly ResponseTypeOption[] = [
     { id: 'normal', name: 'ធម្មតា', description: 'បង្ហាញជាទម្រង់ Markdown' },
     { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ទាក់ទាញ' }
-] as const satisfies ReadonlyArray<{
-    id: AIResponseType;
-    name: string;
-    description: string;
-}>;
+] as const;
 
-type ResponseTypeOption = typeof responseTypeOptions[number];
-
-// Simplified Response Type Option Component for better performance
-const ResponseTypeOptionItem = React.memo(({ option, isSelected, isActive }: {
-    option: ResponseTypeOption;
-    isSelected: boolean;
-    isActive: boolean;
-}) => {
-    const baseClasses = "relative cursor-pointer select-none px-4 py-2 text-sm transition-colors duration-75 rounded-3xl";
-    const selectedClasses = "bg-indigo-50 text-indigo-600 font-medium";
-    const activeClasses = "bg-gray-50 text-gray-700";
-    const defaultClasses = "text-gray-700";
-
-    const className = isSelected ? `${baseClasses} ${selectedClasses}` :
-        isActive ? `${baseClasses} ${activeClasses}` :
-            `${baseClasses} ${defaultClasses}`;
-
-    return (
-        <div className={className}>
-            <div className="text-sm font-medium">{option.name}</div>
-            <div className="text-xs text-gray-500">{option.description}</div>
-        </div>
-    );
-});
-
-ResponseTypeOptionItem.displayName = 'ResponseTypeOptionItem';
-
-// Memoized Message Component to prevent unnecessary re-renders
-const MessageItem = React.memo(({
-    message,
-    onCopyMessage,
-    copiedMessageId
-}: {
-    message: Message;
-    onCopyMessage: (messageId: string, content: string) => void;
-    copiedMessageId: string | null;
-}) => {
-    const isKomplexMessage = message.responseType === 'komplex';
-
-    const { komplexContent, canRenderKomplex } = useMemo(() => {
-        if (!isKomplexMessage) {
-            return { komplexContent: null, canRenderKomplex: false };
-        }
-        try {
-            return {
-                komplexContent: deserializeTopicContentV3(message.content),
-                canRenderKomplex: true
-            };
-        } catch (err) {
-            console.error('Failed to deserialize KOMPLEX content', err);
-            return { komplexContent: null, canRenderKomplex: false };
-        }
-    }, [isKomplexMessage, message.content]);
-
-    return (
-        <div className="mb-8">
-            {message.sender === 'user' ? (
-                // User message
-                <div className="flex justify-end">
-                    <div className="bg-indigo-600 text-white rounded-2xl px-4 py-3 max-w-[70%]">
-                        <p className="text-md  font-medium">{message.content}</p>
-                    </div>
-                </div>
-            ) : (
-                // AI message
-                <div className="w-full">
-                    <div className="relative bg-white border border-gray-200 rounded-3xl p-4 shadow-sm">
-                        {canRenderKomplex ? (
-                            <ContentRendererV3 content={komplexContent} />
-                        ) : (
-                            <MarkdownRenderer content={message.content} />
-                        )}
-                        <div className="flex items-center justify-between mt-2">
-                            <button
-                                onClick={() => onCopyMessage(message.id, message.content)}
-                                className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
-                                title="Copy response"
-                            >
-                                {copiedMessageId === message.id ? (
-                                    <div className="flex items-center gap-2">
-                                        <Check className="w-4 h-4 text-green-600" />
-                                        បានចម្លង
-                                    </div>
-                                ) : (
-                                    <div className="flex items-center gap-2">
-                                        <Copy className="w-4 h-4 text-gray-600" />
-                                        ចម្លង
-                                    </div>
-                                )}
-                            </button>
-                            <div className="text-xs text-gray-500">
-                                <span className="text-purple-600">KOM</span><span className="text-black font-bold">PLEX</span> Beta - <span className="font-medium">តារា AI</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-});
-
-MessageItem.displayName = 'MessageItem';
-
-// Chat Skeleton Component
-const ChatSkeleton = React.memo(() => {
-    return (
-        <div className="space-y-6 p-4">
-            {/* User message skeleton */}
-            <div className="flex justify-end">
-                <div className="bg-gray-200 rounded-2xl px-4 py-3 max-w-[70%] animate-pulse">
-                    <div className="h-4 bg-gray-300 rounded w-32"></div>
-                </div>
-            </div>
-
-            {/* AI message skeleton */}
-            <div className="w-full">
-                <div className="space-y-3">
-                    <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                    <div className="h-4 bg-gray-200 rounded w-4/5 animate-pulse"></div>
-                    <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
-                    <div className="h-4 bg-gray-200 rounded w-5/6 animate-pulse"></div>
-                </div>
-            </div>
-
-            {/* User message skeleton */}
-            <div className="flex justify-end">
-                <div className="bg-gray-200 rounded-2xl px-4 py-3 max-w-[70%] animate-pulse">
-                    <div className="h-4 bg-gray-300 rounded w-24"></div>
-                </div>
-            </div>
-
-            {/* AI message skeleton */}
-            <div className="w-full">
-                <div className="space-y-3">
-                    <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                    <div className="h-4 bg-gray-200 rounded w-4/5 animate-pulse"></div>
-                    <div className="h-4 bg-gray-200 rounded w-2/3 animate-pulse"></div>
-                </div>
-            </div>
-        </div>
-    );
-});
-
-ChatSkeleton.displayName = 'ChatSkeleton';
-
-const ResponseLoadingState = React.memo(({ responseType }: { responseType: AIResponseType }) => {
-    if (responseType === 'komplex') {
-        return (
-            <div className="w-full">
-                <div className="bg-white border border-gray-200 rounded-3xl p-5 shadow-sm space-y-4 animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded w-1/3"></div>
-                    <div className="space-y-2">
-                        <div className="h-3 bg-gray-100 rounded w-full"></div>
-                        <div className="h-3 bg-gray-100 rounded w-5/6"></div>
-                        <div className="h-3 bg-gray-100 rounded w-2/3"></div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                        <div className="h-20 bg-gray-50 rounded-xl"></div>
-                        <div className="h-20 bg-gray-50 rounded-xl"></div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="w-full">
-            <div className="flex items-start gap-3 bg-white border border-gray-200 rounded-3xl p-4 shadow-sm">
-                <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center">
-                    <Loader2 className="w-4 h-4 text-indigo-500 animate-spin" />
-                </div>
-                <div className="flex-1 space-y-2">
-                    <div className="h-3 bg-gray-200 rounded w-2/3 animate-pulse"></div>
-                    <div className="h-3 bg-gray-200 rounded w-full animate-pulse"></div>
-                    <div className="h-3 bg-gray-200 rounded w-4/5 animate-pulse"></div>
-                </div>
-            </div>
-        </div>
-    );
-});
-
-ResponseLoadingState.displayName = 'ResponseLoadingState';
 
 const isKomplexType = (responseType?: AIResponseType | null) => responseType === 'komplex';
 
@@ -706,68 +522,24 @@ export default function AIChat() {
                     {/* Input Container */}
                     <div className={`bg-white shadow-lg border border-gray-200 p-2 mb-2 transition-all duration-200 ${isMultiLine ? 'rounded-3xl' : 'rounded-full'}`}>
                         {/* Single line layout - show when not multi-line */}
-                        <div className={`flex items-center gap-2`}>
-                            {/* Response Format Dropdown */}
-                            <div className={`relative flex-shrink-0 ${isMultiLine ? 'hidden' : 'flex'}`}>
-                                <Listbox
-                                    value={selectedResponseType}
-                                    onChange={setSelectedResponseType}
-                                    disabled={isInputDisabled}
-                                >
-                                    <Listbox.Button
-                                        disabled={isInputDisabled}
-                                        className={`flex items-center gap-2 px-2 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all ${isInputDisabled
-                                            ? 'bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed'
-                                            : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
-                                            }`}
-                                    >
-                                        <PenTool className="w-4 h-4 rotate-180" />
-                                        <span className="text-xs font-medium">{selectedResponseType.name}</span>
-                                        <ChevronUp size={14} className={`transition-transform ui-open:rotate-180 ${isInputDisabled ? 'text-gray-400' : 'text-gray-500'
-                                            }`} />
-                                    </Listbox.Button>
+                        <div className="flex items-center gap-2">
+                            <ResponseTypeDropdown
+                                className={isMultiLine ? 'hidden' : 'flex'}
+                                options={responseTypeOptions}
+                                value={selectedResponseType}
+                                onChange={setSelectedResponseType}
+                                disabled={isInputDisabled}
+                                variant="compact"
+                            />
 
-                                    <Transition
-                                        enter="transition duration-100 ease-out"
-                                        enterFrom="transform scale-95 opacity-0"
-                                        enterTo="transform scale-100 opacity-100"
-                                        leave="transition duration-75 ease-in"
-                                        leaveFrom="transform scale-100 opacity-100"
-                                        leaveTo="transform scale-95 opacity-0"
-                                    >
-                                        <Listbox.Options className="absolute bottom-full mb-2 left-0 w-48 p-2 bg-white rounded-3xl border border-gray-200 shadow-lg z-50 focus:outline-none max-h-48 overflow-y-auto">
-                                            {responseTypeOptions.map((option) => (
-                                                <Listbox.Option
-                                                    key={option.id}
-                                                    value={option}
-                                                >
-                                                    {({ active, selected }) => (
-                                                        <ResponseTypeOptionItem
-                                                            option={option}
-                                                            isActive={active}
-                                                            isSelected={selected}
-                                                        />
-                                                    )}
-                                                </Listbox.Option>
-                                            ))}
-                                        </Listbox.Options>
-                                    </Transition>
-                                </Listbox>
-                            </div>
-
-                            {/* Textarea Container */}
                             <div className="flex-1 relative min-h-[40px] flex items-center">
-                                <textarea
+                                <PromptTextarea
                                     ref={textareaRef}
                                     value={inputMessage}
                                     onChange={(e) => setInputMessage(e.target.value)}
                                     onKeyPress={handleKeyPress}
                                     disabled={isInputDisabled}
                                     placeholder={isInputDisabled ? "កំពុងដំណើរការ..." : "សរសេរសំណួររបស់អ្នក..."}
-                                    className={`w-full px-3 py-2 text-sm focus:outline-none resize-none bg-transparent border-none ${isInputDisabled
-                                        ? 'placeholder-gray-300 text-gray-400 cursor-not-allowed'
-                                        : 'placeholder-gray-400'
-                                        }`}
                                     style={{
                                         minHeight: '30px',
                                         maxHeight: '120px',
@@ -776,23 +548,23 @@ export default function AIChat() {
                                 />
                             </div>
 
-                            {/* Send Button */}
-                            {
-                                !isLoading && !isStreaming ? (<button
+                            {!isLoading && !isStreaming ? (
+                                <button
                                     onClick={handleSendMessage}
                                     disabled={!inputMessage.trim() || isInputDisabled}
                                     className={`flex-shrink-0 p-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${isMultiLine ? 'hidden' : 'flex'}`}
                                 >
                                     <Send className="w-4 h-4" />
-                                </button>) : (
-                                    <button className="flex-shrink-0 p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors duration-200"
-                                        onClick={handleStopStreaming}
-                                        title={isRequestInProgress ? "បញ្ឈប់ការស្នើសុំ" : "បញ្ឈប់ការសរសេរ"}
-                                    >
-                                        <Square className="w-4 h-4" />
-                                    </button>
-                                )
-                            }
+                                </button>
+                            ) : (
+                                <button
+                                    className="flex-shrink-0 p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors duration-200"
+                                    onClick={handleStopStreaming}
+                                    title={isRequestInProgress ? "បញ្ឈប់ការស្នើសុំ" : "បញ្ឈប់ការសរសេរ"}
+                                >
+                                    <Square className="w-4 h-4" />
+                                </button>
+                            )}
                         </div>
 
                         {/* Multi-line layout - show when multi-line */}
@@ -800,55 +572,14 @@ export default function AIChat() {
 
                             {/* Controls row */}
                             <div className="flex items-center justify-between">
-                                {/* Response Format Dropdown */}
-                                <div className="relative">
-                                    <Listbox
-                                        value={selectedResponseType}
-                                        onChange={setSelectedResponseType}
-                                        disabled={isInputDisabled}
-                                    >
-                                        <Listbox.Button
-                                            disabled={isInputDisabled}
-                                            className={`flex items-center gap-1 px-3 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all ${isInputDisabled
-                                                ? 'bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed'
-                                                : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
-                                                }`}
-                                        >
-                                            <PenTool className="w-4 h-4 rotate-180" />
-                                            <span className="text-xs font-medium">{selectedResponseType.name}</span>
-                                            <ChevronUp size={14} className={`transition-transform ui-open:rotate-180 ${isInputDisabled ? 'text-gray-400' : 'text-gray-500'
-                                                }`} />
-                                        </Listbox.Button>  
+                                <ResponseTypeDropdown
+                                    options={responseTypeOptions}
+                                    value={selectedResponseType}
+                                    onChange={setSelectedResponseType}
+                                    disabled={isInputDisabled}
+                                    variant="default"
+                                />
 
-                                        <Transition
-                                            enter="transition duration-100 ease-out"
-                                            enterFrom="transform scale-95 opacity-0"
-                                            enterTo="transform scale-100 opacity-100"
-                                            leave="transition duration-75 ease-in"
-                                            leaveFrom="transform scale-100 opacity-100"
-                                            leaveTo="transform scale-95 opacity-0"
-                                        >
-                                            <Listbox.Options className="absolute bottom-full mb-2 left-0 w-48 p-2 bg-white rounded-3xl border border-gray-200 shadow-lg z-50 max-h-48 overflow-y-auto">
-                                                {responseTypeOptions.map((option) => (
-                                                    <Listbox.Option
-                                                        key={option.id}
-                                                        value={option}
-                                                    >
-                                                        {({ active, selected }) => (
-                                                            <ResponseTypeOptionItem
-                                                                option={option}
-                                                                isActive={active}
-                                                                isSelected={selected}
-                                                            />
-                                                        )}
-                                                    </Listbox.Option>
-                                                ))}
-                                            </Listbox.Options>
-                                        </Transition>
-                                    </Listbox>
-                                </div>
-
-                                {/* Send Button */}
                                 {!isLoading && !isStreaming ? (
                                     <button
                                         onClick={handleSendMessage}
@@ -869,7 +600,6 @@ export default function AIChat() {
                             </div>
                         </div>
                     </div>
-
                     {/* Warning Text */}
                     <div className="text-center">
                         <p className="text-xs text-gray-500"><span className='font-black'>តារា</span> អាចមានកំហុស។ សូមពិនិត្យព័ត៌មានសំខាន់។</p>
