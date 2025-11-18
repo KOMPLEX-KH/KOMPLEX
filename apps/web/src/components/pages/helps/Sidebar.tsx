@@ -28,7 +28,7 @@ export default function Sidebar({ currentTab, onTabChange }: SidebarProps) {
             key={i}
             onClick={() => onTabChange(i)}
             className={`text-left px-3 py-2 rounded-3xl ${
-              currentTab === i ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'
+              currentTab === i ? 'bg-indigo-50 text-indigo-600 border-l-4 border-indigo-500' : 'hover:bg-gray-100'
             }`}
           >
             {tab}

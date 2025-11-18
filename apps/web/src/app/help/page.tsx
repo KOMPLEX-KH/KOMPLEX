@@ -72,8 +72,8 @@ export default function Help() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="pt-30 lg:pt-15 p-2 max-w-7xl mx-auto bg-amber-700">
-        <div className="flex gap-5 bg-amber-500 min-h-full">
+      <div className="pt-30 lg:pt-19 p-3 max-w-7xl mx-auto ">
+        <div className="flex gap-5  min-h-full">
           <Sidebar currentTab={currentTab} onTabChange={setCurrentTab} />
           <main className="flex-1 bg-white rounded-3xl p-6 shadow">
             <h2 className="text-xl font-semibold mb-4">{`ជំនួយ: ${currentTab + 1}`}</h2>
