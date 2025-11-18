@@ -123,7 +123,7 @@ export default function Forum() {
 
 			{/* Main Content */}
 			<div className="pt-36 lg:pt-20 p-5 max-w-7xl mx-auto">
-				<div className="flex gap-6">
+				<div className="flex gap-6 bg-amber-300">
 					{/* Sidebar */}
 					<Sidebar onSearch={handleSearch} />
 
