@@ -99,5 +99,33 @@ export const createMeAiService = (api: AxiosInstance) => {
         throw new Error("Failed to get AI topic response");
       }
     },
+
+    rateAiResponse: async (
+      id: number,
+      rating: number,
+      ratingFeedback: string
+    ): Promise<void> => {
+      try {
+        await api.post(`/me/ai/${id}/rating`, { rating, ratingFeedback });
+      } catch (error) {
+        console.error("Error rating AI response:", error);
+        throw new Error("Failed to rate AI response");
+      }
+    },
+    rateTopicAiResponse: async (
+      id: number,
+      rating: number,
+      ratingFeedback: string
+    ): Promise<void> => {
+      try {
+        await api.post(`/me/ai/topics/${id}/rating`, {
+          rating,
+          ratingFeedback,
+        });
+      } catch (error) {
+        console.error("Error rating AI topic response:", error);
+        throw new Error("Failed to rate AI topic response");
+      }
+    },
   };
 };

@@ -2,7 +2,10 @@ export type AIResponseType = "normal" | "komplex";
 
 export interface AIResponse {
   prompt: string;
-  data: string;
+  data: {
+    aiResult: string;
+    id: number;
+  };
   responseType: AIResponseType;
 }
 

@@ -12,6 +12,7 @@ import ChatSkeleton from '../../components/pages/ai/ChatSkeleton';
 import ResponseLoadingState from '../../components/pages/ai/ResponseLoadingState';
 import ResponseTypeDropdown, { ResponseTypeOption } from '../../components/pages/ai/ResponseTypeDropdown';
 import PromptTextarea from '../../components/pages/ai/PromptTextarea';
+import AiRating from '../../components/pages/ai/AiRating';
 
 const responseTypeOptions: readonly ResponseTypeOption[] = [
     { id: 'normal', name: 'ធម្មតា', description: 'បង្ហាញជាទម្រង់ Markdown' },
@@ -39,8 +40,10 @@ export default function AIChat() {
     const [showScrollButton, setShowScrollButton] = useState(false);
     const [isInputDisabled, setIsInputDisabled] = useState(false);
     const [pendingResponseType, setPendingResponseType] = useState<AIResponseType | null>(null);
+    const [activeRating, setActiveRating] = useState<{ id: number; scope: "general" } | null>(null);
     const streamingIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const streamingRafRef = useRef<number | null>(null);
+    const streamingCompletionRef = useRef<(() => void) | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -79,6 +82,14 @@ export default function AIChat() {
         });
         return messages;
     };
+
+    const handleRatingComplete = useCallback(() => {
+        setActiveRating(null);
+    }, []);
+
+    const queueRating = useCallback((id: number) => {
+        setActiveRating({ id, scope: 'general' });
+    }, []);
 
     const loadHistory = useCallback(async (page: number = 1, append: boolean = false) => {
         if (!user) return;
@@ -171,11 +182,11 @@ export default function AIChat() {
 
     // Manage input disabled state
     useEffect(() => {
-        setIsInputDisabled(loading || isLoading || isStreaming || isRequestInProgress);
-    }, [loading, isLoading, isStreaming, isRequestInProgress]);
+        setIsInputDisabled(loading || isLoading || isStreaming || isRequestInProgress || Boolean(activeRating));
+    }, [loading, isLoading, isStreaming, isRequestInProgress, activeRating]);
 
     const handleSendMessage = async () => {
-        if (!inputMessage.trim()) return;
+        if (!inputMessage.trim() || activeRating) return;
 
         const userMessage: Message = {
             id: Date.now().toString(),
@@ -208,16 +219,19 @@ export default function AIChat() {
             if (isKomplexType(resolvedResponseType)) {
                 const aiResponse: Message = {
                     id: (Date.now() + 1).toString(),
-                    content: response.data,
+                    content: response.data.aiResult,
                     sender: 'ai',
                     timestamp: new Date(),
                     responseType: resolvedResponseType
                 };
                 setMessages(prev => [...prev, aiResponse]);
                 setPendingResponseType(null);
+                queueRating(response.data.id);
             } else {
                 // Start streaming animation
-                streamText(response.data, resolvedResponseType);
+                streamText(response.data.aiResult, resolvedResponseType, {
+                    onComplete: () => queueRating(response.data.id)
+                });
             }
         } catch (error) {
             console.error('Error calling AI:', error);
@@ -245,8 +259,18 @@ export default function AIChat() {
         }
     }, []);
 
-    const streamText = (text: string, responseType: AIResponseType) => {
-        if (responseType !== 'normal') return;
+    const streamText = (
+        text: string,
+        responseType: AIResponseType,
+        options?: {
+            onComplete?: () => void;
+        }
+    ) => {
+        if (responseType !== 'normal') {
+            options?.onComplete?.();
+            return;
+        }
+        streamingCompletionRef.current = options?.onComplete ?? null;
         setIsStreaming(true);
         setStreamingMessage('');
         let index = 0;
@@ -280,6 +304,10 @@ export default function AIChat() {
                 setMessages(prev => [...prev, aiResponse]);
                 setStreamingMessage('');
                 setPendingResponseType(null);
+                if (streamingCompletionRef.current) {
+                    streamingCompletionRef.current();
+                    streamingCompletionRef.current = null;
+                }
 
                 // No need to refresh history - the new message is already added to the UI
             }
@@ -327,7 +355,7 @@ export default function AIChat() {
     }, [inputMessage, debouncedAutoResize]);
 
     const handleTryAgain = async () => {
-        if (!messages.length) {
+        if (!messages.length || activeRating) {
             setError(null);
             return;
         }
@@ -352,16 +380,19 @@ export default function AIChat() {
             if (isKomplexType(resolvedResponseType)) {
                 const aiResponse: Message = {
                     id: (Date.now() + 1).toString(),
-                    content: response.data,
+                    content: response.data.aiResult,
                     sender: 'ai',
                     timestamp: new Date(),
                     responseType: resolvedResponseType
                 };
                 setMessages(prev => [...prev, aiResponse]);
                 setPendingResponseType(null);
+                queueRating(response.data.id);
             } else {
                 // Start streaming animation
-                streamText(response.data, resolvedResponseType);
+                streamText(response.data.aiResult, resolvedResponseType, {
+                    onComplete: () => queueRating(response.data.id)
+                });
             }
         } catch (error) {
             console.error('Error calling AI:', error);
@@ -404,6 +435,10 @@ export default function AIChat() {
             }
             setStreamingMessage('');
             setPendingResponseType(null);
+            if (streamingCompletionRef.current) {
+                streamingCompletionRef.current();
+                streamingCompletionRef.current = null;
+            }
 
             // No need to refresh history - the partial message is already added to the UI
         }
@@ -519,87 +554,92 @@ export default function AIChat() {
             <div className='bg-gray-50 fixed h-20 w-full bottom-0 '></div>
             <div className="fixed bottom-0 left-0 right-0 px-4 py-2">
                 <div className="max-w-4xl mx-auto">
-                    {/* Input Container */}
-                    <div className={`bg-white shadow-lg border border-gray-200 p-2 mb-2 transition-all duration-200 ${isMultiLine ? 'rounded-3xl' : 'rounded-full'}`}>
-                        {/* Single line layout - show when not multi-line */}
-                        <div className="flex items-center gap-2">
-                            <ResponseTypeDropdown
-                                className={isMultiLine ? 'hidden' : 'flex'}
-                                options={responseTypeOptions}
-                                value={selectedResponseType}
-                                onChange={setSelectedResponseType}
-                                disabled={isInputDisabled}
-                                variant="compact"
-                            />
-
-                            <div className="flex-1 relative min-h-[40px] flex items-center">
-                                <PromptTextarea
-                                    ref={textareaRef}
-                                    value={inputMessage}
-                                    onChange={(e) => setInputMessage(e.target.value)}
-                                    onKeyPress={handleKeyPress}
-                                    disabled={isInputDisabled}
-                                    placeholder={isInputDisabled ? "កំពុងដំណើរការ..." : "សរសេរសំណួររបស់អ្នក..."}
-                                    style={{
-                                        minHeight: '30px',
-                                        maxHeight: '120px',
-                                        height: 'auto'
-                                    }}
-                                />
-                            </div>
-
-                            {!isLoading && !isStreaming ? (
-                                <button
-                                    onClick={handleSendMessage}
-                                    disabled={!inputMessage.trim() || isInputDisabled}
-                                    className={`flex-shrink-0 p-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${isMultiLine ? 'hidden' : 'flex'}`}
-                                >
-                                    <Send className="w-4 h-4" />
-                                </button>
-                            ) : (
-                                <button
-                                    className="flex-shrink-0 p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors duration-200"
-                                    onClick={handleStopStreaming}
-                                    title={isRequestInProgress ? "បញ្ឈប់ការស្នើសុំ" : "បញ្ឈប់ការសរសេរ"}
-                                >
-                                    <Square className="w-4 h-4" />
-                                </button>
-                            )}
+                    {activeRating ? (
+                        <div className="mb-2">
+                            <AiRating responseId={activeRating.id} scope="general" onComplete={handleRatingComplete} />
                         </div>
-
-                        {/* Multi-line layout - show when multi-line */}
-                        <div className={`space-y-3 ${isMultiLine ? 'block' : 'hidden'}`}>
-
-                            {/* Controls row */}
-                            <div className="flex items-center justify-between">
+                    ) : (
+                        <div className={`bg-white shadow-lg border border-gray-200 p-2 mb-2 transition-all duration-200 ${isMultiLine ? 'rounded-3xl' : 'rounded-full'}`}>
+                            {/* Single line.layout - show when not multi-line */}
+                            <div className="flex items-center gap-2">
                                 <ResponseTypeDropdown
+                                    className={isMultiLine ? 'hidden' : 'flex'}
                                     options={responseTypeOptions}
                                     value={selectedResponseType}
                                     onChange={setSelectedResponseType}
                                     disabled={isInputDisabled}
-                                    variant="default"
+                                    variant="compact"
                                 />
+
+                                <div className="flex-1 relative min-h-[40px] flex items-center">
+                                    <PromptTextarea
+                                        ref={textareaRef}
+                                        value={inputMessage}
+                                        onChange={(e) => setInputMessage(e.target.value)}
+                                        onKeyPress={handleKeyPress}
+                                        disabled={isInputDisabled}
+                                        placeholder={isInputDisabled ? "កំពុងដំណើរការ..." : "សរសេរសំណួររបស់អ្នក..."}
+                                        style={{
+                                            minHeight: '30px',
+                                            maxHeight: '120px',
+                                            height: 'auto'
+                                        }}
+                                    />
+                                </div>
 
                                 {!isLoading && !isStreaming ? (
                                     <button
                                         onClick={handleSendMessage}
                                         disabled={!inputMessage.trim() || isInputDisabled}
-                                        className="p-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className={`flex-shrink-0 p-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200.disabled:opacity-50 disabled:cursor-not-allowed ${isMultiLine ? 'hidden' : 'flex'}`}
                                     >
                                         <Send className="w-4 h-4" />
                                     </button>
                                 ) : (
                                     <button
+                                        className="flex-shrink-0 p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors duration-200"
                                         onClick={handleStopStreaming}
-                                        className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors duration-200"
                                         title={isRequestInProgress ? "បញ្ឈប់ការស្នើសុំ" : "បញ្ឈប់ការសរសេរ"}
                                     >
                                         <Square className="w-4 h-4" />
                                     </button>
                                 )}
                             </div>
+
+                            {/* Multi-line layout - show when multi-line */}
+                            <div className={`space-y-3 ${isMultiLine ? 'block' : 'hidden'}`}>
+
+                                {/* Controls row */}
+                                <div className="flex items-center justify-between">
+                                    <ResponseTypeDropdown
+                                        options={responseTypeOptions}
+                                        value={selectedResponseType}
+                                        onChange={setSelectedResponseType}
+                                        disabled={isInputDisabled}
+                                        variant="default"
+                                    />
+
+                                    {!isLoading && !isStreaming ? (
+                                        <button
+                                            onClick={handleSendMessage}
+                                            disabled={!inputMessage.trim() || isInputDisabled}
+                                            className="p-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            <Send className="w-4 h-4" />
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={handleStopStreaming}
+                                            className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors duration-200"
+                                            title={isRequestInProgress ? "បញ្ឈប់ការស្នើសុំ" : "បញ្ឈប់ការសរសេរ"}
+                                        >
+                                            <Square className="w-4 h-4" />
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    )}
                     {/* Warning Text */}
                     <div className="text-center">
                         <p className="text-xs text-gray-500"><span className='font-black'>តារា</span> អាចមានកំហុស។ សូមពិនិត្យព័ត៌មានសំខាន់។</p>

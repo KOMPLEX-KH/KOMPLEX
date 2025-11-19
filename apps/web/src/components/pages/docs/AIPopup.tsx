@@ -9,6 +9,7 @@ import { useAuth } from "@hooks/useAuth";
 import MessageItem from "@/components/pages/ai/MessageItem";
 import ResponseTypeDropdown, { ResponseTypeOption } from "@/components/pages/ai/ResponseTypeDropdown";
 import PromptTextarea from "@/components/pages/ai/PromptTextarea";
+import AiRating from "@/components/pages/ai/AiRating";
 import ResponseLoadingState from "@/components/pages/ai/ResponseLoadingState";
 import { AnimatePresence, motion } from "framer-motion";
 import { useParams } from "next/navigation";
@@ -79,6 +80,7 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
     const [pendingResponseType, setPendingResponseType] = useState<AIResponseType | null>(null);
     const [isHistoryLoading, setIsHistoryLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [activeRating, setActiveRating] = useState<{ id: number; scope: "topic" } | null>(null);
     const params = useParams() as Params;
     const topicParam = params?.topic;
     const parsedTopicId =
@@ -89,12 +91,22 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
 
     const chatBodyRef = useRef<HTMLDivElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const isInputDisabled = !user || !isTopicScoped || topicId == null || isLoading || isStreaming || isRequestInProgress;
+    const streamingCompletionRef = useRef<(() => void) | null>(null);
+    const isInputDisabled =
+        !user || !isTopicScoped || topicId == null || isLoading || isStreaming || isRequestInProgress || Boolean(activeRating);
 
     const closePopup = useCallback(() => {
         if (isRequestInProgress) return;
         onClose();
     }, [isRequestInProgress, onClose]);
+
+    const handleRatingComplete = useCallback(() => {
+        setActiveRating(null);
+    }, []);
+
+    const queueRating = useCallback((id: number) => {
+        setActiveRating({ id, scope: "topic" });
+    }, []);
 
     const handleBackdropClick = useCallback(
         (event: React.MouseEvent<HTMLDivElement>) => {
@@ -150,6 +162,8 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
             setStreamingMessage("");
             setIsStreaming(false);
             setIsLoading(false);
+            setActiveRating(null);
+            streamingCompletionRef.current = null;
             return;
         }
         if (!user) return;
@@ -188,39 +202,52 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
         }
     }, []);
 
-    const streamText = useCallback((text: string) => {
-        setIsStreaming(true);
-        setStreamingMessage("");
-        let index = 0;
-        const maxStep = 32;
-        const minStep = 3;
-
-        const tick = () => {
-            if (index < text.length) {
-                const dynamicStep = Math.min(minStep + Math.floor(index / 50), maxStep);
-                index = Math.min(index + dynamicStep, text.length);
-                setStreamingMessage(text.slice(0, index));
-                requestAnimationFrame(tick);
-            } else {
-                setIsStreaming(false);
-                const aiResponse: Message = {
-                    id: (Date.now() + 1).toString(),
-                    content: text,
-                    sender: "ai",
-                    timestamp: new Date(),
-                    responseType: "normal"
-                };
-                setMessages((prev) => [...prev, aiResponse]);
-                setStreamingMessage("");
-                setPendingResponseType(null);
+    const streamText = useCallback(
+        (
+            text: string,
+            options?: {
+                onComplete?: () => void;
             }
-        };
+        ) => {
+            streamingCompletionRef.current = options?.onComplete ?? null;
+            setIsStreaming(true);
+            setStreamingMessage("");
+            let index = 0;
+            const maxStep = 32;
+            const minStep = 3;
 
-        requestAnimationFrame(tick);
-    }, []);
+            const tick = () => {
+                if (index < text.length) {
+                    const dynamicStep = Math.min(minStep + Math.floor(index / 50), maxStep);
+                    index = Math.min(index + dynamicStep, text.length);
+                    setStreamingMessage(text.slice(0, index));
+                    requestAnimationFrame(tick);
+                } else {
+                    setIsStreaming(false);
+                    const aiResponse: Message = {
+                        id: (Date.now() + 1).toString(),
+                        content: text,
+                        sender: "ai",
+                        timestamp: new Date(),
+                        responseType: "normal"
+                    };
+                    setMessages((prev) => [...prev, aiResponse]);
+                    setStreamingMessage("");
+                    setPendingResponseType(null);
+                    if (streamingCompletionRef.current) {
+                        streamingCompletionRef.current();
+                        streamingCompletionRef.current = null;
+                    }
+                }
+            };
+
+            requestAnimationFrame(tick);
+        },
+        []
+    );
 
     const handleSendMessage = async () => {
-        if (!inputMessage.trim() || isLoading || isStreaming || !user) return;
+        if (!inputMessage.trim() || isLoading || isStreaming || !user || activeRating) return;
         const userMessage: Message = {
             id: Date.now().toString(),
             content: inputMessage,
@@ -253,15 +280,18 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
             if (resolvedResponseType === "komplex") {
                 const aiResponse: Message = {
                     id: (Date.now() + 1).toString(),
-                    content: response.data,
+                    content: response.data.aiResult,
                     sender: "ai",
                     timestamp: new Date(),
                     responseType: resolvedResponseType
                 };
                 setMessages((prev) => [...prev, aiResponse]);
                 setPendingResponseType(null);
+                queueRating(response.data.id);
             } else {
-                streamText(response.data);
+                streamText(response.data.aiResult, {
+                    onComplete: () => queueRating(response.data.id)
+                });
             }
         } catch (err) {
             console.error("Failed to send AI popup message:", err);
@@ -302,6 +332,10 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
             }
             setStreamingMessage("");
             setPendingResponseType(null);
+            if (streamingCompletionRef.current) {
+                streamingCompletionRef.current();
+                streamingCompletionRef.current = null;
+            }
         }
     };
 
@@ -401,49 +435,53 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
 
                                 {/* Input */}
                                 <div className="p-2">
-                                    <div className="bg-white border border-gray-200 rounded-3xl px-2 py-1 shadow-sm">
-                                        <div className="flex items-center gap-2">
-                                            <ResponseTypeDropdown
-                                                className="flex-shrink-0"
-                                                options={responseTypeOptions}
-                                                value={selectedResponseType}
-                                                onChange={setSelectedResponseType}
-                                                disabled={isInputDisabled}
-                                                variant={isDesktop ? "default" : "compact"}
-                                            />
-                                            <div className="flex-1 relative flex items-center">
-                                                <PromptTextarea
-                                                    ref={textareaRef}
-                                                    value={inputMessage}
-                                                    onChange={(e) => setInputMessage(e.target.value)}
-                                                    onKeyDown={handleKeyDown}
+                                    {activeRating ? (
+                                        <AiRating responseId={activeRating.id} scope="topic" onComplete={handleRatingComplete} />
+                                    ) : (
+                                        <div className="bg-white border border-gray-200 rounded-3xl px-2 py-1 shadow-sm">
+                                            <div className="flex items-center gap-2">
+                                                <ResponseTypeDropdown
+                                                    className="flex-shrink-0"
+                                                    options={responseTypeOptions}
+                                                    value={selectedResponseType}
+                                                    onChange={setSelectedResponseType}
                                                     disabled={isInputDisabled}
-                                                    placeholder={isInputDisabled ? "កំពុងដំណើរការ..." : "សួរអ្វីមួយអំពីមេរៀននេះ..."}
+                                                    variant={isDesktop ? "default" : "compact"}
                                                 />
+                                                <div className="flex-1 relative flex items-center">
+                                                    <PromptTextarea
+                                                        ref={textareaRef}
+                                                        value={inputMessage}
+                                                        onChange={(e) => setInputMessage(e.target.value)}
+                                                        onKeyDown={handleKeyDown}
+                                                        disabled={isInputDisabled}
+                                                        placeholder={isInputDisabled ? "កំពុងដំណើរការ..." : "សួរអ្វីមួយអំពីមេរៀននេះ..."}
+                                                    />
+                                                </div>
+                                                {!isLoading && !isStreaming ? (
+                                                    <button
+                                                        onClick={handleSendMessage}
+                                                        disabled={!inputMessage.trim() || !user}
+                                                        className="p-2 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition.disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-indigo-500/25"
+                                                    >
+                                                        <Send className="w-4 h-4" />
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        onClick={handleStop}
+                                                        className="p-2 rounded-full bg-red-600 text-white hover:bg-red-700 transition shadow-lg shadow-red-500/25"
+                                                    >
+                                                        <Square className="w-4 h-4" />
+                                                    </button>
+                                                )}
                                             </div>
-                                            {!isLoading && !isStreaming ? (
-                                                <button
-                                                    onClick={handleSendMessage}
-                                                    disabled={!inputMessage.trim() || !user}
-                                                    className="p-2 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition disabled:opacity-50.disabled:cursor-not-allowed shadow-lg shadow-indigo-500/25"
-                                                >
-                                                    <Send className="w-4 h-4" />
-                                                </button>
-                                            ) : (
-                                                <button
-                                                    onClick={handleStop}
-                                                    className="p-2 rounded-full bg-red-600 text-white hover:bg-red-700 transition shadow-lg shadow-red-500/25"
-                                                >
-                                                    <Square className="w-4 h-4" />
-                                                </button>
+                                            {pendingResponseType && isLoading && (
+                                                <div className="text-xs text-gray-500 text-center">
+                                                    កំពុងរៀបចំទម្រង់ {pendingResponseType === "komplex" ? "KOMPLEX" : "ធម្មតា"}...
+                                                </div>
                                             )}
                                         </div>
-                                        {pendingResponseType && isLoading && (
-                                            <div className="text-xs text-gray-500 text-center">
-                                                កំពុងរៀបចំទម្រង់ {pendingResponseType === "komplex" ? "KOMPLEX" : "ធម្មតា"}...
-                                            </div>
-                                        )}
-                                    </div>
+                                    )}
                                     <div className="text-center text-xs text-gray-500 mt-2">
                                         តារា អាចមានកំហុស។ សូមពិនិត្យព័ត៌មានសំខាន់។
                                     </div>
