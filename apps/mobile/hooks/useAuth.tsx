@@ -10,6 +10,8 @@ import { User as UserType } from "@core-types/user-content/user";
 import { useRouter, usePathname } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { auth } from "@/configs/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { authService } from "@/services/index";
 
 interface AuthContextType {
   user: UserType | null;
@@ -27,26 +29,85 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Load user from AsyncStorage and Firebase auth
+  // Firebase auth state listener
   useEffect(() => {
-    const loadUser = async () => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       try {
-        setLoading(true);
-        const userData = await AsyncStorage.getItem("user");
-        const currentUser = auth.currentUser;
+        if (firebaseUser) {
+          // User is signed in, fetch user data from backend
+          try {
+            const userData = await authService.getCurrentUser();
+            await AsyncStorage.setItem("user", JSON.stringify(userData));
+            setUser(userData);
+          } catch (error) {
+            console.error("Error fetching user data:", error);
 
-        if (!currentUser || !userData) {
+            // If user doesn't exist in backend, check if it's a social login
+            // and create the user via socialLogin
+            const providerData = firebaseUser.providerData;
+            if (providerData && providerData.length > 0) {
+              const providerId = providerData[0].providerId;
+
+              // Check if it's a social provider (not email/password)
+              if (providerId !== 'password') {
+                try {
+                  // Determine provider type
+                  let provider: 'google' | 'github' | 'microsoft' = 'google';
+                  if (providerId.includes('github')) {
+                    provider = 'github';
+                  } else if (providerId.includes('microsoft')) {
+                    provider = 'microsoft';
+                  }
+
+                  // Get user info from Firebase
+                  const email = firebaseUser.email || '';
+                  const displayName = firebaseUser.displayName || '';
+                  const nameParts = displayName.split(' ') || [];
+                  const firstName = nameParts[0] || '';
+                  const lastName = nameParts.slice(1).join(' ') || '';
+                  const photoURL = firebaseUser.photoURL || null;
+
+                  // Create user via social login
+                  const userData = await authService.socialLogin({
+                    provider,
+                    email,
+                    username: email.split('@')[0] + '_' + Date.now().toString().slice(-6),
+                    uid: firebaseUser.uid,
+                    firstName,
+                    lastName,
+                    dateOfBirth: null,
+                    phone: '',
+                    profileImage: photoURL,
+                    profileImageKey: null,
+                  });
+
+                  await AsyncStorage.setItem("user", JSON.stringify(userData));
+                  setUser(userData);
+                  return;
+                } catch (socialError) {
+                  console.error("Error creating social login user:", socialError);
+                }
+              }
+            }
+
+            // If backend call fails and not a social login, try to use stored data
+            const storedData = await AsyncStorage.getItem("user");
+            if (storedData) {
+              setUser(JSON.parse(storedData));
+            } else {
+              setUser(null);
+            }
+          }
+        } else {
+          // User is signed out
+          await AsyncStorage.removeItem("user");
           setUser(null);
-          // Redirect to auth if not on auth page
           if (pathname !== "/auth") {
             router.replace("/auth");
           }
-          return;
         }
-
-        setUser(JSON.parse(userData));
       } catch (error) {
-        console.error("Error loading user:", error);
+        console.error("Error in auth state listener:", error);
         setUser(null);
         if (pathname !== "/auth") {
           router.replace("/auth");
@@ -54,37 +115,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } finally {
         setLoading(false);
       }
-    };
+    });
 
-    loadUser();
+    return () => unsubscribe();
   }, [router, pathname]);
-
-  // Re-sync on route change in case auth state changed elsewhere
-  useEffect(() => {
-    const syncUser = async () => {
-      try {
-        const userData = await AsyncStorage.getItem("user");
-        const currentUser = auth.currentUser;
-
-        if (!currentUser || !userData) {
-          setUser(null);
-          if (pathname !== "/auth") {
-            router.replace("/auth");
-          }
-          return;
-        }
-
-        setUser(JSON.parse(userData));
-      } catch {
-        setUser(null);
-        if (pathname !== "/auth") {
-          router.replace("/auth");
-        }
-      }
-    };
-
-    syncUser();
-  }, [pathname, router]);
 
   const value = useMemo(
     () => ({ user, loading }),

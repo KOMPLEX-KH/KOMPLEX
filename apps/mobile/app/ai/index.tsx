@@ -163,7 +163,9 @@ export default function AiScreen() {
         setError(null);
 
         try {
-            const response = await meAiService.callAiAndWriteToHistory(currentInput, selectedLanguage);
+            const response = await meAiService.callAiAndWriteToHistory(currentInput, {
+                language: selectedLanguage
+            });
             setIsLoading(false);
             setIsRequestInProgress(false);
 
@@ -231,7 +233,9 @@ export default function AiScreen() {
             const lastUserMessage = messages.filter(m => m.sender === 'user').pop();
             if (!lastUserMessage) return;
 
-            const response = await meAiService.callAiAndWriteToHistory(lastUserMessage.content, selectedLanguage);
+            const response = await meAiService.callAiAndWriteToHistory(lastUserMessage.content, {
+                language: selectedLanguage
+            });
             setIsLoading(false);
             setIsRequestInProgress(false);
 

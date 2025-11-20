@@ -178,27 +178,27 @@ export default function AboutFeatures() {
       isMediaFirst: true,
       mediaClassName: "",
     },
-    {
-      media: (
-        <div className="bg-white rounded-3xl p-2 shadow-lg opacity-60">
-          <div className="w-full h-80 bg-gray-100 rounded-3xl flex items-center justify-center">
-            <img
-              src="/landing/exercises.png"
-              alt="exercises"
-              className="w-full h-full object-cover rounded-3xl"
-            />
-          </div>
-        </div>
-      ),
-      title: "លំហាត់អនុវត្តន៍រាល់ជំពូក",
-      icon: BookOpen,
-      listItems: [
-        "សាលល្បងសម្ថភាព",
-        "ទទួលបានរបាយការណ៏",
-        "ធ្វើតេស្តបានច្រើនដង",
-      ],
-      isMediaFirst: false,
-    },
+    // {
+    //   media: (
+    //     <div className="bg-white rounded-3xl p-2 shadow-lg opacity-60">
+    //       <div className="w-full h-80 bg-gray-100 rounded-3xl flex items-center justify-center">
+    //         <img
+    //           src="/landing/exercises.png"
+    //           alt="exercises"
+    //           className="w-full h-full object-cover rounded-3xl"
+    //         />
+    //       </div>
+    //     </div>
+    //   ),
+    //   title: "លំហាត់អនុវត្តន៍រាល់ជំពូក",
+    //   icon: BookOpen,
+    //   listItems: [
+    //     "សាលល្បងសម្ថភាព",
+    //     "ទទួលបានរបាយការណ៏",
+    //     "ធ្វើតេស្តបានច្រើនដង",
+    //   ],
+    //   isMediaFirst: false,
+    // },
     {
       media: (
         <div className="bg-white rounded-3xl p-2 shadow-lg">
@@ -223,11 +223,10 @@ export default function AboutFeatures() {
         "ពន្យល់គោលគំនិតស្មុគស្មាញឱ្យកាន់តែងាយយល់",
         "ផ្តល់ឧទាហរណ៍ និងលំហាត់បន្ថែម",
       ],
-      isMediaFirst: true,
+      isMediaFirst: false,
       mediaLink: "/ai",
     },
     {
-      sectionHeader: "មុខងារចែករំលែក",
       media: (
         <div className="bg-white rounded-3xl p-2 shadow-lg">
           <div className="w-full h-80 bg-gray-100 rounded-3xl flex items-center justify-center">
@@ -246,7 +245,7 @@ export default function AboutFeatures() {
         "សួរសំណួរ និងរកដំណោះស្រាយ",
         "ចែករំលែកបទពិសោធន៍",
       ],
-      isMediaFirst: false,
+      isMediaFirst: true,
       mediaLink: "/forums",
     },
     {
@@ -268,7 +267,7 @@ export default function AboutFeatures() {
         "មានលំហាត់អនុវត្តន៍ភ្ជាប់នឹងវីដេអូ",
         "ផ្ដល់មតិ និងពិភាក្សាទាក់ទងនឹងវីដេអូ",
       ],
-      isMediaFirst: true,
+      isMediaFirst: false,
       mediaLink: "/videos",
     },
   ];
@@ -283,35 +282,21 @@ export default function AboutFeatures() {
           className="text-center mb-15"
         >
           <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
-            មុខងារមេរៀន
+            អំពីមុខងារ
           </h2>
         </motion.div>
 
         {features.map((feature, index) => (
-          <div key={index}>
-            {feature.sectionHeader && (
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="text-center mb-15"
-              >
-                <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
-                  {feature.sectionHeader}
-                </h2>
-              </motion.div>
-            )}
-            <FeatureSection
-              media={feature.media}
-              title={feature.title}
-              icon={feature.icon}
-              listItems={feature.listItems}
-              isMediaFirst={feature.isMediaFirst}
-              mediaLink={feature.mediaLink}
-              mediaClassName={feature.mediaClassName}
-            />
-          </div>
+          <FeatureSection
+            key={index}
+            media={feature.media}
+            title={feature.title}
+            icon={feature.icon}
+            listItems={feature.listItems}
+            isMediaFirst={feature.isMediaFirst}
+            mediaLink={feature.mediaLink}
+            mediaClassName={feature.mediaClassName}
+          />
         ))}
       </div>
     </section>

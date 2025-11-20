@@ -13,6 +13,7 @@ import Skeleton from "@/components/pages/docs/Skeleton";
 import { feedCurriculumsService } from "@/services";
 import { DoTopicExercise } from "@/components/pages/docs/boxes/DoTopicExercise";
 import ContentError from "@/components/common/ContentError";
+import AiButton from "@/components/pages/docs/AiButton";
 
 
 type Params = { grade: string; subject: string; lesson: string; topic: string };
@@ -221,7 +222,7 @@ export default function Page() {
     const Component = topicComponent ? deserializeTopicContentV3(topicComponent as string) : null;
 
     return (
-        <div className="flex bg-gray-50 min-h-screen">
+        <div className="flex bg-gray-50 min-h-screen ">
             <Sidebar
                 currentGrade={{ id: parseInt(params.grade) }}
                 currentSubject={{ id: parseInt(params.subject) }}
@@ -234,7 +235,7 @@ export default function Page() {
                 currentLesson={{ id: parseInt(params.lesson) }}
                 currentTopic={{ id: parseInt(params.topic) }}
             />
-            <div className="w-full lg:ml-70 lg:mt-30 mt-40 p-5 lg:p-6">
+            <div className="w-full lg:ml-70 lg:mt-30 mt-40 p-5 lg:p-6 pb-20 lg:pb-20">
                 <TopicWrapper
                     title={getTopicInfo().topic?.name}
                     prev={navigation?.prev}
@@ -244,6 +245,7 @@ export default function Page() {
                         content={Component}
                     />
                 </TopicWrapper>
+                <AiButton />
             </div>
         </div>
     );

@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import * as FileSystem from 'expo-file-system';
 import { tw } from '@/utils/styles';
 import { auth, googleProvider, microsoftProvider, githubProvider } from '@/configs/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithRedirect, getAuth, fetchSignInMethodsForEmail } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithCredential, signInWithRedirect, getAuth, fetchSignInMethodsForEmail, OAuthProvider, GoogleAuthProvider, GithubAuthProvider } from 'firebase/auth';
 import { authService } from '@/services/index';
 import {
     validateLoginForm,
@@ -17,6 +17,11 @@ import Logo from '@/components/common/Logo';
 import { Text } from '@/components/common/Text';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Svg, { Path } from 'react-native-svg';
+import * as AuthSession from 'expo-auth-session';
+import * as WebBrowser from 'expo-web-browser';
+
+// Complete auth session for proper cleanup
+WebBrowser.maybeCompleteAuthSession();
 
 type ProviderKey = 'google' | 'github' | 'microsoft';
 
@@ -224,28 +229,138 @@ export default function AuthPage() {
         }
     };
 
+    // Note: For React Native, signInWithRedirect will open a browser
+    // The auth state listener in useAuth.tsx will handle the result automatically
+    // when the user returns from the browser after authentication
+
     const handleSocialLogin = async (providerKey: ProviderKey) => {
         setFormError(null);
         setIsSubmitting(true);
         try {
-            const provider =
-                providerKey === 'google' ? googleProvider :
-                    providerKey === 'github' ? githubProvider :
-                        microsoftProvider;
-
-            // For React Native, we need to use signInWithRedirect or a native solution
-            // This is a placeholder - you'll need to implement proper social auth for React Native
-            // For web/Expo Web, signInWithRedirect might work
             if (Platform.OS === 'web') {
+                // For web, use Firebase's signInWithRedirect
+                const provider =
+                    providerKey === 'google' ? googleProvider :
+                        providerKey === 'github' ? githubProvider :
+                            microsoftProvider;
                 await signInWithRedirect(auth, provider);
+                return;
+            }
+
+            // For native, we need to use expo-auth-session to get OAuth tokens
+            // Then create Firebase credentials and sign in
+            const redirectUri = AuthSession.makeRedirectUri();
+            let discovery: AuthSession.DiscoveryDocument;
+            let request: AuthSession.AuthRequest;
+
+            // Configure OAuth based on provider
+            // Note: These client IDs should be configured in your Firebase project
+            // and can be obtained from Firebase Console > Authentication > Sign-in method
+            if (providerKey === 'google') {
+                discovery = {
+                    authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
+                    tokenEndpoint: 'https://oauth2.googleapis.com/token',
+                    revocationEndpoint: 'https://oauth2.googleapis.com/revoke',
+                };
+                // For Google, you can use the Firebase project's OAuth client ID
+                // Get it from Firebase Console > Project Settings > General > Your apps
+                request = new AuthSession.AuthRequest({
+                    clientId: process.env.EXPO_PUBLIC_FIREBASE_GOOGLE_CLIENT_ID || process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID || '',
+                    scopes: ['openid', 'profile', 'email'],
+                    responseType: AuthSession.ResponseType.Code,
+                    redirectUri,
+                });
+            } else if (providerKey === 'microsoft') {
+                discovery = {
+                    authorizationEndpoint: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+                    tokenEndpoint: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+                };
+                request = new AuthSession.AuthRequest({
+                    clientId: process.env.EXPO_PUBLIC_MICROSOFT_CLIENT_ID || '',
+                    scopes: ['openid', 'profile', 'email'],
+                    responseType: AuthSession.ResponseType.Code,
+                    redirectUri,
+                });
+            } else if (providerKey === 'github') {
+                discovery = {
+                    authorizationEndpoint: 'https://github.com/login/oauth/authorize',
+                    tokenEndpoint: 'https://github.com/login/oauth/access_token',
+                };
+                request = new AuthSession.AuthRequest({
+                    clientId: process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID || '',
+                    scopes: ['read:user', 'user:email'],
+                    responseType: AuthSession.ResponseType.Code,
+                    redirectUri,
+                });
             } else {
-                // For native, you'll need expo-auth-session or react-native-firebase
-                setFormError('សូមប្រើប្រាស់កំណែវែបសម្រាប់ការចូលដោយប្រើគណនីសង្គម');
+                throw new Error('Unsupported provider');
+            }
+
+            if (!request.clientId) {
+                throw new Error(`Missing OAuth client ID for ${providerKey}. Please configure it in your environment variables.`);
+            }
+
+            // Start the OAuth flow
+            const result = await request.promptAsync(discovery);
+
+            if (result.type !== 'success') {
                 setIsSubmitting(false);
                 return;
             }
+
+            // Exchange code for token
+            const tokenRequestParams = new URLSearchParams();
+            tokenRequestParams.append('client_id', request.clientId);
+            tokenRequestParams.append('code', result.params.code);
+            tokenRequestParams.append('redirect_uri', redirectUri);
+            tokenRequestParams.append('grant_type', 'authorization_code');
+
+            // Add client secret if available (for some providers)
+            if (providerKey === 'github' && process.env.EXPO_PUBLIC_GITHUB_CLIENT_SECRET) {
+                tokenRequestParams.append('client_secret', process.env.EXPO_PUBLIC_GITHUB_CLIENT_SECRET);
+            }
+
+            const tokenResponse = await fetch(discovery.tokenEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    Accept: 'application/json',
+                },
+                body: tokenRequestParams.toString(),
+            });
+
+            const tokenData = await tokenResponse.json();
+
+            if (!tokenData.access_token) {
+                throw new Error('Failed to get access token');
+            }
+
+            // Create Firebase credential from OAuth token
+            let credential;
+            if (providerKey === 'google') {
+                credential = GoogleAuthProvider.credential(tokenData.id_token || tokenData.access_token);
+            } else if (providerKey === 'microsoft') {
+                credential = new OAuthProvider('microsoft.com').credential({
+                    idToken: tokenData.id_token || tokenData.access_token,
+                    accessToken: tokenData.access_token,
+                });
+            } else if (providerKey === 'github') {
+                // GitHub doesn't provide idToken, use access token
+                credential = GithubAuthProvider.credential(tokenData.access_token);
+            } else {
+                throw new Error('Unsupported provider');
+            }
+
+            // Sign in with Firebase using the credential
+            const firebaseResult = await signInWithCredential(auth, credential);
+            await firebaseResult.user.getIdToken(true);
+
+            // The auth state listener in useAuth.tsx will handle user creation
+            // if the user doesn't exist in the backend
+            setIsSubmitting(false);
         } catch (error: unknown) {
             console.error('Social login error:', error);
+            setIsSubmitting(false);
 
             // Handle special case for account exists with different credential
             if (isFirebaseAuthError(error) && error.code === "auth/account-exists-with-different-credential") {
@@ -259,11 +374,9 @@ export default function AuthPage() {
                     setFormError(getErrorMessage(error, 'social'));
                 }
             } else {
-                setFormError(getErrorMessage(error, 'social'));
+                const errorMessage = error instanceof Error ? error.message : 'មានបញ្ហាក្នុងការចូលដោយប្រើគណនីសង្គម';
+                setFormError(errorMessage);
             }
-        }
-        finally {
-            setIsSubmitting(false);
         }
     };
 

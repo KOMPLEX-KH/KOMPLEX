@@ -1,3 +1,9 @@
+'use client';
+
+import { useState } from "react";
+import { Info } from "lucide-react";
+import BetaDialog from "./BetaDialog";
+
 interface LogoProps {
     isVertical?: boolean,
     size?: "xl" | "lg" | "md" | "sm",
@@ -7,6 +13,9 @@ interface LogoProps {
 }
 
 export const Logo = ({ isVertical = false, size = "md", isLoading = false, variant = "default", showText = true }: LogoProps) => {
+    const [isBetaDialogOpen, setIsBetaDialogOpen] = useState(false);
+
+
     // Size configurations
     const sizeConfig = {
         sm: {
@@ -27,7 +36,7 @@ export const Logo = ({ isVertical = false, size = "md", isLoading = false, varia
         xl: {
             image: 'lg:w-24 lg:h-24 w-16 h-16',
             text: 'lg:text-[70px] text-[40px]',
-            gap: 'gap-4'
+            gap: 'gap-0'
         }
     };
 
@@ -54,15 +63,32 @@ export const Logo = ({ isVertical = false, size = "md", isLoading = false, varia
 
     const currentVariant = variantConfig[variant];
 
+
+
     return (
-        <div className={`flex items-center justify-center ${currentSize.gap} ${isVertical ? 'flex-col' : 'flex-row'} ${isLoading ? 'opacity-70 animate-pulse' : ''}`}>
-            <img src={currentVariant.logo} alt="logo" className={currentSize.image} />
-            {showText && (
-                <div className="flex items-center justify-center gap-0">
-                    <span className={`${currentSize.text} font-extrabold tracking-tight ${currentVariant.textColor}`}>KOM</span>
-                    <span className={`${currentSize.text} font-extrabold tracking-tight ${currentVariant.textColor2}`}>PLEX</span>
-                </div>
-            )}
-        </div>
+        <>
+            <div className={`flex relative items-center justify-center ${currentSize.gap} ${isVertical ? 'flex-col' : 'flex-row'} ${isLoading ? 'opacity-70 animate-pulse' : ''}`}>
+                <button
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setIsBetaDialogOpen(true)
+                    }}
+                    className={`absolute flex items-center gap-1 ${isVertical ? '-top-4 right-1/8' : ' top-1 -right-18'} py-1 px-2 text-indigo-500 bg-indigo-500/10 border border-indigo-500 rounded-full hover:bg-indigo-500/20 transition-colors cursor-pointer`}
+                >
+                    <span className="text-xs font-bold">Beta</span>
+                    <Info className="w-4 h-4" />
+                </button>
+                <img src={currentVariant.logo} alt="logo" className={currentSize.image} />
+                {showText && (
+                    <div className="flex items-center justify-center gap-0">
+                        <span className={`${currentSize.text} font-extrabold tracking-tight ${currentVariant.textColor}`}>KOM</span>
+                        <span className={`${currentSize.text} font-extrabold tracking-tight ${currentVariant.textColor2}`}>PLEX</span>
+                    </div>
+                )}
+            </div>
+
+            {/* Beta Info Dialog */}
+            {<BetaDialog isBetaDialogOpen={isBetaDialogOpen} setIsBetaDialogOpen={setIsBetaDialogOpen} />}
+        </>
     );
 };
