@@ -1,28 +1,90 @@
 "use client";
 
-import React from "react";
-import { Loader2 } from "lucide-react";
+import React, { useEffect, useMemo, useState } from "react";
+import { Check, Loader2, Sparkles } from "lucide-react";
 import { AIResponseType } from "@/types/content/ai";
 
 interface Props {
     responseType: AIResponseType;
 }
 
+type Step = {
+    id: number;
+    label: string;
+};
+
+const steps: Step[] = [
+    { id: 0, label: "តារាកំពុងយល់ពីសំណួរ" },
+    { id: 1, label: "តារាកំពុងគិត" },
+    { id: 2, label: "តារាកំពុងរៀបចំចម្លើយ" },
+    { id: 3, label: "តារាកំពុងសរសេរចម្លើយ" }
+];
+
+const TOTAL_DURATION = 20000;
+
 const ResponseLoadingState: React.FC<Props> = React.memo(({ responseType }) => {
+    const [activeStep, setActiveStep] = useState(0);
+
+    useEffect(() => {
+        setActiveStep(0);
+        const interval = Math.floor(TOTAL_DURATION / steps.length);
+        const timers: NodeJS.Timeout[] = [];
+
+        for (let i = 1; i < steps.length; i += 1) {
+            timers.push(setTimeout(() => setActiveStep(i), interval * i));
+        }
+
+        return () => {
+            timers.forEach(clearTimeout);
+        };
+    }, [responseType]);
+
+    const progress = useMemo(() => ((activeStep + 1) / steps.length) * 100, [activeStep]);
+
+    const renderTimeline = () => (
+        <div className="space-y-3 mt-4">
+            {steps.map((step, index) => {
+                const isActive = index === activeStep;
+                const isComplete = index < activeStep;
+                const baseColor = "bg-gray-50/80";
+                const activeColor = "bg-white border-indigo-100";
+                const textColor = "text-gray-800";
+
+                return (
+                    <div
+                        key={step.id}
+                        className={`flex items-center gap-3 rounded-3xl border px-3 py-2 transition-colors ${isActive ? activeColor : baseColor
+                            } border-gray-200`}
+                    >
+                        <div
+                            className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold ${isComplete
+                                ? "bg-indigo-500 text-white"
+                                : isActive
+                                    ? "bg-indigo-100 text-indigo-700 animate-pulse"
+                                    : "bg-gray-100 text-gray-500"
+                                }`}
+                        >
+                            {isComplete ? <Check className="w-4 h-4" /> : <Loader2 className="w-4 h-4 animate-spin" />}
+                        </div>
+                        <p className={`text-sm ${textColor}`}>{step.label}</p>
+                    </div>
+                );
+            })}
+        </div>
+    );
+
     if (responseType === "komplex") {
         return (
             <div className="w-full">
-                <div className="bg-white border border-gray-200 rounded-3xl p-5 shadow-sm space-y-4 animate-pulse">
-                    <div className="h-4 bg-gray-200 rounded w-1/3" />
-                    <div className="space-y-2">
-                        <div className="h-3 bg-gray-100 rounded w-full" />
-                        <div className="h-3 bg-gray-100 rounded w-5/6" />
-                        <div className="h-3 bg-gray-100 rounded w-2/3" />
+                <div className="bg-gradient-to-br from-white to-indigo-50/70 border border-indigo-100 rounded-3xl p-6 shadow-sm">
+                    <div className="flex items-center gap-2 text-indigo-600 font-semibold text-sm">
+                        <Sparkles className="w-4 h-4 animate-pulse" />
+                        តារាកំពុងរៀបចំទម្រង់ KOMPLEX
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
-                        <div className="h-20 bg-gray-50 rounded-xl" />
-                        <div className="h-20 bg-gray-50 rounded-xl" />
+                    <div className="mt-4 h-2 rounded-full bg-indigo-100 overflow-hidden">
+                        <div className="h-full bg-indigo-500 transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
                     </div>
+                    {renderTimeline()}
                 </div>
             </div>
         );
@@ -30,14 +92,18 @@ const ResponseLoadingState: React.FC<Props> = React.memo(({ responseType }) => {
 
     return (
         <div className="w-full">
-            <div className="flex items-start gap-3 bg-white border border-gray-200 rounded-3xl p-4 shadow-sm">
-                <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center">
-                    <Loader2 className="w-4 h-4 text-indigo-500 animate-spin" />
-                </div>
-                <div className="flex-1 space-y-2">
-                    <div className="h-3 bg-gray-200 rounded w-2/3 animate-pulse" />
-                    <div className="h-3 bg-gray-200 rounded w-full animate-pulse" />
-                    <div className="h-3 bg-gray-200 rounded w-4/5 animate-pulse" />
+            <div className="bg-white border border-gray-200 rounded-3xl p-4 shadow-sm">
+                <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center">
+                        <Loader2 className="w-4 h-4 text-indigo-500 animate-spin" />
+                    </div>
+                    <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">តារាកំពុងត្រៀមចម្លើយឱ្យអ្នក...</p>
+                        <div className="mt-3 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                            <div className="h-full bg-indigo-500 transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
+                        </div>
+                        {renderTimeline()}
+                    </div>
                 </div>
             </div>
         </div>
@@ -47,4 +113,3 @@ const ResponseLoadingState: React.FC<Props> = React.memo(({ responseType }) => {
 ResponseLoadingState.displayName = "ResponseLoadingState";
 
 export default ResponseLoadingState;
-

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { X, Send, Square, Bot, AlertCircle } from "lucide-react";
+import { X, Send, Square, Bot, AlertCircle, Maximize, Minimize } from "lucide-react";
 import { Message, AIHistoryItem, AIResponseType } from "@/types/content/ai";
 import { meAiService } from "@/services/index";
 import MarkdownRenderer from "@/components/helper/MarkDownRenderer";
@@ -80,6 +80,7 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
     const [pendingResponseType, setPendingResponseType] = useState<AIResponseType | null>(null);
     const [isHistoryLoading, setIsHistoryLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isPopupMaximized, setIsPopupMaximized] = useState(false);
     const [activeRating, setActiveRating] = useState<{ id: number; scope: "topic" } | null>(null);
     const params = useParams() as Params;
     const topicParam = params?.topic;
@@ -339,6 +340,10 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
         }
     };
 
+    const handleMaximize = ()=>{
+        setIsPopupMaximized(!isPopupMaximized);
+    }
+
     useEffect(() => {
         if (!textareaRef.current) return;
         textareaRef.current.style.height = "30px";
@@ -369,7 +374,7 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                         >
                             <div
                                 className={`pointer-events-auto flex flex-col  transition-all duration-300 ease-out ${isDesktop
-                                    ? "w-[700px] h-full rounded-3xl bg-white/95 backdrop-blur-xl border border-gray-200 shadow-2xl"
+                                    ? `${isPopupMaximized ? "w-full h-full" : "w-[700px] h-full"} rounded-3xl bg-white/95 backdrop-blur-xl border border-gray-200 shadow-2xl`
                                     : "w-full h-[80vh] rounded-t-3xl bg-white"
                                     }`}
                             >
@@ -380,17 +385,26 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                                         </div>
                                         <p className="text-lg font-semibold text-gray-900">តារា AI - {topicTitle}</p>
                                     </div>
-                                    <button
-                                        onClick={closePopup}
-                                        className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
-                                        disabled={isRequestInProgress}
-                                    >
-                                        <X className="w-5 h-5 text-gray-600" />
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        {isDesktop && <button
+                                            onClick={handleMaximize}
+                                            className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                                            disabled={isRequestInProgress}
+                                        >
+                                            {isPopupMaximized ? <Minimize className="w-5 h-5 text-gray-600" /> : <Maximize className="w-5 h-5 text-gray-600" />}
+                                        </button>}
+                                        <button
+                                            onClick={closePopup}
+                                            className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                                            disabled={isRequestInProgress}
+                                        >
+                                            <X className="w-5 h-5 text-gray-600" />
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {/* Chat body */}
-                                <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 scrollbar-hide" ref={chatBodyRef}>
+                                <div className={`flex-1 overflow-y-auto px-4 py-6 space-y-4 scrollbar-hide ${isPopupMaximized ? "max-w-6xl mx-auto" : ""}`} ref={chatBodyRef}>
                                     {isHistoryLoading ? (
                                         <div className="flex items-center justify-center py-10">
                                             <div className="text-sm text-gray-500">កំពុងផ្ទុកប្រវត្តិ...</div>
@@ -452,7 +466,7 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                                 )}
 
                                 {/* Input */}
-                                <div className="p-2">
+                                <div className={`p-2 ${isPopupMaximized ? "max-w-6xl mx-auto w-full" : ""}`}>
                                     {activeRating ? (
                                         <AiRating responseId={activeRating.id} scope="topic" onComplete={handleRatingComplete} />
                                     ) : (
