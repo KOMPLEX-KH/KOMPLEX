@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Bot, RefreshCw, Square, ChevronDown } from 'lucide-react';
+import { Send, Bot, RefreshCw, Square, ChevronDown, AlertCircle } from 'lucide-react';
 import { meAiService } from '@/services/index';
 import MarkdownRenderer from '@/components/helper/MarkDownRenderer';
 import { useAuth } from '@hooks/useAuth';
@@ -455,7 +455,7 @@ export default function AIChat() {
                     // Loading auth state
                     <ChatSkeleton />
                 )
-                    : messages.length === 0 ? (
+                    : messages.length === 0 && !error && !isLoading ? (
                         // Welcome screen
                         <div className="flex flex-col items-center justify-center h-full">
                             <div className="text-center max-w-2xl">
@@ -464,6 +464,15 @@ export default function AIChat() {
                                 </div>
                                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">ស្វាគមន៍!</h2>
                                 <p className="text-gray-600 mb-8">ខ្ញុំឈ្មោះតារា ជា AI ជំនួយការរៀន។ តើអ្នកចង់សួរអ្វីអំពីអ្វីដែរ?</p>
+                            </div>
+                        </div>
+                    ) : messages.length === 0 && error ? (
+                        // Error screen
+                        <div className="flex flex-col items-center justify-center h-full">
+                            <div className="text-center max-w-2xl">
+                                <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <AlertCircle className="w-10 h-10 text-red-600" />
+                                </div>
                             </div>
                         </div>
                     ) : (

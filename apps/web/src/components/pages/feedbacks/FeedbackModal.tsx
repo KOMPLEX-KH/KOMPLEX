@@ -44,10 +44,6 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
         setIsSubmitting(false);
     }, [isOpen]);
 
-
-
-
-
     const canSubmit = useMemo(() => {
         const typeValid = feedbackType !== 'other' ? Boolean(feedbackType) : customType.trim().length > 0;
         const contentValid = content.trim().length > 0;

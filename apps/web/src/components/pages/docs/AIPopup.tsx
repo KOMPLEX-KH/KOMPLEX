@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { X, Send, Square, Bot } from "lucide-react";
+import { X, Send, Square, Bot, AlertCircle } from "lucide-react";
 import { Message, AIHistoryItem, AIResponseType } from "@/types/content/ai";
 import { meAiService } from "@/services/index";
 import MarkdownRenderer from "@/components/helper/MarkDownRenderer";
@@ -395,6 +395,24 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                                         <div className="flex items-center justify-center py-10">
                                             <div className="text-sm text-gray-500">កំពុងផ្ទុកប្រវត្តិ...</div>
                                         </div>
+                                    ) : messages.length === 0 && error ? (
+                                        <div className="flex items-center justify-center py-10">
+                                            <div className="text-sm text-gray-500">{error}</div>
+                                            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                                <AlertCircle className="w-10 h-10 text-red-600" />
+                                            </div>
+                                        </div>
+                                    ) : messages.length === 0 && !error ? (
+                                        // Welcome screen
+                                        <div className="flex flex-col items-center justify-center h-full">
+                                            <div className="text-center max-w-2xl">
+                                                <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                                    <Bot className="w-10 h-10 text-indigo-600" />
+                                                </div>
+                                                <h2 className="text-2xl font-semibold text-gray-900 mb-4">ស្វាគមន៍!</h2>
+                                                <p className="text-gray-600 mb-8">ខ្ញុំឈ្មោះតារា ជា AI ជំនួយការរៀន។ តើអ្នកចង់សួរអ្វីអំពី <span className="font-bold text-indigo-600">{topicTitle}</span > ដែរ?</p>
+                                            </div>
+                                        </div>
                                     ) : (
                                         <>
                                             {messages.map((message) => (
@@ -475,11 +493,6 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                                                     </button>
                                                 )}
                                             </div>
-                                            {pendingResponseType && isLoading && (
-                                                <div className="text-xs text-gray-500 text-center">
-                                                    កំពុងរៀបចំទម្រង់ {pendingResponseType === "komplex" ? "KOMPLEX" : "ធម្មតា"}...
-                                                </div>
-                                            )}
                                         </div>
                                     )}
                                     <div className="text-center text-xs text-gray-500 mt-2">
