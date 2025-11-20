@@ -181,7 +181,7 @@ export default function AuthPage() {
                     {/* Logo and Slogan */}
                     <div className="text-center mb-8">
                         <Link href="/" className="flex items-center justify-center gap-2 mb-4">
-                            <Logo size='lg' />
+                            <Logo size='lg' showBeta={false} />
                         </Link>
                         {/* <p className="text-gray-700 text-xl font-medium mb-2">
                             ប្រព័ន្ធសិក្សា សម្រាប់សិស្សកម្ពុជា

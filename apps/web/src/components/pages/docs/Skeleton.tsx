@@ -90,7 +90,7 @@ export default function Skeleton() {
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/10 backdrop-blur-sm">
                 <div className="text-center space-y-4 p-8">
                     {/* Icon Skeleton */}
-                    <Logo isLoading={true} size="xl" isVertical={true} />
+                    <Logo isLoading={true} size="xl" isVertical={true} showBeta={false} />
                 </div>
             </div>
         </div>
