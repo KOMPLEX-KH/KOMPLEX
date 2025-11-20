@@ -1,3 +1,9 @@
+import { redirect } from "next/navigation";
+import { RedirectType } from "next/dist/client/components/redirect-error";
+export default function ExercisesPage() {
+    redirect("/not-found", RedirectType.replace)
+}
+
 // 'use client';
 
 // import { useState, useEffect } from 'react';
