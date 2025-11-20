@@ -15,9 +15,9 @@ type Step = {
 
 const steps: Step[] = [
     { id: 0, label: "តារាកំពុងយល់ពីសំណួរ" },
-    { id: 1, label: "តារាកំពុងគិត" },
-    { id: 2, label: "តារាកំពុងរៀបចំចម្លើយ" },
-    { id: 3, label: "តារាកំពុងសរសេរចម្លើយ" }
+    { id: 1, label: "កំពុងគិត..." },
+    { id: 2, label: "កំពុងរៀបចំចម្លើយ" },
+    { id: 3, label: "តារាកំពុងសរសេរចម្លើយ..." }
 ];
 
 const TOTAL_DURATION = 20000;
@@ -73,41 +73,22 @@ const ResponseLoadingState: React.FC<Props> = React.memo(({ responseType }) => {
         </div>
     );
 
-    if (responseType === "komplex") {
-        return (
-            <div className="w-full">
-                <div className="bg-gradient-to-br from-white to-indigo-50/70 border border-indigo-100 rounded-3xl p-6 shadow-sm">
-                    <div className="flex items-center gap-2 text-indigo-600 font-semibold text-sm">
-                        <Sparkles className="w-4 h-4 animate-pulse" />
-                        តារាកំពុងរៀបចំទម្រង់ KOMPLEX
-                    </div>
-                    <div className="mt-4 h-2 rounded-full bg-indigo-100 overflow-hidden">
-                        <div className="h-full bg-indigo-500 transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
-                    </div>
-                    {renderTimeline()}
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div className="w-full">
-            <div className="bg-white border border-gray-200 rounded-3xl p-4 shadow-sm">
-                <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center">
-                        <Loader2 className="w-4 h-4 text-indigo-500 animate-spin" />
-                    </div>
-                    <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">តារាកំពុងត្រៀមចម្លើយឱ្យអ្នក...</p>
-                        <div className="mt-3 h-1.5 rounded-full bg-gray-100 overflow-hidden">
-                            <div className="h-full bg-indigo-500 transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
-                        </div>
-                        {renderTimeline()}
-                    </div>
+            <div className="bg-gradient-to-br from-white to-indigo-50/70 border border-indigo-100 rounded-3xl p-6 shadow-sm">
+                <div className="flex items-center gap-2 text-indigo-600 font-semibold text-sm">
+                    <Sparkles className="w-4 h-4 animate-pulse" />
+                    <p className="text-sm font-medium text-gray-900">តារាកំពុងត្រៀមចម្លើយឱ្យអ្នក...</p>
                 </div>
+                <div className="mt-4 h-2 rounded-full bg-indigo-100 overflow-hidden">
+                    <div className="h-full bg-indigo-500 transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
+                </div>
+                {renderTimeline()}
             </div>
         </div>
     );
+
+
 });
 
 ResponseLoadingState.displayName = "ResponseLoadingState";
