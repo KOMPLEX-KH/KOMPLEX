@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
 import { X, Loader2, ChevronDown, Check, MessageCircle } from 'lucide-react';
 import { Listbox, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
@@ -82,7 +81,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-black/40" onClick={onClose} />
 
-            <div className="relative z-10 w-full max-w-lg mx-auto bg-white rounded-2xl shadow-xl border border-gray-200">
+            <div className="relative z-10 w-full max-w-lg mx-auto bg-white rounded-3xl shadow-xl border border-gray-200">
                 <div className="flex items-center justify-between p-6 border-b border-gray-200">
                     <h3 className="flex items-center gap-2 text-xl font-bold text-gray-900">
                         <MessageCircle className="w-5 h-5 text-indigo-500" />
@@ -90,7 +89,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                     </h3>
                     <button
                         onClick={onClose}
-                        className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors"
+                        className="p-2 rounded-full hover:bg-gray-100 text-gray-500 transition-colors"
                         aria-label="Close feedback modal"
                     >
                         <X className="w-5 h-5" />
@@ -102,7 +101,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                         <label className="block text-sm font-medium text-gray-700 mb-3">ប្រភេទ</label>
                         <Listbox value={feedbackType} onChange={setFeedbackType}>
                             <div className="relative">
-                                <Listbox.Button className="relative w-full cursor-pointer rounded-lg bg-white py-3 pl-4 pr-10 text-left shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                <Listbox.Button className="relative w-full cursor-pointer rounded-full bg-white py-3 pl-4 pr-10 text-left shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                                     <span className="block truncate text-gray-900">
                                         {options.find(opt => opt.value === feedbackType)?.label}
                                     </span>
@@ -116,12 +115,12 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto p-2 rounded-3xl bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         {options.map((option) => (
                                             <Listbox.Option
                                                 key={option.value}
                                                 className={({ active }) =>
-                                                    `relative cursor-pointer select-none py-3 pl-10 pr-4 ${active ? 'bg-indigo-100 text-indigo-900' : 'text-gray-900'
+                                                    `relative cursor-pointer select-none py-3 pl-10 pr-4 rounded-full ${active ? 'bg-indigo-100 text-indigo-900' : 'text-gray-900'
                                                     }`
                                                 }
                                                 value={option.value}
@@ -150,7 +149,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                                 value={customType}
                                 onChange={(e) => setCustomType(e.target.value)}
                                 placeholder="បញ្ចូលប្រភេទផ្ទាល់ខ្លួន"
-                                className="mt-3 w-full px-4 py-3 bg-white rounded-lg text-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                                className="mt-3 w-full px-4 py-3 bg-white rounded-full text-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                             />
                         )}
                     </div>
@@ -161,7 +160,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             placeholder="ពិពណ៌នាអំពីបញ្ហា/ប្រធានបទ/សំណួរ ឬចែករំលែកមតិយោបល់របស់អ្នក..."
-                            className="w-full p-4 rounded-xl bg-white border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none transition-all"
+                            className="w-full p-4 rounded-3xl bg-white border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none transition-all"
                             rows={6}
                         />
                     </div>
@@ -170,7 +169,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                 <div className="p-6 border-t border-gray-200 flex items-center justify-end gap-3">
                     <button
                         onClick={onClose}
-                        className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors font-medium"
+                        className="px-6 py-3 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors font-medium"
                         disabled={isSubmitting}
                     >
                         បោះបង់
@@ -178,7 +177,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                     <button
                         onClick={handleSubmit}
                         disabled={!canSubmit}
-                        className={`px-6 py-3 rounded-xl text-white flex items-center gap-2 font-medium transition-all ${canSubmit ? 'bg-indigo-600 hover:bg-indigo-700 shadow-lg hover:shadow-xl' : 'bg-indigo-400 cursor-not-allowed'
+                        className={`px-6 py-3 rounded-full text-white flex items-center gap-2 font-medium transition-all ${canSubmit ? 'bg-indigo-600 hover:bg-indigo-700 shadow-lg hover:shadow-xl' : 'bg-indigo-400 cursor-not-allowed'
                             }`}
                     >
                         {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
