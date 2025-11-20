@@ -78,7 +78,7 @@ const ResponseTypeDropdown: React.FC<ResponseTypeDropdownProps> = ({
             <Listbox value={value} onChange={onChange} disabled={disabled}>
                 <div className="relative">
                     <Listbox.Button className={buttonClasses}>
-                        {isCompact && <PenTool className="w-4 h-4 rotate-180 text-indigo-600" />}
+                        {<PenTool className="w-4 h-4 rotate-180 text-indigo-600" />}
                         <span className="text-xs font-medium">{value.name}</span>
                         <ChevronUp
                             size={14}
