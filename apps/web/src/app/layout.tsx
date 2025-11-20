@@ -6,7 +6,7 @@ import Header from "@/components/common/Header";
 import ModalRoot from "@/components/common/ModalRoot";
 import Script from "next/script";
 import { AuthProvider } from "@hooks/useAuth";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect } from "react";
 import { feedCurriculumsService } from "@/services";
 import "katex/dist/katex.min.css";
 import { GA_MEASUREMENT_ID } from "@/configs/googleAnalytics";
@@ -88,7 +88,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
       >
-        <AnalyticsListener />
+        <Suspense fallback={null}>
+          <AnalyticsListener />
+        </Suspense>
         <Script
           src="https://www.desmos.com/api/v1.6/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"
           strategy="beforeInteractive"
