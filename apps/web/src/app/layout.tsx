@@ -9,6 +9,8 @@ import { AuthProvider } from "@hooks/useAuth";
 import { useEffect, useState } from "react";
 import { feedCurriculumsService } from "@/services";
 import "katex/dist/katex.min.css";
+import { GA_MEASUREMENT_ID } from "@/configs/googleAnalytics";
+import AnalyticsListener from "./analytics-listener";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -67,12 +69,26 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;500;700&display=swap&subset=khmer"
           rel="stylesheet"
         />
-
+        <Script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
         <title>KOMPLEX</title>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
       >
+        <AnalyticsListener />
         <Script
           src="https://www.desmos.com/api/v1.6/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"
           strategy="beforeInteractive"
