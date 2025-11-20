@@ -9,10 +9,11 @@ interface LogoProps {
     size?: "xl" | "lg" | "md" | "sm",
     isLoading?: boolean,
     variant?: "default" | "light" | "dark",
-    showText?: boolean
+    showText?: boolean,
+    showBeta?: boolean
 }
 
-export const Logo = ({ isVertical = false, size = "md", isLoading = false, variant = "default", showText = true }: LogoProps) => {
+export const Logo = ({ isVertical = false, size = "md", isLoading = false, variant = "default", showText = true, showBeta = true }: LogoProps) => {
     const [isBetaDialogOpen, setIsBetaDialogOpen] = useState(false);
 
 
@@ -68,16 +69,18 @@ export const Logo = ({ isVertical = false, size = "md", isLoading = false, varia
     return (
         <>
             <div className={`flex relative items-center justify-center ${currentSize.gap} ${isVertical ? 'flex-col' : 'flex-row'} ${isLoading ? 'opacity-70 animate-pulse' : ''}`}>
-                <button
-                    onClick={(e) => {
-                        e.preventDefault();
-                        setIsBetaDialogOpen(true)
-                    }}
-                    className={`absolute flex items-center gap-1 ${isVertical ? '-top-4 right-1/8' : ' top-1 -right-18'} py-1 px-2 text-indigo-500 bg-indigo-500/10 border border-indigo-500 rounded-full hover:bg-indigo-500/20 transition-colors cursor-pointer`}
-                >
-                    <span className="text-xs font-bold">Beta</span>
-                    <Info className="w-4 h-4" />
-                </button>
+                {showBeta && (
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setIsBetaDialogOpen(true)
+                        }}
+                        className={`absolute flex items-center gap-1 ${isVertical ? '-top-4 right-0' : ' top-1 -right-18'} py-1 px-2 text-indigo-500 bg-indigo-500/10 border border-indigo-500 rounded-full hover:bg-indigo-500/20 transition-colors cursor-pointer`}
+                    >
+                        <span className="text-xs font-bold">Beta</span>
+                        <Info className="w-4 h-4" />
+                    </button>
+                )}
                 <img src={currentVariant.logo} alt="logo" className={currentSize.image} />
                 {showText && (
                     <div className="flex items-center justify-center gap-0">

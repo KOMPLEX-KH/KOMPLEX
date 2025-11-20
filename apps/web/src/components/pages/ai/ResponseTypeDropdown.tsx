@@ -39,8 +39,8 @@ const OptionItem = React.memo(
         const className = isSelected
             ? `${baseClasses} ${selectedClasses}`
             : isActive
-            ? `${baseClasses} ${activeClasses}`
-            : `${baseClasses} ${defaultClasses}`;
+                ? `${baseClasses} ${activeClasses}`
+                : `${baseClasses} ${defaultClasses}`;
 
         return (
             <div className={className}>
@@ -64,29 +64,26 @@ const ResponseTypeDropdown: React.FC<ResponseTypeDropdownProps> = ({
     const isCompact = variant === "compact";
 
     const buttonClasses = isCompact
-        ? `flex items-center gap-2 px-2 py-2 border rounded-full focus:outline-none  transition-all ${
-              disabled
-                  ? "bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed"
-                  : "bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200"
-          }`
-        : `flex items-center gap-1 px-3 py-2 border rounded-full focus:outline-none  transition-all ${
-              disabled
-                  ? "bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed"
-                  : "bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200"
-          }`;
+        ? `flex items-center gap-2 px-2 py-2 border rounded-full focus:outline-none  transition-all ${disabled
+            ? "bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed"
+            : "bg-indigo-50 border-indigo-600 text-indigo-600 hover:bg-indigo-100"
+        }`
+        : `flex items-center gap-1 px-3 py-2 border rounded-full focus:outline-none  transition-all ${disabled
+            ? "bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed"
+            : "bg-indigo-50 border-indigo-600 text-indigo-600 hover:bg-indigo-100"
+        }`;
 
     return (
         <div className={`relative flex-shrink-0 ${className}`}>
             <Listbox value={value} onChange={onChange} disabled={disabled}>
                 <div className="relative">
                     <Listbox.Button className={buttonClasses}>
-                        {isCompact && <PenTool className="w-4 h-4 rotate-180" />}
+                        {isCompact && <PenTool className="w-4 h-4 rotate-180 text-indigo-600" />}
                         <span className="text-xs font-medium">{value.name}</span>
                         <ChevronUp
                             size={14}
-                            className={`transition-transform ui-open:rotate-180 ${
-                                disabled ? "text-gray-400" : "text-gray-500"
-                            }`}
+                            className={`transition-transform ui-open:rotate-180 ${disabled ? "text-gray-400" : "text-gray-500"
+                                }`}
                         />
                     </Listbox.Button>
                     <Transition

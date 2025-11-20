@@ -25,13 +25,13 @@ export default function AiRating({ responseId, scope = "general", onComplete, cl
 
     const currentFill = useMemo(() => hoveredRating ?? selectedRating, [hoveredRating, selectedRating]);
 
-    const submitRating = useCallback(async () => {
+    const submitRating = useCallback(async (skipFeedback = false) => {
         if (!selectedRating || isSubmitting) {
             return;
         }
         setIsSubmitting(true);
         setErrorMessage(null);
-        const ratingFeedback = feedback.trim();
+        const ratingFeedback = skipFeedback ? "" : feedback.trim();
         try {
             if (scope === "topic") {
                 await meAiService.rateTopicAiResponse(responseId, selectedRating, ratingFeedback);
@@ -82,11 +82,19 @@ export default function AiRating({ responseId, scope = "general", onComplete, cl
                             />
                             <button
                                 type="button"
-                                onClick={submitRating}
+                                onClick={() => submitRating()}
                                 disabled={isSubmitDisabled}
                                 className="rounded-2xl bg-indigo-600 px-2 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
                             >
                                 {isSubmitting ? <Loader className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => submitRating(true)}
+                                disabled={isSubmitDisabled}
+                                className="rounded-2xl border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 transition hover:border-gray-300 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
+                                រំលង
                             </button>
                         </div>
                     </div>
