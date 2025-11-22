@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://komplex.app
+
+# Sitemaps
+Sitemap: https://komplex.app/sitemap.xml

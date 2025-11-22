@@ -2,10 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { ArrowLeft, Trash, Edit, Eye, Clock, MessageSquare, BookOpen } from 'lucide-react';
+import { Trash, Edit, Eye, Clock, MessageSquare, BookOpen } from 'lucide-react';
 import { feedVideoService, meVideoService } from '@/services/index';
-import Sidebar from '@/components/pages/me/Sidebar';
 import Comments from '@/components/common/comments/Comments';
 import EditVideo from '@/components/pages/me/videos/EditVideo';
 import ContentError from '@/components/common/ContentError';
@@ -19,8 +17,8 @@ import { BackButton } from '@/components/common/BackButton';
 // Skeleton Loading Component for Display Mode
 function VideoPostSkeleton() {
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className=" mx-auto p-5 ">
+        <div className="min-h-screen bg-gray-50 pt-32 lg:pt-20">
+            <div className="max-w-6xl mx-auto p-5">
                 {/* Back Button Skeleton */}
                 <div className="mb-6">
                     <div className="w-32 h-6 bg-gray-200 rounded animate-pulse"></div>
@@ -161,12 +159,7 @@ export default function VideoPost() {
 
     // Show loading while checking auth or fetching data
     if (authLoading || isLoading) {
-        return <div className="flex min-h-screen transition-colors duration-200 bg-gray-50">
-            <Sidebar />
-            <div className="flex-1 ml-64 pt-16">
-                <VideoPostSkeleton />
-            </div>
-        </div>;
+        return <VideoPostSkeleton />;
     }
 
     // Don't render anything if not authenticated (will redirect)
@@ -176,18 +169,15 @@ export default function VideoPost() {
 
     if (error || !videoPost) {
         return (
-            <div className="flex min-h-screen transition-colors duration-200 bg-gray-50">
-                <Sidebar />
-                <div className="flex-1 ml-64 pt-20">
-                    <div className=" mx-auto p-5">
-                        <div className="mb-6">
-                            <BackButton href={"/me/videos"} />
-                        </div>
-                        <ContentError
-                            type="error"
-                            message={error || 'មានបញ្ហាក្នុងការទាញយកវីដេអូ'}
-                        />
+            <div className="min-h-screen bg-gray-50 pt-32 lg:pt-20">
+                <div className="max-w-6xl mx-auto p-5">
+                    <div className="mb-6">
+                        <BackButton href="/me?tab=videos" />
                     </div>
+                    <ContentError
+                        type="error"
+                        message={error || 'មានបញ្ហាក្នុងការទាញយកវីដេអូ'}
+                    />
                 </div>
             </div>
         );
@@ -197,77 +187,72 @@ export default function VideoPost() {
     if (!isEditMode) {
         return (
             <>
-                <div className="flex min-h-screen transition-colors duration-200 bg-gray-50">
-                    {/* Sidebar */}
-                    <Sidebar />
-
-                    {/* Main Content */}
-                    <div className="flex-1 lg:ml-64 pt-32 lg:pt-16">
-                        <div className=" mx-auto p-5">
-                            <div className="sticky top-20 ">
-                                <BackButton href={"/me/videos"} />
+                <div className="min-h-screen bg-gray-50 pt-32 lg:pt-20">
+                    <div className="max-w-6xl mx-auto p-5">
+                        <div className="mb-6">
+                            <BackButton href="/me?tab=videos" />
+                        </div>
+                        {/* Header with Back Button and Edit Button */}
+                        <div className="mb-6 flex items-center justify-end">
+                            <div className='flex gap-2 items-center'>
+                                <button
+                                    onClick={handleDeleteClick}
+                                    className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors font-medium"
+                                >
+                                    <Trash className="w-4 h-4" />
+                                    លុប
+                                </button>
+                                <button
+                                    onClick={() => setIsEditMode(true)}
+                                    className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors font-medium"
+                                >
+                                    <Edit className="w-4 h-4" />
+                                    កែប្រែ
+                                </button>
                             </div>
-                            {/* Header with Back Button and Edit Button */}
-                            <div className="mb-6 flex items-center justify-end">
-                                <div className='flex gap-2 items-center'>
-                                    <button
-                                        onClick={handleDeleteClick}
-                                        className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors font-medium"
+                        </div>
+
+                        {/* Main Grid Layout */}
+                        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-0 lg:gap-6 items-start">
+                            {/* Left Column - Video Player and Info */}
+                            <div className="space-y-4">
+                                {/* Video Player */}
+                                <div className="bg-black rounded-3xl overflow-hidden shadow-lg">
+                                    <video
+                                        className="w-full aspect-video"
+                                        controls
+                                        poster={videoPost.thumbnailUrl}
+                                        preload="metadata"
+                                        onError={(e) => {
+                                            console.error('Video loading error:', e);
+                                        }}
                                     >
-                                        <Trash className="w-4 h-4" />
-                                        លុប
-                                    </button>
-                                    <button
-                                        onClick={() => setIsEditMode(true)}
-                                        className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors font-medium"
-                                    >
-                                        <Edit className="w-4 h-4" />
-                                        កែប្រែ
-                                    </button>
+                                        <source src={videoPost.videoUrl} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </video>
                                 </div>
-                            </div>
 
-                            {/* Main Grid Layout */}
-                            <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-0 lg:gap-6 items-start">
-                                {/* Left Column - Video Player and Info */}
-                                <div className="space-y-4">
-                                    {/* Video Player */}
-                                    <div className="bg-black rounded-3xl overflow-hidden shadow-lg">
-                                        <video
-                                            className="w-full aspect-video"
-                                            controls
-                                            poster={videoPost.thumbnailUrl}
-                                            preload="metadata"
-                                            onError={(e) => {
-                                                console.error('Video loading error:', e);
-                                            }}
-                                        >
-                                            <source src={videoPost.videoUrl} type="video/mp4" />
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    </div>
+                                {/* Video Description */}
+                                <div className="bg-white rounded-3xl shadow-sm p-6">
+                                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 leading-tight">
+                                        {videoPost.title}
+                                    </h1>
 
-                                    {/* Video Description */}
-                                    <div className="bg-white rounded-3xl shadow-sm p-6">
-                                        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 leading-tight">
-                                            {videoPost.title}
-                                        </h1>
-
-                                        {/* User Info and Stats */}
-                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold">
-                                                    {videoPost.username.split(" ")[0].charAt(0)}
-                                                </div>
-                                                <div className='flex items-center gap-2'>
-                                                    <span className="font-semibold text-gray-900">{videoPost.username}</span>
-                                                    <span>|</span>
-                                                    <span className="text-gray-500 text-sm">{formatDate(videoPost.createdAt)}</span>
-                                                </div>
+                                    {/* User Info and Stats */}
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold">
+                                                {videoPost.username.split(" ")[0].charAt(0)}
                                             </div>
+                                            <div className='flex items-center gap-2'>
+                                                <span className="font-semibold text-gray-900">{videoPost.username}</span>
+                                                <span>|</span>
+                                                <span className="text-gray-500 text-sm">{formatDate(videoPost.createdAt)}</span>
+                                            </div>
+                                        </div>
 
-                                            {/* Action Buttons */}
-                                            {/* <div className="flex items-center gap-2">
+                                        {/* Action Buttons */}
+                                        {/* <div className="flex items-center gap-2">
                                             <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                                                 <ThumbsUp className="w-4 h-4" />
                                                 {videoPost.likeCount}
@@ -281,90 +266,35 @@ export default function VideoPost() {
                                                 ចែករំលែក
                                             </button>
                                         </div> */}
-                                        </div>
-
-                                        {/* Stats */}
-                                        <div className="flex items-center gap-6 mb-6 text-gray-600">
-                                            <span className="flex items-center gap-2">
-                                                <Eye className="w-5 h-5" />
-                                                {videoPost.viewCount.toLocaleString()} ទស្សនា
-                                            </span>
-                                            <span className="flex items-center gap-2">
-                                                <Clock className="w-5 h-5" />
-                                                {formatDuration(videoPost.duration)}
-                                            </span>
-                                        </div>
-
-                                        {/* Description */}
-                                        <div className="prose prose-lg max-w-none">
-                                            <MarkDownRenderer content={videoPost.description} />
-                                        </div>
                                     </div>
 
-                                    {/* Exercise Section - Under Video for Desktop */}
-                                    <div className="hidden lg:block">
-                                        <Exercise exercises={videoPost.exercises || []} />
+                                    {/* Stats */}
+                                    <div className="flex items-center gap-6 mb-6 text-gray-600">
+                                        <span className="flex items-center gap-2">
+                                            <Eye className="w-5 h-5" />
+                                            {videoPost.viewCount.toLocaleString()} ទស្សនា
+                                        </span>
+                                        <span className="flex items-center gap-2">
+                                            <Clock className="w-5 h-5" />
+                                            {formatDuration(videoPost.duration)}
+                                        </span>
+                                    </div>
+
+                                    {/* Description */}
+                                    <div className="prose prose-lg max-w-none">
+                                        <MarkDownRenderer content={videoPost.description} />
                                     </div>
                                 </div>
 
-                                {/* Right Column - Tabs */}
-                                <div className="self-start h-fit lg:top-6">
-                                    {/* Tab Navigation */}
-                                    <div className="bg-white rounded-3xl shadow-sm mb-4">
-                                        <div className="flex">
-                                            <button
-                                                onClick={() => setActiveTab('comments')}
-                                                className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activeTab === 'comments'
-                                                    ? 'text-indigo-600 underline underline-offset-8'
-                                                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                                                    }`}
-                                            >
-                                                <div className="flex items-center gap-2 justify-center">
-                                                    <MessageSquare size={16} />
-                                                    មតិតិការ
-                                                </div>
-                                            </button>
-                                            <button
-                                                onClick={() => setActiveTab('exercise')}
-                                                className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activeTab === 'exercise'
-                                                    ? 'text-indigo-600 underline underline-offset-8'
-                                                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                                                    }`}
-                                            >
-                                                <div className="flex items-center gap-2 justify-center">
-                                                    <BookOpen size={16} />
-                                                    លំហាត់
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    {/* Tab Content */}
-                                    <div className="bg-white rounded-3xl shadow-sm">
-                                        {activeTab === 'comments' && (
-                                            <div>
-                                                <Comments
-                                                    type='video'
-                                                    parentId={videoPost.id}
-                                                    focusInput={isCommentInputActive}
-                                                    isReadOnly={true}
-                                                    onClose={handleCommentClose}
-                                                />
-                                            </div>
-                                        )}
-
-                                        {activeTab === 'exercise' && (
-                                            <div className="p-6">
-                                                <Exercise exercises={videoPost.exercises || []} />
-                                            </div>
-                                        )}
-                                    </div>
+                                {/* Exercise Section - Under Video for Desktop */}
+                                <div className="hidden lg:block">
+                                    <Exercise exercises={videoPost.exercises || []} />
                                 </div>
                             </div>
 
-                            {/* Mobile Tab System */}
-                            <div className="lg:hidden mt-8">
-                                {/* Mobile Tab Navigation */}
+                            {/* Right Column - Tabs */}
+                            <div className="self-start h-fit lg:top-6">
+                                {/* Tab Navigation */}
                                 <div className="bg-white rounded-3xl shadow-sm mb-4">
                                     <div className="flex">
                                         <button
@@ -394,24 +324,78 @@ export default function VideoPost() {
                                     </div>
                                 </div>
 
-                                {/* Mobile Tab Content */}
-                                {activeTab === 'comments' && (
-                                    <div className="bg-white rounded-3xl p-4 shadow-sm">
-                                        <Comments
-                                            type='video'
-                                            parentId={videoPost.id}
-                                            focusInput={isCommentInputActive}
-                                            isReadOnly={true}
-                                            onClose={handleCommentClose}
-                                        />
-                                    </div>
-                                )}
-                                {activeTab === 'exercise' && (
-                                    <div className="bg-white rounded-3xl p-4 shadow-sm">
-                                        <Exercise exercises={videoPost.exercises || []} />
-                                    </div>
-                                )}
+                                {/* Tab Content */}
+                                <div className="bg-white rounded-3xl shadow-sm">
+                                    {activeTab === 'comments' && (
+                                        <div>
+                                            <Comments
+                                                type='video'
+                                                parentId={videoPost.id}
+                                                focusInput={isCommentInputActive}
+                                                isReadOnly={true}
+                                                onClose={handleCommentClose}
+                                            />
+                                        </div>
+                                    )}
+
+                                    {activeTab === 'exercise' && (
+                                        <div className="p-6">
+                                            <Exercise exercises={videoPost.exercises || []} />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
+                        </div>
+
+                        {/* Mobile Tab System */}
+                        <div className="lg:hidden mt-8">
+                            {/* Mobile Tab Navigation */}
+                            <div className="bg-white rounded-3xl shadow-sm mb-4">
+                                <div className="flex">
+                                    <button
+                                        onClick={() => setActiveTab('comments')}
+                                        className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activeTab === 'comments'
+                                            ? 'text-indigo-600 underline underline-offset-8'
+                                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                                            }`}
+                                    >
+                                        <div className="flex items-center gap-2 justify-center">
+                                            <MessageSquare size={16} />
+                                            មតិតិការ
+                                        </div>
+                                    </button>
+                                    <button
+                                        onClick={() => setActiveTab('exercise')}
+                                        className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activeTab === 'exercise'
+                                            ? 'text-indigo-600 underline underline-offset-8'
+                                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                                            }`}
+                                    >
+                                        <div className="flex items-center gap-2 justify-center">
+                                            <BookOpen size={16} />
+                                            លំហាត់
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Mobile Tab Content */}
+                            {activeTab === 'comments' && (
+                                <div className="bg-white rounded-3xl p-4 shadow-sm">
+                                    <Comments
+                                        type='video'
+                                        parentId={videoPost.id}
+                                        focusInput={isCommentInputActive}
+                                        isReadOnly={true}
+                                        onClose={handleCommentClose}
+                                    />
+                                </div>
+                            )}
+                            {activeTab === 'exercise' && (
+                                <div className="bg-white rounded-3xl p-4 shadow-sm">
+                                    <Exercise exercises={videoPost.exercises || []} />
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -431,28 +415,22 @@ export default function VideoPost() {
     // Edit Mode
     return (
         <>
-            <div className="flex min-h-screen transition-colors duration-200 bg-gray-50">
-                {/* Sidebar */}
-                <Sidebar />
-
-                {/* Main Content */}
-                <div className="flex-1 lg:ml-64 pt-32 lg:pt-0">
-                    <div className=" mx-auto p-5">
-                        <div className="sticky top-20 ">
-                            <BackButton href={"/me/videos"} />
-                        </div>
-                        {/* Header with Back Button */}
-                        <div className="mb-6 flex items-center justify-end">
-                            <button className='bg-gray-500 text-white rounded-full p-2 flex items-center gap-2' onClick={() => setIsEditMode(false)}><Eye className="w-4 h-4" />មើល</button>
-                        </div>
-
-                        {/* Edit Video Component */}
-                        <EditVideo
-                            video={videoPost}
-                            onSave={handleSave}
-                            onCancel={handleCancel}
-                        />
+            <div className="min-h-screen bg-gray-50 pt-32 lg:pt-20">
+                <div className="max-w-6xl mx-auto p-5">
+                    <div className="mb-6">
+                        <BackButton href="/me?tab=videos" />
                     </div>
+                    {/* Header with Back Button */}
+                    <div className="mb-6 flex items-center justify-end">
+                        <button className='bg-gray-500 text-white rounded-full p-2 flex items-center gap-2' onClick={() => setIsEditMode(false)}><Eye className="w-4 h-4" />មើល</button>
+                    </div>
+
+                    {/* Edit Video Component */}
+                    <EditVideo
+                        video={videoPost}
+                        onSave={handleSave}
+                        onCancel={handleCancel}
+                    />
                 </div>
             </div>
 
