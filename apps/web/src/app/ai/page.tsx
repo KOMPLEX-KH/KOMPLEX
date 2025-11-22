@@ -557,50 +557,52 @@ export default function AIChat() {
                         <AiRating responseId={activeRating.id} scope="general" onComplete={handleRatingComplete} />
                     </div>
                 ) : (
-                    <div className="bg-white max-w-4xl mx-auto shadow-lg border border-gray-200 rounded-3xl p-2 mb-2 transition-all duration-200 space-y-2">
-                        <div className="flex-1  ">
-                            <PromptTextarea
-                                ref={textareaRef}
-                                value={inputMessage}
-                                onChange={(e) => setInputMessage(e.target.value)}
-                                onKeyPress={handleKeyPress}
-                                disabled={isInputDisabled}
-                                placeholder={isInputDisabled ? "កំពុងដំណើរការ..." : "សរសេរសំណួររបស់អ្នក..."}
-                                className="min-h-[0px] text-base leading-relaxed"
-                                style={{
-                                    // minHeight: '10px',
-                                    maxHeight: '200px',
-                                    height: 'auto'
-                                }}
-                            />
-                        </div>
-
-                        <div className="flex flex-row items-center justify-between">
-                            <ResponseTypeDropdown
-                                options={responseTypeOptions}
-                                value={selectedResponseType}
-                                onChange={setSelectedResponseType}
-                                disabled={isInputDisabled}
-                                variant="default"
-                            />
-
-                            <div className="flex items-center gap-2">
-                                {!isLoading && !isStreaming ? (
-                                    <button
-                                        onClick={handleSendMessage}
-                                        disabled={!inputMessage.trim() || isInputDisabled}
-                                        className="px-2 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed "
-                                    >
-                                        <Send className="w-4 h-4" />
-                                    </button>
-                                ) : (
-                                    <button
-                                        onClick={handleStopStreaming}
-                                        className="px-2 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors.duration-200 "
-                                    >
-                                        <Square className="w-4 h-4" />
-                                    </button>
-                                )}
+                    <div className='lg:px-4 lg:max-w-4xl lg:mx-auto'>
+                        <div className="bg-white max-w-4xl mx-auto shadow-lg border border-gray-200 rounded-3xl p-2 mb-2 transition-all duration-200 space-y-2">
+                            <div className="flex-1  ">
+                                <PromptTextarea
+                                    ref={textareaRef}
+                                    value={inputMessage}
+                                    onChange={(e) => setInputMessage(e.target.value)}
+                                    onKeyPress={handleKeyPress}
+                                    disabled={isInputDisabled}
+                                    placeholder={isInputDisabled ? "កំពុងដំណើរការ..." : "សរសេរសំណួររបស់អ្នក..."}
+                                    className="min-h-[0px] text-base leading-relaxed"
+                                    style={{
+                                        // minHeight: '10px',
+                                        maxHeight: '200px',
+                                        height: 'auto'
+                                    }}
+                                />
+                            </div>
+    
+                            <div className="flex flex-row items-center justify-between">
+                                <ResponseTypeDropdown
+                                    options={responseTypeOptions}
+                                    value={selectedResponseType}
+                                    onChange={setSelectedResponseType}
+                                    disabled={isInputDisabled}
+                                    variant="default"
+                                />
+    
+                                <div className="flex items-center gap-2">
+                                    {!isLoading && !isStreaming ? (
+                                        <button
+                                            onClick={handleSendMessage}
+                                            disabled={!inputMessage.trim() || isInputDisabled}
+                                            className="px-2 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed "
+                                        >
+                                            <Send className="w-4 h-4" />
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={handleStopStreaming}
+                                            className="px-2 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors.duration-200 "
+                                        >
+                                            <Square className="w-4 h-4" />
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
