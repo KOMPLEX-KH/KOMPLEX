@@ -70,7 +70,7 @@
     ".next/types/**/*.ts",
     "src/app/me/create-blog",
     "src/app/me/create-forum"
-, "../../packages/types/content/profile.ts"  ],
+, "../../packages/types/content/profile.ts", "next-sitemap.config.js"  ],
   "exclude": [
     "node_modules"
   ],

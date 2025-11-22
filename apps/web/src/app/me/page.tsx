@@ -2,30 +2,34 @@
 
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useState, type ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState, type ReactNode, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Video, MessageSquare, UserCircle, Mail, AtSign, Phone, Calendar, ShieldCheck, ShieldAlert, User as UserIcon } from 'lucide-react';
 import { useAuth } from '@hooks/useAuth';
 import MeSkeleton from '@/components/pages/me/MeSkeleton';
-import api from '@/configs/axios';
 import { authService } from '@/services/index';
 import type { User } from '@/types/auth';
 import ContentError from '@/components/common/ContentError';
+import Link from 'next/link';
+import AllMeForums from '@/components/pages/me/forums/AllMeForums';
+import AllMeVideos from '@/components/pages/me/videos/AllMeVideos';
 
-interface ContentStats {
-    dashboardData: {
-        numOfForums: number;
-        numOfVideos: number;
-    };
-}
 
 export default function MePage() {
+    return (
+        <Suspense fallback={<MeSkeleton />}>
+            <MePageContent />
+        </Suspense>
+    );
+}
+
+function MePageContent() {
     const { user: authUser, loading: authLoading } = useAuth();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const activeTab = searchParams.get('tab') || 'profile';
 
-    const [stats, setStats] = useState<ContentStats | null>(null);
     const [profile, setProfile] = useState<User | null>(null);
-    const [isStatsLoading, setIsStatsLoading] = useState(true);
     const [isProfileLoading, setIsProfileLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -34,35 +38,6 @@ export default function MePage() {
             router.push('/auth');
         }
     }, [authLoading, authUser, router]);
-
-    useEffect(() => {
-        if (!authUser) return;
-
-        const fetchStats = async () => {
-            try {
-                setIsStatsLoading(true);
-                const response = await api.get('/me/dashboard');
-                setStats({
-                    dashboardData: {
-                        numOfForums: response.data.dashboardData?.numOfForums ?? 0,
-                        numOfVideos: response.data.dashboardData?.numOfVideos ?? 0,
-                    },
-                });
-            } catch (err) {
-                console.error('Error fetching dashboard stats:', err);
-                setStats({
-                    dashboardData: {
-                        numOfForums: 0,
-                        numOfVideos: 0,
-                    },
-                });
-            } finally {
-                setIsStatsLoading(false);
-            }
-        };
-
-        fetchStats();
-    }, [authUser]);
 
     useEffect(() => {
         if (!authUser) return;
@@ -85,7 +60,7 @@ export default function MePage() {
         fetchProfile();
     }, [authUser]);
 
-    if (authLoading || isStatsLoading || isProfileLoading) {
+    if (authLoading || isProfileLoading) {
         return <MeSkeleton />;
     }
 
@@ -96,112 +71,119 @@ export default function MePage() {
     return (
         <div className="flex min-h-screen bg-gray-50">
             <div className="flex-1 pt-32 lg:pt-20">
-                <div className="max-w-6xl mx-auto p-6 space-y-8">
-                    <section>
-                        <div className="mb-6">
-                            <h1 className="text-3xl font-bold text-gray-900 mb-2">ផ្ទាំងគ្រប់គ្រង</h1>
-                            <p className="text-gray-600">មើលសកម្មភាពទូទៅ និងស្ថិតិមាតិការបស់អ្នក</p>
-                        </div>
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <StatCard
-                                title="វីដេអូ"
-                                value={stats?.dashboardData.numOfVideos ?? 0}
-                                icon={<Video className="w-6 h-6 text-green-600" />}
-                                iconBg="bg-green-100"
-                            />
-                            <StatCard
-                                title="វេទិកា"
-                                value={stats?.dashboardData.numOfForums ?? 0}
-                                icon={<MessageSquare className="w-6 h-6 text-blue-600" />}
-                                iconBg="bg-blue-100"
-                            />
-                        </div>
-                    </section>
+                <div className="max-w-6xl mx-auto p-6">
+                    {/* Header */}
+                    <div className="mb-8">
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2">ផ្ទាំងគ្រប់គ្រង</h1>
+                        <p className="text-gray-600">គ្រប់គ្រងមាតិកា និងព័ត៌មានផ្ទាល់ខ្លួនរបស់អ្នក</p>
+                    </div>
 
-                    <section>
-                        <div className="mb-6">
-                            <div className="flex items-center gap-3 mb-2">
-                                <UserCircle className="w-8 h-8 text-indigo-600" />
-                                <h2 className="text-2xl font-bold text-gray-900">ព័ត៌មានផ្ទាល់ខ្លួន</h2>
-                            </div>
-                            <p className="text-gray-600">គ្រប់គ្រងព័ត៌មានប្រវត្តិរបស់អ្នក</p>
+                    {/* Tabs */}
+                    <div className="mb-8">
+                        <div className="overflow-x-hidden">
+                            <nav className="flex gap-2 whitespace-nowrap">
+                                <Link
+                                    href="/me?tab=profile"
+                                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === 'profile' || activeTab === null
+                                        ? 'bg-indigo-600 text-white'
+                                        : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                                        }`}
+                                >
+                                    <span className="inline-flex items-center gap-2">
+                                        <UserCircle className="w-4 h-4" />
+                                        <span>ព័ត៌មានផ្ទាល់ខ្លួន</span>
+                                    </span>
+                                </Link>
+                                <Link
+                                    href="/me?tab=forums"
+                                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === 'forums'
+                                        ? 'bg-indigo-600 text-white'
+                                        : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                                        }`}
+                                >
+                                    <span className="inline-flex items-center gap-2">
+                                        <MessageSquare className="w-4 h-4" />
+                                        <span>វេទិកា</span>
+                                    </span>
+                                </Link>
+                                <Link
+                                    href="/me?tab=videos"
+                                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === 'videos'
+                                        ? 'bg-indigo-600 text-white'
+                                        : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                                        }`}
+                                >
+                                    <span className="inline-flex items-center gap-2">
+                                        <Video className="w-4 h-4" />
+                                        <span>វីដេអូ</span>
+                                    </span>
+                                </Link>
+                            </nav>
                         </div>
+                    </div>
 
-                        {error && <ContentError type="error" message={error} />}
+                    {/* Tab Content */}
+                    {activeTab === 'profile' && (
+                        <section>
+                            {error && <ContentError type="error" message={error} />}
 
-                        {!error && profile && (
-                            <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-6">
-                                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                                    <div className="flex items-center gap-4">
-                                        {profile.profileImage ? (
-                                            <img
-                                                src={profile.profileImage}
-                                                alt="Profile"
-                                                className="w-20 h-20 rounded-full object-cover border-2 border-indigo-500 shadow-lg"
-                                            />
-                                        ) : (
-                                            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
-                                                {((`${profile.firstName || ''} ${profile.lastName || ''}`.trim()) || profile.username || profile.email || 'U').charAt(0)}
-                                            </div>
-                                        )}
-                                        <div>
-                                            <div className="flex items-center gap-2 flex-wrap">
-                                                <h3 className="text-2xl font-semibold text-gray-900">
-                                                    {`${profile.firstName || ''} ${profile.lastName || ''}`.trim() || profile.username}
-                                                </h3>
-                                                {profile.isVerified && (
-                                                    <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
-                                                        <ShieldCheck size={12} />
-                                                        បានផ្ទៀងផ្ទាត់
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className="mt-1 flex items-center gap-2 text-gray-600">
-                                                <Mail size={16} />
-                                                <span className="text-sm">{profile.email}</span>
+                            {!error && profile && (
+                                <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-6">
+                                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                                        <div className="flex items-center gap-4">
+                                            {profile.profileImage ? (
+                                                <img
+                                                    src={profile.profileImage}
+                                                    alt="Profile"
+                                                    className="w-20 h-20 rounded-full object-cover border-2 border-indigo-500 shadow-lg"
+                                                />
+                                            ) : (
+                                                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                                                    {((`${profile.firstName || ''} ${profile.lastName || ''}`.trim()) || profile.username || profile.email || 'U').charAt(0)}
+                                                </div>
+                                            )}
+                                            <div>
+                                                <div className="flex items-center gap-2 flex-wrap">
+                                                    <h3 className="text-2xl font-semibold text-gray-900">
+                                                        {`${profile.firstName || ''} ${profile.lastName || ''}`.trim() || profile.username}
+                                                    </h3>
+                                                    {profile.isVerified && (
+                                                        <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                                                            <ShieldCheck size={12} />
+                                                            បានផ្ទៀងផ្ទាត់
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="mt-1 flex items-center gap-2 text-gray-600">
+                                                    <Mail size={16} />
+                                                    <span className="text-sm">{profile.email}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <ProfileField icon={<AtSign size={16} />} label="ឈ្មោះអ្នកប្រើប្រាស់" value={profile.username} />
+                                        <ProfileField icon={<UserIcon size={16} />} label="ឈ្មោះ" value={profile.firstName || '-'} />
+                                        <ProfileField icon={<UserIcon size={16} />} label="នាមត្រកូល" value={profile.lastName || '-'} />
+                                        <ProfileField icon={<Calendar size={16} />} label="ថ្ងៃខែឆ្នាំកំណើត" value={profile.dateOfBirth || '-'} />
+                                        <ProfileField icon={<Phone size={16} />} label="លេខទូរស័ព្ទ" value={profile.phone || '-'} />
+                                        <ProfileField
+                                            icon={profile.isVerified ? <ShieldCheck size={16} /> : <ShieldAlert size={16} />}
+                                            label="ស្ថានភាព"
+                                            value={profile.isVerified ? 'បានផ្ទៀងផ្ទាត់' : 'មិនទាន់ផ្ទៀងផ្ទាត់'}
+                                            badgeClass={profile.isVerified ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}
+                                        />
+                                    </div>
                                 </div>
+                            )}
+                        </section>
+                    )}
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <ProfileField icon={<AtSign size={16} />} label="ឈ្មោះអ្នកប្រើប្រាស់" value={profile.username} />
-                                    <ProfileField icon={<UserIcon size={16} />} label="ឈ្មោះ" value={profile.firstName || '-'} />
-                                    <ProfileField icon={<UserIcon size={16} />} label="នាមត្រកូល" value={profile.lastName || '-'} />
-                                    <ProfileField icon={<Calendar size={16} />} label="ថ្ងៃខែឆ្នាំកំណើត" value={profile.dateOfBirth || '-'} />
-                                    <ProfileField icon={<Phone size={16} />} label="លេខទូរស័ព្ទ" value={profile.phone || '-'} />
-                                    <ProfileField
-                                        icon={profile.isVerified ? <ShieldCheck size={16} /> : <ShieldAlert size={16} />}
-                                        label="ស្ថានភាព"
-                                        value={profile.isVerified ? 'បានផ្ទៀងផ្ទាត់' : 'មិនទាន់ផ្ទៀងផ្ទាត់'}
-                                        badgeClass={profile.isVerified ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}
-                                    />
-                                </div>
-                            </div>
-                        )}
-                    </section>
+                    {activeTab === 'forums' && <AllMeForums />}
+
+                    {activeTab === 'videos' && <AllMeVideos />}
                 </div>
-            </div>
-        </div>
-    );
-}
-
-interface StatCardProps {
-    title: string;
-    value: number;
-    icon: ReactNode;
-    iconBg: string;
-}
-
-function StatCard({ title, value, icon, iconBg }: StatCardProps) {
-    return (
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
-            <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-sm font-medium text-gray-600">{title}</p>
-                    <p className="text-2xl font-bold text-gray-900">{value}</p>
-                </div>
-                <div className={`p-3 rounded-full ${iconBg}`}>{icon}</div>
             </div>
         </div>
     );

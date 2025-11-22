@@ -79,7 +79,7 @@ export default function ForumCard({ post, isFromMePage }: ForumCardProps) {
                 {post.title}
             </div>
 
-            <div className="text-gray-700 text-sm leading-relaxed mb-4">
+            <div className="text-gray-700 text-sm leading-relaxed mb-4 line-clamp-3">
                 <MarkDownRenderer content={post.description} />
             </div>
 
