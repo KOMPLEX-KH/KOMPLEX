@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, AlertCircle } from "lucide-react";
 import { Message } from "@/types/content/ai";
 import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
 import { deserializeTopicContentV3 } from "@/components/pages/docs/utils/ContentSerializerV2";
@@ -47,8 +47,17 @@ export default function MessageItem({ message, onCopyMessage, copiedMessageId }:
         <div className="mb-8">
             <div className="w-full">
                 <div className="relative bg-white border border-gray-200 rounded-3xl p-4 shadow-sm">
-                    {canRenderKomplex ? (
-                        <ContentRendererV3 content={komplexContent} />
+                    {isKomplexMessage ? (
+                        canRenderKomplex ? (
+                            <ContentRendererV3 content={komplexContent} />
+                        ) : (
+                            <div className="flex items-center gap-3 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0" />
+                                <p className="text-sm text-yellow-800">
+                                    សូមអភ័យទោស មានបញ្ហាក្នុងការបង្ហាញចម្លើយ
+                                </p>
+                            </div>
+                        )
                     ) : (
                         <MarkdownRenderer content={message.content} />
                     )}

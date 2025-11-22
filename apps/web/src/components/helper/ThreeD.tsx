@@ -81,7 +81,7 @@ const ModelLoader: React.FC<{ progress: number }> = () => {
         <div className="absolute inset-0 bg-gray-400 backdrop-blur-sm flex items-center justify-center z-10">
             <div className="text-center">
                 {/* Spinning loader */}
-                <Logo isLoading={true} size="xl" isVertical={true} showText={false} />
+                <Logo isLoading={true} size="xl" isVertical={true} showText={false} showBeta={false} />
 
                 <div className="text-white/70 text-lg my-4">
                     កំពុងទាញយកម៉ូឌែល 3D...

@@ -1,12 +1,36 @@
 import AiRating from "@/components/pages/ai/AiRating";
+import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
+import { deserializeTopicContentV3 } from "@/components/pages/docs/utils/ContentSerializerV2";
 
 export default function TestPage() {
-    // const markdownContent = "\n[\n  {\n    \"type\": \"definition\",\n    \"props\": {\n      \"title\": \"អនុគមន៍សនិទាន\",\n      \"content\": {\n        \"type\": \"text\",\n        \"value\": \"អនុគមន៍គឺជាគំនិតមួយក្នុងគណិតវិទ្យា​ដែលបង្ហាញពីទំនាក់ទំនងរវាងរវាងសំណុំទិន្នន័យ 2\"\n      }\n    }\n  },\n  {\n    \"type\": \"tip\",\n    \"props\": {\n      \"title\": \"ដែនកំណត់\",\n      \"content\": {\n        \"type\": \"p\",\n        \"props\": {\n          \"children\": {\n            \"type\": \"text\",\n            \"value\": \"ជាសំណុំតម្លៃអថេរធ្វើអោយភាគបែងមានតម្លៃខុសពីសូន្យ\"\n          }\n        }\n      }\n    }\n  },\n  {\n    \"type\": \"example\",\n    \"props\": {\n      \"question\": {\n        \"type\": \"div\",\n        \"props\": {\n          \"className\": \"ml-2\",\n          \"children\": [\n            {\n              \"type\": \"text\",\n              \"value\": \"រកដែនកំណត់នៃអនុគមន៍ \"\n            },\n            {\n              \"type\": \"InlineMath\",\n              \"props\": {\n                \"math\": \"f(x) = \\\\frac{x^2-3x+2}{x^2-4}\"\n              }\n            }\n          ]\n        }\n      },\n      \"steps\": [\n        {\n          \"title\": \"អោយភាគបែងស្មើរសូន្យ\",\n          \"content\": [\n            {\n              \"type\": \"InlineMath\",\n              \"props\": {\n                \"math\": \"x^2-4 = 0\"\n              }\n            },\n            {\n              \"type\": \"br\",\n              \"props\": {}\n            },\n            {\n              \"type\": \"InlineMath\",\n              \"props\": {\n                \"math\": \"(x-2)(x+2) = 0\"\n              }\n            },\n            {\n              \"type\": \"br\",\n              \"props\": {}\n            },\n            {\n              \"type\": \"text\",\n              \"value\": \"ដូចនេះ \"\n            },\n            {\n              \"type\": \"InlineMath\",\n              \"props\": {\n                \"math\": \"x = 2\"\n              }\n            },\n            {\n              \"type\": \"text\",\n              \"value\": \" ឬ \"\n            },\n            {\n              \"type\": \"InlineMath\",\n              \"props\": {\n                \"math\": \"x = -2\"\n              }\n            }\n          ]\n        },\n        {\n          \"title\": \"ចម្លើយ\",\n          \"content\": {\n            \"type\": \"div\",\n            \"props\": {\n              \"children\": [\n                {\n                  \"type\": \"div\",\n                  \"props\": {\n                    \"children\": [\n                      {\n                        \"type\": \"text\",\n                        \"value\": \"f(x) មានដែនកំណត់កាលណា​ x​ ខុសពី​​\"\n                      },\n                      {\n                        \"type\": \"text\",\n                        \"value\": \" \"\n                      },\n                      {\n                        \"type\": \"InlineMath\",\n                        \"props\": {\n                          \"math\": \"2\"\n                        }\n                      },\n                      {\n                        \"type\": \"text\",\n                        \"value\": \" និង \"\n                      },\n                      {\n                        \"type\": \"InlineMath\",\n                        \"props\": {\n                          \"math\": \"-2\"\n                        }\n                      }\n                    ]\n                  }\n                },\n                {\n                  \"type\": \"div\",\n                  \"props\": {\n                    \"children\": {\n                      \"type\": \"InlineMath\",\n                      \"props\": {\n                        \"math\": \"D_f = \\\\mathbb{R} \\\\setminus \\\\left\\\\{ -2, 2 \\\\right\\\\}\"\n                      }\n                    }\n                  }\n                }\n              ]\n            }\n          }\n        }\n      ],\n      \"answer\": {\n        \"type\": \"div\",\n        \"props\": {\n          \"children\": [\n            {\n              \"type\": \"text\",\n              \"value\": \"ដូចនេះ\"\n            },\n            {\n              \"type\": \"text\",\n              \"value\": \" \"\n            },\n            {\n              \"type\": \"InlineMath\",\n              \"props\": {\n                \"math\": \"D_f = \\\\mathbb{R} \\\\setminus \\\\left\\\\{ -2, 2 \\\\right\\\\}\"\n              }\n            }\n          ]\n        }\n      }\n    }\n  },\n  {\n    \"type\": \"graph\",\n    \"props\": {\n      \"expressions\": [\n        {\n          \"id\": \"1\",\n          \"latex\": \"f(x) = (x^2-3x+2)/(x^2-4)\",\n          \"color\": \"#1f77b4\"\n        }\n      ],\n      \"options\": {\n        \"showGrid\": true,\n        \"expressions\": true,\n        \"xAxisLabel\": \"x\",\n        \"yAxisLabel\": \"y\",\n        \"xAxisMin\": -5,\n        \"xAxisMax\": 5,\n        \"yAxisMin\": -5,\n        \"yAxisMax\": 5\n      }\n    }\n  },\n  {\n    \"type\": \"definition\",\n    \"props\": {\n      \"title\": \"\",\n      \"content\": {\n        \"type\": \"text\",\n        \"value\": \"សង្ឃឹមថាការបង្ហាញនេះនឹងជួយអ្នកឱ្យយល់កាន់តែច្បាស់អំពីអនុគមន៍សនិទាន និងការកំណត់ដែនកំណត់របស់វា។\"\n      }\n    }\n  }\n]\n"
-    // const deserialized = deserializeTopicContentV3(markdownContent);
+    const markdownContent = `[
+        {
+          "type": "graph",
+          "props": {
+            "expressions": [
+              {
+                "id": "1",
+                "latex": "y = \\ln(x + 1)",
+                "color": "#1f77b4"
+              }
+            ],
+            "options": {
+              "xAxisLabel": "x",
+              "yAxisLabel": "f(x)",
+              "showGrid": true,
+              "xAxisMin": -2,
+              "xAxisMax": 10,
+              "yAxisMin": -5,
+              "yAxisMax": 5
+            }
+          }
+        }
+      ]`;
+    const deserialized = deserializeTopicContentV3(markdownContent);
     return (
         <div className="bg-white min-h-screen p-20 flex items-center justify-center">
-            {/* <div className="max-w-6xl"><ContentRendererV3 content={deserialized} /></div > */}
-            <AiRating responseId={1} />
+            <div className="max-w-6xl"><ContentRendererV3 content={deserialized} /></div >
+            {/* <AiRating responseId={1} /> */}
         </div>
     );
 }
