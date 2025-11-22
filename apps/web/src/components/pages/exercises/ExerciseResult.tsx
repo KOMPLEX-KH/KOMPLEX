@@ -20,7 +20,7 @@ export default function PracticeResult({ examSections, overallScore, sectionScor
         <div className="bg-white rounded-3xl shadow-lg p-5 text-center">
             <div className="mb-6">
                 {isLoading ? (
-                    <Logo isLoading={true} isVertical={true} size="xl" />
+                    <Logo isLoading={true} isVertical={true} size="xl" showBeta={false} />
                 ) : percentage >= 80 ? (
                     <CheckCircle size={80} className="text-green-500 mx-auto mb-4" />
                 ) : percentage >= 60 ? (
