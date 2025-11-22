@@ -589,18 +589,16 @@ export default function AIChat() {
                                     <button
                                         onClick={handleSendMessage}
                                         disabled={!inputMessage.trim() || isInputDisabled}
-                                        className="px-2 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                        className="px-2 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed "
                                     >
                                         <Send className="w-4 h-4" />
                                     </button>
                                 ) : (
                                     <button
                                         onClick={handleStopStreaming}
-                                        className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors.duration-200 flex items-center gap-2"
-                                        title={isRequestInProgress ? "បញ្ឈប់ការស្នើសុំ" : "បញ្ឈប់ការសរសេរ"}
+                                        className="px-2 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors.duration-200 "
                                     >
                                         <Square className="w-4 h-4" />
-                                        <span className="text-sm font-medium">បញ្ឈប់</span>
                                     </button>
                                 )}
                             </div>

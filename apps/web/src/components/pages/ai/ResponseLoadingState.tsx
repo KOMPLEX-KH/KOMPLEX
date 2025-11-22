@@ -20,7 +20,7 @@ const steps: Step[] = [
     { id: 3, label: "តារាកំពុងសរសេរចម្លើយ..." }
 ];
 
-const TOTAL_DURATION = 20000;
+const TOTAL_DURATION = 18000;
 
 const ResponseLoadingState: React.FC<Props> = React.memo(({ responseType }) => {
     const [activeStep, setActiveStep] = useState(0);
@@ -75,7 +75,7 @@ const ResponseLoadingState: React.FC<Props> = React.memo(({ responseType }) => {
 
     return (
         <div className="w-full">
-            <div className="bg-gradient-to-br from-white to-indigo-50/70 border border-indigo-100 rounded-3xl p-6 shadow-sm">
+            <div className="bg-indigo-50 border border-indigo-500 rounded-3xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 text-indigo-600 font-semibold text-sm">
                     <Sparkles className="w-4 h-4 animate-pulse" />
                     <p className="text-sm font-medium text-gray-900">តារាកំពុងត្រៀមចម្លើយឱ្យអ្នក...</p>
