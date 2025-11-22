@@ -8,7 +8,7 @@ import { Expression } from '@core-types/docs/boxProps';
 export type { Expression };
 
 export type DesmosGraphProps = {
-    expressions: Expression[];
+    expressions?: Expression[] | null;
     width?: string | number;
     height?: string | number;
     options?: Partial<CalculatorOptions>;
@@ -46,10 +46,18 @@ const CustomDesmosGraph = ({
                 ...options,
             });
 
-            // Set expressions
-            expressions.forEach(expr => {
-                calculatorInstance.current?.setExpression(expr);
-            });
+            // Set expressions - validate that expressions exists and is an array
+            if (Array.isArray(expressions) && expressions.length > 0) {
+                try {
+                    expressions.forEach(expr => {
+                        if (expr && typeof expr === 'object') {
+                            calculatorInstance.current?.setExpression(expr);
+                        }
+                    });
+                } catch (error) {
+                    console.error("Error setting graph expressions:", error);
+                }
+            }
         }
 
         return () => {

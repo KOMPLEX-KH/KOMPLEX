@@ -13,6 +13,9 @@ export const GraphExplanationBox = ({ expressions, options, explanation }: Graph
     const desmosOptions = options as Partial<CalculatorOptions> | undefined;
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    // Validate expressions - ensure it's an array
+    const validExpressions = Array.isArray(expressions) && expressions.length > 0 ? expressions : [];
+
     return (
         <>
             <div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-6 gap-2 my-6'>
@@ -20,13 +23,21 @@ export const GraphExplanationBox = ({ expressions, options, explanation }: Graph
                     <div className="grid grid-cols-1 gap-6">
                         <div className="w-full">
                             <div className="relative group bg-white rounded-3xl">
-                                <Graph expressions={expressions} options={desmosOptions} />
-                                <button
-                                    onClick={() => setIsModalOpen(true)}
-                                    className="absolute -top-2 -right-2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-200"
-                                >
-                                    <Maximize2 size={16} />
-                                </button>
+                                {validExpressions.length > 0 ? (
+                                    <>
+                                        <Graph expressions={validExpressions} options={desmosOptions} />
+                                        <button
+                                            onClick={() => setIsModalOpen(true)}
+                                            className="absolute -top-2 -right-2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-200"
+                                        >
+                                            <Maximize2 size={16} />
+                                        </button>
+                                    </>
+                                ) : (
+                                    <div className="flex items-center justify-center h-[400px] bg-gray-50 rounded-3xl">
+                                        <p className="text-sm text-gray-500">No graph expressions provided</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -102,7 +113,13 @@ export const GraphExplanationBox = ({ expressions, options, explanation }: Graph
                                             <X size={20} />
                                         </button>
                                         <div className="h-[80vh] flex flex-col justify-center items-center p-4">
-                                            <Graph expressions={expressions} options={desmosOptions} />
+                                            {validExpressions.length > 0 ? (
+                                                <Graph expressions={validExpressions} options={desmosOptions} />
+                                            ) : (
+                                                <div className="flex items-center justify-center h-full">
+                                                    <p className="text-sm text-gray-500">No graph expressions provided</p>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </Dialog.Panel>

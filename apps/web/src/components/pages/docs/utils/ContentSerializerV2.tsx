@@ -528,10 +528,42 @@ export function serializeTopicContentV3(items: TopicContent_V3[]): string {
  * Rebuilds ReactNode props using element deserialization
  */
 export function deserializeTopicContentV3(jsonString: string): TopicContent_V3[] {
-  const data = JSON.parse(jsonString) as Array<{
+  // Validate input
+  if (!jsonString || typeof jsonString !== "string") {
+    console.warn("deserializeTopicContentV3: Invalid input, expected non-empty string");
+    return [];
+  }
+
+  // Trim whitespace and check if empty
+  const trimmed = jsonString.trim();
+  if (!trimmed) {
+    console.warn("deserializeTopicContentV3: Empty JSON string provided");
+    return [];
+  }
+
+  let data: Array<{
     type: TopicContent_V3["type"];
     props: Record<string, unknown>;
   }>;
+
+  try {
+    data = JSON.parse(trimmed) as Array<{
+      type: TopicContent_V3["type"];
+      props: Record<string, unknown>;
+    }>;
+  } catch (error) {
+    console.error("deserializeTopicContentV3: Failed to parse JSON", {
+      error: error instanceof Error ? error.message : String(error),
+      input: trimmed.substring(0, 100), // Log first 100 chars for debugging
+    });
+    return [];
+  }
+
+  // Validate that parsed data is an array
+  if (!Array.isArray(data)) {
+    console.warn("deserializeTopicContentV3: Parsed data is not an array", { data });
+    return [];
+  }
 
   const reviveMixed = (node: unknown): unknown => {
     if (node == null) return node;
@@ -552,14 +584,21 @@ export function deserializeTopicContentV3(jsonString: string): TopicContent_V3[]
     return node;
   };
 
-  return data.map((entry) => {
-    const { type, props } = entry;
-    const restoredProps: Record<string, unknown> = {};
-    for (const [k, v] of Object.entries(props || {})) {
-      restoredProps[k] = reviveMixed(v);
-    }
-    return { type, ...(restoredProps as object) } as TopicContent_V3;
-  });
+  try {
+    return data.map((entry) => {
+      const { type, props } = entry;
+      const restoredProps: Record<string, unknown> = {};
+      for (const [k, v] of Object.entries(props || {})) {
+        restoredProps[k] = reviveMixed(v);
+      }
+      return { type, ...(restoredProps as object) } as TopicContent_V3;
+    });
+  } catch (error) {
+    console.error("deserializeTopicContentV3: Error during deserialization", {
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return [];
+  }
 }
 
 /**
@@ -569,10 +608,42 @@ export function deserializeTopicContentV3(jsonString: string): TopicContent_V3[]
  * { type, props } objects for tags and InlineMath/BlockMath.
  */
 export function deserializeTopicContentV3ToTree(jsonString: string): TopicContent_V3[] {
-  const data = JSON.parse(jsonString) as Array<{
+  // Validate input
+  if (!jsonString || typeof jsonString !== "string") {
+    console.warn("deserializeTopicContentV3ToTree: Invalid input, expected non-empty string");
+    return [];
+  }
+
+  // Trim whitespace and check if empty
+  const trimmed = jsonString.trim();
+  if (!trimmed) {
+    console.warn("deserializeTopicContentV3ToTree: Empty JSON string provided");
+    return [];
+  }
+
+  let data: Array<{
     type: TopicContent_V3["type"];
     props: Record<string, unknown>;
   }>;
+
+  try {
+    data = JSON.parse(trimmed) as Array<{
+      type: TopicContent_V3["type"];
+      props: Record<string, unknown>;
+    }>;
+  } catch (error) {
+    console.error("deserializeTopicContentV3ToTree: Failed to parse JSON", {
+      error: error instanceof Error ? error.message : String(error),
+      input: trimmed.substring(0, 100), // Log first 100 chars for debugging
+    });
+    return [];
+  }
+
+  // Validate that parsed data is an array
+  if (!Array.isArray(data)) {
+    console.warn("deserializeTopicContentV3ToTree: Parsed data is not an array", { data });
+    return [];
+  }
 
   const passThrough = (node: unknown): unknown => {
     if (node == null) return node;
@@ -590,12 +661,19 @@ export function deserializeTopicContentV3ToTree(jsonString: string): TopicConten
     return node;
   };
 
-  return data.map((entry) => {
-    const { type, props } = entry;
-    const restoredProps: Record<string, unknown> = {};
-    for (const [k, v] of Object.entries(props || {})) {
-      restoredProps[k] = passThrough(v);
-    }
-    return { type, ...(restoredProps as object) } as TopicContent_V3;
-  });
+  try {
+    return data.map((entry) => {
+      const { type, props } = entry;
+      const restoredProps: Record<string, unknown> = {};
+      for (const [k, v] of Object.entries(props || {})) {
+        restoredProps[k] = passThrough(v);
+      }
+      return { type, ...(restoredProps as object) } as TopicContent_V3;
+    });
+  } catch (error) {
+    console.error("deserializeTopicContentV3ToTree: Error during deserialization", {
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return [];
+  }
 }
