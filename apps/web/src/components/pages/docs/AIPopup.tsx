@@ -466,59 +466,61 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                                 )}
 
                                 {/* Input */}
-                                <div className={`p-2 ${isPopupMaximized ? "max-w-4xl mx-auto w-full" : ""}`}>
+                                <div className={`px-4 lg:px-2 ${isPopupMaximized ? "max-w-4xl mx-auto w-full" : ""}`}>
                                     {activeRating ? (
                                         <AiRating responseId={activeRating.id} scope="topic" onComplete={handleRatingComplete} />
                                     ) : (
-                                        <div className="bg-white max-w-4xl mx-auto shadow-lg border border-gray-200 rounded-3xl p-2 transition-all duration-200">
-                                            <div className="flex-1  ">
-                                                <PromptTextarea
-                                                    ref={textareaRef}
-                                                    value={inputMessage}
-                                                    onChange={(e) => setInputMessage(e.target.value)}
-                                                    onKeyPress={handleKeyDown}
-                                                    disabled={isInputDisabled}
-                                                    placeholder={isInputDisabled ? "កំពុងដំណើរការ..." : "សរសេរសំណួររបស់អ្នក..."}
-                                                    className="min-h-[0px] text-base leading-relaxed"
-                                                    style={{
-                                                        // minHeight: '10px',
-                                                        maxHeight: '200px',
-                                                        height: 'auto'
-                                                    }}
-                                                />
-                                            </div>
-
-                                            <div className="flex flex-row items-center justify-between">
-                                                <ResponseTypeDropdown
-                                                    options={responseTypeOptions}
-                                                    value={selectedResponseType}
-                                                    onChange={setSelectedResponseType}
-                                                    disabled={isInputDisabled}
-                                                    variant="default"
-                                                />
-
-                                                <div className="flex items-center gap-2">
-                                                    {!isLoading && !isStreaming ? (
-                                                        <button
-                                                            onClick={handleSendMessage}
-                                                            disabled={!inputMessage.trim() || isInputDisabled}
-                                                            className="px-2 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                                                        >
-                                                            <Send className="w-4 h-4" />
-                                                        </button>
-                                                    ) : (
-                                                        <button
-                                                            onClick={handleStop}
-                                                            className="px-2 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors.duration-200 flex items-center gap-2"
-                                                        >
-                                                            <Square className="w-4 h-4" />
-                                                        </button>
-                                                    )}
+                                        <div className='lg:px-2 lg:max-w-4xl lg:mx-auto'>
+                                            <div className="bg-white max-w-4xl mx-auto shadow-lg border border-gray-200 rounded-3xl p-2 transition-all duration-200">
+                                                <div className="flex-1  ">
+                                                    <PromptTextarea
+                                                        ref={textareaRef}
+                                                        value={inputMessage}
+                                                        onChange={(e) => setInputMessage(e.target.value)}
+                                                        onKeyPress={handleKeyDown}
+                                                        disabled={isInputDisabled}
+                                                        placeholder={isInputDisabled ? "កំពុងដំណើរការ..." : "សរសេរសំណួររបស់អ្នក..."}
+                                                        className="min-h-[0px] text-base leading-relaxed"
+                                                        style={{
+                                                            // minHeight: '10px',
+                                                            maxHeight: '200px',
+                                                            height: 'auto'
+                                                        }}
+                                                    />
+                                                </div>
+    
+                                                <div className="flex flex-row items-center justify-between">
+                                                    <ResponseTypeDropdown
+                                                        options={responseTypeOptions}
+                                                        value={selectedResponseType}
+                                                        onChange={setSelectedResponseType}
+                                                        disabled={isInputDisabled}
+                                                        variant="default"
+                                                    />
+    
+                                                    <div className="flex items-center gap-2">
+                                                        {!isLoading && !isStreaming ? (
+                                                            <button
+                                                                onClick={handleSendMessage}
+                                                                disabled={!inputMessage.trim() || isInputDisabled}
+                                                                className="px-2 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                                            >
+                                                                <Send className="w-4 h-4" />
+                                                            </button>
+                                                        ) : (
+                                                            <button
+                                                                onClick={handleStop}
+                                                                className="px-2 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors.duration-200 flex items-center gap-2"
+                                                            >
+                                                                <Square className="w-4 h-4" />
+                                                            </button>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     )}
-                                    <div className="text-center text-xs text-gray-500 mt-2">
+                                    <div className="text-center text-xs text-gray-500 mb-1">
                                         តារា អាចមានកំហុស។ សូមពិនិត្យព័ត៌មានសំខាន់។
                                     </div>
                                 </div>
