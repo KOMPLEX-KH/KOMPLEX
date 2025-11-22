@@ -1,6 +1,6 @@
 'use client';
 
-import { BotIcon } from "lucide-react";
+import { BotIcon, Sparkle, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@hooks/useAuth";
@@ -40,6 +40,7 @@ export default function AiButton() {
                     >
                         <BotIcon className="w-6 h-6" />
                     </div>
+                    <Sparkles className="w-5 h-5 text-indigo-500 fill-indigo-500 absolute -top-2 -left-2 animate-pulse" />
                 </div>
             </button>
             <AIPopup isOpen={isAiPopupOpen} onClose={() => setIsAiPopupOpen(false)} />
