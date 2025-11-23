@@ -59,9 +59,9 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
                         >
                             <source src={video.videoUrl} type="video/mp4" />
                         </video>
-                        <div className="absolute bottom-1 right-1 bg-black/50 text-white text-xs px-1 py-0.5 rounded-3xl">
+                        {/* <div className="absolute bottom-1 right-1 bg-black/50 text-white text-xs px-1 py-0.5 rounded-3xl">
                             {formatDuration(video.duration)}
-                        </div>
+                        </div> */}
                     </div>
                     <div className="min-w-0 flex-2">
                         <h4 className="font-bold text-gray-900 text-md line-clamp-2 group-hover:text-indigo-600 transition-colors">
@@ -101,9 +101,9 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
                         >
                             <source src={video.videoUrl} type="video/mp4" />
                         </video>
-                        <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-xl">
+                        {/* <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-xl">
                             {formatDuration(video.duration)}
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="p-3">
@@ -162,9 +162,9 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
                         <source src={video.videoUrl} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
-                    <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-3xl">
+                    {/* <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-3xl">
                         {formatDuration(video.duration)}
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className="p-4">
