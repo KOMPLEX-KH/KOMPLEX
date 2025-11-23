@@ -55,7 +55,7 @@ export default function DeleteConfirm({ isOpen, onClose, onConfirm, title, messa
                                         className="rounded-full border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-50 focus:outline-none"
                                         onClick={onClose}
                                     >
-                                        Cancel
+                                        បោះបង់
                                     </button>
                                     <button
                                         type="button"
@@ -65,7 +65,7 @@ export default function DeleteConfirm({ isOpen, onClose, onConfirm, title, messa
                                             onClose();
                                         }}
                                     >
-                                        Delete
+                                        លុប
                                     </button>
                                 </div>
                             </Dialog.Panel>
