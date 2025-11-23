@@ -204,7 +204,7 @@ export default function Header() {
                                                                 className={`flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-full text-sm text-gray-700 no-underline font-medium transition-colors duration-200 ${active ? ' text-indigo-600' : ' hover:text-indigo-600'}`}
                                                             >
                                                                 <BookMarked className="w-4 h-4" />
-                                                                ប្រវត្តិរូបខ្ញុំ
+                                                                មាតិកាខ្ញុំ
                                                             </Link>
                                                         )}
                                                     </HeadlessMenu.Item>
@@ -345,7 +345,7 @@ export default function Header() {
                                                         className={`flex items-center gap-3 w-full text-left px-3 py-2.5 rounded-full text-sm text-gray-700 no-underline font-medium transition-colors duration-200 ${active ? 'text-indigo-600' : ' hover:text-indigo-600'}`}
                                                     >
                                                         <BookMarked className="w-4 h-4" />
-                                                        ប្រវត្តិរូបខ្ញុំ
+                                                        មាតិកាខ្ញុំ
                                                     </Link>
                                                 )}
                                             </HeadlessMenu.Item>
