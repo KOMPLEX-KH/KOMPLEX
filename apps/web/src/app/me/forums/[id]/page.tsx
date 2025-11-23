@@ -64,7 +64,7 @@ export default function MyForumDetail() {
     const handleDeleteConfirm = async () => {
         try {
             await meForumService.deleteForum(id);
-            router.push('/me/forums');
+            router.push('/me?tab=forums');
         } catch (error) {
             console.error('Error deleting forum:', error);
             alert('មានបញ្ហាកើតឡើងពេលលុបវេទិកា សូមព្យាយាមម្តងទៀត');

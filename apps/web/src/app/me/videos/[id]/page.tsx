@@ -114,7 +114,7 @@ export default function VideoPost() {
     const handleDeleteConfirm = async () => {
         try {
             await meVideoService.deleteVideo(id);
-            router.push('/me/videos');
+            router.push('/me?tab=videos');
         } catch (error) {
             console.error('Error deleting video:', error);
             alert('មានបញ្ហាកើតឡើងពេលលុបវីដេអូ សូមព្យាយាមម្តងទៀត');
