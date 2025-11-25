@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { FileText, MessageSquare, Bot, Camera, Pencil, LogOut, BookMarked, MessageCircle, UserIcon, EllipsisVertical, HelpCircle } from 'lucide-react';
+import { FileText, MessageSquare, Bot, Camera, Pencil, LogOut, BookMarked, MessageCircle, UserIcon, EllipsisVertical, HelpCircle, Plus, PlusCircle } from 'lucide-react';
 import { Menu as HeadlessMenu, Transition } from '@headlessui/react';
 import FeedbackModal from '../pages/feedbacks/FeedbackModal';
 import { useAuth } from '@hooks/useAuth';
@@ -10,6 +10,7 @@ import { signOut } from 'firebase/auth';
 import { auth } from '@/configs/firebase';
 import { useEffect, useState, useRef } from 'react';
 import { Logo } from './Logo';
+import { Extrude } from '@react-three/drei';
 
 const navLinks = [
     {
@@ -42,9 +43,9 @@ const navLinks = [
         style: "bg-transparent  hover:text-indigo-600 hover:bg-indigo-50/90 "
     },
     {
-        label: 'ជំនួយ',
-        href: '/help',
-        icon: HelpCircle,
+        label: 'បន្ថែម',
+        href: '/extra',
+        icon: PlusCircle,
         style: "bg-transparent  hover:text-indigo-600 hover:bg-indigo-50/90 "
     },
     {
