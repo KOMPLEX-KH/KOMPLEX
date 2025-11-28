@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import SubjectCard from "./SubjectCard";
 import { ScienceSubjects, SocialScienceSubjects, getSubjectScienceGrade, getSubjectSocialScienceGrade  } from "@/types/extra/calculation";
 import ResultCard from "./ResultCard";
+import { Calculator } from "lucide-react";
 
 type Scores = {
   [key: string]: string;
@@ -139,28 +140,36 @@ export default function CalculateContent() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl md:text-5xl font-bold text-indigo-600 mb-6">
-            គណនាពិន្ទុបាក់ឌុប
-          </h1>
-          <div className="flex items-center justify-center sm:justify-end px-4 py-2 rounded-md">
-            <div className="bg-gray-200 rounded-full p-1 w-full sm:w-[260px] flex">
-              <button onClick={() => setSubjectType("science")}
-                className={`flex-1 py-2 rounded-full text-sm font-medium transition-all
-                  ${subjectType === "science" ? "bg-indigo-600 text-white" : "text-gray-600"}
-                `}
-              >
-                វិទ្យាសាស្រ្តពិត
-              </button>
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-8 px-4 rounded-t-2xl">
+            <div className="max-w-6xl mx-auto flex flex-col justify-center items-center">
+              {/* Title */}
+              <div className="flex items-center gap-3 mb-2">
+                <Calculator className="w-8 h-8" />
+                <h1 className="text-4xl font-bold">គណនាពិន្ទុបាក់ឌុប</h1>
+              </div>
 
-              <button onClick={() => setSubjectType("social")}
-                className={`flex-1 py-2 rounded-full text-sm font-medium transition-all
-                  ${subjectType === "social" ? "bg-indigo-600 text-white" : "text-gray-600"}
-                `}
-              >
-                វិទ្យាសាស្រ្តសង្គម
-              </button>
+              <div className="flex w-full items-center mt-4 justify-center sm:justify-end  rounded-md">
+                <div className="bg-gray-200 rounded-full p-1 w-full sm:w-[260px] flex">
+                  <button onClick={() => setSubjectType("science")}
+                    className={`flex-1 py-2 rounded-full text-sm font-medium transition-all
+                      ${subjectType === "science" ? "bg-indigo-600 text-white" : "text-gray-600"}
+                    `}
+                  >
+                    វិទ្យាសាស្រ្តពិត
+                  </button>
+                    
+                  <button onClick={() => setSubjectType("social")}
+                    className={`flex-1 py-2 rounded-full text-sm font-medium transition-all
+                      ${subjectType === "social" ? "bg-indigo-600 text-white" : "text-gray-600"}
+                    `}
+                  >
+                    វិទ្យាសាស្រ្តសង្គម
+                  </button>
+                </div>
+          </div>
             </div>
           </div>
+          
         </motion.div>
 
         {/* Subject Cards */}

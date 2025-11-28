@@ -1,122 +1,108 @@
+export const subjects = [
+  { id: "all", name: "គ្រប់មុខវិជ្ជា" },
+  { id: "math", name: "គណិតវិទ្យា" },
+  { id: "physics", name: "រូបវិទ្យា" },
+  { id: "chemistry", name: "គីមីវិទ្យា" },
+  { id: "biology", name: "ជីវវិទ្យា" },
+  { id: "khmer", name: "អក្សរសិល្ប៍ខ្មែរ" },
+  { id: "history", name: "ប្រវត្តិសាស្ត្រ" },
+  { id: "english", name: "អង់គ្លេស" },
+];
+
+export const lessonsBySubject = {
+  math: [
+    { id: "limit", name: "Limit" },
+    { id: "integral", name: "អាំងតេក្រាល (Integral)" },
+    { id: "komplex", name: "កុំផ្លិច" },
+  ],
+
+  physics: [
+    { id: "newton", name: "ច្បាប់ Newton" },
+    { id: "motion", name: "ចលនា" },
+    { id: "energy", name: "ថាមពល" },
+  ],
+
+  chemistry: [
+    { id: "atom", name: "អាតូម" },
+    { id: "bonding", name: "Chemical Bonding" },
+  ],
+
+  biology: [
+    { id: "cell", name: "កោសិកា" },
+    { id: "life", name: "ពិភពជីវិត" },
+  ],
+
+  khmer: [
+    { id: "literature", name: "អក្សរសាស្ត្រ" },
+  ],
+
+  history: [
+    { id: "world", name: "ប្រវត្តិសាស្ត្រពិភពលោក" },
+    { id: "asia", name: "អាស៊ីបុរាណ" },
+  ],
+
+  english: [
+    { id: "grammar", name: "អង់គ្លេស Grammar" },
+    { id: "reading", name: "Reading Skill" },
+  ],
+};
+
+
+// mock data
 export const Books = [
   {
     id: "1",
     title: "អាំងតេក្រាល ផ្នែក ១",
-    tag: "គណិតវិទ្យា",
-    lesson: "angtekral",
-    pdfSrc: "",
-    imageSrc: "",
+    subject: "math",
+    lessons: ["integral"],
+    grade: "ទី១២",
+    description: "មេរៀនស្តីពីអាំងតេក្រាលដំបូងចំពោះសិស្សថ្នាក់ទី១២។",
+    pdfSrc: "/pdfs/math/integral1.pdf",
+    imageSrc: "/images/math/integral1.jpg",
+    author: "គ្រូ សុភា",
+    type: "book",
+    views: 1200,
   },
+
   {
     id: "2",
     title: "មូលដ្ឋានរូបវិទ្យា",
-    tag: "រូបវិទ្យា",
-    lesson: "physics_basics",
-    pdfSrc: "",
-    imageSrc: "",
+    subject: "physics",
+    lessons: ["newton", "energy"],
+    grade: "ទី១១",
+    description: "សៀវភៅនេះពន្យល់អំពីច្បាប់និយាយទំនាក់ទំនងរវាងវត្ថុ។",
+    pdfSrc: "/pdfs/physics/basic_physics.pdf",
+    imageSrc: "/images/physics/basic_physics.jpg",
+    author: "គ្រូ វុទ្ធி",
+    type: "book",
+    views: 900,
   },
+
   {
     id: "3",
-    title: "បើកផ្លូវទៅកាន់គីមីវិទ្យា",
-    tag: "គីមីវិទ្យា",
-    lesson: "intro_chemistry",
-    pdfSrc: "",
-    imageSrc: "",
+    title: "អាសុីត បាស",
+    subject: "chemistry",
+    lessons: ["acid"],
+    grade: "ទី១០",
+    description: "បង្ហាញពីបំលែងគីមី និងរចនាសម្ព័ន្ធអាតូម។",
+    pdfSrc: "/pdfs/chemistry/intro_chem.pdf",
+    imageSrc: "/images/chemistry/intro_chem.jpg",
+    author: "គ្រូ ច័ន្ទស្រី",
+    type: "book",
+    views: 450,
   },
+
   {
     id: "4",
     title: "វចនានុក្រមភាសាអង់គ្លេស",
-    tag: "ភាសាអង់គ្លេស",
-    lesson: "english_grammar",
-    pdfSrc: "",
-    imageSrc: "",
-  },
-  {
-    id: "5",
-    title: "ប្រវត្តិសាស្ត្រពិភពលោក",
-    tag: "ប្រវត្តិសាស្ត្រ",
-    lesson: "world_history",
-    pdfSrc: "",
-    imageSrc: "",
-  },
-  {
-    id: "6",
-    title: "ជីវវិទ្យា៖ ពិភពជីវិត",
-    tag: "ជីវវិទ្យា",
-    lesson: "biology_living_world",
-    pdfSrc: "",
-    imageSrc: "",
-  },
-  {
-    id: "7",
-    title: "គណិតវិទ្យាជាន់ខ្ពស់",
-    tag: "គណិតវិទ្យា",
-    lesson: "advanced_algebra",
-    pdfSrc: "",
-    imageSrc: "",
-  },
-  {
-    id: "8",
-    title: "អក្សរសិល្ប៍ខ្មែរ",
-    tag: "អក្សរសិល្ប៍",
-    lesson: "cambodian_literature",
-    pdfSrc: "",
-    imageSrc: "",
-  },
-  {
-    id: "9",
-    title: "មូលដ្ឋានវិទ្យាសាស្រ្តកុំព្យូទ័រ",
-    tag: "វិទ្យាសាស្រ្តកុំព្យូទ័រ",
-    lesson: "cs_fundamentals",
-    pdfSrc: "",
-    imageSrc: "",
-  },
-  {
-    id: "10",
-    title: "ភូមិសាស្រ្តអាស៊ី",
-    tag: "ភូមិសាស្រ្ត",
-    lesson: "asia_geography",
-    pdfSrc: "",
-    imageSrc: "",
-  },
-  {
-    id: "11",
-    title: "សេដ្ឋកិច្ចមូលដ្ឋាន",
-    tag: "សេដ្ឋកិច្ច",
-    lesson: "basic_economics",
-    pdfSrc: "",
-    imageSrc: "",
-  },
-  {
-    id: "12",
-    title: "ទស្សនវិជ្ជា ១០១",
-    tag: "ទស្សនវិជ្ជា",
-    lesson: "philosophy_101",
-    pdfSrc: "",
-    imageSrc: "",
-  },
-  {
-    id: "13",
-    title: "ច្បាប់មូលដ្ឋាន",
-    tag: "ច្បាប់",
-    lesson: "basic_law",
-    pdfSrc: "",
-    imageSrc: "",
-  },
-  {
-    id: "14",
-    title: "ភាសាបារាំងមូលដ្ឋាន",
-    tag: "ភាសាបារាំង",
-    lesson: "french_basics",
-    pdfSrc: "",
-    imageSrc: "",
-  },
-  {
-    id: "15",
-    title: "វិទ្យាសាស្រ្តបរិស្ថាន",
-    tag: "បរិស្ថានវិទ្យា",
-    lesson: "environmental_science",
-    pdfSrc: "",
-    imageSrc: "",
+    subject: "english",
+    lessons: ["grammar"],
+    grade: "សិស្សទូទៅ",
+    description: "សៀវភៅ Grammar ត្រូវការសម្រាប់ការរៀនអង់គ្លេស។",
+    pdfSrc: "/pdfs/english/grammar.pdf",
+    imageSrc: "/images/english/grammar.jpg",
+    author: "Teacher John",
+    type: "book",
+    views: 830,
   },
 ];
