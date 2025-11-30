@@ -50,6 +50,8 @@ export default function Sidebar({ currentTab, onTabChange }: SidebarProps) {
 
   return (
     <>
+
+      {/* Mobile top bar */}
       <div
         className={`lg:hidden fixed top-14 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 px-4 py-3 transition-transform duration-300 ${
           isScrollingDown ? '-translate-y-[300%]' : 'translate-y-0'
@@ -57,9 +59,7 @@ export default function Sidebar({ currentTab, onTabChange }: SidebarProps) {
       >
         <div className="flex gap-3 overflow-x-auto whitespace-nowrap scrollbar-hide">
           {tabs.map((tab, i) => (
-            <button
-              key={i}
-              onClick={() => onTabChange(i)}
+            <button key={i} onClick={() => onTabChange(i)}
               className={`px-4 py-2 rounded-full border border-indigo-500/10 text-sm transition ${
                 currentTab === i
                   ? 'text-indigo-600 bg-indigo-50/80 font-semibold'
@@ -72,6 +72,7 @@ export default function Sidebar({ currentTab, onTabChange }: SidebarProps) {
         </div>
       </div>
 
+      {/* Desktop sidebar */}
       <aside className="hidden lg:block w-65 bg-white rounded-3xl shadow p-6 shadow-indigo-500/10 border border-indigo-500/10 h-fit sticky top-20">
         <div className="mb-6">
           <h1 className="text-2xl font-extrabold mb-2 text-indigo-600">ជំនួយ</h1>
@@ -80,9 +81,7 @@ export default function Sidebar({ currentTab, onTabChange }: SidebarProps) {
 
         <nav className="flex flex-col space-y-2">
           {tabs.map((tab, i) => (
-            <button
-              key={i}
-              onClick={() => onTabChange(i)}
+            <button key={i} onClick={() => onTabChange(i)}
               className={`text-left px-3 py-2 rounded-3xl cursor-pointer  ${
                 currentTab === i
                   ? 'text-indigo-600 bg-indigo-50/80 font-semibold'
