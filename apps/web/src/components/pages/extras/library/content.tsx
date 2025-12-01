@@ -4,6 +4,7 @@ import { Search, BookOpen, ChevronDown, Filter, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import BookContainer from "./books/BookContainer";
+import { BookContainerSkeleton, ViewAllByCategorySkeleton, BookSelectedSkeleton } from "./utils/BookSkeleton";
 import ExtraHeader from "./utils/ExtraHeader";
 import { categories, lessonsBySubject, Books } from "@/types/library/library";
 
@@ -13,17 +14,33 @@ export default function LibraryContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [openPanel, setOpenPanel] = useState(false);
+  
 
   const filterRef = useRef(null);   
   const panelRef = useRef(null);
-
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 1500);
-  }, []);
-
   const searchParams = useSearchParams();
+  const categoryFromUrl = searchParams.get("category");
   const bookSelectedFromUrl = searchParams.get("book");
 
+  const prevCategoryRef = useRef(null);
+  const prevBookRef = useRef(null);
+  
+  useEffect(() => {
+    const categoryChanged = prevCategoryRef.current !== categoryFromUrl;
+    const bookChanged = prevBookRef.current !== bookSelectedFromUrl;
+
+    prevCategoryRef.current = categoryFromUrl;
+    prevBookRef.current = bookSelectedFromUrl;
+
+    if ((categoryChanged && categoryFromUrl) || (bookChanged && bookSelectedFromUrl)) {
+      setLoading(true);
+      const timer = setTimeout(() => setLoading(false), 1500);
+      return () => clearTimeout(timer);
+    } else {
+      // When navigating back to base (no category/book), disable loading immediately
+      setLoading(false);
+    }
+  }, [categoryFromUrl, bookSelectedFromUrl]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -41,6 +58,7 @@ export default function LibraryContent() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
 
   // lesson list
   const lessons = selectedSubject === "all" 
@@ -68,7 +86,17 @@ export default function LibraryContent() {
       )}
       
       <div className="max-w-6xl mx-auto pt-5">
-        <BookContainer books={Books}/>
+        {loading ? (
+          categoryFromUrl ? (
+            <ViewAllByCategorySkeleton />
+          ) : bookSelectedFromUrl ? (
+            <BookSelectedSkeleton />
+          ) : (
+            <BookContainerSkeleton />
+          )
+        ) : (
+          <BookContainer />
+        )}
       </div>
     </div>
   );

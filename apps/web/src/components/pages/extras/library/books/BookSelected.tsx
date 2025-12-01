@@ -29,6 +29,15 @@ export default function BookSelectedPage() {
     );
   }
 
+  const handleDownload = async () => {
+    try {
+      alert("Testing download...");
+    } catch (error) {
+      alert("Download failed.");
+      console.error(error);
+    }
+  };
+
   const relatedBooks = Books.filter(
     book => book.category === selectedBook.category && book.id !== selectedBook.id
   ).slice(0, 5);
@@ -116,6 +125,7 @@ export default function BookSelectedPage() {
                       ចាប់ផ្តេីមអាន
                     </button>
                     <button
+                      onClick={handleDownload}
                       className="px-6 py-3 border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 font-semibold rounded-lg transition duration-200"
                     >
                       រក្សាទុក
