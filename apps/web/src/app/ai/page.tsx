@@ -1,319 +1,31 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Bot, RefreshCw, Square, ChevronDown, AlertCircle } from 'lucide-react';
-import { meAiService } from '@/services/index';
-import MarkdownRenderer from '@/components/helper/MarkDownRenderer';
-import { useAuth } from '@hooks/useAuth';
-import { Message, AIHistoryItem, AIResponseType } from '@/types/content/ai';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { Bot, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import MessageItem from '../../components/pages/ai/MessageItem';
-import ChatSkeleton from '../../components/pages/ai/ChatSkeleton';
-import ResponseLoadingState from '../../components/pages/ai/ResponseLoadingState';
-import ResponseTypeDropdown, { ResponseTypeOption } from '../../components/pages/ai/ResponseTypeDropdown';
+import { meAiService } from '@/services/index';
+import SideBar from '../../components/pages/ai/SideBar';
 import PromptTextarea from '../../components/pages/ai/PromptTextarea';
-import AiRating from '../../components/pages/ai/AiRating';
+import ResponseTypeDropdown, {
+    ResponseTypeOption,
+} from '../../components/pages/ai/ResponseTypeDropdown';
+import { AIResponseType } from '@/types/content/ai';
 
 const responseTypeOptions: readonly ResponseTypeOption[] = [
     { id: 'normal', name: 'ធម្មតា', description: 'បង្ហាញជាទម្រង់ Markdown' },
-    { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ទាក់ទាញ' }
+    { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ទាក់ទាញ' },
 ] as const;
 
-
-const isKomplexType = (responseType?: AIResponseType | null) => responseType === 'komplex';
-
-export default function AIChat() {
-    const [messages, setMessages] = useState<Message[]>([]);
+export default function AIWelcomePage() {
+    const router = useRouter();
     const [inputMessage, setInputMessage] = useState('');
+    const [selectedResponseType, setSelectedResponseType] = useState<ResponseTypeOption>(
+        responseTypeOptions[0]
+    );
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedResponseType, setSelectedResponseType] = useState<ResponseTypeOption>(responseTypeOptions[0]);
-    const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [streamingMessage, setStreamingMessage] = useState<string>('');
-    const [isStreaming, setIsStreaming] = useState(false);
-    const [isRequestInProgress, setIsRequestInProgress] = useState(false);
-    const [isLoadingHistory, setIsLoadingHistory] = useState(false);
-    const [hasMoreHistory, setHasMoreHistory] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [isLoadingMore, setIsLoadingMore] = useState(false);
-    const [showScrollButton, setShowScrollButton] = useState(false);
-    const [isInputDisabled, setIsInputDisabled] = useState(false);
-    const [pendingResponseType, setPendingResponseType] = useState<AIResponseType | null>(null);
-    const [activeRating, setActiveRating] = useState<{ id: number; scope: "general" } | null>(null);
-    const streamingIntervalRef = useRef<NodeJS.Timeout | null>(null);
-    const streamingRafRef = useRef<number | null>(null);
-    const streamingCompletionRef = useRef<(() => void) | null>(null);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const debounceRef = useRef<NodeJS.Timeout | null>(null);
-    const chatContainerRef = useRef<HTMLDivElement>(null);
-    const router = useRouter();
-
-    const { user, loading } = useAuth();
-
-    useEffect(() => {
-        // Only redirect if auth is done loading and user is null
-        if (!loading && !user) {
-            router.push('/auth');
-        }
-    }, [user, loading, router]);
-
-    const convertHistoryToMessages = (historyItems: AIHistoryItem[]): Message[] => {
-        const messages: Message[] = [];
-        historyItems.forEach((item) => {
-            // Add user message
-            messages.push({
-                id: `user-${item.id}`,
-                content: item.prompt,
-                sender: 'user',
-                timestamp: new Date(item.createdAt),
-                isFromHistory: true
-            });
-            // Add AI response
-            messages.push({
-                id: `ai-${item.id}`,
-                content: item.aiResult,
-                sender: 'ai',
-                timestamp: new Date(item.createdAt),
-                isFromHistory: true,
-                responseType: item.responseType ?? 'normal'
-            });
-        });
-        return messages;
-    };
-
-    const handleRatingComplete = useCallback(() => {
-        setActiveRating(null);
-    }, []);
-
-    const queueRating = useCallback((id: number) => {
-        setActiveRating({ id, scope: 'general' });
-    }, []);
-
-    const loadHistory = useCallback(async (page: number = 1, append: boolean = false) => {
-        if (!user) return;
-
-        try {
-            if (page === 1) {
-                setIsLoadingHistory(true);
-            } else {
-                setIsLoadingMore(true);
-            }
-
-            const response = await meAiService.getAiHistory(page, 20);
-            const historyMessages = convertHistoryToMessages(response.data);
-
-            if (append) {
-                setMessages(prev => [...historyMessages, ...prev]);
-            } else {
-                setMessages(historyMessages);
-            }
-
-            setHasMoreHistory(response.hasMore);
-            setCurrentPage(page);
-        } catch (error) {
-            console.error('Error loading AI history:', error);
-            setError('មានបញ្ហាក្នុងការផ្ទុកប្រវត្តិសន្ទនា។ សូមព្យាយាមម្តងទៀត។');
-        } finally {
-            setIsLoadingHistory(false);
-            setIsLoadingMore(false);
-        }
-    }, [user]);
-
-
-
-    // Cleanup all timeouts and intervals on unmount
-    useEffect(() => {
-        return () => {
-            if (streamingIntervalRef.current) {
-                clearInterval(streamingIntervalRef.current);
-            }
-            if (streamingRafRef.current !== null) {
-                cancelAnimationFrame(streamingRafRef.current);
-            }
-            if (debounceRef.current) {
-                clearTimeout(debounceRef.current);
-            }
-        };
-    }, []);
-
-    // Load AI history on component mount - only when auth is ready and user exists
-    useEffect(() => {
-        if (!loading && user) {
-            loadHistory();
-        }
-    }, [user, loading, loadHistory]);
-
-    const loadMoreHistory = () => {
-        if (hasMoreHistory && !isLoadingMore) {
-            loadHistory(currentPage + 1, true);
-        }
-    };
-
-    const scrollToBottom = useCallback(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, []);
-
-    // Handle scroll detection for scroll-to-bottom button
-    const handleScroll = useCallback(() => {
-        if (chatContainerRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-            const isNearBottom = scrollHeight - scrollTop - clientHeight < 150;
-            setShowScrollButton(!isNearBottom && scrollHeight > clientHeight);
-        }
-    }, []);
-
-    // Scroll to bottom when new messages arrive
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages, scrollToBottom]);
-
-    // Add scroll listener and initial check
-    useEffect(() => {
-        const chatContainer = chatContainerRef.current;
-        if (chatContainer) {
-            chatContainer.addEventListener('scroll', handleScroll);
-            // Initial check for scroll button
-            handleScroll();
-            return () => chatContainer.removeEventListener('scroll', handleScroll);
-        }
-    }, [handleScroll]);
-
-    // Manage input disabled state
-    useEffect(() => {
-        setIsInputDisabled(loading || isLoading || isStreaming || isRequestInProgress || Boolean(activeRating));
-    }, [loading, isLoading, isStreaming, isRequestInProgress, activeRating]);
-
-    const handleSendMessage = async () => {
-        if (!inputMessage.trim() || activeRating) return;
-
-        const userMessage: Message = {
-            id: Date.now().toString(),
-            content: inputMessage,
-            sender: 'user',
-            timestamp: new Date()
-        };
-
-        setMessages(prev => [...prev, userMessage]);
-        const currentInput = inputMessage;
-        const responseType = selectedResponseType.id;
-        setInputMessage('');
-        setIsLoading(true);
-        setIsRequestInProgress(true);
-        setPendingResponseType(responseType);
-        setError(null); // Clear any previous errors
-
-        try {
-            const response = await meAiService.callAiAndWriteToHistory(currentInput, {
-                responseType
-            });
-            setIsLoading(false);
-            setIsRequestInProgress(false);
-
-            const resolvedResponseType =
-                response.responseType ??
-                (response as { format?: AIResponseType }).format ??
-                'normal';
-
-            if (isKomplexType(resolvedResponseType)) {
-                const aiResponse: Message = {
-                    id: (Date.now() + 1).toString(),
-                    content: response.data.aiResult,
-                    sender: 'ai',
-                    timestamp: new Date(),
-                    responseType: resolvedResponseType
-                };
-                setMessages(prev => [...prev, aiResponse]);
-                setPendingResponseType(null);
-                queueRating(response.data.id);
-            } else {
-                // Start streaming animation
-                streamText(response.data.aiResult, resolvedResponseType, {
-                    onComplete: () => queueRating(response.data.id)
-                });
-            }
-        } catch (error) {
-            console.error('Error calling AI:', error);
-            setIsLoading(false);
-            setIsRequestInProgress(false);
-            setPendingResponseType(null);
-            setError('មានបញ្ហាក្នុងការទាក់ទងតារា។ សូមព្យាយាមម្តងទៀត។');
-        }
-    };
-
-    const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSendMessage();
-        }
-    };
-
-    const handleCopyMessage = useCallback(async (messageId: string, content: string) => {
-        try {
-            await navigator.clipboard.writeText(content);
-            setCopiedMessageId(messageId);
-            setTimeout(() => setCopiedMessageId(null), 2000); // Reset after 2 seconds
-        } catch (error) {
-            console.error('Failed to copy text: ', error);
-        }
-    }, []);
-
-    const streamText = (
-        text: string,
-        responseType: AIResponseType,
-        options?: {
-            onComplete?: () => void;
-        }
-    ) => {
-        if (responseType !== 'normal') {
-            options?.onComplete?.();
-            return;
-        }
-        streamingCompletionRef.current = options?.onComplete ?? null;
-        setIsStreaming(true);
-        setStreamingMessage('');
-        let index = 0;
-        // Adaptive step: starts small, increases as content grows
-        const maxStep = 32;
-        const minStep = 3;
-
-        const tick = () => {
-            if (index < text.length) {
-                const dynamicStep = Math.min(minStep + Math.floor(index / 50), maxStep);
-                index = Math.min(index + dynamicStep, text.length);
-                setStreamingMessage(text.slice(0, index));
-                streamingRafRef.current = requestAnimationFrame(tick);
-            } else {
-                if (streamingRafRef.current !== null) {
-                    cancelAnimationFrame(streamingRafRef.current);
-                    streamingRafRef.current = null;
-                }
-                if (streamingIntervalRef.current) {
-                    clearInterval(streamingIntervalRef.current);
-                    streamingIntervalRef.current = null;
-                }
-                setIsStreaming(false);
-                const aiResponse: Message = {
-                    id: (Date.now() + 1).toString(),
-                    content: text,
-                    sender: 'ai',
-                    timestamp: new Date(),
-                    responseType
-                };
-                setMessages(prev => [...prev, aiResponse]);
-                setStreamingMessage('');
-                setPendingResponseType(null);
-                if (streamingCompletionRef.current) {
-                    streamingCompletionRef.current();
-                    streamingCompletionRef.current = null;
-                }
-
-                // No need to refresh history - the new message is already added to the UI
-            }
-        };
-
-        streamingRafRef.current = requestAnimationFrame(tick);
-    };
 
     const autoResizeTextarea = useCallback(() => {
         if (textareaRef.current) {
@@ -330,13 +42,11 @@ export default function AIChat() {
         }
         debounceRef.current = setTimeout(() => {
             autoResizeTextarea();
-        }, 16); // ~60fps
+        }, 16);
     }, [autoResizeTextarea]);
 
     useEffect(() => {
         debouncedAutoResize();
-
-        // Cleanup timeout on unmount
         return () => {
             if (debounceRef.current) {
                 clearTimeout(debounceRef.current);
@@ -344,274 +54,116 @@ export default function AIChat() {
         };
     }, [inputMessage, debouncedAutoResize]);
 
-    const handleTryAgain = async () => {
-        if (!messages.length || activeRating) {
-            setError(null);
-            return;
-        }
-        const responseType = selectedResponseType.id;
+    const handleSendFirstMessage = async () => {
+        if (!inputMessage.trim() || isLoading) return;
+
         setIsLoading(true);
-        setIsRequestInProgress(true);
-        setPendingResponseType(responseType);
         setError(null);
 
         try {
-            const response = await meAiService.callAiAndWriteToHistory(messages[messages.length - 1].content, {
-                responseType
+            const response = await meAiService.callAiGeneralFirstTime(inputMessage, {
+                responseType: selectedResponseType.id as AIResponseType,
             });
-            setIsLoading(false);
-            setIsRequestInProgress(false);
 
-            const resolvedResponseType =
-                response.responseType ??
-                (response as { format?: AIResponseType }).format ??
-                'normal';
+            // Backend returns tab metadata on first call
+            const data = response as unknown as { tabId?: number; tabID?: number; tabid?: number };
+            const tabId: number | undefined = data.tabId ?? data.tabID ?? data.tabid;
 
-            if (isKomplexType(resolvedResponseType)) {
-                const aiResponse: Message = {
-                    id: (Date.now() + 1).toString(),
-                    content: response.data.aiResult,
-                    sender: 'ai',
-                    timestamp: new Date(),
-                    responseType: resolvedResponseType
-                };
-                setMessages(prev => [...prev, aiResponse]);
-                setPendingResponseType(null);
-                queueRating(response.data.id);
-            } else {
-                // Start streaming animation
-                streamText(response.data.aiResult, resolvedResponseType, {
-                    onComplete: () => queueRating(response.data.id)
-                });
+            if (!tabId) {
+                throw new Error('Missing tabId in response');
             }
-        } catch (error) {
-            console.error('Error calling AI:', error);
+
+            // Seamlessly navigate to the new tab chat page
+            router.push(`/ai/${tabId}`);
+        } catch (e) {
+            console.error('Error starting first AI chat:', e);
+            setError('មានបញ្ហាក្នុងការចាប់ផ្តើមសន្ទនាថ្មី។ សូមព្យាយាមម្តងទៀត។');
+        } finally {
             setIsLoading(false);
-            setIsRequestInProgress(false);
-            setPendingResponseType(null);
-            setError('មានបញ្ហាក្នុងការទាក់ទងតារា។ សូមព្យាយាមម្តងទៀត។');
         }
     };
 
-    const handleStopStreaming = () => {
-        if (isRequestInProgress) {
-            // Case 1: Stop the actual API request (if still in progress)
-            setIsRequestInProgress(false);
-            setIsLoading(false);
-            setPendingResponseType(null);
-            setError('បានបញ្ឈប់ការស្នើសុំ។');
-        } else if (isStreaming) {
-            // Case 2: Stop the fake streaming and keep what has been streamed
-            if (streamingRafRef.current !== null) {
-                cancelAnimationFrame(streamingRafRef.current);
-                streamingRafRef.current = null;
-            }
-            if (streamingIntervalRef.current) {
-                clearInterval(streamingIntervalRef.current);
-                streamingIntervalRef.current = null;
-            }
-            setIsStreaming(false);
-
-            // Add the partial message to the messages array
-            if (streamingMessage.trim()) {
-                const aiResponse: Message = {
-                    id: (Date.now() + 1).toString(),
-                    content: streamingMessage,
-                    sender: 'ai',
-                    timestamp: new Date(),
-                    responseType: 'normal'
-                };
-                setMessages(prev => [...prev, aiResponse]);
-            }
-            setStreamingMessage('');
-            setPendingResponseType(null);
-            if (streamingCompletionRef.current) {
-                streamingCompletionRef.current();
-                streamingCompletionRef.current = null;
-            }
-
-            // No need to refresh history - the partial message is already added to the UI
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSendFirstMessage();
         }
     };
 
     return (
-        <div className="min-h-screen relative bg-gray-50 pt-16 pb-32">
-            {/* Main Chat Area */}
-            <div
-                ref={chatContainerRef}
-                className="overflow-y-auto p-4 space-y-4 max-w-4xl mx-auto w-full scrollbar-hide"
-            >
-                {loading || isLoadingHistory ? (
-                    // Loading auth state
-                    <ChatSkeleton />
-                )
-                    : messages.length === 0 && !error && !isLoading ? (
-                        // Welcome screen
-                        <div className="flex flex-col items-center justify-center h-full">
-                            <div className="text-center max-w-2xl">
-                                <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <div className="min-h-screen relative bg-gray-50 pt-16 pb-16">
+            <SideBar />
+
+            {/* Main content area shifted right of the sidebar */}
+            <div className="ml-72 px-4 min-h-[calc(100vh-10rem)] flex items-center">
+                <div className="max-w-4xl mx-auto w-full space-y-2">
+                    {/* Centered welcome card */}
+                    <div className="flex items-center justify-center">
+                        <div className="max-w-4xl w-full">
+                            <div className=" max-w-4xl mx-auto rounded-3xl px-6 py-10 flex flex-col items-center text-center">
+                                <div className=" bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6 p-4">
                                     <Bot className="w-10 h-10 text-indigo-600" />
                                 </div>
-                                <h2 className="text-2xl font-semibold text-gray-900 mb-4">ស្វាគមន៍!</h2>
-                                <p className="text-gray-600 mb-8">ខ្ញុំឈ្មោះតារា ជា AI ជំនួយការរៀន។ តើអ្នកចង់សួរអ្វីអំពីអ្វីដែរ?</p>
-                            </div>
-                        </div>
-                    ) : messages.length === 0 && error ? (
-                        // Error screen
-                        <div className="flex flex-col items-center justify-center h-full">
-                            <div className="text-center max-w-2xl">
-                                <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                                    <AlertCircle className="w-10 h-10 text-red-600" />
-                                </div>
-                            </div>
-                        </div>
-                    ) : (
-                        // Messages
-                        <>
-                            {/* History Controls */}
-                            <div className="flex justify-center gap-2 py-4">
-                                {hasMoreHistory && (
-                                    <button
-                                        onClick={loadMoreHistory}
-                                        disabled={isLoadingMore}
-                                        className="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        {isLoadingMore ? (
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin"></div>
-                                                កំពុងទាញយកប្រវត្តិសន្ទនា...
-                                            </div>
-                                        ) : (
-                                            'ទាញយកប្រវត្តិសន្ទនាបន្ថែម'
-                                        )}
-                                    </button>
+                                <p className="text-gray-600 mb-4 font-bold text-lg">
+                                    <span className='text-indigo-600'>តារា AI</span> សូមស្វាគមន៍!
+                                </p>
+                                <p className="text-gray-600 mb-4">
+                                    តើអ្នកចង់សួរអ្វីអំពី អ្វីដែរ?
+                                </p>
+                                {error && (
+                                    <p className="mt-2 text-sm text-red-600">
+                                        {error}
+                                    </p>
                                 )}
                             </div>
-
-                            {messages.map((message) => (
-                                <MessageItem
-                                    key={message.id}
-                                    message={message}
-                                    onCopyMessage={handleCopyMessage}
-                                    copiedMessageId={copiedMessageId}
-                                />
-                            ))}
-
-                            {isLoading && (
-                                <ResponseLoadingState responseType={(pendingResponseType ?? selectedResponseType.id)} />
-                            )}
-
-                            {isStreaming && (
-                                <div className="w-full">
-                                    <div className="relative bg-white border border-gray-200 rounded-3xl p-4 shadow-sm">
-                                        <MarkdownRenderer content={streamingMessage} />
-                                        <div className="flex items-center justify-end mt-2">
-                                            <div className="text-xs text-gray-500">
-                                                <span className="text-purple-600">KOM</span><span className="text-black font-bold">PLEX</span> Beta - <span className="font-medium">តារា AI</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {error && (
-                                <div className="w-full">
-                                    <div className="bg-red-50 border border-red-200 rounded-2xl p-4">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                                            <span className="text-sm text-red-700">{error}</span>
-                                            <button
-                                                onClick={handleTryAgain}
-                                                className="ml-auto text-red-500 hover:text-red-700 transition-colors"
-                                            >
-                                                <RefreshCw className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </>
-                    )}
-                <div ref={messagesEndRef} />
-            </div>
-
-            {/* Scroll to Bottom Button */}
-            {showScrollButton && (
-                <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-50">
-                    <button
-                        onClick={scrollToBottom}
-                        className="bg-indigo-600 text-white p-3 rounded-full shadow-lg hover:bg-indigo-700 transition-colors duration-200 flex items-center gap-2"
-                        title="Scroll to bottom"
-                    >
-                        <ChevronDown className="w-4 h-4" />
-                        <span className="text-sm font-medium">Scroll to bottom</span>
-                    </button>
-                </div>
-            )}
-
-            {/* Fixed Input Area */}
-            <div className='bg-gray-50 fixed h-20 w-full bottom-0 '></div>
-            <div className="fixed bottom-0 left-0 right-0 px-4 py-2">
-                {activeRating ? (
-                    <div className="mb-2">
-                        <AiRating responseId={activeRating.id} scope="general" onComplete={handleRatingComplete} />
+                        </div>
                     </div>
-                ) : (
-                    <div className='lg:px-4 lg:max-w-4xl lg:mx-auto'>
-                        <div className="bg-white max-w-4xl mx-auto shadow-lg border border-gray-200 rounded-3xl p-2 mb-2 transition-all duration-200 space-y-2">
-                            <div className="flex-1  ">
-                                <PromptTextarea
-                                    ref={textareaRef}
-                                    value={inputMessage}
-                                    onChange={(e) => setInputMessage(e.target.value)}
-                                    onKeyPress={handleKeyPress}
-                                    disabled={isInputDisabled}
-                                    placeholder={isInputDisabled ? "កំពុងដំណើរការ..." : "សរសេរសំណួររបស់អ្នក..."}
-                                    className="min-h-[0px] text-base leading-relaxed"
-                                    style={{
-                                        // minHeight: '10px',
-                                        maxHeight: '200px',
-                                        height: 'auto'
-                                    }}
-                                />
-                            </div>
-    
-                            <div className="flex flex-row items-center justify-between">
-                                <ResponseTypeDropdown
-                                    options={responseTypeOptions}
-                                    value={selectedResponseType}
-                                    onChange={setSelectedResponseType}
-                                    disabled={isInputDisabled}
-                                    variant="default"
-                                />
-    
-                                <div className="flex items-center gap-2">
-                                    {!isLoading && !isStreaming ? (
-                                        <button
-                                            onClick={handleSendMessage}
-                                            disabled={!inputMessage.trim() || isInputDisabled}
-                                            className="px-2 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed "
-                                        >
-                                            <Send className="w-4 h-4" />
-                                        </button>
-                                    ) : (
-                                        <button
-                                            onClick={handleStopStreaming}
-                                            className="px-2 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors.duration-200 "
-                                        >
-                                            <Square className="w-4 h-4" />
-                                        </button>
-                                    )}
-                                </div>
+
+                    {/* Input area (no longer fixed, centered with max width) */}
+                    <div className="bg-white max-w-4xl mx-auto shadow-lg border border-gray-200 rounded-3xl p-2 transition-all duration-200 space-y-2">
+                        <div className="flex-1">
+                            <PromptTextarea
+                                ref={textareaRef}
+                                value={inputMessage}
+                                onChange={(e) => setInputMessage(e.target.value)}
+                                onKeyPress={handleKeyPress}
+                                disabled={isLoading}
+                                placeholder={
+                                    isLoading
+                                        ? 'កំពុងដំណើរការ...'
+                                        : 'សរសេរសំណួររបស់អ្នកដំបូងនៅទីនេះ...'
+                                }
+                                className="min-h-[0px] text-base leading-relaxed"
+                                style={{
+                                    maxHeight: '200px',
+                                    height: 'auto',
+                                }}
+                            />
+                        </div>
+
+                        <div className="flex flex-row items-center justify-between">
+                            <ResponseTypeDropdown
+                                options={responseTypeOptions}
+                                value={selectedResponseType}
+                                onChange={setSelectedResponseType}
+                                disabled={isLoading}
+                                variant="default"
+                            />
+
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={handleSendFirstMessage}
+                                    disabled={!inputMessage.trim() || isLoading}
+                                    className="px-3 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    <Send className="w-4 h-4" />
+                                </button>
                             </div>
                         </div>
                     </div>
-                )}
-                {/* Warning Text */}
-                <div className="text-center">
-                    <p className="text-xs text-gray-500"><span className='font-black'>តារា</span> អាចមានកំហុស។ សូមពិនិត្យព័ត៌មានសំខាន់។</p>
                 </div>
             </div>
         </div>
     );
 }
+
