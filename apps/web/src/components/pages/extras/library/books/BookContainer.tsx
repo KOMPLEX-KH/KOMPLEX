@@ -33,16 +33,16 @@ export default function BookContainer({ books = Books, loading = false }) {
   }
 
   return (
-    <div className="flex flex-col gap-10 pt-3">
+    <div className="flex flex-col pt-3">
 
       {/* ===== Recommended Section ===== */}
-      <section className="flex flex-col gap-4 bg-gradient-to-br from-gray-50 to-indigo-50/30 rounded-3xl p-4 border border-indigo-100">
+      <section className="flex flex-col gap-4 rounded-3xl border-none pb-4">
 
         {/* Header */}
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="p-2 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl">
-              <BookOpen className="w-6 h-6 text-white" />
+            <div className="p-2 bg-blue-600 rounded-3xl">
+              <BookOpen className="w-5 h-5 text-white" />
             </div>
             <div>
               <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">ណែនាំ</h2>
@@ -77,13 +77,13 @@ export default function BookContainer({ books = Books, loading = false }) {
 
         return (
           <section key={cat.id}
-            className="flex flex-col gap-4 bg-gradient-to-br from-gray-50 to-indigo-50/30 rounded-3xl p-4 border border-indigo-100"
+            className="flex flex-col gap-4 rounded-3xl border-none"
           >
             {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl">
-                  <BookOpen className="w-6 h-6 text-white" />
+                <div className="p-2 bg-blue-600 rounded-3xl">
+                  <BookOpen className="w-5 h-5 text-white" />
                 </div>
                 <div>
                   <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">{cat.name}</h2>
@@ -93,7 +93,7 @@ export default function BookContainer({ books = Books, loading = false }) {
 
               <button
                 onClick={() => router.push(`?tab=library&category=${cat.id}`)}
-                className="text-indigo-600 bg-indigo-50/80 font-semibold px-4 py-2 rounded-xl hover:bg-indigo-100 transition-colors flex items-center gap-2 group text-sm sm:text-base"
+                className="text-indigo-600 bg-indigo-50/80 font-semibold px-4 py-2 rounded-3xl hover:bg-indigo-100 transition-colors flex items-center gap-2 group text-sm sm:text-base"
               >
                 <span className="hidden sm:inline">មើលទាំងអស់</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

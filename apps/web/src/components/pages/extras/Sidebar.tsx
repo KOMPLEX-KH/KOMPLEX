@@ -11,7 +11,7 @@ const tabs = [
   { label: 'ស្វែងយល់', slug: 'explore' },
   { label: 'គណនាពិន្ទុ', slug: 'calculate' },
   { label: 'បណ្ណាល័យ', slug: 'library' },
-  { label: 'កំណត់ចំណាំ', slug: 'notes' },
+  { label: 'កំណត់ត្រា', slug: 'notes' },
   { label: 'រូបមន្ត', slug: 'formular' },
   { label: 'ប្រតិទិន', slug: 'calendar' },
 ];

@@ -3,10 +3,10 @@ import { User } from "lucide-react";
 
 export default function BookCard({ book, onClick }) {
     return (
-        <div className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+        <div className="bg-white rounded-xl border-gray-200 border-1 overflow-hidden cursor-pointer"
             onClick={()=> onClick && onClick(book.id)}>
 
-            <div className="w-full h-48 bg-gradient-to-br from-blue-100 to-purple-100"></div>
+            <div className="w-full h-48 bg-gray-300"></div>
 
             <div className="p-4 space-y-2">
                 <h3 className="font-bold text-lg">{book.title}</h3>

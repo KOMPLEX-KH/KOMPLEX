@@ -28,7 +28,7 @@ export default function ExtraPage() {
   const [isFading, setIsFading] = useState(false);
 
   // Ref to the scrollable container
-  const mainRef = useRef<HTMLElement>(null);
+  // const mainRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
 
@@ -45,9 +45,9 @@ export default function ExtraPage() {
     }, 100);
 
     // Scroll the scrollable container to top
-    if (mainRef.current) {
-      mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    // if (mainRef.current) {
+    //   mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    // }
 
     return () => clearTimeout(timeout);
   }, [tabIndex, router]);
@@ -59,27 +59,33 @@ export default function ExtraPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className=" bg-gray-50 relative">
       <div className="pt-29 lg:pt-19 max-w-7xl mx-auto h-screen">
-        <div className="flex gap-5 h-full">
-          <Sidebar currentTab={tabIndex} onTabChange={handleTabChange} />
-          <main ref={mainRef}
-            className="flex-1 bg-white rounded-3xl p-5 shadow relative overflow-auto"
-            style={{
-              msOverflowStyle: 'none',
-              scrollbarWidth: 'none',
-            }}
-          >
-            <style jsx>{`main::-webkit-scrollbar { display: none;  }`}</style>
-            <div className={`transition-opacity duration-200 ease-in-out ${
-                isFading ? 'opacity-0' : 'opacity-100'
-              }`}
-            >
-              <ExtraHelper currentTab={Tabs[tabIndex]} />
-            </div>
-          </main>
+  <div className="flex gap-5 h-[calc(100vh-7rem)] lg:h-[calc(100vh-5rem)]">
+    <Sidebar currentTab={tabIndex} onTabChange={handleTabChange} />
+
+    <main className="flex-1 h-full bg-white rounded-3xl p-5  relative">
+      <div
+        className="h-full overflow-auto"
+        style={{
+          msOverflowStyle: 'none',
+          scrollbarWidth: 'none',
+        }}
+      >
+        <style jsx>{`div::-webkit-scrollbar { display: none; }`}</style>
+
+        <div
+          className={`transition-opacity duration-200 ease-in-out ${
+            isFading ? 'opacity-0' : 'opacity-100'
+          }`}
+        >
+          <ExtraHelper currentTab={Tabs[tabIndex]} />
         </div>
       </div>
+    </main>
+  </div>
+</div>
+
     </div>
   );
 }

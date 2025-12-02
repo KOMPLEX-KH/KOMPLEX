@@ -1,41 +1,29 @@
 'use client';
 
-import { Search, BookOpen, ChevronDown, Filter, X } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { Search, Plus } from "lucide-react";
 
+export default function NoteHeader({ searchQuery, setSearchQuery, onAddNote }) {
+  return (
+    <div className="flex items-center gap-3 mb-6">
+      
+      <div className="relative flex-1">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+        <input
+          type="text"
+          value={searchQuery}
+          placeholder="ស្វែងរកកំណត់ត្រា..."
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 outline-none"
+        />
+      </div>
 
-export default function NoteHeader({
-    searchQuery,
-    setSearchQuery,
-    openPanel,
-    setOpenPanel,
-    filterRef,
-}) {
-    
-    return(
-        <>  
-            <div className="flex items-center gap-3 relative">          
-                
-                {/* Search section */}
-                <div className="relative flex-1">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <input
-                    type="text"
-                    placeholder="ស្វែងរកសៀវភៅ..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-gray-500 outline-none"
-                  />
-                </div>
-                
-                {/* filter btn section */}
-                <button ref={filterRef}
-                  onClick={() => setOpenPanel(!openPanel)}
-                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 flex items-center gap-2"
-                >
-                  <Filter className="w-5 h-5" />
-                </button>           
-            </div>    
-        </>
-    )
+      <button
+        onClick={onAddNote}
+        className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow transition-all"
+      >
+        <Plus className="w-5 h-5" />
+      </button>
+
+    </div>
+  );
 }

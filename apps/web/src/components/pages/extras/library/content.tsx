@@ -5,25 +5,30 @@ import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import BookContainer from "./books/BookContainer";
 import { BookContainerSkeleton, ViewAllByCategorySkeleton, BookSelectedSkeleton } from "./utils/BookSkeleton";
-import ExtraHeader from "./utils/ExtraHeader";
+import ExtraHeader from "./utils/LibrayHeader";
 import { categories, lessonsBySubject, Books } from "@/types/library/library";
 
 export default function LibraryContent() {
   const [selectedSubject, setSelectedSubject] = useState("all");
   const [selectedLesson, setSelectedLesson] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [openPanel, setOpenPanel] = useState(false);
-  
 
-  const filterRef = useRef(null);   
+  const [loading, setLoading] = useState(true);
+
+  const [openPanel, setOpenPanel] = useState(false);
+  const [openSubjectDropdown, setOpenSubjectDropdown] = useState(false);
+  const [openLessonDropdown, setOpenLessonDropdown] = useState(false);
+
+  const filterRef = useRef(null);
   const panelRef = useRef(null);
+
   const searchParams = useSearchParams();
   const categoryFromUrl = searchParams.get("category");
   const bookSelectedFromUrl = searchParams.get("book");
 
   const prevCategoryRef = useRef(null);
   const prevBookRef = useRef(null);
+  
   
   useEffect(() => {
     const categoryChanged = prevCategoryRef.current !== categoryFromUrl;
@@ -77,10 +82,14 @@ export default function LibraryContent() {
           setSelectedSubject={setSelectedSubject}
           selectedLesson={selectedLesson}
           setSelectedLesson={setSelectedLesson}
-          openPanel={openPanel}
-          setOpenPanel={setOpenPanel}
+          openSubjectDropdown={openSubjectDropdown}
+          setOpenSubjectDropdown={setOpenSubjectDropdown}
+          openLessonDropdown={openLessonDropdown}
+          setOpenLessonDropdown={setOpenLessonDropdown}
           filterRef={filterRef}
           panelRef={panelRef}
+          openPanel={openPanel}
+          setOpenPanel={setOpenPanel}
           lessons={lessons}
         />
       )}
