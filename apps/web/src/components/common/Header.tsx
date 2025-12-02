@@ -43,7 +43,7 @@ const navLinks = [
     },
     {
         label: 'តារា AI',
-        href: '/ai/chat',
+        href: '/ai',
         icon: Bot,
         style: "bg-indigo-600 text-white no-underline   hover:bg-indigo-500"
     }

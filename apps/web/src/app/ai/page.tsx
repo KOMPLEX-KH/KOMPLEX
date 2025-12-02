@@ -22,6 +22,7 @@ export default function AIWelcomePage() {
     const [selectedResponseType, setSelectedResponseType] = useState<ResponseTypeOption>(
         responseTypeOptions[0]
     );
+    const [isSideBarCollapsed, setIsSideBarCollapsed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -92,10 +93,10 @@ export default function AIWelcomePage() {
 
     return (
         <div className="min-h-screen relative bg-gray-50 pt-16 pb-16">
-            <SideBar />
+            <SideBar onCollapsedChange={setIsSideBarCollapsed} />
 
             {/* Main content area shifted right of the sidebar */}
-            <div className="ml-72 px-4 min-h-[calc(100vh-10rem)] flex items-center">
+            <div className={`${isSideBarCollapsed ? 'lg:ml-4' : 'lg:ml-76'} px-4 min-h-[calc(100vh-10rem)] flex items-center`}>
                 <div className="max-w-4xl mx-auto w-full space-y-2">
                     {/* Centered welcome card */}
                     <div className="flex items-center justify-center">

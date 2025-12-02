@@ -43,7 +43,7 @@ export default function AIChat() {
     const [activeRating, setActiveRating] = useState<{ id: number; scope: 'general' | 'topic' } | null>(
         null,
     );
-
+    const [isSideBarCollapsed, setIsSideBarCollapsed] = useState(false);
     const streamingIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const streamingRafRef = useRef<number | null>(null);
     const streamingCompletionRef = useRef<(() => void) | null>(null);
@@ -520,15 +520,15 @@ export default function AIChat() {
 
     return (
         <div className="min-h-screen relative bg-gray-50 pt-16 pb-4">
-            <SideBar />
+            <SideBar onCollapsedChange={setIsSideBarCollapsed} />
 
             {/* Right panel with sidebar offset */}
-            <div className="ml-72 px-4 min-h-[calc(100vh-4rem)] flex">
-                <div className="max-w-4xl mx-auto w-full flex flex-col">
+            <div className={`${isSideBarCollapsed ? 'lg:ml-4' : 'lg:ml-76'} px-4 min-h-[calc(100vh-4rem)] flex`}>
+                <div className="max-w-5xl mx-auto w-full flex flex-col">
                     {/* Main Chat Area */}
                     <div
                         ref={chatContainerRef}
-                        className="flex-1 overflow-y-auto p-4 space-y-4 w-full scrollbar-hide"
+                        className="flex-1 overflow-y-auto space-y-4 w-full scrollbar-hide pb-32"
                     >
                         {loading || isLoadingHistory ? (
                             <ChatSkeleton />
@@ -560,7 +560,7 @@ export default function AIChat() {
                             // Messages
                             <>
                                 {/* History Controls */}
-                                <div className="flex justify-center gap-2 py-4">
+                                <div className="flex justify-center gap-2 py-4 ">
                                     {hasMoreHistory && (
                                         <button
                                             onClick={loadMoreHistory}
@@ -631,7 +631,8 @@ export default function AIChat() {
                     </div>
 
                     {/* Bottom input & rating area, anchored within right panel */}
-                    <div className="mt-3 pb-4">
+                    <div className={`mt-3 px-4 pb-2 fixed bottom-0 ${isSideBarCollapsed ? 'lg:left-4' : 'lg:left-76'} left-0 right-0  `}>
+                        <div className="absolute bottom-0 left-0 right-0 bg-gray-50 max-w-5xl mx-auto h-36 "></div>
                         {activeRating ? (
                             <div className="mb-2">
                                 <AiRating
@@ -641,8 +642,8 @@ export default function AIChat() {
                                 />
                             </div>
                         ) : (
-                            <div className="max-w-4xl mx-auto">
-                                <div className="bg-white max-w-4xl mx-auto shadow-lg border border-gray-200 rounded-3xl p-2 mb-2 transition-all duration-200 space-y-2">
+                            <div className=" max-w-5xl mx-auto w-full">
+                                <div className="bg-white max-w-5xl mx-auto shadow-lg border border-gray-200 rounded-3xl p-2 mb-2 transition-all duration-200 space-y-2 relative z-10">
                                     <div className="flex-1">
                                         <PromptTextarea
                                             ref={textareaRef}
@@ -695,7 +696,7 @@ export default function AIChat() {
                             </div>
                         )}
                         {/* Warning Text */}
-                        <div className="text-center mt-1">
+                        <div className="text-center mt-1 relative z-10">
                             <p className="text-xs text-gray-500">
                                 <span className="font-black">តារា</span> អាចមានកំហុស។ សូមពិនិត្យព័ត៌មានសំខាន់។
                             </p>
