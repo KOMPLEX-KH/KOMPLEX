@@ -15,6 +15,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useParams } from "next/navigation";
 import type { Params } from "next/dist/server/request/params";
 import type { Grade, Lesson, Subject, Topic } from "@core-types/docs/curriculum";
+import ChatSkeleton from "../ai/ChatSkeleton";
 
 interface AIPopupProps {
     isOpen: boolean;
@@ -22,8 +23,8 @@ interface AIPopupProps {
 }
 
 const responseTypeOptions: readonly ResponseTypeOption[] = [
+    { id: "komplex", name: "KOMPLEX", description: "បង្ហាញជាប្រអប់ទាក់ទាញ" },
     { id: "normal", name: "ធម្មតា", description: "បង្ហាញជា Markdown" },
-    { id: "komplex", name: "KOMPLEX", description: "បង្ហាញជាប្រអប់ទាក់ទាញ" }
 ] as const;
 
 const useMediaQuery = (query: string) => {
@@ -175,7 +176,7 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
         (async () => {
             try {
                 setIsHistoryLoading(true);
-                const history = await meAiService.getAiTopicHistory(topicId, 1, 20);
+                const history = await meAiService.getAiGeneralHistoryBasedOnTopic(topicId, 1, 20);
                 setMessages(convertHistoryToMessages(history.data));
                 setError(null);
             } catch (err) {
@@ -269,14 +270,10 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
             return;
         }
         try {
-            const response = await meAiService.callAiTopicAndWriteToTopicHistory(
-                payload,
-                topicId,
-                selectedResponseType.id
-            );
+            const response: { data: { aiResult: string; id: number; responseType?: AIResponseType } } =
+                await meAiService.callAiTopic(payload, topicId, selectedResponseType.id);
 
-            const resolvedResponseType =
-                response.responseType ?? (response as { format?: AIResponseType }).format ?? "normal";
+            const resolvedResponseType = response.data.responseType ?? "normal";
 
             if (resolvedResponseType === "komplex") {
                 const aiResponse: Message = {
@@ -383,7 +380,13 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                                         <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
                                             <Bot className="w-5 h-5 text-indigo-500" />
                                         </div>
-                                        <p className="text-lg font-semibold text-gray-900">តារា AI - {topicTitle}</p>
+                                        <div className="flex gap-1">
+                                            <div className="flex">
+                                                <span className="text-indigo-600 font-bold">តា</span>
+                                                <span className="text-indigo-500 font-bold">រា</span>
+                                            </div>
+                                            <span className="text-indigo-500 font-bold"> AI 1.0</span> - {topicTitle}
+                                        </div>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         {isDesktop && <button
@@ -404,56 +407,72 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                                 </div>
 
                                 {/* Chat body */}
-                                <div className={`flex-1 overflow-y-auto px-4 py-6 space-y-4 scrollbar-hide ${isPopupMaximized ? "max-w-4xl mx-auto" : ""}`} ref={chatBodyRef}>
-                                    {isHistoryLoading ? (
-                                        <div className="flex items-center justify-center py-10">
-                                            <div className="text-sm text-gray-500">កំពុងផ្ទុកប្រវត្តិ...</div>
-                                        </div>
-                                    ) : messages.length === 0 && error ? (
-                                        <div className="flex items-center justify-center py-10">
-                                            <div className="text-sm text-gray-500">{error}</div>
-                                            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                                                <AlertCircle className="w-10 h-10 text-red-600" />
-                                            </div>
-                                        </div>
-                                    ) : messages.length === 0 && !error ? (
-                                        // Welcome screen
-                                        <div className="flex flex-col items-center justify-center h-full">
-                                            <div className="text-center max-w-2xl">
-                                                <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                                                    <Bot className="w-10 h-10 text-indigo-600" />
+                                <div
+                                    className="flex-1 overflow-y-auto px-4 py-6 scrollbar-hide"
+                                    ref={chatBodyRef}
+                                >
+                                    <div className={`space-y-4 ${isPopupMaximized ? "max-w-4xl mx-auto" : ""}`}>
+                                        {isHistoryLoading ? (
+                                            <ChatSkeleton />
+                                        ) : messages.length === 0 && error ? (
+                                            <div className="flex items-center justify-center py-10">
+                                                <div className="text-sm text-gray-500">{error}</div>
+                                                <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                                    <AlertCircle className="w-10 h-10 text-red-600" />
                                                 </div>
-                                                <h2 className="text-2xl font-semibold text-gray-900 mb-4">ស្វាគមន៍!</h2>
-                                                <p className="text-gray-600 mb-8">ខ្ញុំឈ្មោះតារា ជា AI ជំនួយការរៀន។ តើអ្នកចង់សួរអ្វីអំពី <span className="font-bold text-indigo-600">{topicTitle}</span > ដែរ?</p>
                                             </div>
-                                        </div>
-                                    ) : (
-                                        <>
-                                            {messages.map((message) => (
-                                                <MessageItem
-                                                    key={message.id}
-                                                    message={message}
-                                                    onCopyMessage={handleCopy}
-                                                    copiedMessageId={copiedMessageId}
-                                                />
-                                            ))}
-                                            {isLoading && (
-                                                <ResponseLoadingState
-                                                    responseType={pendingResponseType ?? selectedResponseType.id}
-                                                />
-                                            )}
-                                            {isStreaming && (
-                                                <div className="flex justify-start">
-                                                    <div className="bg-white border border-gray-200 rounded-3xl p-4 shadow-sm w-full">
-                                                        <MarkdownRenderer content={streamingMessage} />
-                                                        <div className="flex justify-end mt-2 text-[10px] text-gray-500 uppercase tracking-wider">
-                                                            <span className="text-purple-600">KOM</span><span className="font-bold text-black">PLEX</span> Beta - <span className="font-medium">តារា AI</span>
+                                        ) : messages.length === 0 && !error ? (
+                                            // Welcome screen
+                                            <div className="flex items-center justify-center">
+                                                <div className="max-w-4xl w-full">
+                                                    <div className=" max-w-4xl mx-auto rounded-3xl px-6 py-10 flex flex-col items-center text-center">
+                                                        <div className=" bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6 p-4">
+                                                            <Bot className="w-10 h-10 text-indigo-600" />
                                                         </div>
+                                                        <p className="text-gray-600 mb-4 font-bold text-lg">
+                                                            <span className='text-indigo-600'>តារា AI</span> សូមស្វាគមន៍!
+                                                        </p>
+                                                        <p className="text-gray-600 mb-4">
+                                                            តើអ្នកចង់សួរអ្វីអំពី <span className="font-bold text-indigo-600">{topicTitle}</span> ដែរ?
+                                                        </p>
+                                                        {error && (
+                                                            <p className="mt-2 text-sm text-red-600">
+                                                                {error}
+                                                            </p>
+                                                        )}
                                                     </div>
                                                 </div>
-                                            )}
-                                        </>
-                                    )}
+                                            </div>
+                                        ) : (
+                                            <>
+                                                {messages.map((message) => (
+                                                    <MessageItem
+                                                        key={message.id}
+                                                        message={message}
+                                                        onCopyMessage={handleCopy}
+                                                        copiedMessageId={copiedMessageId}
+                                                    />
+                                                ))}
+                                                {isLoading && (
+                                                    <ResponseLoadingState
+                                                        responseType={pendingResponseType ?? selectedResponseType.id}
+                                                    />
+                                                )}
+                                                {isStreaming && (
+                                                    <div className="flex justify-start">
+                                                        <div className="bg-white border border-gray-200 rounded-3xl p-4 shadow-sm w-full">
+                                                            <MarkdownRenderer content={streamingMessage} />
+                                                            <div className="flex justify-end mt-2 text-[10px] text-gray-500 uppercase tracking-wider">
+                                                                <span className="text-purple-600">KOM</span>
+                                                                <span className="font-bold text-black">PLEX</span> Beta -{" "}
+                                                                <span className="font-medium">តារា AI</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/* Error */}
@@ -466,11 +485,11 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                                 )}
 
                                 {/* Input */}
-                                <div className={`px-4 lg:px-2 ${isPopupMaximized ? "max-w-4xl mx-auto w-full" : ""}`}>
+                                <div className={`lg:px-0 px-4 ${isPopupMaximized ? "max-w-4xl mx-auto w-full" : ""}`}>
                                     {activeRating ? (
                                         <AiRating responseId={activeRating.id} scope="topic" onComplete={handleRatingComplete} />
                                     ) : (
-                                        <div className='lg:px-2 lg:max-w-4xl lg:mx-auto'>
+                                        <div className={`${isPopupMaximized ? "lg:px-0 px-4 lg:max-w-4xl lg:mx-auto" : "px-0 lg:px-4"}`}>
                                             <div className="bg-white max-w-4xl mx-auto shadow-lg border border-gray-200 rounded-3xl p-2 transition-all duration-200">
                                                 <div className="flex-1  ">
                                                     <PromptTextarea
@@ -488,7 +507,7 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                                                         }}
                                                     />
                                                 </div>
-    
+
                                                 <div className="flex flex-row items-center justify-between">
                                                     <ResponseTypeDropdown
                                                         options={responseTypeOptions}
@@ -497,7 +516,7 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                                                         disabled={isInputDisabled}
                                                         variant="default"
                                                     />
-    
+
                                                     <div className="flex items-center gap-2">
                                                         {!isLoading && !isStreaming ? (
                                                             <button

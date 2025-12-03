@@ -179,7 +179,10 @@ export const createMeAiService = (api: AxiosInstance) => {
       ratingFeedback: string
     ): Promise<void> => {
       try {
-        await api.post(`/me/ai/${id}/rating`, { rating, ratingFeedback });
+        await api.post(`/me/ai/general/rating/${id}`, {
+          rating,
+          ratingFeedback,
+        });
       } catch (error) {
         console.error("Error rating AI response:", error);
         throw new Error("Failed to rate AI response");
@@ -191,7 +194,7 @@ export const createMeAiService = (api: AxiosInstance) => {
       ratingFeedback: string
     ): Promise<void> => {
       try {
-        await api.post(`/me/ai/topics/${id}/rating`, {
+        await api.post(`/me/ai/topics/rating/${id}`, {
           rating,
           ratingFeedback,
         });

@@ -16,11 +16,14 @@ import AiRating from '../../../components/pages/ai/AiRating';
 import SideBar from '../../../components/pages/ai/SideBar';
 
 const responseTypeOptions: readonly ResponseTypeOption[] = [
-    { id: 'normal', name: 'ធម្មតា', description: 'បង្ហាញជាទម្រង់ Markdown' },
     { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ទាក់ទាញ' },
+    { id: 'normal', name: 'ធម្មតា', description: 'បង្ហាញជាទម្រង់ Markdown' },
 ] as const;
 
 const isKomplexType = (responseType?: AIResponseType | null) => responseType === 'komplex';
+
+const NEW_TAB_PROMPT_KEY_PREFIX = 'ai:newTabFirstPrompt:';
+const NEW_TAB_RESPONSE_TYPE_KEY_PREFIX = 'ai:newTabFirstPromptResponseType:';
 
 export default function AIChat() {
     const [messages, setMessages] = useState<Message[]>([]);
@@ -51,6 +54,7 @@ export default function AIChat() {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const debounceRef = useRef<NodeJS.Timeout | null>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
+    const initialLoadDoneRef = useRef(false);
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -140,7 +144,7 @@ export default function AIChat() {
                 setCurrentPage(page);
             } catch (err) {
                 console.error('Error loading AI history:', err);
-                setError('មានបញ្ហាក្នុងការផ្ទុកប្រវត្តិសន្ទនា។ សូមព្យាយាមម្តងទៀត។');
+                setError('មានบញ្ហាក្នុងការផ្ទុកប្រវត្តិសន្ទនា។ សូមព្យាយាមម្តងទៀត។');
             } finally {
                 setIsLoadingHistory(false);
                 setIsLoadingMore(false);
@@ -148,6 +152,109 @@ export default function AIChat() {
         },
         [user, searchParams],
     );
+
+    const runInitialLoad = useCallback(async () => {
+        if (!user) return;
+
+        const tabId = searchParams.get('tabId');
+        const topicId = searchParams.get('topicId');
+
+        // For topic chats or missing tabId, just load history as usual
+        if (!tabId || topicId) {
+            await loadHistory();
+            return;
+        }
+
+        if (typeof window === 'undefined') {
+            await loadHistory();
+            return;
+        }
+
+        const promptKey = `${NEW_TAB_PROMPT_KEY_PREFIX}${tabId}`;
+        const typeKey = `${NEW_TAB_RESPONSE_TYPE_KEY_PREFIX}${tabId}`;
+        const storedPrompt = window.localStorage.getItem(promptKey) || '';
+        const storedType = window.localStorage.getItem(typeKey) as AIResponseType | null;
+
+        if (!storedPrompt.trim()) {
+            await loadHistory();
+            return;
+        }
+
+        // Clear immediately to avoid duplicate sends on refresh
+        try {
+            window.localStorage.removeItem(promptKey);
+            window.localStorage.removeItem(typeKey);
+        } catch (e) {
+            console.error('Failed to clear initial prompt from storage', e);
+        }
+
+        const tabIdNum = Number(tabId);
+        if (Number.isNaN(tabIdNum)) {
+            await loadHistory();
+            return;
+        }
+
+        const effectiveType = (storedType as AIResponseType) ?? (responseTypeOptions[0].id as AIResponseType);
+
+        // Optimistically show the first user message
+        const userMessage: Message = {
+            id: `user-first-${tabId}-${Date.now()}`,
+            content: storedPrompt,
+            sender: 'user',
+            timestamp: new Date(),
+        };
+
+        setMessages([userMessage]);
+        setHasMoreHistory(false);
+        setCurrentPage(1);
+        setIsLoading(true);
+        setIsRequestInProgress(true);
+        setPendingResponseType(effectiveType);
+        setError(null);
+
+        try {
+            const response: { data: { aiResult: string; id: number; responseType?: AIResponseType } } =
+                await meAiService.callAiGeneralAndWriteToHistory(storedPrompt, tabIdNum, {
+                    responseType: effectiveType,
+                });
+
+            setIsLoading(false);
+            setIsRequestInProgress(false);
+
+            const resolvedResponseType = response.data.responseType ?? 'normal';
+
+            if (isKomplexType(resolvedResponseType)) {
+                const aiResponse: Message = {
+                    id: (Date.now() + 1).toString(),
+                    content: response.data.aiResult,
+                    sender: 'ai',
+                    timestamp: new Date(),
+                    responseType: resolvedResponseType,
+                };
+                setMessages((prev) => [...prev, aiResponse]);
+                setPendingResponseType(null);
+                queueRating(response.data.id, 'general');
+            } else {
+                // Use streaming path for normal responses
+                streamText(response.data.aiResult, resolvedResponseType, {
+                    onComplete: () => queueRating(response.data.id, 'general'),
+                });
+            }
+        } catch (err) {
+            console.error('Error sending initial AI message:', err);
+            setIsLoading(false);
+            setIsRequestInProgress(false);
+            setPendingResponseType(null);
+            setError('មានបញ្ហាក្នុងការចាប់ផ្តើមសន្ទនា។ សូមព្យាយាមម្តងទៀត។');
+
+            // Fallback to loading history so the user still sees the chat (likely empty)
+            try {
+                await loadHistory();
+            } catch (e) {
+                console.error('Error loading history after failed initial send', e);
+            }
+        }
+    }, [user, searchParams, loadHistory, queueRating]);
 
     // Cleanup all timeouts and intervals on unmount
     useEffect(() => {
@@ -164,12 +271,13 @@ export default function AIChat() {
         };
     }, []);
 
-    // Load AI history on component mount - only when auth is ready and user exists
+    // Initial load: either replay first prompt for new tab or load history
     useEffect(() => {
-        if (!loading && user) {
-            loadHistory();
+        if (!loading && user && !initialLoadDoneRef.current) {
+            initialLoadDoneRef.current = true;
+            void runInitialLoad();
         }
-    }, [user, loading, loadHistory]);
+    }, [user, loading, runInitialLoad]);
 
     const loadMoreHistory = () => {
         if (hasMoreHistory && !isLoadingMore) {
@@ -236,7 +344,7 @@ export default function AIChat() {
         setError(null); // Clear any previous errors
 
         try {
-            let response;
+            let response: { data: { aiResult: string; id: number; responseType?: AIResponseType } };
             let ratingScope: 'general' | 'topic' = 'general';
 
             if (tabId) {
@@ -264,10 +372,7 @@ export default function AIChat() {
             setIsLoading(false);
             setIsRequestInProgress(false);
 
-            const resolvedResponseType =
-                response.responseType ??
-                (response as { format?: AIResponseType }).format ??
-                'normal';
+            const resolvedResponseType = response.data.responseType ?? 'normal';
 
             if (isKomplexType(resolvedResponseType)) {
                 const aiResponse: Message = {
@@ -318,7 +423,7 @@ export default function AIChat() {
         options?: {
             onComplete?: () => void;
         },
-    ) => {
+    ): void => {
         if (responseType !== 'normal') {
             options?.onComplete?.();
             return;
@@ -634,7 +739,7 @@ export default function AIChat() {
                     <div className={`mt-3 px-4 pb-2 fixed bottom-0 ${isSideBarCollapsed ? 'lg:left-4' : 'lg:left-76'} left-0 right-0  `}>
                         <div className="absolute bottom-0 left-0 right-0 bg-gray-50 max-w-5xl mx-auto h-36 "></div>
                         {activeRating ? (
-                            <div className="mb-2">
+                            <div className=" px-4 relative z-10">
                                 <AiRating
                                     responseId={activeRating.id}
                                     scope={activeRating.scope}

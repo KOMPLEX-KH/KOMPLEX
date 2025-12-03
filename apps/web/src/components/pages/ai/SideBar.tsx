@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, Edit, Menu, X } from 'lucide-react';
 import { AiTab } from '@core-types/content/ai';
 import TabSkeleton from './TabSkeleton';
 import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
 
 type ActiveTab = 'general' | 'topic';
 
@@ -105,19 +106,6 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const handleNewChat = () => {
-        router.push('/ai');
-    };
-
-    const handleSelectTabItem = (id: number) => {
-        if (activeTab === 'general') {
-            router.push(`/ai/chat?tabId=${id}`);
-        } else {
-            router.push(`/ai/chat?topicId=${id}`);
-        }
-        setIsMobileMenuOpen(false);
-    };
-
     const items = activeTab === 'general' ? generalTabs : topicTabs;
     const isLoading = activeTab === 'general' ? isLoadingGeneral : isLoadingTopics;
     const activeTabId = searchParams.get('tabId');
@@ -130,7 +118,7 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                 <div className="hidden lg:flex h-full pointer-events-auto">
                     {isCollapsed ? (
                         // Collapsed: only two circular icon buttons (no background card)
-                        <div className="pl-3 pt-20 pb-6 flex flex-col items-center gap-3">
+                        <div className="pl-6 pt-20 pb-6 flex flex-col items-center gap-3">
                             <button
                                 type="button"
                                 onClick={() => setIsCollapsed(false)}
@@ -139,24 +127,26 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                             >
                                 <ChevronRight className="w-5 h-5" />
                             </button>
-                            <button
-                                type="button"
-                                onClick={handleNewChat}
+                            <Link
+                                href="/ai"
                                 className="w-10 h-10 rounded-full flex items-center justify-center text-indigo-600 hover:text-indigo-800 transition-colors shadow-lg border border-gray-200 bg-white"
                                 aria-label="សន្ទនាថ្មី"
                             >
                                 <Edit className="w-5 h-5" />
-                            </button>
+                            </Link>
                         </div>
                     ) : (
-                        <div className="pl-3 pt-20 pb-6 h-full">
+                        <div className="pl-6 pt-20 pb-6 h-full">
                             <div className="bg-white/95 backdrop-blur-sm shadow-xl border border-indigo-100 rounded-3xl flex flex-col w-72 h-full transition-all duration-200 ease-out overflow-hidden">
                                 {/* Header */}
                                 <div className="flex items-center justify-between px-4 py-3 border-b border-indigo-50">
                                     <div className="flex items-center gap-4">
-                                        <div className="flex flex-col">
-                                            <span className="text-lg font-bold tracking-wide text-indigo-500.uppercase">
-                                                តារា AI <span className="text-gray-500 text-sm">1.0</span>
+                                        <div className="flex ">
+                                            <span className="text-xl font-bold tracking-wide text-indigo-600 uppercase">
+                                                តា
+                                            </span>
+                                            <span className="text-xl font-bold tracking-wide text-indigo-500 uppercase">
+                                                រា  <span className="text-base text-gray-500 "> AI 1.0</span>
                                             </span>
                                         </div>
                                     </div>
@@ -172,14 +162,13 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
 
                                 {/* New chat button */}
                                 <div className="px-4 pt-3 pb-2">
-                                    <button
-                                        type="button"
-                                        onClick={handleNewChat}
+                                    <Link
+                                        href="/ai"
                                         className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 text-white text-sm font-medium py-2.5 shadow-md hover:bg-indigo-700 transition-colors"
                                     >
                                         <Edit className="w-4 h-4" />
-                                        <span>សន្ទនាថ្មី</span>
-                                    </button>
+                                        <span className="text-sm font-medium">សន្ទនាថ្មី</span>
+                                    </Link>
                                 </div>
 
                                 {/* Tabs */}
@@ -189,8 +178,8 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                                             type="button"
                                             onClick={() => setActiveTab('general')}
                                             className={`flex-1 px-4 py-2 text-sm font-semibold rounded-full transition-colors ${activeTab === 'general'
-                                                    ? 'bg-white text-indigo-700 shadow-sm'
-                                                    : 'text-indigo-500 hover:text-indigo-700'
+                                                ? 'bg-white text-indigo-700 shadow-sm'
+                                                : 'text-indigo-500 hover:text-indigo-700'
                                                 }`}
                                         >
                                             ទូទៅ
@@ -199,8 +188,8 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                                             type="button"
                                             onClick={() => setActiveTab('topic')}
                                             className={`flex-1 px-4 py-2 text-sm font-semibold rounded-full transition-colors ${activeTab === 'topic'
-                                                    ? 'bg-white text-indigo-700 shadow-sm'
-                                                    : 'text-indigo-500 hover:text-indigo-700'
+                                                ? 'bg-white text-indigo-700 shadow-sm'
+                                                : 'text-indigo-500 hover:text-indigo-700'
                                                 }`}
                                         >
                                             មេរៀន
@@ -220,17 +209,16 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                                                         ? String(item.id) === activeTabId
                                                         : String(item.id) === activeTopicId;
                                                 return (
-                                                    <button
+                                                    <Link
                                                         key={`${activeTab}-${item.id}`}
-                                                        type="button"
-                                                        onClick={() => handleSelectTabItem(item.id)}
+                                                        href={activeTab === 'general' ? `/ai/chat?tabId=${item.id}` : `/ai/chat?topicId=${item.id}`}
                                                         className={`w-full text-left px-4 py-2.5 rounded-full line-clamp-1 font-medium border transition-colors ${isActiveItem
-                                                                ? 'bg-indigo-50 text-indigo-900 border-indigo-500'
-                                                                : 'bg-transparent text-indigo-900 border-transparent hover:bg-indigo-50 hover:border-indigo-200'
+                                                            ? 'bg-indigo-50 text-indigo-900 border-indigo-500'
+                                                            : 'bg-transparent text-indigo-900 border-transparent hover:bg-indigo-50 hover:border-indigo-200'
                                                             }`}
                                                     >
-                                                        <span className="line-clamp-2">{item.name}</span>
-                                                    </button>
+                                                        <span className="line-clamp-1">{item.name}</span>
+                                                    </Link>
                                                 );
                                             })
                                         )}
@@ -251,20 +239,19 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                 <button
                     type="button"
                     onClick={() => setIsMobileMenuOpen(true)}
-                    className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md border border-gray-200 text-gray-700 hover:text-indigo-600 transition-colors"
+                    className="inline-flex items-center justify-center w-10 h-10  text-gray-700 hover:text-indigo-600 transition-colors"
                     aria-label="បើកបញ្ជីសន្ទនា"
                 >
                     <Menu className="w-5 h-5" />
                 </button>
 
                 {/* Right: new chat button */}
-                <button
-                    type="button"
-                    onClick={handleNewChat}
+                <Link
+                    href="/ai"
                     className="inline-flex items-center justify-center rounded-full bg-indigo-600 text-white text-sm font-medium p-2 shadow-md hover:bg-indigo-700 transition-colors"
                 >
                     <Edit className="w-4 h-4" />
-                </button>
+                </Link>
             </div>
 
             {/* Mobile overlay menu */}
@@ -287,9 +274,12 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                         >
                             {/* Tabs header inside overlay */}
                             <div className="flex items-center justify-between px-4 py-3 border-b border-indigo-50">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-lg font-bold text-indigo-600">
-                                        តារា AI 1.0
+                                <div className="flex ">
+                                    <span className="text-xl font-bold tracking-wide text-indigo-600 uppercase">
+                                        តា
+                                    </span>
+                                    <span className="text-xl font-bold tracking-wide text-indigo-500 uppercase">
+                                        រា  <span className="text-base text-gray-500 "> AI 1.0</span>
                                     </span>
                                 </div>
                                 <button
@@ -309,8 +299,8 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                                         type="button"
                                         onClick={() => setActiveTab('general')}
                                         className={`flex-1 px-3 py-1.5 text-sm font-semibold rounded-full transition-colors ${activeTab === 'general'
-                                                ? 'bg-white text-indigo-700 shadow-sm'
-                                                : 'text-indigo-500 hover:text-indigo-700'
+                                            ? 'bg-white text-indigo-700 shadow-sm'
+                                            : 'text-indigo-500 hover:text-indigo-700'
                                             }`}
                                     >
                                         ទូទៅ
@@ -319,8 +309,8 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                                         type="button"
                                         onClick={() => setActiveTab('topic')}
                                         className={`flex-1 px-3 py-1.5 text-sm font-semibold rounded-full transition-colors ${activeTab === 'topic'
-                                                ? 'bg-white text-indigo-700 shadow-sm'
-                                                : 'text-indigo-500 hover:text-indigo-700'
+                                            ? 'bg-white text-indigo-700 shadow-sm'
+                                            : 'text-indigo-500 hover:text-indigo-700'
                                             }`}
                                     >
                                         មេរៀន
@@ -329,7 +319,7 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                             </div>
 
                             {/* List - full height & scrollable */}
-                            <div className="flex-1 px-2 pb-3 overflow-y-auto scrollbar-hide space-y-1.5 pr-1">
+                            <div className="flex-1 px-4  pb-3 overflow-y-auto scrollbar-hide space-y-1.5 ">
                                 {isLoading ? (
                                     <TabSkeleton />
                                 ) : (
@@ -339,17 +329,18 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                                                 ? String(item.id) === activeTabId
                                                 : String(item.id) === activeTopicId;
                                         return (
-                                            <button
+                                            <Link
                                                 key={`${activeTab}-${item.id}`}
-                                                type="button"
-                                                onClick={() => handleSelectTabItem(item.id)}
-                                                className={`w-full text-left px-3 py-2 rounded-full font-medium border transition-colors ${isActiveItem
-                                                        ? 'bg-indigo-50 text-indigo-900 border-indigo-500'
-                                                        : 'bg-transparent text-indigo-900 border-transparent hover:bg-indigo-50 hover:border-indigo-200'
-                                                    }`}
+                                                href={activeTab === 'general' ? `/ai/chat?tabId=${item.id}` : `/ai/chat?topicId=${item.id}`}
+
                                             >
-                                                <span className="line-clamp-1">{item.name}</span>
-                                            </button>
+                                                <div className={`w-full text-left px-4 py-2.5 rounded-full  transition-colors my-1 ${isActiveItem
+                                                    ? 'border bg-indigo-50 text-indigo-900 border-indigo-500'
+                                                    : 'bg-transparent text-indigo-900 border-transparent hover:bg-indigo-50 hover:border-indigo-200'
+                                                    }`}>
+                                                    <span className="line-clamp-1 text-sm font-medium">{item.name}</span>
+                                                </div>
+                                            </Link>
                                         );
                                     })
                                 )}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useRef, useEffect, useTransition } from 'react';
 import { Bot, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { meAiService } from '@/services/index';
@@ -12,9 +12,12 @@ import ResponseTypeDropdown, {
 import { AIResponseType } from '@/types/content/ai';
 
 const responseTypeOptions: readonly ResponseTypeOption[] = [
+    { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ KOMPLEX' },
     { id: 'normal', name: 'ធម្មតា', description: 'បង្ហាញជាទម្រង់ Markdown' },
-    { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ទាក់ទាញ' },
 ] as const;
+
+const NEW_TAB_PROMPT_KEY_PREFIX = 'ai:newTabFirstPrompt:';
+const NEW_TAB_RESPONSE_TYPE_KEY_PREFIX = 'ai/newTabFirstPromptResponseType:';
 
 export default function AIWelcomePage() {
     const router = useRouter();
@@ -25,6 +28,7 @@ export default function AIWelcomePage() {
     const [isSideBarCollapsed, setIsSideBarCollapsed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isPending, startTransition] = useTransition();
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -55,33 +59,64 @@ export default function AIWelcomePage() {
         };
     }, [inputMessage, debouncedAutoResize]);
 
-    const handleSendFirstMessage = async () => {
-        if (!inputMessage.trim() || isLoading) return;
+    const handleSendFirstMessage = () => {
+        if (!inputMessage.trim() || isLoading || isPending) return;
 
-        setIsLoading(true);
-        setError(null);
+        startTransition(async () => {
+            setIsLoading(true);
+            setError(null);
 
-        try {
-            const response = await meAiService.callAiGeneralFirstTime(inputMessage, {
-                responseType: selectedResponseType.id as AIResponseType,
-            });
+            try {
+                const response = await meAiService.callAiGeneralFirstTime(inputMessage, {
+                    responseType: selectedResponseType.id as AIResponseType,
+                });
 
-            // Backend returns tab metadata on first call
-            const data = response as unknown as { tabId?: number; tabID?: number; tabid?: number };
-            const tabId: number | undefined = data.tabId ?? data.tabID ?? data.tabid;
+                // Backend now returns the new tab metadata without calling AI:
+                // response.data: { id, name, prompt, responseType, ... }
+                const base = (response as {
+                    data?: { id?: number; name?: string; prompt?: string; responseType?: string };
+                }) || {};
+                const payload = (base.data ?? base) as {
+                    id?: number;
+                    name?: string;
+                    prompt?: string;
+                    responseType?: string;
+                };
 
-            if (!tabId) {
-                throw new Error('Missing tabId in response');
+                const tabId: number | undefined = payload.id;
+                const prompt: string | undefined = payload.prompt ?? inputMessage;
+                const respType: string | undefined = payload.responseType ?? selectedResponseType.id;
+
+                if (!tabId) {
+                    throw new Error('Missing tabId in response');
+                }
+
+                // Persist the first prompt & response type so the /ai/chat page
+                // can perform the actual first AI call and make the transition seamless.
+                try {
+                    if (typeof window !== 'undefined') {
+                        window.localStorage.setItem(
+                            `${NEW_TAB_PROMPT_KEY_PREFIX}${tabId}`,
+                            String(prompt ?? ''),
+                        );
+                        window.localStorage.setItem(
+                            `${NEW_TAB_RESPONSE_TYPE_KEY_PREFIX}${tabId}`,
+                            String(respType ?? ''),
+                        );
+                    }
+                } catch (storageErr) {
+                    console.error('Failed to persist first prompt for new tab:', storageErr);
+                }
+
+                // Seamlessly navigate to the new chat page using replace (ChatGPT-style)
+                router.replace(`/ai/chat?tabId=${tabId}`);
+            } catch (e) {
+                console.error('Error starting first AI chat:', e);
+                setError('មានបញ្ហាក្នុងការចាប់ផ្តើមសន្ទនាថ្មី។ សូមព្យាយាមម្តងទៀត។');
+            } finally {
+                setIsLoading(false);
             }
-
-            // Seamlessly navigate to the new tab chat page
-            router.push(`/ai/${tabId}`);
-        } catch (e) {
-            console.error('Error starting first AI chat:', e);
-            setError('មានបញ្ហាក្នុងការចាប់ផ្តើមសន្ទនាថ្មី។ សូមព្យាយាមម្តងទៀត។');
-        } finally {
-            setIsLoading(false);
-        }
+        });
     };
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -128,9 +163,9 @@ export default function AIWelcomePage() {
                                 value={inputMessage}
                                 onChange={(e) => setInputMessage(e.target.value)}
                                 onKeyPress={handleKeyPress}
-                                disabled={isLoading}
+                                disabled={isLoading || isPending}
                                 placeholder={
-                                    isLoading
+                                    isLoading || isPending
                                         ? 'កំពុងដំណើរការ...'
                                         : 'សរសេរសំណួររបស់អ្នកដំបូងនៅទីនេះ...'
                                 }
@@ -154,8 +189,8 @@ export default function AIWelcomePage() {
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={handleSendFirstMessage}
-                                    disabled={!inputMessage.trim() || isLoading}
-                                    className="px-3 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={!inputMessage.trim() || isLoading || isPending}
+                                    className="px-2 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     <Send className="w-4 h-4" />
                                 </button>
