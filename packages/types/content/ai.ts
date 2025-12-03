@@ -32,3 +32,8 @@ export interface Message {
   isFromHistory?: boolean;
   responseType?: AIResponseType;
 }
+
+export interface AiTab {
+  id: number;
+  name: string;
+}

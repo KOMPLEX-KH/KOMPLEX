@@ -75,10 +75,9 @@ export const Logo = ({ isVertical = false, size = "md", isLoading = false, varia
                             e.preventDefault();
                             setIsBetaDialogOpen(true)
                         }}
-                        className={`absolute flex items-center gap-1 ${isVertical ? '-top-4 right-0' : ' top-1 -right-18'} py-1 px-2 text-indigo-500 bg-indigo-500/10 border border-indigo-500 rounded-full hover:bg-indigo-500/20 transition-colors cursor-pointer`}
+                        className={`absolute flex items-center gap-1 ${isVertical ? '-top-4 right-0' : ' top-[4px] -right-14'} py-0.5 px-2 text-indigo-500 bg-indigo-500/10 border border-indigo-500 rounded-full hover:bg-indigo-500/20 transition-colors cursor-pointer`}
                     >
                         <span className="text-xs font-bold">Beta</span>
-                        <Info className="w-4 h-4" />
                     </button>
                 )}
                 <img src={currentVariant.logo} alt="logo" className={currentSize.image} />

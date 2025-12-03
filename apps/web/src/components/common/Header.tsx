@@ -42,7 +42,7 @@ const navLinks = [
         style: "bg-transparent  hover:text-indigo-600 hover:bg-indigo-50/90 "
     },
     {
-        label: 'តារា',
+        label: 'តារា AI',
         href: '/ai',
         icon: Bot,
         style: "bg-indigo-600 text-white no-underline   hover:bg-indigo-500"

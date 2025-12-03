@@ -14,7 +14,7 @@ export default function NotFound() {
             ទំព័រមិនត្រូវបានរកឃើញ
           </h1>
           
-          <div className="bg-indigo-50 rounded-xl p-4 mb-8">
+          <div className="bg-indigo-50 rounded-3xl p-4 mb-8">
             <p className="text-lg text-indigo-900/80">
               សូមអភ័យទោស ទំព័រដែលអ្នកកំពុងស្វែងរកមិនមានទេ។
             </p>
@@ -22,7 +22,7 @@ export default function NotFound() {
 
           <Link
             href="/"
-            className="bg-indigo-600 text-white px-8 py-4 rounded-2xl no-underline font-semibold text-base transition-all duration-300 hover:bg-indigo-700 hover:-translate-y-0.5 inline-flex items-center gap-2"
+            className="bg-indigo-600 text-white px-8 py-4 rounded-full no-underline font-semibold text-base transition-all duration-300 hover:bg-indigo-700 hover:-translate-y-0.5 inline-flex items-center gap-2"
           >
             <Home size={20} />
             ត្រឡប់ទៅទំព័រដើម
