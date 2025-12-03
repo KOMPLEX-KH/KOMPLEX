@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef, useEffect, useTransition } from 'react';
+import React, { Suspense, useState, useCallback, useRef, useEffect, useTransition } from 'react';
 import { Bot, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { meAiService } from '@/services/index';
@@ -10,6 +10,7 @@ import ResponseTypeDropdown, {
     ResponseTypeOption,
 } from '../../components/pages/ai/ResponseTypeDropdown';
 import { AIResponseType } from '@/types/content/ai';
+import { Logo } from '@/components/common/Logo';
 
 const responseTypeOptions: readonly ResponseTypeOption[] = [
     { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ KOMPLEX' },
@@ -19,7 +20,7 @@ const responseTypeOptions: readonly ResponseTypeOption[] = [
 const NEW_TAB_PROMPT_KEY_PREFIX = 'ai:newTabFirstPrompt:';
 const NEW_TAB_RESPONSE_TYPE_KEY_PREFIX = 'ai/newTabFirstPromptResponseType:';
 
-export default function AIWelcomePage() {
+function AIWelcomePageInner() {
     const router = useRouter();
     const [inputMessage, setInputMessage] = useState('');
     const [selectedResponseType, setSelectedResponseType] = useState<ResponseTypeOption>(
@@ -203,3 +204,14 @@ export default function AIWelcomePage() {
     );
 }
 
+export default function AIWelcomePage() {
+    return (
+        <Suspense
+            fallback={
+                <Logo showBeta={false} isVertical={true} isLoading={true} />
+            }
+        >
+            <AIWelcomePageInner />
+        </Suspense>
+    );
+}

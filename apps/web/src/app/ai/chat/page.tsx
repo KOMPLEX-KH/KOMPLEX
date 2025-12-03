@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { Suspense, useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Bot, RefreshCw, Square, ChevronDown, AlertCircle } from 'lucide-react';
 import { meAiService } from '@/services/index';
 import MarkdownRenderer from '@/components/helper/MarkDownRenderer';
@@ -14,6 +14,7 @@ import ResponseTypeDropdown, { ResponseTypeOption } from '../../../components/pa
 import PromptTextarea from '../../../components/pages/ai/PromptTextarea';
 import AiRating from '../../../components/pages/ai/AiRating';
 import SideBar from '../../../components/pages/ai/SideBar';
+import { Logo } from '@/components/common/Logo';
 
 const responseTypeOptions: readonly ResponseTypeOption[] = [
     { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ទាក់ទាញ' },
@@ -25,7 +26,7 @@ const isKomplexType = (responseType?: AIResponseType | null) => responseType ===
 const NEW_TAB_PROMPT_KEY_PREFIX = 'ai:newTabFirstPrompt:';
 const NEW_TAB_RESPONSE_TYPE_KEY_PREFIX = 'ai:newTabFirstPromptResponseType:';
 
-export default function AIChat() {
+function AIChatInner() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputMessage, setInputMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -824,5 +825,17 @@ export default function AIChat() {
                 </div>
             )}
         </div>
+    );
+}
+
+export default function AIChat() {
+    return (
+        <Suspense
+            fallback={
+                <Logo showBeta={false} isVertical={true} isLoading={true} />
+            }
+        >
+            <AIChatInner />
+        </Suspense>
     );
 }
