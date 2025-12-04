@@ -172,7 +172,7 @@ export default function Header() {
                                         <div className='h-0.5  my-2'></div>
                                         {user ? (
                                             <>
-                                                <Link href={"/me/profile"} className="flex items-center gap-3 px-2 py-2 overflow-hidden">
+                                                <Link href={"/me"} className="flex items-center gap-3 px-2 py-2 overflow-hidden">
                                                     {user?.profileImage ? (
                                                         <img
                                                             src={user.profileImage}
@@ -309,7 +309,7 @@ export default function Header() {
                                 >
                                     <HeadlessMenu.Items className="absolute  right-0 mt-3 focus:outline-none w-72 bg-white/95 rounded-3xl shadow-2xl border border-gray-200  z-50 p-4">
                                         {/* User Info Section */}
-                                        <div className="flex items-center gap-3">
+                                        <Link href="/me" className="flex items-center gap-3">
                                             {user.profileImage ? (
                                                 <img
                                                     src={user.profileImage}
@@ -332,7 +332,7 @@ export default function Header() {
                                                     {user.email || ''}
                                                 </p>
                                             </div>
-                                        </div>
+                                        </Link>
 
                                         <div className='h-0.5  my-2'></div>
 

@@ -74,7 +74,7 @@ function MePageContent() {
                 <div className="max-w-6xl mx-auto p-6">
                     {/* Header */}
                     <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">ផ្ទាំងគ្រប់គ្រង</h1>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2">គ្រប់គ្រងមាតិកា</h1>
                         <p className="text-gray-600">គ្រប់គ្រងមាតិកា និងព័ត៌មានផ្ទាល់ខ្លួនរបស់អ្នក</p>
                     </div>
 
@@ -199,9 +199,9 @@ interface ProfileFieldProps {
 function ProfileField({ icon, label, value, badgeClass }: ProfileFieldProps) {
     const iconClasses = badgeClass ?? 'bg-indigo-100 text-indigo-600';
     return (
-        <div className="bg-white rounded-2xl p-4 border border-gray-200 hover:border-indigo-200 transition-colors">
+        <div className="bg-white rounded-3xl p-4 border border-gray-200 hover:border-indigo-200 transition-colors">
             <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-lg ${iconClasses}`}>{icon}</div>
+                <div className={`p-2 rounded-full ${iconClasses}`}>{icon}</div>
                 <div>
                     <div className="text-xs text-gray-500 font-medium">{label}</div>
                     <div className="text-gray-900 font-semibold">{value}</div>
