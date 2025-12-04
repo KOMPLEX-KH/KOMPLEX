@@ -16,7 +16,6 @@ type SideBarProps = {
 };
 
 const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
-    const router = useRouter();
     const searchParams = useSearchParams();
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [activeTab, setActiveTab] = useState<ActiveTab>('general');
@@ -198,8 +197,8 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                                 </div>
 
                                 {/* List */}
-                                <div className="flex-1 px-2 pb-3">
-                                    <div className="h-full overflow-y-auto scrollbar-hide space-y-1.5 pr-1">
+                                <div className="flex-1 px-4 pb-3 overflow-y-auto scrollbar-hide">
+                                    <div className="h-full overflow-y-auto scrollbar-hide space-y-1.5 ">
                                         {isLoading ? (
                                             <TabSkeleton />
                                         ) : (
@@ -212,7 +211,7 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                                                     <Link
                                                         key={`${activeTab}-${item.id}`}
                                                         href={activeTab === 'general' ? `/ai/chat?tabId=${item.id}` : `/ai/chat?topicId=${item.id}`}
-                                                        className={`w-full text-left px-4 py-2.5 rounded-full line-clamp-1 font-medium border transition-colors ${isActiveItem
+                                                        className={`w-full text-left px-4 py-1.5 rounded-full line-clamp-1 font-medium border transition-colors ${isActiveItem
                                                             ? 'bg-indigo-50 text-indigo-900 border-indigo-500'
                                                             : 'bg-transparent text-indigo-900 border-transparent hover:bg-indigo-50 hover:border-indigo-200'
                                                             }`}
@@ -334,9 +333,9 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                                                 href={activeTab === 'general' ? `/ai/chat?tabId=${item.id}` : `/ai/chat?topicId=${item.id}`}
 
                                             >
-                                                <div className={`w-full text-left px-4 py-2.5 rounded-full  transition-colors my-1 ${isActiveItem
+                                                <div className={`w-full text-left px-4 py-1.5 rounded-full  transition-colors my-2  border hover:bg-indigo-50 hover:border-indigo-500 ${isActiveItem
                                                     ? 'border bg-indigo-50 text-indigo-900 border-indigo-500'
-                                                    : 'bg-transparent text-indigo-900 border-transparent hover:bg-indigo-50 hover:border-indigo-200'
+                                                    : 'bg-transparent text-indigo-900 border-transparent '
                                                     }`}>
                                                     <span className="line-clamp-1 text-sm font-medium">{item.name}</span>
                                                 </div>
