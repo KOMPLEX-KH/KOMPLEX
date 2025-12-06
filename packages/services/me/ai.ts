@@ -203,5 +203,40 @@ export const createMeAiService = (api: AxiosInstance) => {
         throw new Error("Failed to rate AI topic response");
       }
     },
+
+    // Delete AI general tab
+    deleteAiGeneralTab: async (tabId: number): Promise<void> => {
+      try {
+        await api.delete(`/me/ai/general/tabs/${tabId}`);
+      } catch (error) {
+        console.error("Error deleting AI general tab:", error);
+        throw new Error("Failed to delete AI general tab");
+      }
+    },
+
+    // Update AI general tab name
+    updateAiGeneralTabName: async (
+      tabId: number,
+      tabName: string
+    ): Promise<void> => {
+      try {
+        await api.put(`/me/ai/general/tabs/${tabId}`, {
+          tabName,
+        });
+      } catch (error) {
+        console.error("Error updating AI general tab name:", error);
+        throw new Error("Failed to update AI general tab name");
+      }
+    },
+
+    // Delete AI topic tab
+    deleteAiTopicTab: async (topicId: number): Promise<void> => {
+      try {
+        await api.delete(`/me/ai/topics/${topicId}`);
+      } catch (error) {
+        console.error("Error deleting AI topic tab:", error);
+        throw new Error("Failed to delete AI topic tab");
+      }
+    },
   };
 };
