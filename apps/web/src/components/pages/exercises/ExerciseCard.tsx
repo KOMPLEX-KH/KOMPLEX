@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react';
 import { Target, Clock } from 'lucide-react';
 import { useAuth } from '@hooks/useAuth';

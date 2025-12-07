@@ -5,7 +5,6 @@ import { Canvas } from '@react-three/fiber';
 import { useGLTF, OrbitControls, Text, Html, useProgress } from '@react-three/drei';
 import { Object3D, Mesh } from 'three';
 import { ThreeDProps } from '@/types/docs/threeD';
-import { ThreeDTextItem, TwoDTextItem } from '@core-types/docs/boxProps';
 import { Logo } from '../common/Logo';
 
 // Error Boundary for catching React rendering errors
@@ -72,6 +71,7 @@ const Model = ({ modelUrl, scale = 0.1, onError }: {
         }
     }, [scene, onError]);
 
+    // @ts-expect-error - primitive is a valid JSX element in react-three/fiber
     return <primitive object={scene} scale={scale} position={[0, 0, 0]} />;
 };
 
@@ -96,7 +96,7 @@ const ModelError: React.FC<{
     error: Error;
     onRetry: () => void;
     modelUrl: string;
-}> = ({ error, onRetry, modelUrl }) => {
+}> = ({ error, onRetry }) => {
     const is404 = error.message.includes('404') || error.message.includes('Not Found');
     const isNetworkError = error.message.includes('Network') || error.message.includes('fetch');
 
@@ -238,7 +238,9 @@ export const ThreeD: React.FC<ThreeDProps> = ({
                         maxDistance={20}
                         target={target}
                     />
+                    {/* @ts-expect-error - ambientLight is a valid JSX element in react-three/fiber */}
                     <ambientLight intensity={0.5} />
+                    {/* @ts-expect-error - directionalLight is a valid JSX element in react-three/fiber */}
                     <directionalLight position={[3, 5, 2]} intensity={1} />
                     <Suspense fallback={null}>
                         {customContent}
@@ -248,6 +250,7 @@ export const ThreeD: React.FC<ThreeDProps> = ({
                 // Render GLB model
                 <ThreeDErrorBoundary onError={handleError}>
                     <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
+                        {/* @ts-expect-error - color is a valid JSX element in react-three/fiber */}
                         <color attach="background" args={[canvasBackgroundColor]} />
 
                         <OrbitControls
@@ -334,7 +337,9 @@ export const ThreeD: React.FC<ThreeDProps> = ({
                             </Html>
                         )}
 
+                        {/* @ts-expect-error - ambientLight is a valid JSX element in react-three/fiber */}
                         <ambientLight intensity={0.5} />
+                        {/* @ts-expect-error - directionalLight is a valid JSX element in react-three/fiber */}
                         <directionalLight position={[3, 5, 2]} intensity={1} />
                     </Canvas>
                 </ThreeDErrorBoundary>

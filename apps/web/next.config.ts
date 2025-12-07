@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
   experimental: {
     // appDir: true,
   },
+  turbopack: {},
 };
 
 export default bundleAnalyzer(nextConfig);
