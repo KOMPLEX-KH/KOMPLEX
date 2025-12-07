@@ -8,10 +8,18 @@ const bundleAnalyzer = withBundleAnalyzer({
 const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "assets.komplex.app",
+        pathname: "/**",
+      },
+    ],
   },
   experimental: {
     // appDir: true,
   },
+  turbopack: {},
 };
 
 export default bundleAnalyzer(nextConfig);

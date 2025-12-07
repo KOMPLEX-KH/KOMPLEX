@@ -53,7 +53,7 @@ export default function ExerciseReportComponent() {
             const data = await meExerciseService.getExercisesWithAttempts(selectedGrade.name);
             const transformedSubjects = transformBackendDataToSubjects(data as unknown as Exercise);
             if (transformedSubjects.length > 0) {
-                setSubjects(transformedSubjects);
+                setSubjects(transformedSubjects as Subject[]);
             } else {
                 setError('មិនមានលំហាត់សម្រាប់ថ្នាក់នេះទេ');
             }

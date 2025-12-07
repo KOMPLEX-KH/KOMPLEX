@@ -1,3 +1,5 @@
+'use client';
+
 import Link from "next/link";
 import { Home, AlertCircle } from "lucide-react";
 
@@ -9,11 +11,11 @@ export default function NotFound() {
           <div className="w-24 h-24 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-8">
             <AlertCircle size={48} className="text-white" />
           </div>
-          
+
           <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
             ទំព័រមិនត្រូវបានរកឃើញ
           </h1>
-          
+
           <div className="bg-indigo-50 rounded-3xl p-4 mb-8">
             <p className="text-lg text-indigo-900/80">
               សូមអភ័យទោស ទំព័រដែលអ្នកកំពុងស្វែងរកមិនមានទេ។
