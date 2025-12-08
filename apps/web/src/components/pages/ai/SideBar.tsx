@@ -6,7 +6,6 @@ import { meAiService } from '@/services/index';
 import { ChevronLeft, ChevronRight, Edit, Menu, X, MoreVertical, Check, Trash2 } from 'lucide-react';
 import { AiTab } from '@core-types/content/ai';
 import TabSkeleton from './TabSkeleton';
-import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
 import { Transition } from '@headlessui/react';
 import DeleteConfirm from '@/components/common/DeleteConfirm';
@@ -219,6 +218,9 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                     router.push('/ai');
                 }
             }
+            // Close any open menus/overlays after deletion
+            setOpenMenuId(null);
+            setIsMobileMenuOpen(false);
         } catch (error) {
             console.error('Failed to delete tab:', error);
             // Optionally show error toast
@@ -409,7 +411,7 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                                     e.stopPropagation();
                                     setOpenMenuId(openMenuId === item.id ? null : item.id);
                                 }}
-                                className={`p-1 text-gray-500 hover:text-indigo-600 transition-colors focus:outline-none ${isHovered || openMenuId === item.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+                                className={`p-1 text-gray-500 hover:text-indigo-600 transition-colors focus:outline-none ${isHovered || openMenuId === item.id ? 'opacity-100' : 'opacity-100 lg:opacity-0 lg:group-hover:opacity-100'}`}
                                 aria-label="ជម្រើស"
                             >
                                 <MoreVertical className="w-4 h-4" />
@@ -583,83 +585,74 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
             </div>
 
             {/* Mobile overlay menu */}
-            <AnimatePresence>
-                {isMobileMenuOpen && (
-                    <motion.div
-                        className="fixed inset-0 z-40 lg:hidden bg-black/10 backdrop-blur-sm"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setIsMobileMenuOpen(false)}
+            {isMobileMenuOpen && (
+                <div
+                    className="fixed inset-0 z-40 lg:hidden bg-black/10 backdrop-blur-sm"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                >
+                    <div
+                        className="absolute top-16 left-3 right-12 max-w-xs bg-white/95 backdrop-blur-sm shadow-xl border border-indigo-100 rounded-3xl flex flex-col overflow-hidden h-[calc(100vh-5rem)]"
+                        onClick={(e) => e.stopPropagation()}
                     >
-                        <motion.div
-                            className="absolute top-16 left-3 right-12 max-w-xs bg-white/95 backdrop-blur-sm shadow-xl border border-indigo-100 rounded-3xl flex flex-col overflow-hidden h-[calc(100vh-5rem)]"
-                            initial={{ x: -260, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            exit={{ x: -260, opacity: 0 }}
-                            transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            {/* Tabs header inside overlay */}
-                            <div className="flex items-center justify-between px-4 py-3 border-b border-indigo-50">
-                                <div className="flex ">
-                                    <span className="text-xl font-bold tracking-wide text-indigo-600 uppercase">
-                                        តា
-                                    </span>
-                                    <span className="text-xl font-bold tracking-wide text-indigo-500 uppercase">
-                                        រា  <span className="text-base text-gray-500 "> AI 1.0</span>
-                                    </span>
-                                </div>
+                        {/* Tabs header inside overlay */}
+                        <div className="flex items-center justify-between px-4 py-3 border-b border-indigo-50">
+                            <div className="flex ">
+                                <span className="text-xl font-bold tracking-wide text-indigo-600 uppercase">
+                                    តា
+                                </span>
+                                <span className="text-xl font-bold tracking-wide text-indigo-500 uppercase">
+                                    រា  <span className="text-base text-gray-500 "> AI 1.0</span>
+                                </span>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-gray-200 bg-white text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors"
+                                aria-label="បិទបញ្ជីសន្ទនា"
+                            >
+                                <X className="w-3 h-3" />
+                            </button>
+                        </div>
+
+                        {/* Tabs switcher */}
+                        <div className="px-3 pt-2 pb-2">
+                            <div className="flex p-1 rounded-full bg-indigo-50">
                                 <button
                                     type="button"
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-gray-200 bg-white text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors"
-                                    aria-label="បិទបញ្ជីសន្ទនា"
+                                    onClick={() => setActiveTab('general')}
+                                    className={`flex-1 px-3 py-1.5 text-sm font-semibold rounded-full transition-colors ${activeTab === 'general'
+                                        ? 'bg-white text-indigo-700 shadow-sm'
+                                        : 'text-indigo-500 hover:text-indigo-700'
+                                        }`}
                                 >
-                                    <X className="w-3 h-3" />
+                                    ទូទៅ
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setActiveTab('topic')}
+                                    className={`flex-1 px-3 py-1.5 text-sm font-semibold rounded-full transition-colors ${activeTab === 'topic'
+                                        ? 'bg-white text-indigo-700 shadow-sm'
+                                        : 'text-indigo-500 hover:text-indigo-700'
+                                        }`}
+                                >
+                                    មេរៀន
                                 </button>
                             </div>
+                        </div>
 
-                            {/* Tabs switcher */}
-                            <div className="px-3 pt-2 pb-2">
-                                <div className="flex p-1 rounded-full bg-indigo-50">
-                                    <button
-                                        type="button"
-                                        onClick={() => setActiveTab('general')}
-                                        className={`flex-1 px-3 py-1.5 text-sm font-semibold rounded-full transition-colors ${activeTab === 'general'
-                                            ? 'bg-white text-indigo-700 shadow-sm'
-                                            : 'text-indigo-500 hover:text-indigo-700'
-                                            }`}
-                                    >
-                                        ទូទៅ
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setActiveTab('topic')}
-                                        className={`flex-1 px-3 py-1.5 text-sm font-semibold rounded-full transition-colors ${activeTab === 'topic'
-                                            ? 'bg-white text-indigo-700 shadow-sm'
-                                            : 'text-indigo-500 hover:text-indigo-700'
-                                            }`}
-                                    >
-                                        មេរៀន
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* List - full height & scrollable */}
-                            <div className="flex-1 px-4 pb-3 overflow-y-auto scrollbar-hide space-y-1.5 ">
-                                {isLoading ? (
-                                    <TabSkeleton />
-                                ) : (
-                                    items.map((item) => (
-                                        <TabItemMobile key={`${activeTab}-${item.id}`} item={item} />
-                                    ))
-                                )}
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                        {/* List - full height & scrollable */}
+                        <div className="flex-1 px-4 pb-3 overflow-y-auto scrollbar-hide space-y-1.5 ">
+                            {isLoading ? (
+                                <TabSkeleton />
+                            ) : (
+                                items.map((item) => (
+                                    <TabItemMobile key={`${activeTab}-${item.id}`} item={item} />
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Delete Confirmation Dialog */}
             <DeleteConfirm

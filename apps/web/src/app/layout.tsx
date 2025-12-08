@@ -2,15 +2,16 @@
 
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/common/Header";
+import ModalRoot from "@/components/common/ModalRoot";
 import Script from "next/script";
-import { Suspense, useEffect, useState } from "react";
-import dynamic from "next/dynamic";
+import { AuthProvider } from "@hooks/useAuth";
+import { Suspense, useEffect } from "react";
 import { feedCurriculumsService } from "@/services";
 import "katex/dist/katex.min.css";
 import { GA_MEASUREMENT_ID } from "@/configs/googleAnalytics";
 import AnalyticsListener from "./analytics-listener";
 import { metadataConfig } from "@/configs/metadata";
-import { AuthContext } from "@hooks/useAuth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,57 +29,13 @@ const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
 });
 
-// Fallback provider for SSR/static generation - uses the same context from useAuth
-const FallbackAuthProvider = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <AuthContext.Provider
-      value={{
-        user: null,
-        loading: true,
-        isLoginOpen: false,
-        openLoginModal: () => { },
-        closeLoginModal: () => { },
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-// Dynamically import AuthProvider to avoid SSR issues with usePathname
-const ClientAuthProvider = dynamic(
-  () => import("@hooks/useAuth").then((mod) => ({ default: mod.AuthProvider })),
-  {
-    ssr: false,
-    loading: () => null, // Don't show loading state during SSR
-  }
-);
-
-// Dynamically import Header to avoid SSR issues with usePathname in AuthProvider
-const ClientHeader = dynamic(() => import("@/components/common/Header"), {
-  ssr: false,
-  loading: () => <div className="h-16" />,
-});
-
-// Dynamically import ModalRoot to avoid SSR issues with useAuth
-const ClientModalRoot = dynamic(() => import("@/components/common/ModalRoot"), {
-  ssr: false,
-});
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
     const stored = localStorage.getItem("curriculum");
     if (stored) {
       return;
@@ -234,20 +191,11 @@ export default function RootLayout({
           {`eruda.init();`}
         </Script> */}
 
-        {!mounted ? (
-          <FallbackAuthProvider>
-            <div className="h-16" />
-            {children}
-          </FallbackAuthProvider>
-        ) : (
-          <ClientAuthProvider>
-            <Suspense fallback={<div className="h-16" />}>
-              <ClientHeader />
-            </Suspense>
-            {children}
-            <ClientModalRoot />
-          </ClientAuthProvider>
-        )}
+        <AuthProvider>
+          <Header />
+          {children}
+          <ModalRoot />
+        </AuthProvider>
       </body>
     </html>
   );
