@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Send, Bot, RefreshCw, Square, ChevronDown, AlertCircle } from 'lucide-react';
 import { meAiService } from '@/services/index';
 import MarkdownRenderer from '@/components/helper/MarkDownRenderer';
@@ -14,7 +14,6 @@ import ResponseTypeDropdown, { ResponseTypeOption } from '../../../components/pa
 import PromptTextarea from '../../../components/pages/ai/PromptTextarea';
 import AiRating from '../../../components/pages/ai/AiRating';
 import SideBar from '../../../components/pages/ai/SideBar';
-import { Logo } from '@/components/common/Logo';
 
 const responseTypeOptions: readonly ResponseTypeOption[] = [
     { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ទាក់ទាញ' },
@@ -26,7 +25,7 @@ const isKomplexType = (responseType?: AIResponseType | null) => responseType ===
 const NEW_TAB_PROMPT_KEY_PREFIX = 'ai:newTabFirstPrompt:';
 const NEW_TAB_RESPONSE_TYPE_KEY_PREFIX = 'ai:newTabFirstPromptResponseType:';
 
-function AIChatInner() {
+export default function AIChat() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputMessage, setInputMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -56,6 +55,7 @@ function AIChatInner() {
     const debounceRef = useRef<NodeJS.Timeout | null>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const initialLoadDoneRef = useRef(false);
+    const lastContextKeyRef = useRef<string | null>(null);
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -273,12 +273,24 @@ function AIChatInner() {
     }, []);
 
     // Initial load: either replay first prompt for new tab or load history
+    const contextKey = useMemo(
+        () => `${searchParams.get('tabId') ?? ''}|${searchParams.get('topicId') ?? ''}`,
+        [searchParams],
+    );
+
+    useEffect(() => {
+        if (contextKey !== lastContextKeyRef.current) {
+            lastContextKeyRef.current = contextKey;
+            initialLoadDoneRef.current = false;
+        }
+    }, [contextKey]);
+
     useEffect(() => {
         if (!loading && user && !initialLoadDoneRef.current) {
             initialLoadDoneRef.current = true;
             void runInitialLoad();
         }
-    }, [user, loading, runInitialLoad]);
+    }, [user, loading, runInitialLoad, contextKey]);
 
     const loadMoreHistory = () => {
         if (hasMoreHistory && !isLoadingMore) {
@@ -813,7 +825,7 @@ function AIChatInner() {
 
             {/* Scroll to Bottom Button */}
             {showScrollButton && (
-                <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-50">
+                <div className="fixed bottom-40 left-1/2 transform -translate-x-1/2 z-50">
                     <button
                         onClick={scrollToBottom}
                         className="bg-indigo-600 text-white p-3 rounded-full shadow-lg hover:bg-indigo-700 transition-colors duration-200 flex items-center gap-2"
@@ -825,17 +837,5 @@ function AIChatInner() {
                 </div>
             )}
         </div>
-    );
-}
-
-export default function AIChat() {
-    return (
-        <Suspense
-            fallback={
-                <Logo showBeta={false} isVertical={true} isLoading={true} />
-            }
-        >
-            <AIChatInner />
-        </Suspense>
     );
 }
