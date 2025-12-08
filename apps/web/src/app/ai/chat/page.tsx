@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, Suspense } from 'react';
 import { Send, Bot, RefreshCw, Square, ChevronDown, AlertCircle } from 'lucide-react';
 import { meAiService } from '@/services/index';
 import MarkdownRenderer from '@/components/helper/MarkDownRenderer';
@@ -25,7 +25,7 @@ const isKomplexType = (responseType?: AIResponseType | null) => responseType ===
 const NEW_TAB_PROMPT_KEY_PREFIX = 'ai:newTabFirstPrompt:';
 const NEW_TAB_RESPONSE_TYPE_KEY_PREFIX = 'ai:newTabFirstPromptResponseType:';
 
-export default function AIChat() {
+function AIChatInner() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputMessage, setInputMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -638,7 +638,9 @@ export default function AIChat() {
 
     return (
         <div className="min-h-screen relative bg-gray-50 pt-16 pb-4">
-            <SideBar onCollapsedChange={setIsSideBarCollapsed} />
+            <Suspense fallback={null}>
+                <SideBar onCollapsedChange={setIsSideBarCollapsed} />
+            </Suspense>
 
             {/* Right panel with sidebar offset */}
             <div className={`${isSideBarCollapsed ? 'lg:ml-4' : 'lg:ml-76'} px-4 min-h-[calc(100vh-4rem)] flex`}>
@@ -837,5 +839,13 @@ export default function AIChat() {
                 </div>
             )}
         </div>
+    );
+}
+
+export default function AIChat() {
+    return (
+        <Suspense fallback={null}>
+            <AIChatInner />
+        </Suspense>
     );
 }
