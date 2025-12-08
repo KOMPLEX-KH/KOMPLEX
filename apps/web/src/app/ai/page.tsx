@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef, useEffect, useTransition } from 'react';
+import React, { useState, useCallback, useRef, useEffect, useTransition, Suspense } from 'react';
 import { Bot, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { meAiService } from '@/services/index';
@@ -19,7 +19,7 @@ const responseTypeOptions: readonly ResponseTypeOption[] = [
 const NEW_TAB_PROMPT_KEY_PREFIX = 'ai:newTabFirstPrompt:';
 const NEW_TAB_RESPONSE_TYPE_KEY_PREFIX = 'ai/newTabFirstPromptResponseType:';
 
-export default function AIWelcomePage() {
+function AIWelcomePageInner() {
     const router = useRouter();
     const [inputMessage, setInputMessage] = useState('');
     const [selectedResponseType, setSelectedResponseType] = useState<ResponseTypeOption>(
@@ -128,7 +128,9 @@ export default function AIWelcomePage() {
 
     return (
         <div className="min-h-screen relative bg-gray-50 pt-16 pb-16">
-            <SideBar onCollapsedChange={setIsSideBarCollapsed} />
+            <Suspense fallback={null}>
+                <SideBar onCollapsedChange={setIsSideBarCollapsed} />
+            </Suspense>
 
             {/* Main content area shifted right of the sidebar */}
             <div className={`${isSideBarCollapsed ? 'lg:ml-4' : 'lg:ml-76'} px-4 min-h-[calc(100vh-10rem)] flex items-center`}>
@@ -200,5 +202,13 @@ export default function AIWelcomePage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function AIWelcomePage() {
+    return (
+        <Suspense fallback={null}>
+            <AIWelcomePageInner />
+        </Suspense>
     );
 }
