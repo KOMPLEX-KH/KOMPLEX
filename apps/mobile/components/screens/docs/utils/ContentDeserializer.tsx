@@ -862,10 +862,42 @@ function deserializeElementValue(
  * Deserialize JSON string to TopicContent_V3[] with React Native elements
  */
 export function deserializeTopicContentV3(jsonString: string): TopicContent_V3[] {
-    const data = JSON.parse(jsonString) as {
-        type: TopicContent_V3["type"];
-        props: Record<string, unknown>;
-    }[];
+    if (!jsonString) return [];
+
+    let parsed: unknown;
+    try {
+        parsed = JSON.parse(jsonString);
+    } catch {
+        return [];
+    }
+
+    // Accept common container shapes and stringified arrays
+    const tryParseArray = (val: unknown): any[] | null => {
+        if (Array.isArray(val)) return val;
+        if (typeof val === "string") {
+            try {
+                const parsedVal = JSON.parse(val);
+                return Array.isArray(parsedVal) ? parsedVal : null;
+            } catch {
+                return null;
+            }
+        }
+        return null;
+    };
+
+    const candidates: unknown[] = [
+        parsed,
+        (parsed as any)?.data,
+        (parsed as any)?.content,
+        (parsed as any)?.items,
+        (parsed as any)?.component,
+        (parsed as any)?.data?.component,
+        (parsed as any)?.data?.content,
+    ];
+
+    const data = candidates.map(tryParseArray).find((arr) => Array.isArray(arr)) || null;
+
+    if (!Array.isArray(data)) return [];
 
     const reviveMixed = (node: unknown): unknown => {
         if (node == null) return node;
@@ -886,12 +918,14 @@ export function deserializeTopicContentV3(jsonString: string): TopicContent_V3[]
         return node;
     };
 
-    return data.map((entry) => {
-        const { type, props } = entry;
-        const restoredProps: Record<string, unknown> = {};
-        for (const [k, v] of Object.entries(props || {})) {
-            restoredProps[k] = reviveMixed(v);
-        }
-        return { type, ...(restoredProps as object) } as TopicContent_V3;
-    });
+    return (data as { type?: TopicContent_V3["type"]; props?: Record<string, unknown> }[])
+        .filter((entry) => entry && typeof entry === "object" && "type" in entry)
+        .map((entry) => {
+            const { type, props } = entry as { type: TopicContent_V3["type"]; props: Record<string, unknown> };
+            const restoredProps: Record<string, unknown> = {};
+            for (const [k, v] of Object.entries(props || {})) {
+                restoredProps[k] = reviveMixed(v);
+            }
+            return { type, ...(restoredProps as object) } as TopicContent_V3;
+        });
 }
