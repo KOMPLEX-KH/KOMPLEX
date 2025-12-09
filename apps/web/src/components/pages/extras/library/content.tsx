@@ -2,16 +2,20 @@
 
 import { Search, BookOpen, ChevronDown, Filter, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import BookContainer from "./books/BookContainer";
-import { BookContainerSkeleton, ViewAllByCategorySkeleton, BookSelectedSkeleton } from "./utils/BookSkeleton";
+import {ViewAllByCategorySkeleton, BookSelectedSkeleton } from "./utils/BookSkeleton";
 import ExtraHeader from "./utils/LibrayHeader";
-import { categories, lessonsBySubject, Books } from "@/types/library/library";
+import { feedLibraryService } from "@/services";
+import type { Subject, Book } from "@core-types/content/library";
 
 export default function LibraryContent() {
+  const router = useRouter();
   const [selectedSubject, setSelectedSubject] = useState("all");
   const [selectedLesson, setSelectedLesson] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [books, setBooks] = useState<Book[]>([]);
 
   const [loading, setLoading] = useState(true);
 
@@ -29,6 +33,22 @@ export default function LibraryContent() {
   const prevCategoryRef = useRef(null);
   const prevBookRef = useRef(null);
   
+  // Fetch subjects and books on mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [subjectsData, booksData] = await Promise.all([
+          feedLibraryService.getAllSubjects(),
+          feedLibraryService.getAllBooks(),
+        ]);
+        setSubjects(subjectsData);
+        setBooks(booksData.books);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
   
   useEffect(() => {
     const categoryChanged = prevCategoryRef.current !== categoryFromUrl;
@@ -39,7 +59,7 @@ export default function LibraryContent() {
 
     if ((categoryChanged && categoryFromUrl) || (bookChanged && bookSelectedFromUrl)) {
       setLoading(true);
-      const timer = setTimeout(() => setLoading(false), 1500);
+      const timer = setTimeout(() => setLoading(false), 2500);
       return () => clearTimeout(timer);
     } else {
       // When navigating back to base (no category/book), disable loading immediately
@@ -64,11 +84,13 @@ export default function LibraryContent() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // lesson list (for now, you can add lesson fetching later if needed)
+  const lessons = [{ id: "all", name: "គ្រប់មេរៀន" }];
 
-  // lesson list
-  const lessons = selectedSubject === "all" 
-      ? [{ id: "all", name: "គ្រប់មេរៀន" }]
-      : [{ id: "all", name: "គ្រប់មេរៀន" }, ...(lessonsBySubject[selectedSubject] || [])];
+  const handleBookClick = (bookId: string) => {
+    router.push(`?tab=library&book=${bookId}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <div className="relative">
@@ -91,6 +113,9 @@ export default function LibraryContent() {
           openPanel={openPanel}
           setOpenPanel={setOpenPanel}
           lessons={lessons}
+          subjects={subjects}
+          books={books}
+          onBookClick={handleBookClick}
         />
       )}
       
@@ -101,7 +126,7 @@ export default function LibraryContent() {
           ) : bookSelectedFromUrl ? (
             <BookSelectedSkeleton />
           ) : (
-            <BookContainerSkeleton />
+            null
           )
         ) : (
           <BookContainer />

@@ -2,30 +2,55 @@
 
 import { Search, BookOpen, ChevronDown, Filter, X, Check } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import { categories } from "@/types/library/library";
+import type { Subject, Book } from "@core-types/content/library";
+import SearchDropdown from "./SearchDropdown";
 
-export default function ExtraHeader(
-  {
-    searchQuery,
-    setSearchQuery,
-    selectedSubject,
-    setSelectedSubject,
-    selectedLesson,
-    setSelectedLesson,
-    openSubjectDropdown,
-    setOpenSubjectDropdown,
-    openLessonDropdown,
-    setOpenLessonDropdown,
-    filterRef,
-    panelRef,
-    openPanel,
-    setOpenPanel,
-    lessons,
-  }
-) {
+interface ExtraHeaderProps {
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  selectedSubject: string;
+  setSelectedSubject: (subject: string) => void;
+  selectedLesson: string;
+  setSelectedLesson: (lesson: string) => void;
+  openSubjectDropdown: boolean;
+  setOpenSubjectDropdown: (open: boolean) => void;
+  openLessonDropdown: boolean;
+  setOpenLessonDropdown: (open: boolean) => void;
+  filterRef: React.RefObject<HTMLButtonElement>;
+  panelRef: React.RefObject<HTMLDivElement>;
+  openPanel: boolean;
+  setOpenPanel: (open: boolean) => void;
+  lessons: { id: string; name: string }[];
+  subjects: Subject[];
+  books: Book[];
+  onBookClick: (bookId: string) => void;
+}
+
+export default function ExtraHeader({
+  searchQuery,
+  setSearchQuery,
+  selectedSubject,
+  setSelectedSubject,
+  selectedLesson,
+  setSelectedLesson,
+  openSubjectDropdown,
+  setOpenSubjectDropdown,
+  openLessonDropdown,
+  setOpenLessonDropdown,
+  filterRef,
+  panelRef,
+  openPanel,
+  setOpenPanel,
+  lessons,
+  subjects,
+  books,
+  onBookClick,
+}: ExtraHeaderProps) {
 
   const subjectDropdownRef = useRef(null);
   const lessonDropdownRef = useRef(null);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -39,6 +64,9 @@ export default function ExtraHeader(
           filterRef.current && !filterRef.current.contains(event.target)) {
         setOpenPanel(false);
       }
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsSearchFocused(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -47,17 +75,18 @@ export default function ExtraHeader(
 
   return (
     <>  
-      <div className="flex items-center gap-3 relative">          
+      <div className="flex items-center gap-3 relative" ref={searchRef}>          
         
         {/* Search section */}
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
           <input
             type="text"
             placeholder="ស្វែងរកសៀវភៅ..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-3xl focus:border-gray-500 outline-none"
+            onFocus={() => setIsSearchFocused(true)}
+            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-3xl outline-none transition-colors"
           />
         </div>
 
@@ -68,6 +97,17 @@ export default function ExtraHeader(
         >
           <Filter className="w-5 h-5" />
         </button>
+
+        {/* Search Dropdown - Full Width */}
+        <SearchDropdown
+          isOpen={isSearchFocused}
+          searchQuery={searchQuery}
+          books={books}
+          onBookClick={(bookId) => {
+            onBookClick(bookId);
+            setIsSearchFocused(false);
+          }}
+        />
 
         {openPanel && (
           <div ref={panelRef}
@@ -87,7 +127,7 @@ export default function ExtraHeader(
                   onClick={() => setOpenSubjectDropdown(!openSubjectDropdown)}
                   className="w-full appearance-none bg-white border-1 border-gray-200 focus:ring-blue-200 py-3 px-4 pr-10 rounded-3xl cursor-pointer transition-all duration-200 text-gray-500 font-medium outline-none flex items-center justify-between"
                 >
-                  <span>{categories.find(s => s.id === selectedSubject)?.name}</span>
+                  <span>{subjects.find(s => s.id === selectedSubject)?.name || "គ្រប់ប្រភេទ"}</span>
                   <div className="absolute right-4">
                     <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openSubjectDropdown ? 'rotate-180' : ''}`} />
                   </div>
@@ -97,29 +137,41 @@ export default function ExtraHeader(
                 {openSubjectDropdown && (
                   <div className="absolute top-full mt-1 w-full bg-white rounded-xl shadow-xl border border-gray-200 z-50 overflow-hidden">
                     <div className="max-h-48 overflow-y-auto">
-                      {categories.map((s) => {
-                        const isSelected = selectedSubject === s.id;
-                        return (
-                          <button
-                            key={s.id}
-                            onClick={() => {
-                              setSelectedSubject(s.id);
-                              setSelectedLesson("all");
-                              setOpenSubjectDropdown(false);
-                            }}
-                            className={`w-full text-left px-4 py-2.5 transition-all duration-150 text-sm font-medium ${
-                              isSelected
-                                ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600'
-                                : 'hover:bg-gray-50 border-l-4 border-transparent text-gray-700'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between">
-                              <span>{s.name}</span>
-                              {isSelected && <Check className="w-4 h-4" />}
-                            </div>
-                          </button>
-                        );
-                      })}
+                      {subjects.length > 0 ? (
+                        subjects.map((s) => {
+                          const isSelected = selectedSubject === s.id;
+                          return (
+                            <button
+                              key={s.id}
+                              onClick={() => {
+                                setSelectedSubject(s.id);
+                                setSelectedLesson("all");
+                                setOpenSubjectDropdown(false);
+                              }}
+                              className={`w-full text-left px-4 py-2.5 transition-all duration-150 text-sm font-medium ${
+                                isSelected
+                                  ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600'
+                                  : 'hover:bg-gray-50 border-l-4 border-transparent text-gray-700'
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <span>{s.name}</span>
+                                {isSelected && <Check className="w-4 h-4" />}
+                              </div>
+                            </button>
+                          );
+                        })
+                      ) : (
+                        <button
+                          onClick={() => setOpenSubjectDropdown(false)}
+                          className="w-full text-left px-4 py-2.5 transition-all duration-150 text-sm font-medium bg-blue-50 text-blue-600 border-l-4 border-blue-600"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span>គ្រប់ប្រភេទ</span>
+                            <Check className="w-4 h-4" />
+                          </div>
+                        </button>
+                      )}
                     </div>
                   </div>
                 )}

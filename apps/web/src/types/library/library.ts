@@ -1,3 +1,18 @@
+export interface Book{
+  id: string;
+  title: string;
+  lessonId: string;
+  isRecommended: boolean;
+  categoryId: string;
+  grade: string;
+  description: string;
+  pdfSrc: string;
+  imageSrc: string;
+}
+
+
+
+
 export const categories = [
   { id: "all", name: "គ្រប់មុខវិជ្ជា" },
   { id: "math", name: "គណិតវិទ្យា" },
@@ -65,7 +80,7 @@ export const Books = [
     views: 1200,
   },
   {
-    id: "5",
+    id: "2",
     title: "លីមីតរាង 0/0",
     lesson: "limit",
     isRecommended: true,
@@ -79,7 +94,7 @@ export const Books = [
     views: 1100,
   },
   {
-    id: "6",
+    id: "3",
     title: "ដេរីវេ",
     lesson: "derivative",
     isRecommended: false,
@@ -93,7 +108,7 @@ export const Books = [
     views: 850,
   },
   {
-    id: "2",
+    id: "4",
     title: "ដែនម៉ាញេទិច",
     lesson: "magnetic_field",
     isRecommended: false,
@@ -107,7 +122,7 @@ export const Books = [
     views: 900,
   },
   {
-    id: "7",
+    id: "5",
     title: "ម៉ាសុីនកាកណូ",
     lesson: "kinematics",
     isRecommended: true,
@@ -121,7 +136,7 @@ export const Books = [
     views: 950,
   },
   {
-    id: "8",
+    id: "6",
     title: "កម្លាំង",
     lesson: "energy",
     isRecommended: false,
@@ -135,7 +150,7 @@ export const Books = [
     views: 780,
   },
   {
-    id: "3",
+    id: "7",
     title: "អាសុីត បាស",
     lesson: "acid_base",
     isRecommended: false,
@@ -149,7 +164,7 @@ export const Books = [
     views: 450,
   },
   {
-    id: "9",
+    id: "8",
     title: "លំនឹងគីមី",
     lesson: "natrual_chemistry",
     isRecommended: false,
@@ -163,7 +178,7 @@ export const Books = [
     views: 500,
   },
   {
-    id: "10",
+    id: "9",
     title: "សុីនេទិចគីមី",
     lesson: "physical_chemistry",
     isRecommended: false,
@@ -177,7 +192,7 @@ export const Books = [
     views: 530,
   },
   {
-    id: "4",
+    id: "10",
     title: "វចនានុក្រមភាសាអង់គ្លេស",
     lesson: "grammar",
     isRecommended: true,
@@ -191,7 +206,7 @@ export const Books = [
     views: 830,
   },
   {
-    id: "4",
+    id: "11",
     title: "Elmentary",
     lesson: "elmentary",
     isRecommended: false,
@@ -205,7 +220,7 @@ export const Books = [
     views: 830,
   },
   {
-    id: "4",
+    id: "12",
     title: "Begineer",
     lesson: "Begineer",
     isRecommended: false,
@@ -219,7 +234,7 @@ export const Books = [
     views: 830,
   },
   {
-    id: "11",
+    id: "13",
     title: "ការតែងសេចក្តី",
     lesson: "essay",
     isRecommended: false,
@@ -233,7 +248,7 @@ export const Books = [
     views: 720,
   },
   {
-    id: "12",
+    id: "14",
     title: "ប្រវត្តិសាស្ត្រពិភពលោក",
     lesson: "world_history",
     isRecommended: false,
@@ -247,7 +262,7 @@ export const Books = [
     views: 670,
   },
   {
-    id: "13",
+    id: "15",
     title: "សង្គ្រាមត្រជាក់",
     lesson: "ice_war",
     isRecommended: false,
@@ -261,7 +276,7 @@ export const Books = [
     views: 620,
   },
   {
-    id: "14",
+    id: "16",
     title: "អក្សរសាស្ត្រខ្មែរ",
     lesson: "khmer_literature",
     isRecommended: false,
@@ -275,7 +290,7 @@ export const Books = [
     views: 400,
   },
   {
-    id: "16",
+    id: "17",
     title: "ប្រលមលោកខ្មែរ",
     lesson: "khmer_",
     isRecommended: false,
@@ -289,7 +304,7 @@ export const Books = [
     views: 400,
   },
   {
-    id: "17",
+    id: "18",
     title: "រាមកេរណ៏",
     lesson: "reamker_novel",
     isRecommended: false,
@@ -303,7 +318,7 @@ export const Books = [
     views: 400,
   },
   {
-    id: "15",
+    id: "19",
     title: "សាធារណរដ្ឋខ្មែរ",
     lesson: "khmer_republic",
     isRecommended: false,
@@ -317,7 +332,7 @@ export const Books = [
     views: 400,
   },
   {
-    id: "18",
+    id: "20",
     title: "សង្គមរាស្រ្តនិយម",
     lesson: "socialism",
     isRecommended: false,
@@ -331,7 +346,7 @@ export const Books = [
     views: 400,
   },
   {
-    id: "19",
+    id: "21",
     title: "កុលាបប៉ៃលិន",
     lesson: "pailin_novel",
     isRecommended: false,
@@ -345,7 +360,7 @@ export const Books = [
     views: 400,
   },
   {
-    id: "19",
+    id: "22",
     title: "ទុំ ទាវ",
     lesson: "tum_teav_novel",
     isRecommended: false,
@@ -359,7 +374,7 @@ export const Books = [
     views: 400,
   },
   {
-    id: "20",
+    id: "23",
     title: "ល្បឿនប្រតិកម្មគីមី",
     lesson: "chemical_reaction_rate",
     isRecommended: false,
@@ -373,7 +388,7 @@ export const Books = [
     views: 400,
   },
   {
-    id: "20",
+    id: "24",
     title: "លំនឹងប្រតិកម្មគីមី",
     lesson: "chemical_equilibrium",
     isRecommended: false,
@@ -387,7 +402,7 @@ export const Books = [
     views: 400,
   },
   {
-    id: "21",
+    id: "25",
     title: "រលក",
     lesson: "waves",
     isRecommended: false,
@@ -401,7 +416,7 @@ export const Books = [
     views: 400,
   },
   {
-    id: "21",
+    id: "26",
     title: "កម្លាំងម៉ាញេទិច",
     lesson: "magnetic_force",
     isRecommended: true,
@@ -415,7 +430,7 @@ export const Books = [
     views: 400,
   },
   {
-    id: "22",
+    id: "27",
     title: "អនុគមន៍",
     lesson: "functions",
     isRecommended: true,

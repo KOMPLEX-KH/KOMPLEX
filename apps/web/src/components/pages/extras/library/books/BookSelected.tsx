@@ -1,24 +1,60 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ArrowLeft, Eye, BookOpen, User, GraduationCap, Tag, FileText } from "lucide-react";
-import { categories, Books } from "@/types/library/library";
 import BookCard from "./BookCard";
+import { extraScrollRef } from "@/app/extra/page";
+import { feedLibraryService } from "@/services";
+import type { Book, Subject } from "@core-types/content/library";
 
-export default function BookSelectedPage() {
+export default function BookSelectedPage({ bookId }: { bookId: string }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  
-  const bookId = searchParams.get("book");
-  const selectedBook = Books.find(book => book.id === bookId);
-  
-  React.useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [relatedBooks, setRelatedBooks] = useState<Book[]>([]);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [bookResponse, subjectsResponse] = await Promise.all([
+          feedLibraryService.getBookById(bookId),
+          feedLibraryService.getAllSubjects(),
+        ]);
+        setSelectedBook(bookResponse);
+        setSubjects(subjectsResponse);
+
+        // Fetch related books
+        if (bookResponse.categoryId) {
+          const relatedResponse = await feedLibraryService.getBooksBySubject(bookResponse.categoryId);
+          setRelatedBooks(relatedResponse.books.filter(b => b.id !== bookId).slice(0, 5));
+        }
+      } catch (error) {
+        console.error("Error fetching book details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+    if (extraScrollRef.current) {
+      extraScrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }, [bookId]);
 
-  const handleBookSelected = (bookId)=>{
+
+  const handleBookSelected = (bookId: string) => {
     router.push(`?tab=library&book=${bookId}`);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
   }
 
   if (!selectedBook) {
@@ -38,11 +74,7 @@ export default function BookSelectedPage() {
     }
   };
 
-  const relatedBooks = Books.filter(
-    book => book.category === selectedBook.category && book.id !== selectedBook.id
-  ).slice(0, 5);
-
-  const categoryInfo = categories.find(cat => cat.id === selectedBook.category);
+  const subjectInfo = subjects.find(subject => subject.id === selectedBook.categoryId);
 
   return (
     <div className="w-full">
@@ -84,7 +116,7 @@ export default function BookSelectedPage() {
               <div className="flex flex-wrap gap-3 mb-4">
                 <span className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg font-medium">
                   <Tag className="w-4 h-4" />
-                  {categoryInfo?.name || selectedBook.category}
+                  {subjectInfo?.name || selectedBook.categoryId}
                 </span>
                 <span className="inline-flex items-center gap-2 px-4 py-1 bg-green-100 text-green-700 rounded-lg font-medium">
                   <GraduationCap className="w-4 h-4" />

@@ -1,4 +1,97 @@
 "use client";
+import { BookOpen, Search, ChevronDown, Filter, Check } from "lucide-react";
+
+export default function LibraryContentSkeleton() {
+  return (
+    <div className="relative max-w-6xl mx-auto pt-5 animate-pulse select-none">
+
+      {/* ===== Skeleton Header ===== */}
+      <div className="flex items-center gap-3 mb-6 relative">
+        {/* Search input skeleton */}
+        <div className="relative flex-1">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5" />
+          <div className="w-full h-12 bg-gray-300 rounded-3xl"></div>
+        </div>
+
+        {/* Filter button skeleton */}
+        <div className="w-12 h-12 rounded-full bg-gray-300"></div>
+      </div>
+
+      {/* ===== Skeleton BookContainer ===== */}
+
+      {/* Recommended Section */}
+      <section className="flex flex-col gap-4 rounded-3xl border-none pb-4">
+
+        {/* Header skeleton */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 bg-gray-300 rounded-3xl w-10 h-10"></div>
+          <div className="flex flex-col gap-2">
+            <div className="h-5 w-32 bg-gray-300 rounded"></div>
+            <div className="h-4 w-20 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+
+        {/* Recommended books row */}
+        <div className="
+          grid grid-flow-col
+          auto-cols-[65%]
+          sm:auto-cols-[33%]
+          lg:auto-cols-[25%]
+          gap-4 pb-2
+          overflow-x-auto whitespace-nowrap scrollbar-hide
+        ">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="flex flex-col bg-gray-100 rounded-2xl p-4 h-56 w-full">
+              <div className="bg-gray-300 h-32 rounded-xl mb-3"></div>
+              <div className="bg-gray-300 h-4 rounded mb-2 w-3/4"></div>
+              <div className="bg-gray-200 h-3 rounded w-1/2"></div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Categories Sections */}
+      {[1, 2].map((cat) => (
+        <section key={cat} className="flex flex-col gap-4 rounded-3xl border-none mt-8">
+
+          {/* Category header skeleton */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-gray-300 rounded-3xl w-10 h-10"></div>
+              <div className="flex flex-col gap-2">
+                <div className="h-5 w-28 bg-gray-300 rounded"></div>
+                <div className="h-4 w-16 bg-gray-200 rounded"></div>
+              </div>
+            </div>
+
+            <div className="w-24 h-9 bg-gray-300 rounded-3xl"></div>
+          </div>
+
+          {/* Books row */}
+          <div className="
+            grid grid-flow-col
+            auto-cols-[65%]
+            sm:auto-cols-[33%]
+            lg:auto-cols-[25%]
+            gap-4 pb-2
+            overflow-x-auto whitespace-nowrap scrollbar-hide
+          ">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="flex flex-col bg-gray-100 rounded-2xl p-4 h-56 w-full">
+                <div className="bg-gray-300 h-32 rounded-xl mb-3"></div>
+                <div className="bg-gray-300 h-4 rounded mb-2 w-3/4"></div>
+                <div className="bg-gray-200 h-3 rounded w-1/2"></div>
+              </div>
+            ))}
+          </div>
+
+        </section>
+      ))}
+
+    </div>
+  );
+}
+
 
 export function BookContainerSkeleton() {
   return (

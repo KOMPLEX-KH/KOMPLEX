@@ -1,0 +1,118 @@
+import { BookOpen, Search } from "lucide-react";
+import { useState, useEffect } from "react";
+import type { Book } from "@core-types/content/library";
+
+interface SearchDropdownProps {
+  isOpen: boolean;
+  searchQuery: string;
+  books: Book[];
+  onBookClick: (bookId: string) => void;
+}
+
+export default function SearchDropdown({
+  isOpen,
+  searchQuery,
+  books,
+  onBookClick,
+}: SearchDropdownProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      // Small delay to trigger the expansion animation
+      setTimeout(() => setIsExpanded(true), 10);
+    } else {
+      setIsExpanded(false);
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  // Filter books based on search query
+  const filteredBooks = searchQuery.trim()
+    ? books.filter(
+        (book) =>
+          book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          book.author.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : books.slice(0, 6); // Show first 6 books when no search query
+
+  return (
+    <div
+      className={`absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden transition-all duration-500 ease-out z-50 ${
+        isExpanded 
+          ? "max-h-[500px] opacity-100 scale-100" 
+          : "max-h-12 opacity-0 scale-95"
+      }`}
+      style={{
+        transformOrigin: "top center",
+      }}
+    >
+      <div className="p-4">
+
+        {/* Books List */}
+        <div className="max-h-[400px] overflow-y-auto space-y-2">
+          {filteredBooks.length > 0 ? (
+            filteredBooks.map((book) => (
+              <button
+                key={book.id}
+                onClick={() => onBookClick(book.id)}
+                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-all duration-200 text-left group"
+              >
+                {/* Book Cover Placeholder */}
+                <div className="w-12 h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
+                  <div className="w-full h-full bg-gray-300 group-hover:scale-105 transition-transform duration-300"></div>
+                </div>
+
+                {/* Book Info */}
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-semibold text-gray-800 text-sm truncate group-hover:text-blue-600 transition-colors">
+                    {book.title}
+                  </h4>
+                  <p className="text-xs text-gray-500 truncate">{book.author}</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-xs px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full">
+                      {book.grade ? `ថ្នាក់ ${book.grade}` : "N/A"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Arrow Icon */}
+                <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <svg
+                    className="w-5 h-5 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </div>
+              </button>
+            ))
+          ) : (
+            <div className="text-center py-8">
+              <BookOpen className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500 font-bold text-[20px]">មិនមានលទ្ធផល</p>
+              <p className="text-gray-400 text-[14px] mt-1">សូមព្យាយាមស្វែងរកម្តងទៀត</p>
+            </div>
+          )}
+        </div>
+
+        {/* Footer - Show more link */}
+        {filteredBooks.length > 0 && (
+          <div className="mt-3 pt-3 border-t border-gray-100">
+            <button className="w-full text-center text-sm text-blue-600 hover:text-blue-700 font-medium py-2 rounded-lg hover:bg-blue-50 transition-colors">
+              មើលទាំងអស់ ({filteredBooks.length})
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

@@ -1,20 +1,41 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import BookCard from "./BookCard";
-import { Books, categories } from "@/types/library/library";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { feedLibraryService } from "@/services";
+import type { Book, Subject } from "@core-types/content/library";
 
 export default function ViewAllByCategory() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  // Read categoryId directly from URL every render
   const categoryId = searchParams.get("category");
 
-  // Scroll to top on mount or categoryId change
-  React.useEffect(() => {
+  const [booksInCategory, setBooksInCategory] = useState<Book[]>([]);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!categoryId) return;
+      
+      try {
+        setLoading(true);
+        const [booksResponse, subjectsResponse] = await Promise.all([
+          feedLibraryService.getBooksBySubject(categoryId),
+          feedLibraryService.getAllSubjects(),
+        ]);
+        setBooksInCategory(booksResponse.books);
+        setSubjects(subjectsResponse);
+      } catch (error) {
+        console.error("Error fetching category books:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [categoryId]);
 
@@ -26,11 +47,18 @@ export default function ViewAllByCategory() {
     );
   }
 
-  const category = categories.find((c) => c.id === categoryId);
+  const category = subjects.find((c) => c.id === categoryId);
 
-  const handleBookSelected = (bookId)=>{
+  const handleBookSelected = (bookId: string) => {
     router.push(`?tab=library&book=${bookId}`);
-    // router.push(`/book/${bookId}`);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
   }
 
   if (!category) {
@@ -46,8 +74,6 @@ export default function ViewAllByCategory() {
       </div>
     );
   }
-
-  const booksInCategory = Books.filter((b) => b.category === categoryId);
 
   return (
     <div className="w-full">
