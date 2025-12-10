@@ -396,7 +396,7 @@ export default function TopicScreen() {
                     next={navigationData?.next || null}
                     onNavigate={handleNavigation}
                 >
-                    <ContentRenderer content={deserialized} />
+                    <ContentRenderer key={topicKey} content={deserialized} />
                 </TopicWrapper>
             </ScrollView>
         </View>

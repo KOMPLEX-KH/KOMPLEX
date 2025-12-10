@@ -420,7 +420,7 @@ function deserializeElementValue(
         if (serialized.type === "InlineMath") {
             const math = (serialized.props as any)?.math;
             if (math && typeof math === 'string') {
-                return <MathRenderer key={key} math={math} inline />;
+                return <MathRenderer key={key} math={math}  />;
             }
             return null;
         }
@@ -429,7 +429,7 @@ function deserializeElementValue(
         if (serialized.type === "BlockMath") {
             const math = (serialized.props as any)?.math;
             if (math && typeof math === 'string') {
-                return <MathRenderer key={key} math={math} inline={false} />;
+                return <MathRenderer key={key} math={math}  />;
             }
             return null;
         }
@@ -603,6 +603,17 @@ function deserializeElementValue(
                     elementStyles = tw("italic");
                 }
 
+                const wrapInlineMath = (node: ReactNode, keyBase: string | number) => {
+                    if (React.isValidElement(node) && node.type === MathRenderer) {
+                        return (
+                            <View key={`${keyBase}-wrap`} style={tw("")}>
+                                {React.cloneElement(node, { key: `${keyBase}-math` })}
+                            </View>
+                        );
+                    }
+                    return node;
+                };
+
                 if (hasBr) {
                     // When there are br tags, processedChildren are Views (one per line segment)
                     // We need to wrap them in a flex-col container and apply text styling to Text children within segments
@@ -614,8 +625,6 @@ function deserializeElementValue(
                             const segmentChildren = React.Children.toArray(segmentProps.children).map((child: any, childIdx: number) => {
                                 if (React.isValidElement(child) && child.type === Text) {
                                     const childProps = child.props as any;
-                                    // Apply elementStyles only if this is a styled element (strong, em, heading)
-                                    // Always apply textStyleFromClassName (from className like text-base)
                                     const shouldApplyElementStyles =
                                         serialized.type === 'strong' || serialized.type === 'b' ||
                                         serialized.type === 'em' || serialized.type === 'i' ||
@@ -630,7 +639,8 @@ function deserializeElementValue(
                                         style: stylesToApply.filter(s => s && (typeof s === 'object' ? Object.keys(s).length > 0 : true))
                                     });
                                 }
-                                return child;
+                                // Wrap inline math rows to preserve spacing
+                                return wrapInlineMath(child, `${key}-seg-${idx}-${childIdx}`);
                             });
 
                             return React.cloneElement(segmentView as React.ReactElement<any>, {
@@ -657,14 +667,13 @@ function deserializeElementValue(
                     );
                 } else {
                     // No br tags - single inline row, apply flex-row layout
-                    const baseFlexStyles = tw("flex flex-row flex-wrap items-baseline gap-1");
+                    const baseFlexStyles = tw("flex flex-row flex-wrap items-center");
 
                     // Apply text styling to Text children
                     // Combine elementStyles (for strong, em, headings) with textStyleFromClassName (from className)
                     const styledChildren = processedChildren.map((child, idx) => {
                         if (React.isValidElement(child) && child.type === Text) {
                             const childProps = child.props as any;
-                            // Apply elementStyles only if this is a styled element
                             const shouldApplyElementStyles =
                                 serialized.type === 'strong' || serialized.type === 'b' ||
                                 serialized.type === 'em' || serialized.type === 'i' ||
@@ -679,7 +688,8 @@ function deserializeElementValue(
                                 style: stylesToApply.filter(s => s && (typeof s === 'object' ? Object.keys(s).length > 0 : true))
                             });
                         }
-                        return child;
+                        // Wrap inline math rows to preserve spacing
+                        return wrapInlineMath(child, `${key}-${idx}`);
                     });
 
                     // Build final styles array:

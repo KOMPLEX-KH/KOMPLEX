@@ -1,12 +1,14 @@
 /* eslint-disable */
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-// @ts-ignore - react-native-math-view source imports
-import MathView from 'react-native-math-view';
+import { View, StyleSheet, Platform } from 'react-native';
+
+// Use react-native-math-view for native, react-katex for web
+const MathView = Platform.OS !== 'web' ? require('react-native-math-view').default : null;
+const { InlineMath: WebInlineMath, BlockMath: WebBlockMath } =
+    Platform.OS === 'web' ? require('react-katex') : { InlineMath: null, BlockMath: null };
 
 interface MathRendererProps {
     math: string;
-    inline?: boolean;
 }
 
 /**
@@ -210,13 +212,9 @@ function normalizeMathOnly(math: string): string {
         // Pattern: (start of string OR non-backslash char) + word boundary + greek + word boundary
         const greekPattern = new RegExp(`(^|[^\\\\])\\b${greek}\\b(?!\\w)`, 'g');
         normalized = normalized.replace(greekPattern, (match, prefix) => {
-            // Check if the match already starts with backslash (shouldn't happen with our pattern, but safety check)
             if (match.includes(`\\${greek}`)) {
                 return match; // Already escaped
             }
-            // prefix is either empty string (start) or a single character (non-backslash)
-            // If prefix is empty, we're at start of string, so just add backslash
-            // If prefix exists, it's part of the match, so include it in replacement
             if (!prefix || prefix === '') {
                 return `\\${greek}`;
             }
@@ -226,10 +224,8 @@ function normalizeMathOnly(math: string): string {
 
     // Second pass: Handle other commands
     for (const cmd of latexCommands) {
-        // Skip if already processed as Greek letter
         if (greekLetters.includes(cmd)) continue;
 
-        // For other commands, use patterns that avoid already-escaped commands
         const patterns = [
             new RegExp(`(^|[^\\\\])\\b${cmd}(?=[({])`, 'g'),
             new RegExp(`(^|[^\\\\])\\b${cmd}\\s+(?=[({])`, 'g'),
@@ -238,11 +234,9 @@ function normalizeMathOnly(math: string): string {
 
         patterns.forEach(pattern => {
             normalized = normalized.replace(pattern, (match, prefix) => {
-                // Only add backslash if not already escaped
                 if (match.startsWith('\\')) {
                     return match; // Already escaped
                 }
-                // Replace the command part with escaped version
                 return `${prefix}\\${cmd}`;
             });
         });
@@ -263,15 +257,12 @@ function normalizeMathOnly(math: string): string {
     }
 
     // Step 4: Convert parentheses to braces for single-argument commands
-    // Handle nested parentheses by processing from innermost to outermost
     for (const cmd of singleArgCommands) {
         let changed = true;
         let iterations = 0;
-        while (changed && iterations < 10) { // Safety limit
+        while (changed && iterations < 10) {
             changed = false;
             const before = normalized;
-            // Match \command(...) where ... can contain nested parentheses
-            // We'll use a more sophisticated approach: find matching parentheses
             normalized = normalized.replace(
                 new RegExp(`\\\\${cmd}\\s*\\(([^()]*(?:\\([^()]*\\)[^()]*)*)\\)`, 'g'),
                 (match, content) => {
@@ -285,7 +276,6 @@ function normalizeMathOnly(math: string): string {
     }
 
     // Step 4b: Handle subscript notation: z1 -> z_1, z2 -> z_2, etc.
-    // Match variable names followed by numbers (like z1, z2, etc.)
     normalized = normalized.replace(/([a-zA-Z])(\d+)/g, '$1_{$2}');
 
     // Step 5: Fix frac patterns: frac(a,b) -> \frac{a}{b}
@@ -306,27 +296,11 @@ function normalizeMathOnly(math: string): string {
     return normalized;
 }
 
-export default function MathRenderer({ math, inline = false }: MathRendererProps) {
-    // Normalize the math string to ensure proper LaTeX syntax
+export default function MathRenderer({ math }: MathRendererProps) {
     const normalizedMath = normalizeMathString(math);
 
-    if (inline) {
-        // For inline math: render directly without wrapper to maximize inline behavior
-        // Parent flex-row in ContentDeserializer will handle inline flow
-        // Use resizeMode="cover" to avoid the contain style's maxWidth: '100%'
-        return (
-            <View style={styles.inlineContainer}>
-                <MathView
-                    math={normalizedMath}
-                    resizeMode="cover"
-                    config={{ inline: true }}
-                    style={styles.inlineMath}
-                />
-            </View>
-        );
-    }
+    if (!MathView) return null;
 
-    // For block math: use MathView with block container
     return (
         <View style={styles.blockContainer}>
             <MathView
@@ -340,38 +314,33 @@ export default function MathRenderer({ math, inline = false }: MathRendererProps
 
 const styles = StyleSheet.create({
     inlineMath: {
-        // CRITICAL for inline rendering:
         backgroundColor: 'transparent',
-        // Align with text baseline in parent flex-row
         alignSelf: 'baseline',
-        // Prevent expansion - only take space needed
         flexShrink: 1,
         flexGrow: 0,
         flexBasis: 'auto',
-        // Remove ALL width constraints
-        // SVG will use intrinsic width/height from MathJax (via size prop)
         maxWidth: undefined,
         maxHeight: undefined,
         width: undefined,
         height: undefined,
         minWidth: undefined,
-        minHeight: undefined,
-        // Small margin for spacing
+        minHeight: 18, // prevent 0-height on first render
         marginHorizontal: 2,
         marginVertical: 2,
-    },
-    blockContainer: {
-        marginVertical: 12,
-        backgroundColor: 'transparent',
-        width: '100%',
-        alignItems: 'center',
     },
     inlineContainer: {
         backgroundColor: 'transparent',
         flexDirection: 'row',
-        alignItems: 'center',
+        flexWrap: 'wrap',
+        alignItems: 'baseline',
         marginHorizontal: 2,
         marginVertical: 1,
-        gap: 1,
+        gap: 2,
+    },
+    blockContainer: {
+        marginVertical: 4,
+        backgroundColor: 'transparent',
+        width: '100%',
+        alignItems: 'center',
     },
 });

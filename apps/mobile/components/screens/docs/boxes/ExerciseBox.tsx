@@ -250,7 +250,7 @@ export default function ExerciseBox({ questions }: ExerciseBoxProps) {
           </Text>
           <View style={tw("flex-1")}>
             {isMath ? (
-              <MathRenderer math={option} inline />
+              <MathRenderer math={option}  />
             ) : (
               <Text style={tw(textColor)}>{option}</Text>
             )}

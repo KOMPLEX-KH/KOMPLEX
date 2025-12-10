@@ -50,14 +50,14 @@ export default function ExampleBox({ question, content, steps, answer }: Example
                 <View style={tw("mb-4 gap-4")}>
                     {steps.map((step, index) =>
                         step.content && (
-                            <View key={index} style={tw("gap-2")}>
-                                <View style={tw("flex-row items-center ")}>
+                            <View key={index} style={tw("gap-2 bg-white rounded-3xl border-2 border-gray-200 p-3")}>
+                                <View style={tw("flex-row items-center flex-wrap  ")}>
                                     <Text style={tw("font-nokora-bold")}>ជំហានទី  </Text>
                                     <Text style={tw("font-nokora-bold")}>{toKhmerNumber(index + 1)}  </Text>
                                     <Text style={tw("font-nokora-bold")}> :  </Text>
                                     <Text style={tw("font-nokora-bold")}>{step.title}</Text>
                                 </View>
-                                <View style={tw("bg-white rounded-3xl border-2 border-gray-200 p-3")}>
+                                <View style={tw("mt-2")}>
                                     <Text style={tw("text-sm text-black")}>
                                         {step.content}
                                     </Text>

@@ -75,7 +75,10 @@ export default function AiScreen() {
     };
 
     const loadHistory = useCallback(async (page: number = 1, append: boolean = false) => {
-        if (!user) return;
+        if (!user) {
+            router.replace("/auth");
+            return;
+        }
 
         try {
             if (page === 1) {
