@@ -420,7 +420,7 @@ function deserializeElementValue(
         if (serialized.type === "InlineMath") {
             const math = (serialized.props as any)?.math;
             if (math && typeof math === 'string') {
-                return <MathRenderer key={key} math={math} inline />;
+                return <MathRenderer key={key} math={math}  />;
             }
             return null;
         }
@@ -429,7 +429,7 @@ function deserializeElementValue(
         if (serialized.type === "BlockMath") {
             const math = (serialized.props as any)?.math;
             if (math && typeof math === 'string') {
-                return <MathRenderer key={key} math={math} inline={false} />;
+                return <MathRenderer key={key} math={math}  />;
             }
             return null;
         }
@@ -603,6 +603,17 @@ function deserializeElementValue(
                     elementStyles = tw("italic");
                 }
 
+                const wrapInlineMath = (node: ReactNode, keyBase: string | number) => {
+                    if (React.isValidElement(node) && node.type === MathRenderer) {
+                        return (
+                            <View key={`${keyBase}-wrap`} style={tw("")}>
+                                {React.cloneElement(node, { key: `${keyBase}-math` })}
+                            </View>
+                        );
+                    }
+                    return node;
+                };
+
                 if (hasBr) {
                     // When there are br tags, processedChildren are Views (one per line segment)
                     // We need to wrap them in a flex-col container and apply text styling to Text children within segments
@@ -614,8 +625,6 @@ function deserializeElementValue(
                             const segmentChildren = React.Children.toArray(segmentProps.children).map((child: any, childIdx: number) => {
                                 if (React.isValidElement(child) && child.type === Text) {
                                     const childProps = child.props as any;
-                                    // Apply elementStyles only if this is a styled element (strong, em, heading)
-                                    // Always apply textStyleFromClassName (from className like text-base)
                                     const shouldApplyElementStyles =
                                         serialized.type === 'strong' || serialized.type === 'b' ||
                                         serialized.type === 'em' || serialized.type === 'i' ||
@@ -630,7 +639,8 @@ function deserializeElementValue(
                                         style: stylesToApply.filter(s => s && (typeof s === 'object' ? Object.keys(s).length > 0 : true))
                                     });
                                 }
-                                return child;
+                                // Wrap inline math rows to preserve spacing
+                                return wrapInlineMath(child, `${key}-seg-${idx}-${childIdx}`);
                             });
 
                             return React.cloneElement(segmentView as React.ReactElement<any>, {
@@ -657,14 +667,13 @@ function deserializeElementValue(
                     );
                 } else {
                     // No br tags - single inline row, apply flex-row layout
-                    const baseFlexStyles = tw("flex flex-row flex-wrap items-baseline gap-1");
+                    const baseFlexStyles = tw("flex flex-row flex-wrap items-center");
 
                     // Apply text styling to Text children
                     // Combine elementStyles (for strong, em, headings) with textStyleFromClassName (from className)
                     const styledChildren = processedChildren.map((child, idx) => {
                         if (React.isValidElement(child) && child.type === Text) {
                             const childProps = child.props as any;
-                            // Apply elementStyles only if this is a styled element
                             const shouldApplyElementStyles =
                                 serialized.type === 'strong' || serialized.type === 'b' ||
                                 serialized.type === 'em' || serialized.type === 'i' ||
@@ -679,7 +688,8 @@ function deserializeElementValue(
                                 style: stylesToApply.filter(s => s && (typeof s === 'object' ? Object.keys(s).length > 0 : true))
                             });
                         }
-                        return child;
+                        // Wrap inline math rows to preserve spacing
+                        return wrapInlineMath(child, `${key}-${idx}`);
                     });
 
                     // Build final styles array:
@@ -862,10 +872,42 @@ function deserializeElementValue(
  * Deserialize JSON string to TopicContent_V3[] with React Native elements
  */
 export function deserializeTopicContentV3(jsonString: string): TopicContent_V3[] {
-    const data = JSON.parse(jsonString) as {
-        type: TopicContent_V3["type"];
-        props: Record<string, unknown>;
-    }[];
+    if (!jsonString) return [];
+
+    let parsed: unknown;
+    try {
+        parsed = JSON.parse(jsonString);
+    } catch {
+        return [];
+    }
+
+    // Accept common container shapes and stringified arrays
+    const tryParseArray = (val: unknown): any[] | null => {
+        if (Array.isArray(val)) return val;
+        if (typeof val === "string") {
+            try {
+                const parsedVal = JSON.parse(val);
+                return Array.isArray(parsedVal) ? parsedVal : null;
+            } catch {
+                return null;
+            }
+        }
+        return null;
+    };
+
+    const candidates: unknown[] = [
+        parsed,
+        (parsed as any)?.data,
+        (parsed as any)?.content,
+        (parsed as any)?.items,
+        (parsed as any)?.component,
+        (parsed as any)?.data?.component,
+        (parsed as any)?.data?.content,
+    ];
+
+    const data = candidates.map(tryParseArray).find((arr) => Array.isArray(arr)) || null;
+
+    if (!Array.isArray(data)) return [];
 
     const reviveMixed = (node: unknown): unknown => {
         if (node == null) return node;
@@ -886,12 +928,14 @@ export function deserializeTopicContentV3(jsonString: string): TopicContent_V3[]
         return node;
     };
 
-    return data.map((entry) => {
-        const { type, props } = entry;
-        const restoredProps: Record<string, unknown> = {};
-        for (const [k, v] of Object.entries(props || {})) {
-            restoredProps[k] = reviveMixed(v);
-        }
-        return { type, ...(restoredProps as object) } as TopicContent_V3;
-    });
+    return (data as { type?: TopicContent_V3["type"]; props?: Record<string, unknown> }[])
+        .filter((entry) => entry && typeof entry === "object" && "type" in entry)
+        .map((entry) => {
+            const { type, props } = entry as { type: TopicContent_V3["type"]; props: Record<string, unknown> };
+            const restoredProps: Record<string, unknown> = {};
+            for (const [k, v] of Object.entries(props || {})) {
+                restoredProps[k] = reviveMixed(v);
+            }
+            return { type, ...(restoredProps as object) } as TopicContent_V3;
+        });
 }

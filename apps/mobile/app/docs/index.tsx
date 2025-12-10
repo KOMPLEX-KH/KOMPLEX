@@ -1,10 +1,6 @@
 import { useRouter, usePathname } from "expo-router"
 import { useEffect, useRef } from "react"
-import { View } from "react-native"
-import { tw } from "@/utils/styles"
-
-// Global flag to prevent multiple redirects
-let hasRedirected = false
+import Logo from "@/components/common/Logo"
 
 export default function LessonsScreen() {
     const router = useRouter()
@@ -13,24 +9,21 @@ export default function LessonsScreen() {
 
     useEffect(() => {
         // Only redirect if we're exactly on /docs route
-        // Check both local ref and global flag to prevent loops
-        if (pathname === "/docs" && !hasRedirectedRef.current && !hasRedirected) {
+        // Reset the ref when we're not on /docs to allow redirect on next visit
+        if (pathname !== "/docs") {
+            hasRedirectedRef.current = false
+            return
+        }
+
+        // Redirect if we haven't redirected yet in this mount
+        if (pathname === "/docs" && !hasRedirectedRef.current) {
             hasRedirectedRef.current = true
-            hasRedirected = true
             router.replace("/docs/1/1/1/1" as any)
-            
         }
     }, [pathname, router])
 
-    // Reset global flag if we navigate away from /docs
-    useEffect(() => {
-        if (pathname !== "/docs" && pathname.startsWith("/docs/")) {
-            hasRedirected = false
-        }
-    }, [pathname])
-
     return (
-        <View style={tw("flex-1 bg-white")} />
+        <Logo isLoading isVertical size="xl"/>
     )
 }
 

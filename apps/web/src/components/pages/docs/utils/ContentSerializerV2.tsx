@@ -534,23 +534,15 @@ export function deserializeTopicContentV3(jsonString: string): TopicContent_V3[]
     return [];
   }
 
-  // Trim whitespace and check if empty
   const trimmed = jsonString.trim();
   if (!trimmed) {
     console.warn("deserializeTopicContentV3: Empty JSON string provided");
     return [];
   }
 
-  let data: Array<{
-    type: TopicContent_V3["type"];
-    props: Record<string, unknown>;
-  }>;
-
+  let parsed: unknown;
   try {
-    data = JSON.parse(trimmed) as Array<{
-      type: TopicContent_V3["type"];
-      props: Record<string, unknown>;
-    }>;
+    parsed = JSON.parse(trimmed);
   } catch (error) {
     console.error("deserializeTopicContentV3: Failed to parse JSON", {
       error: error instanceof Error ? error.message : String(error),
@@ -559,9 +551,35 @@ export function deserializeTopicContentV3(jsonString: string): TopicContent_V3[]
     return [];
   }
 
-  // Validate that parsed data is an array
+  // Accept common container shapes and stringified arrays
+  const tryParseArray = (val: unknown): any[] | null => {
+    if (Array.isArray(val)) return val;
+    if (typeof val === "string") {
+      try {
+        const parsedVal = JSON.parse(val);
+        return Array.isArray(parsedVal) ? parsedVal : null;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  };
+
+  const candidates: unknown[] = [
+    parsed,
+    (parsed as any)?.data,
+    (parsed as any)?.content,
+    (parsed as any)?.items,
+    (parsed as any)?.component,
+    (parsed as any)?.data?.component,
+    (parsed as any)?.data?.content,
+  ];
+
+  const data =
+    candidates.map(tryParseArray).find((arr) => Array.isArray(arr)) || null;
+
   if (!Array.isArray(data)) {
-    console.warn("deserializeTopicContentV3: Parsed data is not an array", { data });
+    console.warn("deserializeTopicContentV3: Parsed data is not an array", { parsed });
     return [];
   }
 
@@ -586,7 +604,7 @@ export function deserializeTopicContentV3(jsonString: string): TopicContent_V3[]
 
   try {
     return data.map((entry) => {
-      const { type, props } = entry;
+      const { type, props } = entry as { type: TopicContent_V3["type"]; props: Record<string, unknown> };
       const restoredProps: Record<string, unknown> = {};
       for (const [k, v] of Object.entries(props || {})) {
         restoredProps[k] = reviveMixed(v);
