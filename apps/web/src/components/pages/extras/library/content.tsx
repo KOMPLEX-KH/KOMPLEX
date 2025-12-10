@@ -37,11 +37,10 @@ export default function LibraryContent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [subjectsData, booksData] = await Promise.all([
-          feedLibraryService.getAllSubjects(),
+        const [booksData] = await Promise.all([
           feedLibraryService.getAllBooks(),
         ]);
-        setSubjects(subjectsData);
+        setSubjects([]); // Empty until backend is ready
         setBooks(booksData.books);
       } catch (error) {
         console.error("Error fetching data:", error);

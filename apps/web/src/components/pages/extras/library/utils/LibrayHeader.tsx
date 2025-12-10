@@ -105,8 +105,8 @@ export default function ExtraHeader({
           books={books}
           onBookClick={(bookId) => {
             onBookClick(bookId);
-            setIsSearchFocused(false);
           }}
+          onClose={() => setIsSearchFocused(false)}
         />
 
         {openPanel && (

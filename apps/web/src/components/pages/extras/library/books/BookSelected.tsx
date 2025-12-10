@@ -19,16 +19,15 @@ export default function BookSelectedPage({ bookId }: { bookId: string }) {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [bookResponse, subjectsResponse] = await Promise.all([
+        const [bookResponse] = await Promise.all([
           feedLibraryService.getBookById(bookId),
-          feedLibraryService.getAllSubjects(),
         ]);
         setSelectedBook(bookResponse);
-        setSubjects(subjectsResponse);
+        setSubjects([]); // Empty until backend is ready
 
         // Fetch related books
-        if (bookResponse.categoryId) {
-          const relatedResponse = await feedLibraryService.getBooksBySubject(bookResponse.categoryId);
+        if (bookResponse.subjectId) {
+          const relatedResponse = await feedLibraryService.getBooksBySubject(bookResponse.subjectId);
           setRelatedBooks(relatedResponse.books.filter(b => b.id !== bookId).slice(0, 5));
         }
       } catch (error) {
@@ -49,13 +48,6 @@ export default function BookSelectedPage({ bookId }: { bookId: string }) {
     router.push(`?tab=library&book=${bookId}`);
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
 
   if (!selectedBook) {
     return (
@@ -74,7 +66,7 @@ export default function BookSelectedPage({ bookId }: { bookId: string }) {
     }
   };
 
-  const subjectInfo = subjects.find(subject => subject.id === selectedBook.categoryId);
+  const subjectInfo = subjects.find(subject => subject.id === selectedBook.subjectId);
 
   return (
     <div className="w-full">
@@ -97,12 +89,11 @@ export default function BookSelectedPage({ bookId }: { bookId: string }) {
           
           <div className="md:col-span-2">
             <div className="relative h-70 md:h-full rounded-xl overflow-hidden">
-              {/* <img
-                src={selectedBook.imageSrc || "/placeholder-book.jpg"}
+              <img
+                src={selectedBook.imageUrl || "/placeholder-book.jpg"}
                 alt={selectedBook.title}
                 className="w-full h-full object-cover"
-              /> */}
-              <div className="w-full h-full bg-gray-300"></div>
+              />
             </div>
           </div>
 
@@ -116,7 +107,7 @@ export default function BookSelectedPage({ bookId }: { bookId: string }) {
               <div className="flex flex-wrap gap-3 mb-4">
                 <span className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg font-medium">
                   <Tag className="w-4 h-4" />
-                  {subjectInfo?.name || selectedBook.categoryId}
+                  {subjectInfo?.name || selectedBook.subjectId}
                 </span>
                 <span className="inline-flex items-center gap-2 px-4 py-1 bg-green-100 text-green-700 rounded-lg font-medium">
                   <GraduationCap className="w-4 h-4" />
@@ -138,7 +129,7 @@ export default function BookSelectedPage({ bookId }: { bookId: string }) {
                   <Eye className="w-5 h-5 text-gray-500 mt-1 flex-shrink-0" />
                   <div>
                     <p className="text-sm text-gray-500">ចំនួនអ្នកមើល</p>
-                    <p className="text-[15px] font-medium text-gray-900">{selectedBook.views.toLocaleString()} នាក់</p>
+                    <p className="text-[15px] font-medium text-gray-900">{(selectedBook.views || 0).toLocaleString()} នាក់</p>
                   </div>
                 </div>
               </div>
@@ -152,7 +143,7 @@ export default function BookSelectedPage({ bookId }: { bookId: string }) {
 
                 <div className="flex gap-4 mt-6">
                     <button
-                      onClick={() => window.open(selectedBook.pdfSrc, '_blank')}
+                      onClick={() => window.open(selectedBook.pdfUrl, '_blank')}
                       className="flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 shadow-lg hover:shadow-xl"
                     >
                       ចាប់ផ្តេីមអាន

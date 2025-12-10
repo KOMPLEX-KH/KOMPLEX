@@ -6,6 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { feedLibraryService } from "@/services";
 import type { Book, Subject } from "@core-types/content/library";
+import { subjectNameMap } from "@core-types/content/library";
 
 export default function ViewAllByCategory() {
   const router = useRouter();
@@ -16,18 +17,18 @@ export default function ViewAllByCategory() {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
     const fetchData = async () => {
       if (!categoryId) return;
       
       try {
         setLoading(true);
-        const [booksResponse, subjectsResponse] = await Promise.all([
+        const [booksResponse] = await Promise.all([
           feedLibraryService.getBooksBySubject(categoryId),
-          feedLibraryService.getAllSubjects(),
         ]);
         setBooksInCategory(booksResponse.books);
-        setSubjects(subjectsResponse);
+        setSubjects([]); // Empty until backend is ready
       } catch (error) {
         console.error("Error fetching category books:", error);
       } finally {
@@ -47,19 +48,14 @@ export default function ViewAllByCategory() {
     );
   }
 
-  const category = subjects.find((c) => c.id === categoryId);
+  // Get category name from mapping or subjects array
+  const category = subjects.find((c) => c.id === categoryId) || 
+                   (categoryId ? { id: categoryId, name: subjectNameMap[categoryId] || categoryId } : null);
 
   const handleBookSelected = (bookId: string) => {
     router.push(`?tab=library&book=${bookId}`);
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
 
   if (!category) {
     return (

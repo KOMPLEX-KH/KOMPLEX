@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import EmptyState from "../utils/EmptyState";
 import { feedLibraryService } from "@/services";
+import { subjectNameMap } from "@core-types/content/library";
 import type { Book, Subject } from "@core-types/content/library";
 
 export default function BookContainer() {
@@ -18,22 +19,18 @@ export default function BookContainer() {
 
   const [books, setBooks] = useState<Book[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        const [booksResponse, subjectsResponse] = await Promise.all([
+        const [booksResponse] = await Promise.all([
           feedLibraryService.getAllBooks(),
-          feedLibraryService.getAllSubjects(),
         ]);
         setBooks(booksResponse.books);
-        setSubjects(subjectsResponse);
+        setSubjects([]);
+        
       } catch (error) {
         console.error("Error fetching library data:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -54,18 +51,25 @@ export default function BookContainer() {
 
   const recommendedBooks = books.filter((b) => b.isRecommended);
 
+
+  const displaySubjects = subjects.length > 0 
+    ? subjects 
+    : Array.from(new Set(books.map(b => b.subjectId)))
+        .filter(id => id)
+        .map(id => ({ 
+          id, 
+          name: subjectNameMap[id] || id
+        }));
+
+  console.log('📊 Display subjects:', displaySubjects);
+  console.log('📊 Total books:', books.length);
+  console.log('📊 Recommended books:', recommendedBooks.length);
+
   const handleBookSelected = (bookId: string) => {
     router.push(`?tab=library&book=${bookId}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col pt-3">
@@ -103,10 +107,10 @@ export default function BookContainer() {
       {/* Empty state when no books at all */}
       {books.length === 0 && <EmptyState />}
 
-      {subjects.map((subject) => {
+      {displaySubjects.map((subject) => {
         if (subject.id === "all") return null;
 
-        const booksInSubject = books.filter((b) => b.categoryId === subject.id);
+        const booksInSubject = books.filter((b) => b.subjectId === subject.id);
         if (booksInSubject.length === 0) return null;
         return (
           <section key={subject.id}

@@ -1,5 +1,6 @@
-import { BookOpen, Search } from "lucide-react";
+import { BookOpen, Search, User } from "lucide-react";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import type { Book } from "@core-types/content/library";
 
 interface SearchDropdownProps {
@@ -7,6 +8,7 @@ interface SearchDropdownProps {
   searchQuery: string;
   books: Book[];
   onBookClick: (bookId: string) => void;
+  onClose?: () => void;
 }
 
 export default function SearchDropdown({
@@ -14,6 +16,7 @@ export default function SearchDropdown({
   searchQuery,
   books,
   onBookClick,
+  onClose,
 }: SearchDropdownProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -56,12 +59,22 @@ export default function SearchDropdown({
             filteredBooks.map((book) => (
               <button
                 key={book.id}
-                onClick={() => onBookClick(book.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onBookClick(book.id);
+                  onClose?.();
+                }}
                 className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-all duration-200 text-left group"
               >
                 {/* Book Cover Placeholder */}
-                <div className="w-12 h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
-                  <div className="w-full h-full bg-gray-300 group-hover:scale-105 transition-transform duration-300"></div>
+                <div className="relative w-20 h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg flex-shrink-0 overflow-hidden">
+                  <Image 
+                      src={book.imageUrl} 
+                      alt={book.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      unoptimized
+                  /> 
                 </div>
 
                 {/* Book Info */}
@@ -69,12 +82,11 @@ export default function SearchDropdown({
                   <h4 className="font-semibold text-gray-800 text-sm truncate group-hover:text-blue-600 transition-colors">
                     {book.title}
                   </h4>
-                  <p className="text-xs text-gray-500 truncate">{book.author}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full">
-                      {book.grade ? `ថ្នាក់ ${book.grade}` : "N/A"}
-                    </span>
+                  <div className="flex items-center">
+                        <User className="w-3 h-3 inline-block text-gray-400 mr-1" />
+                       <p className="text-xs text-gray-500 truncate">{book.author}</p>
                   </div>
+                 
                 </div>
 
                 {/* Arrow Icon */}

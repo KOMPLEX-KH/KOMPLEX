@@ -9,6 +9,7 @@ import CalendarContent from "@/components/pages/extras/calendar/content";
 import LibraryContentSkeleton from "@/components/pages/extras/library/utils/BookSkeleton";
 // import NotesContentSkeleton from "@/components/pages/extras/";
 import NotesContentSkeleton from "@/components/pages/extras/notes/utils/NoteSkeleton";
+import FormularContentSkeleton from "@/components/pages/extras/formular/utils/FormularSkeleton";
 import CalculateContentSkeleton from "@/components/pages/extras/calculate/utils/CalculateSkeleton";
 import NotFound from "../not-found";
 import { useState } from "react";
@@ -46,6 +47,8 @@ export default function ExtraHelper({ currentTab }: HelpWrapperProps) {
                 return <NotesContentSkeleton/>
             case "calculate":
                 return <CalculateContentSkeleton/>
+            case "formular":
+                return <FormularContentSkeleton/>
             default:
             return(
                 <div className="p-10 text-center text-gray-400">
