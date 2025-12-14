@@ -10,6 +10,7 @@ import { createFeedExerciseService } from "@core-services/feed/exercises";
 import { createFeedForumService } from "@core-services/feed/forums";
 import { createFeedVideoService } from "@core-services/feed/videos";
 import { createFeedCurriculumsService } from "@core-services/feed/curriculums";
+import { createFeedBlogService as createFeedNewsService } from "@/services/feed/news";
 import { createFeedForumCommentService } from "@core-services/feed/forum-comments";
 import { createFeedForumReplyService } from "@core-services/feed/forum-replies";
 import { createFeedVideoCommentService } from "@core-services/feed/video-comments";
@@ -30,6 +31,7 @@ import { createMeVideoService } from "@core-services/me/videos";
 import { createMeVideoCommentService } from "@core-services/me/video-comments";
 import { createMeVideoReplyService } from "@core-services/me/video-replies";
 import { createMeVideoHistoryService } from "@core-services/me/video-history";
+import { createMeLastAccessedService } from "@/services/me/last-accessed";
 
 // User services
 import { createUserBlogService } from "@core-services/user/blogs";
@@ -47,6 +49,7 @@ export const feedExerciseService = createFeedExerciseService(api);
 export const feedForumService = createFeedForumService(api);
 export const feedVideoService = createFeedVideoService(api);
 export const feedCurriculumsService = createFeedCurriculumsService(api);
+export const feedNewsService = createFeedNewsService(api);
 export const feedForumCommentService = createFeedForumCommentService(api);
 export const feedForumReplyService = createFeedForumReplyService(api);
 export const feedVideoCommentService = createFeedVideoCommentService(api);
@@ -67,6 +70,7 @@ export const meVideoService = createMeVideoService(api);
 export const meVideoCommentService = createMeVideoCommentService(api);
 export const meVideoReplyService = createMeVideoReplyService(api);
 export const meVideoHistoryService = createMeVideoHistoryService(api);
+export const meLastAccessedService = createMeLastAccessedService(api);
 
 // User services
 export const userBlogService = createUserBlogService(api);

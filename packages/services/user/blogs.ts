@@ -1,11 +1,11 @@
 import type { AxiosInstance } from "axios";
-import type { Blog } from "../../types/content/blogs";
+import type { News } from "../../types/content/news";
 
 export const createUserBlogService = (api: AxiosInstance) => {
   return {
-    getUserBlogs: async (userId: string): Promise<Blog[]> => {
+    getUserBlogs: async (userId: string): Promise<News[]> => {
       try {
-        const response = await api.get<{ data: Blog[] }>(
+        const response = await api.get<{ data: News[] }>(
           `/users/${userId}/blogs`
         );
         return response.data.data;

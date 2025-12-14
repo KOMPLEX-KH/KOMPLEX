@@ -1,11 +1,78 @@
 import { useRouter, usePathname } from "expo-router"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
+import { View, Pressable } from "react-native"
 import Logo from "@/components/common/Logo"
+import { Text } from "@/components/common/Text"
+import { meLastAccessedService } from "@/services"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { tw } from "@/utils/styles"
+import { AlertCircle, RefreshCw } from "lucide-react-native"
 
 export default function LessonsScreen() {
     const router = useRouter()
     const pathname = usePathname()
     const hasRedirectedRef = useRef(false)
+    const [error, setError] = useState<string | null>(null)
+
+    const navigateToLastTopic = useCallback(async () => {
+        try {
+            setError(null)
+
+            // Get last accessed topic
+            const response = await meLastAccessedService.getLastAccessed()
+            const lastAccessed = response.lastAccessed
+
+            // If no last topic, navigate to default
+            if (!lastAccessed.lastTopic) {
+                router.replace("/docs/1/1/1/1" as any)
+                return
+            }
+
+            // Get curriculum from AsyncStorage
+            const stored = await AsyncStorage.getItem('curriculum')
+            if (!stored) {
+                // If no curriculum, navigate to default
+                router.replace("/docs/1/1/1/1" as any)
+                return
+            }
+
+            const curriculumData = JSON.parse(stored)
+            const topicId = lastAccessed.lastTopic.id
+
+            // Search through all grades, subjects, lessons to find the topic
+            let foundGrade: any = null
+            let foundSubject: any = null
+            let foundLesson: any = null
+            let foundTopic: any = null
+
+            for (const grade of curriculumData) {
+                for (const subject of grade.subjects || []) {
+                    for (const lesson of subject.lessons || []) {
+                        const topic = lesson.topics?.find((t: any) => t.id === topicId)
+                        if (topic) {
+                            foundGrade = grade
+                            foundSubject = subject
+                            foundLesson = lesson
+                            foundTopic = topic
+                            break
+                        }
+                    }
+                    if (foundTopic) break
+                }
+                if (foundTopic) break
+            }
+
+            if (foundGrade && foundSubject && foundLesson && foundTopic) {
+                router.replace(`/docs/${foundGrade.id}/${foundSubject.id}/${foundLesson.id}/${foundTopic.id}` as any)
+            } else {
+                // Fallback to default if topic not found
+                router.replace("/docs/1/1/1/1" as any)
+            }
+        } catch (err: any) {
+            console.error('Error navigating to last topic:', err)
+            setError(err.message || "មានបញ្ហាកើតឡើងពេលទាញយកទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។")
+        }
+    }, [router])
 
     useEffect(() => {
         // Only redirect if we're exactly on /docs route
@@ -18,12 +85,48 @@ export default function LessonsScreen() {
         // Redirect if we haven't redirected yet in this mount
         if (pathname === "/docs" && !hasRedirectedRef.current) {
             hasRedirectedRef.current = true
-            router.replace("/docs/1/1/1/1" as any)
+            navigateToLastTopic()
         }
-    }, [pathname, router])
+    }, [pathname, navigateToLastTopic])
+
+    const handleRetry = () => {
+        hasRedirectedRef.current = false
+        navigateToLastTopic()
+    }
+
+    if (error) {
+        return (
+            <View style={tw("flex-1 bg-white justify-center items-center px-6")}>
+                <View style={tw("items-center gap-4")}>
+                    <View style={tw("p-4 rounded-full bg-red-100")}>
+                        <AlertCircle size={48} color="#dc2626" />
+                    </View>
+                    <View style={tw("items-center gap-2")}>
+                        <Text style={tw("text-xl font-kh-bold text-gray-900 text-center")}>
+                            មានបញ្ហាកើតឡើង
+                        </Text>
+                        <Text style={tw("text-base font-kh-normal text-gray-600 text-center")}>
+                            {error}
+                        </Text>
+                    </View>
+                    <Pressable
+                        onPress={handleRetry}
+                        style={tw("flex-row items-center gap-2 bg-indigo-600 px-6 py-3 rounded-full mt-4")}
+                    >
+                        <RefreshCw size={18} color="#ffffff" />
+                        <Text style={tw("text-white font-kh-medium text-base")}>
+                            ព្យាយាមម្តងទៀត
+                        </Text>
+                    </Pressable>
+                </View>
+            </View>
+        )
+    }
 
     return (
-        <Logo isLoading isVertical size="xl"/>
+        <View style={tw("flex-1 bg-white justify-center items-center")}>
+            <Logo isLoading isVertical size="xl" />
+        </View>
     )
 }
 

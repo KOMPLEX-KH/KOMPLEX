@@ -120,7 +120,7 @@ export default function UserProfilePage() {
 
     return (
         <View style={tw('flex-1 bg-gray-50')}>
-            <ScrollView style={tw('flex-1')} contentContainerStyle={tw('pb-20')} showsVerticalScrollIndicator={false}>
+            <ScrollView style={tw('flex-1')}  showsVerticalScrollIndicator={false}>
                 {/* Profile Header */}
                 <View style={tw('bg-white pb-6 pt-20 px-4')}>
                     <View style={tw('items-center mb-6')}>

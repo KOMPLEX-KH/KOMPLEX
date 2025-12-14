@@ -1,17 +1,17 @@
 import type { AxiosInstance } from "axios";
-import type { Blog } from "../../types/content/blogs";
+import type { News } from "@core-types/content/news";
 
 export const createFeedBlogService = (api: AxiosInstance) => {
   return {
     // Get all blog posts
-    getAllBlogs: async (): Promise<{
-      blogs: Blog[];
+    getAllNews: async (): Promise<{
+      news: News[];
       hasMore: boolean;
     }> => {
       try {
-        const response = await api.get(`/feed/blogs`);
+        const response = await api.get(`/feed/news`);
         return {
-          blogs: response.data.data,
+          news: response.data.data,
           hasMore: response.data.hasMore,
         };
       } catch (error) {
@@ -21,9 +21,9 @@ export const createFeedBlogService = (api: AxiosInstance) => {
     },
 
     // Get a single blog post by ID
-    getBlogById: async (id: string): Promise<Blog & { isSaved: boolean }> => {
+    getNewsById: async (id: string): Promise<News & { isSaved: boolean }> => {
       try {
-        const response = await api.get(`/feed/blogs/${id}`);
+        const response = await api.get(`/feed/news/${id}`);
         return response.data.data;
       } catch (error) {
         console.error("Error fetching blog post:", error);

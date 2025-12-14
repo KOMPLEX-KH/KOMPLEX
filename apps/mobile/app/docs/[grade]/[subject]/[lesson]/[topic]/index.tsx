@@ -12,6 +12,7 @@ import { deserializeTopicContentV3 } from "@/components/screens/docs/utils/Conte
 import ContentRenderer from "@/components/screens/docs/utils/ContentRenderer"
 import { Grade } from "@core-types/docs/curriculum"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import AiButton from "@/components/screens/docs/AiButton"
 
 type Params = {
     grade: string
@@ -313,7 +314,7 @@ export default function TopicScreen() {
                     currentLesson={memoizedParams.lesson}
                     currentTopic={memoizedParams.topic}
                 />
-                <ScrollView contentContainerStyle={tw("py-36 px-4")}>
+                <ScrollView contentContainerStyle={tw("pt-40 pb-14 px-4")}>
                     <TopicWrapper
                         title={topicInfo.topic?.name || ""}
                         prev={navigationData?.prev || null}
@@ -338,7 +339,7 @@ export default function TopicScreen() {
                     currentLesson={memoizedParams.lesson}
                     currentTopic={memoizedParams.topic}
                 />
-                <ScrollView contentContainerStyle={tw("py-36 px-4")}>
+                <ScrollView contentContainerStyle={tw("pt-40 pb-14 px-4")}>
                     <TopicWrapper
                         title={topicInfo.topic?.name || ""}
                         prev={navigationData?.prev || null}
@@ -363,7 +364,7 @@ export default function TopicScreen() {
                     currentLesson={memoizedParams.lesson}
                     currentTopic={memoizedParams.topic}
                 />
-                <ScrollView contentContainerStyle={tw("py-36 px-4")}>
+                <ScrollView contentContainerStyle={tw("pt-40 pb-14 px-4")}>
                     <TopicWrapper
                         title={topicInfo.topic?.name || ""}
                         prev={navigationData?.prev || null}
@@ -381,7 +382,7 @@ export default function TopicScreen() {
     const deserialized = deserializeTopicContentV3(topicComponent)
 
     return (
-        <View style={tw("flex-1 bg-white")}>
+        <View style={tw("flex-1 bg-white relative")}>
             <DocHeader
                 isVisible={isHeaderVisible}
                 currentGrade={memoizedParams.grade}
@@ -389,7 +390,7 @@ export default function TopicScreen() {
                 currentLesson={memoizedParams.lesson}
                 currentTopic={memoizedParams.topic}
             />
-            <ScrollView contentContainerStyle={tw("py-40 px-4")}>
+            <ScrollView contentContainerStyle={tw("pt-40 pb-24 px-4")}>
                 <TopicWrapper
                     title={topicInfo.topic?.name || ""}
                     prev={navigationData?.prev || null}
@@ -399,6 +400,7 @@ export default function TopicScreen() {
                     <ContentRenderer key={topicKey} content={deserialized} />
                 </TopicWrapper>
             </ScrollView>
+            <AiButton />
         </View>
     )
 }

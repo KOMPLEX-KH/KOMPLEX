@@ -1,14 +1,19 @@
 import { Pressable, View, Modal, ScrollView, Animated } from 'react-native';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
-import { BookOpen, Bot, Camera, Library, MessageSquare, ArrowRight, FileText, Calculator, GraduationCap } from 'lucide-react-native'
+import { BookOpen, Bot, Camera, Library, MessageSquare, ArrowRight, FileText, Calculator } from 'lucide-react-native'
 import FeatureCard from '@/components/screens/home/FeatureCard';
 import { TAILWIND_COLORS } from '@/constants/styles/tailwind-colors';
 import { useRouter } from 'expo-router';
 import HomeHeader from '@/components/screens/home/HomeHeader';
 import NewsCard from '@/components/screens/news/NewsCard';
 import NewsSkeleton from '@/components/screens/news/NewsSkeleton';
+import ContinueSkeleton from '@/components/screens/home/ContinueSkeleton';
+import { feedNewsService, meLastAccessedService } from '@/services';
+import type { News } from '@core-types/content/news';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MAIN_FEATURES = {
     lessons: {
@@ -45,14 +50,9 @@ const MAIN_FEATURES = {
     },
 }
 
-interface NewsItem {
-    id: string | number;
-    image: string;
-    title: string;
-    description: string;
-}
 
 interface ContinueItem {
+    id: number;
     title: string;
     type: 'lesson' | 'video' | 'chat';
     icon: React.ReactNode;
@@ -68,92 +68,136 @@ interface QuickAction {
 
 export default function HomeScreen() {
     const router = useRouter();
-    const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+    const [newsItems, setNewsItems] = useState<News[]>([]);
     const [loadingNews, setLoadingNews] = useState<boolean>(true);
+    const [loadingContinue, setLoadingContinue] = useState<boolean>(true);
     const [showComingSoon, setShowComingSoon] = useState<boolean>(false);
     const [continueItems, setContinueItems] = useState<ContinueItem[]>([]);
     const scrollY = useRef(new Animated.Value(0)).current;
 
-    useEffect(() => {
-        // TODO: Replace with actual news API call
-        const loadNews = async () => {
-            try {
-                setLoadingNews(true);
-                // Static data for now
-                const staticNews: NewsItem[] = [
-                    {
-                        id: 1,
-                        image: 'https://via.placeholder.com/400x300',
-                        title: 'ព័ត៌មានថ្មីៗ',
-                        description: 'សូមអានព័ត៌មានថ្មីៗរបស់យើង',
-                    },
-                    {
-                        id: 2,
-                        image: 'https://via.placeholder.com/400x300',
-                        title: 'ព័ត៌មានសំខាន់',
-                        description: 'ព័ត៌មានសំខាន់ៗដែលអ្នកមិនគួរខកខាន',
-                    },
-                    {
-                        id: 3,
-                        image: 'https://via.placeholder.com/400x300',
-                        title: 'ព័ត៌មានអប់រំ',
-                        description: 'ព័ត៌មានអប់រំនិងការអភិវឌ្ឍន៍',
-                    },
-                ];
-                setNewsItems(staticNews);
-            } catch (err) {
-                console.error("Error loading news:", err);
-            } finally {
-                setLoadingNews(false);
-            }
-        };
-        loadNews();
+    const loadNews = useCallback(async () => {
+        try {
+            setLoadingNews(true);
+            const response = await feedNewsService.getAllNews();
+            setNewsItems(response.news);
+        } catch (err) {
+            console.error("Error loading news:", err);
+        } finally {
+            setLoadingNews(false);
+        }
     }, []);
 
-    useEffect(() => {
-        // TODO: Replace with actual continue progress API calls
-        // For now, using static/mock data
-        const loadContinueItems = () => {
+    const loadContinueItems = useCallback(async () => {
+        try {
+            setLoadingContinue(true);
+            const response = await meLastAccessedService.getLastAccessed();
             const items: ContinueItem[] = [];
 
+            const lastAccessed = response.lastAccessed;
+
             // Continue Lesson
-            items.push({
-                type: 'lesson',
-                title: 'គណិតវិទ្យា - ចំនួនកុំផ្លិច',
-                icon: <BookOpen size={20} color="#4F46E5" />,
-                onPress: () => {
-                    // TODO: Navigate to last lesson
-                    router.push('/docs');
-                },
-            });
+            if (lastAccessed.lastTopic) {
+                items.push({
+                    type: 'lesson',
+                    id: lastAccessed.lastTopic.id,
+                    title: lastAccessed.lastTopic.name,
+                    icon: <BookOpen size={20} color="#4F46E5" />,
+                    onPress: async () => {
+                        try {
+                            const stored = await AsyncStorage.getItem('curriculum');
+                            if (stored) {
+                                const curriculumData = JSON.parse(stored);
+                                const topicId = lastAccessed.lastTopic.id;
+
+                                // Search through all grades, subjects, lessons to find the topic
+                                let foundGrade: any = null;
+                                let foundSubject: any = null;
+                                let foundLesson: any = null;
+                                let foundTopic: any = null;
+
+                                for (const grade of curriculumData) {
+                                    for (const subject of grade.subjects || []) {
+                                        for (const lesson of subject.lessons || []) {
+                                            const topic = lesson.topics?.find((t: any) => t.id === topicId);
+                                            if (topic) {
+                                                foundGrade = grade;
+                                                foundSubject = subject;
+                                                foundLesson = lesson;
+                                                foundTopic = topic;
+                                                break;
+                                            }
+                                        }
+                                        if (foundTopic) break;
+                                    }
+                                    if (foundTopic) break;
+                                }
+
+                                if (foundGrade && foundSubject && foundLesson && foundTopic) {
+                                    router.push(`/docs/${foundGrade.id}/${foundSubject.id}/${foundLesson.id}/${foundTopic.id}` as any);
+                                } else {
+                                    // Fallback to docs page if topic not found
+                                    router.push('/docs' as any);
+                                }
+                            } else {
+                                // If no curriculum in storage, navigate to docs page
+                                router.push('/docs' as any);
+                            }
+                        } catch (error) {
+                            console.error('Error navigating to topic:', error);
+                            router.push('/docs' as any);
+                        }
+                    },
+                });
+            }
 
             // Continue Video
-            items.push({
-                type: 'video',
-                title: 'ការរៀនគណិតវិទ្យា',
-                icon: <Camera size={20} color="#4F46E5" />,
-                onPress: () => {
-                    // TODO: Navigate to last video
-                    router.push('/videos');
-                },
-            });
+            if (lastAccessed.lastVideo) {
+                items.push({
+                    type: 'video',
+                    id: lastAccessed.lastVideo.id,
+                    title: lastAccessed.lastVideo.title,
+                    icon: <Camera size={20} color="#4F46E5" />,
+                    onPress: () => {
+                        router.push(`/videos/${lastAccessed.lastVideo.id}` as any);
+                    },
+                });
+            }
 
             // Continue Chat
-            items.push({
-                type: 'chat',
-                title: 'សន្ទនាអំពីគណិតវិទ្យា',
-                icon: <Bot size={20} color="#4F46E5" />,
-                onPress: () => {
-                    // TODO: Navigate to last chat tab
-                    router.push('/ai/chat');
-                },
-            });
+            if (lastAccessed.lastAiTab) {
+                items.push({
+                    id: lastAccessed.lastAiTab.id,
+                    type: 'chat',
+                    title: lastAccessed.lastAiTab.name,
+                    icon: <Bot size={20} color="#4F46E5" />,
+                    onPress: () => {
+                        router.push(`/ai/chat?tabId=${lastAccessed.lastAiTab.id}` as any);
+                    },
+                });
+            }
 
             setContinueItems(items);
-        };
-
-        loadContinueItems();
+        } catch (err) {
+            console.error("Error loading last accessed:", err);
+            setContinueItems([]);
+        } finally {
+            setLoadingContinue(false);
+        }
     }, [router]);
+
+    // Initial load on mount
+    useEffect(() => {
+        loadNews();
+        loadContinueItems();
+    }, [loadNews, loadContinueItems]);
+
+    // Refresh data when screen comes into focus
+    useFocusEffect(
+        useCallback(() => {
+            loadNews();
+            loadContinueItems();
+        }, [loadNews, loadContinueItems])
+    );
 
     const quickActions: QuickAction[] = [
         {
@@ -292,34 +336,38 @@ export default function HomeScreen() {
                     <View style={tw("px-4 pt-6 pb-6")}>
                         {/* Continue Progress Section */}
                         <View style={tw("mb-8")}>
-                            <View style={tw("gap-3")}>
-                                {continueItems.map((item, index) => (
-                                    <Pressable
-                                        key={index}
-                                        onPress={item.onPress}
-                                        style={tw("bg-white rounded-3xl border border-gray-200 p-4 flex-row items-center justify-between shadow-sm")}
-                                    >
-                                        <View style={tw("flex-row items-center gap-3 flex-1")}>
-                                            <View style={tw("p-2 rounded-full bg-indigo-50 border border-indigo-600")}>
-                                                {item.icon}
+                            {loadingContinue ? (
+                                <ContinueSkeleton count={3} />
+                            ) : continueItems.length > 0 ? (
+                                <View style={tw("gap-3")}>
+                                    {continueItems.map((item, index) => (
+                                        <Pressable
+                                            key={index}
+                                            onPress={item.onPress}
+                                            style={tw("bg-white rounded-3xl border border-gray-200 p-4 flex-row items-center justify-between shadow-sm")}
+                                        >
+                                            <View style={tw("flex-row items-center gap-3 flex-1")}>
+                                                <View style={tw("p-2 rounded-full bg-indigo-50 border border-indigo-600")}>
+                                                    {item.icon}
+                                                </View>
+                                                <View style={tw("flex-1")}>
+                                                    <Text style={tw("text-sm font-kh-medium text-gray-500 mb-1")}>
+                                                        បន្ត{item.type === 'lesson' ? 'មេរៀន' : item.type === 'video' ? 'វីដេអូ' : 'សន្ទនា'}
+                                                    </Text>
+                                                    <Text style={tw("text-base font-kh-bold text-gray-900")} numberOfLines={1}>
+                                                        {item.title}
+                                                    </Text>
+                                                </View>
                                             </View>
-                                            <View style={tw("flex-1")}>
-                                                <Text style={tw("text-sm font-kh-medium text-gray-500 mb-1")}>
-                                                    បន្ត{item.type === 'lesson' ? 'មេរៀន' : item.type === 'video' ? 'វីដេអូ' : 'សន្ទនា'}
-                                                </Text>
-                                                <Text style={tw("text-base font-kh-bold text-gray-900")} numberOfLines={1}>
-                                                    {item.title}
-                                                </Text>
+                                            <View style={tw("ml-2")}>
+                                                <View style={tw("w-10 h-10 rounded-full bg-indigo-600 items-center justify-center")}>
+                                                    <ArrowRight size={16} color="white" />
+                                                </View>
                                             </View>
-                                        </View>
-                                        <View style={tw("ml-2")}>
-                                            <View style={tw("w-10 h-10 rounded-full bg-indigo-600 items-center justify-center")}>
-                                                <ArrowRight size={16} color="white" />
-                                            </View>
-                                        </View>
-                                    </Pressable>
-                                ))}
-                            </View>
+                                        </Pressable>
+                                    ))}
+                                </View>
+                            ) : null}
                         </View>
 
                         <View style={tw(" mb-6 ")}>
@@ -360,12 +408,12 @@ export default function HomeScreen() {
                                         <NewsCard
                                             key={item.id}
                                             id={item.id}
-                                            image={"https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
+                                            image={item.media && item.media.length > 0 ? item.media[0].url : 'https://via.placeholder.com/400x300'}
                                             title={item.title}
                                             description={item.description}
                                             onPress={() => {
                                                 // TODO: Navigate to news detail page
-                                                console.log('Navigate to news:', item.id);
+                                                router.push(`/news/${item.id}` as any);
                                             }}
                                         />
                                     ))

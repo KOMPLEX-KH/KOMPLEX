@@ -1,6 +1,6 @@
 import { Media } from "./media";
 
-export interface Blog {
+export interface News {
   id: number;
   userId: number;
   profileImage: string;

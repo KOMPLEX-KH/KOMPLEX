@@ -132,7 +132,6 @@ export default function MyContent() {
         <View style={tw("flex-1 bg-gray-50")}>
             <ScrollView
                 style={tw("flex-1")}
-                contentContainerStyle={tw("pb-20")}
                 showsVerticalScrollIndicator={false}
             >
                 {/* Profile Header */}

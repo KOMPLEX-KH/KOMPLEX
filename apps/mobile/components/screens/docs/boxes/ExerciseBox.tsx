@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { View, Pressable, ScrollView } from "react-native";
+import { View, Pressable } from "react-native";
 import {
   ChevronLeft,
   ChevronRight,
@@ -23,11 +23,15 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-// Shuffle questions and their options, tracking correct answer
-function shuffleQuestions(questions: ExerciseQuestion[]): ExerciseQuestion[] {
-  const shuffledQuestions = shuffleArray(questions);
+// Pick 5 random questions from the pool and shuffle them
+function pickAndShuffleQuestions(questions: ExerciseQuestion[], maxQuestions: number = 5): ExerciseQuestion[] {
+  // First, shuffle the entire pool
+  const shuffledPool = shuffleArray(questions);
+  // Pick only the first maxQuestions (5) from the shuffled pool, or all if less than maxQuestions
+  const selectedQuestions = shuffledPool.slice(0, Math.min(maxQuestions, questions.length));
 
-  return shuffledQuestions.map((question) => {
+  // Then shuffle the selected questions and their options
+  return selectedQuestions.map((question) => {
     const originalOptions = [...question.options];
     // Ensure correctAnswer is a number
     const originalCorrectAnswer = typeof question.correctAnswer === 'number'
@@ -66,8 +70,9 @@ function shuffleQuestions(questions: ExerciseQuestion[]): ExerciseQuestion[] {
 }
 
 export default function ExerciseBox({ questions }: ExerciseBoxProps) {
+  const MAX_QUESTIONS = 5;
   const [shuffledQuestions, setShuffledQuestions] = useState<ExerciseQuestion[]>(() =>
-    shuffleQuestions(questions)
+    pickAndShuffleQuestions(questions, MAX_QUESTIONS)
   );
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   // Store answers for each question: { questionIndex: selectedAnswer }
@@ -159,8 +164,8 @@ export default function ExerciseBox({ questions }: ExerciseBoxProps) {
     // Clear the just-answered flag
     justAnsweredRef.current = null;
 
-    // Reset everything and re-shuffle
-    setShuffledQuestions(shuffleQuestions(questions));
+    // Reset everything and pick 5 new random questions from the full pool
+    setShuffledQuestions(pickAndShuffleQuestions(questions, MAX_QUESTIONS));
     setCurrentQuestionIndex(0);
     setAnswers({});
   };
@@ -250,7 +255,7 @@ export default function ExerciseBox({ questions }: ExerciseBoxProps) {
           </Text>
           <View style={tw("flex-1")}>
             {isMath ? (
-              <MathRenderer math={option}  />
+              <MathRenderer math={option} />
             ) : (
               <Text style={tw(textColor)}>{option}</Text>
             )}
@@ -344,7 +349,7 @@ export default function ExerciseBox({ questions }: ExerciseBoxProps) {
         </Pressable>
 
         {/* Question Dots */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={tw("flex-row gap-2")}>
+        <View style={tw("flex-row justify-center items-center gap-2")}>
           {shuffledQuestions.map((_, index) => {
             const hasAnswer = answers[index] !== undefined;
             const isAnswered = answers[index] === shuffledQuestions[index].correctAnswer;
@@ -362,8 +367,7 @@ export default function ExerciseBox({ questions }: ExerciseBoxProps) {
                 key={index}
                 onPress={() => goToQuestion(index)}
                 style={tw(
-                  `w-3 h-3 rounded-full ${isCurrent ? "ring-2 ring-indigo-300 ring-offset-1" : ""
-                  }`
+                  `w-3 h-3 rounded-full `
                 )}
               >
                 <View
@@ -375,7 +379,7 @@ export default function ExerciseBox({ questions }: ExerciseBoxProps) {
               </Pressable>
             );
           })}
-        </ScrollView>
+        </View>
 
         {isLastQuestion ? (
           <Pressable
