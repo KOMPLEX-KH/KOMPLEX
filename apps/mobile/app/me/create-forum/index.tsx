@@ -11,7 +11,7 @@ import { Text } from '@/components/common/Text';
 import { meForumService } from '@/services/index';
 import { BackButton } from '@/components/common/BackButton';
 import { HEADER_CONFIG } from '@/constants/header-config';
-import { Plus, Tag, MessageCircle } from 'lucide-react-native';
+import { MessageCircle, Plus, Trash } from 'lucide-react-native';
 
 interface PickedImage {
     uri: string;
@@ -19,39 +19,22 @@ interface PickedImage {
     fileName?: string;
 }
 
-const forumTypeOptions = ['បទពិសោធន៍', 'វិធីសាស្ត្ររៀន', 'រឿងរ៉ាវ', 'គន្លឹះ'];
-const topicOptions = ['គណិតវិទ្យា', 'រូបវិទ្យា', 'គីមីវិទ្យា', 'ជីវវិទ្យា', 'អូឡាំពិច'];
-
-const typeMapping: Record<string, string> = {
-    'បទពិសោធន៍': 'discussion',
-    'វិធីសាស្ត្ររៀន': 'question',
-    'រឿងរ៉ាវ': 'discussion',
-    'គន្លឹះ': 'announcement',
-};
-
-const topicMapping: Record<string, string> = {
-    'គណិតវិទ្យា': 'math',
-    'រូបវិទ្យា': 'physics',
-    'គីមីវិទ្យា': 'chemistry',
-    'ជីវវិទ្យា': 'biology',
-    'អូឡាំពិច': 'general',
-};
-
 export default function CreateForumScreen() {
     const navigation = useNavigation();
     const router = useRouter();
     const { user, loading: authLoading } = useAuth();
 
     const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [forumType, setForumType] = useState(forumTypeOptions[0]);
-    const [topic, setTopic] = useState(topicOptions[0]);
-    const [images, setImages] = useState<PickedImage[]>([]);
+    const [bodyText, setBodyText] = useState('');
+    const [titleCharCount, setTitleCharCount] = useState(0);
+    const [selectedImages, setSelectedImages] = useState<PickedImage[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string>('');
+    const [success, setSuccess] = useState(false);
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: 'បង្កើតវេទិកា',
+            headerTitle: 'បង្កើតការពិភាក្សា',
             ...HEADER_CONFIG,
         });
     }, [navigation]);
@@ -62,12 +45,25 @@ export default function CreateForumScreen() {
         }
     }, [authLoading, user, router]);
 
-    const canSubmit = useMemo(() => {
-        return Boolean(title.trim() && description.trim());
-    }, [title, description]);
+    const handleTitleChange = (value: string) => {
+        if (value.length <= 300) {
+            setTitle(value);
+            setTitleCharCount(value.length);
+            if (error) setError('');
+        }
+    };
+
+    const handleBodyTextChange = (value: string) => {
+        setBodyText(value);
+        if (error) setError('');
+    };
+
+    const isFormValid = useMemo(() => {
+        return Boolean(title.trim() && bodyText.trim() && !error);
+    }, [title, bodyText, error]);
 
     const pickImage = async () => {
-        if (images.length >= 4) return;
+        if (selectedImages.length >= 4) return;
 
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
@@ -86,7 +82,7 @@ export default function CreateForumScreen() {
         }
 
         const asset = result.assets[0];
-        setImages((prev) => [
+        setSelectedImages((prev) => [
             ...prev,
             {
                 uri: asset.uri,
@@ -94,40 +90,57 @@ export default function CreateForumScreen() {
                 fileName: asset.fileName ?? `forum_${prev.length + 1}.jpg`,
             },
         ]);
+        if (error) setError('');
     };
 
     const removeImage = (uri: string) => {
-        setImages((prev) => prev.filter((image) => image.uri !== uri));
+        setSelectedImages((prev) => prev.filter((image) => image.uri !== uri));
+        if (error) setError('');
     };
 
     const handleSubmit = async () => {
-        if (!canSubmit) return;
+        if (!title.trim() || !bodyText.trim()) {
+            setError('សូមបំពេញចំណងជើងនិងមាតិកា');
+            return;
+        }
+
+        setIsSubmitting(true);
+        setError('');
+        setSuccess(false);
+
         try {
-            setIsSubmitting(true);
             const formData = new FormData();
             formData.append('title', title.trim());
-            formData.append('description', description.trim());
-            formData.append('type', typeMapping[forumType] ?? 'discussion');
-            formData.append('topic', topicMapping[topic] ?? 'general');
+            formData.append('description', bodyText.trim());
+            formData.append('type', 'discussion');
+            formData.append('topic', 'general');
 
-            images.forEach((image, index) => {
-                formData.append('images', {
-                    uri: image.uri,
-                    type: image.mimeType ?? 'image/jpeg',
-                    name: image.fileName ?? `forum_image_${index + 1}.jpg`,
-                } as any);
-            });
+            if (selectedImages.length > 0) {
+                selectedImages.forEach((image, index) => {
+                    formData.append('images', {
+                        uri: image.uri,
+                        type: image.mimeType ?? 'image/jpeg',
+                        name: image.fileName ?? `forum_image_${index + 1}.jpg`,
+                    } as any);
+                });
+            }
 
             await meForumService.createForum(formData);
-            Alert.alert('បានបង្កើត', 'វេទិកាត្រូវបានបង្កើតដោយជោគជ័យ', [
-                {
-                    text: 'យល់ព្រម',
-                    onPress: () => router.replace('/me/forums'),
-                },
-            ]);
+
+            setSuccess(true);
+
+            setTimeout(() => {
+                setTitle('');
+                setBodyText('');
+                setTitleCharCount(0);
+                setSelectedImages([]);
+                setError('');
+                setSuccess(false);
+                router.replace('/me/forums');
+            }, 1500);
         } catch (error) {
             console.error('Error creating forum:', error);
-            Alert.alert('បរាជ័យ', 'មានបញ្ហាកើតឡើងពេលបង្កើតវេទិកា សូមព្យាយាមម្ដងទៀត');
+            setError('មានបញ្ហាកើតឡើងពេលបង្កើតវេទិកា សូមព្យាយាមម្តងទៀត');
         } finally {
             setIsSubmitting(false);
         }
@@ -143,152 +156,175 @@ export default function CreateForumScreen() {
 
     return (
         <View style={tw('flex-1 bg-gray-50')}>
-            <Sidebar />
             <ScrollView
                 style={tw('flex-1')}
-                contentContainerStyle={tw('p-4 pt-20 gap-6 pb-24')}
+                contentContainerStyle={tw('p-6  pt-20 gap-6 ')}
                 keyboardShouldPersistTaps="handled"
                 showsVerticalScrollIndicator={false}
             >
-                <BackButton href="/me/forums" />
 
-                <View style={tw('bg-white rounded-3xl border border-gray-200 p-4 gap-4')}>
-                    <View style={tw('flex-row items-center gap-2')}>
-                        <MessageCircle size={18} color="#4F46E5" />
-                        <Text style={tw('text-lg font-kh-semibold text-gray-900')}>ព័ត៌មានវេទិកា</Text>
-                    </View>
+                <View style={tw('')}>
 
-                    <View style={tw('gap-2')}>
-                        <Text style={tw('text-sm font-kh-medium text-gray-700')}>ចំណងជើង</Text>
+                    {/* Title Input */}
+                    <View style={tw('mb-6')}>
+                        <Text style={tw('block text-sm font-kh-bold text-gray-700 mb-2')}>
+                            ចំណងជើង
+                        </Text>
                         <TextInput
                             value={title}
-                            onChangeText={setTitle}
-                            placeholder="សរសេរចំណងជើងវេទិកា..."
+                            onChangeText={handleTitleChange}
+                            placeholder="សរសេរចំណងជើងការឆ្លើយតបរបស់អ្នក..."
                             placeholderTextColor="#9CA3AF"
-                            style={tw('border border-gray-300 rounded-3xl px-4 py-3 font-kh-medium text-base text-gray-900')}
+                            maxLength={300}
+                            style={tw('w-full bg-white px-4 py-3 border border-gray-300 rounded-full text-sm font-kh-medium text-gray-900')}
                         />
+                        <View style={tw('flex-row justify-between items-center mt-2')}>
+                            <Text style={tw('text-xs text-gray-500')}>
+                                {titleCharCount}/300
+                            </Text>
+                        </View>
                     </View>
 
-                    <View style={tw('gap-2')}>
-                        <Text style={tw('text-sm font-kh-medium text-gray-700')}>មាតិកា</Text>
+                    {/* Image Upload */}
+                    <View style={tw('mb-6')}>
+                        <Text style={tw('block text-sm font-kh-bold text-gray-700 mb-2')}>
+                            រូបភាព ឬ វីដេអូ
+                        </Text>
+
+                        {/* 2x2 Grid for Images */}
+                        <View style={tw('flex-row flex-wrap gap-2')}>
+                            {selectedImages.map((image, index) => (
+                                <View
+                                    key={index}
+                                    style={[tw('relative    rounded-3xl overflow-hidden border border-gray-200'), { width: '48%' }]}
+                                >
+                                    <Image
+                                        source={{ uri: image.uri }}
+                                        style={tw('w-full h-48')}
+                                        resizeMode="cover"
+                                    />
+                                    <Pressable
+                                        onPress={() => removeImage(image.uri)}
+                                        style={tw('absolute top-2 right-2 w-6 h-6 bg-red-500 rounded-full items-center justify-center')}
+                                    >
+                                        <Trash size={12} color="#FFFFFF" />
+                                    </Pressable>
+                                </View>
+                            ))}
+
+                            {/* Upload Button (if less than 4 images) */}
+                            {selectedImages.length < 4 && (
+                                <Pressable
+                                    onPress={pickImage}
+                                    style={[tw('w-1/2 py-16 bg-white border-2 border-dashed border-gray-300 rounded-3xl items-center justify-center gap-2'), { width: '48%' }]}
+                                >
+                                    <Plus size={24} color="#6B7280" />
+                                    <Text style={tw('text-xs font-medium text-indigo-600')}>
+                                        ជ្រើសរើស
+                                    </Text>
+                                </Pressable>
+                            )}
+                        </View>
+
+                        {/* Image Count Info */}
+                        <View style={tw('mt-2')}>
+                            <Text style={tw('text-xs text-gray-500')}>
+                                {selectedImages.length}/4
+                            </Text>
+                        </View>
+                    </View>
+
+                    {/* Body Text */}
+                    <View style={tw('mb-6')}>
+                        <Text style={tw('block text-sm font-kh-bold text-gray-700 mb-2')}>
+                            មាតិកា
+                        </Text>
                         <TextInput
-                            value={description}
-                            onChangeText={setDescription}
-                            placeholder="សរសេរការពិពណ៌នាវេទិកា..."
+                            value={bodyText}
+                            onChangeText={handleBodyTextChange}
+                            placeholder="សរសេរមាតិកាវេទិការបស់អ្នក..."
                             placeholderTextColor="#9CA3AF"
                             multiline
                             textAlignVertical="top"
-                            style={tw('border border-gray-300 rounded-3xl px-4 py-3 min-h-[220px] font-kh-medium text-base text-gray-900')}
+                            style={[tw('border border-gray-300 bg-white rounded-3xl px-4 py-3 font-kh-medium text-base text-gray-900'), { minHeight: 200 }]}
                         />
                     </View>
-                </View>
 
-                <View style={tw('bg-white rounded-3xl border border-gray-200 p-4 gap-4')}>
-                    <View style={tw('flex-row items-center gap-2')}>
-                        <Tag size={18} color="#4F46E5" />
-                        <Text style={tw('text-lg font-kh-semibold text-gray-900')}>ប្រភេទ និង ប្រធានបទ</Text>
-                    </View>
-
-                    <View style={tw('gap-2')}>
-                        <Text style={tw('text-sm font-kh-medium text-gray-700')}>ប្រភេទវេទិកា</Text>
-                        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={tw('gap-2')}>
-                            {forumTypeOptions.map((option) => (
-                                <Pressable
-                                    key={option}
-                                    onPress={() => setForumType(option)}
-                                    style={tw(
-                                        `px-4 py-2 rounded-full border ${forumType === option ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200'
-                                        }`
-                                    )}
-                                >
-                                    <Text
-                                        style={tw(
-                                            `text-sm font-kh-medium ${forumType === option ? 'text-indigo-600' : 'text-gray-600'
-                                            }`
-                                        )}
-                                    >
-                                        {option}
-                                    </Text>
-                                </Pressable>
-                            ))}
-                        </ScrollView>
-                    </View>
-
-                    <View style={tw('gap-2')}>
-                        <Text style={tw('text-sm font-kh-medium text-gray-700')}>ប្រធានបទ</Text>
-                        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={tw('gap-2')}>
-                            {topicOptions.map((option) => (
-                                <Pressable
-                                    key={option}
-                                    onPress={() => setTopic(option)}
-                                    style={tw(
-                                        `px-4 py-2 rounded-full border ${topic === option ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200'
-                                        }`
-                                    )}
-                                >
-                                    <Text
-                                        style={tw(
-                                            `text-sm font-kh-medium ${topic === option ? 'text-indigo-600' : 'text-gray-600'
-                                            }`
-                                        )}
-                                    >
-                                        {option}
-                                    </Text>
-                                </Pressable>
-                            ))}
-                        </ScrollView>
-                    </View>
-                </View>
-
-                <View style={tw('bg-white rounded-3xl border border-gray-200 p-4 gap-4')}>
-                    <Text style={tw('text-sm font-kh-medium text-gray-700')}>រូបភាព (អតិបរមា 4)</Text>
-                    <View style={tw('flex-row flex-wrap gap-3')}>
-                        {images.map((image) => (
-                            <View key={image.uri} style={tw('relative w-[48%] aspect-video rounded-3xl overflow-hidden border border-gray-200')}>
-                                <Image source={{ uri: image.uri }} style={tw('w-full h-full')} resizeMode="cover" />
-                                <Pressable
-                                    onPress={() => removeImage(image.uri)}
-                                    style={tw('absolute top-2 right-2 w-7 h-7 rounded-full bg-red-500 items-center justify-center')}
-                                >
-                                    <Text style={tw('text-white font-kh-medium text-sm')}>×</Text>
-                                </Pressable>
+                    {/* Error Message */}
+                    {error && (
+                        <View style={tw('mb-6')}>
+                            <View style={tw('bg-red-50 border border-red-200 rounded-xl p-4')}>
+                                <View style={tw('flex-row items-center')}>
+                                    <View style={tw('flex-shrink-0')}>
+                                        <View style={tw('w-5 h-5 bg-red-400 rounded-full')} />
+                                    </View>
+                                    <View style={tw('ml-3')}>
+                                        <Text style={tw('text-sm text-red-800')}>{error}</Text>
+                                    </View>
+                                </View>
                             </View>
-                        ))}
-                        {images.length < 4 && (
-                            <Pressable
-                                onPress={pickImage}
-                                style={tw('w-[48%] aspect-video border-2 border-dashed border-gray-300 rounded-3xl items-center justify-center gap-2')}
-                            >
-                                <Plus size={20} color="#6B7280" />
-                                <Text style={tw('text-sm text-gray-500 font-kh-medium')}>ជ្រើសរើសរូប</Text>
-                            </Pressable>
-                        )}
+                        </View>
+                    )}
+
+                    {/* Success Message */}
+                    {success && (
+                        <View style={tw('mb-6')}>
+                            <View style={tw('bg-green-50 border border-green-200 rounded-xl p-4')}>
+                                <View style={tw('flex-row items-center')}>
+                                    <View style={tw('flex-shrink-0')}>
+                                        <View style={tw('w-5 h-5 bg-green-400 rounded-full')} />
+                                    </View>
+                                    <View style={tw('ml-3')}>
+                                        <Text style={tw('text-sm text-green-800')}>
+                                            បង្កើតវេទិកាបានជោគជ័យ! កំពុងបញ្ជូនទៅទំព័រវេទិកា...
+                                        </Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                    )}
+
+                    {/* Action Buttons */}
+                    <View style={tw('flex-row justify-end gap-3 pt-4 border-t border-gray-200')}>
+                        <Pressable
+                            onPress={handleSubmit}
+                            disabled={!isFormValid || isSubmitting}
+                            style={tw(
+                                `px-6 py-2 rounded-full ${isFormValid && !isSubmitting
+                                    ? 'bg-indigo-600'
+                                    : 'bg-gray-300'
+                                }`
+                            )}
+                        >
+                            {isSubmitting ? (
+                                <View style={tw('flex-row items-center gap-2')}>
+                                    <ActivityIndicator size="small" color="#FFFFFF" />
+                                    <Text style={tw('text-white font-medium')}>កំពុងបង្កើត...</Text>
+                                </View>
+                            ) : success ? (
+                                <View style={tw('flex-row items-center gap-2')}>
+                                    <View style={tw('w-4 h-4 bg-white rounded-full')} />
+                                    <Text style={tw('text-white font-medium')}>បានបង្កើតជោគជ័យ</Text>
+                                </View>
+                            ) : (
+                                <Text style={tw('text-white font-medium')}>បោះផ្សាយ</Text>
+                            )}
+                        </Pressable>
                     </View>
+
+                    {/* Retry Button for Errors */}
+                    {error && !isSubmitting && (
+                        <View style={tw('mt-4 items-center')}>
+                            <Pressable
+                                onPress={handleSubmit}
+                                style={tw('flex-row items-center gap-2 px-6 py-2 bg-red-600 rounded-full')}
+                            >
+                                <View style={tw('w-4 h-4')} />
+                                <Text style={tw('text-white font-medium')}>ព្យាយាមម្តងទៀត</Text>
+                            </Pressable>
+                        </View>
+                    )}
                 </View>
-
-                <Pressable
-                    onPress={handleSubmit}
-                    disabled={!canSubmit || isSubmitting}
-                    style={tw(
-                        `self-center flex-row items-center gap-2 px-6 py-3 rounded-full ${!canSubmit || isSubmitting ? 'bg-indigo-200' : 'bg-indigo-600'
-                        }`
-                    )}
-                >
-                    {isSubmitting ? (
-                        <ActivityIndicator color="#FFFFFF" size="small" />
-                    ) : (
-                        <Plus size={16} color="white" />
-                    )}
-                    <Text style={tw('text-white font-kh-medium text-sm')}>
-                        {isSubmitting ? 'កំពុងបង្កើត...' : 'បង្កើតវេទិកា'}
-                    </Text>
-                </Pressable>
-
-                {!canSubmit && !isSubmitting && (
-                    <Text style={tw('text-xs text-center text-gray-500 font-kh-medium')}>
-                        សូមបំពេញចំណងជើង និងមាតិកា ជាមុនសិន
-                    </Text>
-                )}
             </ScrollView>
         </View>
     );

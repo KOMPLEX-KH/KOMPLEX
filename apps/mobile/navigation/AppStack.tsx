@@ -55,6 +55,9 @@ export default function AppStack() {
             <Stack.Screen
                 name="ai"
             />
+            <Stack.Screen
+                name="ai/chat"
+            />
 
             <Stack.Screen
                 name="blogs"

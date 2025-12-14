@@ -1,82 +1,45 @@
 import { useState, useEffect, useLayoutEffect } from 'react';
-import { View, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
+import { View, ScrollView, Pressable, Image } from 'react-native';
+import { useRouter, Href } from 'expo-router';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
 import Sidebar from '@/components/screens/me/Sidebar';
-import {
-    MessageSquare,
-    Video,
-    Pencil,
-} from 'lucide-react-native';
-import { formatToKhmerDate } from '@core-utils/formater';
-import api from '@/configs/axios';
+import { MessageSquare, Video, Plus, Edit } from 'lucide-react-native';
 import { useAuth } from '@/hooks/useAuth';
 import MeSkeleton from '@/components/screens/me/MeSkeleton';
 import { useNavigation } from '@react-navigation/native';
 import { HEADER_CONFIG } from '@/constants/header-config';
+import { meForumService, meVideoService } from '@/services/index';
+import { ForumPost } from '@/types/content/forums';
+import { VideoPost } from '@/types/content/videos';
+import ForumCard from '@/components/screens/me/forums/ForumCard';
+import ContentError from '@/components/common/ContentError';
 
-interface RecentActivity {
-    title: string;
-    createdAt: string;
-    contentType: string;
-}
-
-interface ContentStats {
-    dashboardData: {
-        numOfForums: number;
-        numOfVideos: number;
-        numOfExercises: number;
-    };
-    recentActivities: RecentActivity[];
-}
-
-const getContentTypeIcon = (contentType: string) => {
-    switch (contentType) {
-        case 'video':
-            return (
-                <View style={tw("p-2 rounded-full bg-green-100")}>
-                    <Video size={16} color="#10B981" />
-                </View>
-            );
-        case 'exercise':
-            return (
-                <View style={tw("p-2 rounded-full bg-purple-100")}>
-                    <Pencil size={16} color="#9333EA" />
-                </View>
-            );
-        case 'forum':
-            return (
-                <View style={tw("p-2 rounded-full bg-blue-100")}>
-                    <MessageSquare size={16} color="#3B82F6" />
-                </View>
-            );
-        default:
-            return (
-                <View style={tw("p-2 rounded-full bg-gray-100")}>
-                    <Pencil size={16} color="#6B7280" />
-                </View>
-            );
-    }
-};
+type TabType = 'forums' | 'videos';
 
 export default function MyContent() {
     const navigation = useNavigation();
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
-    const [stats, setStats] = useState<ContentStats>({
-        dashboardData: {
-            numOfForums: 0,
-            numOfVideos: 0,
-            numOfExercises: 0,
-        },
-        recentActivities: []
-    });
-    const [isLoading, setIsLoading] = useState(true);
+    const [activeTab, setActiveTab] = useState<TabType>('forums');
+
+    // Forum state
+    const [forumPosts, setForumPosts] = useState<ForumPost[]>([]);
+    const [isLoadingForums, setIsLoadingForums] = useState(true);
+    const [forumError, setForumError] = useState<string | null>(null);
+
+    // Video state
+    const [videos, setVideos] = useState<VideoPost[]>([]);
+    const [isLoadingVideos, setIsLoadingVideos] = useState(true);
+    const [videoError, setVideoError] = useState<string | null>(null);
+
+    // Mock stats
+    const [followers] = useState(128);
+    const [following] = useState(64);
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: 'ផ្ទាំងគ្រប់គ្រង',
+            headerTitle: 'ប្រវត្តិរូប',
             ...HEADER_CONFIG,
         });
     }, [navigation]);
@@ -88,25 +51,75 @@ export default function MyContent() {
         }
     }, [user, authLoading, router]);
 
+    // Fetch forums
     useEffect(() => {
-        if (user) {
-            const fetchStats = async () => {
+        if (user && activeTab === 'forums') {
+            const fetchForums = async () => {
                 try {
-                    setIsLoading(true);
-                    const response = await api.get('/me/dashboard');
-                    setStats(response.data);
+                    setIsLoadingForums(true);
+                    setForumError(null);
+                    const forums = await meForumService.getUserForums();
+                    setForumPosts(forums);
                 } catch (error) {
-                    console.error('Error fetching dashboard stats:', error);
+                    console.error('Error fetching forums:', error);
+                    setForumError('មានបញ្ហាកើតឡើងពេលទាញយកទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។');
                 } finally {
-                    setIsLoading(false);
+                    setIsLoadingForums(false);
                 }
             };
-            fetchStats();
+            fetchForums();
         }
-    }, [user]);
+    }, [user, activeTab]);
 
-    // Show loading while checking auth or fetching data
-    if (authLoading || isLoading) {
+    // Fetch videos
+    useEffect(() => {
+        if (user && activeTab === 'videos') {
+            const fetchVideos = async () => {
+                try {
+                    setIsLoadingVideos(true);
+                    setVideoError(null);
+                    const userVideos = await meVideoService.getUserVideos();
+                    setVideos(userVideos.map((v) => ({
+                        id: v.id,
+                        userId: v.userId,
+                        profileImage: v.profileImage,
+                        title: v.title,
+                        description: v.description,
+                        duration: Number(v.duration),
+                        videoUrl: v.videoUrl,
+                        thumbnailUrl: v.thumbnailUrl,
+                        videoUrlForDeletion: v.videoUrlForDeletion,
+                        thumbnailUrlForDeletion: v.thumbnailUrlForDeletion,
+                        viewCount: Number(v.viewCount),
+                        createdAt: v.createdAt,
+                        updatedAt: v.updatedAt,
+                        username: v.username,
+                        isSave: v.isSave,
+                        isLiked: v.isLiked,
+                        likeCount: Number(v.likeCount),
+                        saveCount: Number(v.saveCount),
+                        exercises: v.exercises,
+                        isFollowing: v.isFollowing,
+                    })));
+                } catch (error) {
+                    console.error('Error fetching videos:', error);
+                    setVideoError('មានបញ្ហាកើតឡើងពេលទាញយកទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។');
+                } finally {
+                    setIsLoadingVideos(false);
+                }
+            };
+            fetchVideos();
+        }
+    }, [user, activeTab]);
+
+    const totalPosts = forumPosts.length + videos.length;
+
+    const getAvatar = (username: string): string => {
+        return username.charAt(0).toUpperCase();
+    };
+
+    // Show loading while checking auth
+    if (authLoading) {
         return <MeSkeleton />;
     }
 
@@ -117,105 +130,195 @@ export default function MyContent() {
 
     return (
         <View style={tw("flex-1 bg-gray-50")}>
-            <Sidebar />
             <ScrollView
                 style={tw("flex-1")}
-                contentContainerStyle={tw("p-4 pt-20")}
+                contentContainerStyle={tw("pb-20")}
                 showsVerticalScrollIndicator={false}
             >
-                {/* Header */}
-                <View style={tw("mb-8")}>
-                    <Text style={tw("text-3xl font-kh-bold text-gray-900 mb-2")}>
-                        ផ្ទាំងគ្រប់គ្រង
-                    </Text>
-                    <Text style={tw("text-gray-600")}>
-                        ស្វាគមន៍មកកាន់មាតិការបស់អ្នក និងមើលវឌ្ឍនភាពរបស់អ្នក
-                    </Text>
-                </View>
-
-                {/* Stats Cards */}
-                <View style={tw("flex-row flex-wrap gap-4 mb-8")}>
-                    {/* Videos */}
-                    <View style={tw("flex-1 min-w-[48%] bg-white rounded-3xl p-6 shadow-sm border border-gray-200")}>
-                        <View style={tw("flex-row items-center justify-between")}>
-                            <View>
-                                <Text style={tw("text-sm font-kh-medium text-gray-600")}>វីដេអូ</Text>
-                                <Text style={tw("text-2xl font-kh-bold text-gray-900")}>
-                                    {stats.dashboardData.numOfVideos}
+                {/* Profile Header */}
+                <View style={tw("bg-white pb-6 pt-20 px-4")}>
+                    <View style={tw("items-center mb-6")}>
+                        {user.profileImage ? (
+                            <Image
+                                source={{ uri: user.profileImage }}
+                                style={tw("w-24 h-24 rounded-full border-4 border-indigo-500")}
+                                resizeMode="cover"
+                            />
+                        ) : (
+                            <View style={tw("w-24 h-24 rounded-full bg-indigo-600 items-center justify-center border-4 border-indigo-500")}>
+                                <Text style={tw("text-white font-kh-bold text-3xl")}>
+                                    {getAvatar(user.username)}
                                 </Text>
                             </View>
-                            <View style={tw("p-3 bg-green-100 rounded-full")}>
-                                <Video size={24} color="#10B981" />
-                            </View>
-                        </View>
+                        )}
+                        <Text style={tw("text-2xl font-kh-bold text-gray-900 mt-4")}>
+                            {user.username}
+                        </Text>
+                        <Text style={tw("text-gray-600 mt-1")}>
+                            {user.email}
+                        </Text>
                     </View>
 
-                    {/* Exercises */}
-                    <View style={tw("flex-1 min-w-[48%] bg-white rounded-3xl p-6 shadow-sm border border-gray-200")}>
-                        <View style={tw("flex-row items-center justify-between")}>
-                            <View>
-                                <Text style={tw("text-sm font-kh-medium text-gray-600")}>លំហាត់</Text>
-                                <Text style={tw("text-2xl font-kh-bold text-gray-900")}>
-                                    {stats.dashboardData.numOfExercises}
-                                </Text>
-                            </View>
-                            <View style={tw("p-3 bg-purple-100 rounded-full")}>
-                                <Pencil size={24} color="#9333EA" />
-                            </View>
+                    {/* Stats Row */}
+                    <View style={tw("flex-row justify-around  pt-6")}>
+                        <View style={tw("items-center")}>
+                            <Text style={tw("text-2xl font-kh-bold text-gray-900")}>
+                                {totalPosts}
+                            </Text>
+                            <Text style={tw("text-sm text-gray-600 mt-1")}>
+                                ប្រកាស
+                            </Text>
                         </View>
-                    </View>
-
-                    {/* Forums */}
-                    <View style={tw("flex-1 min-w-[48%] bg-white rounded-3xl p-6 shadow-sm border border-gray-200")}>
-                        <View style={tw("flex-row items-center justify-between")}>
-                            <View>
-                                <Text style={tw("text-sm font-kh-medium text-gray-600")}>វេទិកា</Text>
-                                <Text style={tw("text-2xl font-kh-bold text-gray-900")}>
-                                    {stats.dashboardData.numOfForums}
-                                </Text>
-                            </View>
-                            <View style={tw("p-3 bg-blue-100 rounded-full")}>
-                                <MessageSquare size={24} color="#3B82F6" />
-                            </View>
+                        <View style={tw("items-center")}>
+                            <Text style={tw("text-2xl font-kh-bold text-gray-900")}>
+                                {followers}
+                            </Text>
+                            <Text style={tw("text-sm text-gray-600 mt-1")}>
+                                អ្នកតាម
+                            </Text>
+                        </View>
+                        <View style={tw("items-center")}>
+                            <Text style={tw("text-2xl font-kh-bold text-gray-900")}>
+                                {following}
+                            </Text>
+                            <Text style={tw("text-sm text-gray-600 mt-1")}>
+                                កំពុងតាម
+                            </Text>
                         </View>
                     </View>
                 </View>
 
-                {/* Recent Activity */}
-                <View style={tw("bg-white rounded-3xl shadow-sm border border-gray-200")}>
-                    <View style={tw("p-6 border-b border-gray-200")}>
-                        <Text style={tw("text-lg font-kh-semibold text-gray-900")}>
-                            សកម្មភាពថ្មីៗ
-                        </Text>
-                        <Text style={tw("text-sm text-gray-600")}>
-                            សកម្មភាពថ្មីៗរបស់អ្នកនៅលើវេទិកា
-                        </Text>
+                {/* Tabs */}
+                <View style={tw("bg-white border-b border-gray-200 px-4")}>
+                    <View style={tw("flex-row justify-around")}>
+                        <Pressable
+                            onPress={() => setActiveTab('forums')}
+                            style={tw(`flex-1 items-center py-4 border-b-2 ${activeTab === 'forums' ? 'border-indigo-600' : 'border-transparent'
+                                }`)}
+                        >
+                            <MessageSquare
+                                size={24}
+                                color={activeTab === 'forums' ? '#4F46E5' : '#9CA3AF'}
+                            />
+                        </Pressable>
+                        <Pressable
+                            onPress={() => setActiveTab('videos')}
+                            style={tw(`flex-1 items-center py-4 border-b-2 ${activeTab === 'videos' ? 'border-indigo-600' : 'border-transparent'
+                                }`)}
+                        >
+                            <Video
+                                size={24}
+                                color={activeTab === 'videos' ? '#4F46E5' : '#9CA3AF'}
+                            />
+                        </Pressable>
                     </View>
-                    <View style={tw("p-6")}>
-                        <View style={tw("gap-4")}>
-                            {stats.recentActivities.map((activity, index) => {
-                                const Icon = getContentTypeIcon(activity.contentType);
-                                return (
-                                    <View key={index} style={tw("flex-row items-center gap-4")}>
-                                        <View style={tw("p-2 rounded-full")}>
-                                            {Icon}
+                </View>
+
+                {/* Tab Content */}
+                <View style={tw("px-6 pt-6")}>
+                    {activeTab === 'forums' && (
+                        <View>
+                            <View style={tw("flex-row items-center justify-between mb-4")}>
+                                <Text style={tw("text-xl font-kh-bold text-gray-900")}>
+                                    អត្ថបទវេទិកា
+                                </Text>
+                                <Pressable
+                                    onPress={() => router.push('/me/create-forum' as Href)}
+                                    style={tw("flex-row items-center gap-2 px-4 py-2 bg-indigo-600 rounded-full")}
+                                >
+                                    <Plus size={16} color="white" />
+                                    <Text style={tw("text-white font-kh-medium text-sm")}>
+                                        បង្កើត
+                                    </Text>
+                                </Pressable>
+                            </View>
+
+                            {isLoadingForums ? (
+                                <View style={tw("gap-4")}>
+                                    {[1, 2, 3].map((i) => (
+                                        <View key={i} style={tw("bg-white rounded-3xl p-6 border border-gray-200")}>
+                                            <View style={tw("w-12 h-12 bg-gray-200 rounded-full mb-4")} />
+                                            <View style={tw("h-4 w-3/4 bg-gray-200 rounded mb-2")} />
+                                            <View style={tw("h-4 w-1/2 bg-gray-100 rounded")} />
                                         </View>
-                                        <View style={tw("flex-1")}>
-                                            <Text style={tw("text-sm font-kh-medium text-gray-900")} numberOfLines={1}>
-                                                {activity.title}
-                                            </Text>
-                                        </View>
-                                        <Text style={tw("text-xs text-gray-500")}>
-                                            {activity.createdAt.split('T')[0]}
-                                        </Text>
-                                    </View>
-                                );
-                            })}
+                                    ))}
+                                </View>
+                            ) : forumError ? (
+                                <ContentError type="error" message={forumError} />
+                            ) : forumPosts.length === 0 ? (
+                                <ContentError type="no-results" message="អ្នកមិនទាន់មានអត្ថបទវេទិកាណាមួយទេ" />
+                            ) : (
+                                <View style={tw("gap-4")}>
+                                    {forumPosts.map((post) => (
+                                        <ForumCard key={post.id} post={post} isFromMePage={true} />
+                                    ))}
+                                </View>
+                            )}
                         </View>
-                    </View>
+                    )}
+
+                    {activeTab === 'videos' && (
+                        <View>
+                            <View style={tw("flex-row items-center justify-between mb-4")}>
+                                <Text style={tw("text-xl font-kh-bold text-gray-900")}>
+                                    វីដេអូ
+                                </Text>
+                                <Pressable
+                                    onPress={() => router.push('/me/create-video' as Href)}
+                                    style={tw("flex-row items-center gap-2 px-4 py-2 bg-indigo-600 rounded-full")}
+                                >
+                                    <Edit size={16} color="white" />
+                                    <Text style={tw("text-white font-kh-medium text-sm")}>
+                                        បង្ហោះ
+                                    </Text>
+                                </Pressable>
+                            </View>
+
+                            {isLoadingVideos ? (
+                                <View style={tw("gap-4")}>
+                                    {[1, 2, 3].map((i) => (
+                                        <View key={i} style={tw("bg-white rounded-3xl overflow-hidden border border-gray-200")}>
+                                            <View style={tw("w-full h-48 bg-gray-200")} />
+                                            <View style={tw("p-4")}>
+                                                <View style={tw("h-4 w-3/4 bg-gray-200 rounded mb-2")} />
+                                                <View style={tw("h-4 w-1/2 bg-gray-100 rounded")} />
+                                            </View>
+                                        </View>
+                                    ))}
+                                </View>
+                            ) : videoError ? (
+                                <ContentError type="error" message={videoError} />
+                            ) : videos.length === 0 ? (
+                                <ContentError type="no-results" message="រកមិនឃើញវីដេអូ។ សូមបង្ហោះវីដេអូដំបូងរបស់អ្នក!" />
+                            ) : (
+                                <View style={tw("gap-4")}>
+                                    {videos.map((video) => (
+                                        <Pressable
+                                            key={video.id}
+                                            onPress={() => router.push(`/me/videos/${video.id}` as Href)}
+                                            style={tw("bg-white rounded-3xl overflow-hidden border border-gray-200")}
+                                        >
+                                            <Image
+                                                source={{ uri: video.thumbnailUrl || '' }}
+                                                style={tw("w-full h-48")}
+                                                resizeMode="cover"
+                                            />
+                                            <View style={tw("p-4")}>
+                                                <Text style={tw("font-kh-semibold text-gray-900 mb-2")} numberOfLines={2}>
+                                                    {video.title || 'Untitled Video'}
+                                                </Text>
+                                                <Text style={tw("text-sm text-gray-600")} numberOfLines={2}>
+                                                    {video.description || 'No description'}
+                                                </Text>
+                                            </View>
+                                        </Pressable>
+                                    ))}
+                                </View>
+                            )}
+                        </View>
+                    )}
                 </View>
             </ScrollView>
         </View>
     );
 }
-

@@ -19,10 +19,9 @@ export const createFeedCurriculumsService = (api: AxiosInstance) => {
       try {
         const response = await api.get(`/feed/curriculums/${topicId}`);
         return response.data.data;
-      } catch (error: any) {
+      } catch (error) {
         console.error("Error fetching curriculum component:", error);
-        // Re-throw the original error to preserve status codes and error details
-        throw error;
+        throw new Error("Failed to fetch curriculum component");
       }
     },
   };

@@ -203,6 +203,7 @@ export default function DocHeader({
                             data={grades.map(grade => ({ key: grade.id.toString(), value: grade.name }))}
                             placeholder={gradeData.name}
                             defaultOption={gradeData ? { key: gradeData.id.toString(), value: gradeData.name } : undefined}
+                            selectedValue={gradeData ? gradeData.id.toString() : undefined}
                             setSelected={(selectedKey) => {
                                 // Only handle selection if it's a valid string and different from current
                                 if (selectedKey && typeof selectedKey === 'string') {
@@ -227,6 +228,7 @@ export default function DocHeader({
                                     data={lessons.map(lesson => ({ key: lesson.id.toString(), value: lesson.name }))}
                                     placeholder={lessonData.name}
                                     defaultOption={{ key: lessonData.id.toString(), value: lessonData.name }}
+                                    selectedValue={lessonData ? lessonData.id.toString() : undefined}
                                     setSelected={(selectedKey) => {
                                         // Only handle selection if it's a valid string and different from current
                                         if (selectedKey && typeof selectedKey === 'string') {

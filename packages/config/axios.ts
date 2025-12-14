@@ -8,7 +8,22 @@ export const createApi = (baseURL: string, getToken: TokenProvider) => {
   api.interceptors.request.use(async (config) => {
     const token = await getToken();
     if (token) {
+      // Ensure headers object exists
+      if (!config.headers) {
+        config.headers = {};
+      }
       config.headers.Authorization = `Bearer ${token}`;
+      console.log(
+        "[Axios Interceptor] Token added to request:",
+        config.url,
+        "Token length:",
+        token.length
+      );
+    } else {
+      console.warn(
+        "[Axios Interceptor] No token available for request:",
+        config.url
+      );
     }
     return config;
   });

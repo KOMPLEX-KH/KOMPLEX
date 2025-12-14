@@ -1,17 +1,19 @@
 import { useState, useEffect, useLayoutEffect } from "react";
-import { View, ScrollView, RefreshControl, FlatList } from "react-native";
+import { View, ScrollView, RefreshControl, FlatList, Pressable, TextInput } from "react-native";
 import { tw } from "@/utils/styles";
 import VideoCard from "@/components/screens/videos/VideoCard";
 import VideoCardSkeleton from "@/components/screens/videos/VideoCardSkeleton";
 import ContentError from "@/components/common/ContentError";
 import { VideoPost } from "@/types/content/videos";
 import { feedVideoService } from "@/services/index";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { HEADER_CONFIG } from "@/constants/header-config";
-import { Scroll } from "lucide-react-native";
+import { Plus, Scroll } from "lucide-react-native";
+import { TAILWIND_COLORS } from "@/constants/styles/tailwind-colors";
 
 export default function VideosScreen() {
     const navigation = useNavigation();
+    const router = useRouter();
     const [videos, setVideos] = useState<VideoPost[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -56,6 +58,12 @@ export default function VideosScreen() {
     if (loading) {
         return (
             <View style={tw("flex-1 bg-gray-50")}>
+                <View style={tw("fixed top-14 left-0 right-0 z-10 flex-row items-center justify-between gap-2  p-4 bg-white shadow-sm")}>
+                    <TextInput placeholder="ស្វែងរក" placeholderTextColor={TAILWIND_COLORS["gray-500"]} style={tw("border border-gray-300 rounded-full px-3 py-2 flex-1 font-kh-medium")} />
+                    <Pressable style={tw("rounded-full bg-indigo-600 p-2")} onPress={() => router.push('/me/create-video')}>
+                        <Plus size={20} color="white" />
+                    </Pressable>
+                </View>
                 <ScrollView
                     style={tw("flex-1")}
                     contentContainerStyle={tw("px-4 py-20")}
@@ -69,6 +77,12 @@ export default function VideosScreen() {
     if (error) {
         return (
             <View style={tw("flex-1 bg-gray-50")}>
+                <View style={tw("fixed top-14 left-0 right-0 z-10 flex-row items-center justify-between gap-2  p-4 bg-white shadow-sm")}>
+                    <TextInput placeholder="ស្វែងរក" placeholderTextColor={TAILWIND_COLORS["gray-500"]} style={tw("border border-gray-300 rounded-full px-3 py-2 flex-1 font-kh-medium")} />
+                    <Pressable style={tw("rounded-full bg-indigo-600 p-2")} onPress={() => router.push('/me/create-video')}>
+                        <Plus size={20} color="white" />
+                    </Pressable>
+                </View>
                 <ScrollView
                     style={tw("flex-1")}
                     contentContainerStyle={tw("px-4 py-20")}
@@ -84,6 +98,12 @@ export default function VideosScreen() {
 
     return (
         <View style={tw("flex-1 bg-gray-50")}>
+            <View style={tw("fixed top-14 left-0 right-0 z-10 flex-row items-center justify-between gap-2  p-4 bg-white shadow-sm")}>
+                <TextInput placeholder="ស្វែងរក" placeholderTextColor={TAILWIND_COLORS["gray-500"]} style={tw("border border-gray-300 rounded-full px-3 py-2 flex-1 font-kh-medium")} />
+                <Pressable style={tw("rounded-full bg-indigo-600 p-2")} onPress={() => router.push('/me/create-video')}>
+                    <Plus size={20} color="white" />
+                </Pressable>
+            </View>
             <ScrollView
                 style={tw("flex-1")}
                 contentContainerStyle={tw("px-4 py-20")}

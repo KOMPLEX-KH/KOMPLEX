@@ -1,23 +1,25 @@
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import { View, ScrollView, Pressable, ActivityIndicator, Alert } from 'react-native';
+import { View, ScrollView, Pressable, ActivityIndicator, Alert, TextInput, Image } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
-import { useRouter } from 'expo-router';
-import { useNavigation } from '@react-navigation/native';
-import Sidebar from '@/components/screens/me/Sidebar';
+import { useNavigation, useRouter } from 'expo-router';
 import MeSkeleton from '@/components/screens/me/MeSkeleton';
 import { useAuth } from '@/hooks/useAuth';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
-import VideoUpload, { PickedVideo } from '@/components/screens/me/create-video/VideoUpload';
-import Description from '@/components/screens/me/create-video/Description';
 import { uploadService, meVideoService } from '@/services/index';
-import { BackButton } from '@/components/common/BackButton';
+import { Upload, X, Image as ImageIcon } from 'lucide-react-native';
+import { Video as ExpoVideo, ResizeMode } from 'expo-av';
 import { HEADER_CONFIG } from '@/constants/header-config';
-import { Save } from 'lucide-react-native';
+
+export interface PickedVideo {
+    uri: string;
+    name?: string;
+    size?: number;
+    type?: string;
+}
 
 export default function CreateVideoScreen() {
-    const navigation = useNavigation();
     const router = useRouter();
     const { user, loading: authLoading } = useAuth();
 
@@ -27,10 +29,11 @@ export default function CreateVideoScreen() {
     const [description, setDescription] = useState('');
     const [durationSeconds, setDurationSeconds] = useState<number>(0);
     const [isUploading, setIsUploading] = useState(false);
+    const navigation = useNavigation();
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: 'បង្ហោះវីដេអូ',
+            headerTitle: 'បង្កើតវីដេអូ',
             ...HEADER_CONFIG,
         });
     }, [navigation]);
@@ -43,10 +46,10 @@ export default function CreateVideoScreen() {
 
     const pickVideo = async () => {
         try {
-            const result = await DocumentPicker.getDocumentAsync({
-                type: 'video/*',
-                multiple: false,
-                copyToCacheDirectory: true,
+            const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+                quality: 0.8,
+                allowsEditing: true,
             });
 
             if (result.canceled || !result.assets?.length) {
@@ -56,8 +59,8 @@ export default function CreateVideoScreen() {
             const asset = result.assets[0];
             setVideo({
                 uri: asset.uri,
-                name: asset.name,
-                size: asset.size,
+                name: asset.fileName,
+                size: asset.fileSize,
                 type: asset.mimeType,
             });
             setDurationSeconds(0);
@@ -96,22 +99,16 @@ export default function CreateVideoScreen() {
         try {
             setIsUploading(true);
 
-            const videoKey = await uploadService.uploadUri(video.uri, {
-                fileName: video.name,
-                mimeType: video.type,
-            });
+            const videoKey = await uploadService.getUploadUrl(video.name, video.type);
 
-            const thumbnailKey = await uploadService.uploadUri(thumbnailUri, {
-                fileName: `thumbnail_${Date.now()}.jpg`,
-                mimeType: 'image/jpeg',
-            });
+            const thumbnailKey = await uploadService.getUploadUrl(`thumbnail_${Date.now()}.jpg`, 'image/jpeg');
 
             await meVideoService.createVideo({
-                videoKey,
+                videoKey: videoKey.key,
                 title: title.trim(),
                 description: description.trim(),
                 duration: Math.round(durationSeconds),
-                thumbnailKey,
+                thumbnailKey: thumbnailKey.key,
                 questions: undefined,
             });
 
@@ -139,57 +136,100 @@ export default function CreateVideoScreen() {
 
     return (
         <View style={tw('flex-1 bg-gray-50')}>
-            <Sidebar />
             <ScrollView
                 style={tw('flex-1')}
-                contentContainerStyle={tw('p-4 pt-20 gap-6 pb-24')}
-                showsVerticalScrollIndicator={false}
+                contentContainerStyle={tw('p-6 pt-20 gap-6')}
                 keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
             >
-                <BackButton href="/me/videos" />
+                <View style={tw('')}>
+                    {/* Video Upload */}
+                    <View style={tw('mb-6')}>
+                        {!video ? (
+                            <Pressable
+                                onPress={pickVideo}
+                                style={tw('border-2 border-dashed border-gray-300 rounded-3xl p-20 items-center gap-3 bg-white')}
+                            >
+                                <Upload size={36} color="#6B7280" />
+                                <Text style={tw('text-gray-600 font-kh-medium')}>ជ្រើសរើសវីដេអូ</Text>
+                            </Pressable>
+                        ) : (
+                            <View style={tw('gap-3')}>
+                                <View style={tw('relative rounded-3xl overflow-hidden bg-black')}>
+                                    <ExpoVideo
+                                        source={{ uri: video.uri }}
+                                        useNativeControls
+                                        resizeMode={ResizeMode.CONTAIN}
+                                        style={tw('w-full h-48')}
+                                        onLoad={(status) => {
+                                            if ('durationMillis' in status && status.durationMillis) {
+                                                setDurationSeconds(status.durationMillis / 1000);
+                                            }
+                                        }}
+                                    />
+                                    <Pressable
+                                        onPress={() => {
+                                            setVideo(undefined);
+                                            setDurationSeconds(0);
+                                        }}
+                                        style={tw('absolute top-3 right-3 w-8 h-8 rounded-full bg-red-500 items-center justify-center')}
+                                    >
+                                        <X size={16} color="white" />
+                                    </Pressable>
+                                </View>
+                            </View>
+                        )}
+                    </View>
 
-                <VideoUpload
-                    video={video}
-                    onPickVideo={pickVideo}
-                    onRemoveVideo={() => {
-                        setVideo(undefined);
-                        setDurationSeconds(0);
-                    }}
-                    onDurationChange={setDurationSeconds}
-                />
+                    {/* Title Input */}
+                    <View style={tw('mb-6')}>
+                        <Text style={tw('block text-sm font-kh-bold text-gray-700 mb-2')}>
+                            ចំណងជើង
+                        </Text>
+                        <TextInput
+                            value={title}
+                            onChangeText={setTitle}
+                            placeholder="សរសេរចំណងជើងវីដេអូ..."
+                            placeholderTextColor="#9CA3AF"
+                            style={tw('w-full bg-white px-4 py-3 border border-gray-300 rounded-full text-sm font-kh-medium text-gray-900')}
+                        />
+                    </View>
 
-                <Description
-                    title={title}
-                    description={description}
-                    thumbnail={thumbnailUri}
-                    onTitleChange={setTitle}
-                    onDescriptionChange={setDescription}
-                    onPickThumbnail={pickThumbnail}
-                />
+                    {/* Description */}
+                    <View style={tw('mb-6')}>
+                        <Text style={tw('block text-sm font-kh-bold text-gray-700 mb-2')}>
+                            ការពិពណ៌នា
+                        </Text>
+                        <TextInput
+                            value={description}
+                            onChangeText={setDescription}
+                            placeholder="សរសេរការពិពណ៌នាវីដេអូរបស់អ្នក..."
+                            placeholderTextColor="#9CA3AF"
+                            multiline
+                            textAlignVertical="top"
+                            style={[tw('border border-gray-300 bg-white rounded-3xl px-4 py-3 font-kh-medium text-base text-gray-900'), { minHeight: 200 }]}
+                        />
+                    </View>
 
-                <Pressable
-                    onPress={handleUpload}
-                    disabled={!canSubmit || isUploading}
-                    style={tw(
-                        `self-center flex-row items-center gap-2 px-6 py-3 rounded-full ${!canSubmit || isUploading ? 'bg-indigo-200' : 'bg-indigo-600'
-                        }`
-                    )}
-                >
-                    {isUploading ? (
-                        <ActivityIndicator color="#FFFFFF" size="small" />
-                    ) : (
-                        <Save size={16} color="white" />
-                    )}
-                    <Text style={tw('text-white font-kh-medium text-sm')}>
-                        {isUploading ? 'កំពុងផ្ទុក...' : 'បង្ហោះវីដេអូ'}
-                    </Text>
-                </Pressable>
-
-                {!canSubmit && !isUploading && (
-                    <Text style={tw('text-xs text-center text-gray-500 font-kh-medium')}>
-                        សូមជ្រើសរើសវីដេអូ រូបភាពតូច និងបំពេញព័ត៌មានទាំងអស់ជាមុនសិន
-                    </Text>
-                )}
+                    {/* Submit Button */}
+                    <Pressable
+                        onPress={handleUpload}
+                        disabled={!canSubmit || isUploading}
+                        style={tw(
+                            `w-full flex-row justify-center items-center gap-2 px-6 py-3 rounded-full ${!canSubmit || isUploading ? 'bg-indigo-200' : 'bg-indigo-600'
+                            }`
+                        )}
+                    >
+                        {isUploading ? (
+                            <ActivityIndicator color="#FFFFFF" size="small" />
+                        ) : (
+                            <Upload size={16} color="white" />
+                        )}
+                        <Text style={tw('text-white font-kh-medium text-sm')}>
+                            {isUploading ? 'កំពុងផ្ទុក...' : 'បង្ហោះវីដេអូ'}
+                        </Text>
+                    </Pressable>
+                </View>
             </ScrollView>
         </View>
     );

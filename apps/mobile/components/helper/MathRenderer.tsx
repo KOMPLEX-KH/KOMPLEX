@@ -9,6 +9,7 @@ const { InlineMath: WebInlineMath, BlockMath: WebBlockMath } =
 
 interface MathRendererProps {
     math: string;
+    inline?: boolean;
 }
 
 /**
@@ -166,6 +167,21 @@ function normalizeMathOnly(math: string): string {
 
     let normalized = math;
 
+    // Arrow and common replacements (better support for chemistry-like arrows)
+    // Arrow replacements: keep valid LaTeX commands, only normalize plain ascii arrows
+    const arrowReplacements: Array<[RegExp, string]> = [
+        [/<=?>/g, '\\leftrightarrow'], // <=> variants
+        [/->/g, '\\to'],
+        [/=>/g, '\\to'],
+    ];
+    arrowReplacements.forEach(([pattern, replacement]) => {
+        normalized = normalized.replace(pattern, replacement);
+    });
+
+    // Spacing replacements (common in math text)
+    normalized = normalized.replace(/\\qquad/g, '\\;\\;');
+    normalized = normalized.replace(/\\quad/g, '\\;');
+
     // List of LaTeX commands (sorted by length, longest first to avoid partial matches)
     const latexCommands = [
         'overline', 'underline', 'Rightarrow', 'Leftrightarrow', 'rightarrow', 'leftarrow',
@@ -296,10 +312,39 @@ function normalizeMathOnly(math: string): string {
     return normalized;
 }
 
-export default function MathRenderer({ math }: MathRendererProps) {
+export default function MathRenderer({ math, inline = false }: MathRendererProps) {
     const normalizedMath = normalizeMathString(math);
 
+    // Web rendering via react-katex
+    if (Platform.OS === 'web') {
+        if (inline && WebInlineMath) {
+            return <WebInlineMath math={normalizedMath} />;
+        }
+        if (WebBlockMath) {
+            return (
+                <View style={styles.blockContainer}>
+                    <WebBlockMath math={normalizedMath} />
+                </View>
+            );
+        }
+        return null;
+    }
+
+    // Native rendering via react-native-math-view
     if (!MathView) return null;
+
+    if (inline) {
+        return (
+            <View style={styles.inlineContainer}>
+                <MathView
+                    math={normalizedMath}
+                    resizeMode="cover"
+                    config={{ inline: true }}
+                    style={styles.inlineMath}
+                />
+            </View>
+        );
+    }
 
     return (
         <View style={styles.blockContainer}>
@@ -324,7 +369,7 @@ const styles = StyleSheet.create({
         width: undefined,
         height: undefined,
         minWidth: undefined,
-        minHeight: 18, // prevent 0-height on first render
+        minHeight: 6, // prevent 0-height on first render
         marginHorizontal: 2,
         marginVertical: 2,
     },

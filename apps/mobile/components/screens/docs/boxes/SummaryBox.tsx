@@ -37,10 +37,6 @@ export default function SummaryBox({
             <View style={tw("gap-2")}>
               {typeof section.content === 'string' ? (
                 <Text style={tw("text-sm")}>{section.content}</Text>
-              ) : Array.isArray(section.content) ? (
-                section.content.map((item, i) => (
-                  <Text key={i} style={tw("text-sm")}>{item}</Text>
-                ))
               ) : (
                 section.content
               )}

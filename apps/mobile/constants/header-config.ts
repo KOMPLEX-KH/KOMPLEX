@@ -5,6 +5,8 @@ import {
   Video,
   MessageSquare,
   Library,
+  Edit,
+  User,
 } from "lucide-react-native";
 import { TAILWIND_COLORS } from "./styles/tailwind-colors";
 import Header from "@/components/common/Header";
@@ -28,7 +30,7 @@ const renderHeader = (props: NativeStackHeaderProps) => {
           size: 24,
           color: TAILWIND_COLORS["indigo-600"],
         });
-      case "ពិភាក្សា":
+      case "ការពិភាក្សា":
         return React.createElement(MessageSquare, {
           size: 24,
           color: TAILWIND_COLORS["indigo-600"],
@@ -38,10 +40,24 @@ const renderHeader = (props: NativeStackHeaderProps) => {
           size: 24,
           color: TAILWIND_COLORS["indigo-600"],
         });
+        case "បង្កើតការពិភាក្សា":
+        return React.createElement(Edit, {
+          size: 24,
+          color: TAILWIND_COLORS["indigo-600"],
+        });
+        case "បង្កើតវីដេអូ":
+        return React.createElement(Edit, {
+          size: 24,
+          color: TAILWIND_COLORS["indigo-600"],
+        });
+        case "ប្រវត្តិរូប":
+        return React.createElement(User, {
+          size: 24,
+          color: TAILWIND_COLORS["indigo-600"],
+        });
       default:
         return null;
     }
-    return null;
   };
   return React.createElement(Header, {
     title: props.options.headerTitle?.toString(),

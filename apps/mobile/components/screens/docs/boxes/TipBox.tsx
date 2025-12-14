@@ -21,16 +21,8 @@ export default function TipBox({
             )}
             {typeof content === 'string' ? (
                 <Text style={tw("text-gray-700 leading-relaxed text-base")}>{content}</Text>
-            ) : Array.isArray(content) ? (
-                <View style={tw("gap-2")}>
-                    {content.map((item, index) => (
-                        <Text key={index} style={tw("text-gray-700 leading-relaxed text-base")}>{item}</Text>
-                    ))}
-                </View>
             ) : (
-                <View>
-                    {content}
-                </View>
+                content
             )}
         </View>
     );

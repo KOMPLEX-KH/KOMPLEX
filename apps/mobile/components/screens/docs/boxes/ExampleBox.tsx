@@ -44,29 +44,29 @@ export default function ExampleBox({ question, content, steps, answer }: Example
                     <Text style={tw("text-gray-800 font-medium")}>{content}</Text>
                 </View>
             )}
-
-            {/* Solution Steps */}
-            {steps?.some(step => step.content) && (
-                <View style={tw("mb-4 gap-4")}>
-                    {steps.map((step, index) =>
-                        step.content && (
-                            <View key={index} style={tw("gap-2 bg-white rounded-3xl border-2 border-gray-200 p-3")}>
-                                <View style={tw("flex-row items-center flex-wrap  ")}>
-                                    <Text style={tw("font-nokora-bold")}>ជំហានទី  </Text>
-                                    <Text style={tw("font-nokora-bold")}>{toKhmerNumber(index + 1)}  </Text>
-                                    <Text style={tw("font-nokora-bold")}> :  </Text>
-                                    <Text style={tw("font-nokora-bold")}>{step.title}</Text>
+            <View style={tw("gap-2 bg-white rounded-3xl border-2 border-gray-200 p-3")}>
+                {steps?.some(step => step.content) && (
+                    <View style={tw("mb-4 gap-4")} >
+                        {steps.map((step, index) =>
+                            step.content && (
+                                <View key={index}>
+                                    <View style={tw("flex-row items-center flex-wrap  ")}>
+                                        <Text style={tw("font-nokora-bold")}>ជំហានទី  </Text>
+                                        <Text style={tw("font-nokora-bold")}>{toKhmerNumber(index + 1)}  </Text>
+                                        <Text style={tw("font-nokora-bold")}> :  </Text>
+                                        <Text style={tw("font-nokora-bold")}>{step.title}</Text>
+                                    </View>
+                                    <View style={tw("mt-2")}>
+                                        <Text style={tw("text-sm text-black")}>
+                                            {step.content}
+                                        </Text>
+                                    </View>
                                 </View>
-                                <View style={tw("mt-2")}>
-                                    <Text style={tw("text-sm text-black")}>
-                                        {step.content}
-                                    </Text>
-                                </View>
-                            </View>
-                        )
-                    )}
-                </View>
-            )}
+                            )
+                        )}
+                    </View>
+                )}
+            </View>
 
             {/* Answer */}
             {answer && <AnswerBox answer={answer} />}

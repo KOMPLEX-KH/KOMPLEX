@@ -1,5 +1,5 @@
 import { useState, useEffect, useLayoutEffect } from "react";
-import { View, ScrollView, RefreshControl } from "react-native";
+import { View, ScrollView, RefreshControl, Pressable } from "react-native";
 import { Text } from "@/components/common/Text";
 import { tw } from "@/utils/styles";
 import ForumCard from "@/components/screens/forums/ForumCard";
@@ -9,6 +9,10 @@ import { ForumPost } from "@/types/content/forums";
 import { feedForumService, feedSearchForumService, meForumService } from "@/services/index";
 import { useNavigation } from "expo-router";
 import { HEADER_CONFIG } from "@/constants/header-config";
+import { Plus } from "lucide-react-native";
+import { TAILWIND_COLORS } from "@/constants/styles/tailwind-colors";
+import { TextInput } from "react-native";
+import { useRouter } from "expo-router";
 
 export default function ForumsScreen() {
     const navigation = useNavigation();
@@ -19,11 +23,12 @@ export default function ForumsScreen() {
     const [error, setError] = useState<string | null>(null);
     const [match, setMatch] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
+    const router = useRouter();
 
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: 'ពិភាក្សា',
+            headerTitle: 'ការពិភាក្សា',
             ...HEADER_CONFIG,
         })
     }, [navigation])
@@ -101,6 +106,12 @@ export default function ForumsScreen() {
     if (loading || isSearching) {
         return (
             <View style={tw("flex-1 bg-gray-50")}>
+                <View style={tw("fixed top-14 left-0 right-0 z-10 flex-row items-center justify-between gap-2  p-4 bg-white shadow-sm")}>
+                    <TextInput placeholder="ស្វែងរក" placeholderTextColor={TAILWIND_COLORS["gray-500"]} style={tw("border border-gray-300 rounded-full px-3 py-2 flex-1 font-kh-medium")} />
+                    <Pressable style={tw("rounded-full bg-indigo-600 p-2")} onPress={() => router.push('/me/create-forum')}>
+                        <Plus size={20} color="white" />
+                    </Pressable>
+                </View>
                 <ScrollView
                     style={tw("flex-1")}
                     contentContainerStyle={tw("px-4 py-20 gap-4")}
@@ -114,6 +125,12 @@ export default function ForumsScreen() {
     if (error) {
         return (
             <View style={tw("flex-1 bg-gray-50")}>
+                <View style={tw("fixed top-14 left-0 right-0 z-10 flex-row items-center justify-between gap-2  p-4 bg-white shadow-sm")}>
+                    <TextInput placeholder="ស្វែងរក" placeholderTextColor={TAILWIND_COLORS["gray-500"]} style={tw("border border-gray-300 rounded-full px-3 py-2 flex-1 font-kh-medium")} />
+                    <Pressable style={tw("rounded-full bg-indigo-600 p-2")} onPress={() => router.push('/me/create-forum')}>
+                        <Plus size={20} color="white" />
+                    </Pressable>
+                </View>
                 <ScrollView
                     style={tw("flex-1")}
                     contentContainerStyle={tw("px-4 py-20")}
@@ -129,6 +146,12 @@ export default function ForumsScreen() {
 
     return (
         <View style={tw("flex-1 bg-gray-50")}>
+            <View style={tw("fixed top-14 left-0 right-0 z-10 flex-row items-center justify-between gap-2  p-4 bg-white shadow-sm")}>
+                <TextInput placeholder="ស្វែងរក" placeholderTextColor={TAILWIND_COLORS["gray-500"]} style={tw("border border-gray-300 rounded-full px-3 py-2 flex-1 font-kh-medium")} />
+                <Pressable style={tw("rounded-full bg-indigo-600 p-2")} onPress={() => router.push('/me/create-forum')}>
+                    <Plus size={20} color="white" />
+                </Pressable>
+            </View>
             <ScrollView
                 style={tw("flex-1")}
                 contentContainerStyle={tw("px-4 py-20 gap-4")}

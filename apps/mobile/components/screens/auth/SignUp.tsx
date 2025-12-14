@@ -93,7 +93,7 @@ export default function SignUp({
             <View style={tw("gap-6")}>
                 {/* Profile Image */}
                 <View style={tw("items-center")}>
-                    <Text style={tw("text-sm font-medium text-gray-700 mb-3")}>
+                    <Text style={tw("text-sm font-kh-medium text-gray-700 mb-3")}>
                         រូបផ្ទាល់ខ្លួន
                     </Text>
                     <Pressable onPress={pickImage} disabled={isSubmitting}>
@@ -114,13 +114,13 @@ export default function SignUp({
                 {/* Username, First Name, Last Name */}
                 <View style={tw("w-full gap-4")}>
                     <View>
-                        <Text style={tw("text-sm font-medium text-gray-700 mb-3")}>
+                        <Text style={tw("text-sm font-kh-medium text-gray-700 mb-3")}>
                             ឈ្មោះអ្នកប្រើប្រាស់
                         </Text>
                         <TextInput
                             value={signupData.username}
                             onChangeText={(text) => setSignupData(prev => ({ ...prev, username: text }))}
-                            style={[tw("w-full px-4 py-4 bg-gray-50 rounded-full"), styles.input]}
+                            style={[tw("w-full px-4 py-4 bg-gray-50 rounded-full font-kh-medium"), styles.input]}
                             placeholder="បញ្ចូលឈ្មោះអ្នកប្រើប្រាស់"
                             placeholderTextColor="#9ca3af"
                             editable={!isSubmitting}
@@ -135,26 +135,26 @@ export default function SignUp({
 
                     <View style={tw("flex-row gap-3")}>
                         <View style={tw("flex-1")}>
-                            <Text style={tw("text-sm font-medium text-gray-700 mb-3")}>
+                            <Text style={tw("text-sm font-kh-medium text-gray-700 mb-3")}>
                                 ឈ្មោះ
                             </Text>
                             <TextInput
                                 value={signupData.firstName}
                                 onChangeText={(text) => setSignupData(prev => ({ ...prev, firstName: text }))}
-                                style={[tw("w-full px-4 py-4 bg-gray-50 rounded-full"), styles.input]}
+                                style={[tw("w-full px-4 py-4 bg-gray-50 rounded-full font-kh-medium"), styles.input]}
                                 placeholder="ឈ្មោះ"
                                 placeholderTextColor="#9ca3af"
                                 editable={!isSubmitting}
                             />
                         </View>
                         <View style={tw("flex-1")}>
-                            <Text style={tw("text-sm font-medium text-gray-700 mb-3")}>
+                            <Text style={tw("text-sm font-kh-medium text-gray-700 mb-3")}>
                                 នាមត្រកូល
                             </Text>
                             <TextInput
                                 value={signupData.lastName}
                                 onChangeText={(text) => setSignupData(prev => ({ ...prev, lastName: text }))}
-                                style={[tw("w-full px-4 py-4 bg-gray-50 rounded-full"), styles.input]}
+                                style={[tw("w-full px-4 py-4 bg-gray-50 rounded-full font-kh-medium"), styles.input]}
                                 placeholder="នាមត្រកូល"
                                 placeholderTextColor="#9ca3af"
                                 editable={!isSubmitting}
@@ -166,14 +166,14 @@ export default function SignUp({
 
             {/* Email */}
             <View>
-                <Text style={tw("text-sm font-medium text-gray-700 mb-3")}>
+                <Text style={tw("text-sm font-kh-medium text-gray-700 mb-3")}>
                     អ៊ីមែល
                 </Text>
                 <View style={styles.inputContainer}>
                     <TextInput
                         value={signupData.email}
                         onChangeText={(text) => setSignupData(prev => ({ ...prev, email: text }))}
-                        style={[tw("flex-1 p-4 bg-gray-50 rounded-full"), styles.input]}
+                        style={[tw("flex-1 p-4 bg-gray-50 rounded-full font-kh-medium"), styles.input]}
                         placeholder="បញ្ចូលអ៊ីមែលរបស់អ្នក"
                         placeholderTextColor="#9ca3af"
                         editable={!isSubmitting}
@@ -190,7 +190,7 @@ export default function SignUp({
 
             {/* Password and Confirm Password */}
             <View style={tw("flex-1")}>
-                <Text style={tw("text-sm font-medium text-gray-700 mb-3")}>
+                <Text style={tw("text-sm font-kh-medium text-gray-700 mb-3")}>
                     ពាក្យសម្ងាត់
                 </Text>
                 <View style={styles.inputContainer}>
@@ -198,7 +198,7 @@ export default function SignUp({
                         value={signupData.password}
                         onChangeText={(text) => setSignupData(prev => ({ ...prev, password: text }))}
                         secureTextEntry={!showPassword}
-                        style={[tw("flex-1  p-4 bg-gray-50 rounded-full"), styles.input]}
+                        style={[tw("flex-1  p-4 bg-gray-50 rounded-full font-kh-medium"), styles.input]}
                         placeholder="បង្កើតពាក្យសម្ងាត់"
                         placeholderTextColor="#9ca3af"
                         editable={!isSubmitting}
@@ -218,7 +218,7 @@ export default function SignUp({
                 )}
             </View>
             <View style={tw("flex-1")}>
-                <Text style={tw("text-sm font-medium text-gray-700 mb-3")}>
+                <Text style={tw("text-sm font-kh-medium text-gray-700 mb-3")}>
                     បញ្ជាក់ពាក្យសម្ងាត់
                 </Text>
                 <View style={styles.inputContainer}>
@@ -226,7 +226,7 @@ export default function SignUp({
                         value={signupData.confirmPassword}
                         onChangeText={(text) => setSignupData(prev => ({ ...prev, confirmPassword: text }))}
                         secureTextEntry={!showConfirmPassword}
-                        style={[tw("flex-1  p-4 bg-gray-50 rounded-full"), styles.input]}
+                        style={[tw("flex-1  p-4 bg-gray-50 rounded-full font-kh-medium"), styles.input]}
                         placeholder="បញ្ជាក់ពាក្យសម្ងាត់ម្តងទៀត"
                         placeholderTextColor="#9ca3af"
                         editable={!isSubmitting}
@@ -259,7 +259,7 @@ export default function SignUp({
                 disabled={!isSignupValid() || isSubmitting}
                 style={tw(`w-full bg-indigo-600 py-4 rounded-full ${!isSignupValid() || isSubmitting ? 'opacity-50' : ''}`)}
             >
-                <Text style={tw("text-white text-center font-semibold text-base")}>
+                <Text style={tw("text-white text-center font-kh-medium text-base")}>
                     {isSubmitting ? 'កំពុងចុះឈ្មោះ...' : 'ចុះឈ្មោះ'}
                 </Text>
             </Pressable>

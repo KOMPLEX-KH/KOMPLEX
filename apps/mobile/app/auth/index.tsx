@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, ScrollView, KeyboardAvoidingView, Platform, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as FileSystem from 'expo-file-system';
+import Constants from 'expo-constants';
 import { tw } from '@/utils/styles';
 import { auth, googleProvider, microsoftProvider, githubProvider } from '@/configs/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithCredential, signInWithRedirect, getAuth, fetchSignInMethodsForEmail, OAuthProvider, GoogleAuthProvider, GithubAuthProvider } from 'firebase/auth';
@@ -134,7 +135,6 @@ export default function AuthPage() {
             if (signupData.profileImage) {
                 try {
                     // For React Native image upload, we'll use a helper function
-                    // that converts the image URI to a File-like object for upload
                     imageKey = await uploadImageFromURI(signupData.profileImage);
                 } catch (uploadErr) {
                     console.error('Upload error:', uploadErr);
@@ -249,23 +249,52 @@ export default function AuthPage() {
 
             // For native, we need to use expo-auth-session to get OAuth tokens
             // Then create Firebase credentials and sign in
-            const redirectUri = AuthSession.makeRedirectUri();
+            // Manually construct Expo proxy HTTPS redirect URI (required by Google OAuth)
+            // The proxy URL format is: https://auth.expo.io/@username/slug
+            const expoSlug = Constants.expoConfig?.slug || 'komplex-mobile';
+
+            // Try to use proxy first
+            let redirectUri = AuthSession.makeRedirectUri({
+                // @ts-expect-error - useProxy exists at runtime but not in types for v7
+                useProxy: true,
+            });
+
+            // If proxy didn't work (still exp://), manually construct HTTPS proxy URL
+            // Note: You may need to replace 'your-expo-username' with your actual Expo username
+            // or use the format that works with your Expo account
+            if (redirectUri.startsWith('exp://')) {
+                // Try to get username from Constants, fallback to manual entry needed
+                const expoUsername = Constants.expoConfig?.owner || Constants.manifest?.owner?.username || 'ocraksa';
+                redirectUri = `https://auth.expo.io/@${expoUsername}/${expoSlug}`;
+                console.log('⚠️ Proxy not available, using manual HTTPS proxy URL');
+                console.log('📝 If this doesn\'t work, replace "your-expo-username" with your actual Expo username');
+            }
+
+            // Log the redirect URI for debugging - add this exact HTTPS URI to Google Cloud Console
+            console.log('OAuth Redirect URI:', redirectUri);
+            console.log('⚠️ IMPORTANT: Add this exact HTTPS URI to Google Cloud Console > OAuth 2.0 Client IDs > Web Client > Authorized redirect URIs');
+
             let discovery: AuthSession.DiscoveryDocument;
             let request: AuthSession.AuthRequest;
 
             // Configure OAuth based on provider
-            // Note: These client IDs should be configured in your Firebase project
-            // and can be obtained from Firebase Console > Authentication > Sign-in method
+            // When using Expo proxy (HTTPS redirect URI), we MUST use Web client ID
             if (providerKey === 'google') {
                 discovery = {
                     authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
                     tokenEndpoint: 'https://oauth2.googleapis.com/token',
                     revocationEndpoint: 'https://oauth2.googleapis.com/revoke',
                 };
-                // For Google, you can use the Firebase project's OAuth client ID
-                // Get it from Firebase Console > Project Settings > General > Your apps
+                // Use Web client ID when using Expo proxy (HTTPS redirect URI)
+                const googleClientId = process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID || process.env.EXPO_PUBLIC_FIREBASE_GOOGLE_CLIENT_ID || '';
+
+                // Log client ID for debugging (first 20 chars only for security)
+                console.log('🔑 Using Google Client ID:', googleClientId ? `${googleClientId.substring(0, 20)}...` : '❌ MISSING');
+                console.log('📱 Platform:', Platform.OS);
+                console.log('🔗 Redirect URI:', redirectUri);
+
                 request = new AuthSession.AuthRequest({
-                    clientId: process.env.EXPO_PUBLIC_FIREBASE_GOOGLE_CLIENT_ID || process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID || '',
+                    clientId: googleClientId,
                     scopes: ['openid', 'profile', 'email'],
                     responseType: AuthSession.ResponseType.Code,
                     redirectUri,
@@ -300,6 +329,13 @@ export default function AuthPage() {
                 throw new Error(`Missing OAuth client ID for ${providerKey}. Please configure it in your environment variables.`);
             }
 
+            // Log OAuth request details for debugging
+            console.log('🚀 Starting OAuth flow with:');
+            console.log('   Client ID:', request.clientId ? `${request.clientId.substring(0, 30)}...` : 'MISSING');
+            console.log('   Redirect URI:', redirectUri);
+            console.log('   Scopes:', request.scopes || ['openid', 'profile', 'email']);
+            console.log('   ⚠️ Make sure this exact redirect URI is registered in Google Cloud Console for this Client ID');
+
             // Start the OAuth flow
             const result = await request.promptAsync(discovery);
 
@@ -315,7 +351,11 @@ export default function AuthPage() {
             tokenRequestParams.append('redirect_uri', redirectUri);
             tokenRequestParams.append('grant_type', 'authorization_code');
 
-            // Add client secret if available (for some providers)
+            // Add client secret for providers that require it (Google Web client requires secret)
+            if (providerKey === 'google' && process.env.EXPO_PUBLIC_GOOGLE_CLIENT_SECRET) {
+                tokenRequestParams.append('client_secret', process.env.EXPO_PUBLIC_GOOGLE_CLIENT_SECRET);
+                console.log('🔐 Using Google client secret for token exchange');
+            }
             if (providerKey === 'github' && process.env.EXPO_PUBLIC_GITHUB_CLIENT_SECRET) {
                 tokenRequestParams.append('client_secret', process.env.EXPO_PUBLIC_GITHUB_CLIENT_SECRET);
             }
@@ -332,8 +372,17 @@ export default function AuthPage() {
             const tokenData = await tokenResponse.json();
 
             if (!tokenData.access_token) {
-                throw new Error('Failed to get access token');
+                console.error('❌ Token exchange failed:', tokenData);
+                console.error('📋 Request details:', {
+                    clientId: request.clientId ? `${request.clientId.substring(0, 20)}...` : 'MISSING',
+                    redirectUri,
+                    code: result.params.code ? 'present' : 'missing',
+                    tokenEndpoint: discovery.tokenEndpoint,
+                });
+                throw new Error(`Failed to get access token: ${JSON.stringify(tokenData)}`);
             }
+
+            console.log('✅ Successfully obtained access token');
 
             // Create Firebase credential from OAuth token
             let credential;

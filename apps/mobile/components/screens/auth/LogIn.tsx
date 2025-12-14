@@ -31,14 +31,14 @@ export default function LogIn({
     return (
         <View style={tw("gap-6")}>
             <View>
-                <Text style={tw("text-sm font-medium text-gray-700 mb-3")}>
+                <Text style={tw("text-sm font-kh-medium text-gray-700 mb-3")}>
                     អ៊ីមែល ឬ ឈ្មោះអ្នកប្រើប្រាស់
                 </Text>
                 <View style={styles.inputContainer}>
                     <TextInput
                         value={loginIdentifier}
                         onChangeText={setLoginIdentifier}
-                        style={[tw("flex-1 p-4  bg-gray-50 rounded-full"), styles.input]}
+                        style={[tw("flex-1 p-4  bg-gray-50 rounded-full font-kh-medium"), styles.input]}
                         placeholder="បញ្ចូលអ៊ីមែល ឬ ឈ្មោះអ្នកប្រើប្រាស់"
                         placeholderTextColor="#9ca3af"
                         editable={!isSubmitting}
@@ -49,7 +49,7 @@ export default function LogIn({
             </View>
 
             <View>
-                <Text style={tw("text-sm font-medium text-gray-700 mb-3")}>
+                <Text style={tw("text-sm font-kh-medium text-gray-700 mb-3")}>
                     ពាក្យសម្ងាត់
                 </Text>
                 <View style={styles.inputContainer}>
@@ -57,7 +57,7 @@ export default function LogIn({
                         value={loginPassword}
                         onChangeText={setLoginPassword}
                         secureTextEntry={!showPassword}
-                        style={[tw("flex-1  p-4 bg-gray-50 rounded-full"), styles.input]}
+                        style={[tw("flex-1  p-4 bg-gray-50 rounded-full font-kh-medium"), styles.input]}
                         placeholder="បញ្ចូលពាក្យសម្ងាត់"
                         placeholderTextColor="#9ca3af"
                         editable={!isSubmitting}

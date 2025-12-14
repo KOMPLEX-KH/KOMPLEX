@@ -14,12 +14,6 @@ export default function HintBox({ content, title = "សំគាល់" }: HintB
 
             {typeof content === 'string' ? (
                 <Text style={tw("text-gray-700")}>{content}</Text>
-            ) : Array.isArray(content) ? (
-                <View style={tw("gap-2")}>
-                    {content.map((item, index) => (
-                        <Text key={index} style={tw("text-gray-700")}>{item}</Text>
-                    ))}
-                </View>
             ) : (
                 <View>{content}</View>
             )}
