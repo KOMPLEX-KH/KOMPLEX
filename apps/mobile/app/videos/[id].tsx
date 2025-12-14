@@ -141,11 +141,11 @@ export default function VideoDetailScreen() {
             >
 
                 {/* Video Player */}
-                <View style={tw("rounded-3xl overflow-hidden bg-black")}>
+                <View style={tw("rounded-3xl overflow-hidden")}>
                     <VideoPlayer
                         src={videoPost.videoUrl}
                         poster={videoPost.thumbnailUrl}
-                        style={tw("w-full aspect-video")}
+                        style={tw("w-full")}
                     />
                 </View>
 

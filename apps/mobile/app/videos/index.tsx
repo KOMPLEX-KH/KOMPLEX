@@ -111,7 +111,7 @@ export default function VideosScreen() {
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
             >
-                <View >
+                <View style={tw("flex gap-4")}>
                     {videos.length > 0 ? (
                         videos.map((video) => (
                             <VideoCard key={video.id} video={video} variant="compact" />

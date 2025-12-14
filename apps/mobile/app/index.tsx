@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
-import { BookOpen, Bot, Camera, Library, MessageSquare, ArrowRight, FileText, Calculator } from 'lucide-react-native'
+import { BookOpen, Bot, Camera, Library, MessageSquare, ArrowRight, FileText, Calculator, AlertCircle } from 'lucide-react-native'
 import FeatureCard from '@/components/screens/home/FeatureCard';
 import { TAILWIND_COLORS } from '@/constants/styles/tailwind-colors';
 import { useRouter } from 'expo-router';
@@ -217,8 +217,7 @@ export default function HomeScreen() {
             title: 'កត់ត្រា',
             icon: <FileText size={24} color="#4F46E5" />,
             onPress: () => {
-                // TODO: Navigate to notes
-                console.log('Take notes');
+                setShowComingSoon(true);
             },
         },
         {
@@ -226,8 +225,7 @@ export default function HomeScreen() {
             title: 'គណនាពន្ទុ',
             icon: <Calculator size={24} color="#4F46E5" />,
             onPress: () => {
-                // TODO: Navigate to calculator
-                console.log('Calculator');
+                setShowComingSoon(true);
             },
         },
     ];
@@ -412,7 +410,6 @@ export default function HomeScreen() {
                                             title={item.title}
                                             description={item.description}
                                             onPress={() => {
-                                                // TODO: Navigate to news detail page
                                                 router.push(`/news/${item.id}` as any);
                                             }}
                                         />
@@ -435,15 +432,15 @@ export default function HomeScreen() {
                         <View style={tw("flex-row items-center justify-between mb-4")}>
                             <View style={tw("flex-row items-center gap-3")}>
                                 <View style={tw("p-2 rounded-full bg-indigo-100")}>
-                                    <Library size={24} color={TAILWIND_COLORS["indigo-600"]} />
+                                    <AlertCircle size={24} color={TAILWIND_COLORS["indigo-600"]} />
                                 </View>
                                 <Text style={tw("text-xl font-kh-bold text-gray-900")}>
-                                    ជំនួយ
+                                    សូមរង់ចាំ!
                                 </Text>
                             </View>
                         </View>
                         <Text style={tw("text-base font-kh-normal text-gray-600 mb-6")}>
-                            មុខងារនេះនឹងមកដល់ឆាប់ៗនេះ។ សូមរង់ចាំ!
+                            មុខងារនេះនឹងមកដល់ឆាប់ៗនេះ។
                         </Text>
                         <Pressable
                             onPress={() => setShowComingSoon(false)}

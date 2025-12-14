@@ -7,6 +7,7 @@ import {
   Library,
   Edit,
   User,
+  Info,
 } from "lucide-react-native";
 import { TAILWIND_COLORS } from "./styles/tailwind-colors";
 import Header from "@/components/common/Header";
@@ -40,17 +41,22 @@ const renderHeader = (props: NativeStackHeaderProps) => {
           size: 24,
           color: TAILWIND_COLORS["indigo-600"],
         });
-        case "បង្កើតការពិភាក្សា":
+      case "ព័ត៌មាន":
+        return React.createElement(Info, {
+          size: 24,
+          color: TAILWIND_COLORS["indigo-600"],
+        });
+      case "បង្កើតការពិភាក្សា":
         return React.createElement(Edit, {
           size: 24,
           color: TAILWIND_COLORS["indigo-600"],
         });
-        case "បង្កើតវីដេអូ":
+      case "បង្កើតវីដេអូ":
         return React.createElement(Edit, {
           size: 24,
           color: TAILWIND_COLORS["indigo-600"],
         });
-        case "ប្រវត្តិរូប":
+      case "ប្រវត្តិរូប":
         return React.createElement(User, {
           size: 24,
           color: TAILWIND_COLORS["indigo-600"],

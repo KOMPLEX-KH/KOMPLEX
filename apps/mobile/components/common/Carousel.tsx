@@ -113,7 +113,7 @@ export default function Carousel({
     }
 
     return (
-        <View style={tw("w-full rounded-2xl overflow-hidden relative")}>
+        <View style={tw("w-full rounded-3xl overflow-hidden relative")}>
             <FlatList
                 ref={flatListRef}
                 data={media}

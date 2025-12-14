@@ -6,7 +6,7 @@ import {
     Image,
     GestureResponderEvent,
 } from "react-native";
-import {Text} from '@/components/common/Text'
+import { Text } from '@/components/common/Text'
 import { Send, ThumbsUp } from "lucide-react-native";
 import { ForumReply } from "@/types/content/forums";
 import { VideoReply } from "@/types/content/videos";
@@ -108,11 +108,9 @@ export default function ReplyComponent({
 
     return (
         <View style={tw("ml-8 mt-3")}>
-            <View style={tw("flex-row gap-3")}>
-                <Pressable
-                    onPress={handleNavigateToUser}
-                    style={tw("items-center gap-3 flex-row")}
-                >
+            {/* Profile Image, Name, and Time at Top */}
+            <View style={tw("flex-row items-center gap-3 mb-2")}>
+                <Pressable onPress={handleNavigateToUser}>
                     {reply.profileImage && !avatarError ? (
                         <Image
                             source={{ uri: reply.profileImage }}
@@ -132,95 +130,100 @@ export default function ReplyComponent({
                         </View>
                     )}
                 </Pressable>
-
-                <View style={tw("flex-1")}>
-                    <View style={tw("flex-row items-center gap-2 mb-1")}>
-                        <Pressable onPress={handleNavigateToUser}>
-                            <Text style={tw("text-sm font-kh-semibold text-gray-900")}>
-                                {reply.username?.toString()}
-                            </Text>
-                        </Pressable>
-                        <Text style={tw("text-xs text-gray-500")}>
-                            {getTimeAgo(reply.createdAt)}
+                <View style={tw("flex-row items-center gap-2 flex-1")}>
+                    <Pressable onPress={handleNavigateToUser}>
+                        <Text style={tw("text-sm font-kh-semibold text-gray-900")}>
+                            {reply.username?.toString()}
                         </Text>
-                    </View>
-                    <Text style={tw("text-sm text-gray-700 leading-relaxed mb-2")}>
-                        {reply.description}
+                    </Pressable>
+                    <Text style={tw("text-xs text-gray-500")}>
+                        {getTimeAgo(reply.createdAt)}
                     </Text>
-
-                    <View style={tw("flex-row items-center gap-4")}>
-                        {!isReadOnly ? (
-                            <>
-                                <Pressable
-                                    onPress={handleReplyLike}
-                                    disabled={isLiking}
-                                    style={tw(
-                                        `flex-row items-center gap-1 px-2 py-1.5 rounded-full ${replyUpvoted ? "bg-indigo-50" : "bg-gray-100"
-                                        }`
-                                    )}
-                                >
-                                    <ThumbsUp
-                                        size={14}
-                                        color={replyUpvoted ? "#4F46E5" : "#6B7280"}
-                                    />
-                                    <Text
-                                        style={tw(
-                                            `text-xs font-kh-medium ${replyUpvoted ? "text-indigo-600" : "text-gray-600"
-                                            }`
-                                        )}
-                                    >
-                                        {likeCount}
-                                    </Text>
-                                </Pressable>
-                                <Pressable
-                                    onPress={() => {
-                                        setIsReplying((prev) => !prev);
-                                        setReplyText("");
-                                    }}
-                                >
-                                    <Text style={tw("text-xs text-gray-500")}>ឆ្លើយតប</Text>
-                                </Pressable>
-                            </>
-                        ) : (
-                            <View style={tw("flex-row items-center gap-1")}>
-                                <ThumbsUp size={14} color="#6B7280" />
-                                <Text style={tw("text-xs text-gray-500")}>{likeCount}</Text>
-                            </View>
-                        )}
-                    </View>
                 </View>
             </View>
 
-            {!isReadOnly && isReplying && (
-                <View style={tw("mt-3 gap-2")}>
-                    <Text style={tw("text-xs text-gray-500")}>
-                        @{reply.username?.toString()}
-                    </Text>
-                    <View style={tw("flex-row items-center gap-2")}>
-                        <TextInput
-                            value={replyText}
-                            onChangeText={setReplyText}
-                            placeholder="សរសេរការឆ្លើយតប..."
-                            placeholderTextColor="#9CA3AF"
-                            style={tw(
-                                "flex-1 px-4 py-3 text-sm border border-gray-200 rounded-full bg-white"
-                            )}
-                            onSubmitEditing={handleSubmitReply}
-                            returnKeyType="send"
-                        />
-                        <Pressable
-                            onPress={handleSubmitReply}
-                            disabled={!replyText.trim()}
-                            style={tw(
-                                `px-3 py-2 rounded-full ${replyText.trim() ? "bg-indigo-600" : "bg-gray-300"
-                                }`
-                            )}
-                        >
-                            <Send size={16} color="#FFFFFF" />
-                        </Pressable>
-                    </View>
+            {/* Reply Content Below */}
+            <View style={tw("")}>
+                <Text style={tw("text-sm text-gray-700 leading-relaxed mb-2")}>
+                    {reply.description}
+                </Text>
+
+                <View style={tw("flex-row items-center gap-4 mt-2")}>
+                    {!isReadOnly ? (
+                        <>
+                            <Pressable
+                                onPress={handleReplyLike}
+                                disabled={isLiking}
+                                style={tw(
+                                    `flex-row items-center gap-1 px-2 py-1 rounded-full ${replyUpvoted ? "" : ""
+                                    }`
+                                )}
+                            >
+                                <ThumbsUp
+                                    size={14}
+                                    color={replyUpvoted ? "#4F46E5" : "#6B7280"}
+                                    fill={replyUpvoted ? "#4F46E5" : "none"}
+                                />
+                                <Text
+                                    style={tw(
+                                        `text-xs font-kh-medium ${replyUpvoted ? "text-indigo-600" : "text-gray-600"
+                                        }`
+                                    )}
+                                >
+                                    {likeCount}
+                                </Text>
+                            </Pressable>
+                            <Pressable
+                                onPress={() => {
+                                    setIsReplying((prev) => !prev);
+                                    setReplyText("");
+                                }}
+                            >
+                                <Text style={tw("text-xs text-gray-500")}>ឆ្លើយតប</Text>
+                            </Pressable>
+                        </>
+                    ) : (
+                        <View style={tw("flex-row items-center gap-1")}>
+                            <ThumbsUp size={14} color="#6B7280" />
+                            <Text style={tw("text-xs text-gray-500")}>{likeCount}</Text>
+                        </View>
+                    )}
                 </View>
-            )}
+
+                {!isReadOnly && isReplying && (
+                    <View style={tw("mt-3 gap-2")}>
+                        <View style={tw("relative flex-row items-center gap-2")}>
+                            <Text
+                                style={tw("absolute left-4 top-3 text-xs text-gray-500 text-center font-kh-bold z-10 bg-indigo-50 rounded-full p-1 ")}
+                            >
+                                @{reply.username?.toString()}{' '}
+                            </Text>
+                            <TextInput
+                                value={replyText}
+                                onChangeText={setReplyText}
+                                placeholder="សរសេរការឆ្លើយតប..."
+                                placeholderTextColor="#9CA3AF"
+                                style={[
+                                    tw("flex-1 py-3 pr-4 text-sm border border-gray-200 rounded-full bg-white font-kh-medium"),
+                                    { paddingLeft: 12 + ((reply.username?.toString()?.length || 0) + 2) * 8 } // Approximate width: 4px base + (username length + "@ " ) * ~8px per char
+                                ]}
+                                onSubmitEditing={handleSubmitReply}
+                                returnKeyType="send"
+                            />
+                            <Pressable
+                                onPress={handleSubmitReply}
+                                disabled={!replyText.trim()}
+                                style={tw(
+                                    `px-3 py-2 rounded-full ${replyText.trim() ? "bg-indigo-600" : "bg-gray-300"
+                                    }`
+                                )}
+                            >
+                                <Send size={16} color="#FFFFFF" />
+                            </Pressable>
+                        </View>
+                    </View>
+                )}
+            </View>
         </View>
     );
 }

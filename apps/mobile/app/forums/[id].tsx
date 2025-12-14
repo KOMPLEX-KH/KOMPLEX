@@ -26,7 +26,7 @@ export default function ForumDetailScreen() {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: 'ពិភាក្សា',
+            headerTitle: 'ការពិភាក្សា',
             ...HEADER_CONFIG,
         })
     }, [navigation])

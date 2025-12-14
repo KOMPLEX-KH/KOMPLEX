@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     },
     video: {
         width: '100%',
-        height: '100%',
+        aspectRatio: 16 / 9,
     },
     loadingContainer: {
         position: 'absolute',

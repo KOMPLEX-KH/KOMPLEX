@@ -122,23 +122,10 @@ export default function VideoDescription({
     const handleShare = async () => {
         try {
             await NativeShare.share({
-                message: `${video.title}\n${shareUrl}`,
+                message: `${shareUrl}`,
             });
         } catch (error) {
             console.error("Error sharing video:", error);
-        }
-    };
-
-    const handleCopyLink = async () => {
-        try {
-            await Clipboard.setStringAsync(shareUrl);
-            setCopied(true);
-            if (copyTimeoutRef.current) {
-                clearTimeout(copyTimeoutRef.current);
-            }
-            copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000) as unknown as NodeJS.Timeout;
-        } catch (error) {
-            console.error("Failed to copy link:", error);
         }
     };
 
@@ -243,24 +230,6 @@ export default function VideoDescription({
                 >
                     <Share2 size={18} color="#4F46E5" />
                     <Text style={tw("text-sm font-kh-medium text-gray-700")}>ចែករំលែក</Text>
-                </Pressable>
-
-                <Pressable
-                    onPress={handleCopyLink}
-                    style={tw("flex-row items-center gap-2 px-4 py-2 rounded-full bg-gray-100")}
-                >
-                    {copied ? (
-                        <Check size={18} color="#10B981" />
-                    ) : (
-                        <Link2 size={18} color="#4F46E5" />
-                    )}
-                    <Text
-                        style={tw(
-                            `text-sm font-kh-medium ${copied ? "text-emerald-600" : "text-gray-700"}`
-                        )}
-                    >
-                        {copied ? "បានចម្លង" : "ចម្លងតំណ"}
-                    </Text>
                 </Pressable>
             </View>
 

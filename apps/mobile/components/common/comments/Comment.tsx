@@ -7,8 +7,8 @@ import {
     ActivityIndicator,
     GestureResponderEvent,
 } from "react-native";
-import {Text} from '@/components/common/Text'
-import { ThumbsUp, MessageCircle } from "lucide-react-native";
+import { Text } from '@/components/common/Text'
+import { ThumbsUp, MessageCircle, Send } from "lucide-react-native";
 import ReplyComponent from "./Reply";
 import { ForumComment, ForumReply } from "@/types/content/forums";
 import { VideoComment, VideoReply } from "@/types/content/videos";
@@ -46,7 +46,7 @@ export default function CommentComponent({
     const [isReplying, setIsReplying] = useState(false);
     const [replyText, setReplyText] = useState("");
     const [isLiking, setIsLiking] = useState(false);
-    const [replies, setReplies] = useState<Array<ForumReply | VideoReply>>([]);
+    const [replies, setReplies] = useState<(ForumReply | VideoReply)[]>([]);
     const [isLoadingReplies, setIsLoadingReplies] = useState(false);
     const [isShowingReplies, setIsShowingReplies] = useState(false);
     const [repliesError, setRepliesError] = useState<string | null>(null);
@@ -153,16 +153,15 @@ export default function CommentComponent({
         const trimmed = replyText.trim();
         if (!trimmed) return;
 
-        handleSubmitReply(comment.id, trimmed);
+        const fullReply = `@${comment.username} ${trimmed}`;
+        handleSubmitReply(comment.id, fullReply);
     };
 
     return (
         <View style={tw("mb-4")}>
-            <View style={tw("flex-row gap-3")}>
-                <Pressable
-                    onPress={navigateToUser}
-                    style={tw("flex-row items-start gap-3")}
-                >
+            {/* Profile Image, Name, and Time at Top */}
+            <View style={tw("flex-row items-center gap-3 mb-2")}>
+                <Pressable onPress={navigateToUser}>
                     {comment.profileImage && !avatarError ? (
                         <Image
                             source={{ uri: comment.profileImage }}
@@ -182,120 +181,112 @@ export default function CommentComponent({
                         </View>
                     )}
                 </Pressable>
-
-                <View style={tw("flex-1")}>
-                    <View style={tw("flex-row items-center gap-2 mb-1")}>
-                        <Pressable onPress={navigateToUser}>
-                            <Text style={tw("text-sm font-kh-semibold text-gray-900")}>
-                                {comment.username}
-                            </Text>
-                        </Pressable>
-                        <Text style={tw("text-xs text-gray-500")}>
-                            {getTimeAgo(comment.createdAt)}
+                <View style={tw("flex-row items-center gap-2 flex-1")}>
+                    <Pressable onPress={navigateToUser}>
+                        <Text style={tw("text-sm font-kh-semibold text-gray-900")}>
+                            {comment.username}
                         </Text>
-                    </View>
-
-                    <Text style={tw("text-sm text-gray-700 leading-relaxed mb-2")}>
-                        {comment.description}
+                    </Pressable>
+                    <Text style={tw("text-xs text-gray-500")}>
+                        {getTimeAgo(comment.createdAt)}
                     </Text>
+                </View>
+            </View>
 
-                    <View style={tw("flex-row items-center gap-4")}>
-                        {!isReadOnly ? (
-                            <>
-                                <Pressable
-                                    onPress={handleCommentLike}
-                                    disabled={isLiking}
+            {/* Comment Content Below */}
+            <View style={tw("ml-13")}>
+                <Text style={tw("text-sm text-gray-700 leading-relaxed mb-2")}>
+                    {comment.description}
+                </Text>
+
+                <View style={tw("flex-row items-center gap-4 mt-2")}>
+                    {!isReadOnly ? (
+                        <>
+                            <Pressable
+                                onPress={handleCommentLike}
+                                disabled={isLiking}
+                                style={tw("flex-row items-center gap-1")}
+                            >
+                                <ThumbsUp
+                                    size={14}
+                                    color={commentUpvoted ? "#4F46E5" : "#6B7280"}
+                                    fill={commentUpvoted ? "#4F46E5" : "none"}
+                                />
+                                <Text
                                     style={tw(
-                                        `flex-row items-center gap-1 px-2 py-1.5 rounded-full ${
-                                            commentUpvoted ? "bg-indigo-50" : "bg-gray-100"
+                                        `text-xs font-kh-medium ${commentUpvoted ? "text-indigo-600" : "text-gray-600"
                                         }`
                                     )}
                                 >
-                                    <ThumbsUp
-                                        size={14}
-                                        color={commentUpvoted ? "#4F46E5" : "#6B7280"}
-                                    />
-                                    <Text
-                                        style={tw(
-                                            `text-xs font-kh-medium ${
-                                                commentUpvoted ? "text-indigo-600" : "text-gray-600"
-                                            }`
-                                        )}
-                                    >
-                                        {likeCount}
-                                    </Text>
-                                </Pressable>
+                                    {likeCount}
+                                </Text>
+                            </Pressable>
 
-                                <Pressable
-                                    onPress={() => {
-                                        setIsReplying((prev) => !prev);
-                                        setReplyText("");
-                                    }}
-                                >
-                                    <Text style={tw("text-xs text-gray-500")}>ឆ្លើយតប</Text>
-                                </Pressable>
-                            </>
-                        ) : (
-                            <View style={tw("flex-row items-center gap-1")}>
-                                <ThumbsUp size={14} color="#6B7280" />
-                                <Text style={tw("text-xs text-gray-500")}>{likeCount}</Text>
-                            </View>
-                        )}
+                            <Pressable
+                                onPress={() => {
+                                    setIsReplying((prev) => !prev);
+                                    setReplyText("");
+                                }}
+                            >
+                                <Text style={tw("text-xs text-gray-500")}>ឆ្លើយតប</Text>
+                            </Pressable>
+                        </>
+                    ) : (
+                        <View style={tw("flex-row items-center gap-1")}>
+                            <ThumbsUp size={14} color="#6B7280" />
+                            <Text style={tw("text-xs text-gray-500")}>{likeCount}</Text>
+                        </View>
+                    )}
 
-                        <Pressable
-                            onPress={fetchReplies}
-                            disabled={isLoadingReplies}
-                            style={tw("flex-row items-center gap-1")}
-                        >
-                            <MessageCircle size={14} color="#4F46E5" />
-                            <Text style={tw("text-xs text-gray-500")}>
-                                {isLoadingReplies
-                                    ? "កំពុងដំណើរការ..."
-                                    : isShowingReplies
+                    <Pressable
+                        onPress={fetchReplies}
+                        disabled={isLoadingReplies}
+                        style={tw("flex-row items-center gap-1")}
+                    >
+                        <MessageCircle size={14} color="#4F46E5" />
+                        <Text style={tw("text-xs text-gray-500")}>
+                            {isLoadingReplies
+                                ? "កំពុងដំណើរការ..."
+                                : isShowingReplies
                                     ? "លាក់ការឆ្លើយតប"
                                     : "បង្ហាញការឆ្លើយតប"}
-                            </Text>
-                        </Pressable>
-                    </View>
+                        </Text>
+                    </Pressable>
+                </View>
 
-                    {!isReadOnly && isReplying && (
-                        <View style={tw("mt-3 gap-2")}>
+                {!isReadOnly && isReplying && (
+                    <View style={tw("mt-3 gap-2")}>
+                        <View style={tw("relative flex-row items-center gap-2")}>
+                            <Text
+                                style={tw("absolute left-4 top-3 text-xs text-gray-500 text-center font-kh-bold z-10 bg-indigo-50 rounded-full p-1 ")}
+                            >
+                                @{comment.username?.toString()}{' '}
+                            </Text>
                             <TextInput
                                 value={replyText}
                                 onChangeText={setReplyText}
                                 placeholder="សរសេរការឆ្លើយតប..."
                                 placeholderTextColor="#9CA3AF"
-                                style={tw(
-                                    "px-4 py-3 text-sm border border-gray-200 rounded-full bg-white"
-                                )}
+                                style={[
+                                    tw("flex-1 py-3 pr-4 text-sm border border-gray-200 rounded-full bg-white font-kh-medium"),
+                                    { paddingLeft: 12 + (comment.username.length + 2) * 8 } // Approximate width: 4px base + (username length + "@ " ) * ~8px per char
+                                ]}
                                 onSubmitEditing={handleSubmitDirectReply}
                                 returnKeyType="send"
                             />
-                            <View style={tw("flex-row gap-2")}>
-                                <Pressable
-                                    onPress={() => {
-                                        setIsReplying(false);
-                                        setReplyText("");
-                                    }}
-                                    style={tw("px-4 py-2 rounded-full bg-gray-100")}
-                                >
-                                    <Text style={tw("text-sm text-gray-600")}>បោះបង់</Text>
-                                </Pressable>
-                                <Pressable
-                                    onPress={handleSubmitDirectReply}
-                                    disabled={!replyText.trim()}
-                                    style={tw(
-                                        `px-4 py-2 rounded-full ${
-                                            replyText.trim() ? "bg-indigo-600" : "bg-gray-300"
-                                        }`
-                                    )}
-                                >
-                                    <Text style={tw("text-sm text-white")}>បោះផ្សាយ</Text>
-                                </Pressable>
-                            </View>
+                            <Pressable
+                                onPress={handleSubmitDirectReply}
+                                disabled={!replyText.trim()}
+                                style={tw(
+                                    `px-3 py-2 rounded-full ${replyText.trim() ? "bg-indigo-600" : "bg-gray-300"
+                                    }`
+                                )}
+                            >
+                                <Send size={16} color="#FFFFFF" />
+                            </Pressable>
                         </View>
-                    )}
-                </View>
+                    </View>
+                )}
             </View>
 
             {isShowingReplies && (

@@ -1,5 +1,5 @@
 import { useRouter, usePathname } from "expo-router"
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useEffect, useRef, useState, useCallback, useLayoutEffect } from "react"
 import { View, Pressable } from "react-native"
 import Logo from "@/components/common/Logo"
 import { Text } from "@/components/common/Text"
@@ -7,12 +7,22 @@ import { meLastAccessedService } from "@/services"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { tw } from "@/utils/styles"
 import { AlertCircle, RefreshCw } from "lucide-react-native"
+import { HEADER_CONFIG } from "@/constants/header-config"
+import { useNavigation } from "@react-navigation/native"
 
 export default function LessonsScreen() {
     const router = useRouter()
     const pathname = usePathname()
     const hasRedirectedRef = useRef(false)
     const [error, setError] = useState<string | null>(null)
+    const navigation = useNavigation()
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerTitle: 'មេរៀន',
+            ...HEADER_CONFIG,
+        })
+    }, [navigation])
 
     const navigateToLastTopic = useCallback(async () => {
         try {
