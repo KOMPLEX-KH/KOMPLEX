@@ -999,6 +999,19 @@ export const TAILWIND_CLASSES = {
   "text-8xl": { fontSize: 96 },
   "text-9xl": { fontSize: 128 },
 
+  "aspect-video": { aspectRatio: 16 / 9 },
+  "aspect-square": { aspectRatio: 1 / 1 },
+  "aspect-auto": { aspectRatio: "auto" },
+  "aspect-original": { aspectRatio: "original" },
+  "aspect-none": { aspectRatio: "none" },
+  "aspect-full": { aspectRatio: "full" },
+  "aspect-inset": { aspectRatio: "inset" },
+  "aspect-cover": { aspectRatio: "cover" },
+  "aspect-contain": { aspectRatio: "contain" },
+  "aspect-fill": { aspectRatio: "fill" },
+  "aspect-fit": { aspectRatio: "fit" },
+  "aspect-stretch": { aspectRatio: "stretch" },
+
   // Font Weight
   "font-en-thin": { fontWeight: "100", fontFamily: "Poppins-Thin" },
   "font-en-extralight": { fontWeight: "200", fontFamily: "Poppins-ExtraLight" },

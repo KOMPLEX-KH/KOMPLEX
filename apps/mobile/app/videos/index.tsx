@@ -5,11 +5,12 @@ import VideoCard from "@/components/screens/videos/VideoCard";
 import VideoCardSkeleton from "@/components/screens/videos/VideoCardSkeleton";
 import ContentError from "@/components/common/ContentError";
 import { VideoPost } from "@/types/content/videos";
-import { feedVideoService } from "@/services/index";
+import { feedSearchVideoService, feedVideoService } from "@/services/index";
 import { useNavigation, useRouter } from "expo-router";
 import { HEADER_CONFIG } from "@/constants/header-config";
 import { Plus, Scroll } from "lucide-react-native";
 import { TAILWIND_COLORS } from "@/constants/styles/tailwind-colors";
+import SearchBar from "@/components/common/SearchBar";
 
 export default function VideosScreen() {
     const navigation = useNavigation();
@@ -18,6 +19,9 @@ export default function VideosScreen() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [refreshing, setRefreshing] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [isSearching, setIsSearching] = useState(false);
+    const [match, setMatch] = useState(true);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -51,19 +55,45 @@ export default function VideosScreen() {
         setRefreshing(false);
     };
 
+    const handleSearch = async (query: string) => {
+        setSearchQuery(query);
+
+        if (query.trim() === "") {
+            fetchVideos();
+            return;
+        }
+
+        try {
+            setIsSearching(true);
+            setError(null);
+            const searchResults = await feedSearchVideoService.searchVideos(query, 50, 0);
+
+            if (searchResults.data.length === 0) {
+                setError("រកមិនឃើញអត្ថបទ");
+                setVideos([]);
+            } else {
+                setMatch(searchResults.isMatch);
+                setVideos(searchResults.data);
+            }
+        } catch {
+            setError("មានបញ្ហាក្នុងការស្វែងរកអត្ថបទ");
+        } finally {
+            setIsSearching(false);
+        }
+    };
+
     useEffect(() => {
         fetchVideos();
     }, []);
 
-    if (loading) {
+    if (loading || isSearching) {
         return (
             <View style={tw("flex-1 bg-gray-50")}>
-                <View style={tw("fixed top-14 left-0 right-0 z-10 flex-row items-center justify-between gap-2  p-4 bg-white shadow-sm")}>
-                    <TextInput placeholder="ស្វែងរក" placeholderTextColor={TAILWIND_COLORS["gray-500"]} style={tw("border border-gray-300 rounded-full px-3 py-2 flex-1 font-kh-medium")} />
-                    <Pressable style={tw("rounded-full bg-indigo-600 p-2")} onPress={() => router.push('/me/create-video')}>
-                        <Plus size={20} color="white" />
-                    </Pressable>
-                </View>
+                <SearchBar
+                    type="videos"
+                    onSearch={handleSearch}
+                    isDisabled={loading || isSearching}
+                />
                 <ScrollView
                     style={tw("flex-1")}
                     contentContainerStyle={tw("px-4 py-20")}
@@ -77,12 +107,11 @@ export default function VideosScreen() {
     if (error) {
         return (
             <View style={tw("flex-1 bg-gray-50")}>
-                <View style={tw("fixed top-14 left-0 right-0 z-10 flex-row items-center justify-between gap-2  p-4 bg-white shadow-sm")}>
-                    <TextInput placeholder="ស្វែងរក" placeholderTextColor={TAILWIND_COLORS["gray-500"]} style={tw("border border-gray-300 rounded-full px-3 py-2 flex-1 font-kh-medium")} />
-                    <Pressable style={tw("rounded-full bg-indigo-600 p-2")} onPress={() => router.push('/me/create-video')}>
-                        <Plus size={20} color="white" />
-                    </Pressable>
-                </View>
+                <SearchBar
+                    type="videos"
+                    onSearch={handleSearch}
+                    isDisabled={true}
+                />
                 <ScrollView
                     style={tw("flex-1")}
                     contentContainerStyle={tw("px-4 py-20")}
@@ -98,12 +127,7 @@ export default function VideosScreen() {
 
     return (
         <View style={tw("flex-1 bg-gray-50")}>
-            <View style={tw("fixed top-14 left-0 right-0 z-10 flex-row items-center justify-between gap-2  p-4 bg-white shadow-sm")}>
-                <TextInput placeholder="ស្វែងរក" placeholderTextColor={TAILWIND_COLORS["gray-500"]} style={tw("border border-gray-300 rounded-full px-3 py-2 flex-1 font-kh-medium")} />
-                <Pressable style={tw("rounded-full bg-indigo-600 p-2")} onPress={() => router.push('/me/create-video')}>
-                    <Plus size={20} color="white" />
-                </Pressable>
-            </View>
+            <SearchBar type="videos" onSearch={handleSearch} />
             <ScrollView
                 style={tw("flex-1")}
                 contentContainerStyle={tw("px-4 py-20")}

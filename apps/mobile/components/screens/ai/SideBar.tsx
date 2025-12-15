@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Pressable, Modal, ScrollView, TextInput, Alert } from 'react-native';
+import { View, Pressable, Modal, ScrollView, TextInput, Alert, Dimensions } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { meAiService } from '@/services/index';
 import { Edit, Menu, X, MoreVertical, Check, Trash2 } from 'lucide-react-native';
@@ -276,7 +276,7 @@ const SideBar: React.FC = () => {
                 transparent
                 animationType="slide"
                 onRequestClose={() => setIsMobileMenuOpen(false)}
-                style={tw("flex-1 bg-black/30")}
+                style={[tw(' bg-white rounded-t-3xl border border-indigo-50'), { minHeight: Dimensions.get('window').height - 100 }]}
             >
                 <BlurView intensity={5} tint="light" style={tw("flex-1 rounded-3xl")}>
                     <View
