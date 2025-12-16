@@ -9,10 +9,12 @@ import { tw } from "@/utils/styles"
 import { AlertCircle, RefreshCw } from "lucide-react-native"
 import { HEADER_CONFIG } from "@/constants/header-config"
 import { useNavigation } from "@react-navigation/native"
+import { useAuth } from "@/hooks/useAuth"
 
 export default function LessonsScreen() {
     const router = useRouter()
     const pathname = usePathname()
+    const { user, loading } = useAuth()
     const hasRedirectedRef = useRef(false)
     const [error, setError] = useState<string | null>(null)
     const navigation = useNavigation()
@@ -27,6 +29,12 @@ export default function LessonsScreen() {
     const navigateToLastTopic = useCallback(async () => {
         try {
             setError(null)
+
+            // If user is not logged in, skip last-accessed and go to default doc
+            if (!user) {
+                router.replace("/docs/1/1/1/1" as any)
+                return
+            }
 
             // Get last accessed topic
             const response = await meLastAccessedService.getLastAccessed()
@@ -82,9 +90,14 @@ export default function LessonsScreen() {
             console.error('Error navigating to last topic:', err)
             setError(err.message || "មានបញ្ហាកើតឡើងពេលទាញយកទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។")
         }
-    }, [router])
+    }, [router, user])
 
     useEffect(() => {
+        // Wait for auth state to resolve before deciding what to do
+        if (loading) {
+            return
+        }
+
         // Only redirect if we're exactly on /docs route
         // Reset the ref when we're not on /docs to allow redirect on next visit
         if (pathname !== "/docs") {
@@ -97,7 +110,7 @@ export default function LessonsScreen() {
             hasRedirectedRef.current = true
             navigateToLastTopic()
         }
-    }, [pathname, navigateToLastTopic])
+    }, [pathname, navigateToLastTopic, loading])
 
     const handleRetry = () => {
         hasRedirectedRef.current = false

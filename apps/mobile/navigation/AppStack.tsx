@@ -89,12 +89,6 @@ export default function AppStack() {
 
             />
 
-            <Stack.Screen
-                name="(modal)/ai"
-                options={{
-                    presentation: 'modal',
-                }}
-            />
         </Stack>
     );
 }

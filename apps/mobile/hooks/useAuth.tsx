@@ -125,17 +125,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           } else {
             await AsyncStorage.removeItem("user");
             setUser(null);
-            if (pathname !== "/auth") {
-              router.replace("/auth");
-            }
+
           }
         }
       } catch (error) {
         console.error("Error in auth state listener:", error);
         setUser(null);
-        if (pathname !== "/auth") {
-          router.replace("/auth");
-        }
       } finally {
         setLoading(false);
       }

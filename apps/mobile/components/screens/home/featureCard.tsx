@@ -6,8 +6,10 @@ import { Href, useRouter } from "expo-router";
 interface FeatureCardProps {
     title: string;
     icon: React.ReactNode;
-    href: Href;
+    href?: Href;
+    isComingSoon?: boolean;
     isImportant?: boolean;
+    onPress?: () => void;
 }
 
 export default function FeatureCard({
@@ -15,13 +17,15 @@ export default function FeatureCard({
     icon,
     href,
     isImportant = false,
+    isComingSoon = false,
+    onPress,
 }: FeatureCardProps) {
     const router = useRouter();
 
     return (
         <Pressable
             style={tw("rounded-3xl bg-indigo-50 border border-indigo-600 shadow-md px-5 py-5 flex-1 flex items-center justify-center gap-2")}
-            onPress={() => router.push(href)}
+            onPress={() => onPress ? onPress() : href ? router.push(href) : null}
         >
             <View style={tw(isImportant ? "p-5 rounded-full bg-indigo-600 text-white" : "p-3 rounded-full bg-indigo-600 text-white")}>
                 {icon}

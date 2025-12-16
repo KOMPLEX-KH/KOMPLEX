@@ -8,6 +8,7 @@ import {
   Edit,
   User,
   Info,
+  Lock,
 } from "lucide-react-native";
 import { TAILWIND_COLORS } from "./styles/tailwind-colors";
 import Header from "@/components/common/Header";
@@ -58,6 +59,11 @@ const renderHeader = (props: NativeStackHeaderProps) => {
         });
       case "ប្រវត្តិរូប":
         return React.createElement(User, {
+          size: 24,
+          color: TAILWIND_COLORS["indigo-600"],
+        });
+      case "ចូលទៅកាន់គណនី":
+        return React.createElement(Lock, {
           size: 24,
           color: TAILWIND_COLORS["indigo-600"],
         });

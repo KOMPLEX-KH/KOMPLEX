@@ -54,11 +54,11 @@ export default function HomeHeader() {
         <View style={tw("flex-row items-center justify-between mb-6")}>
             <Logo />
             <Pressable
-                style={tw(`flex-row items-center justify-center rounded-full bg-indigo-600  ${user ? 'w-8 h-8' : 'w-8 h-8'}`)}
+                style={tw(`flex-row items-center justify-center rounded-full border-2 border-indigo-600 overflow-hidden  ${user ? 'w-8 h-8' : 'w-8 h-8'}`)}
                 onPress={handlePress}
                 onLongPress={handleLongPress}
             >
-                {user ? <Text style={tw("text-white font-bold")}>{user.firstName?.charAt(0).toUpperCase() || user.username?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || 'U'}</Text> : <LogIn size={20} color="white" />}
+                {user ? user.profileImage ? <Image source={{ uri: user.profileImage }} style={tw("w-8 h-8 rounded-full")} /> : <Text style={tw("text-white font-bold")}>{user.firstName?.charAt(0).toUpperCase() || user.username?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || 'U'}</Text> : <LogIn size={20} color="white" />}
             </Pressable>
         </View>
     );

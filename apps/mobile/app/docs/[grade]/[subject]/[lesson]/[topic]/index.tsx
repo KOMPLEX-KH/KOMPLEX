@@ -5,7 +5,7 @@ import ComingSoon from "@/components/screens/docs/ComingSoon"
 import { tw } from "@/utils/styles"
 import { useNavigation, useLocalSearchParams, useRouter } from "expo-router"
 import React, { useLayoutEffect, useState, useEffect, useRef, useMemo } from "react"
-import { View, ScrollView } from "react-native"
+import { View, ScrollView, Animated } from "react-native"
 import { HEADER_CONFIG } from "@/constants/header-config"
 import { feedCurriculumsService } from "@/services"
 import { deserializeTopicContentV3 } from "@/components/screens/docs/utils/ContentDeserializer"
@@ -50,6 +50,7 @@ export default function TopicScreen() {
     const router = useRouter()
     const params = useLocalSearchParams() as Params
     const [isHeaderVisible] = useState(true)
+    const scrollY = useRef(new Animated.Value(0)).current
 
     // Topic data state
     const [topicComponent, setTopicComponent] = useState<string | null>(null)
@@ -385,12 +386,20 @@ export default function TopicScreen() {
         <View style={tw("flex-1 bg-white relative")}>
             <DocHeader
                 isVisible={isHeaderVisible}
+                scrollY={scrollY}
                 currentGrade={memoizedParams.grade}
                 currentSubject={memoizedParams.subject}
                 currentLesson={memoizedParams.lesson}
                 currentTopic={memoizedParams.topic}
             />
-            <ScrollView contentContainerStyle={tw("pt-40 pb-24 px-4")}>
+            <Animated.ScrollView
+                contentContainerStyle={tw("pt-40 pb-24 px-4")}
+                onScroll={Animated.event(
+                    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+                    { useNativeDriver: false }
+                )}
+                scrollEventThrottle={16}
+            >
                 <TopicWrapper
                     title={topicInfo.topic?.name || ""}
                     prev={navigationData?.prev || null}
@@ -399,7 +408,7 @@ export default function TopicScreen() {
                 >
                     <ContentRenderer key={topicKey} content={deserialized} />
                 </TopicWrapper>
-            </ScrollView>
+            </Animated.ScrollView>
             <AiButton />
         </View>
     )

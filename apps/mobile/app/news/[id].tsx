@@ -130,30 +130,6 @@ export default function NewsDetailScreen() {
 
             {/* Content */}
             <View style={tw('px-4')}>
-                {/* Author Info */}
-                <View style={tw('flex-row items-center gap-3 mb-4')}>
-                    {news.profileImage && (
-                        <Image
-                            source={{ uri: news.profileImage }}
-                            style={tw('w-10 h-10 rounded-full')}
-                            resizeMode="cover"
-                        />
-                    )}
-                    <View style={tw('flex-1')}>
-                        <Text style={tw('text-base font-kh-bold text-gray-900')}>
-                            {news.username}
-                        </Text>
-                        {news.createdAt && (
-                            <Text style={tw('text-sm font-kh-normal text-gray-500')}>
-                                {new Date(news.createdAt).toLocaleDateString('km-KH', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                })}
-                            </Text>
-                        )}
-                    </View>
-                </View>
 
                 {/* Title */}
                 <Text style={tw('text-2xl font-kh-bold text-gray-900 mb-4')}>

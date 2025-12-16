@@ -164,6 +164,12 @@ export default function AIWelcomePage() {
                                 onChange={setSelectedResponseType}
                                 disabled={isLoading}
                                 variant="default"
+                                style={{
+                                    left: 30,
+                                    bottom: 170,
+                                    maxHeight: 250,
+                                    maxWidth: 160,
+                                }}
                             />
 
                             <Pressable

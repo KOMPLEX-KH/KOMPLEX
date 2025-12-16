@@ -502,6 +502,12 @@ export default function AiModal({ isOpen, onClose, topicId, topicTitle }: AiModa
                                                 onChange={setSelectedResponseType}
                                                 disabled={isInputDisabled}
                                                 variant="default"
+                                                style={{
+                                                    left: 120,
+                                                    bottom: 5,
+                                                    maxHeight: 250,
+                                                    maxWidth: 160,
+                                                }}
                                             />
 
                                             {!isLoading && !isStreaming ? (

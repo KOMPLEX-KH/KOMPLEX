@@ -3,10 +3,11 @@ import { Animated, Pressable } from "react-native";
 import { BotIcon } from "lucide-react-native";
 import { BlurView } from "expo-blur";
 import { useEffect, useRef, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AiModal from "./AiModal";
 import type { Grade, Subject, Lesson, Topic } from "@core-types/docs/curriculum";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function AiButton() {
     const aiButtonTranslate = useRef(new Animated.Value(24));
@@ -14,7 +15,8 @@ export default function AiButton() {
     const [topicTitle, setTopicTitle] = useState<string | null>(null);
     const params = useLocalSearchParams();
     const topicId = params.topic ? Number(params.topic) : null;
-
+    const router = useRouter();
+    const { user } = useAuth();
     useEffect(() => {
         aiButtonTranslate.current.setValue(32);
         Animated.spring(aiButtonTranslate.current, {
@@ -45,6 +47,10 @@ export default function AiButton() {
     }, [topicId, params.grade, params.subject, params.lesson]);
 
     const handleOpenModal = () => {
+        if (!user) {
+            router.push("/auth");
+            return;
+        }
         if (topicId) {
             setIsModalOpen(true);
         }

@@ -31,10 +31,10 @@ export default function NewsCard({ image, title, description, onPress }: NewsCar
                 />
                 {/* Text Content */}
                 <View style={tw("absolute bottom-0 left-0 right-0 p-4")}>
-                    <Text style={tw("text-white text-xl font-kh-bold mb-2")} numberOfLines={2}>
+                    <Text style={tw("text-white text-xl font-kh-bold mb-2")} numberOfLines={2} ellipsizeMode="tail">
                         {title}
                     </Text>
-                    <Text style={tw("text-white/90 text-sm font-kh-medium")} numberOfLines={2}>
+                    <Text style={tw("text-gray-200 text-sm font-kh-medium")} numberOfLines={2} ellipsizeMode="tail">
                         {description}
                     </Text>
                 </View>

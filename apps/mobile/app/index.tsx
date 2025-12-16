@@ -14,6 +14,7 @@ import ContinueSkeleton from '@/components/screens/home/ContinueSkeleton';
 import { feedNewsService, meLastAccessedService } from '@/services';
 import type { News } from '@core-types/content/news';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '@/hooks/useAuth';
 
 const MAIN_FEATURES = {
     lessons: {
@@ -74,7 +75,7 @@ export default function HomeScreen() {
     const [showComingSoon, setShowComingSoon] = useState<boolean>(false);
     const [continueItems, setContinueItems] = useState<ContinueItem[]>([]);
     const scrollY = useRef(new Animated.Value(0)).current;
-
+    const { user } = useAuth();
     const loadNews = useCallback(async () => {
         try {
             setLoadingNews(true);
@@ -89,6 +90,9 @@ export default function HomeScreen() {
 
     const loadContinueItems = useCallback(async () => {
         try {
+            if (!user) {
+                return;
+            }
             setLoadingContinue(true);
             const response = await meLastAccessedService.getLastAccessed();
             const items: ContinueItem[] = [];
@@ -222,7 +226,7 @@ export default function HomeScreen() {
         },
         {
             id: 'calculator',
-            title: 'គណនាពន្ទុ',
+            title: 'គណនាពិន្ទុ',
             icon: <Calculator size={24} color="#4F46E5" />,
             onPress: () => {
                 setShowComingSoon(true);
@@ -307,7 +311,7 @@ export default function HomeScreen() {
                                 <FeatureCard
                                     title={MAIN_FEATURES.utilities.title}
                                     icon={MAIN_FEATURES.utilities.icon}
-                                    href={MAIN_FEATURES.utilities.href as any}
+                                    onPress={() => setShowComingSoon(true)}
                                 />
                             </View>
                         </View>
@@ -333,7 +337,7 @@ export default function HomeScreen() {
                 >
                     <View style={tw("px-4 pt-6 pb-6")}>
                         {/* Continue Progress Section */}
-                        <View style={tw("mb-8")}>
+                        <View style={tw(` ${continueItems.length > 0 ? 'mb-8' : 'mb-0'}`)}>
                             {loadingContinue ? (
                                 <ContinueSkeleton count={3} />
                             ) : continueItems.length > 0 ? (
@@ -369,6 +373,7 @@ export default function HomeScreen() {
                         </View>
 
                         <View style={tw(" mb-6 ")}>
+                            <Text style={tw("text-xl font-kh-bold text-white mb-4")}>ចូលទៅកាន់</Text>
                             <ScrollView
                                 horizontal
                                 showsHorizontalScrollIndicator={false}

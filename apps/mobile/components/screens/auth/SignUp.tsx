@@ -123,8 +123,10 @@ export default function SignUp({
                             style={[tw("w-full px-4 py-4 bg-gray-50 rounded-full font-kh-medium"), styles.input]}
                             placeholder="បញ្ចូលឈ្មោះអ្នកប្រើប្រាស់"
                             placeholderTextColor="#9ca3af"
+                            autoCapitalize='none'
+                            autoComplete='off'
+                            autoCorrect={false}
                             editable={!isSubmitting}
-                            autoCapitalize="none"
                         />
                         {signupData.username && getValidationError('username', signupData.username) && (
                             <Text style={tw("text-red-500 text-xs mt-2")}>
@@ -143,6 +145,9 @@ export default function SignUp({
                                 onChangeText={(text) => setSignupData(prev => ({ ...prev, firstName: text }))}
                                 style={[tw("w-full px-4 py-4 bg-gray-50 rounded-full font-kh-medium"), styles.input]}
                                 placeholder="ឈ្មោះ"
+                                autoCapitalize='none'
+                                autoComplete='off'
+                                autoCorrect={false}
                                 placeholderTextColor="#9ca3af"
                                 editable={!isSubmitting}
                             />
@@ -156,6 +161,9 @@ export default function SignUp({
                                 onChangeText={(text) => setSignupData(prev => ({ ...prev, lastName: text }))}
                                 style={[tw("w-full px-4 py-4 bg-gray-50 rounded-full font-kh-medium"), styles.input]}
                                 placeholder="នាមត្រកូល"
+                                autoCapitalize='none'
+                                autoComplete='off'
+                                autoCorrect={false}
                                 placeholderTextColor="#9ca3af"
                                 editable={!isSubmitting}
                             />
@@ -177,7 +185,9 @@ export default function SignUp({
                         placeholder="បញ្ចូលអ៊ីមែលរបស់អ្នក"
                         placeholderTextColor="#9ca3af"
                         editable={!isSubmitting}
-                        autoCapitalize="none"
+                        autoCapitalize='none'
+                        autoComplete='off'
+                        autoCorrect={false}
                         keyboardType="email-address"
                     />
                 </View>
@@ -202,6 +212,9 @@ export default function SignUp({
                         placeholder="បង្កើតពាក្យសម្ងាត់"
                         placeholderTextColor="#9ca3af"
                         editable={!isSubmitting}
+                        autoCapitalize='none'
+                        autoComplete='off'
+                        autoCorrect={false}
                     />
                     <Pressable
                         onPress={() => setShowPassword(!showPassword)}
@@ -230,6 +243,9 @@ export default function SignUp({
                         placeholder="បញ្ជាក់ពាក្យសម្ងាត់ម្តងទៀត"
                         placeholderTextColor="#9ca3af"
                         editable={!isSubmitting}
+                        autoCapitalize='none'
+                        autoComplete='off'
+                        autoCorrect={false}
                     />
                     <Pressable
                         onPress={() => setShowConfirmPassword(!showConfirmPassword)}

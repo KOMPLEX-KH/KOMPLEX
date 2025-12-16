@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { View } from "react-native";
 import { AIResponseType } from "@core-types/content/ai";
 import { tw } from "@/utils/styles";
-import { Dropdown } from "@/components/common/Dropdown";
+import Dropdown2 from "@/components/common/DropDown2";
 
 export interface ResponseTypeOption {
     id: AIResponseType;
@@ -17,6 +17,14 @@ interface ResponseTypeDropdownProps {
     disabled?: boolean;
     variant?: "compact" | "default";
     className?: string;
+    style: {
+        left?: number;
+        top?: number;
+        bottom?: number;
+        right?: number;
+        maxHeight?: number;
+        maxWidth?: number;
+    }
 }
 
 const ResponseTypeDropdown: React.FC<ResponseTypeDropdownProps> = ({
@@ -25,44 +33,36 @@ const ResponseTypeDropdown: React.FC<ResponseTypeDropdownProps> = ({
     options,
     disabled,
     variant = "default",
-    className = ""
+    className = "",
+    style
 }) => {
-    // Convert ResponseTypeOption[] to DropdownItem[]
+    // Convert ResponseTypeOption[] to DropDown2 OptionItem[]
     const dropdownData = useMemo(() => {
         return options.map((option) => ({
-            key: option.id,
+            id: option.id,
             value: option.name,
         }));
     }, [options]);
 
-    // Get the selected value key
-    const selectedValue = useMemo(() => value.id, [value.id]);
+    // Get the selected value id
+    const selectedId = useMemo(() => value.id, [value.id]);
 
     // Handle selection change
-    const handleSelectionChange = (selectedKey: string | string[]) => {
-        const key = Array.isArray(selectedKey) ? selectedKey[0] : selectedKey;
-        const selectedOption = options.find((opt) => opt.id === key);
+    const handleSelectionChange = (item: { id: string; value: string }) => {
+        const selectedOption = options.find((opt) => opt.id === item.id);
         if (selectedOption) {
             onChange(selectedOption);
         }
     };
 
-    // Get default option
-    const defaultOption = useMemo(() => {
-        return dropdownData.find((item) => item.key === value.id) || dropdownData[0];
-    }, [dropdownData, value.id]);
-
     return (
         <View style={tw(`relative flex-shrink-0 ${className}`)}>
-            <Dropdown
+            <Dropdown2
                 data={dropdownData}
-                setSelected={handleSelectionChange}
-                selectedValue={selectedValue}
+                onChange={handleSelectionChange}
                 placeholder={value.name}
-                searchable={false}
-                disabled={disabled}
-                defaultOption={defaultOption}
-                width={variant === "compact" ? "w-24" : "w-32"}
+                selectedId={selectedId}
+                style={style}
             />
         </View>
     );

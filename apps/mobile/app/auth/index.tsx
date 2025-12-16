@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { View, ScrollView, KeyboardAvoidingView, Platform, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import Constants from 'expo-constants';
 import { tw } from '@/utils/styles';
 import { auth, googleProvider, microsoftProvider, githubProvider } from '@/configs/firebase';
@@ -20,6 +20,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Svg, { Path } from 'react-native-svg';
 import * as AuthSession from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
+import { HEADER_CONFIG } from '@/constants/header-config';
+import { useNavigation } from '@react-navigation/native';
 
 // Complete auth session for proper cleanup
 WebBrowser.maybeCompleteAuthSession();
@@ -90,6 +92,8 @@ export default function AuthPage() {
         phone: '',
         profileImage: null as { uri: string; type: string; name: string } | null
     });
+
+    const navigation = useNavigation();
 
     // Validation functions
     const isLoginValid = () => {
@@ -265,7 +269,7 @@ export default function AuthPage() {
             if (redirectUri.startsWith('exp://')) {
                 // Try to get username from Constants, fallback to manual entry needed
                 const expoUsername = Constants.expoConfig?.owner || Constants.manifest?.owner?.username || 'ocraksa';
-                redirectUri = `https://auth.expo.io/@${expoUsername}/${expoSlug}`;
+                redirectUri = `https://auth.expo.io/${expoUsername}/${expoSlug}`;
                 console.log('⚠️ Proxy not available, using manual HTTPS proxy URL');
                 console.log('📝 If this doesn\'t work, replace "your-expo-username" with your actual Expo username');
             }
@@ -435,6 +439,13 @@ export default function AuthPage() {
         }
     };
 
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerTitle: 'ចូលទៅកាន់គណនី',
+            ...HEADER_CONFIG,
+        });
+    }, [navigation]);
+
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -516,14 +527,14 @@ export default function AuthPage() {
                 )}
 
                 {/* Divider */}
-                <View style={tw("my-8 flex-row items-center")}>
+                {/* <View style={tw("my-8 flex-row items-center")}>
                     <View style={tw("flex-1 h-px bg-gray-200")} />
                     <Text style={tw("px-4 text-sm text-gray-400")}>ឬ</Text>
                     <View style={tw("flex-1 h-px bg-gray-200")} />
-                </View>
+                </View> */}
 
                 {/* Social Login */}
-                <View style={tw("flex-row gap-3")}>
+                {/* <View style={tw("flex-row gap-3")}>
                     {socialPlatforms.map((platform, index) => (
                         <Pressable
                             key={index}
@@ -534,7 +545,7 @@ export default function AuthPage() {
                             {platform.icon}
                         </Pressable>
                     ))}
-                </View>
+                </View> */}
             </ScrollView>
         </KeyboardAvoidingView>
     );
