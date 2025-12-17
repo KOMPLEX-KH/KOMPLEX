@@ -1,5 +1,5 @@
 import type { AxiosInstance } from "axios";
-import { LastAccessed } from "@/types/last-accessed";
+import { LastAccessed } from "../../types/last-accessed";
 
 export const createMeLastAccessedService = (api: AxiosInstance) => {
   return {

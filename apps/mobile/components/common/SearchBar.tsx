@@ -7,8 +7,8 @@ import { Pressable, TextInput } from "react-native";
 import { View } from "react-native";
 
 interface SearchBarProps {
-    type: "forums" | "videos";
-    onSearch?: (query: string, type: "forums" | "videos") => void;
+    type: "forums" | "videos" | "news";
+    onSearch?: (query: string, type: "forums" | "videos" | "news") => void;
     isDisabled?: boolean;
 }
 
@@ -31,9 +31,13 @@ export default function SearchBar({ type, onSearch, isDisabled = false }: Search
                 style={tw("border border-gray-300 rounded-full px-3 py-2 flex-1 font-kh-medium")}
                 editable={!isDisabled}
             />
-            <Pressable disabled={isDisabled} style={tw("rounded-full bg-indigo-600 p-2")} onPress={() => router.push(`${type === "forums" ? "/me/create-forum" : "/me/create-video"}`)}>
-                <Plus size={20} color={isDisabled ? TAILWIND_COLORS["gray-500"] : "white"} />
-            </Pressable>
-        </View>
+            {
+                type !== 'news' && (
+                    <Pressable disabled={isDisabled} style={tw("rounded-full bg-indigo-600 p-2")} onPress={() => router.push(`${type === "forums" ? "/me/create-forum" : type === "videos" ? "/me/create-video" : null}`)}>
+                        <Plus size={20} color={isDisabled ? TAILWIND_COLORS["gray-500"] : "white"} />
+                    </Pressable>
+                )
+            }
+        </View >
     );
 }

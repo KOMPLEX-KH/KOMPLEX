@@ -5,7 +5,6 @@ import { createAuthService } from "@core-services/auth";
 import { createUploadService } from "@core-services/upload";
 
 // Feed services
-import { createFeedBlogService } from "@core-services/feed/blogs";
 import { createFeedExerciseService } from "@core-services/feed/exercises";
 import { createFeedForumService } from "@core-services/feed/forums";
 import { createFeedVideoService } from "@core-services/feed/videos";
@@ -42,7 +41,6 @@ export const authService = createAuthService(api);
 export const uploadService = createUploadService(api);
 
 // Feed services
-export const feedBlogService = createFeedBlogService(api);
 export const feedExerciseService = createFeedExerciseService(api);
 export const feedForumService = createFeedForumService(api);
 export const feedVideoService = createFeedVideoService(api);

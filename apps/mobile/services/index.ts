@@ -5,18 +5,18 @@ import { createAuthService } from "@core-services/auth";
 import { createUploadService } from "@core-services/upload";
 
 // Feed services
-import { createFeedBlogService } from "@core-services/feed/blogs";
+import { createFeedNewsService } from "@core-services/feed/news";
 import { createFeedExerciseService } from "@core-services/feed/exercises";
 import { createFeedForumService } from "@core-services/feed/forums";
 import { createFeedVideoService } from "@core-services/feed/videos";
 import { createFeedCurriculumsService } from "@core-services/feed/curriculums";
-import { createFeedBlogService as createFeedNewsService } from "@/services/feed/news";
 import { createFeedForumCommentService } from "@core-services/feed/forum-comments";
 import { createFeedForumReplyService } from "@core-services/feed/forum-replies";
 import { createFeedVideoCommentService } from "@core-services/feed/video-comments";
 import { createFeedVideoReplyService } from "@core-services/feed/video-replies";
 import { createFeedSearchForumService } from "@core-services/feed/search/forums";
 import { createFeedSearchVideoService } from "@core-services/feed/search/videos";
+import { createFeedSearchNewsService } from "@core-services/feed/search/news";
 
 // Me services
 import { createMeBlogService } from "@core-services/me/blogs";
@@ -30,7 +30,7 @@ import { createMeVideoService } from "@core-services/me/videos";
 import { createMeVideoCommentService } from "@core-services/me/video-comments";
 import { createMeVideoReplyService } from "@core-services/me/video-replies";
 import { createMeVideoHistoryService } from "@core-services/me/video-history";
-import { createMeLastAccessedService } from "@/services/me/last-accessed";
+import { createMeLastAccessedService } from "@core-services/me/last-accessed";
 
 // User services
 import { createUserBlogService } from "@core-services/user/blogs";
@@ -43,7 +43,6 @@ export const authService = createAuthService(api);
 export const uploadService = createUploadService(api);
 
 // Feed services
-export const feedBlogService = createFeedBlogService(api);
 export const feedExerciseService = createFeedExerciseService(api);
 export const feedForumService = createFeedForumService(api);
 export const feedVideoService = createFeedVideoService(api);
@@ -55,7 +54,7 @@ export const feedVideoCommentService = createFeedVideoCommentService(api);
 export const feedVideoReplyService = createFeedVideoReplyService(api);
 export const feedSearchForumService = createFeedSearchForumService(api);
 export const feedSearchVideoService = createFeedSearchVideoService(api);
-
+export const feedSearchNewsService = createFeedSearchNewsService(api);
 // Me services
 export const meBlogService = createMeBlogService(api);
 export const meAiService = createMeAiService(api);
