@@ -68,6 +68,7 @@ export default function FormularPage({
             </div>
           </div>
 
+
           {/* Content */}
           <div className="p-6 space-y-6">
             {/* Formula Display */}
@@ -102,6 +103,16 @@ export default function FormularPage({
                 {selectedFormula.formula}
               </div>
             </div>
+
+            {/* Description (if any) */}
+            {selectedFormula.description && selectedFormula.description.trim() !== '' && (
+              <div className="bg-white rounded-2xl p-6 border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">ពណ៌នា</h3>
+                <div className="text-gray-700 leading-relaxed whitespace-pre-line">
+                  {selectedFormula.description}
+                </div>
+              </div>
+            )}
 
             {/* Variables (if any) */}
             {selectedFormula.variables && selectedFormula.variables.length > 0 && (
@@ -142,7 +153,7 @@ export default function FormularPage({
       {loading ? (
         <FormularSkeleton />
       ) : filteredFormulas.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredFormulas.map((formula) => (
             <FormularCard
               key={formula.id}
