@@ -1,4 +1,4 @@
-import { Pressable, View, Modal, ScrollView, Animated } from 'react-native';
+import { Pressable, View, Modal, ScrollView, Animated, TextInput } from 'react-native';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { tw } from '@/utils/styles';
@@ -11,10 +11,11 @@ import HomeHeader from '@/components/screens/home/HomeHeader';
 import NewsCard from '@/components/screens/news/NewsCard';
 import NewsSkeleton from '@/components/screens/news/NewsSkeleton';
 import ContinueSkeleton from '@/components/screens/home/ContinueSkeleton';
-import { feedNewsService, meLastAccessedService } from '@/services';
+import { feedNewsService, meLastAccessedService, feedSearchNewsService } from '@/services';
 import type { News } from '@core-types/content/news';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '@/hooks/useAuth';
+import SearchBar from '@/components/common/SearchBar';
 
 const MAIN_FEATURES = {
     lessons: {
@@ -74,6 +75,7 @@ export default function HomeScreen() {
     const [loadingContinue, setLoadingContinue] = useState<boolean>(true);
     const [showComingSoon, setShowComingSoon] = useState<boolean>(false);
     const [continueItems, setContinueItems] = useState<ContinueItem[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>('');
     const scrollY = useRef(new Animated.Value(0)).current;
     const { user } = useAuth();
     const loadNews = useCallback(async () => {
@@ -253,6 +255,18 @@ export default function HomeScreen() {
         extrapolate: 'clamp',
     });
 
+    const handleNewsSearch = async () => {
+        try {
+            setLoadingNews(true);
+            const response = await feedSearchNewsService.searchNews(searchQuery);
+            setNewsItems(response.data);
+        } catch (err) {
+            console.error("Error searching news:", err);
+        } finally {
+            setLoadingNews(false);
+        }
+    }
+
     return (
         <>
             <Animated.ScrollView
@@ -402,6 +416,16 @@ export default function HomeScreen() {
                             <View style={tw("flex-row items-center gap-2 mb-4")}>
                                 <Text style={tw("text-xl font-kh-bold text-white")}>ព័ត៌មាន</Text>
                             </View>
+
+                            <TextInput
+                                value={searchQuery}
+                                onChangeText={setSearchQuery}
+                                returnKeyType="search"
+                                onSubmitEditing={handleNewsSearch}
+                                placeholder="ស្វែងរក"
+                                placeholderTextColor={TAILWIND_COLORS["gray-500"]}
+                                style={tw("border border-gray-300 rounded-full px-3 py-2 flex-1 font-kh-medium bg-white mb-6")}
+                            />
 
                             <View style={tw("gap-4")}>
                                 {loadingNews ? (

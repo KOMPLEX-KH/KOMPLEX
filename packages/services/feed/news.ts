@@ -1,7 +1,7 @@
 import type { AxiosInstance } from "axios";
-import type { News } from "@core-types/content/news";
+import type { News } from "../../types/content/news";
 
-export const createFeedBlogService = (api: AxiosInstance) => {
+export const createFeedNewsService = (api: AxiosInstance) => {
   return {
     // Get all blog posts
     getAllNews: async (): Promise<{
