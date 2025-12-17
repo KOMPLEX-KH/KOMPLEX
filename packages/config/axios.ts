@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestHeaders } from "axios";
 
 export type TokenProvider = () => Promise<string | null>;
 
@@ -10,7 +10,7 @@ export const createApi = (baseURL: string, getToken: TokenProvider) => {
     if (token) {
       // Ensure headers object exists
       if (!config.headers) {
-        config.headers = {};
+        config.headers = {} as AxiosRequestHeaders;
       }
       config.headers.Authorization = `Bearer ${token}`;
       console.log(

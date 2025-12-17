@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Sidebar from '@/components/pages/extras/Sidebar';
 import ExploreContent from '@/components/pages/extras/explore/content';
@@ -85,7 +85,7 @@ function ExtraWrapper({ currentTab }: ExtraWrapperProps) {
   }
 }
 
-export default function ExtraPage() {
+function ExtraPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -150,5 +150,13 @@ export default function ExtraPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ExtraPage() {
+  return (
+    <Suspense fallback={<div className="p-10 text-center text-gray-400">Loading...</div>}>
+      <ExtraPageContent />
+    </Suspense>
   );
 }
