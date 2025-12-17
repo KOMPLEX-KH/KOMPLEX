@@ -3,12 +3,85 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Sidebar from '@/components/pages/extras/Sidebar';
-import ExtraHelper from './ExtraWrapper';
-
+import ExploreContent from '@/components/pages/extras/explore/content';
+import CalculateContent from '@/components/pages/extras/calculate/content';
+import LibraryContent from '@/components/pages/extras/library/content';
+import NotesContent from '@/components/pages/extras/notes/content';
+import FormularContent from '@/components/pages/extras/formular/content';
+import CalendarContent from '@/components/pages/extras/calendar/content';
+import LibraryContentSkeleton from '@/components/pages/extras/library/utils/BookSkeleton';
+import NotesContentSkeleton from '@/components/pages/extras/notes/utils/NoteSkeleton';
+import FormularContentSkeleton from '@/components/pages/extras/formular/utils/FormularSkeleton';
+import CalculateContentSkeleton from '@/components/pages/extras/calculate/utils/CalculateSkeleton';
+import NotFound from '../not-found';
 
 export const extraScrollRef: { current: HTMLDivElement | null } = { current: null };
 
-const Tabs = ['calculate', 'library', 'notes', 'formular', 'calendar'];
+const Tabs = [
+  'calculate',
+  'library',
+  'notes',
+  'formula',
+  // 'calendar'
+];
+
+interface ExtraWrapperProps {
+  currentTab: string;
+}
+
+function ExtraWrapper({ currentTab }: ExtraWrapperProps) {
+  const [loading, setLoading] = useState(true);
+  const [prevTab, setPrevTab] = useState(currentTab);
+
+  useEffect(() => {
+    if (currentTab !== prevTab) {
+      setLoading(true);
+
+      const timer = setTimeout(() => {
+        setLoading(false);
+        setPrevTab(currentTab);
+      }, 2500);
+
+      return () => clearTimeout(timer);
+    } else {
+      setLoading(false);
+    }
+  }, [currentTab, prevTab]);
+
+  if (loading) {
+    switch (currentTab) {
+      case 'library':
+        return <LibraryContentSkeleton />;
+      case 'notes':
+        return <NotesContentSkeleton />;
+      case 'calculate':
+        return <CalculateContentSkeleton />;
+      case 'formula':
+        return <FormularContentSkeleton />;
+      default:
+        return (
+          <div className="p-10 text-center text-gray-400">
+            Loading...
+          </div>
+        );
+    }
+  }
+
+  switch (currentTab) {
+    case 'calculate':
+      return <CalculateContent />;
+    case 'library':
+      return <LibraryContent />;
+    case 'notes':
+      return <NotesContent />;
+    case 'formula':
+      return <FormularContent />;
+    // case 'calendar':
+    //   return <CalendarContent />;
+    default:
+      return <NotFound />;
+  }
+}
 
 export default function ExtraPage() {
   const router = useRouter();
@@ -19,7 +92,6 @@ export default function ExtraPage() {
   const validTabIndex = initialTabIndex === -1 ? 0 : initialTabIndex;
 
   const [tabIndex, setTabIndex] = useState(validTabIndex);
-  const [isFading, setIsFading] = useState(false);
 
   const mainRef = useRef<HTMLDivElement>(null);
 
@@ -29,14 +101,9 @@ export default function ExtraPage() {
 
     router.push(`/extra?${params.toString()}`, { scroll: false });
 
-    setIsFading(true);
-    const timeout = setTimeout(() => setIsFading(false), 100);
-
     if (mainRef.current) {
       mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
-
-    return () => clearTimeout(timeout);
   }, [tabIndex, router]);
 
   const handleTabChange = (index: number) => {
@@ -63,13 +130,7 @@ export default function ExtraPage() {
             >
               <style jsx>{`div::-webkit-scrollbar { display: none; }`}</style>
 
-              <div
-                className={`transition-opacity duration-200 ease-in-out ${
-                  isFading ? 'opacity-0' : 'opacity-100'
-                }`}
-              >
-                <ExtraHelper currentTab={Tabs[tabIndex]} />
-              </div>
+              <ExtraWrapper currentTab={Tabs[tabIndex]} />
             </div>
           </main>
         </div>
