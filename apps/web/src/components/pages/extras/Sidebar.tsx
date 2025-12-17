@@ -8,12 +8,12 @@ interface SidebarProps {
 }
 
 const tabs = [
-  { label: 'ស្វែងយល់', slug: 'explore' },
+  // { label: 'ស្វែងយល់', slug: 'explore' },
   { label: 'គណនាពិន្ទុ', slug: 'calculate' },
   { label: 'បណ្ណាល័យ', slug: 'library' },
   { label: 'កំណត់ត្រា', slug: 'notes' },
   { label: 'រូបមន្ត', slug: 'formular' },
-  { label: 'ប្រតិទិន', slug: 'calendar' },
+  { label: 'ថ្ងៃប្រលងបាក់ឌុប', slug: 'calendar' },
 ];
 
 export default function Sidebar({ currentTab, onTabChange }: SidebarProps) {
@@ -53,14 +53,14 @@ export default function Sidebar({ currentTab, onTabChange }: SidebarProps) {
 
       {/* Mobile top bar */}
       <div
-        className={`lg:hidden fixed top-14 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 px-4 py-3 transition-transform duration-300 ${
+        className={`lg:hidden fixed top-14 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 px-4 py-2 transition-transform duration-300 ${
           isScrollingDown ? '-translate-y-[300%]' : 'translate-y-0'
         }`}
       >
-        <div className="flex gap-3 overflow-x-auto whitespace-nowrap scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide ">
           {tabs.map((tab, i) => (
             <button key={i} onClick={() => onTabChange(i)}
-              className={`px-4 py-2 rounded-full border border-indigo-500/10 text-sm transition ${
+              className={`px-3.5 py-1.5 rounded-full border border-indigo-500/10 sm:text-sm text-[13px] transition ${
                 currentTab === i
                   ? 'text-indigo-600 bg-indigo-50/80 font-semibold'
                   : 'text-gray-600 hover:text-indigo-500 hover:bg-indigo-50/60'

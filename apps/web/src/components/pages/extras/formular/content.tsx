@@ -2,167 +2,126 @@
 
 import { useState, useEffect } from "react";
 import FormularHeader from "./components/FormularHeader";
-import FormularCard from "./components/FormularCard";
-import FormularSkeleton from "./utils/FormularSkeleton";
-import EmptyState from "./utils/EmptyState";
+import FormularPage from "./components/FormularPage";
+import { feedCurriculumsService } from "@/services";
+import { Grade } from "@/types/docs/curriculum";
+import { mockFormulas } from "@core-types/content/formular";
 
-// Mock data - replace with actual API call
-const mockFormulas = [
-  {
-    id: "1",
-    title: "ទ្រឹស្តីបទពីតាហ្គោរ៉ាស",
-    formula: "a² + b² = c²",
-    description: "រូបមន្តគណនាប្រវែងជ្រុងទ្រេតក្នុងត្រីកោណកែង",
-    subject: "math",
-    category: "geometry",
-    views: 1250,
-    isSaved: true,
-  },
-  {
-    id: "2",
-    title: "ច្បាប់នូតុនទី២",
-    formula: "F = ma",
-    description: "កម្លាំង = ម៉ាស់ × ឩស្សាហភាព",
-    subject: "physics",
-    category: "mechanics",
-    views: 980,
-    isSaved: false,
-  },
-  {
-    id: "3",
-    title: "ទ្រឹស្តីបទអេស្តាញ",
-    formula: "E = mc²",
-    description: "ទំនាក់ទំនងរវាងថាមពល និងម៉ាស់",
-    subject: "physics",
-    category: "mechanics",
-    views: 2100,
-    isSaved: true,
-  },
-  {
-    id: "4",
-    title: "រូបមន្តទឹកគីមី",
-    formula: "H₂O",
-    description: "ទឹក = ២អ៊ីដ្រូសែន + ១អុកស៊ីសែន",
-    subject: "chemistry",
-    category: "organic",
-    views: 750,
-    isSaved: false,
-  },
-  {
-    id: "5",
-    title: "រូបមន្តគណនាផ្ទៃក្រាស",
-    formula: "A = πr²",
-    description: "គណនាផ្ទៃរង្វង់ដោយប្រើកាំ",
-    subject: "math",
-    category: "geometry",
-    views: 1450,
-    isSaved: false,
-  },
-  {
-    id: "6",
-    title: "ច្បាប់ចាលឡេស",
-    formula: "PV = nRT",
-    description: "ទំនាក់ទំនងរវាងសម្ពាធ حجម និងសីតុណ្ហភាព",
-    subject: "chemistry",
-    category: "inorganic",
-    views: 890,
-    isSaved: false,
-  },
-  {
-    id: "7",
-    title: "រូបមន្តរីកតុង",
-    formula: "ax² + bx + c = 0",
-    description: "សមីការកូនិគ្រីនីក",
-    subject: "math",
-    category: "algebra",
-    views: 1680,
-    isSaved: true,
-  },
-  {
-    id: "8",
-    title: "ច្បាប់ផតូស៊ីនតេស",
-    formula: "6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂",
-    description: "ដំណើរការផលិតអាហារក្នុងរុក្ខជាតិ",
-    subject: "biology",
-    category: "ecology",
-    views: 1120,
-    isSaved: false,
-  },
-  {
-    id: "9",
-    title: "ច្បាប់អូម",
-    formula: "V = IR",
-    description: "ទំនាក់ទំនងរវាងវ៉ុល អំពែរ និងធនាធាន",
-    subject: "physics",
-    category: "electricity",
-    views: 1340,
-    isSaved: true,
-  },
-];
 
 export default function FormularContent() {
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSubject, setSelectedSubject] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("all");
+
+  const [selectedSubject, setSelectedSubject] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem("curriculum");
+      if (stored) {
+        const parsed = JSON.parse(stored) as Grade[];
+        const grade12 = parsed.find(g => g.name.includes("១២")) || parsed[parsed.length - 1];
+        if (grade12 && grade12.subjects.length > 0) {
+          return String(grade12.subjects[0].id);
+        }
+      }
+    }
+    return "";
+  });
+
+  const [selectedGrade, setSelectedGrade] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem("curriculum");
+      if (stored) {
+        const parsed = JSON.parse(stored) as Grade[];
+        const grade12 = parsed.find(g => g.name.includes("១២")) || parsed[parsed.length - 1];
+        return grade12 ? String(grade12.id) : "4";
+      }
+    }
+    return "4";
+  });
+
   const [formulas, setFormulas] = useState(mockFormulas);
   const [loading, setLoading] = useState(false);
+
+  const [curriculum, setCurriculum] = useState<Grade[]>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem("curriculum");
+      const parsed = stored ? JSON.parse(stored) : [];
+      console.log('Loaded curriculum from localStorage:', parsed.length, 'grades');
+      return parsed;
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    if (curriculum.length === 0) {
+      console.log('Fetching curriculum from API...');
+      const fetchCurriculum = async () => {
+        try {
+          const curriculumData = await feedCurriculumsService.getCurriculum();
+          console.log('Fetched curriculum:', curriculumData.length, 'grades');
+          setCurriculum(curriculumData);
+          localStorage.setItem('curriculum', JSON.stringify(curriculumData));
+        } catch (error) {
+          console.error('Error fetching curriculum:', error);
+        }
+      };
+      fetchCurriculum();
+    }
+  }, [curriculum.length]);
 
   // Filter formulas based on search and filters
   const filteredFormulas = formulas.filter((formula) => {
     const matchesSearch = 
       searchQuery === "" ||
       formula.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      formula.formula.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      formula.description.toLowerCase().includes(searchQuery.toLowerCase());
+      String(formula.formula).toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesSubject = 
-      selectedSubject === "all" || formula.subject === selectedSubject;
+    // Get the selected subject name from curriculum
+    const currentGrade = curriculum.find(g => String(g.id) === selectedGrade);
+    const currentSubject = currentGrade?.subjects.find(s => String(s.id) === selectedSubject);
+    
+    // Map subject names to formula subject codes
+    const subjectMapping: { [key: string]: string } = {
+      "គណិតវិទ្យា": "math",
+      "រូបវិទ្យា": "physics", 
+      "គីមីវិទ្យា": "chemistry",
+      "ជីវវិទ្យា": "biology"
+    };
+    
+    const matchesSubject = currentSubject 
+      ? formula.subject === subjectMapping[currentSubject.name]
+      : true;
 
     const matchesCategory = 
-      selectedCategory === "all" || formula.category === selectedCategory;
+      selectedCategory === "all" || 
+      String(formula.category) === selectedCategory;
+
 
     return matchesSearch && matchesSubject && matchesCategory;
   });
 
-  const handleFormulaClick = (id: string) => {
-    console.log("Formula clicked:", id);
-    // Navigate to formula detail page or open modal
-  };
-
   return (
-    <div className="flex flex-col pt-3">
-      <FormularHeader
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        selectedSubject={selectedSubject}
-        setSelectedSubject={setSelectedSubject}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
+    <div className="relative">
+      <div className="flex flex-col pt-3 ">
+          <FormularHeader
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            selectedSubject={selectedSubject}
+            setSelectedSubject={setSelectedSubject}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            selectedGrade={selectedGrade}
+            setSelectedGrade={setSelectedGrade}
+          />
 
-      {/* Results Count */}
-      {searchQuery && (
-        <div className="mb-4 text-gray-600 text-sm">
-          រកឃើញ <span className="font-semibold text-blue-600">{filteredFormulas.length}</span> រូបមន្ត
-        </div>
-      )}
-
-      {/* Formulas Grid */}
-      {loading ? (
-        <FormularSkeleton />
-      ) : filteredFormulas.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredFormulas.map((formula) => (
-            <FormularCard
-              key={formula.id}
-              formula={formula}
-              onClick={handleFormulaClick}
-            />
-          ))}
-        </div>
-      ) : (
-        <EmptyState searchQuery={searchQuery} selectedSubject={selectedSubject} />
-      )}
+          {/* Formulas Page with Grid and Detail View */}
+          <FormularPage
+            loading={loading}
+            filteredFormulas={filteredFormulas}
+            searchQuery={searchQuery}
+            selectedSubject={selectedSubject}
+          />
+      </div>   
     </div>
   );
 }

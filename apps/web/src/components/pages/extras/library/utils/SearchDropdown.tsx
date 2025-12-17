@@ -9,6 +9,7 @@ interface SearchDropdownProps {
   books: Book[];
   onBookClick: (bookId: string) => void;
   onClose?: () => void;
+  currentSubjectId?: number | null; // Add this prop to filter by subject
 }
 
 export default function SearchDropdown({
@@ -17,6 +18,7 @@ export default function SearchDropdown({
   books,
   onBookClick,
   onClose,
+  currentSubjectId, // Add this
 }: SearchDropdownProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -24,9 +26,18 @@ export default function SearchDropdown({
     if (isOpen) {
       // Small delay to trigger the expansion animation
       setTimeout(() => setIsExpanded(true), 10);
+      // Prevent body scroll
+      document.body.style.overflow = 'hidden';
     } else {
       setIsExpanded(false);
+      // Restore body scroll
+      document.body.style.overflow = '';
     }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -36,21 +47,30 @@ export default function SearchDropdown({
     ? books.filter(
         (book) =>
           book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          book.author.toLowerCase().includes(searchQuery.toLowerCase())
+          book.author?.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : books.slice(0, 6); // Show first 6 books when no search query
+    : currentSubjectId 
+      ? books.filter(book => book.subjectId === currentSubjectId).slice(0, 6) // Show books from current subject
+      : books.filter(book => book.isRecommended).slice(0, 6); // Show recommended books when no search query
 
   return (
-    <div
-      className={`absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden transition-all duration-500 ease-out z-50 ${
-        isExpanded 
-          ? "max-h-[500px] opacity-100 scale-100" 
-          : "max-h-12 opacity-0 scale-95"
-      }`}
-      style={{
-        transformOrigin: "top center",
-      }}
-    >
+    <>
+      {/* Backdrop overlay to prevent scrolling */}
+      <div 
+        className="fixed inset-0 z-40"
+        onClick={onClose}
+      />
+      
+      <div
+        className={`absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden transition-all duration-500 ease-out z-50 ${
+          isExpanded 
+            ? "max-h-[500px] opacity-100 scale-100" 
+            : "max-h-12 opacity-0 scale-95"
+        }`}
+        style={{
+          transformOrigin: "top center",
+        }}
+      >
       <div className="p-4">
 
         {/* Books List */}
@@ -61,7 +81,7 @@ export default function SearchDropdown({
                 key={book.id}
                 onClick={(e) => {
                   e.stopPropagation();
-                  onBookClick(book.id);
+                  onBookClick(String(book.id));
                   onClose?.();
                 }}
                 className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-all duration-200 text-left group"
@@ -126,5 +146,6 @@ export default function SearchDropdown({
         )}
       </div>
     </div>
+    </>
   );
 }

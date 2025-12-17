@@ -115,6 +115,7 @@ export default function LibraryContent() {
           subjects={subjects}
           books={books}
           onBookClick={handleBookClick}
+          currentSubjectId={categoryFromUrl ? Number(categoryFromUrl) : null}
         />
       )}
       

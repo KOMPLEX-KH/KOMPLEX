@@ -7,9 +7,11 @@ import BookSelectedPage from "./BookSelected";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import EmptyState from "../utils/EmptyState";
-import { feedLibraryService } from "@/services";
-import { subjectNameMap } from "@core-types/content/library";
-import type { Book, Subject } from "@core-types/content/library";
+import { feedLibraryService, feedCurriculumsService } from "@/services";
+// import { subjectNameMap } from "@core-types/content/library";
+import type { Book } from "@core-types/content/library";
+import type { Grade } from "@/types/docs/curriculum";
+
 
 export default function BookContainer() {
   const router = useRouter();
@@ -18,21 +20,31 @@ export default function BookContainer() {
   const bookSelectedFromUrl = searchParams.get("book");
 
   const [books, setBooks] = useState<Book[]>([]);
-  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [curriculum, setCurriculum] = useState<Grade[]>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem("curriculum");
+      return stored ? JSON.parse(stored) : [];
+    }
+    return [];
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [booksResponse] = await Promise.all([
-          feedLibraryService.getAllBooks(),
-        ]);
-        setBooks(booksResponse.books);
-        setSubjects([]);
-        
-      } catch (error) {
-        console.error("Error fetching library data:", error);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const [booksResponse] = await Promise.all([
+        feedLibraryService.getAllBooks(),
+        // feedLibraryService.getAllSubjects(),
+      ]);
+      setBooks(booksResponse.books);
+      if (curriculum.length === 0) {
+          const curriculumData = await feedCurriculumsService.getCurriculum();
+          setCurriculum(curriculumData);
+          localStorage.setItem('curriculum', JSON.stringify(curriculumData));
+      }     
+    } catch (error) {
+      console.error("Error fetching library data:", error);
+    }
+  };
 
     fetchData();
   }, []);
@@ -52,18 +64,17 @@ export default function BookContainer() {
   const recommendedBooks = books.filter((b) => b.isRecommended);
 
 
-  const displaySubjects = subjects.length > 0 
-    ? subjects 
-    : Array.from(new Set(books.map(b => b.subjectId)))
-        .filter(id => id)
-        .map(id => ({ 
-          id, 
-          name: subjectNameMap[id] || id
-        }));
-
-  console.log('📊 Display subjects:', displaySubjects);
-  console.log('📊 Total books:', books.length);
-  console.log('📊 Recommended books:', recommendedBooks.length);
+  const allSubjects = curriculum.flatMap(grade =>
+    grade.subjects.map(subject =>({
+      id : subject.id,
+      name: subject.name,
+      icon: subject.icon
+    }))
+  );
+  
+  const displaySubjects = allSubjects.filter(subject =>
+    books.some(book => book.subjectId === subject.id)
+  );
 
   const handleBookSelected = (bookId: string) => {
     router.push(`?tab=library&book=${bookId}`);
@@ -104,17 +115,13 @@ export default function BookContainer() {
         </section>
       ) : null}
 
-      {/* Empty state when no books at all */}
-      {books.length === 0 && <EmptyState />}
-
       {displaySubjects.map((subject) => {
-        if (subject.id === "all") return null;
 
         const booksInSubject = books.filter((b) => b.subjectId === subject.id);
         if (booksInSubject.length === 0) return null;
         return (
           <section key={subject.id}
-            className="flex flex-col gap-4 rounded-3xl border-none"
+            className="flex flex-col gap-4 rounded-3xl border-none mb-3"
           >
             {/* Header */}
             <div className="flex items-center justify-between">

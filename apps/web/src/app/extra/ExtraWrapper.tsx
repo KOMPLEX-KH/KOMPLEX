@@ -59,8 +59,6 @@ export default function ExtraHelper({ currentTab }: HelpWrapperProps) {
     }
 
     switch(currentTab){
-        case 'explore':
-            return <ExploreContent />;
         case 'calculate':
             return <CalculateContent />;
         case 'library':

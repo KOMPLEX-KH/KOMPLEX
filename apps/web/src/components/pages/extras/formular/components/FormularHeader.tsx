@@ -2,6 +2,9 @@
 
 import { Search, Filter, ChevronDown, Check, Beaker, Calculator, Atom, Microscope, Grid3x3 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { Grade } from "@/types/docs/curriculum";
+import { getSubjectIcon } from "@core-utils/transform";
+import { feedCurriculumsService } from "@/services";
 
 interface FormularHeaderProps {
   searchQuery: string;
@@ -10,29 +13,10 @@ interface FormularHeaderProps {
   setSelectedSubject: (subject: string) => void;
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
+  selectedGrade: string;
+  setSelectedGrade: (grade: string) => void;
 }
 
-const subjects = [
-  { id: "all", name: "គ្រប់មុខវិជ្ជា", icon: Grid3x3 },
-  { id: "math", name: "គណិតវិទ្យា", icon: Calculator },
-  { id: "physics", name: "រូបវិទ្យា", icon: Atom },
-  { id: "chemistry", name: "គីមីវិទ្យា", icon: Beaker },
-  { id: "biology", name: "ជីវវិទ្យា", icon: Microscope },
-];
-
-const categories = [
-  { id: "all", name: "គ្រប់ប្រភេទ" },
-  { id: "algebra", name: "ពិជគណិត" },
-  { id: "geometry", name: "ធរណីមាត្រ" },
-  { id: "calculus", name: "គណនាវិភាគ" },
-  { id: "mechanics", name: "យន្តវិទ្យា" },
-  { id: "thermodynamics", name: "កម្តៅវិទ្យា" },
-  { id: "electricity", name: "អគ្គិសនីវិទ្យា" },
-  { id: "organic", name: "សរីរាង្គ" },
-  { id: "inorganic", name: "អសរីរាង្គ" },
-  { id: "genetics", name: "បេតិកជ្ញា" },
-  { id: "ecology", name: "អេកូឡូស៊ី" },
-];
 
 export default function FormularHeader({
   searchQuery,
@@ -41,15 +25,57 @@ export default function FormularHeader({
   setSelectedSubject,
   selectedCategory,
   setSelectedCategory,
+  selectedGrade,
+  setSelectedGrade
 }: FormularHeaderProps) {
+  const [curriculum, setCurriculum] = useState<Grade[]>([]);
   const [openSubjectDropdown, setOpenSubjectDropdown] = useState(false);
   const [openCategoryDropdown, setOpenCategoryDropdown] = useState(false);
   const [openFilterPanel, setOpenFilterPanel] = useState(false);
+  const [openGradeDropdown, setOpenGradeDropdown] = useState(false);
   
   const subjectDropdownRef = useRef<HTMLDivElement>(null);
   const categoryDropdownRef = useRef<HTMLDivElement>(null);
   const filterPanelRef = useRef<HTMLDivElement>(null);
   const filterButtonRef = useRef<HTMLButtonElement>(null);
+  const gradeDropdownRef = useRef<HTMLDivElement>(null);
+  
+  // Fetch curriculum data
+  useEffect(() => {
+    const fetchCurriculum = async () => {
+      try {
+        // Try to get from localStorage first
+        const stored = localStorage.getItem('curriculum');
+        if (stored) {
+          setCurriculum(JSON.parse(stored));
+        } else {
+          // Fetch from API if not in localStorage
+          const curriculumData = await feedCurriculumsService.getCurriculum();
+          setCurriculum(curriculumData);
+          localStorage.setItem('curriculum', JSON.stringify(curriculumData));
+        }
+      } catch (error) {
+        console.error('Error fetching curriculum:', error);
+      }
+    };
+
+    fetchCurriculum();
+  }, []);
+
+  const grades = [
+    ...curriculum.map(g => ({ id: String(g.id), name: g.name }))
+  ];
+
+  // Filter subjects based on selected grade
+  const subjects = curriculum
+    .filter(g => String(g.id) === selectedGrade)
+    .flatMap(grade => 
+      grade.subjects.map(subject => ({
+        id: String(subject.id),
+        name: subject.name,
+        icon: getSubjectIcon(subject.name)
+      }))
+    );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -58,6 +84,9 @@ export default function FormularHeader({
       }
       if (categoryDropdownRef.current && !categoryDropdownRef.current.contains(event.target as Node)) {
         setOpenCategoryDropdown(false);
+      }
+      if (gradeDropdownRef.current && !gradeDropdownRef.current.contains(event.target as Node)) {
+        setOpenGradeDropdown(false);
       }
       if (
         filterPanelRef.current && 
@@ -73,39 +102,37 @@ export default function FormularHeader({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Get filtered categories based on selected subject
-  const getFilteredCategories = () => {
-    if (selectedSubject === "all") return [{ id: "all", name: "គ្រប់ប្រភេទ" }];
-    
-    if (selectedSubject === "math") {
-      return [
-        { id: "all", name: "គ្រប់ប្រភេទ" },
-        { id: "algebra", name: "ពិជគណិត" },
-        { id: "geometry", name: "ធរណីមាត្រ" },
-        { id: "calculus", name: "គណនាវិភាគ" },
-      ];
-    } else if (selectedSubject === "physics") {
-      return [
-        { id: "all", name: "គ្រប់ប្រភេទ" },
-        { id: "mechanics", name: "យន្តវិទ្យា" },
-        { id: "thermodynamics", name: "កម្តៅវិទ្យា" },
-        { id: "electricity", name: "អគ្គិសនីវិទ្យា" },
-      ];
-    } else if (selectedSubject === "chemistry") {
-      return [
-        { id: "all", name: "គ្រប់ប្រភេទ" },
-        { id: "organic", name: "សរីរាង្គ" },
-        { id: "inorganic", name: "អសរីរាង្គ" },
-      ];
-    } else if (selectedSubject === "biology") {
-      return [
-        { id: "all", name: "គ្រប់ប្រភេទ" },
-        { id: "genetics", name: "បេតិកជ្ញា" },
-        { id: "ecology", name: "អេកូឡូស៊ី" },
-      ];
+  // Reset subject when grade changes
+  useEffect(() => {
+    if (subjects.length > 0) {
+      setSelectedSubject(subjects[0].id);
     }
+  }, [selectedGrade, curriculum.length]);
+
+  // Get lessons based on selected subject
+  const getFilteredCategories = () => {
+    if (!selectedSubject || selectedSubject === "all") {
+      return [{ id: "all", name: "គ្រប់មេរៀន" }];
+    }
+
+    // Find the selected subject's lessons
+    const grade = curriculum.find(g => String(g.id) === selectedGrade);
+    const subject = grade?.subjects.find(s => String(s.id) === selectedSubject);
     
-    return [{ id: "all", name: "គ្រប់ប្រភេទ" }];
+    if (!subject || !subject.lessons) {
+      return [{ id: "all", name: "គ្រប់មេរៀន" }];
+    }
+
+    // Map lessons to category format
+    const lessons = subject.lessons.map(lesson => ({
+      id: String(lesson.id),
+      name: lesson.name
+    }));
+
+    return [
+      { id: "all", name: "គ្រប់មេរៀន" },
+      ...lessons
+    ];
   };
 
   const filteredCategories = getFilteredCategories();
@@ -114,8 +141,9 @@ export default function FormularHeader({
 
   return (
     <div className="mb-6">
-      {/* Subject Pills */}
-      <div className="flex items-center gap-3 mb-4 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="flex items-center justify-between gap-3 mb-4">
+        
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide w-80 lg:flex-1 lg:w-auto min-w-0">
         {subjects.map((subject) => {
           const Icon = subject.icon;
           const isSelected = selectedSubject === subject.id;
@@ -126,7 +154,7 @@ export default function FormularHeader({
                 setSelectedSubject(subject.id);
                 setSelectedCategory("all");
               }}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap transition-all duration-200 font-medium text-sm ${
+              className={`flex items-center gap-2 px-4 sm:py-2.5 py-2 rounded-full whitespace-nowrap transition-all duration-200 font-medium sm:text-sm text-[12px]  ${
                 isSelected
                   ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
                   : "bg-white text-gray-600 border border-gray-200 hover:border-blue-500 hover:bg-blue-50"
@@ -137,6 +165,17 @@ export default function FormularHeader({
             </button>
           );
         })}
+        </div>
+
+        <div className="relative" ref={gradeDropdownRef}>
+          <button
+            disabled
+            className="flex sm:text-sm text-[12px] items-center gap-2 px-3 sm:py-2.5 py-2 bg-gray-50 border-2 border-gray-300 rounded-full font-medium text-gray-500 justify-between cursor-not-allowed opacity-60"
+          >
+            <span>{grades.find(g => g.id === selectedGrade)?.name || "ថ្នាក់ទី១២"}</span>
+            <ChevronDown className="w-5 h-5 text-gray-400" />
+          </button>
+        </div>
       </div>
 
       {/* Search and Filter Row */}
@@ -149,7 +188,7 @@ export default function FormularHeader({
             placeholder="ស្វែងរករូបមន្ត..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-3xl outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100 transition-all duration-200"
+            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-3xl outline-none transition-all duration-200"
           />
         </div>
 
@@ -179,20 +218,22 @@ export default function FormularHeader({
           >
             {/* Subject Dropdown */}
             <div className="mb-4">
-              <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                <SubjectIcon className="w-4 h-4" />
+              <label className="flex text-sm font-semibold text-gray-700 mb-2  items-center gap-2">
                 មុខវិជ្ជា
               </label>
               <div className="relative" ref={subjectDropdownRef}>
                 <button
                   onClick={() => setOpenSubjectDropdown(!openSubjectDropdown)}
-                  className="w-full appearance-none bg-white border border-gray-200 py-2.5 px-4 pr-10 rounded-xl cursor-pointer transition-all duration-200 text-gray-700 font-medium outline-none flex items-center justify-between hover:border-blue-300 focus:ring-2 focus:ring-blue-200"
+                  className="w-full relative appearance-none bg-white border border-gray-200 py-2.5 px-4 pr-10 rounded-xl cursor-pointer transition-all duration-200 text-gray-700 font-medium outline-none flex items-center justify-between hover:border-blue-300 focus:ring-2 focus:ring-blue-200"
                 >
                   <div className="flex items-center gap-2">
                     <SubjectIcon className="w-4 h-4" />
                     <span>{selectedSubjectData?.name || "គ្រប់មុខវិជ្ជា"}</span>
                   </div>
-                  <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openSubjectDropdown ? 'rotate-180' : ''}`} />
+                  <div className="absolute right-3">
+                      <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openSubjectDropdown ? 'rotate-180' : ''}`} />
+                  </div>
+                  
                 </button>
 
                 {openSubjectDropdown && (
@@ -217,7 +258,6 @@ export default function FormularHeader({
                           >
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
-                                <Icon className="w-4 h-4" />
                                 <span>{subject.name}</span>
                               </div>
                               {isSelected && <Check className="w-4 h-4" />}
@@ -233,14 +273,17 @@ export default function FormularHeader({
 
             {/* Category Dropdown */}
             <div className="mb-4">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">ប្រភេទ</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">មេរៀន</label>
               <div className="relative" ref={categoryDropdownRef}>
                 <button
                   onClick={() => setOpenCategoryDropdown(!openCategoryDropdown)}
-                  className="w-full appearance-none bg-white border border-gray-200 py-2.5 px-4 pr-10 rounded-xl cursor-pointer transition-all duration-200 text-gray-700 font-medium outline-none flex items-center justify-between hover:border-blue-300 focus:ring-2 focus:ring-blue-200"
+                  className="w-full relative appearance-none bg-white border border-gray-200 py-2.5 px-4 pr-10 rounded-xl cursor-pointer transition-all duration-200 text-gray-700 font-medium outline-none flex items-center justify-between hover:border-blue-300 focus:ring-2 focus:ring-blue-200"
                 >
-                  <span>{filteredCategories.find(c => c.id === selectedCategory)?.name || "គ្រប់ប្រភេទ"}</span>
-                  <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openCategoryDropdown ? 'rotate-180' : ''}`} />
+                  <span>{filteredCategories.find(c => c.id === selectedCategory)?.name || "គ្រប់មេរៀន"}</span>
+                  <div className="absolute right-3">
+                      <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openCategoryDropdown ? 'rotate-180' : ''}`} />
+                  </div>
+                  
                 </button>
 
                 {openCategoryDropdown && (
@@ -279,7 +322,7 @@ export default function FormularHeader({
               className="w-full flex hover:bg-indigo-700 items-center justify-center gap-3 bg-indigo-600 text-white py-3 rounded-xl font-semibold transition-all duration-300"
             >
               <Filter className="w-5 h-5" />
-              អនុវត្ត
+              ស្វែងរក
             </button>
           </div>
         )}

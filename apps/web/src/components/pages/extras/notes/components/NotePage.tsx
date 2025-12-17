@@ -96,7 +96,6 @@ export default function NoteContainer({
         <NoteCard 
           key={note.id}
           note={note}
-          viewMode={viewMode}
           onClick={() => console.log("Open note:", note.id)}
         />
       ))}

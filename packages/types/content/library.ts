@@ -1,38 +1,36 @@
 export interface Book {
-  id: string;
+  id: number;                    
   title: string;
-  lessonId: string;
+  author: string | null;       
+  gradeId: number | null;       
+  lessonId: number | null;       
   isRecommended: boolean;
-  subjectId: string;
-  grade: string;
-  description: string;
-  pdfUrl: string;
-  imageUrl: string;
-  author: string;
-  type: string;
-  views?: number;
+  subjectId: number | null;     
+  publishedDate: string | null;
+  description: string | null;  
+  pdfUrl: string | null;    
+  imageUrl: string | null;   
+  createdAt: string;    
+  updatedAt: string;
+}
+
+export interface Grade {
+  id: number;
+  name: string;
+  orderIndex?: number;
 }
 
 export interface Subject {
-  id: string;
+  id: number;                    
   name: string;
+  icon?: string;
+  orderIndex?: number;
 }
 
-
-export const subjectNameMap: Record<string, string> = {
-    "1": "គណិតវិទ្យា",
-    "2": "រូបវិទ្យា",
-    "3": "គីមីវិទ្យា",
-    "4": "ជីវវិទ្យា",
-    "5": "អក្សរសិល្ប៍ខ្មែរ",
-    "6": "ប្រវត្តិសាស្ត្រ",
-    "7": "អង់គ្លេស",
-    "all": "គ្រប់មុខវិជ្ជា",
-    "math": "គណិតវិទ្យា",
-    "physics": "រូបវិទ្យា",
-    "chemistry": "គីមីវិទ្យា",
-    "biology": "ជីវវិទ្យា",
-    "khmer": "អក្សរសិល្ប៍ខ្មែរ",
-    "history": "ប្រវត្តិសាស្ត្រ",
-    "english": "អង់គ្លេស",
-  };
+export interface Lesson {
+  id: number;
+  name: string;
+  subjectId: number;
+  icon?: string;
+  orderIndex?: number;
+}

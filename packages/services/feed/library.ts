@@ -1,10 +1,5 @@
 import type { AxiosInstance } from "axios";
-import type { Book } from "../../types/content/library";
-
-export interface Subject {
-  id: string;
-  name: string;
-}
+import type { Book, Subject, Grade, Lesson } from "../../types/content/library";
 
 export const createFeedLibraryService = (api: AxiosInstance) => {
   return {
@@ -15,9 +10,10 @@ export const createFeedLibraryService = (api: AxiosInstance) => {
       hasMore: boolean;
     }> => {
       try {
-        const response = await api.get(`/feed/librarys`);
+        const response = await api.get(`/feed/librarys?_t=${Date.now()}`);
+        const books = response.data.data || response.data;
         return {
-          books: response.data.data || response.data,
+          books: books,
           hasMore: response.data.hasMore || false,
         };
       } catch (error) {
@@ -37,17 +33,42 @@ export const createFeedLibraryService = (api: AxiosInstance) => {
       }
     },
 
-    // Get all categories (subjects)
-    getAllSubjects: async (): Promise<Subject[]> => {
+    // Get all subjects
+    getAllSubjects: async (): Promise<{ subjects: Subject[] }> => {
       try {
-        // You'll need to create a backend endpoint for this
-        // For now, return empty array or use filter endpoint
         const response = await api.get(`/feed/librarys/subjects`);
-        return response.data.data || response.data || [];
+        return {
+          subjects: response.data.data || response.data || [],
+        };
       } catch (error) {
-        console.error("Error fetching categories:", error);
-        // Return empty array as fallback
-        return [];
+        console.error("Error fetching subjects:", error);
+        return { subjects: [] };
+      }
+    },
+
+    // Get all grades
+    getAllGrades: async (): Promise<{ grades: Grade[] }> => {
+      try {
+        const response = await api.get(`/feed/librarys/grades`);
+        return {
+          grades: response.data.data || response.data || [],
+        };
+      } catch (error) {
+        console.error("Error fetching grades:", error);
+        return { grades: [] };
+      }
+    },
+
+    // Get all lessons
+    getAllLessons: async (): Promise<{ lessons: Lesson[] }> => {
+      try {
+        const response = await api.get(`/feed/librarys/lessons`);
+        return {
+          lessons: response.data.data || response.data || [],
+        };
+      } catch (error) {
+        console.error("Error fetching lessons:", error);
+        return { lessons: [] };
       }
     },
 

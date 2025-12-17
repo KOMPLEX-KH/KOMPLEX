@@ -8,7 +8,7 @@ import ExtraHelper from './ExtraWrapper';
 
 export const extraScrollRef: { current: HTMLDivElement | null } = { current: null };
 
-const Tabs = ['explore', 'calculate', 'library', 'notes', 'formular', 'calendar'];
+const Tabs = ['calculate', 'library', 'notes', 'formular', 'calendar'];
 
 export default function ExtraPage() {
   const router = useRouter();
@@ -45,7 +45,7 @@ export default function ExtraPage() {
 
   return (
     <div className="bg-gray-50 relative">
-      <div className="pt-29 lg:pt-19 max-w-7xl mx-auto h-screen">
+      <div className="pt-22 lg:pt-19 max-w-7xl mx-auto h-screen">
         <div className="flex gap-5 h-[calc(100vh-7rem)] lg:h-[calc(100vh-5rem)]">
           <Sidebar currentTab={tabIndex} onTabChange={handleTabChange} />
 
@@ -53,7 +53,7 @@ export default function ExtraPage() {
             <div
               ref={(el) => {
                 mainRef.current = el;
-                extraScrollRef.current = el; // ✅ Make it globally usable
+                extraScrollRef.current = el;
               }}
               className="h-full overflow-auto"
               style={{

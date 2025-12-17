@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import SubjectCard from "./SubjectCard";
+import SubjectCard from "./components/SubjectCard";
 import { ScienceSubjects, SocialScienceSubjects, getSubjectScienceGrade, getSubjectSocialScienceGrade  } from "@/types/extra/calculation";
-import ResultCard from "./ResultCard";
+import ResultCard from "./components/ResultCard";
 import { Calculator } from "lucide-react";
 
 type Scores = {
