@@ -149,31 +149,9 @@ export default function UserProfilePage() {
                         ) : null}
                     </View>
 
-                    {/* Stats Row */}
-                    <View style={tw('flex-row justify-around border-t border-gray-200 pt-6')}>
-                        <View style={tw('items-center')}>
-                            <Text style={tw('text-2xl font-kh-bold text-gray-900')}>
-                                {user.totalLikesAndSaves ?? 0}
-                            </Text>
-                            <Text style={tw('text-sm text-gray-600 mt-1')}>ចូលចិត្ត</Text>
-                        </View>
-                        <View style={tw('items-center')}>
-                            <Text style={tw('text-2xl font-kh-bold text-gray-900')}>
-                                {user.numberOfFollowers ?? 0}
-                            </Text>
-                            <Text style={tw('text-sm text-gray-600 mt-1')}>អ្នកតាម</Text>
-                        </View>
-                        <View style={tw('items-center')}>
-                            <Text style={tw('text-2xl font-kh-bold text-gray-900')}>
-                                {user.numberOfFollowing ?? 0}
-                            </Text>
-                            <Text style={tw('text-sm text-gray-600 mt-1')}>កំពុងតាម</Text>
-                        </View>
-                    </View>
-
                     {/* Follow Button */}
                     {currentUser && currentUser.id !== user.id && (
-                        <View style={tw('items-center mt-6')}>
+                        <View style={tw('items-center ')}>
                             <Pressable
                                 onPress={handleFollow}
                                 disabled={isFollowLoading}
@@ -203,6 +181,24 @@ export default function UserProfilePage() {
                             </Pressable>
                         </View>
                     )}
+
+                    {/* Stats Row */}
+                    <View style={tw('flex-row justify-around border-t border-gray-200 pt-6')}>
+                        <View style={tw('items-center')}>
+                            <Text style={tw('text-2xl font-kh-bold text-gray-900')}>
+                                {user.numberOfFollowers ?? 0}
+                            </Text>
+                            <Text style={tw('text-sm text-gray-600 mt-1')}>អ្នកតាម</Text>
+                        </View>
+                        <View style={tw('items-center')}>
+                            <Text style={tw('text-2xl font-kh-bold text-gray-900')}>
+                                {user.numberOfFollowing ?? 0}
+                            </Text>
+                            <Text style={tw('text-sm text-gray-600 mt-1')}>កំពុងតាម</Text>
+                        </View>
+                    </View>
+
+                    
                 </View>
 
                 {/* Tabs */}

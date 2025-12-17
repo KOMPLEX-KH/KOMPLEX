@@ -46,8 +46,9 @@ function MePageContent() {
             try {
                 setIsProfileLoading(true);
                 setError(null);
-                const userData = await authService.getCurrentUser();
-                setProfile(userData);
+                // Use detailed profile endpoint that includes follower stats
+                const userData = await authService.getCurrentUserProfile();
+                setProfile(userData as User);
             } catch (err) {
                 console.error('Error fetching profile:', err);
                 setError('មានបញ្ហាក្នុងការទាញយកព័ត៌មានប្រវត្តិ។ សូមព្យាយាមម្តងទៀត។');

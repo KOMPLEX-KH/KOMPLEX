@@ -3,13 +3,12 @@ import { View, ScrollView, Pressable, Image } from 'react-native';
 import { useRouter, Href } from 'expo-router';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
-import Sidebar from '@/components/screens/me/Sidebar';
 import { MessageSquare, Video, Plus, Edit } from 'lucide-react-native';
 import { useAuth } from '@/hooks/useAuth';
 import MeSkeleton from '@/components/screens/me/MeSkeleton';
 import { useNavigation } from '@react-navigation/native';
 import { HEADER_CONFIG } from '@/constants/header-config';
-import { meForumService, meVideoService } from '@/services/index';
+import { meForumService, meVideoService, authService } from '@/services/index';
 import { ForumPost } from '@/types/content/forums';
 import { VideoPost } from '@/types/content/videos';
 import ForumCard from '@/components/screens/me/forums/ForumCard';
@@ -33,9 +32,9 @@ export default function MyContent() {
     const [isLoadingVideos, setIsLoadingVideos] = useState(true);
     const [videoError, setVideoError] = useState<string | null>(null);
 
-    // Mock stats
-    const [followers] = useState(128);
-    const [following] = useState(64);
+    // Profile stats from backend
+    const [followers, setFollowers] = useState<number>(0);
+    const [following, setFollowing] = useState<number>(0);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -50,6 +49,25 @@ export default function MyContent() {
             router.replace('/auth');
         }
     }, [user, authLoading, router]);
+
+    // Fetch profile stats (followers / following)
+    useEffect(() => {
+        const fetchProfileStats = async () => {
+            try {
+                if (!user) return;
+                const profile = await authService.getCurrentUserProfile();
+                // Backend returns numberOfFollowers and numberOfFollowing on the profile
+                setFollowers((profile as any).numberOfFollowers ?? 0);
+                setFollowing((profile as any).numberOfFollowing ?? 0);
+            } catch (error) {
+                console.error('Error fetching profile stats:', error);
+                setFollowers(0);
+                setFollowing(0);
+            }
+        };
+
+        fetchProfileStats();
+    }, [user]);
 
     // Fetch forums
     useEffect(() => {
@@ -112,8 +130,6 @@ export default function MyContent() {
         }
     }, [user, activeTab]);
 
-    const totalPosts = forumPosts.length + videos.length;
-
     const getAvatar = (username: string): string => {
         return username.charAt(0).toUpperCase();
     };
@@ -160,14 +176,6 @@ export default function MyContent() {
 
                     {/* Stats Row */}
                     <View style={tw("flex-row justify-around  pt-6")}>
-                        <View style={tw("items-center")}>
-                            <Text style={tw("text-2xl font-kh-bold text-gray-900")}>
-                                {totalPosts}
-                            </Text>
-                            <Text style={tw("text-sm text-gray-600 mt-1")}>
-                                ប្រកាស
-                            </Text>
-                        </View>
                         <View style={tw("items-center")}>
                             <Text style={tw("text-2xl font-kh-bold text-gray-900")}>
                                 {followers}

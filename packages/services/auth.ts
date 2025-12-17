@@ -53,6 +53,16 @@ export const createAuthService = (api: AxiosInstance) => {
         throw new Error("Failed to fetch user profile");
       }
     },
+
+    getCurrentUserProfile: async (): Promise<User> => {
+      try {
+        const response = await api.get<User>(`/me/profile`);
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching current user profile:", error);
+        throw new Error("Failed to fetch user profile");
+      }
+    },
   };
 };
 
