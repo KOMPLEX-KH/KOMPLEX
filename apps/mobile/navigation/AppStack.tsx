@@ -55,6 +55,9 @@ export default function AppStack() {
             <Stack.Screen
                 name="ai"
             />
+            <Stack.Screen
+                name="ai/chat"
+            />
 
             <Stack.Screen
                 name="blogs"
@@ -86,12 +89,6 @@ export default function AppStack() {
 
             />
 
-            <Stack.Screen
-                name="(modal)/ai"
-                options={{
-                    presentation: 'modal',
-                }}
-            />
         </Stack>
     );
 }

@@ -28,7 +28,7 @@ const ResponseLoadingState: React.FC<Props> = React.memo(({ responseType }) => {
     useEffect(() => {
         setActiveStep(0);
         const interval = Math.floor(TOTAL_DURATION / steps.length);
-        const timers: NodeJS.Timeout[] = [];
+        const timers: ReturnType<typeof setTimeout>[] = [];
 
         for (let i = 1; i < steps.length; i += 1) {
             timers.push(setTimeout(() => setActiveStep(i), interval * i));

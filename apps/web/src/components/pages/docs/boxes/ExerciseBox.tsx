@@ -72,7 +72,7 @@ export function ExerciseBox({ questions }: ExerciseBoxProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   // Store answers for each question: { questionIndex: selectedAnswer }
   const [answers, setAnswers] = useState<Record<number, number>>({});
-  const autoAdvanceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const autoAdvanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Track when an answer was just selected (to trigger auto-advance)
   const justAnsweredRef = useRef<number | null>(null);
 

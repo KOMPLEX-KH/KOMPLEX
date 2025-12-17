@@ -52,7 +52,7 @@ function AIChatInner() {
     const streamingCompletionRef = useRef<(() => void) | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const debounceRef = useRef<NodeJS.Timeout | null>(null);
+    const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const initialLoadDoneRef = useRef(false);
     const lastContextKeyRef = useRef<string | null>(null);

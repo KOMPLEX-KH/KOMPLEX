@@ -259,7 +259,7 @@ export default function UserProfilePage() {
                     </div>
 
                     {/* Stats Grid */}
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 gap-4 md:grid-cols-2">
                         <div className="text-center p-4 bg-gray-50 rounded-lg border border-indigo-500/20">
                             <div className="text-2xl font-bold text-gray-900">{user.numberOfFollowers}</div>
                             <div className="text-sm text-gray-600">អ្នកតាមដាន</div>
@@ -267,10 +267,6 @@ export default function UserProfilePage() {
                         <div className="text-center p-4 bg-gray-50 rounded-lg border border-indigo-500/20">
                             <div className="text-2xl font-bold text-gray-900">{user.numberOfFollowing}</div>
                             <div className="text-sm text-gray-600">កំពុងតាមដាន</div>
-                        </div>
-                        <div className="text-center p-4 bg-gray-50 rounded-lg border border-indigo-500/20 md:col-span-1 col-span-2">
-                            <div className="text-2xl font-bold text-gray-900">{user.totalLikesAndSaves}</div>
-                            <div className="text-sm text-gray-600">ចូលចិត្ត និងរក្សាទុក</div>
                         </div>
                     </div>
                 </div>

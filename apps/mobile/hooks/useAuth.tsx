@@ -31,6 +31,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Hydrate from AsyncStorage early to avoid a null user flash
+  useEffect(() => {
+    (async () => {
+      try {
+        const stored = await AsyncStorage.getItem("user");
+        if (stored) {
+          setUser(JSON.parse(stored));
+        }
+      } catch (err) {
+        console.error("Error hydrating user from storage:", err);
+      }
+    })();
+  }, []);
+
   // Firebase auth state listener
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -39,8 +53,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           // User is signed in, fetch user data from backend
           try {
             const userData = await authService.getCurrentUser();
+            console.log('userData', userData);
             await AsyncStorage.setItem("user", JSON.stringify(userData));
-            setUser(userData);
+            setUser(userData as UserType);
           } catch (error) {
             console.error("Error fetching user data:", error);
 
@@ -83,8 +98,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     profileImageKey: null,
                   });
 
+                  console.log('userData', userData);
                   await AsyncStorage.setItem("user", JSON.stringify(userData));
-                  setUser(userData);
+                  setUser(userData as UserType);
                   return;
                 } catch (socialError) {
                   console.error("Error creating social login user:", socialError);
@@ -101,19 +117,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             }
           }
         } else {
-          // User is signed out
-          await AsyncStorage.removeItem("user");
-          setUser(null);
-          if (pathname !== "/auth") {
-            router.replace("/auth");
+          // User is signed out or no Firebase session
+          const storedData = await AsyncStorage.getItem("user");
+          if (storedData) {
+            // Keep the stored session to prevent a null flash if backend is temporarily unavailable
+            setUser(JSON.parse(storedData));
+          } else {
+            await AsyncStorage.removeItem("user");
+            setUser(null);
+
           }
         }
       } catch (error) {
         console.error("Error in auth state listener:", error);
         setUser(null);
-        if (pathname !== "/auth") {
-          router.replace("/auth");
-        }
       } finally {
         setLoading(false);
       }

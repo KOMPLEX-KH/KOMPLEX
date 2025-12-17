@@ -90,8 +90,10 @@ export default function VideoPlayer({
         if (player) {
             if (player.playing) {
                 player.pause();
+                setShowButton(true);
             } else {
                 player.play();
+                setShowButton(false);
             }
         }
     };
@@ -111,7 +113,7 @@ export default function VideoPlayer({
             <VideoView
                 player={player}
                 style={styles.video}
-                contentFit="contain"
+                contentFit="cover"
                 nativeControls={false}
                 allowsFullscreen={false}
             />
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
     },
     video: {
         width: '100%',
-        height: '100%',
+        height: 240,
     },
     loadingContainer: {
         position: 'absolute',

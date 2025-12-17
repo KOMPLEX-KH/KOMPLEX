@@ -1,11 +1,11 @@
 import type { AxiosInstance } from "axios";
-import type { Blog } from "../../types/content/blogs";
+import type { News } from "../../types/content/news";
 
 export const createFeedBlogService = (api: AxiosInstance) => {
   return {
     // Get all blog posts
     getAllBlogs: async (): Promise<{
-      blogs: Blog[];
+      blogs: News[];
       hasMore: boolean;
     }> => {
       try {
@@ -21,7 +21,7 @@ export const createFeedBlogService = (api: AxiosInstance) => {
     },
 
     // Get a single blog post by ID
-    getBlogById: async (id: string): Promise<Blog & { isSaved: boolean }> => {
+    getBlogById: async (id: string): Promise<News & { isSaved: boolean }> => {
       try {
         const response = await api.get(`/feed/blogs/${id}`);
         return response.data.data;

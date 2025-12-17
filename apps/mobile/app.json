@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "",
-    "slug": "",
+    "name": "KOMPLEX",
+    "slug": "komplex-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo-2.png",
@@ -19,7 +19,8 @@
       }
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.komplex.app"
     },
     "android": {
       "adaptiveIcon": {
@@ -27,6 +28,7 @@
         "foregroundImage": "./assets/images/logo-2.png",
         "imageWidth": 50
       },
+      "package": "com.komplex.app",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
@@ -53,6 +55,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f596b40c-fb8a-4fc4-8655-e081893806f5"
+      }
     }
   }
 }

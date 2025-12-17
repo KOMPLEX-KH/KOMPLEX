@@ -1,10 +1,5 @@
 import type { AxiosInstance } from "axios";
-import type {
-  User as AuthUser,
-  SignupData,
-  SocialLoginData,
-} from "../types/auth";
-import type { User } from "@core-types/user-content/user";
+import type { User, SignupData, SocialLoginData } from "../types/auth";
 
 export const createAuthService = (api: AxiosInstance) => {
   return {

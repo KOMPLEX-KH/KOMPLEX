@@ -17,9 +17,8 @@ import { useEffect, useRef } from 'react';
 const NAV_ITEMS = [
     { name: 'home', icon: Home, href: '/' },
     { name: 'lessons', icon: BookOpen, href: '/docs' },
-    // { name: 'exercises', icon: Edit, href: '/exercises' },
+    { name: 'ai', icon: BotIcon, href: '/ai' },
     { name: 'videos', icon: Video, href: '/videos' },
-    { name: 'community', icon: MessageSquare, href: '/forums' },
     { name: 'utilities', icon: Library, href: '/utilities' },
     { name: 'profile', icon: User, href: '/me' },
 ];
@@ -27,13 +26,15 @@ const NAV_ITEMS = [
 export default function NavBar() {
     const router = useRouter();
     const pathname = usePathname();
+    const aiButtonTranslate = useRef(new Animated.Value(24));
+
+
     const isDocsPath = pathname?.startsWith('/docs');
-    const aiButtonTranslate = useRef(new Animated.Value(24)).current;
 
     useEffect(() => {
         if (isDocsPath) {
-            aiButtonTranslate.setValue(32);
-            Animated.spring(aiButtonTranslate, {
+            aiButtonTranslate.current.setValue(32);
+            Animated.spring(aiButtonTranslate.current, {
                 toValue: 0,
                 useNativeDriver: true,
                 damping: 12,
@@ -41,6 +42,11 @@ export default function NavBar() {
             }).start();
         }
     }, [aiButtonTranslate, isDocsPath]);
+
+    // don't show on /ai or /ai/chat
+    if (pathname === '/ai' || pathname === '/ai/chat') {
+        return null;
+    }
 
 
     return (

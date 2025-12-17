@@ -3,7 +3,7 @@ import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
 import * as LucideIcons from 'lucide-react-native';
 import { TAILWIND_COLORS } from '@/constants/styles/tailwind-colors';
-import { Dropdown } from '@/components/common/Dropdown';
+import Dropdown2 from '@/components/common/DropDown2';
 import { useEffect, useRef, useState } from 'react';
 import { feedCurriculumsService } from '../../../services';
 import { Grade } from '@core-types/docs/curriculum';
@@ -16,6 +16,7 @@ interface DocHeaderProps {
     currentLesson?: string;
     currentTopic?: string;
     isVisible?: boolean;
+    scrollY?: Animated.Value;
 }
 
 // Icon map - use all lucide icons dynamically
@@ -28,16 +29,21 @@ export default function DocHeader({
     currentSubject,
     currentLesson,
     currentTopic,
-    isVisible = true
+    isVisible = true,
+    scrollY,
 }: DocHeaderProps) {
     const router = useRouter();
     const [curriculum, setCurriculum] = useState<Grade[]>([]);
 
     const translateY = useRef(new Animated.Value(-200)).current;
     const opacity = useRef(new Animated.Value(0)).current;
+    const headerOpacity = useRef(new Animated.Value(1)).current;
+    const headerTranslateY = useRef(new Animated.Value(0)).current;
 
     // Track navigation to prevent loops - must be declared before early returns
     const navigatingRef = useRef(false);
+    const lastScrollY = useRef(0);
+    const scrollDirection = useRef<'up' | 'down'>('up');
 
     useEffect(() => {
         Animated.timing(translateY, {
@@ -51,6 +57,58 @@ export default function DocHeader({
             useNativeDriver: true,
         }).start();
     }, [isVisible, translateY, opacity]);
+
+    // Handle scroll-based fade in/out
+    useEffect(() => {
+        if (!scrollY) return;
+
+        const listenerId = scrollY.addListener(({ value }) => {
+            const currentScrollY = value;
+            const delta = currentScrollY - lastScrollY.current;
+
+            // Determine scroll direction
+            if (delta > 0) {
+                scrollDirection.current = 'down';
+            } else if (delta < 0) {
+                scrollDirection.current = 'up';
+            }
+
+            // Only animate if scroll is significant (more than 10px)
+            if (Math.abs(delta) > 10) {
+                if (scrollDirection.current === 'down' && currentScrollY > 50) {
+                    // Fade out when scrolling down
+                    Animated.timing(headerOpacity, {
+                        toValue: 0,
+                        duration: 200,
+                        useNativeDriver: true,
+                    }).start();
+                    Animated.timing(headerTranslateY, {
+                        toValue: -100,
+                        duration: 200,
+                        useNativeDriver: true,
+                    }).start();
+                } else if (scrollDirection.current === 'up' || currentScrollY <= 50) {
+                    // Fade in when scrolling up or near top
+                    Animated.timing(headerOpacity, {
+                        toValue: 1,
+                        duration: 200,
+                        useNativeDriver: true,
+                    }).start();
+                    Animated.timing(headerTranslateY, {
+                        toValue: 0,
+                        duration: 200,
+                        useNativeDriver: true,
+                    }).start();
+                }
+            }
+
+            lastScrollY.current = currentScrollY;
+        });
+
+        return () => {
+            scrollY.removeListener(listenerId);
+        };
+    }, [scrollY, headerOpacity, headerTranslateY]);
 
     // Load curriculum from AsyncStorage or fetch from API
     useEffect(() => {
@@ -164,8 +222,27 @@ export default function DocHeader({
         }
     };
 
+    const gradeOptions = grades.map(grade => ({ id: grade.id.toString(), value: grade.name }));
+    const lessonOptions = lessons.map(lesson => ({ id: lesson.id.toString(), value: lesson.name }));
+
+    // Combine both animations - visibility toggle and scroll-based fade
+    const combinedTranslateY = scrollY ? Animated.add(
+        translateY,
+        headerTranslateY
+    ) : translateY;
+    const combinedOpacity = scrollY ? Animated.multiply(
+        opacity,
+        headerOpacity
+    ) : opacity;
+
     return (
-        <Animated.View style={[tw("absolute top-12 left-0 right-0 z-10"), { transform: [{ translateY: translateY }], opacity }]}>
+        <Animated.View style={[
+            tw("absolute top-12 left-0 right-0 z-10"),
+            {
+                transform: [{ translateY: combinedTranslateY }],
+                opacity: combinedOpacity
+            }
+        ]}>
             <View style={tw("bg-white/95 border-b border-indigo-500/10")}>
                 <View style={tw("flex gap-1 py-2 px-4")}>
                     {/* Grade and Subject Header */}
@@ -199,22 +276,24 @@ export default function DocHeader({
                         </ScrollView>
 
                         {/* Grade Selector */}
-                        <Dropdown
-                            data={grades.map(grade => ({ key: grade.id.toString(), value: grade.name }))}
+                        <Dropdown2
+                            data={gradeOptions}
                             placeholder={gradeData.name}
-                            defaultOption={gradeData ? { key: gradeData.id.toString(), value: gradeData.name } : undefined}
-                            setSelected={(selectedKey) => {
-                                // Only handle selection if it's a valid string and different from current
-                                if (selectedKey && typeof selectedKey === 'string') {
-                                    const selectedGradeId = parseInt(selectedKey);
-                                    const currentGradeId = parseInt(currentGrade || '0');
-                                    // Only navigate if grade actually changed
-                                    if (selectedGradeId !== currentGradeId) {
-                                        handleChangeGrade(selectedGradeId);
-                                    }
+                            selectedId={gradeData.id.toString()}
+                            onChange={(item) => {
+                                const selectedGradeId = parseInt(item.id, 10);
+                                if (!Number.isNaN(selectedGradeId)) {
+                                    handleChangeGrade(selectedGradeId);
                                 }
                             }}
-                            position="right-0 top-8"
+                            style={
+                                {
+                                    right: 20,
+                                    top: 150,
+                                    maxHeight: 250,
+                                    maxWidth: 160,
+                                }
+                            }
                         />
                     </View>
 
@@ -223,23 +302,24 @@ export default function DocHeader({
                         <View style={tw("flex-row items-center gap-3")}>
                             {/* Lesson Selector */}
                             {lessonData && (
-                                <Dropdown
-                                    data={lessons.map(lesson => ({ key: lesson.id.toString(), value: lesson.name }))}
+                                <Dropdown2
+                                    data={lessonOptions}
                                     placeholder={lessonData.name}
-                                    defaultOption={{ key: lessonData.id.toString(), value: lessonData.name }}
-                                    setSelected={(selectedKey) => {
-                                        // Only handle selection if it's a valid string and different from current
-                                        if (selectedKey && typeof selectedKey === 'string') {
-                                            const selectedLessonId = parseInt(selectedKey);
-                                            const currentLessonId = parseInt(currentLesson || '0');
-                                            // Only navigate if lesson actually changed
-                                            if (selectedLessonId !== currentLessonId) {
-                                                handleChangeLesson(selectedLessonId);
-                                            }
+                                    selectedId={lessonData.id.toString()}
+                                    onChange={(item) => {
+                                        const selectedLessonId = parseInt(item.id, 10);
+                                        if (!Number.isNaN(selectedLessonId)) {
+                                            handleChangeLesson(selectedLessonId);
                                         }
                                     }}
-                                    position="left-0 top-8"
-                                    width='w-32'
+                                    style={
+                                        {
+                                            left: 20,
+                                            top: 190,
+                                            maxHeight: 250,
+                                            maxWidth: 160,
+                                        }
+                                    }
                                 />
                             )}
                         </View>

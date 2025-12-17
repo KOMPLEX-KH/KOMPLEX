@@ -1,5 +1,5 @@
 import { useState, useEffect, useLayoutEffect } from "react";
-import { View, ScrollView, RefreshControl } from "react-native";
+import { View, ScrollView, RefreshControl, Pressable } from "react-native";
 import { Text } from "@/components/common/Text";
 import { tw } from "@/utils/styles";
 import ForumCard from "@/components/screens/forums/ForumCard";
@@ -7,8 +7,9 @@ import ForumSkeleton from "@/components/screens/forums/ForumSkeleton";
 import ContentError from "@/components/common/ContentError";
 import { ForumPost } from "@/types/content/forums";
 import { feedForumService, feedSearchForumService, meForumService } from "@/services/index";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { HEADER_CONFIG } from "@/constants/header-config";
+import SearchBar from "@/components/common/SearchBar";
 
 export default function ForumsScreen() {
     const navigation = useNavigation();
@@ -19,11 +20,12 @@ export default function ForumsScreen() {
     const [error, setError] = useState<string | null>(null);
     const [match, setMatch] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
+    const router = useRouter();
 
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: 'ពិភាក្សា',
+            headerTitle: 'ការពិភាក្សា',
             ...HEADER_CONFIG,
         })
     }, [navigation])
@@ -101,6 +103,11 @@ export default function ForumsScreen() {
     if (loading || isSearching) {
         return (
             <View style={tw("flex-1 bg-gray-50")}>
+                <SearchBar
+                    type="forums"
+                    onSearch={handleSearch}
+                    isDisabled={loading || isSearching}
+                />
                 <ScrollView
                     style={tw("flex-1")}
                     contentContainerStyle={tw("px-4 py-20 gap-4")}
@@ -114,6 +121,11 @@ export default function ForumsScreen() {
     if (error) {
         return (
             <View style={tw("flex-1 bg-gray-50")}>
+                <SearchBar
+                    type="forums"
+                    onSearch={handleSearch}
+                    isDisabled={true}
+                />
                 <ScrollView
                     style={tw("flex-1")}
                     contentContainerStyle={tw("px-4 py-20")}
@@ -129,6 +141,7 @@ export default function ForumsScreen() {
 
     return (
         <View style={tw("flex-1 bg-gray-50")}>
+            <SearchBar type="forums" onSearch={handleSearch} />
             <ScrollView
                 style={tw("flex-1")}
                 contentContainerStyle={tw("px-4 py-20 gap-4")}

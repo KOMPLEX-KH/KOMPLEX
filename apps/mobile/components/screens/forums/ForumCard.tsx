@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import {
     View,
     Pressable,
     Image,
-    ScrollView,
     Share as NativeShare,
     GestureResponderEvent,
     ActivityIndicator,
@@ -12,8 +11,6 @@ import {
     MessageCircle,
     Share2,
     ThumbsUp,
-    Check,
-    Link2,
     UserPlus,
     UserCheck,
 } from "lucide-react-native";
@@ -22,10 +19,12 @@ import { Media } from "@/types/content/media";
 // import MarkDownRenderer from "@/components/helper/MarkDownRenderer";
 import { tw } from "@/utils/styles";
 import { useRouter, Href } from "expo-router";
-import * as Clipboard from "expo-clipboard";
 import { useAuth } from "@/hooks/useAuth";
 import { meForumService, meFollowService } from "@/services/index";
-import {Text} from '@/components/common/Text'
+import { Text } from '@/components/common/Text'
+import MarkDownRenderer from "@/components/helper/MarkDownRenderer";
+import Carousel from "@/components/common/Carousel";
+// import MarkdownRenderer from "@/components/helper/MarkDownRenderer";
 
 const SHARE_BASE_URL = process.env.EXPO_PUBLIC_WEB_URL ?? "https://komplex.app";
 
@@ -54,11 +53,6 @@ const getTimeAgo = (dateString: string): string => {
     return "ថ្មីៗនេះ";
 };
 
-const getImageUrls = (media: Media[] | undefined): string[] => {
-    if (!media) return [];
-    return media.filter((item) => item.type === "image").map((item) => item.url);
-};
-
 export default function ForumCard({
     isFromBasePage,
     post,
@@ -73,20 +67,6 @@ export default function ForumCard({
     const [isFollowing, setIsFollowing] = useState(post.isFollowing);
     const [isFollowLoading, setIsFollowLoading] = useState(false);
     const [avatarError, setAvatarError] = useState(false);
-    const [copied, setCopied] = useState(false);
-
-    const copyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-    useEffect(() => {
-        return () => {
-            if (copyTimeoutRef.current) {
-                clearTimeout(copyTimeoutRef.current);
-            }
-        };
-    }, []);
-
-    const imageUrls = useMemo(() => getImageUrls(post.media), [post.media]);
-
     const forumHref = useMemo(() => `/forums/${post.id}`, [post.id]);
     const userHref = useMemo(() => `/users/${post.userId}`, [post.userId]);
 
@@ -169,27 +149,10 @@ export default function ForumCard({
         try {
             const url = buildShareUrl();
             await NativeShare.share({
-                message: `${post.title}\n${url}`,
+                message: url,
             });
         } catch (error) {
             console.error("Error sharing forum:", error);
-        }
-    };
-
-    const handleCopyLink = async (event: GestureResponderEvent) => {
-        event.stopPropagation();
-
-        try {
-            const url = buildShareUrl();
-            await Clipboard.setStringAsync(url);
-            setCopied(true);
-
-            if (copyTimeoutRef.current) {
-                clearTimeout(copyTimeoutRef.current);
-            }
-            copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000) as unknown as NodeJS.Timeout;
-        } catch (error) {
-            console.error("Failed to copy forum link:", error);
         }
     };
 
@@ -231,7 +194,7 @@ export default function ForumCard({
                     <Pressable
                         onPress={handleFollow}
                         style={tw(
-                            `flex-row items-center gap-2 px-3 py-1.5 rounded-full ${isFollowing ? "bg-indigo-50" : "bg-indigo-600"
+                            `flex-row items-center gap-2 px-3 py-2 rounded-full ${isFollowing ? "bg-indigo-50" : "bg-indigo-600"
                             }`
                         )}
                     >
@@ -257,27 +220,13 @@ export default function ForumCard({
             <View style={tw("gap-2")}>
                 <Text style={tw("text-lg font-kh-bold text-gray-900")}>{post.title}</Text>
                 <View>
-                    {/* <MarkDownRenderer content={post.description} /> */}
-                    <Text>{post.description}</Text>
+                    <MarkDownRenderer content={post.description ?? ""} />
+                    {/* <Text>{post.description}</Text> */}
                 </View>
             </View>
 
-            {imageUrls.length > 0 && (
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    style={tw("mt-1")}
-                    contentContainerStyle={tw("gap-3 pr-2")}
-                >
-                    {imageUrls.map((url) => (
-                        <Image
-                            key={url}
-                            source={{ uri: url }}
-                            style={tw("w-64 h-44 rounded-3xl bg-gray-100")}
-                            resizeMode="cover"
-                        />
-                    ))}
-                </ScrollView>
+            {post.media && post.media.length > 0 && (
+                <Carousel media={post.media as Media[]} autoPlay={false} showControls />
             )}
 
             <View style={tw("flex-row flex-wrap items-center gap-3 pt-2")}>
@@ -314,23 +263,6 @@ export default function ForumCard({
                     <Text style={tw("text-sm font-kh-medium text-gray-600")}>ចែករំលែក</Text>
                 </Pressable>
 
-                <Pressable
-                    onPress={handleCopyLink}
-                    style={tw("flex-row items-center gap-2 px-3 py-2 rounded-full bg-gray-100")}
-                >
-                    {copied ? (
-                        <Check size={16} color="#10B981" />
-                    ) : (
-                        <Link2 size={16} color="#4F46E5" />
-                    )}
-                    <Text
-                        style={tw(
-                            `text-sm font-kh-medium ${copied ? "text-emerald-600" : "text-gray-600"}`
-                        )}
-                    >
-                        {copied ? "បានចម្លង" : "ចម្លងតំណ"}
-                    </Text>
-                </Pressable>
             </View>
         </View>
     );

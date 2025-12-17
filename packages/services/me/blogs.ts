@@ -1,5 +1,5 @@
 import type { AxiosInstance } from "axios";
-import type { Blog } from "../../types/content/blogs";
+import type { News } from "../../types/content/news";
 
 export const createMeBlogService = (api: AxiosInstance) => {
   return {
@@ -15,7 +15,7 @@ export const createMeBlogService = (api: AxiosInstance) => {
     },
 
     // Create a new blog post
-    createBlog: async (formData: FormData): Promise<Blog> => {
+    createBlog: async (formData: FormData): Promise<News> => {
       try {
         const response = await api.post(`/me/blogs`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
@@ -28,7 +28,7 @@ export const createMeBlogService = (api: AxiosInstance) => {
     },
 
     // Update a blog post
-    updateBlog: async (id: string, formData: FormData): Promise<Blog> => {
+    updateBlog: async (id: string, formData: FormData): Promise<News> => {
       try {
         const response = await api.put(`/me/blogs/${id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
@@ -63,7 +63,7 @@ export const createMeBlogService = (api: AxiosInstance) => {
 
     // Get user's own blogs
     getUserBlogs: async (): Promise<{
-      blogs: Blog[];
+      blogs: News[];
     }> => {
       try {
         const response = await api.get(`/me/blogs`);

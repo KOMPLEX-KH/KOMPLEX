@@ -420,7 +420,7 @@ function deserializeElementValue(
         if (serialized.type === "InlineMath") {
             const math = (serialized.props as any)?.math;
             if (math && typeof math === 'string') {
-                return <MathRenderer key={key} math={math}  />;
+                return <MathRenderer key={key} math={math} />;
             }
             return null;
         }
@@ -429,7 +429,7 @@ function deserializeElementValue(
         if (serialized.type === "BlockMath") {
             const math = (serialized.props as any)?.math;
             if (math && typeof math === 'string') {
-                return <MathRenderer key={key} math={math}  />;
+                return <MathRenderer key={key} math={math} />;
             }
             return null;
         }
@@ -505,61 +505,26 @@ function deserializeElementValue(
             }
 
             if (serialized.type === "ul" || serialized.type === "ol") {
-                // Lists - render children with bullets/numbers
+                // Render lists as plain containers (no bullets/numbers) to respect provided structure
                 const listItems = Array.isArray(children) ? children : (children ? [children] : []);
+                const deserializedChildren = listItems.map((item: unknown, index: number) =>
+                    deserializeElementValue(item as SerializedContent, `${key}-item-${index}`, false)
+                );
                 return (
                     <View key={key} style={rnProps.style}>
-                        {listItems.map((item: unknown, index: number) => {
-                            if (item && typeof item === 'object' && 'type' in (item as Record<string, unknown>) && (item as SerializedContent).type === 'li') {
-                                const bullet = serialized.type === "ul" ? "•" : `${index + 1}.`;
-                                const liItem = item as SerializedContent;
-                                const liChildren = liItem.props?.children;
-                                const liChildrenNode = liChildren ? deserializeElementValue(liChildren as SerializedContent, `${key}-li-${index}`, false) : null;
-                                // Wrap text content in list items
-                                const wrappedLiChildren = React.Children.toArray(liChildrenNode).map((child, idx) => {
-                                    if (typeof child === "string" || typeof child === "number") {
-                                        return <Text key={`li-content-${key}-${index}-${idx}`}>{child}</Text>;
-                                    }
-                                    return child;
-                                });
-                                return (
-                                    <View key={index} style={tw("flex-row items-start gap-2 mb-2")}>
-                                        <Text style={tw("text-indigo-600 font-bold")}>{bullet}</Text>
-                                        <View style={tw("flex-1")}>
-                                            {wrappedLiChildren}
-                                        </View>
-                                    </View>
-                                );
-                            }
-                            const deserialized = deserializeElementValue(item as SerializedContent, `${key}-item-${index}`, false);
-                            // Wrap if it's a string
-                            if (typeof deserialized === "string" || typeof deserialized === "number") {
-                                return <Text key={index}>{deserialized}</Text>;
-                            }
-                            return <React.Fragment key={index}>{deserialized}</React.Fragment>;
-                        })}
+                        <View style={tw("flex flex-row justify-start items-center flex-wrap")}>{deserializedChildren}</View >
                     </View>
                 );
             }
 
             if (serialized.type === "li") {
-                // List items are handled by parent ul/ol, but handle standalone li
-                // Wrap text content properly
+                // Render list items as plain containers (no bullets) preserving className layout
                 const liChildrenNode = children
                     ? deserializeElementValue(children as SerializedContent | SerializedContent[], key, false)
                     : null;
-                const wrappedChildren = React.Children.toArray(liChildrenNode).map((child, idx) => {
-                    if (typeof child === "string" || typeof child === "number") {
-                        return <Text key={`li-${key}-${idx}`}>{child}</Text>;
-                    }
-                    return child;
-                });
                 return (
-                    <View key={key} style={tw("flex-row items-start gap-2 mb-2")}>
-                        <Text style={tw("text-indigo-600 font-bold")}>•</Text>
-                        <View style={tw("flex-1")}>
-                            {wrappedChildren}
-                        </View>
+                    <View key={key} style={rnProps.style}>
+                        {liChildrenNode}
                     </View>
                 );
             }

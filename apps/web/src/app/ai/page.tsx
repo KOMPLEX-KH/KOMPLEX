@@ -30,7 +30,7 @@ function AIWelcomePageInner() {
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const debounceRef = useRef<NodeJS.Timeout | null>(null);
+    const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const autoResizeTextarea = useCallback(() => {
         if (textareaRef.current) {

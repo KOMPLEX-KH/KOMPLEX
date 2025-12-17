@@ -2,26 +2,6 @@ import type { AxiosInstance } from "axios";
 import type { UploadUrlResponse } from "../types/uploadUrl";
 import axios from "axios";
 
-async function uploadBlobToSignedUrl(
-  signedUrl: string,
-  blob: Blob,
-  contentType: string
-) {
-  await axios.put(signedUrl, blob, {
-    headers: {
-      "Content-Type": contentType,
-    },
-  });
-}
-
-async function uriToBlob(uri: string): Promise<Blob> {
-  const response = await fetch(uri);
-  if (!response.ok) {
-    throw new Error("Failed to read file uri");
-  }
-  return await response.blob();
-}
-
 export const createUploadService = (api: AxiosInstance) => {
   return {
     // UPLOAD HELPERS ==============================================================
@@ -50,7 +30,11 @@ export const createUploadService = (api: AxiosInstance) => {
     // Upload file to R2 using presigned URL
     uploadFileToR2: async (signedUrl: string, file: File): Promise<void> => {
       try {
-        await uploadBlobToSignedUrl(signedUrl, file, file.type);
+        await axios.put(signedUrl, file, {
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
       } catch (error) {
         console.error("Error uploading file to R2:", error);
         throw new Error("Failed to upload file");
@@ -73,7 +57,11 @@ export const createUploadService = (api: AxiosInstance) => {
 
         const { signedUrl, key } = response.data;
 
-        await uploadBlobToSignedUrl(signedUrl, file, file.type);
+        await axios.put(signedUrl, file, {
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
 
         return key;
       } catch (error) {
@@ -85,8 +73,8 @@ export const createUploadService = (api: AxiosInstance) => {
     // Upload multiple files
     uploadMultipleFiles: async (files: File[]): Promise<string[]> => {
       try {
-        const uploadPromises = files.map((file) =>
-          api
+        const uploadPromises = files.map((file) => {
+          return api
             .post<UploadUrlResponse>(
               `/upload/upload-url`,
               {
@@ -97,10 +85,14 @@ export const createUploadService = (api: AxiosInstance) => {
             )
             .then(async (response) => {
               const { signedUrl, key } = response.data;
-              await uploadBlobToSignedUrl(signedUrl, file, file.type);
+              await axios.put(signedUrl, file, {
+                headers: {
+                  "Content-Type": file.type,
+                },
+              });
               return key;
-            })
-        );
+            });
+        });
         return await Promise.all(uploadPromises);
       } catch (error) {
         console.error("Error uploading multiple files:", error);
@@ -142,36 +134,6 @@ export const createUploadService = (api: AxiosInstance) => {
         return key;
       } catch (error) {
         console.error("Error uploading file with progress:", error);
-        throw new Error("Failed to upload file");
-      }
-    },
-
-    // Upload helper for React Native local URIs
-    uploadUri: async (
-      uri: string,
-      options: { fileName?: string; mimeType?: string } = {}
-    ): Promise<string> => {
-      const blob = await uriToBlob(uri);
-      const fileName =
-        options.fileName || uri.split("/").pop() || `upload_${Date.now()}`;
-      const mimeType =
-        options.mimeType || blob.type || "application/octet-stream";
-
-      try {
-        const response = await api.post<UploadUrlResponse>(
-          `/upload/upload-url`,
-          {
-            fileName,
-            fileType: mimeType,
-          },
-          { withCredentials: true }
-        );
-
-        const { signedUrl, key } = response.data;
-        await uploadBlobToSignedUrl(signedUrl, blob, mimeType);
-        return key;
-      } catch (error) {
-        console.error("Error uploading uri:", error);
         throw new Error("Failed to upload file");
       }
     },
