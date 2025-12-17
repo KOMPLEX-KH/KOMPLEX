@@ -143,7 +143,7 @@ export default function FormularHeader({
     <div className="mb-6">
       <div className="flex items-center justify-between gap-3 mb-4">
         
-        <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide w-80 lg:flex-1 lg:w-auto min-w-0">
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide  lg:flex-1 lg:w-auto min-w-0">
         {subjects.map((subject) => {
           const Icon = subject.icon;
           const isSelected = selectedSubject === subject.id;
@@ -156,7 +156,7 @@ export default function FormularHeader({
               }}
               className={`flex items-center gap-2 px-4 sm:py-2.5 py-2 rounded-full whitespace-nowrap transition-all duration-200 font-medium sm:text-sm text-[12px]  ${
                 isSelected
-                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
+                  ? "bg-gradient-to-r from-indigo-600 to-indigo-600 text-white"
                   : "bg-white text-gray-600 border border-gray-200 hover:border-blue-500 hover:bg-blue-50"
               }`}
             >
@@ -167,15 +167,15 @@ export default function FormularHeader({
         })}
         </div>
 
-        <div className="relative" ref={gradeDropdownRef}>
+        {/* <div className="relative" ref={gradeDropdownRef}>
           <button
             disabled
-            className="flex sm:text-sm text-[12px] items-center gap-2 px-3 sm:py-2.5 py-2 bg-gray-50 border-2 border-gray-300 rounded-full font-medium text-gray-500 justify-between cursor-not-allowed opacity-60"
+            className="flex sm:text-sm text-[12px] items-center gap-2 px-3 sm:py-2.5 py-2 bg-gray-50 border-2 border-gray-300 rounded-3xl font-medium text-gray-500 justify-between cursor-not-allowed opacity-60"
           >
             <span>{grades.find(g => g.id === selectedGrade)?.name || "ថ្នាក់ទី១២"}</span>
             <ChevronDown className="w-5 h-5 text-gray-400" />
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* Search and Filter Row */}
@@ -188,7 +188,7 @@ export default function FormularHeader({
             placeholder="ស្វែងរករូបមន្ត..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-3xl outline-none transition-all duration-200"
+            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-full outline-none transition-all duration-200"
           />
         </div>
 
@@ -196,7 +196,7 @@ export default function FormularHeader({
         <button
           ref={filterButtonRef}
           onClick={() => setOpenFilterPanel(!openFilterPanel)}
-          className={`p-3 rounded-full shadow-lg transition-all duration-300 flex items-center gap-2 ${
+          className={`p-3 rounded-3xl shadow-lg transition-all duration-300 flex items-center gap-2 ${
             openFilterPanel
               ? "bg-indigo-700 text-white"
               : "bg-indigo-600 hover:bg-indigo-700 text-white"
@@ -209,7 +209,7 @@ export default function FormularHeader({
         {openFilterPanel && (
           <div
             ref={filterPanelRef}
-            className="absolute bg-white rounded-2xl shadow-2xl border border-gray-200 z-[999] p-4 animate-slide-down"
+            className="absolute bg-white rounded-3xl shadow-2xl border border-gray-200 z-[999] p-4 animate-slide-down"
             style={{
               top: "calc(100% + 10px)",
               right: "0",
@@ -224,7 +224,7 @@ export default function FormularHeader({
               <div className="relative" ref={subjectDropdownRef}>
                 <button
                   onClick={() => setOpenSubjectDropdown(!openSubjectDropdown)}
-                  className="w-full relative appearance-none bg-white border border-gray-200 py-2.5 px-4 pr-10 rounded-xl cursor-pointer transition-all duration-200 text-gray-700 font-medium outline-none flex items-center justify-between hover:border-blue-300 focus:ring-2 focus:ring-blue-200"
+                  className="w-full relative appearance-none bg-white border border-gray-200 py-2.5 px-4 pr-10 rounded-3xl cursor-pointer transition-all duration-200 text-gray-700 font-medium outline-none flex items-center justify-between hover:border-indigo-300 focus:ring-2 focus:ring-indigo-200"
                 >
                   <div className="flex items-center gap-2">
                     <SubjectIcon className="w-4 h-4" />
@@ -237,7 +237,7 @@ export default function FormularHeader({
                 </button>
 
                 {openSubjectDropdown && (
-                  <div className="absolute top-full mt-1 w-full bg-white rounded-xl shadow-xl border border-gray-200 z-50 overflow-hidden">
+                  <div className="absolute top-full mt-1 w-full bg-white rounded-3xl shadow-xl border border-gray-200 z-50 overflow-hidden">
                     <div className="max-h-60 overflow-y-auto">
                       {subjects.map((subject) => {
                         const Icon = subject.icon;
@@ -252,7 +252,7 @@ export default function FormularHeader({
                             }}
                             className={`w-full text-left px-4 py-2.5 transition-all duration-150 text-sm font-medium ${
                               isSelected
-                                ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600'
+                                ? 'bg-indigo-50 text-indigo-600 border-l-4 border-indigo-600'
                                 : 'hover:bg-gray-50 border-l-4 border-transparent text-gray-700'
                             }`}
                           >
@@ -277,7 +277,7 @@ export default function FormularHeader({
               <div className="relative" ref={categoryDropdownRef}>
                 <button
                   onClick={() => setOpenCategoryDropdown(!openCategoryDropdown)}
-                  className="w-full relative appearance-none bg-white border border-gray-200 py-2.5 px-4 pr-10 rounded-xl cursor-pointer transition-all duration-200 text-gray-700 font-medium outline-none flex items-center justify-between hover:border-blue-300 focus:ring-2 focus:ring-blue-200"
+                  className="w-full relative appearance-none bg-white border border-gray-200 py-2.5 px-4 pr-10 rounded-3xl cursor-pointer transition-all duration-200 text-gray-700 font-medium outline-none flex items-center justify-between hover:border-indigo-300 focus:ring-2 focus:ring-indigo-200"
                 >
                   <span>{filteredCategories.find(c => c.id === selectedCategory)?.name || "គ្រប់មេរៀន"}</span>
                   <div className="absolute right-3">

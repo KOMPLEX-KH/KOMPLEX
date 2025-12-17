@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import SubjectCard from "./components/SubjectCard";
-import { ScienceSubjects, SocialScienceSubjects, getSubjectScienceGrade, getSubjectSocialScienceGrade  } from "@/types/extra/calculation";
+import { ScienceSubjects, SocialScienceSubjects, getSubjectScienceGrade, getSubjectSocialScienceGrade } from "@/types/extra/calculation";
 import ResultCard from "./components/ResultCard";
 import { Calculator } from "lucide-react";
 
@@ -19,7 +19,7 @@ export default function CalculateContent() {
 
   const [isCalculating, setIsCalculating] = useState(false);
 
-  const [subjectType, setSubjectType] = useState("science"); 
+  const [subjectType, setSubjectType] = useState("science");
   const activeSubjects = subjectType === "science" ? ScienceSubjects : SocialScienceSubjects;
 
   const requiredKeys =
@@ -135,46 +135,49 @@ export default function CalculateContent() {
   return (
     <div className="min-h-screen ">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-8 px-4 rounded-t-2xl">
-            <div className="max-w-6xl mx-auto flex flex-col justify-center items-center">
-              {/* Title */}
-              <div className="flex items-center gap-3 mb-2">
-                <Calculator className="w-8 h-8" />
-                <h1 className="text-4xl font-bold">គណនាពិន្ទុបាក់ឌុប</h1>
-              </div>
 
-              <div className="flex w-full items-center mt-4 justify-center sm:justify-end  rounded-md">
-                <div className="bg-gray-200 rounded-full p-1 w-full sm:w-[260px] flex">
-                  <button onClick={() => setSubjectType("science")}
-                    className={`flex-1 py-2 rounded-full text-sm font-medium transition-all
-                      ${subjectType === "science" ? "bg-indigo-600 text-white" : "text-gray-600"}
-                    `}
-                  >
-                    វិទ្យាសាស្រ្តពិត
-                  </button>
-                    
-                  <button onClick={() => setSubjectType("social")}
-                    className={`flex-1 py-2 rounded-full text-sm font-medium transition-all
-                      ${subjectType === "social" ? "bg-indigo-600 text-white" : "text-gray-600"}
-                    `}
-                  >
-                    វិទ្យាសាស្រ្តសង្គម
-                  </button>
-                </div>
-          </div>
+        <div className="bg-indigo-600 text-white py-12 px-4 rounded-t-3xl">
+          <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-4 lg:gap-0 justify-center lg:justify-between items-center">
+            {/* Title */}
+            <div className="flex items-center gap-3 mb-2">
+              <Calculator className="w-8 h-8" />
+              <h1 className="text-4xl font-bold">គណនាពិន្ទុបាក់ឌុប</h1>
+            </div>
+
+            <div className="flex items-center justify-center mt-4 lg:mt-0 lg:justify-end rounded-md w-full lg:w-auto">
+              <div className="bg-gray-200 rounded-3xl p-1 w-full lg:w-[260px] flex gap-2">
+                <button
+                  onClick={() => setSubjectType("science")}
+                  className={`flex-1 py-2 rounded-3xl text-sm font-medium transition-all duration-300 border border-transparent
+                    ${subjectType === "science"
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "text-gray-600 hover:bg-indigo-50 hover:border-indigo-600"
+                    }
+                  `}
+                >
+                  វិទ្យាសាស្រ្តពិត
+                </button>
+
+                <button
+                  onClick={() => setSubjectType("social")}
+                  className={`flex-1 py-2 rounded-3xl text-sm font-medium transition-all duration-300 border border-transparent
+                    ${subjectType === "social"
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "text-gray-600 hover:bg-indigo-50 hover:border-indigo-600"
+                    }
+                  `}
+                >
+                  វិទ្យាសាស្រ្តសង្គម
+                </button>
+              </div>
             </div>
           </div>
-          
-        </motion.div>
+        </div>
+
 
         {/* Subject Cards */}
         <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-12
             md:[&>*:last-child]:col-span-2
             lg:[&>*:last-child]:col-start-2
             lg:[&>*:last-child]:col-span-1
@@ -196,20 +199,20 @@ export default function CalculateContent() {
 
         {/* Calculate Button */}
         <div className="flex flex-col items-center mb-8">
-          <motion.button
-            whileHover={canCalculate && !isCalculating ? { scale: 1.05 } : undefined}
-            whileTap={canCalculate && !isCalculating ? { scale: 0.95 } : undefined}
+          <button
             onClick={onCalculateClick}
             disabled={!canCalculate || isCalculating}
-            className={`px-16 py-4 rounded-full text-xl font-bold shadow-xl transition-colors
+            className={`
+              px-16 py-4 rounded-full text-xl font-bold shadow-sm  transition-all duration-300
               ${canCalculate && !isCalculating
-                ? "bg-indigo-600 hover:bg-indigo-500 text-white"
+                ? "bg-indigo-600 hover:bg-indigo-500 text-white active:scale-95 hover:scale-105"
                 : "bg-blue-300 text-white cursor-not-allowed"
-              }`}
+              }
+            `}
             style={{ cursor: (!canCalculate || isCalculating) ? "not-allowed" : "pointer" }}
           >
             {isCalculating ? "កំពុងគណនា..." : "គណនាពិន្ទុ"}
-          </motion.button>
+          </button>
         </div>
 
         {/* Result */}

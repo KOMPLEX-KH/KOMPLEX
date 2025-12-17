@@ -4,7 +4,7 @@ import { Search, BookOpen, ChevronDown, Filter, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import BookContainer from "./books/BookContainer";
-import {ViewAllByCategorySkeleton, BookSelectedSkeleton } from "./utils/BookSkeleton";
+import { ViewAllByCategorySkeleton, BookSelectedSkeleton } from "./utils/BookSkeleton";
 import ExtraHeader from "./utils/LibrayHeader";
 import { feedLibraryService } from "@/services";
 import type { Subject, Book } from "@core-types/content/library";
@@ -32,7 +32,7 @@ export default function LibraryContent() {
 
   const prevCategoryRef = useRef(null);
   const prevBookRef = useRef(null);
-  
+
   // Fetch subjects and books on mount
   useEffect(() => {
     const fetchData = async () => {
@@ -48,7 +48,7 @@ export default function LibraryContent() {
     };
     fetchData();
   }, []);
-  
+
   useEffect(() => {
     const categoryChanged = prevCategoryRef.current !== categoryFromUrl;
     const bookChanged = prevBookRef.current !== bookSelectedFromUrl;
@@ -93,10 +93,10 @@ export default function LibraryContent() {
 
   return (
     <div className="relative">
-      
+
       {/* Header */}
       {!bookSelectedFromUrl && (
-        <ExtraHeader 
+        <ExtraHeader
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           selectedSubject={selectedSubject}
@@ -118,7 +118,7 @@ export default function LibraryContent() {
           currentSubjectId={categoryFromUrl ? Number(categoryFromUrl) : null}
         />
       )}
-      
+
       <div className="max-w-6xl mx-auto pt-5">
         {loading ? (
           categoryFromUrl ? (

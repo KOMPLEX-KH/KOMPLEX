@@ -18,10 +18,10 @@ import NotFound from '../not-found';
 export const extraScrollRef: { current: HTMLDivElement | null } = { current: null };
 
 const Tabs = [
-  'calculate',
   'library',
-  'notes',
   'formula',
+  'calculate',
+  // 'notes',
   // 'calendar'
 ];
 
@@ -37,6 +37,7 @@ function ExtraWrapper({ currentTab }: ExtraWrapperProps) {
     if (currentTab !== prevTab) {
       setLoading(true);
 
+      //! let the tab component handle its loading state not with a time out
       const timer = setTimeout(() => {
         setLoading(false);
         setPrevTab(currentTab);
@@ -48,12 +49,13 @@ function ExtraWrapper({ currentTab }: ExtraWrapperProps) {
     }
   }, [currentTab, prevTab]);
 
+  // ! when each tab handle its loading state no need for this let each tab give its own skeleton
   if (loading) {
     switch (currentTab) {
       case 'library':
         return <LibraryContentSkeleton />;
-      case 'notes':
-        return <NotesContentSkeleton />;
+      // case 'notes':
+      //   return <NotesContentSkeleton />;
       case 'calculate':
         return <CalculateContentSkeleton />;
       case 'formula':
@@ -72,8 +74,8 @@ function ExtraWrapper({ currentTab }: ExtraWrapperProps) {
       return <CalculateContent />;
     case 'library':
       return <LibraryContent />;
-    case 'notes':
-      return <NotesContent />;
+    // case 'notes':
+    //   return <NotesContent />;
     case 'formula':
       return <FormularContent />;
     // case 'calendar':
@@ -94,6 +96,18 @@ export default function ExtraPage() {
   const [tabIndex, setTabIndex] = useState(validTabIndex);
 
   const mainRef = useRef<HTMLDivElement>(null);
+
+  // ! dont use index use (alr in sidebar component) because the ordering of the tab here and the tab at the sidebar 
+  // ! has to match or else bug so identify by the slug or id 
+
+  // const tabs = [
+  //   // { label: 'ស្វែងយល់', slug: 'explore' },
+  //   { label: 'បណ្ណាល័យ', slug: 'library' },
+  //   { label: 'រូបមន្ត', slug: 'formula' },
+  //   { label: 'គណនាពិន្ទុ', slug: 'calculate' },
+  //   // { label: 'កំណត់ត្រា', slug: 'notes' },
+  //   // { label: 'ថ្ងៃប្រលងបាក់ឌុប', slug: 'calendar' },
+  // ];
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);

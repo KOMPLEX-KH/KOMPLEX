@@ -154,7 +154,7 @@ export function ViewAllByCategorySkeleton() {
       </div>
 
       {/* Books Grid Skeleton */}
-      <section className="flex flex-col gap-4 bg-gradient-to-br from-gray-50 to-indigo-50/30 rounded-3xl p-4 border border-indigo-100">
+      <section className="flex flex-col gap-4 bg-white shadow-sm rounded-3xl p-4 border border-indigo-100">
         <div
           className="
             grid 
@@ -167,7 +167,7 @@ export function ViewAllByCategorySkeleton() {
           {[...Array(16)].map((_, i) => (
             <div
               key={i}
-              className="h-60 rounded-xl bg-gray-300"
+              className="aspect-[9/13] rounded-3xl bg-gray-300"
             />
           ))}
         </div>
@@ -218,7 +218,7 @@ export function BookSelectedSkeleton() {
 
       {/* Related books skeleton */}
       <section className="flex flex-col gap-4 bg-gradient-to-br from-gray-50 to-indigo-50/30 rounded-3xl p-4 border border-indigo-100">
-        <div className="h-8 w-48 bg-gray-300 rounded-md mb-4" />
+        <div className="h-8 w-48 bg-gray-300 rounded-full mb-4" />
         <div className="grid grid-flow-col auto-cols-[65%] sm:auto-cols-[33%] lg:auto-cols-[25%] gap-4 pb-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
           {[...Array(5)].map((_, i) => (
             <div key={i} className="h-40 bg-gray-300 rounded-lg inline-block" />

@@ -6,10 +6,10 @@ export default function BookCard({ book, onClick }) {
     console.log('📖 Full book data:', book);
     
     return (
-        <div className="bg-white rounded-xl border-gray-200 border-1 overflow-hidden cursor-pointer"
+        <div className="bg-white rounded-3xl border-gray-200 border-1 overflow-hidden cursor-pointer"
             onClick={()=> onClick && onClick(book.id)}>
 
-            <div className="w-full h-48 overflow-hidden relative bg-gray-200">
+            <div className="w-full aspect-[9/13] overflow-hidden relative bg-gray-200">
                 <Image 
                     src={book.imageUrl} 
                     alt={book.title}

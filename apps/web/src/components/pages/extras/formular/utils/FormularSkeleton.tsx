@@ -4,7 +4,7 @@ export default function NotesContentSkeleton() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {[...Array(6)].map((_, index) => (
-        <div key={index} className="bg-white rounded-2xl border border-gray-200 overflow-hidden animate-pulse">
+        <div key={index} className="bg-white rounded-3xl border border-gray-200 overflow-hidden animate-pulse">
           {/* Header skeleton */}
           <div className="bg-gray-300 h-32 relative">
             <div className="absolute bottom-4 left-4 right-4">
@@ -16,7 +16,7 @@ export default function NotesContentSkeleton() {
 
           {/* Formula display skeleton */}
           <div className="p-6 bg-gray-50">
-            <div className="bg-gray-200 rounded-xl h-20"></div>
+            <div className="bg-gray-200 rounded-3xl h-20"></div>
           </div>
 
           {/* Footer skeleton */}

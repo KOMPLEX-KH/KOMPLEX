@@ -88,7 +88,7 @@ export default function ExtraHeader({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setIsSearchFocused(true)}
-            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-3xl outline-none transition-colors"
+            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-full outline-none transition-colors"
           />
         </div>
         <SearchDropdown

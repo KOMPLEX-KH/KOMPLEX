@@ -45,16 +45,16 @@ export default function FormularPage({
   // If a formula is selected, show the detail view
   if (selectedFormula) {
     return (
-      <div 
+      <div
         className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
         onClick={handleCloseDetail}
       >
-        <div 
+        <div
           className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto scrollbar-hide"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="sticky top-0 z-20 bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-t-2xl">
+          <div className="sticky top-0 z-20 bg-indigo-600  text-white p-6 rounded-t-3xl">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <h2 className="text-2xl sm:text-3xl font-bold mb-2">{selectedFormula.title}</h2>
@@ -71,19 +71,18 @@ export default function FormularPage({
           {/* Content */}
           <div className="p-6 space-y-6">
             {/* Formula Display */}
-            <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-6 border-2 border-blue-200">
+            <div className="bg-gray-50 rounded-3xl p-6 border-2 border-indigo-200">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                  <Calculator className="w-5 h-5 text-blue-600" />
+                  <Calculator className="w-5 h-5 text-indigo-600" />
                   រូបមន្ត
                 </h3>
                 <button
                   onClick={handleCopyFormula}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all ${
-                    copied
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                  }`}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all ${copied
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'
+                    }`}
                 >
                   {copied ? (
                     <>
@@ -105,15 +104,15 @@ export default function FormularPage({
 
             {/* Variables (if any) */}
             {selectedFormula.variables && selectedFormula.variables.length > 0 && (
-              <div className="bg-white rounded-2xl p-6 border border-gray-200">
+              <div className="bg-white rounded-3xl p-6 border border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">អថេរ</h3>
                 <div className="space-y-3">
                   {selectedFormula.variables.map((variable, index) => (
                     <div
                       key={index}
-                      className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl"
+                      className="flex items-center gap-3 p-3 bg-gray-50 rounded-3xl"
                     >
-                      <span className="font-mono font-bold text-blue-600 text-lg min-w-[40px]">
+                      <span className="font-mono font-bold text-indigo-600 text-lg min-w-[40px]">
                         {variable.symbol}
                       </span>
                       <div>
@@ -142,7 +141,7 @@ export default function FormularPage({
       {loading ? (
         <FormularSkeleton />
       ) : filteredFormulas.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
           {filteredFormulas.map((formula) => (
             <FormularCard
               key={formula.id}
