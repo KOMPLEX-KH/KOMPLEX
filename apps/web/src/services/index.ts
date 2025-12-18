@@ -29,6 +29,7 @@ import { createMeVideoService } from "@core-services/me/videos";
 import { createMeVideoCommentService } from "@core-services/me/video-comments";
 import { createMeVideoReplyService } from "@core-services/me/video-replies";
 import { createMeVideoHistoryService } from "@core-services/me/video-history";
+import { createMeLastAccessedService } from "@core-services/me/last-accessed";
 
 // User services
 import { createUserBlogService } from "@core-services/user/blogs";
@@ -65,6 +66,7 @@ export const meVideoService = createMeVideoService(api);
 export const meVideoCommentService = createMeVideoCommentService(api);
 export const meVideoReplyService = createMeVideoReplyService(api);
 export const meVideoHistoryService = createMeVideoHistoryService(api);
+export const meLastAccessedService = createMeLastAccessedService(api);
 
 // User services
 export const userBlogService = createUserBlogService(api);
