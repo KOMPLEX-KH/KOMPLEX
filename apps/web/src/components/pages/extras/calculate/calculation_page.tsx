@@ -55,58 +55,6 @@ export default function CalculateContent() {
     }, 1000);
   };
 
-
-  // Need to understand this part
-
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     const savedScores = localStorage.getItem("scores");
-  //     const savedResult = localStorage.getItem("result");
-  //     if (savedScores) setScores(JSON.parse(savedScores));
-  //     if (savedResult) setResult(JSON.parse(savedResult));
-  //     if (savedScores) setTempScores(JSON.parse(savedScores));
-  //   }
-  // }, []);
-
-  
-  // what is this
-
-  // useEffect(() => {
-  //   const handleBeforeUnload = () => {
-  //     localStorage.removeItem("scores");
-  //     localStorage.removeItem("result");
-  //   };
-  //   window.addEventListener("beforeunload", handleBeforeUnload);
-  //   return () => {
-  //     window.removeEventListener("beforeunload", handleBeforeUnload);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   const newScores: Scores = {};
-  //   activeSubjects.forEach(subject => {
-  //     newScores[subject.key] = "";
-  //   });
-  //   setTempScores(newScores);
-  //   setScores({});
-  //   setResult(null);
-  //   localStorage.removeItem("scores");
-  //   localStorage.removeItem("result");
-  // }, [subjectType]);
-
-  
-
-  // restore save data after refresh
-  useEffect(()=>{
-    const saveScore = localStorage.getItem("scores"); 
-  })
-
-
-  // clear data when user leave this site
-  useEffect(()=>{
-    
-  })
-
   const calculateGrade = (scoreParam: Scores) => {
     let requiredSum = 0;
     let englishBonus = 0;

@@ -4,15 +4,13 @@ import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Sidebar from '@/components/pages/extras/Sidebar';
 import ExploreContent from '@/components/pages/extras/explore/content';
-import CalculateContent from '@/components/pages/extras/calculate/calculation';
+import CalculateContent from '@/components/pages/extras/calculate/calculation_page';
 import LibraryContent from '@/components/pages/extras/library/content';
 import NotesContent from '@/components/pages/extras/notes/content';
-import FormularContent from '@/components/pages/extras/formular/content';
+import FormularContent from '@/components/pages/extras/formular/FormularPage';
 import CalendarContent from '@/components/pages/extras/calendar/content';
 import LibraryContentSkeleton from '@/components/pages/extras/library/utils/BookSkeleton';
-import NotesContentSkeleton from '@/components/pages/extras/notes/utils/NoteSkeleton';
-import FormularContentSkeleton from '@/components/pages/extras/formular/utils/FormularSkeleton';
-import CalculateContentSkeleton from '@/components/pages/extras/calculate/CalculateSkeleton';
+import CalculateContentSkeleton from '@/components/pages/extras/calculate/calculateSkeleton';
 import NotFound from '../not-found';
 
 export const extraScrollRef: { current: HTMLDivElement | null } = { current: null };
@@ -58,8 +56,6 @@ function ExtraWrapper({ currentTab }: ExtraWrapperProps) {
       //   return <NotesContentSkeleton />;
       case 'calculate':
         return <CalculateContentSkeleton />;
-      case 'formula':
-        return <FormularContentSkeleton />;
       default:
         return (
           <div className="p-10 text-center text-gray-400">

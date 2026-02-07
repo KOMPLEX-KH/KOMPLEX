@@ -8,6 +8,13 @@ export interface Variable {
   unit?: ReactNode;
 }
 
+export const subjectMapping: Record<string, string> = {
+  "គណិតវិទ្យា": "math",
+  "រូបវិទ្យា": "physics",
+  "គីមីវិទ្យា": "chemistry",
+  "ជីវវិទ្យា": "biology"
+}
+
 export interface Formular {
   id: string;
   title: string;
