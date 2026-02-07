@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Trophy, Star, Award } from "lucide-react";
+import {Award } from "lucide-react";
 
 export default function ResultCard({ result, scores, getSubjectGrade, subjects }) {
   if (!result) return null;

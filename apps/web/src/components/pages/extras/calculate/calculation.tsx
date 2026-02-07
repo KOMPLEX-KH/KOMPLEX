@@ -1,67 +1,29 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import SubjectCard from "./components/SubjectCard";
-import { ScienceSubjects, SocialScienceSubjects, getSubjectScienceGrade, getSubjectSocialScienceGrade } from "@/types/extra/calculation";
-import ResultCard from "./components/ResultCard";
 import { Calculator } from "lucide-react";
+import { Subject, SubjectKey } from "@/types/extra/calculation";
+import SubjectCard from "./SubjectCard";
+import { ScienceSubjects, SocialScienceSubjects, getSubjectScienceGrade, getSubjectSocialScienceGrade } from "@/types/extra/calculation";
+import ResultCard from "./ResultCard";
+import { Scores } from "@/types/extra/calculation";
+import { calculateTotalGrade } from "@/types/extra/calculation";
 
-type Scores = {
-  [key: string]: string;
-};
 
 export default function CalculateContent() {
-  const [tempScores, setTempScores] = useState<Scores>({});
 
+  const [tempScores, setTempScores] = useState<Scores>({});
   const [scores, setScores] = useState<Scores>({});
   const [result, setResult] = useState<{ average: number; grade: string } | null>(null);
-
   const [isCalculating, setIsCalculating] = useState(false);
-
   const [subjectType, setSubjectType] = useState("science");
-  const activeSubjects = subjectType === "science" ? ScienceSubjects : SocialScienceSubjects;
+  const activeSubjects : Subject[] = subjectType === "science" ? ScienceSubjects : SocialScienceSubjects;
 
-  const requiredKeys =
-    subjectType === "science"
-      ? ["math", "physics", "biology", "chemistry", "khmer", "history"]
-      : ["math", "khmer", "history", "geography", "ethics", "earth"];
+  const canCalculate = activeSubjects.every(
+    s=> tempScores[s.key]?.trim()
+  );
 
-  const canCalculate = requiredKeys.every(key => tempScores[key] && tempScores[key].trim() !== "");
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedScores = localStorage.getItem("scores");
-      const savedResult = localStorage.getItem("result");
-      if (savedScores) setScores(JSON.parse(savedScores));
-      if (savedResult) setResult(JSON.parse(savedResult));
-      if (savedScores) setTempScores(JSON.parse(savedScores));
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      localStorage.removeItem("scores");
-      localStorage.removeItem("result");
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
-
-  useEffect(() => {
-    const newScores: Scores = {};
-    activeSubjects.forEach(subject => {
-      newScores[subject.key] = "";
-    });
-    setTempScores(newScores);
-    setScores({});
-    setResult(null);
-    localStorage.removeItem("scores");
-    localStorage.removeItem("result");
-  }, [subjectType]);
-
+  // scroll user to result section
   useEffect(() => {
     if (result) {
       const resultSection = document.getElementById("result-section");
@@ -71,10 +33,10 @@ export default function CalculateContent() {
     }
   }, [result]);
 
-  const handleScoreChange = (key: string, value: string) => {
-    const subject = activeSubjects.find(s => s.key === key);
-    const max = subject ? subject.maxScore || 100 : 100;
-    const numValue = parseFloat(value);
+
+  const handleScoreChange = (key: SubjectKey, value: string) => {
+    const max = activeSubjects.find(s=>s.key === key)!.maxScore;
+    const numValue = Number(value);
 
     if (value === "" || (numValue >= 0 && numValue <= max)) {
       setTempScores(prev => ({ ...prev, [key]: value }));
@@ -93,47 +55,94 @@ export default function CalculateContent() {
     }, 1000);
   };
 
-  const calculateGrade = (scoresParam: Scores) => {
-    const s = scoresParam;
 
-    const math = Number(s.math) || 0;
-    const physics = Number(s.physics) || 0;
-    const biology = Number(s.biology) || 0;
-    const chemistry = Number(s.chemistry) || 0;
-    const khmer = Number(s.khmer) || 0;
-    const history = Number(s.history) || 0;
-    const english = Number(s.english) || 0;
+  // Need to understand this part
 
-    const requiredSum = math + physics + biology + chemistry + khmer + history;
-    const englishBonus = english > 25 ? english - 25 : 0;
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const savedScores = localStorage.getItem("scores");
+  //     const savedResult = localStorage.getItem("result");
+  //     if (savedScores) setScores(JSON.parse(savedScores));
+  //     if (savedResult) setResult(JSON.parse(savedResult));
+  //     if (savedScores) setTempScores(JSON.parse(savedScores));
+  //   }
+  // }, []);
+
+  
+  // what is this
+
+  // useEffect(() => {
+  //   const handleBeforeUnload = () => {
+  //     localStorage.removeItem("scores");
+  //     localStorage.removeItem("result");
+  //   };
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   const newScores: Scores = {};
+  //   activeSubjects.forEach(subject => {
+  //     newScores[subject.key] = "";
+  //   });
+  //   setTempScores(newScores);
+  //   setScores({});
+  //   setResult(null);
+  //   localStorage.removeItem("scores");
+  //   localStorage.removeItem("result");
+  // }, [subjectType]);
+
+  
+
+  // restore save data after refresh
+  useEffect(()=>{
+    const saveScore = localStorage.getItem("scores"); 
+  })
+
+
+  // clear data when user leave this site
+  useEffect(()=>{
+    
+  })
+
+  const calculateGrade = (scoreParam: Scores) => {
+    let requiredSum = 0;
+    let englishBonus = 0;
+
+
+    activeSubjects.forEach((sub) => {
+      const value = Number(scoreParam[sub.key]) || 0;
+
+      if (sub.key === "english") {
+        if (value > 25) englishBonus = value - 25;
+      } else {
+        requiredSum += value;
+      }
+    });
 
     if (requiredSum === 0) {
       setResult(null);
       return;
     }
 
-    const totalPoints = requiredSum + englishBonus;
+    const totalPoint = englishBonus + requiredSum;
+    const grade = calculateTotalGrade(totalPoint);
 
-    let grade = "";
 
-    if (totalPoints >= 427) grade = "A";
-    else if (totalPoints >= 380) grade = "B";
-    else if (totalPoints >= 332) grade = "C";
-    else if (totalPoints >= 285) grade = "D";
-    else if (totalPoints >= 237) grade = "E";
-    else grade = "F";
+    setResult({ average: Math.round(totalPoint), grade });
+  } ;
 
-    setResult({ average: Math.round(totalPoints), grade });
-  };
 
-  const getSubjectGrade = (key: string, score: number) => {
+  const getSubjectGrade = (key: SubjectKey, score: number) => {
     return subjectType === "science"
       ? getSubjectScienceGrade(key, score)
       : getSubjectSocialScienceGrade(key, score);
   };
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
       <div className="max-w-6xl mx-auto">
 
         <div className="bg-indigo-600 text-white py-12 px-4 rounded-t-3xl">
@@ -176,26 +185,19 @@ export default function CalculateContent() {
 
 
         {/* Subject Cards */}
-        <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-12
-            md:[&>*:last-child]:col-span-2
-            lg:[&>*:last-child]:col-start-2
-            lg:[&>*:last-child]:col-span-1
-            md:[&>*:last-child]:max-w-[350px]
-            md:[&>*:last-child]:mx-auto"
-        >
-
-
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 auto-rows-max  my-12">
           {activeSubjects.map((subject, idx) => (
-            <SubjectCard
-              key={subject.key}
-              subject={subject}
-              index={idx}
-              value={tempScores[subject.key] || ""}
-              onChange={(v) => handleScoreChange(subject.key, v)}
-            />
+            <div key={subject.key} className="w-full" >
+              <SubjectCard
+                subject={subject}
+                index={idx}
+                value={tempScores[subject.key] || ""}
+                onChange={(v) => handleScoreChange(subject.key, v)}
+              />
+            </div>
           ))}
         </div>
+
 
         {/* Calculate Button */}
         <div className="flex flex-col items-center mb-8">

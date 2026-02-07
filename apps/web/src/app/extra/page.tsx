@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Sidebar from '@/components/pages/extras/Sidebar';
 import ExploreContent from '@/components/pages/extras/explore/content';
-import CalculateContent from '@/components/pages/extras/calculate/content';
+import CalculateContent from '@/components/pages/extras/calculate/calculation';
 import LibraryContent from '@/components/pages/extras/library/content';
 import NotesContent from '@/components/pages/extras/notes/content';
 import FormularContent from '@/components/pages/extras/formular/content';
@@ -12,7 +12,7 @@ import CalendarContent from '@/components/pages/extras/calendar/content';
 import LibraryContentSkeleton from '@/components/pages/extras/library/utils/BookSkeleton';
 import NotesContentSkeleton from '@/components/pages/extras/notes/utils/NoteSkeleton';
 import FormularContentSkeleton from '@/components/pages/extras/formular/utils/FormularSkeleton';
-import CalculateContentSkeleton from '@/components/pages/extras/calculate/utils/CalculateSkeleton';
+import CalculateContentSkeleton from '@/components/pages/extras/calculate/CalculateSkeleton';
 import NotFound from '../not-found';
 
 export const extraScrollRef: { current: HTMLDivElement | null } = { current: null };
