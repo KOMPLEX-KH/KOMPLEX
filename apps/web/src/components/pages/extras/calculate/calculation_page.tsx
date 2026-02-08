@@ -91,7 +91,7 @@ export default function CalculateContent() {
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto mt-3">
 
         <div className="bg-indigo-600 text-white py-12 px-4 rounded-t-3xl">
           <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-4 lg:gap-0 justify-center lg:justify-between items-center">

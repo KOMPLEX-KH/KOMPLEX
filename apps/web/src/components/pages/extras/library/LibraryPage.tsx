@@ -23,30 +23,31 @@ export default function LibraryContent() {
   const category = searchParams.get("category");
   const book = searchParams.get("book");
 
-  // Fetch books
   useEffect(() => {
+    let timer: NodeJS.Timeout;
+
     async function fetchBooks() {
+      setLoading(true);
+
       try {
         const data = await feedLibraryService.getAllBooks();
         setBooks(data.books);
         setSubjects([]);
       } catch (err) {
         console.error(err);
-      } finally {
-        setLoading(false);
       }
+
+      timer = setTimeout(() => setLoading(false), 1000);
     }
 
     fetchBooks();
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, []);
 
-  useEffect(() => {
-    if (category || book) {
-      setLoading(true);
-      const timer = setTimeout(() => setLoading(false), 500);
-      return () => clearTimeout(timer);
-    }
-  }, [category, book]);
+
 
   const handleBookClick = (id: string) => {
     router.push(`?tab=library&book=${id}`);
@@ -55,7 +56,6 @@ export default function LibraryContent() {
 
   return (
     <div className="relative">
-
       {!book && (
         <LibraryHeader
           searchQuery={searchQuery}
@@ -70,14 +70,11 @@ export default function LibraryContent() {
 
       <div className="max-w-6xl mx-auto pt-5">
         {loading ? (
-          category ? <ViewAllByCategorySkeleton /> :
-          book ? <BookSelectedSkeleton /> :
-          null
+          <ViewAllByCategorySkeleton />
         ) : (
           <BookContainer books={books} />
         )}
       </div>
-
     </div>
   );
 }

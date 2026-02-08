@@ -1,177 +1,49 @@
-"use client";
-import { BookOpen, Search, ChevronDown, Filter, Check } from "lucide-react";
-
-export default function LibraryContentSkeleton() {
-  return (
-    <div className="relative max-w-6xl mx-auto pt-5 animate-pulse select-none">
-
-      {/* ===== Skeleton Header ===== */}
-      <div className="flex items-center gap-3 mb-6 relative">
-        {/* Search input skeleton */}
-        <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5" />
-          <div className="w-full h-12 bg-gray-300 rounded-3xl"></div>
-        </div>
-
-        {/* Filter button skeleton */}
-        <div className="w-12 h-12 rounded-full bg-gray-300"></div>
-      </div>
-
-      {/* ===== Skeleton BookContainer ===== */}
-
-      {/* Recommended Section */}
-      <section className="flex flex-col gap-4 rounded-3xl border-none pb-4">
-
-        {/* Header skeleton */}
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-gray-300 rounded-3xl w-10 h-10"></div>
-          <div className="flex flex-col gap-2">
-            <div className="h-5 w-32 bg-gray-300 rounded"></div>
-            <div className="h-4 w-20 bg-gray-200 rounded"></div>
-          </div>
-        </div>
-
-        {/* Recommended books row */}
-        <div className="
-          grid grid-flow-col
-          auto-cols-[65%]
-          sm:auto-cols-[33%]
-          lg:auto-cols-[25%]
-          gap-4 pb-2
-          overflow-x-auto whitespace-nowrap scrollbar-hide
-        ">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="flex flex-col bg-gray-100 rounded-2xl p-4 h-56 w-full">
-              <div className="bg-gray-300 h-32 rounded-xl mb-3"></div>
-              <div className="bg-gray-300 h-4 rounded mb-2 w-3/4"></div>
-              <div className="bg-gray-200 h-3 rounded w-1/2"></div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Categories Sections */}
-      {[1, 2].map((cat) => (
-        <section key={cat} className="flex flex-col gap-4 rounded-3xl border-none mt-8">
-
-          {/* Category header skeleton */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gray-300 rounded-3xl w-10 h-10"></div>
-              <div className="flex flex-col gap-2">
-                <div className="h-5 w-28 bg-gray-300 rounded"></div>
-                <div className="h-4 w-16 bg-gray-200 rounded"></div>
-              </div>
-            </div>
-
-            <div className="w-24 h-9 bg-gray-300 rounded-3xl"></div>
-          </div>
-
-          {/* Books row */}
-          <div className="
-            grid grid-flow-col
-            auto-cols-[65%]
-            sm:auto-cols-[33%]
-            lg:auto-cols-[25%]
-            gap-4 pb-2
-            overflow-x-auto whitespace-nowrap scrollbar-hide
-          ">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex flex-col bg-gray-100 rounded-2xl p-4 h-56 w-full">
-                <div className="bg-gray-300 h-32 rounded-xl mb-3"></div>
-                <div className="bg-gray-300 h-4 rounded mb-2 w-3/4"></div>
-                <div className="bg-gray-200 h-3 rounded w-1/2"></div>
-              </div>
-            ))}
-          </div>
-
-        </section>
-      ))}
-
-    </div>
-  );
-}
-
-
-export function BookContainerSkeleton() {
-  return (
-    <div className="flex flex-col gap-10 pt-3 animate-pulse">
-
-      {/* Recommended Section Skeleton */}
-      <section className="flex flex-col gap-4 bg-gray-100 rounded-3xl p-4 border border-gray-300">
-        <div className="flex items-center justify-between flex-wrap gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gray-300" />
-            <div className="space-y-2">
-              <div className="w-32 h-6 bg-gray-300 rounded" />
-              <div className="w-48 h-4 bg-gray-300 rounded" />
-            </div>
-          </div>
-        </div>
-
-        {/* Horizontal scroll skeleton */}
-        <div className="grid grid-flow-col auto-cols-[65%] sm:auto-cols-[33%] lg:auto-cols-[25%] gap-4 pb-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
-          {[1,2,3,4].map((_, i) => (
-            <div key={i} className="h-48 bg-gray-300 rounded-xl" />
-          ))}
-        </div>
-      </section>
-
-      {/* Categories Skeleton */}
-      {[1, 2, 3,4].map((_, i) => (
-        <section key={i} className="flex flex-col gap-4 bg-gray-100 rounded-3xl p-4 border border-gray-300">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gray-300" />
-              <div className="space-y-2">
-                <div className="w-32 h-6 bg-gray-300 rounded" />
-                <div className="w-48 h-4 bg-gray-300 rounded" />
-              </div>
-            </div>
-            <div className="w-24 h-8 bg-gray-300 rounded-xl" />
-          </div>
-
-          <div className="grid grid-flow-col auto-cols-[65%] sm:auto-cols-[33%] lg:auto-cols-[25%] gap-4 pb-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
-            {[1,2,3,4].map((_, j) => (
-              <div key={j} className="h-48 bg-gray-300 rounded-xl" />
-            ))}
-          </div>
-        </section>
-      ))}
-
-    </div>
-  );
-}
-
-
 export function ViewAllByCategorySkeleton() {
-  return (
-    <div className="w-full animate-pulse space-y-6">
-      {/* Back Button Skeleton */}
-      <div className="flex items-center gap-3 mb-5">
-        <div className="h-10 w-10 rounded-lg bg-gray-300" /> 
-        <div className="h-10 w-28 rounded-lg bg-gray-300" />
-      </div>
+  const sectionsCount = 4;
+  const skeletonBooksCount = 6; // books per row in skeleton
 
-      {/* Books Grid Skeleton */}
-      <section className="flex flex-col gap-4 bg-white shadow-sm rounded-3xl p-4 border border-indigo-100">
-        <div
-          className="
-            grid 
-            grid-cols-2         
-            sm:grid-cols-3   
-            lg:grid-cols-4    
-            gap-4
-          "
+  return (
+    <div className="flex flex-col pt-3 space-y-8 animate-pulse">
+
+      {[...Array(sectionsCount)].map((_, sectionIndex) => (
+        <section
+          key={sectionIndex}
+          className="flex flex-col gap-4 rounded-3xl border-none pb-4"
         >
-          {[...Array(16)].map((_, i) => (
-            <div
-              key={i}
-              className="aspect-[9/13] rounded-3xl bg-gray-300"
-            />
-          ))}
-        </div>
-      </section>
+          {/* Header Skeleton */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-gray-300 rounded-3xl w-9 h-9" /> {/* icon skeleton */}
+              <div className="space-y-1">
+                <div className="h-5 w-24 rounded-lg bg-gray-300" /> {/* title */}
+                <div className="h-3 w-36 rounded-lg bg-gray-300" /> {/* subtitle */}
+              </div>
+            </div>
+
+            {/* Button Skeleton */}
+            <div className="h-8 w-24 rounded-3xl bg-gray-300" />
+          </div>
+
+          {/* Horizontal scrollable book cards skeleton */}
+          <div
+            className="
+              grid grid-flow-col
+              auto-cols-[65%]
+              sm:auto-cols-[33%]
+              lg:auto-cols-[25%]
+              gap-4 pb-2 overflow-x-auto whitespace-nowrap scrollbar-hide
+            "
+          >
+            {[...Array(skeletonBooksCount)].map((__, i) => (
+              <div
+                key={i}
+                className="aspect-[9/13] rounded-3xl bg-gray-300 inline-block"
+              />
+            ))}
+          </div>
+        </section>
+      ))}
+
     </div>
   );
 }
