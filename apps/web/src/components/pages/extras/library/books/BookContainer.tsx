@@ -6,20 +6,22 @@ import ViewAllByCategory from "./ViewAllBooks";
 import BookSelectedPage from "./BookSelected";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import EmptyState from "../utils/EmptyState";
-import { feedLibraryService, feedCurriculumsService } from "@/services";
-// import { subjectNameMap } from "@core-types/content/library";
+import { feedCurriculumsService } from "@/services";
 import type { Book } from "@core-types/content/library";
 import type { Grade } from "@/types/docs/curriculum";
 
+interface BookContainerProps {
+  books: Book[];
+}
 
-export default function BookContainer() {
+export default function BookContainer({ books }: BookContainerProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  
   const categoryFromUrl = searchParams.get("category");
   const bookSelectedFromUrl = searchParams.get("book");
-
-  const [books, setBooks] = useState<Book[]>([]);
+  
+  // fetch curriculum from local stroage
   const [curriculum, setCurriculum] = useState<Grade[]>(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem("curriculum");
@@ -28,35 +30,48 @@ export default function BookContainer() {
     return [];
   });
 
+  // fetch curriculum once
   useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const [booksResponse] = await Promise.all([
-        feedLibraryService.getAllBooks(),
-        // feedLibraryService.getAllSubjects(),
-      ]);
-      setBooks(booksResponse.books);
+    const fetchCurriculum = async () => {
       if (curriculum.length === 0) {
+        try {
           const curriculumData = await feedCurriculumsService.getCurriculum();
           setCurriculum(curriculumData);
           localStorage.setItem('curriculum', JSON.stringify(curriculumData));
-      }     
-    } catch (error) {
-      console.error("Error fetching library data:", error);
-    }
-  };
+        } catch (error) {
+          console.error("Error fetching curriculum data:", error);
+        }
+      }
+    };
 
-    fetchData();
-  }, []);
+    fetchCurriculum();
+  }, [curriculum.length]);
 
   if (categoryFromUrl) {
     return (
-      <ViewAllByCategory key={categoryFromUrl} />
+      <ViewAllByCategory 
+        key={categoryFromUrl} 
+        books={books}
+        curriculum={curriculum}
+        categoryId={categoryFromUrl}
+      />
     );
   }
-  if (bookSelectedFromUrl) {
+
+  const selectedBook = books.find((b) => String(b.id) === bookSelectedFromUrl) || null;
+  const relatedBooks =
+    selectedBook && selectedBook.subjectId
+      ? books.filter((b) => b.subjectId === selectedBook.subjectId && String(b.id) !== String(selectedBook.id)).slice(0, 5)
+      : [];
+  
+  if (bookSelectedFromUrl && selectedBook) {
     return (
-      <BookSelectedPage key={bookSelectedFromUrl} bookId={bookSelectedFromUrl} />
+      <BookSelectedPage
+        key={bookSelectedFromUrl}
+        book={selectedBook}
+        relatedBooks={relatedBooks}
+        curriculum={curriculum}
+      />
     );
   }
 
@@ -64,6 +79,7 @@ export default function BookContainer() {
   const recommendedBooks = books.filter((b) => b.isRecommended);
 
 
+  // flat subjects from all grade into single array
   const allSubjects = curriculum.flatMap(grade =>
     grade.subjects.map(subject =>({
       id : subject.id,
@@ -76,7 +92,7 @@ export default function BookContainer() {
     books.some(book => book.subjectId === subject.id)
   );
 
-  const handleBookSelected = (bookId: string) => {
+  const handleBookSelected = (bookId: number) => {
     router.push(`?tab=library&book=${bookId}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -85,7 +101,7 @@ export default function BookContainer() {
   return (
     <div className="flex flex-col pt-3">
 
-      {/* Recommended Section - Only show if there are recommended books */}
+      {/* display recommendation book */}
       {recommendedBooks.length > 0 ? (
         <section className="flex flex-col gap-4 rounded-3xl border-none pb-4">
           {/* Header */}

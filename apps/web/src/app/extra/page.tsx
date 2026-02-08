@@ -5,11 +5,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Sidebar from '@/components/pages/extras/Sidebar';
 import ExploreContent from '@/components/pages/extras/explore/content';
 import CalculateContent from '@/components/pages/extras/calculate/calculation_page';
-import LibraryContent from '@/components/pages/extras/library/content';
+import LibraryContent from '@/components/pages/extras/library/LibraryPage';
 import NotesContent from '@/components/pages/extras/notes/content';
 import FormularContent from '@/components/pages/extras/formular/FormularPage';
 import CalendarContent from '@/components/pages/extras/calendar/content';
-import LibraryContentSkeleton from '@/components/pages/extras/library/utils/BookSkeleton';
+import LibraryContentSkeleton from '@/components/pages/extras/library/BookSkeleton';
 import CalculateContentSkeleton from '@/components/pages/extras/calculate/calculateSkeleton';
 import NotFound from '../not-found';
 

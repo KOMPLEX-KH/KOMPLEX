@@ -149,8 +149,8 @@ export function ViewAllByCategorySkeleton() {
     <div className="w-full animate-pulse space-y-6">
       {/* Back Button Skeleton */}
       <div className="flex items-center gap-3 mb-5">
-        <div className="h-10 w-10 rounded-lg bg-gray-300" /> {/* Icon placeholder */}
-        <div className="h-10 w-28 rounded-lg bg-gray-300" /> {/* Button text placeholder */}
+        <div className="h-10 w-10 rounded-lg bg-gray-300" /> 
+        <div className="h-10 w-28 rounded-lg bg-gray-300" />
       </div>
 
       {/* Books Grid Skeleton */}

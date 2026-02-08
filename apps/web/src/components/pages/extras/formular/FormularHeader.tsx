@@ -124,7 +124,7 @@ export default function FormularHeader({
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="ស្វែងរករូបមន្ត..."
-            className="w-full pl-12 pr-4 py-3 border rounded-full focus:outline-none"
+            className="w-full pl-12 pr-4 py-3 border border-gray-400 rounded-full focus:outline-none"
           />
         </div>
 
