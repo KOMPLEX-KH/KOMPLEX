@@ -37,7 +37,7 @@ export default function LibraryContent() {
         console.error(err);
       }
 
-      timer = setTimeout(() => setLoading(false), 1000);
+      timer = setTimeout(() => setLoading(false), 1000) as unknown as NodeJS.Timeout;
     }
 
     fetchBooks();

@@ -35,7 +35,7 @@ function ExtraWrapper({ currentTab }: { currentTab: ExtraTab }) {
   }
 }
 
-export default function ExtraPage() {
+function ExtraPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -55,29 +55,35 @@ export default function ExtraPage() {
   }, [tabIndex, router, searchParams]);
 
   return (
-    <Suspense fallback={<div className="p-10 text-center text-gray-400">Loading...</div>}>
-      <div className="bg-gray-50 relative">
-        <div className="pt-22 lg:pt-19 max-w-7xl mx-auto h-screen">
-          <div className="flex gap-5 h-[calc(100vh-7rem)] lg:h-[calc(100vh-5rem)]">
-            <Sidebar currentTab={tabIndex} onTabChange={setTabIndex} />
+    <div className="bg-gray-50 relative">
+      <div className="pt-22 lg:pt-19 max-w-7xl mx-auto h-screen">
+        <div className="flex gap-5 h-[calc(100vh-7rem)] lg:h-[calc(100vh-5rem)]">
+          <Sidebar currentTab={tabIndex} onTabChange={setTabIndex} />
 
-            <main className="flex-1 h-full bg-white rounded-3xl p-5 relative">
-              <div
-                ref={el => {
-                  mainRef.current = el;
-                  extraScrollRef.current = el;
-                }}
-                className="h-full overflow-auto"
-                style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
-              >
-                <style jsx>{`div::-webkit-scrollbar { display: none; }`}</style>
+          <main className="flex-1 h-full bg-white rounded-3xl p-5 relative">
+            <div
+              ref={el => {
+                mainRef.current = el;
+                extraScrollRef.current = el;
+              }}
+              className="h-full overflow-auto"
+              style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
+            >
+              <style jsx>{`div::-webkit-scrollbar { display: none; }`}</style>
 
-                <ExtraWrapper currentTab={Tabs[tabIndex]} />
-              </div>
-            </main>
-          </div>
+              <ExtraWrapper currentTab={Tabs[tabIndex]} />
+            </div>
+          </main>
         </div>
       </div>
+    </div>
+  );
+}
+
+export default function ExtraPage() {
+  return (
+    <Suspense fallback={<div className="p-10 text-center text-gray-400">Loading...</div>}>
+      <ExtraPageContent />
     </Suspense>
   );
 }
