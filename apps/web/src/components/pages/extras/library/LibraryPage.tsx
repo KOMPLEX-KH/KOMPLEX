@@ -24,7 +24,7 @@ export default function LibraryContent() {
   const book = searchParams.get("book");
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: number;
 
     async function fetchBooks() {
       setLoading(true);
