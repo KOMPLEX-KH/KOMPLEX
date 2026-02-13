@@ -33,7 +33,7 @@ export default function ExtraTabPage() {
     switch (tab) {
       case 'library':
         return <LibraryContent />;
-      case 'formular':
+      case 'formula':
         return <FormularContent />;
       case 'calculate':
         return <CalculateContent />;

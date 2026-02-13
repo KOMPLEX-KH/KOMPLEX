@@ -9,7 +9,7 @@ interface SidebarProps {
 
 export const ExtraTabs = [
   { label: 'បណ្ណាល័យ', slug: 'library', href: '/extra/library' },
-  { label: 'រូបមន្ត', slug: 'formular', href: '/extra/formular' },
+  { label: 'រូបមន្ត', slug: 'formula', href: '/extra/formula' },
   { label: 'គណនាពិន្ទុ', slug: 'calculate', href: '/extra/calculate' },
 ];
 
@@ -38,6 +38,7 @@ export default function Sidebar({ currentPath }: SidebarProps) {
 
       {/* Desktop sidebar */}
       <aside className="hidden lg:block w-65 bg-white rounded-3xl shadow p-6 shadow-indigo-500/10 border border-indigo-500/10 h-fit sticky top-20">
+        
         <div className="mb-6">
           <h1 className="text-2xl font-extrabold mb-2 text-indigo-600">បន្ថែម</h1>
           <p className="text-gray-500 text-sm">មុខងារផ្សេង ដែលជួយដល់ការសិក្សា</p>
