@@ -77,6 +77,11 @@ function convertPropsToRN(props: Record<string, unknown> = {}): Record<string, a
         // Skip children - handled separately
         if (key === 'children') continue;
 
+        // Skip web-only attributes that React Native doesn't support
+        if (key.startsWith('aria-') || key.startsWith('data-') || key === 'role') {
+            continue;
+        }
+
         // Convert className to style
         if (key === 'className') {
             rnProps.style = convertClassNameToStyle(value as string);
@@ -108,6 +113,12 @@ function convertPropsToRN(props: Record<string, unknown> = {}): Record<string, a
         // Convert alt to accessibilityLabel
         if (key === 'alt') {
             rnProps.accessibilityLabel = value as string;
+            continue;
+        }
+
+        // Convert string booleans to actual booleans for React Native
+        if (typeof value === 'string' && (value === 'true' || value === 'false')) {
+            rnProps[key] = value === 'true';
             continue;
         }
 

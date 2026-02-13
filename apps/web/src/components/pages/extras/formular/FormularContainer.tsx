@@ -1,48 +1,34 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useCallback  } from "react";
 import FormularCard from "./FormularCard";
-import FormularSkeleton from "../utils/FormularSkeleton";
-import EmptyState from "../utils/EmptyState";
+import EmptyState from "./EmptyState";
 import { Formula } from "@core-types/content/formular";
 import { X, BookOpen, Tag, Calculator, Copy, Check } from "lucide-react";
 
 interface FormularPageProps {
-  loading: boolean;
   filteredFormulas: Formula[];
   searchQuery: string;
   selectedSubject: string;
 }
 
 export default function FormularPage({
-  loading,
   filteredFormulas,
   searchQuery,
   selectedSubject
 }: FormularPageProps) {
+  
   const [selectedFormula, setSelectedFormula] = useState<Formula | null>(null);
-  const [copied, setCopied] = useState(false);
 
-  const handleFormulaClick = (id: string) => {
-    const formula = filteredFormulas.find(f => f.id === id);
-    if (formula) {
-      setSelectedFormula(formula);
-    }
-  };
+  const handleFormulaClick = useCallback((id: string) => {
+    setSelectedFormula(filteredFormulas.find(f => f.id === id) || null);
+  }, [filteredFormulas]);
 
   const handleCloseDetail = () => {
     setSelectedFormula(null);
   };
-
-  const handleCopyFormula = () => {
-    if (selectedFormula) {
-      navigator.clipboard.writeText(String(selectedFormula.formula));
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
-  // If a formula is selected, show the detail view
+  
+  // pop  up
   if (selectedFormula) {
     return (
       <div
@@ -77,33 +63,14 @@ export default function FormularPage({
                 <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
                   <Calculator className="w-5 h-5 text-indigo-600" />
                   រូបមន្ត
-                </h3>
-                <button
-                  onClick={handleCopyFormula}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all ${copied
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'
-                    }`}
-                >
-                  {copied ? (
-                    <>
-                      <Check className="w-4 h-4" />
-                      <span className="text-sm font-medium">ចម្លងរួច</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-4 h-4" />
-                      <span className="text-sm font-medium">ចម្លង</span>
-                    </>
-                  )}
-                </button>
+                </h3>               
               </div>
               <div className="text-2xl font-mono text-center py-4 text-gray-800 z-10 relative">
                 {selectedFormula.formula}
               </div>
             </div>
 
-            {/* Description (if any) */}
+            {/* Description  */}
             {selectedFormula.description && selectedFormula.description.trim() !== '' && (
               <div className="bg-white rounded-2xl p-6 border border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">ពណ៌នា</h3>
@@ -113,7 +80,6 @@ export default function FormularPage({
               </div>
             )}
 
-            {/* Variables (if any) */}
             {selectedFormula.variables && selectedFormula.variables.length > 0 && (
               <div className="bg-white rounded-3xl p-6 border border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">អថេរ</h3>
@@ -146,12 +112,9 @@ export default function FormularPage({
     );
   }
 
-  // Grid view
   return (
     <>
-      {loading ? (
-        <FormularSkeleton />
-      ) : filteredFormulas.length > 0 ? (
+      {filteredFormulas.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
           {filteredFormulas.map((formula) => (
             <FormularCard
