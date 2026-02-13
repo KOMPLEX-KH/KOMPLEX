@@ -9,33 +9,16 @@ interface SidebarProps {
 
 export const ExtraTabs = [
   { label: 'បណ្ណាល័យ', slug: 'library', href: '/extra/library' },
-  { label: 'រូបមន្ត', slug: 'formula', href: '/extra/formular' },
+  { label: 'រូបមន្ត', slug: 'formular', href: '/extra/formular' },
   { label: 'គណនាពិន្ទុ', slug: 'calculate', href: '/extra/calculate' },
 ];
 
 export default function Sidebar({ currentPath }: SidebarProps) {
-  
-  const [isScrollingDown, setIsScrollingDown] = useState(false);
-  const lastScrollY = useRef(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const y = window.scrollY;
-
-      setIsScrollingDown(y > lastScrollY.current && y > 50);
-      lastScrollY.current = y;
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <>
       {/* Mobile top bar */}
-      <div className={`lg:hidden fixed top-14 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 px-4 py-2 transition-transform duration-300 ${
-          isScrollingDown ? '-translate-y-[300%]' : 'translate-y-0'
-        }`}
+      <div className={`lg:hidden fixed top-14 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 px-4 py-2 transition-transform duration-300 `}
       >
         <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
           {ExtraTabs.map((tab) => (

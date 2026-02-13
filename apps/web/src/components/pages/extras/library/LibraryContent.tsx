@@ -12,7 +12,7 @@ import BookSelectedPage from "@/components/pages/extras/library/BookSelected";
 import type { Subject, Book } from "@core-types/content/library";
 import type { Grade } from "@/types/docs/curriculum";
 
-export default function LibraryPage() {
+export default function LibraryContent() {
  
   const router = useRouter();
   const searchParams = useSearchParams();
