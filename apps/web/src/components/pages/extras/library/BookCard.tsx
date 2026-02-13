@@ -1,13 +1,19 @@
 "use client";
 import { User } from "lucide-react";
+import { Book } from "@core-types/content/library";
 import Image from "next/image";
 
-export default function BookCard({ book, onClick }) {
+type Props = {
+    book: Book;
+    onClick?: (id: number) => void;
+}
+
+export default function BookCard({ book, onClick }: Props) {
     console.log('📖 Full book data:', book);
     
     return (
         <div className="bg-white rounded-3xl border-gray-200 border-1 overflow-hidden cursor-pointer"
-            onClick={()=> onClick && onClick(book.id)}>
+            onClick={() => onClick?.(book.id)}>
 
             <div className="w-full aspect-[9/13] overflow-hidden relative bg-gray-200">
                 <Image 
