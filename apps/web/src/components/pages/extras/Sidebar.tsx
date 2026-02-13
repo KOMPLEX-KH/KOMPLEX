@@ -1,19 +1,20 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 
 interface SidebarProps {
-  currentTab: number;
-  onTabChange: (index: number) => void;
+  currentPath: string;
 }
 
 export const ExtraTabs = [
-  { label: 'បណ្ណាល័យ', slug: 'library' },
-  { label: 'រូបមន្ត', slug: 'formula' },
-  { label: 'គណនាពិន្ទុ', slug: 'calculate' },
+  { label: 'បណ្ណាល័យ', slug: 'library', href: '/extra/library' },
+  { label: 'រូបមន្ត', slug: 'formula', href: '/extra/formular' },
+  { label: 'គណនាពិន្ទុ', slug: 'calculate', href: '/extra/calculate' },
 ];
 
-export default function Sidebar({ currentTab, onTabChange }: SidebarProps) {
+export default function Sidebar({ currentPath }: SidebarProps) {
+  
   const [isScrollingDown, setIsScrollingDown] = useState(false);
   const lastScrollY = useRef(0);
 
@@ -32,24 +33,22 @@ export default function Sidebar({ currentTab, onTabChange }: SidebarProps) {
   return (
     <>
       {/* Mobile top bar */}
-      <div
-        className={`lg:hidden fixed top-14 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 px-4 py-2 transition-transform duration-300 ${
+      <div className={`lg:hidden fixed top-14 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 px-4 py-2 transition-transform duration-300 ${
           isScrollingDown ? '-translate-y-[300%]' : 'translate-y-0'
         }`}
       >
         <div className="flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
-          {ExtraTabs.map((tab, i) => (
-            <button
-              key={tab.slug}
-              onClick={() => onTabChange(i)}
+          {ExtraTabs.map((tab) => (
+            <Link key={tab.slug}
+              href={tab.href}
               className={`px-3.5 py-1.5 rounded-full border border-indigo-500/10 sm:text-sm text-[13px] transition ${
-                currentTab === i
+                currentPath.startsWith(tab.href)
                   ? 'text-indigo-600 bg-indigo-50/80 font-semibold'
                   : 'text-gray-600 hover:text-indigo-500 hover:bg-indigo-50/60'
               }`}
             >
               {tab.label}
-            </button>
+            </Link>
           ))}
         </div>
       </div>
@@ -62,18 +61,18 @@ export default function Sidebar({ currentTab, onTabChange }: SidebarProps) {
         </div>
 
         <nav className="flex flex-col space-y-2">
-          {ExtraTabs.map((tab, i) => (
-            <button
+          {ExtraTabs.map((tab) => (
+            <Link
               key={tab.slug}
-              onClick={() => onTabChange(i)}
-              className={`text-left px-3 py-2 rounded-3xl ${
-                currentTab === i
+              href={tab.href}
+              className={`text-left px-3 py-2 rounded-3xl transition-colors ${
+                currentPath.startsWith(tab.href)
                   ? 'text-indigo-600 bg-indigo-50/80 font-semibold'
                   : 'text-gray-600 hover:text-indigo-500 hover:bg-indigo-50/60'
               }`}
             >
               {tab.label}
-            </button>
+            </Link>
           ))}
         </nav>
       </aside>

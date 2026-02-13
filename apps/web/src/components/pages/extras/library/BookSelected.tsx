@@ -22,7 +22,7 @@ export default function BookSelectedPage({ book, relatedBooks, curriculum }: Pro
       {/* Back Button */}
       <div className="flex items-center gap-3 mb-2">
         <button
-          onClick={() => router.push("?tab=library")}
+          onClick={() => router.push("/extra/library")}
           type="button"
           className="inline-flex items-center gap-2 text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none rounded-full px-2 py-2 font-semibold transition duration-200 select-none shadow-sm"
         >
@@ -97,7 +97,7 @@ export default function BookSelectedPage({ book, relatedBooks, curriculum }: Pro
             "
           >
             {relatedBooks.map((book) => (
-              <BookCard key={book.id} book={book} onClick={() => router.push(`?tab=library&book=${book.id}`)} />
+              <BookCard key={book.id} book={book} onClick={() => router.push(`/extra/library?book=${book.id}`)} />
             ))}
           </div>
         </section>

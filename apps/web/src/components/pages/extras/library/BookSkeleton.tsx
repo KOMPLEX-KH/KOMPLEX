@@ -49,8 +49,6 @@ export function ViewAllByCategorySkeleton() {
 }
 
 
-
-
 export function BookSelectedSkeleton() {
   return (
     <div className="w-full animate-pulse space-y-6">

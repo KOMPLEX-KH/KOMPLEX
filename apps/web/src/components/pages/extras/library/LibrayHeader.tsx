@@ -11,7 +11,7 @@ interface Props {
   filterRef: React.RefObject<HTMLButtonElement>;
   panelRef: React.RefObject<HTMLDivElement>;
   books: Book[];
-  onBookClick: (id: string) => void;
+  onBookClick: (id: number) => void;
   currentSubjectId?: number | null;
 }
 
@@ -80,7 +80,7 @@ export default function LibraryHeader({
 
               <button
                 key={book.id}
-                onClick={() => onBookClick(String(book.id))}
+                onClick={() => onBookClick(book.id)}
                 className="w-full flex gap-3 p-3 rounded-3xl hover:bg-gray-50 group"
               >
                 <div className="relative w-20 h-28 overflow-hidden rounded-md">
