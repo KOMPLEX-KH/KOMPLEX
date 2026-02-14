@@ -1,22 +1,10 @@
-export interface User {
-  id: number;
-  uid: string;
-  username: string;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string | null;
-  isAdmin: boolean;
-  isVerified: boolean;
-  isSocial: boolean;
-  email: string;
-  phone: string;
-  profileImage: string;
-  profileImageKey: string | null;
-  createdAt: string;
-  updatedAt: string;
-  numberOfFollowers: number;
-  numberOfFollowing: number;
-  totalLikesAndSaves: number;
+import { GetApiSchema, SchemaMap } from "../../utils/apiSchema";
+
+type MeResponse = GetApiSchema<typeof SchemaMap.MeResponse>;
+export type User = MeResponse & {
+  numberOfFollowers?: number;
+  numberOfFollowing?: number;
+  totalLikesAndSaves?: number;
   bio?: string;
   location?: string;
   isFollowing?: boolean;
@@ -26,4 +14,4 @@ export interface User {
     forums: number;
     exercises: number;
   };
-}
+};

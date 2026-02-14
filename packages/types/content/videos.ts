@@ -1,3 +1,4 @@
+import { GetApiSchema, SchemaMap } from "../../utils/apiSchema";
 import { Comment } from "./comments";
 import { Media } from "./media";
 
@@ -37,41 +38,22 @@ export interface VideoExercise {
   questions: ExerciseQuestion[];
 }
 
-export interface VideoPost {
-  id: number;
-  userId: number;
-  profileImage: string;
-  isFollowing: boolean;
-  title: string;
-  description: string;
-  duration: number;
-  videoUrl: string;
-  thumbnailUrl: string;
-  videoUrlForDeletion: string;
-  thumbnailUrlForDeletion: string;
-  viewCount: number;
-  createdAt: string;
-  updatedAt: string;
-  username: string;
-  isSave: boolean;
-  isLiked: boolean;
-  likeCount: number;
-  saveCount: number;
+type FeedVideosResponse = GetApiSchema<typeof SchemaMap.FeedVideosResponse>;
+type FeedVideoItem = FeedVideosResponse["data"][number];
+
+export type VideoPost = FeedVideoItem & {
+  videoUrlForDeletion?: string;
+  thumbnailUrlForDeletion?: string;
+  isSave?: boolean;
   exercises?: VideoExercise[];
-}
+};
 
 export interface VideoComment extends Comment {
   videoId: number;
 }
 
-export interface VideoHistory {
-  id: number;
-  videoId: number;
-  createdAt: string;
-  updatedAt: string;
-  title: string;
-  thumbnailUrl: string;
-}
+type MeVideoHistoryResponse = GetApiSchema<typeof SchemaMap.MeVideoHistoryResponse>;
+export type VideoHistory = MeVideoHistoryResponse["data"][number];
 
 export interface VideoReply {
   id: number;

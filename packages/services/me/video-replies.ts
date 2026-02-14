@@ -1,5 +1,4 @@
 import type { AxiosInstance } from "axios";
-import type { VideoComment } from "../../types/content/videos";
 
 export const createMeVideoReplyService = (api: AxiosInstance) => {
   return {
@@ -7,9 +6,9 @@ export const createMeVideoReplyService = (api: AxiosInstance) => {
     createVideoReply: async (
       commentId: number,
       description: string
-    ): Promise<VideoComment> => {
+    ) => {
       try {
-        const response = await api.post<VideoComment>(
+        const response = await api.post(
           `/me/video-replies/${commentId}`,
           {
             description,
@@ -26,10 +25,11 @@ export const createMeVideoReplyService = (api: AxiosInstance) => {
     toggleVideoReplyLike: async (
       replyId: number,
       isLiked: boolean
-    ): Promise<void> => {
+    ) => {
       try {
         const endpoint = isLiked ? "unlike" : "like";
-        await api.patch(`/me/video-replies/${replyId}/${endpoint}`);
+        const response = await api.patch(`/me/video-replies/${replyId}/${endpoint}`);
+        return response.data;
       } catch (error) {
         console.error("Error toggling video reply like:", error);
         throw new Error("Failed to update video reply like status");

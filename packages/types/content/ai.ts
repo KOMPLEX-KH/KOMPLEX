@@ -1,23 +1,25 @@
+import { GetApiSchema, SchemaMap } from "../../utils/apiSchema";
+
 export type AIResponseType = "normal" | "komplex";
 
-export interface AIResponse {
+type MePostAiGeneralResponse = GetApiSchema<typeof SchemaMap.MePostAiGeneralResponse>;
+export type AIResponse = {
   prompt: string;
   data: {
     aiResult: string;
     id: number;
   };
   responseType: AIResponseType;
-}
+} & MePostAiGeneralResponse["data"];
 
-export interface AIHistoryItem {
-  id: number;
-  userId: number;
-  prompt: string;
-  aiResult: string;
+type MeAiGeneralTabHistoryResponse = GetApiSchema<typeof SchemaMap.MeAiGeneralTabHistoryResponse>;
+export type AIHistoryItem = MeAiGeneralTabHistoryResponse["data"][number] & {
+  id?: number;
+  userId?: number;
+  createdAt?: string;
+  updatedAt?: string;
   responseType?: AIResponseType;
-  createdAt: string;
-  updatedAt: string;
-}
+};
 
 export interface AIHistoryResponse {
   data: AIHistoryItem[];
@@ -33,7 +35,5 @@ export interface Message {
   responseType?: AIResponseType;
 }
 
-export interface AiTab {
-  id: number;
-  name: string;
-}
+type MeAiGeneralTabsResponse = GetApiSchema<typeof SchemaMap.MeAiGeneralTabsResponse>;
+export type AiTab = MeAiGeneralTabsResponse["data"][number];

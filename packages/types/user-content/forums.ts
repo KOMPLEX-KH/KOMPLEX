@@ -1,34 +1,20 @@
+import { GetApiSchema, SchemaMap } from "../../utils/apiSchema";
 import { Media } from "./media";
 
-export interface ForumPost {
-  id: number;
-  userId: number;
-  title: string;
-  description: string;
-  type: "discussion" | "question" | "announcement";
-  topic: "math" | "physics" | "chemistry" | "biology" | "general";
-  viewCount: number;
-  likeCount: number;
-  commentCount: number;
-  createdAt: string;
-  updatedAt: string;
-  media: Media[];
-  username: string;
-  isLike: boolean;
-}
+type UserForumsResponse = GetApiSchema<typeof SchemaMap.UserForumsResponse>;
+export type ForumPost = UserForumsResponse["data"][number] & {
+  likeCount?: number;
+  commentCount?: number;
+  isLike?: boolean;
+};
 
-export interface ForumComment {
-  id: number;
-  userId: number;
-  forumId: number;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  media: Media[];
-  username: string;
-  isLike: boolean;
-}
+type MePostForumCommentResponse = GetApiSchema<typeof SchemaMap.MePostForumCommentResponse>;
+export type ForumComment = MePostForumCommentResponse["data"] & {
+  forumId?: number;
+  isLike?: boolean;
+};
 
+// ForumReply doesn't have a direct schema, keeping the interface
 export interface ForumReply {
   id: number;
   userId: number;

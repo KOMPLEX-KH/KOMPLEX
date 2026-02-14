@@ -1,5 +1,6 @@
-export interface LastAccessed {
-    lastTopic: { id: number; name: string } | null;
-    lastVideo: { id: number; title: string } | null;
-    lastAiTab: { id: number; name: string } | null;
-  }
+import { GetApiSchema, SchemaMap } from "../utils/apiSchema";
+
+type MeLastAccessedResponse = GetApiSchema<typeof SchemaMap.MeLastAccessedResponse>;
+export type LastAccessed = MeLastAccessedResponse["data"] extends null 
+  ? { lastTopic: null; lastVideo: null; lastAiTab: null }
+  : MeLastAccessedResponse["data"];

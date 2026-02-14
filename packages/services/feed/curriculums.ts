@@ -7,7 +7,7 @@ export const createFeedCurriculumsService = (api: AxiosInstance) => {
     getCurriculum: async (): Promise<Grade[]> => {
       try {
         const response = await api.get("/feed/curriculums");
-        return response.data.data;
+        return response.data;
       } catch (error) {
         console.error("Error fetching curriculum:", error);
         throw new Error("Failed to fetch curriculum");
@@ -18,7 +18,7 @@ export const createFeedCurriculumsService = (api: AxiosInstance) => {
     getTopicComponent: async (topicId: string): Promise<any> => {
       try {
         const response = await api.get(`/feed/curriculums/${topicId}`);
-        return response.data.data;
+        return response.data;
       } catch (error) {
         console.error("Error fetching curriculum component:", error);
         throw new Error("Failed to fetch curriculum component");

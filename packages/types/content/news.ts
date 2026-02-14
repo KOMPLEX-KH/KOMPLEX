@@ -1,19 +1,5 @@
+import { GetApiSchema, SchemaMap } from "../../utils/apiSchema";
 import { Media } from "./media";
 
-export interface News {
-  id: number;
-  userId: number;
-  profileImage: string;
-  isFollowing: boolean;
-  username: string;
-  title: string;
-  type: string;
-  topic: string;
-  description: string;
-  viewCount: number;
-  likeCount: number;
-  createdAt: string;
-  updatedAt: string;
-  isSaved: boolean;
-  media: Media[];
-}
+type FeedNewsResponse = GetApiSchema<typeof SchemaMap.FeedNewsResponse>;
+export type News = FeedNewsResponse["data"][number];

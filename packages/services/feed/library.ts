@@ -3,7 +3,7 @@ import type { Book, Subject, Grade, Lesson } from "../../types/content/library";
 
 export const createFeedLibraryService = (api: AxiosInstance) => {
   return {
-    
+
     // Get all books
     getAllBooks: async (): Promise<{
       books: Book[];
@@ -11,7 +11,7 @@ export const createFeedLibraryService = (api: AxiosInstance) => {
     }> => {
       try {
         const response = await api.get(`/feed/librarys?_t=${Date.now()}`);
-        const books = response.data.data || response.data;
+        const books = response.data;
         return {
           books: books,
           hasMore: response.data.hasMore || false,
@@ -26,7 +26,7 @@ export const createFeedLibraryService = (api: AxiosInstance) => {
     getBookById: async (id: string): Promise<Book> => {
       try {
         const response = await api.get(`/feed/librarys/${id}`);
-        return response.data.data || response.data;
+        return response.data;
       } catch (error) {
         console.error("Error fetching book:", error);
         throw new Error("Failed to fetch book");
@@ -38,7 +38,7 @@ export const createFeedLibraryService = (api: AxiosInstance) => {
       try {
         const response = await api.get(`/feed/librarys/subjects`);
         return {
-          subjects: response.data.data || response.data || [],
+          subjects: response.data,
         };
       } catch (error) {
         console.error("Error fetching subjects:", error);
@@ -51,7 +51,7 @@ export const createFeedLibraryService = (api: AxiosInstance) => {
       try {
         const response = await api.get(`/feed/librarys/grades`);
         return {
-          grades: response.data.data || response.data || [],
+          grades: response.data
         };
       } catch (error) {
         console.error("Error fetching grades:", error);
@@ -64,7 +64,7 @@ export const createFeedLibraryService = (api: AxiosInstance) => {
       try {
         const response = await api.get(`/feed/librarys/lessons`);
         return {
-          lessons: response.data.data || response.data || [],
+          lessons: response.data
         };
       } catch (error) {
         console.error("Error fetching lessons:", error);

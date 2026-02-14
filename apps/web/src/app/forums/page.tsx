@@ -4,13 +4,15 @@ import ForumCard from "@/components/pages/forums/ForumCard";
 import ForumSkeleton from "@/components/pages/forums/ForumSkeleton";
 import ContentError from "@/components/common/ContentError";
 import { useState, useEffect } from "react";
-import { ForumPost } from "@/types/content/forums";
 import { feedForumService, feedSearchForumService, meForumService } from "@/services/index";
 import Sidebar from "@/components/pages/forums/Sidebar";
+import { GetApiSchema, SchemaMap } from "@core-utils/apiSchema";
+
+type FeedForumsResponse = GetApiSchema<typeof SchemaMap.FeedForumsResponse>;
 
 export default function Forum() {
 	const [searchQuery, setSearchQuery] = useState("");
-	const [forumPosts, setForumPosts] = useState<ForumPost[]>([]);
+	const [forumPosts, setForumPosts] = useState<FeedForumsResponse["data"]>([]);
 	const [loading, setLoading] = useState(true);
 	const [isSearching, setIsSearching] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -19,9 +21,9 @@ export default function Forum() {
 		try {
 			setLoading(true);
 			setError(null);
-			const { forums } = await feedForumService.getAllForums();
-			if (forums.length > 0) {
-				setForumPosts(forums);
+			const forums = await feedForumService.getAllForums();
+			if (forums.data.length > 0) {
+				setForumPosts(forums.data);
 			} else {
 				setError("រកមិនឃើញអត្ថបទ");
 			}

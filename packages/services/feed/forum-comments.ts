@@ -7,7 +7,7 @@ export const createFeedForumCommentService = (api: AxiosInstance) => {
     getForumComments: async (forumId: string): Promise<ForumComment[]> => {
       try {
         const response = await api.get(`/feed/forum-comments/${forumId}`);
-        return response.data.data;
+        return response.data;
       } catch (error) {
         console.error("Error fetching forum comments:", error);
         throw new Error("Failed to fetch forum comments");

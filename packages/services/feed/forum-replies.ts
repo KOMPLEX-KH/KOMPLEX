@@ -7,7 +7,7 @@ export const createFeedForumReplyService = (api: AxiosInstance) => {
     getForumReplies: async (commentId: number): Promise<ForumReply[]> => {
       try {
         const response = await api.get(`/feed/forum-replies/${commentId}`);
-        return response.data.data;
+        return response.data;
       } catch (error) {
         console.error("Error fetching forum replies:", error);
         throw new Error("Failed to fetch forum replies");

@@ -11,12 +11,10 @@ export const createMeAiService = (api: AxiosInstance) => {
     // ---- AI General (Tabs) ----
 
     // Get all AI general tab names
-    getAllAiGeneralTabNames: async (): Promise<AiTab[]> => {
+    getAllAiGeneralTabNames: async () => {
       try {
-        const response = await api.get<{ data: AiTab[] }>(
-          "/me/ai/general/tabs"
-        );
-        return response.data.data;
+        const response = await api.get(`/me/ai/general/tabs`);
+        return response.data;
       } catch (error) {
         console.error("Error fetching AI general tab names:", error);
         throw new Error("Failed to get AI general tab names");
@@ -28,17 +26,14 @@ export const createMeAiService = (api: AxiosInstance) => {
       tabId: string,
       page: number = 1,
       limit: number = 20
-    ): Promise<AIHistoryResponse> => {
+    ) => {
       try {
-        const response = await api.get<AIHistoryResponse>(
-          `/me/ai/general/tabs/${tabId}`,
-          {
-            params: {
-              page,
-              limit,
-            },
-          }
-        );
+        const response = await api.get(`/me/ai/general/tabs/${tabId}`, {
+          params: {
+            page,
+            limit,
+          },
+        });
         return response.data;
       } catch (error) {
         console.error("Error fetching AI general history by tab:", error);
@@ -53,7 +48,7 @@ export const createMeAiService = (api: AxiosInstance) => {
         language?: string;
         responseType?: AIResponseType;
       }
-    ): Promise<AIResponse> => {
+    ) => {
       try {
         const payload: {
           prompt: string;
@@ -69,7 +64,7 @@ export const createMeAiService = (api: AxiosInstance) => {
           payload.responseType = options.responseType;
         }
 
-        const response = await api.post<AIResponse>("/me/ai/general/tabs", {
+        const response = await api.post(`/me/ai/general/tabs`, {
           ...payload,
         });
         return response.data;
@@ -87,7 +82,7 @@ export const createMeAiService = (api: AxiosInstance) => {
         language?: string;
         responseType?: AIResponseType;
       }
-    ): Promise<AIResponse> => {
+    ) => {
       try {
         const payload: {
           prompt: string;
@@ -103,12 +98,9 @@ export const createMeAiService = (api: AxiosInstance) => {
           payload.responseType = options.responseType;
         }
 
-        const response = await api.post<AIResponse>(
-          `/me/ai/general/tabs/${tabId}`,
-          {
-            ...payload,
-          }
-        );
+        const response = await api.post(`/me/ai/general/tabs/${tabId}`, {
+          ...payload,
+        });
         return response.data;
       } catch (error) {
         console.error("Error calling AI general:", error);
@@ -119,10 +111,10 @@ export const createMeAiService = (api: AxiosInstance) => {
     // ---- AI Topics ----
 
     // Get all AI topic names
-    getAllAiTopicTabNames: async (): Promise<AiTab[]> => {
+    getAllAiTopicTabNames: async () => {
       try {
-        const response = await api.get<{ data: AiTab[] }>("/me/ai/topics");
-        return response.data.data;
+        const response = await api.get(`/me/ai/topics`);
+        return response.data;
       } catch (error) {
         console.error("Error fetching AI topic tab names:", error);
         throw new Error("Failed to get AI topic tab names");
@@ -134,16 +126,14 @@ export const createMeAiService = (api: AxiosInstance) => {
       topicId: number,
       page: number = 1,
       limit: number = 20
-    ): Promise<AIHistoryResponse> => {
+    ) => {
       try {
-        const response = await api.get<AIHistoryResponse>(
-          `/me/ai/topics/${topicId}`,
-          {
-            params: {
-              page,
-              limit,
-            },
-          }
+        const response = await api.get(`/me/ai/topics/${topicId}`, {
+          params: {
+            page,
+            limit,
+          },
+        }
         );
         return response.data;
       } catch (error) {
@@ -157,14 +147,12 @@ export const createMeAiService = (api: AxiosInstance) => {
       prompt: string,
       topicId: number,
       responseType: AIResponseType
-    ): Promise<AIResponse> => {
+    ) => {
       try {
-        const response = await api.post<AIResponse>(
-          `/me/ai/topics/${topicId}`,
-          {
-            prompt,
-            responseType,
-          }
+        const response = await api.post(`/me/ai/topics/${topicId}`, {
+          prompt,
+          responseType,
+        }
         );
         return response.data;
       } catch (error) {
@@ -177,7 +165,7 @@ export const createMeAiService = (api: AxiosInstance) => {
       id: number,
       rating: number,
       ratingFeedback: string
-    ): Promise<void> => {
+    ) => {
       try {
         await api.post(`/me/ai/general/rating/${id}`, {
           rating,
@@ -192,7 +180,7 @@ export const createMeAiService = (api: AxiosInstance) => {
       id: number,
       rating: number,
       ratingFeedback: string
-    ): Promise<void> => {
+    ) => {
       try {
         await api.post(`/me/ai/topics/rating/${id}`, {
           rating,
@@ -205,7 +193,7 @@ export const createMeAiService = (api: AxiosInstance) => {
     },
 
     // Delete AI general tab
-    deleteAiGeneralTab: async (tabId: number): Promise<void> => {
+    deleteAiGeneralTab: async (tabId: number) => {
       try {
         await api.delete(`/me/ai/general/tabs/${tabId}`);
       } catch (error) {
@@ -218,7 +206,7 @@ export const createMeAiService = (api: AxiosInstance) => {
     updateAiGeneralTabName: async (
       tabId: number,
       tabName: string
-    ): Promise<void> => {
+    ) => {
       try {
         await api.put(`/me/ai/general/tabs/${tabId}`, {
           tabName,
@@ -230,7 +218,7 @@ export const createMeAiService = (api: AxiosInstance) => {
     },
 
     // Delete AI topic tab
-    deleteAiTopicTab: async (topicId: number): Promise<void> => {
+    deleteAiTopicTab: async (topicId: number) => {
       try {
         await api.delete(`/me/ai/topics/${topicId}`);
       } catch (error) {

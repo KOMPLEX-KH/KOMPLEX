@@ -4,16 +4,13 @@ import type { VideoPost } from "../../types/content/videos";
 export const createFeedVideoService = (api: AxiosInstance) => {
   return {
     // Get all videos
-    getAllVideos: async (): Promise<{
-      data: VideoPost[];
-      hasMore: boolean;
-    }> => {
+    getAllVideos: async () => {
       try {
         const response = await api.get<{ data: VideoPost[]; hasMore: boolean }>(
           `/feed/videos`
         );
         return {
-          data: response.data.data,
+          data: response.data,
           hasMore: response.data.hasMore,
         };
       } catch (error) {
@@ -25,10 +22,8 @@ export const createFeedVideoService = (api: AxiosInstance) => {
     // Get video by ID
     getVideoById: async (id: string): Promise<VideoPost> => {
       try {
-        const response = await api.get<{ data: VideoPost }>(
-          `/feed/videos/${id}`
-        );
-        return response.data.data;
+        const response = await api.get(`/feed/videos/${id}`);
+        return response.data;
       } catch (error) {
         console.error("Error fetching video by ID:", error);
         throw new Error("Failed to fetch video");
@@ -38,9 +33,7 @@ export const createFeedVideoService = (api: AxiosInstance) => {
     // Get exercises for a video
     getVideoExercises: async (videoId: string): Promise<unknown[]> => {
       try {
-        const response = await api.get<unknown[]>(
-          `/feed/videos/${videoId}/exercise`
-        );
+        const response = await api.get(`/feed/videos/${videoId}/exercise`);
         return response.data;
       } catch (error) {
         console.error("Error fetching video exercises:", error);
@@ -54,12 +47,12 @@ export const createFeedVideoService = (api: AxiosInstance) => {
       videoId: number,
       limit: number = 5,
       offset: number = 0
-    ): Promise<VideoPost[]> => {
+    ) => {
       try {
-        const response = await api.get<{ data: VideoPost[] }>(
+        const response = await api.get(
           `/feed/videos/${videoId}/recommended?limit=${limit}&offset=${offset}`
         );
-        return response.data.data;
+        return response.data;
       } catch (error) {
         console.error("Error fetching recommended videos:", error);
         throw new Error("Failed to fetch recommended videos");
