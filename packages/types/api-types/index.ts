@@ -519,7 +519,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["FeedForumsResponse"];
+                            data: components["schemas"]["FeedForumItemSchema"][];
                         };
                     };
                 };
@@ -572,7 +572,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data?: unknown;
+                            data: components["schemas"]["FeedForumItemResponseSchema"];
                         };
                     };
                 };
@@ -625,7 +625,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data?: unknown;
+                            data: components["schemas"]["FeedForumCommentItemResponseSchema"][];
                         };
                     };
                 };
@@ -652,7 +652,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/komplex/feed/forums/:id/comments/:id/replies": {
+    "/komplex/feed/forums/comments/:commentId/replies": {
         parameters: {
             query?: never;
             header?: never;
@@ -678,7 +678,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data?: unknown;
+                            data: components["schemas"]["FeedForumReplyItemResponseSchema"][];
                         };
                     };
                 };
@@ -943,7 +943,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["FeedCurriculumsResponse"];
+                            data: components["schemas"]["FeedCurriculumsResponseSchema"];
                         };
                     };
                 };
@@ -996,7 +996,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data?: unknown;
+                            data: components["schemas"]["CurriculumTopicResponse"];
                         };
                     };
                 };
@@ -1795,7 +1795,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeLastAccessedResponse"];
+                            data: components["schemas"]["MeLastAccessedResponseSchema"];
                         };
                     };
                 };
@@ -4628,30 +4628,77 @@ export interface components {
             }[];
             hasMore: boolean;
         };
-        FeedForumsResponse: {
-            data: {
-                id: number;
-                userId: number;
-                title: string;
-                description?: string | null;
-                type: string;
-                topic?: string | null;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-                username: string;
-                profileImage?: string | null;
-                media: {
-                    url: string;
-                    type: string;
-                }[];
-                viewCount: number;
-                likeCount: number;
-                isLiked: boolean;
-                isFollowing: boolean;
-            }[];
-            hasMore: boolean;
+        FeedForumItemSchema: {
+            id: number;
+            userId: number;
+            title: string;
+            description?: string | null;
+            type: string;
+            topic?: string | null;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
+            username: string;
+            profileImage?: string | null;
+            media: components["schemas"]["MediaSchema"][];
+            viewCount: number;
+            likeCount: number;
+            isLiked: boolean;
+            isFollowing: boolean;
+        };
+        MediaSchema: {
+            url: string;
+            type: string;
+        };
+        FeedForumItemResponseSchema: {
+            id: number;
+            userId: number;
+            title: string;
+            description?: string | null;
+            type: string;
+            topic?: string | null;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
+            username: string;
+            profileImage?: string | null;
+            media: components["schemas"]["MediaSchema"][];
+            viewCount: number;
+            likeCount: number;
+            isLiked: boolean;
+            isFollowing: boolean;
+        };
+        FeedForumCommentItemResponseSchema: {
+            id: number;
+            userId: number;
+            forumId: number;
+            description: string;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
+            media: components["schemas"]["MediaSchema"][];
+            username: string;
+            profileImage?: string | null;
+            likeCount: number;
+            isLiked: boolean;
+        };
+        FeedForumReplyItemResponseSchema: {
+            id: number;
+            userId: number;
+            forumCommentId: number;
+            description: string;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
+            media: components["schemas"]["MediaSchema"][];
+            username: string;
+            profileImage?: string | null;
+            likeCount: number;
+            isLiked: boolean;
         };
         FeedNewsResponse: {
             data: {
@@ -4690,30 +4737,38 @@ export interface components {
                 highestScore?: number | null;
             }[];
         };
-        FeedCurriculumsResponse: {
-            data: {
-                id: number;
-                name: string;
-                orderIndex?: number | null;
-                subjects: {
-                    id: number;
-                    name: string;
-                    icon?: string | null;
-                    orderIndex?: number | null;
-                    lessons: {
-                        id: number;
-                        name: string;
-                        icon?: string | null;
-                        topics: {
-                            id: number;
-                            name: string;
-                            exerciseId?: number | null;
-                            orderIndex?: number | null;
-                        }[];
-                        orderIndex?: number | null;
-                    }[];
-                }[];
-            }[];
+        FeedCurriculumsResponseSchema: {
+            data: components["schemas"]["GradeSchema"][];
+        };
+        GradeSchema: {
+            id: number;
+            name: string;
+            orderIndex?: number | null;
+            subjects: components["schemas"]["SubjectSchema"][];
+        };
+        SubjectSchema: {
+            id: number;
+            name: string;
+            icon?: string | null;
+            orderIndex?: number | null;
+            lessons: components["schemas"]["LessonSchema"][];
+        };
+        LessonSchema: {
+            id: number;
+            name: string;
+            icon?: string | null;
+            topics: components["schemas"]["TopicSchema"][];
+            orderIndex?: number | null;
+        };
+        TopicSchema: {
+            id: number;
+            name: string;
+            exerciseId?: number | null;
+            orderIndex?: number | null;
+        };
+        CurriculumTopicResponse: {
+            component: unknown[];
+            componentCode: string;
         };
         FeedBooksResponse: {
             data: {
@@ -4952,25 +5007,16 @@ export interface components {
                 contentType: "news" | "video" | "exercise" | "forum";
             }[];
         };
-        MeLastAccessedResponse: {
-            data: {
-                lastTopic: {
-                    id: number;
-                    name?: string;
-                    title?: string;
-                } | null;
-                lastVideo: {
-                    id: number;
-                    name?: string;
-                    title?: string;
-                } | null;
-                lastAiTab: {
-                    id: number;
-                    name?: string;
-                    title?: string;
-                } | null;
-            } | null;
-        };
+        MeLastAccessedResponseSchema: {
+            lastTopic: components["schemas"]["LastAccessedItemSchema"];
+            lastVideo: components["schemas"]["LastAccessedItemSchema"];
+            lastAiTab: components["schemas"]["LastAccessedItemSchema"];
+        } | null;
+        LastAccessedItemSchema: {
+            id: number;
+            name?: string;
+            title?: string;
+        } | null;
         MeVideoHistoryResponse: {
             data: {
                 id: number;

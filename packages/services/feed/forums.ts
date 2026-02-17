@@ -1,15 +1,14 @@
-import { GetApiSchema, SchemaMap } from './../../utils/apiSchema';
+import { ApiWrapper } from './../../types/apiWrapper';
+import { ForumPost } from '@core-types/content/forums';
 
 import type { AxiosInstance } from "axios";
-
-type FeedForumsResponse = GetApiSchema<typeof SchemaMap.FeedForumsResponse>;
 
 export const createFeedForumService = (api: AxiosInstance) => {
   return {
     // Get all forum posts
-    getAllForums: async (): Promise<FeedForumsResponse> => {
+    getAllForums: async (): Promise<ApiWrapper<ForumPost[]>> => {
       try {
-        const response = await api.get(`/feed/forums`);
+        const response = await api.get<ApiWrapper<ForumPost[]>>(`/feed/forums`);
         return response.data;
       } catch (error) {
         console.error("Error fetching all forums:", error);
@@ -18,9 +17,9 @@ export const createFeedForumService = (api: AxiosInstance) => {
     },
 
     // Get a single forum post by ID
-    getForumById: async (id: string): Promise<FeedForumsResponse> => {
+    getForumById: async (id: string): Promise<ApiWrapper<ForumPost>> => {
       try {
-        const response = await api.get(`/feed/forums/${id}`);
+        const response = await api.get<ApiWrapper<ForumPost>>(`/feed/forums/${id}`);
         return response.data;
       } catch (error) {
         console.error("Error fetching forum post:", error);

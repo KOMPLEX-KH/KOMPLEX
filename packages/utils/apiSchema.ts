@@ -1,6 +1,6 @@
-import type { components, paths } from "../types/api-types/index";
+import type { components } from "../types/api-types/index";
 
-// Simple schema extractor
+
 export type GetApiSchema<
     T extends SchemaKey
 > = components["schemas"][T];
@@ -14,10 +14,19 @@ export const SchemaMap = {
     UploadUrlResponse: "UploadUrlResponse",
     UploadUrlBody: "UploadUrlBody",
     FeedVideosResponse: "FeedVideosResponse",
-    FeedForumsResponse: "FeedForumsResponse",
+    FeedForumItemSchema: "FeedForumItemSchema",
+    MediaSchema: "MediaSchema",
+    FeedForumItemResponseSchema: "FeedForumItemResponseSchema",
+    FeedForumCommentItemResponseSchema: "FeedForumCommentItemResponseSchema",
+    FeedForumReplyItemResponseSchema: "FeedForumReplyItemResponseSchema",
     FeedNewsResponse: "FeedNewsResponse",
     FeedExercisesResponse: "FeedExercisesResponse",
-    FeedCurriculumsResponse: "FeedCurriculumsResponse",
+    FeedCurriculumsResponseSchema: "FeedCurriculumsResponseSchema",
+    GradeSchema: "GradeSchema",
+    SubjectSchema: "SubjectSchema",
+    LessonSchema: "LessonSchema",
+    TopicSchema: "TopicSchema",
+    CurriculumTopicResponse: "CurriculumTopicResponse",
     FeedBooksResponse: "FeedBooksResponse",
     FeedBooksByLessonResponse: "FeedBooksByLessonResponse",
     FeedBooksBySubjectResponse: "FeedBooksBySubjectResponse",
@@ -32,7 +41,8 @@ export const SchemaMap = {
     MeResponse: "MeResponse",
     MeProfileResponse: "MeProfileResponse",
     MeDashboardResponse: "MeDashboardResponse",
-    MeLastAccessedResponse: "MeLastAccessedResponse",
+    MeLastAccessedResponseSchema: "MeLastAccessedResponseSchema",
+    LastAccessedItemSchema: "LastAccessedItemSchema",
     MeVideoHistoryResponse: "MeVideoHistoryResponse",
     MePostFeedbackResponse: "MePostFeedbackResponse",
     MePostFeedbackBody: "MePostFeedbackBody",
@@ -74,4 +84,7 @@ export const SchemaMap = {
     MeRateAiTopicBody: "MeRateAiTopicBody",
 } as const;
 
-export type SchemaKey = typeof SchemaMap[keyof typeof SchemaMap];
+export type SchemaKey = keyof typeof SchemaMap;
+
+// Helper type to get schema by key (fixes type error on index)
+export type GetApiSchema<T extends SchemaKey> = components["schemas"][typeof SchemaMap[T]];

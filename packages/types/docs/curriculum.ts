@@ -1,43 +1,17 @@
-// ===== CURRICULUM STRUCTURE TYPES =====
-// These types define the hierarchical structure of the educational curriculum
-// From Grade → Subject → Lesson → Topic
+import { GetApiSchema, SchemaMap } from "../../utils/apiSchema";
 
-import { FC } from "react";
+// Extract types from generated API schemas
+type GradeSchema = GetApiSchema<typeof SchemaMap.GradeSchema>;
+type SubjectSchema = GetApiSchema<typeof SchemaMap.SubjectSchema>;
+type LessonSchema = GetApiSchema<typeof SchemaMap.LessonSchema>;
+type TopicSchema = GetApiSchema<typeof SchemaMap.TopicSchema>;
+type FeedCurriculumsResponseSchema = GetApiSchema<typeof SchemaMap.FeedCurriculumsResponseSchema>;
+type CurriculumTopicResponseSchema = GetApiSchema<typeof SchemaMap.CurriculumTopicResponse>;
 
-// ===== CURRICULUM HIERARCHY =====
-
-// Grade level (e.g., Grade 12)
-export interface Grade {
-  id: number;
-  name: string; // Khmer grade name (e.g., "ថ្នាក់ទី១២")
-  subjects: Subject[]; // Subjects within this grade
-  orderIndex: number;
-}
-
-// Subject within a grade (e.g., Mathematics, Physics)
-export interface Subject {
-  id: number;
-  name: string; // Khmer subject name (e.g., "គណិតវិទ្យា")
-  icon: string; // Subject icon
-  lessons: Lesson[]; // Lessons within this subject
-  orderIndex: number;
-}
-
-// Lesson within a subject (e.g., Limits, Derivatives)
-export interface Lesson {
-  id: number;
-  name: string; // Khmer lesson name (e.g., "លីមីត")
-  icon: string; // Lesson icon
-  topics: Topic[]; // Topics within this lesson
-  orderIndex: number;
-}
-
-// Individual topic within a lesson (e.g., Zero over Zero, Infinity over Infinity)
-export interface Topic {
-  id: number;
-  name: string; // Khmer topic name (e.g., "លីមីត ០/០")
-  component: string;
-  componentCode: string;
-  orderIndex: number;
-  exerciseId: number | null;
-}
+// Export with names matching usage
+export type Grade = GradeSchema;
+export type Subject = SubjectSchema;
+export type Lesson = LessonSchema;
+export type Topic = TopicSchema;
+export type FeedCurriculumsResponse = FeedCurriculumsResponseSchema;
+export type CurriculumTopicResponse = CurriculumTopicResponseSchema;

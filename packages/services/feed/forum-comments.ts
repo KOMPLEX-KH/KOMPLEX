@@ -1,12 +1,13 @@
 import type { AxiosInstance } from "axios";
 import type { ForumComment } from "../../types/content/forums";
+import { ApiWrapper } from "../../types/apiWrapper";
 
 export const createFeedForumCommentService = (api: AxiosInstance) => {
   return {
     // Get comments for a forum post
-    getForumComments: async (forumId: string): Promise<ForumComment[]> => {
+    getForumComments: async (forumId: string): Promise<ApiWrapper<ForumComment[]>> => {
       try {
-        const response = await api.get(`/feed/forum-comments/${forumId}`);
+        const response = await api.get<ApiWrapper<ForumComment[]>>(`/feed/forums/${forumId}/comments`);
         return response.data;
       } catch (error) {
         console.error("Error fetching forum comments:", error);

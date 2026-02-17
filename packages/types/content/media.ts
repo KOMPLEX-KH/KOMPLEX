@@ -1,4 +1,4 @@
-export interface Media {
-    url: string;
-    type: "image" | "video";
-  }
+import { GetApiSchema, SchemaMap } from "@core-utils/apiSchema";
+
+type MediaSchema = GetApiSchema<typeof SchemaMap.MediaSchema>;
+export type Media = MediaSchema;

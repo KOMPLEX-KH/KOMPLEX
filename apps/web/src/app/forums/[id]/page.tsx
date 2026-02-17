@@ -8,7 +8,7 @@ import ContentError from '@/components/common/ContentError';
 import Comments from '@/components/common/comments/Comments';
 import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'next/navigation';
-import { ForumPost } from '@/types/content/forums';
+import { ForumPost } from '@core-types/content/forums';
 import { feedForumService, meForumService } from '@/services/index';
 import { useAuth } from '@hooks/useAuth';
 import { BackButton } from '@/components/common/BackButton';
@@ -29,9 +29,12 @@ export default function ForumDiscussion() {
             setError(null);
 
             const postData = await feedForumService.getForumById(id);
-            setPost(postData);
+            if (postData.success) {
+                setPost(postData.data);
+            } else {
+                setError('មានបញ្ហាក្នុងការទាញយកទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។');
+            }
         } catch (error) {
-            console.error('Error fetching data:', error);
             setError('មានបញ្ហាក្នុងការទាញយកទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។');
         } finally {
             setLoading(false);

@@ -117,7 +117,6 @@ export const createUploadService = (api: AxiosInstance) => {
 
         return key;
       } catch (error) {
-        console.error("Error uploading file with progress:", error);
         throw new Error("Failed to upload file");
       }
     },

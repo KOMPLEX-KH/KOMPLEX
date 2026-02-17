@@ -6,13 +6,11 @@ import ContentError from "@/components/common/ContentError";
 import { useState, useEffect } from "react";
 import { feedForumService, feedSearchForumService, meForumService } from "@/services/index";
 import Sidebar from "@/components/pages/forums/Sidebar";
-import { GetApiSchema, SchemaMap } from "@core-utils/apiSchema";
-
-type FeedForumsResponse = GetApiSchema<typeof SchemaMap.FeedForumsResponse>;
+import { ForumPost } from "@core-types/content/forums";
 
 export default function Forum() {
 	const [searchQuery, setSearchQuery] = useState("");
-	const [forumPosts, setForumPosts] = useState<FeedForumsResponse["data"]>([]);
+	const [forumPosts, setForumPosts] = useState<ForumPost[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [isSearching, setIsSearching] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -22,13 +20,12 @@ export default function Forum() {
 			setLoading(true);
 			setError(null);
 			const forums = await feedForumService.getAllForums();
-			if (forums.data.length > 0) {
+			if (forums.success && forums.data.length > 0) {
 				setForumPosts(forums.data);
 			} else {
 				setError("រកមិនឃើញអត្ថបទ");
 			}
 		} catch (err) {
-			console.error("Error fetching forum posts:", err);
 			setError("មានបញ្ហាក្នុងការទាញយកទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។");
 		} finally {
 			setLoading(false);
