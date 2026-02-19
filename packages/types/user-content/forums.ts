@@ -1,15 +1,18 @@
 import { GetApiSchema, SchemaMap } from "../../utils/apiSchema";
 import { Media } from "./media";
 
-type UserForumsResponse = GetApiSchema<typeof SchemaMap.UserForumsResponse>;
-export type ForumPost = UserForumsResponse["data"][number] & {
+// UserForumsResponse is an inline type, using FeedForumItemSchema as base
+// The actual response structure is similar to FeedForumItemSchema but without likeCount, isLiked, isFollowing
+type FeedForumItemSchema = GetApiSchema<typeof SchemaMap.FeedForumItemSchema>;
+export type ForumPost = Omit<FeedForumItemSchema, "likeCount" | "isLiked" | "isFollowing"> & {
   likeCount?: number;
   commentCount?: number;
   isLike?: boolean;
 };
 
-type MePostForumCommentResponse = GetApiSchema<typeof SchemaMap.MePostForumCommentResponse>;
-export type ForumComment = MePostForumCommentResponse["data"] & {
+// MePostForumCommentResponse returns unknown, using FeedForumCommentItemResponseSchema as base
+type FeedForumCommentItemResponseSchema = GetApiSchema<typeof SchemaMap.FeedForumCommentItemResponseSchema>;
+export type ForumComment = FeedForumCommentItemResponseSchema & {
   forumId?: number;
   isLike?: boolean;
 };

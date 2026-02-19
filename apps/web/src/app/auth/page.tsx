@@ -62,7 +62,7 @@ export default function AuthPage() {
             await result.user.getIdToken(true);
             const userData = await authService.getCurrentUser();
 
-            localStorage.setItem("user", JSON.stringify(userData));
+            localStorage.setItem("user", JSON.stringify(userData.data));
 
             router.push('/');
         } catch (error: unknown) {
@@ -106,12 +106,11 @@ export default function AuthPage() {
                 profileImageKey: imageKey,
             });
 
-            localStorage.setItem("user", JSON.stringify(userData));
+            localStorage.setItem("user", JSON.stringify(userData.data));
 
             // redirect to home page
             router.push('/');
         } catch (error: unknown) {
-            console.error('Signup error:', error);
             setFormError(getErrorMessage(error, 'signup'));
         }
         finally {
@@ -141,7 +140,7 @@ export default function AuthPage() {
                 profileImageKey: null,
             });
 
-            localStorage.setItem("user", JSON.stringify(userData));
+            localStorage.setItem("user", JSON.stringify(userData.data));
             router.push('/');
         } catch (error: unknown) {
             console.error('Social login error:', error);

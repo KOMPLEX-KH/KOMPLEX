@@ -1,66 +1,65 @@
 import type { AxiosInstance } from "axios";
 import type { User, SignupData, SocialLoginData } from "../types/auth";
+import { ApiWrapper } from "@core-types/apiWrapper";
+import { Profile } from "@core-types/content/profile";
 
 export const createAuthService = (api: AxiosInstance) => {
   return {
     // AUTH OPERATIONS
 
     // Register new user
-    signup: async (signupData: SignupData): Promise<User> => {
+    signup: async (signupData: SignupData): Promise<ApiWrapper<User>> => {
       try {
-        const response = await api.post<User>(`/auth/signup`, signupData);
+        const response = await api.post<ApiWrapper<User>>(`/auth/signup`, signupData);
         return response.data;
       } catch (error) {
-        console.error("Error during signup:", error);
         throw new Error("Failed to create account");
       }
     },
 
     // Social login
-    socialLogin: async (socialData: SocialLoginData): Promise<User> => {
+    socialLogin: async (socialData: SocialLoginData): Promise<ApiWrapper<User>> => {
       try {
-        const response = await api.post<User>(`/auth/social-login`, socialData);
+        const response = await api.post<ApiWrapper<User>>(`/auth/social-login`, socialData);
         return response.data;
       } catch (error) {
-        console.error("Error during social login:", error);
         throw new Error("Failed to login with social provider");
       }
     },
 
     // USER MANAGEMENT
 
-    // Update user profile
-    updateProfile: async (
-      userId: number,
-      profileData: Partial<User>
-    ): Promise<User> => {
-      try {
-        const response = await api.put<User>(`/profile/${userId}`, profileData);
-        return response.data;
-      } catch (error) {
-        console.error("Error updating profile:", error);
-        throw new Error("Failed to update profile");
-      }
-    },
+    // // Update user profile
+    // updateProfile: async (
+    //   userId: number,
+    //   profileData: Partial<User>
+    // ): Promise<User> => {
+    //   try {
+    //     const response = await api.put<User>(`/profile/${userId}`, profileData);
+    //     return response.data;
+    //   } catch (error) {
+    //     console.error("Error updating profile:", error);
+    //     throw new Error("Failed to update profile");
+    //   }
+    // },
 
     // Get current user profile
-    getCurrentUser: async (): Promise<User> => {
+    getCurrentUser: async (): Promise<ApiWrapper<User>> => {
       try {
-        const response = await api.get<User>(`/me`);
+        const response = await api.get<ApiWrapper<User>>(`/me`);
         return response.data;
       } catch (error) {
         console.error("Error fetching current user:", error);
-        throw new Error("Failed to fetch user profile");
+        throw new Error("Failed to fetch current user");
       }
     },
 
-    getCurrentUserProfile: async (): Promise<User> => {
+    getCurrentUserProfile: async (): Promise<ApiWrapper<Profile>> => {
       try {
-        const response = await api.get<User>(`/me/profile`);
+        const response = await api.get<ApiWrapper<Profile>>(`/me/profile`);
         return response.data;
       } catch (error) {
-        console.error("Error fetching current user profile:", error);
-        throw new Error("Failed to fetch user profile");
+        throw new Error("Failed to fetch current user profile");
       }
     },
   };

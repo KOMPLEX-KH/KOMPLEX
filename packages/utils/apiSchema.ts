@@ -3,71 +3,115 @@ import type { components } from "../types/api-types/index";
 
 export type GetApiSchema<
     T extends SchemaKey
-> = components["schemas"][T];
+> = components["schemas"][typeof SchemaMap[T]];
 
 
 export const SchemaMap = {
+    // Auth
     SignupResponse: "SignupResponse",
     SignupBody: "SignupBody",
     SocialLoginResponse: "SocialLoginResponse",
     SocialLoginBody: "SocialLoginBody",
+    
+    // Upload
     UploadUrlResponse: "UploadUrlResponse",
     UploadUrlBody: "UploadUrlBody",
-    FeedVideosResponse: "FeedVideosResponse",
+    
+    // Feed - Videos
+    FeedVideoItemSchema: "FeedVideoItemSchema",
+    
+    // Feed - Forums
     FeedForumItemSchema: "FeedForumItemSchema",
-    MediaSchema: "MediaSchema",
     FeedForumItemResponseSchema: "FeedForumItemResponseSchema",
     FeedForumCommentItemResponseSchema: "FeedForumCommentItemResponseSchema",
     FeedForumReplyItemResponseSchema: "FeedForumReplyItemResponseSchema",
-    FeedNewsResponse: "FeedNewsResponse",
+    
+    // Feed - News (fixed: FeedNewsItemSchema exists, not FeedNewsResponse)
+    FeedNewsResponse: "FeedNewsItemSchema", // Backward compatibility alias
+    FeedNewsItemSchema: "FeedNewsItemSchema",
+    
+    // Feed - Exercises
     FeedExercisesResponse: "FeedExercisesResponse",
-    FeedCurriculumsResponseSchema: "FeedCurriculumsResponseSchema",
+    
+    // Feed - Curriculum (fixed: returns GradeSchema[], not FeedCurriculumsResponseSchema)
+    FeedCurriculumsResponseSchema: "GradeSchema", // Backward compatibility alias
     GradeSchema: "GradeSchema",
     SubjectSchema: "SubjectSchema",
     LessonSchema: "LessonSchema",
     TopicSchema: "TopicSchema",
     CurriculumTopicResponse: "CurriculumTopicResponse",
+    
+    // Feed - Library/Books
     FeedBooksResponse: "FeedBooksResponse",
     FeedBooksByLessonResponse: "FeedBooksByLessonResponse",
     FeedBooksBySubjectResponse: "FeedBooksBySubjectResponse",
     FilterBooksResponse: "FilterBooksResponse",
     FilterBooksBody: "FilterBooksBody",
-    SearchVideosResponse: "SearchVideosResponse",
-    SearchForumsResponse: "SearchForumsResponse",
-    SearchNewsResponse: "SearchNewsResponse",
+    
+    // Common
+    MediaSchema: "MediaSchema",
+    
+    // Search (inline types - keeping for backward compatibility but these don't exist as schemas)
+    SearchVideosResponse: "FeedVideoItemSchema", // Alias to closest match
+    SearchForumsResponse: "FeedForumItemSchema", // Alias to closest match
+    SearchNewsResponse: "FeedNewsItemSchema", // Alias to closest match
+    
+    // User Profile
     UserProfileResponse: "UserProfileResponse",
-    UserVideosResponse: "UserVideosResponse",
-    UserForumsResponse: "UserForumsResponse",
+    
+    // User Content (inline types - keeping for backward compatibility)
+    UserVideosResponse: "FeedVideoItemSchema", // Alias to closest match
+    UserForumsResponse: "FeedForumItemSchema", // Alias to closest match
+    
+    // Me - User Info
     MeResponse: "MeResponse",
     MeProfileResponse: "MeProfileResponse",
     MeDashboardResponse: "MeDashboardResponse",
     MeLastAccessedResponseSchema: "MeLastAccessedResponseSchema",
     LastAccessedItemSchema: "LastAccessedItemSchema",
-    MeVideoHistoryResponse: "MeVideoHistoryResponse",
-    MePostFeedbackResponse: "MePostFeedbackResponse",
+    
+    // Me - Video History (inline type - keeping for backward compatibility)
+    MeVideoHistoryResponse: "FeedVideoItemSchema", // Alias to closest match
+    
+    // Me - Feedback
+    MePostFeedbackResponse: "MePostFeedbackBody", // Response is unknown[], using body as placeholder
     MePostFeedbackBody: "MePostFeedbackBody",
-    MeFollowersResponse: "MeFollowersResponse",
-    MeFollowingResponse: "MeFollowingResponse",
-    MeFollowUserResponse: "MeFollowUserResponse",
-    MeUnfollowUserResponse: "MeUnfollowUserResponse",
+    
+    // Me - Follow (fixed: returns arrays of item schemas)
+    MeFollowersResponse: "MeFollowersItemSchema", // Backward compatibility alias
+    MeFollowingResponse: "MeFollowingItemSchema", // Backward compatibility alias
+    MeFollowersItemSchema: "MeFollowersItemSchema",
+    MeFollowingItemSchema: "MeFollowingItemSchema",
+    MeFollowUserResponse: "MePostFeedbackBody", // Response is unknown, using placeholder
+    MeUnfollowUserResponse: "MePostFeedbackBody", // Response is unknown, using placeholder
+    
+    // Me - Videos
     MeGetMyVideosResponse: "MeGetMyVideosResponse",
     MeMyVideoItem: "MeMyVideoItem",
     MePostVideoResponse: "MePostVideoResponse",
     MePostVideoBody: "MePostVideoBody",
     MeDeleteVideoResponse: "MeDeleteVideoResponse",
-    MeGetForumsResponse: "MeGetForumsResponse",
-    MeForumItem: "MeForumItem",
-    MePostForumResponse: "MePostForumResponse",
+    
+    // Me - Forums (inline types - keeping for backward compatibility)
+    MeGetForumsResponse: "FeedForumItemSchema", // Alias to closest match
+    MeForumItem: "FeedForumItemSchema", // Alias to closest match
+    MePostForumResponse: "MePostFeedbackBody", // Response is unknown, using placeholder
     MePostForumBody: "MePostForumBody",
-    MeDeleteForumResponse: "MeDeleteForumResponse",
-    MeLikeForumResponse: "MeLikeForumResponse",
-    MePostForumCommentResponse: "MePostForumCommentResponse",
+    MeDeleteForumResponse: "MePostFeedbackBody", // Response is unknown, using placeholder
+    MeLikeForumResponse: "MePostFeedbackBody", // Response is unknown, using placeholder
+    MePostForumCommentResponse: "MePostFeedbackBody", // Response is unknown, using placeholder
     MePostForumCommentBody: "MePostForumCommentBody",
+    
+    // Me - Notes
     MeNotesResponse: "MeNotesResponse",
-    MeAiGeneralTabsResponse: "MeAiGeneralTabsResponse",
+    
+    // Me - AI General (fixed: returns single item schema, not array response)
+    MeAiGeneralTabsResponse: "MeAiGeneralTabItemSchema", // Backward compatibility alias
+    MeAiGeneralTabItemSchema: "MeAiGeneralTabItemSchema",
     MeCreateAiGeneralTabResponse: "MeCreateAiGeneralTabResponse",
     MeCreateAiGeneralTabBody: "MeCreateAiGeneralTabBody",
-    MeAiGeneralTabHistoryResponse: "MeAiGeneralTabHistoryResponse",
+    MeAiGeneralTabHistoryResponse: "MeAiGeneralTabHistoryItemSchema", // Backward compatibility alias
+    MeAiGeneralTabHistoryItemSchema: "MeAiGeneralTabHistoryItemSchema",
     MePostAiGeneralResponse: "MePostAiGeneralResponse",
     MePostAiGeneralBody: "MePostAiGeneralBody",
     MeUpdateAiGeneralTabResponse: "MeUpdateAiGeneralTabResponse",
@@ -75,8 +119,12 @@ export const SchemaMap = {
     MeDeleteAiGeneralTabResponse: "MeDeleteAiGeneralTabResponse",
     MeRateAiGeneralResponse: "MeRateAiGeneralResponse",
     MeRateAiGeneralBody: "MeRateAiGeneralBody",
-    MeGetAiTopicsResponse: "MeGetAiTopicsResponse",
-    MeAiTopicHistoryResponse: "MeAiTopicHistoryResponse",
+    
+    // Me - AI Topics (fixed: returns single item schema, not array response)
+    MeGetAiTopicsResponse: "MeAiTopicItemSchema", // Backward compatibility alias
+    MeAiTopicItemSchema: "MeAiTopicItemSchema",
+    MeAiTopicHistoryResponse: "MeAiTopicHistoryItem", // Backward compatibility alias
+    MeAiTopicHistoryItem: "MeAiTopicHistoryItem",
     MeCallAiTopicResponse: "MeCallAiTopicResponse",
     MeCallAiTopicBody: "MeCallAiTopicBody",
     MeDeleteAiTopicResponse: "MeDeleteAiTopicResponse",
@@ -86,5 +134,3 @@ export const SchemaMap = {
 
 export type SchemaKey = keyof typeof SchemaMap;
 
-// Helper type to get schema by key (fixes type error on index)
-export type GetApiSchema<T extends SchemaKey> = components["schemas"][typeof SchemaMap[T]];

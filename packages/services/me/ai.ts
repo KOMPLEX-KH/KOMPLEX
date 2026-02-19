@@ -5,18 +5,18 @@ import type {
   AIResponseType,
   AiTab,
 } from "../../types/content/ai";
+import { ApiWrapper } from "../../types/apiWrapper";
 
 export const createMeAiService = (api: AxiosInstance) => {
   return {
     // ---- AI General (Tabs) ----
 
     // Get all AI general tab names
-    getAllAiGeneralTabNames: async () => {
+    getAllAiGeneralTabNames: async (): Promise<ApiWrapper<AiTab[]>> => {
       try {
-        const response = await api.get(`/me/ai/general/tabs`);
+        const response = await api.get<ApiWrapper<AiTab[]>>(`/me/ai/general/tabs`);
         return response.data;
       } catch (error) {
-        console.error("Error fetching AI general tab names:", error);
         throw new Error("Failed to get AI general tab names");
       }
     },
@@ -26,7 +26,7 @@ export const createMeAiService = (api: AxiosInstance) => {
       tabId: string,
       page: number = 1,
       limit: number = 20
-    ) => {
+    ): Promise<ApiWrapper<AIHistoryResponse>> => {
       try {
         const response = await api.get(`/me/ai/general/tabs/${tabId}`, {
           params: {
@@ -48,7 +48,7 @@ export const createMeAiService = (api: AxiosInstance) => {
         language?: string;
         responseType?: AIResponseType;
       }
-    ) => {
+    ): Promise<ApiWrapper<AIResponse>> => {
       try {
         const payload: {
           prompt: string;
@@ -64,7 +64,7 @@ export const createMeAiService = (api: AxiosInstance) => {
           payload.responseType = options.responseType;
         }
 
-        const response = await api.post(`/me/ai/general/tabs`, {
+        const response = await api.post<ApiWrapper<AIResponse>>(`/me/ai/general/tabs`, {
           ...payload,
         });
         return response.data;
@@ -82,7 +82,7 @@ export const createMeAiService = (api: AxiosInstance) => {
         language?: string;
         responseType?: AIResponseType;
       }
-    ) => {
+    ): Promise<ApiWrapper<AIResponse>> => {
       try {
         const payload: {
           prompt: string;
@@ -98,7 +98,7 @@ export const createMeAiService = (api: AxiosInstance) => {
           payload.responseType = options.responseType;
         }
 
-        const response = await api.post(`/me/ai/general/tabs/${tabId}`, {
+        const response = await api.post<ApiWrapper<AIResponse>>(`/me/ai/general/tabs/${tabId}`, {
           ...payload,
         });
         return response.data;
@@ -111,9 +111,9 @@ export const createMeAiService = (api: AxiosInstance) => {
     // ---- AI Topics ----
 
     // Get all AI topic names
-    getAllAiTopicTabNames: async () => {
+    getAllAiTopicTabNames: async (): Promise<ApiWrapper<AiTab[]>> => {
       try {
-        const response = await api.get(`/me/ai/topics`);
+        const response = await api.get<ApiWrapper<AiTab[]>>(`/me/ai/topics`);
         return response.data;
       } catch (error) {
         console.error("Error fetching AI topic tab names:", error);
@@ -126,9 +126,9 @@ export const createMeAiService = (api: AxiosInstance) => {
       topicId: number,
       page: number = 1,
       limit: number = 20
-    ) => {
+    ): Promise<ApiWrapper<AIHistoryResponse>> => {
       try {
-        const response = await api.get(`/me/ai/topics/${topicId}`, {
+        const response = await api.get<ApiWrapper<AIHistoryResponse>>(`/me/ai/topics/${topicId}`, {
           params: {
             page,
             limit,
@@ -147,9 +147,9 @@ export const createMeAiService = (api: AxiosInstance) => {
       prompt: string,
       topicId: number,
       responseType: AIResponseType
-    ) => {
+    ): Promise<ApiWrapper<AIResponse>> => {
       try {
-        const response = await api.post(`/me/ai/topics/${topicId}`, {
+        const response = await api.post<ApiWrapper<AIResponse>>(`/me/ai/topics/${topicId}`, {
           prompt,
           responseType,
         }
@@ -165,12 +165,13 @@ export const createMeAiService = (api: AxiosInstance) => {
       id: number,
       rating: number,
       ratingFeedback: string
-    ) => {
+    ): Promise<ApiWrapper<void>> => {
       try {
-        await api.post(`/me/ai/general/rating/${id}`, {
+        await api.post<ApiWrapper<void>>(`/me/ai/general/rating/${id}`, {
           rating,
           ratingFeedback,
         });
+        return;
       } catch (error) {
         console.error("Error rating AI response:", error);
         throw new Error("Failed to rate AI response");
@@ -180,12 +181,13 @@ export const createMeAiService = (api: AxiosInstance) => {
       id: number,
       rating: number,
       ratingFeedback: string
-    ) => {
+    ): Promise<ApiWrapper<void>> => {
       try {
-        await api.post(`/me/ai/topics/rating/${id}`, {
+        await api.post<ApiWrapper<void>>(`/me/ai/topics/rating/${id}`, {
           rating,
           ratingFeedback,
         });
+        return;
       } catch (error) {
         console.error("Error rating AI topic response:", error);
         throw new Error("Failed to rate AI topic response");
@@ -193,9 +195,10 @@ export const createMeAiService = (api: AxiosInstance) => {
     },
 
     // Delete AI general tab
-    deleteAiGeneralTab: async (tabId: number) => {
+    deleteAiGeneralTab: async (tabId: number): Promise<ApiWrapper<void>> => {
       try {
-        await api.delete(`/me/ai/general/tabs/${tabId}`);
+        await api.delete<ApiWrapper<void>>(`/me/ai/general/tabs/${tabId}`);
+        return;
       } catch (error) {
         console.error("Error deleting AI general tab:", error);
         throw new Error("Failed to delete AI general tab");
@@ -206,11 +209,12 @@ export const createMeAiService = (api: AxiosInstance) => {
     updateAiGeneralTabName: async (
       tabId: number,
       tabName: string
-    ) => {
+    ): Promise<ApiWrapper<void>> => {
       try {
-        await api.put(`/me/ai/general/tabs/${tabId}`, {
+        await api.put<ApiWrapper<void>>(`/me/ai/general/tabs/${tabId}`, {
           tabName,
         });
+        return;
       } catch (error) {
         console.error("Error updating AI general tab name:", error);
         throw new Error("Failed to update AI general tab name");
@@ -218,9 +222,10 @@ export const createMeAiService = (api: AxiosInstance) => {
     },
 
     // Delete AI topic tab
-    deleteAiTopicTab: async (topicId: number) => {
+    deleteAiTopicTab: async (topicId: number): Promise<ApiWrapper<void>> => {
       try {
-        await api.delete(`/me/ai/topics/${topicId}`);
+        await api.delete<ApiWrapper<void>>(`/me/ai/topics/${topicId}`);
+        return;
       } catch (error) {
         console.error("Error deleting AI topic tab:", error);
         throw new Error("Failed to delete AI topic tab");

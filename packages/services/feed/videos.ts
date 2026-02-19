@@ -1,18 +1,16 @@
 import type { AxiosInstance } from "axios";
 import type { VideoPost } from "../../types/content/videos";
+import { ApiWrapper } from "../../types/apiWrapper";
 
 export const createFeedVideoService = (api: AxiosInstance) => {
   return {
     // Get all videos
-    getAllVideos: async () => {
+    getAllVideos: async (): Promise<ApiWrapper<VideoPost[]>> => {
       try {
-        const response = await api.get<{ data: VideoPost[]; hasMore: boolean }>(
+        const response = await api.get<ApiWrapper<VideoPost[]>>(
           `/feed/videos`
         );
-        return {
-          data: response.data,
-          hasMore: response.data.hasMore,
-        };
+        return response.data;
       } catch (error) {
         console.error("Error fetching all videos:", error);
         throw new Error("Failed to fetch videos");
@@ -47,9 +45,9 @@ export const createFeedVideoService = (api: AxiosInstance) => {
       videoId: number,
       limit: number = 5,
       offset: number = 0
-    ) => {
+    ): Promise<ApiWrapper<VideoPost[]>> => {
       try {
-        const response = await api.get(
+        const response = await api.get<ApiWrapper<VideoPost[]>>(
           `/feed/videos/${videoId}/recommended?limit=${limit}&offset=${offset}`
         );
         return response.data;

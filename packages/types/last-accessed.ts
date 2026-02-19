@@ -1,6 +1,8 @@
 import { GetApiSchema, SchemaMap } from "../utils/apiSchema";
 
-type MeLastAccessedResponse = GetApiSchema<typeof SchemaMap.MeLastAccessedResponse>;
-export type LastAccessed = MeLastAccessedResponse["data"] extends null 
+// MeLastAccessedResponseSchema is the data structure itself (can be null)
+// The API response wraps it as: { success: true, data: MeLastAccessedResponseSchema }
+type MeLastAccessedResponseSchema = GetApiSchema<typeof SchemaMap.MeLastAccessedResponseSchema>;
+export type LastAccessed = MeLastAccessedResponseSchema extends null
   ? { lastTopic: null; lastVideo: null; lastAiTab: null }
-  : MeLastAccessedResponse["data"];
+  : MeLastAccessedResponseSchema;

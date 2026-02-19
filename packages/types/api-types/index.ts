@@ -201,7 +201,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["FeedVideosResponse"];
+                            data: components["schemas"]["FeedVideoItemSchema"][];
                         };
                     };
                 };
@@ -254,7 +254,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data?: unknown;
+                            data: components["schemas"]["FeedVideoItemSchema"];
                         };
                     };
                 };
@@ -307,7 +307,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data?: unknown;
+                            data: components["schemas"]["FeedVideoItemSchema"][];
                         };
                     };
                 };
@@ -731,7 +731,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["FeedNewsResponse"];
+                            data: components["schemas"]["FeedNewsItemSchema"][];
                         };
                     };
                 };
@@ -784,7 +784,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data?: unknown;
+                            data: components["schemas"]["FeedNewsItemSchema"];
                         };
                     };
                 };
@@ -943,7 +943,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["FeedCurriculumsResponseSchema"];
+                            data: components["schemas"]["GradeSchema"][];
                         };
                     };
                 };
@@ -1318,7 +1318,28 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["SearchVideosResponse"];
+                            data: {
+                                id: number;
+                                userId: number;
+                                title: string;
+                                description?: string | null;
+                                type: string;
+                                topic?: string | null;
+                                duration?: number | null;
+                                videoUrl: string;
+                                thumbnailUrl?: string | null;
+                                /** Format: date-time */
+                                createdAt: string;
+                                /** Format: date-time */
+                                updatedAt: string;
+                                username: string;
+                                profileImage?: string | null;
+                                viewCount: number;
+                                likeCount: number;
+                                saveCount: number;
+                                isLiked: boolean;
+                                isSaved: boolean;
+                            }[];
                         };
                     };
                 };
@@ -1371,7 +1392,24 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["SearchForumsResponse"];
+                            data: {
+                                id: number;
+                                userId: number;
+                                title: string;
+                                description?: string | null;
+                                type: string;
+                                topic?: string | null;
+                                /** Format: date-time */
+                                createdAt: string;
+                                /** Format: date-time */
+                                updatedAt: string;
+                                username: string;
+                                profileImage?: string | null;
+                                media: components["schemas"]["MediaSchema"][];
+                                viewCount: number;
+                                likeCount: number;
+                                isLiked: boolean;
+                            }[];
                         };
                     };
                 };
@@ -1424,7 +1462,24 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["SearchNewsResponse"];
+                            data: {
+                                id: number;
+                                userId: number;
+                                title: string;
+                                description?: string | null;
+                                type: string;
+                                topic?: string | null;
+                                /** Format: date-time */
+                                createdAt: string;
+                                /** Format: date-time */
+                                updatedAt: string;
+                                username: string;
+                                profileImage?: string | null;
+                                media: components["schemas"]["MediaSchema"][];
+                                viewCount: number;
+                                likeCount: number;
+                                isSaved: boolean;
+                            }[];
                         };
                     };
                 };
@@ -1530,7 +1585,24 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["UserVideosResponse"];
+                            data: {
+                                id: number;
+                                userId: number;
+                                title: string;
+                                description?: string | null;
+                                type: string;
+                                topic?: string | null;
+                                duration?: number | null;
+                                videoUrl: string;
+                                thumbnailUrl?: string | null;
+                                viewCount: number;
+                                /** Format: date-time */
+                                createdAt: string;
+                                /** Format: date-time */
+                                updatedAt: string;
+                                userFirstName: string;
+                                userLastName: string;
+                            }[];
                         };
                     };
                 };
@@ -1583,7 +1655,21 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["UserForumsResponse"];
+                            data: {
+                                id: number;
+                                userId: number;
+                                title: string;
+                                description?: string | null;
+                                type: string;
+                                topic?: string | null;
+                                viewCount: number;
+                                /** Format: date-time */
+                                createdAt: string;
+                                /** Format: date-time */
+                                updatedAt: string;
+                                username: string;
+                                media: components["schemas"]["MediaSchema"][];
+                            }[];
                         };
                     };
                 };
@@ -1848,7 +1934,16 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeVideoHistoryResponse"];
+                            data: {
+                                id: number;
+                                videoId: number;
+                                /** Format: date-time */
+                                createdAt: string;
+                                /** Format: date-time */
+                                updatedAt: string;
+                                title?: string | null;
+                                thumbnailUrl?: string | null;
+                            }[];
                         };
                     };
                 };
@@ -1907,7 +2002,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MePostFeedbackResponse"];
+                            data?: unknown;
                         };
                     };
                 };
@@ -1958,7 +2053,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeFollowersResponse"];
+                            data: components["schemas"]["MeFollowersItemSchema"][];
                         };
                     };
                 };
@@ -2011,7 +2106,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeFollowingResponse"];
+                            data: components["schemas"]["MeFollowingItemSchema"][];
                         };
                     };
                 };
@@ -2066,7 +2161,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeFollowUserResponse"];
+                            data: unknown;
                         };
                     };
                 };
@@ -2119,7 +2214,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeUnfollowUserResponse"];
+                            data: unknown;
                         };
                     };
                 };
@@ -2958,7 +3053,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeGetForumsResponse"];
+                            data?: unknown;
                         };
                     };
                 };
@@ -3001,7 +3096,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MePostForumResponse"];
+                            data?: unknown;
                         };
                     };
                 };
@@ -3092,7 +3187,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeDeleteForumResponse"];
+                            data?: unknown;
                         };
                     };
                 };
@@ -3148,7 +3243,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeLikeForumResponse"];
+                            data?: unknown;
                         };
                     };
                 };
@@ -3254,7 +3349,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MePostForumCommentResponse"];
+                            data?: unknown;
                         };
                     };
                 };
@@ -3982,7 +4077,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeAiGeneralTabsResponse"];
+                            data: components["schemas"]["MeAiGeneralTabItemSchema"];
                         };
                     };
                 };
@@ -4076,7 +4171,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeAiGeneralTabHistoryResponse"];
+                            data: components["schemas"]["MeAiGeneralTabHistoryItemSchema"];
                         };
                     };
                 };
@@ -4305,7 +4400,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeGetAiTopicsResponse"];
+                            data: components["schemas"]["MeAiTopicItemSchema"];
                         };
                     };
                 };
@@ -4358,7 +4453,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeAiTopicHistoryResponse"];
+                            data: components["schemas"]["MeAiTopicHistoryItem"];
                         };
                     };
                 };
@@ -4602,31 +4697,28 @@ export interface components {
             fileName: string;
             fileType: string;
         };
-        FeedVideosResponse: {
-            data: {
-                id: number;
-                userId: number;
-                title: string;
-                description?: string | null;
-                type: string;
-                topic?: string | null;
-                duration?: number | null;
-                videoUrl: string;
-                thumbnailUrl?: string | null;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-                username: string;
-                profileImage?: string | null;
-                viewCount: number;
-                likeCount: number;
-                saveCount: number;
-                isLiked: boolean;
-                isSaved: boolean;
-                isFollowing: boolean;
-            }[];
-            hasMore: boolean;
+        FeedVideoItemSchema: {
+            id: number;
+            userId: number;
+            title: string;
+            description?: string | null;
+            type?: string | null;
+            topic?: string | null;
+            duration?: number | null;
+            videoUrl: string;
+            thumbnailUrl?: string | null;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
+            username: string;
+            profileImage?: string | null;
+            viewCount: number;
+            likeCount: number;
+            saveCount: number;
+            isLiked: boolean;
+            isSaved: boolean;
+            isFollowing: boolean;
         };
         FeedForumItemSchema: {
             id: number;
@@ -4700,30 +4792,24 @@ export interface components {
             likeCount: number;
             isLiked: boolean;
         };
-        FeedNewsResponse: {
-            data: {
-                id: number;
-                userId: number;
-                title: string;
-                description?: string | null;
-                type: string;
-                topic?: string | null;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-                username: string;
-                profileImage?: string | null;
-                media: {
-                    url: string;
-                    type: string;
-                }[];
-                viewCount: number;
-                likeCount: number;
-                isSaved: boolean;
-                isFollowing: boolean;
-            }[];
-            hasMore: boolean;
+        FeedNewsItemSchema: {
+            id: number;
+            userId: number;
+            title: string;
+            description?: string | null;
+            type: string;
+            topic?: string | null;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
+            username: string;
+            profileImage?: string | null;
+            media: components["schemas"]["MediaSchema"][];
+            viewCount: number;
+            likeCount: number;
+            isSaved: boolean;
+            isFollowing: boolean;
         };
         FeedExercisesResponse: {
             [key: string]: {
@@ -4736,9 +4822,6 @@ export interface components {
                 numberOfAttempts?: number | null;
                 highestScore?: number | null;
             }[];
-        };
-        FeedCurriculumsResponseSchema: {
-            data: components["schemas"]["GradeSchema"][];
         };
         GradeSchema: {
             id: number;
@@ -4842,126 +4925,12 @@ export interface components {
             lessonId?: string;
             subjectId?: string;
         };
-        SearchVideosResponse: {
-            data: {
-                id: number;
-                userId: number;
-                title: string;
-                description?: string | null;
-                type: string;
-                topic?: string | null;
-                duration?: number | null;
-                videoUrl: string;
-                thumbnailUrl?: string | null;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-                username: string;
-                profileImage?: string | null;
-                viewCount: number;
-                likeCount: number;
-                saveCount: number;
-                isLiked: boolean;
-                isSaved: boolean;
-            }[];
-            hasMore: boolean;
-            isMatch: boolean;
-        };
-        SearchForumsResponse: {
-            data: {
-                id: number;
-                userId: number;
-                title: string;
-                description?: string | null;
-                type: string;
-                topic?: string | null;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-                username: string;
-                profileImage?: string | null;
-                media: {
-                    url: string;
-                    type: string;
-                }[];
-                viewCount: number;
-                likeCount: number;
-                isLiked: boolean;
-            }[];
-            hasMore: boolean;
-            isMatch: boolean;
-        };
-        SearchNewsResponse: {
-            data: {
-                id: number;
-                userId: number;
-                title: string;
-                description?: string | null;
-                type: string;
-                topic?: string | null;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-                username: string;
-                profileImage?: string | null;
-                media: {
-                    url: string;
-                    type: string;
-                }[];
-                viewCount: number;
-                likeCount: number;
-                isSaved: boolean;
-            }[];
-            hasMore: boolean;
-            isMatch: boolean;
-        };
         UserProfileResponse: {
-            data?: unknown;
-        };
-        UserVideosResponse: {
-            data: {
-                id: number;
-                userId: number;
-                title: string;
-                description?: string | null;
-                type: string;
-                topic?: string | null;
-                duration?: number | null;
-                videoUrl: string;
-                thumbnailUrl?: string | null;
-                viewCount: number;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-                userFirstName: string;
-                userLastName: string;
-            }[];
-            hasMore: boolean;
-        };
-        UserForumsResponse: {
-            data: {
-                id: number;
-                userId: number;
-                title: string;
-                description?: string | null;
-                type: string;
-                topic?: string | null;
-                viewCount: number;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-                username: string;
-                media: {
-                    url: string;
-                    type: string;
-                }[];
-            }[];
-            hasMore: boolean;
+            id: number;
+            username: string;
+            profileImage?: string | null;
+            numberOfFollowers: number;
+            numberOfFollowing: number;
         };
         MeResponse: {
             id: number;
@@ -4987,10 +4956,11 @@ export interface components {
             updatedAt: string;
         };
         MeProfileResponse: {
-            data?: unknown;
-            /** @enum {boolean} */
-            success: true;
-            message: string;
+            id: number;
+            username: string;
+            profileImage?: string | null;
+            numberOfFollowers: number;
+            numberOfFollowing: number;
         };
         MeDashboardResponse: {
             dashboardData: {
@@ -5017,36 +4987,27 @@ export interface components {
             name?: string;
             title?: string;
         } | null;
-        MeVideoHistoryResponse: {
-            data: {
-                id: number;
-                videoId: number;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-                title?: string | null;
-                thumbnailUrl?: string | null;
-            }[];
-        };
-        MePostFeedbackResponse: unknown[];
         MePostFeedbackBody: {
             content: string;
             type: string;
         };
-        MeFollowersResponse: {
-            data: unknown[];
-            hasMore: boolean;
+        MeFollowersItemSchema: {
+            id: number;
+            userId: number;
+            followedId: number;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
         };
-        MeFollowingResponse: {
-            data: unknown[];
-            hasMore: boolean;
-        };
-        MeFollowUserResponse: {
-            message: string;
-        };
-        MeUnfollowUserResponse: {
-            message: string;
+        MeFollowingItemSchema: {
+            id: number;
+            userId: number;
+            followedId: number;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
         };
         MeGetMyVideosResponse: {
             data: components["schemas"]["MeMyVideoItem"][];
@@ -5098,80 +5059,11 @@ export interface components {
         MeDeleteVideoResponse: {
             data: unknown[];
         };
-        MeGetForumsResponse: {
-            data: components["schemas"]["MeForumItem"][];
-            hasMore: boolean;
-        };
-        MeForumItem: {
-            id: number;
-            userId: number;
-            title: string;
-            description: string;
-            type?: string | null;
-            topic?: string | null;
-            viewCount: number;
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
-            likeCount: number;
-            /** @default [] */
-            media: {
-                url: string;
-                type: string;
-            }[];
-            username: string;
-            profileImage?: string | null;
-        };
-        MePostForumResponse: {
-            data: {
-                /** @enum {boolean} */
-                success: true;
-                newForum?: unknown;
-                newForumMedia: unknown[];
-            };
-        };
         MePostForumBody: {
             title: string;
             description: string;
             type?: string;
             topic?: string;
-        };
-        MeDeleteForumResponse: {
-            data: {
-                /** @enum {boolean} */
-                success: true;
-                message: string;
-                deletedForum?: unknown;
-                deletedMedia?: unknown;
-                deleteReplies?: unknown;
-                deleteComments?: unknown;
-            };
-        };
-        MeLikeForumResponse: {
-            data: {
-                like: unknown[];
-            };
-        };
-        MePostForumCommentResponse: {
-            data: {
-                id: number;
-                userId: number;
-                description: string;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-                username: string;
-                profileImage?: string | null;
-                isSave: boolean;
-                media: {
-                    url: string;
-                    type: string;
-                }[];
-            };
-            /** @enum {boolean} */
-            success: true;
         };
         MePostForumCommentBody: {
             description: string;
@@ -5194,68 +5086,43 @@ export interface components {
                 updatedAt: string;
             }[];
         };
-        MeAiGeneralTabsResponse: {
-            data: {
-                id: number;
-                name: string;
-            }[];
-            hasMore?: boolean;
+        MeAiGeneralTabItemSchema: {
+            id: number;
+            name: string;
         };
         MeCreateAiGeneralTabResponse: {
-            /** @enum {boolean} */
-            success: true;
-            message: string;
-            data: {
-                prompt: string;
-                responseType: string;
-                id: number;
-                name: string;
-            };
+            prompt: string;
+            responseType: string;
+            id: number;
+            name: string;
         };
         MeCreateAiGeneralTabBody: {
             prompt: string;
             responseType: string;
         };
-        MeAiGeneralTabHistoryResponse: {
-            data: {
-                prompt: string;
-                aiResult: string;
-                responseType: string;
-            }[];
+        MeAiGeneralTabHistoryItemSchema: {
+            prompt: string;
+            aiResult: string;
+            responseType: string;
         };
         MePostAiGeneralResponse: {
-            /** @enum {boolean} */
-            success: true;
-            message: string;
-            data: {
-                prompt: string;
-                aiResult: string;
-                responseType: string;
-                id?: number;
-            };
+            prompt: string;
+            aiResult: string;
+            responseType: string;
+            id?: number;
         };
         MePostAiGeneralBody: {
             prompt: string;
             responseType: string;
         };
         MeUpdateAiGeneralTabResponse: {
-            /** @enum {boolean} */
-            success: true;
-            message: string;
-            data: {
-                data: unknown[];
-            };
+            data: unknown[];
         };
         MeUpdateAiGeneralTabBody: {
             tabName: string;
         };
         MeDeleteAiGeneralTabResponse: {
-            /** @enum {boolean} */
-            success: true;
-            message: string;
-            data: {
-                data: unknown[];
-            };
+            data: unknown[];
         };
         MeRateAiGeneralResponse: {
             data: unknown[];
@@ -5264,41 +5131,33 @@ export interface components {
             rating: number;
             ratingFeedback?: string;
         };
-        MeGetAiTopicsResponse: {
-            data: {
-                id: number;
-                name?: string | null;
-            }[];
-            /** @enum {boolean} */
-            success: true;
-            message: string;
+        MeAiTopicItemSchema: {
+            id: number;
+            name?: string | null;
         };
-        MeAiTopicHistoryResponse: {
-            data: unknown[];
-            hasMore: boolean;
+        MeAiTopicHistoryItem: {
+            id: number;
+            userId: number;
+            topicId: number;
+            prompt: string;
+            response: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
         };
         MeCallAiTopicResponse: {
-            /** @enum {boolean} */
-            success: true;
-            message: string;
-            data: {
-                prompt: string;
-                responseType: string;
-                aiResult: string;
-                id: number;
-            };
+            prompt: string;
+            responseType: string;
+            aiResult: string;
+            id: number;
         };
         MeCallAiTopicBody: {
             prompt: string;
             responseType: string;
         };
         MeDeleteAiTopicResponse: {
-            /** @enum {boolean} */
-            success: true;
-            message: string;
-            data: {
-                data: unknown[];
-            };
+            data: unknown[];
         };
         MeRateAiTopicResponse: {
             data: unknown[];
