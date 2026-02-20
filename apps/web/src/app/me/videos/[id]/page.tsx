@@ -9,7 +9,7 @@ import EditVideo from '@/components/pages/me/videos/EditVideo';
 import ContentError from '@/components/common/ContentError';
 import DeleteConfirm from '@/components/common/DeleteConfirm';
 import Exercise from '@/components/pages/videos/Exercise';
-import type { VideoPost } from '@/types/content/videos';
+import type { VideoPost } from '@core-types/content/videos';
 import { useAuth } from '@hooks/useAuth';
 import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
 import { BackButton } from '@/components/common/BackButton';
@@ -94,7 +94,7 @@ export default function VideoPost() {
                     setIsLoading(true);
                     setError(null);
                     const video = await feedVideoService.getVideoById(id);
-                    setVideoPost(video);
+                    setVideoPost(video.data);
                 } catch (error) {
                     console.error('Error fetching video:', error);
                     setError('មានបញ្ហាកើតឡើងពេលផ្ទុកវីដេអូ សូមព្យាយាមម្តងទៀត');

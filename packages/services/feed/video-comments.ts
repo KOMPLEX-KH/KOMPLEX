@@ -1,12 +1,13 @@
+import { ApiWrapper } from "@core-types/apiWrapper";
+import { VideoComment } from "@core-types/content/videos";
 import type { AxiosInstance } from "axios";
-import type { VideoComment } from "../../types/content/videos";
 
 export const createFeedVideoCommentService = (api: AxiosInstance) => {
   return {
     // Get comments for a video
-    getVideoComments: async (videoId: string): Promise<VideoComment[]> => {
+    getVideoComments: async (videoId: string): Promise<ApiWrapper<VideoComment[]>> => {
       try {
-        const response = await api.get(`/feed/video-comments/${videoId}`);
+        const response = await api.get<ApiWrapper<VideoComment[]>>(`/feed/videos/${videoId}/comments`);
         return response.data;
       } catch (error) {
         console.error("Error fetching video comments:", error);

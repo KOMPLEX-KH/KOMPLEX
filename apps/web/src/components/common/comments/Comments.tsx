@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { ForumComment } from '@core-types/content/forums';
-import { VideoComment } from '@core-types/content/videos';
+import type { VideoComment } from '@core-types/content/videos';
 import CommentComponent from './Comment';
 import ContentError from '@/components/common/ContentError';
 import { feedVideoCommentService, meForumCommentService, meVideoCommentService, feedForumCommentService } from '@/services/index';
@@ -36,7 +36,12 @@ export default function Comments({ type, parentId, focusInput = false, isReadOnl
 
                 let fetchedComments: ForumComment[] | VideoComment[] = [];
                 if (type === 'video') {
-                    fetchedComments = await feedVideoCommentService.getVideoComments(parentId.toString());
+                    const response = await feedVideoCommentService.getVideoComments(parentId.toString());
+                    if (response.success) {
+                        fetchedComments = response.data as VideoComment[];
+                    } else {
+                        setCommentsError('មានបញ្ហាក្នុងការទាញយកការឆ្លើយតប។ សូមព្យាយាមម្តងទៀត។');
+                    }
                 } else {
                     const response = await feedForumCommentService.getForumComments(parentId.toString());
                     if (response.success) {

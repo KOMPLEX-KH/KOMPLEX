@@ -175,7 +175,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/komplex/feed/videos": {
+    "/feed/videos": {
         parameters: {
             query?: never;
             header?: never;
@@ -228,7 +228,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/komplex/feed/videos/:id": {
+    "/feed/videos/:id": {
         parameters: {
             query?: never;
             header?: never;
@@ -281,7 +281,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/komplex/feed/videos/:id/recommended": {
+    "/feed/videos/:id/recommended": {
         parameters: {
             query?: never;
             header?: never;
@@ -307,7 +307,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["FeedVideoItemSchema"][];
+                            data: components["schemas"]["RecommendedVideosItemSchema"][];
                         };
                     };
                 };
@@ -334,7 +334,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/komplex/feed/videos/:id/likes": {
+    "/feed/videos/:id/likes": {
         parameters: {
             query?: never;
             header?: never;
@@ -387,7 +387,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/komplex/feed/videos/:id/comments": {
+    "/feed/videos/:id/comments": {
         parameters: {
             query?: never;
             header?: never;
@@ -413,7 +413,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data?: unknown;
+                            data: components["schemas"]["FeedVideoCommentItemResponseSchema"][];
                         };
                     };
                 };
@@ -440,7 +440,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/komplex/feed/videos/:id/comments/:id/replies": {
+    "/feed/videos/:id/comments/:id/replies": {
         parameters: {
             query?: never;
             header?: never;
@@ -466,7 +466,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data?: unknown;
+                            data: components["schemas"]["FeedVideoReplyItemResponseSchema"][];
                         };
                     };
                 };
@@ -1023,7 +1023,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/komplex/feed/librarys/:id": {
+    "/komplex/feed/books/:id": {
         parameters: {
             query?: never;
             header?: never;
@@ -1049,7 +1049,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data?: unknown;
+                            data: components["schemas"]["BookItemSchema"];
                         };
                     };
                 };
@@ -1076,7 +1076,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/komplex/feed/librarys": {
+    "komplex/feed/books": {
         parameters: {
             query?: never;
             header?: never;
@@ -1102,7 +1102,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["FeedBooksResponse"];
+                            data: components["schemas"]["BookItemSchema"][];
                         };
                     };
                 };
@@ -1123,169 +1123,6 @@ export interface paths {
         };
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/komplex/feed/librarys/lesson/{lessonId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get books by lesson */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Books retrieved successfully */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @enum {boolean} */
-                            success: true;
-                            data: components["schemas"]["FeedBooksByLessonResponse"];
-                        };
-                    };
-                };
-                /** @description Invalid input */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @enum {boolean} */
-                            success: false;
-                            error: string;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/komplex/feed/librarys/subject/{subjectId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get books by subject */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Books retrieved successfully */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @enum {boolean} */
-                            success: true;
-                            data: components["schemas"]["FeedBooksBySubjectResponse"];
-                        };
-                    };
-                };
-                /** @description Invalid input */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @enum {boolean} */
-                            success: false;
-                            error: string;
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/komplex/feed/librarys/filter": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Filter books */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["FilterBooksBody"];
-                };
-            };
-            responses: {
-                /** @description Filtered books retrieved successfully */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @enum {boolean} */
-                            success: true;
-                            data: components["schemas"]["FilterBooksResponse"];
-                        };
-                    };
-                };
-                /** @description Invalid input */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @enum {boolean} */
-                            success: false;
-                            error: string;
-                        };
-                    };
-                };
-            };
-        };
         delete?: never;
         options?: never;
         head?: never;
@@ -4590,7 +4427,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeRateAiTopicResponse"];
+                            data?: unknown;
                         };
                     };
                 };
@@ -4720,6 +4557,62 @@ export interface components {
             isSaved: boolean;
             isFollowing: boolean;
         };
+        RecommendedVideosItemSchema: {
+            id: number;
+            userId: number;
+            title: string;
+            description?: string | null;
+            type?: string | null;
+            topic?: string | null;
+            duration?: number | null;
+            videoUrl: string;
+            thumbnailUrl?: string | null;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
+            username: string;
+            profileImage?: string | null;
+            viewCount: number;
+            likeCount: number;
+            saveCount: number;
+            isLiked: boolean;
+            isSaved: boolean;
+        };
+        FeedVideoCommentItemResponseSchema: {
+            id: number;
+            userId: number;
+            videoId: number;
+            description: string;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
+            media: components["schemas"]["MediaSchema"][];
+            username: string;
+            profileImage?: string | null;
+            likeCount: number;
+            isLiked: boolean;
+        };
+        MediaSchema: {
+            url: string;
+            type: string;
+        };
+        FeedVideoReplyItemResponseSchema: {
+            id: number;
+            userId: number;
+            videoCommentId: number;
+            description: string;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
+            media: components["schemas"]["MediaSchema"][];
+            username: string;
+            profileImage?: string | null;
+            likeCount: number;
+            isLiked: boolean;
+        };
         FeedForumItemSchema: {
             id: number;
             userId: number;
@@ -4738,10 +4631,6 @@ export interface components {
             likeCount: number;
             isLiked: boolean;
             isFollowing: boolean;
-        };
-        MediaSchema: {
-            url: string;
-            type: string;
         };
         FeedForumItemResponseSchema: {
             id: number;
@@ -4853,77 +4742,23 @@ export interface components {
             component: unknown[];
             componentCode: string;
         };
-        FeedBooksResponse: {
-            data: {
-                id: number;
-                title: string;
-                description?: string | null;
-                fileUrl?: string | null;
-                fileKey?: string | null;
-                coverUrl?: string | null;
-                coverKey?: string | null;
-                subjectId?: number | null;
-                lessonId?: number | null;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-            }[];
-        };
-        FeedBooksByLessonResponse: {
-            data: {
-                id: number;
-                title: string;
-                description?: string | null;
-                fileUrl?: string | null;
-                fileKey?: string | null;
-                coverUrl?: string | null;
-                coverKey?: string | null;
-                subjectId?: number | null;
-                lessonId?: number | null;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-            }[];
-        };
-        FeedBooksBySubjectResponse: {
-            data: {
-                id: number;
-                title: string;
-                description?: string | null;
-                fileUrl?: string | null;
-                fileKey?: string | null;
-                coverUrl?: string | null;
-                coverKey?: string | null;
-                subjectId?: number | null;
-                lessonId?: number | null;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-            }[];
-        };
-        FilterBooksResponse: {
-            data: {
-                id: number;
-                title: string;
-                description?: string | null;
-                fileUrl?: string | null;
-                fileKey?: string | null;
-                coverUrl?: string | null;
-                coverKey?: string | null;
-                subjectId?: number | null;
-                lessonId?: number | null;
-                /** Format: date-time */
-                createdAt: string;
-                /** Format: date-time */
-                updatedAt: string;
-            }[];
-        };
-        FilterBooksBody: {
-            lessonId?: string;
-            subjectId?: string;
+        BookItemSchema: {
+            id: number;
+            title: string;
+            description?: string | null;
+            author?: string | null;
+            gradeId?: number | null;
+            lessonId?: number | null;
+            isRecommended?: boolean | null;
+            subjectId?: number | null;
+            /** Format: date-time */
+            publishedDate?: string | null;
+            pdfUrl: string;
+            imageUrl: string;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
         };
         UserProfileResponse: {
             id: number;
@@ -5180,9 +5015,6 @@ export interface components {
             responseType: string;
         };
         MeDeleteAiTopicResponse: {
-            data: unknown[];
-        };
-        MeRateAiTopicResponse: {
             data: unknown[];
         };
         MeRateAiTopicBody: {

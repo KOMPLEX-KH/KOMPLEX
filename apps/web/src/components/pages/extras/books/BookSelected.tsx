@@ -3,8 +3,8 @@
 import { ArrowLeft, User, GraduationCap } from "lucide-react";
 import BookCard from "./BookCard";
 import { useRouter } from "next/navigation";
-import type { Book, Subject } from "@core-types/content/library";
-import type { Grade } from "@/types/docs/curriculum";
+import type { Book } from "@core-types/content/books";
+import type { Grade, Subject } from "@core-types/docs/curriculum";
 
 type Props = {
   book: Book;
@@ -60,7 +60,7 @@ export default function BookSelectedPage({ book, relatedBooks, curriculum }: Pro
 
                 <span className="inline-flex items-center gap-2 px-4 py-1 bg-green-100 text-green-700 rounded-full font-medium">
                   <GraduationCap className="w-4 h-4" />
-                  {gradeInfo?.name || `ថ្នាក់ទី ${book.gradeId}`}
+                  {gradeInfo?.name || `ថ្នាក់ទី ${gradeInfo.name}`}
                 </span>
               </div>
 

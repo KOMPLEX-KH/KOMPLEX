@@ -9,3 +9,12 @@ export type VideoPost = FeedVideoItemSchema;
 type MeVideoHistoryResponse = GetApiSchema<typeof SchemaMap.MeVideoHistoryResponse>;
 export type VideoHistory = MeVideoHistoryResponse;
 
+type RecommendedVideosItemSchema = GetApiSchema<typeof SchemaMap.RecommendedVideosItemSchema>;
+export type RecommendedVideos = RecommendedVideosItemSchema;
+
+type FeedVideoCommentItemResponseSchema = GetApiSchema<typeof SchemaMap.FeedVideoCommentItemResponseSchema>;
+export type VideoComment = FeedVideoCommentItemResponseSchema;
+
+type FeedVideoReplyItemResponseSchema = GetApiSchema<typeof SchemaMap.FeedVideoReplyItemResponseSchema>;
+export type VideoReply = FeedVideoReplyItemResponseSchema;
+
