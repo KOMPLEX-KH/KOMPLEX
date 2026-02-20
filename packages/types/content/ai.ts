@@ -7,7 +7,7 @@ export type AIResponse = MePostAiGeneralResponse;
 
 // MeAiGeneralTabHistoryResponse is actually MeAiGeneralTabHistoryItemSchema (single item, not array)
 type MeAiGeneralTabHistoryItemSchema = GetApiSchema<typeof SchemaMap.MeAiGeneralTabHistoryItemSchema>;
-export type AIHistoryResponse = MeAiGeneralTabHistoryItemSchema;
+export type AiHistoryItem = MeAiGeneralTabHistoryItemSchema;
 
 // MeAiGeneralTabsResponse is actually MeAiGeneralTabItemSchema (single item, not array)
 type MeAiGeneralTabItemSchema = GetApiSchema<typeof SchemaMap.MeAiGeneralTabItemSchema>;

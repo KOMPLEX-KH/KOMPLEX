@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Play, Clock, Calendar, Trash2, History, AlertCircle, CheckCircle } from 'lucide-react';
 import { meVideoHistoryService } from '@/services/index';
-import type { VideoHistory } from '@/types/content/videos';
+import type { VideoHistory } from '@core-types/api-types';
 
 interface VideoHistoryProps {
     onError?: (error: string) => void;
@@ -25,7 +25,7 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                 setLoading(true);
                 setError(null);
                 const history = await meVideoHistoryService.getUserVideoHistory();
-                setVideoHistory(history);
+                setVideoHistory(history.data || []);
             } catch (err) {
                 console.error('Error fetching video history:', err);
                 const errorMessage = 'មានបញ្ហាក្នុងការផ្ទុកប្រវត្តិវីដេអូ។ សូមព្យាយាមម្តងទៀត។';

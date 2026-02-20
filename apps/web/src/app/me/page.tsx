@@ -8,11 +8,11 @@ import { Video, MessageSquare, UserCircle, Mail, AtSign, Phone, Calendar, Shield
 import { useAuth } from '@hooks/useAuth';
 import MeSkeleton from '@/components/pages/me/MeSkeleton';
 import { authService } from '@/services/index';
-import type { User } from '@/types/auth';
 import ContentError from '@/components/common/ContentError';
 import Link from 'next/link';
 import AllMeForums from '@/components/pages/me/forums/AllMeForums';
 import AllMeVideos from '@/components/pages/me/videos/AllMeVideos';
+import { Profile } from '@core-types/content/profile';
 
 
 export default function MePage() {
@@ -29,7 +29,7 @@ function MePageContent() {
     const searchParams = useSearchParams();
     const activeTab = searchParams.get('tab') || 'profile';
 
-    const [profile, setProfile] = useState<User | null>(null);
+    const [profile, setProfile] = useState<Profile | null>(null);
     const [isProfileLoading, setIsProfileLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -48,7 +48,7 @@ function MePageContent() {
                 setError(null);
                 // Use detailed profile endpoint that includes follower stats
                 const userData = await authService.getCurrentUserProfile();
-                setProfile(userData as User);
+                setProfile(userData.data);
             } catch (err) {
                 console.error('Error fetching profile:', err);
                 setError('មានបញ្ហាក្នុងការទាញយកព័ត៌មានប្រវត្តិ។ សូមព្យាយាមម្តងទៀត។');

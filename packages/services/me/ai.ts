@@ -1,7 +1,7 @@
 import type { AxiosInstance } from "axios";
 import type {
   AIResponse,
-  AIHistoryResponse,
+  AiHistoryItem,
   AIResponseType,
   AiTab,
 } from "../../types/content/ai";
@@ -26,7 +26,7 @@ export const createMeAiService = (api: AxiosInstance) => {
       tabId: string,
       page: number = 1,
       limit: number = 20
-    ): Promise<ApiWrapper<AIHistoryResponse>> => {
+    ): Promise<ApiWrapper<AiHistoryItem[]>> => {
       try {
         const response = await api.get(`/me/ai/general/tabs/${tabId}`, {
           params: {
@@ -126,9 +126,9 @@ export const createMeAiService = (api: AxiosInstance) => {
       topicId: number,
       page: number = 1,
       limit: number = 20
-    ): Promise<ApiWrapper<AIHistoryResponse>> => {
+    ): Promise<ApiWrapper<AiHistoryItem[]>> => {
       try {
-        const response = await api.get<ApiWrapper<AIHistoryResponse>>(`/me/ai/topics/${topicId}`, {
+        const response = await api.get<ApiWrapper<AiHistoryItem[]>>(`/me/ai/topics/${topicId}`, {
           params: {
             page,
             limit,

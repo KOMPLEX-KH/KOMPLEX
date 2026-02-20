@@ -1,4 +1,4 @@
-import type { components } from "../types/api-types/index";
+import type { components } from "../types/auto-api-types/index";
 
 
 export type GetApiSchema<

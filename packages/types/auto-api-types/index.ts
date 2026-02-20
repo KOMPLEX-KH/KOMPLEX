@@ -4349,7 +4349,7 @@ export interface paths {
                         "application/json": {
                             /** @enum {boolean} */
                             success: true;
-                            data: components["schemas"]["MeRateAiGeneralResponse"];
+                            data?: unknown;
                         };
                     };
                 };
@@ -5149,9 +5149,6 @@ export interface components {
         MeDeleteAiGeneralTabResponse: {
             data: unknown[];
         };
-        MeRateAiGeneralResponse: {
-            data: unknown[];
-        };
         MeRateAiGeneralBody: {
             rating: number;
             ratingFeedback?: string;
@@ -5163,13 +5160,14 @@ export interface components {
         MeAiTopicHistoryItem: {
             id: number;
             userId: number;
-            topicId: number;
             prompt: string;
-            response: string;
+            aiResult: string;
+            /** @enum {string} */
+            responseType: "normal" | "komplex";
             /** Format: date-time */
-            createdAt: string;
+            createdAt: string | null;
             /** Format: date-time */
-            updatedAt: string;
+            updatedAt: string | null;
         };
         MeCallAiTopicResponse: {
             prompt: string;
