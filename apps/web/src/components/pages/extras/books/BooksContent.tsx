@@ -7,7 +7,7 @@ import BookCard from "@/components/pages/extras/books/BookCard";
 import ViewAllByCategory from "@/components/pages/extras/books/ViewAllBooks";
 import { ViewAllByCategorySkeleton } from "@/components/pages/extras/books/BookSkeleton";
 import { feedBooksService, feedCurriculumsService } from "@/services";
-import LibraryHeader from "@/components/pages/extras/books/BooksHeader";
+import BooksHeader from "@/components/pages/extras/books/BooksHeader";
 import BookSelectedPage from "@/components/pages/extras/books/BookSelected";
 import type { Book } from "@core-types/content/books";
 import type { Grade, Subject } from "@core-types/docs/curriculum";
@@ -85,7 +85,7 @@ export default function BooksContent() {
 
   // Handle book selection
   const handleBookSelected = (bookId: number) => {
-    router.push(`/extra/library?book=${bookId}`);
+    router.push(`/extra/books?book=${bookId}`);
   };
 
 
@@ -148,7 +148,7 @@ export default function BooksContent() {
 
   return (
     <div className="relative">
-      <LibraryHeader
+      <BooksHeader
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         filterRef={filterRef}
@@ -214,7 +214,7 @@ export default function BooksContent() {
                     </div>
 
                     <button
-                      onClick={() => router.push(`/extra/library?category=${subject.id}`)}
+                      onClick={() => router.push(`/extra/books?category=${subject.id}`)}
                       className="text-indigo-600 bg-indigo-50/80 font-semibold px-4 py-2 rounded-3xl hover:bg-indigo-100 transition-colors flex items-center gap-2 group text-sm sm:text-base"
                     >
                       <span className="hidden sm:inline">មើលទាំងអស់</span>

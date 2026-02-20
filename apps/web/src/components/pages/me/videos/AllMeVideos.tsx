@@ -11,7 +11,7 @@ import {
     Calendar,
 } from 'lucide-react';
 import { meVideoService } from '@/services/index';
-import { VideoPost } from '@/types/content/videos';
+import { VideoPost } from '@core-types/content/videos';
 import ContentError from '@/components/common/ContentError';
 import MeSkeleton from '@/components/pages/me/MeSkeleton';
 import { useAuth } from '@hooks/useAuth';
@@ -38,7 +38,7 @@ export default function AllMeVideos() {
                     setIsLoading(true);
                     setError(null);
                     const userVideos = await meVideoService.getUserVideos();
-                    setVideos(userVideos.map((v) => {
+                    setVideos(userVideos.data.map((v) => {
                         return {
                             id: v.id,
                             userId: v.userId,

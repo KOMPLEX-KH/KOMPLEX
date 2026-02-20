@@ -42,7 +42,7 @@ export default function ViewAllByCategory({ books, curriculum, categoryId }: Vie
       <div className="p-8 text-center">
         <p className="text-gray-500 text-lg">រកមិនឃើញប្រភេទសៀវភៅ</p>
         <button
-          onClick={() => router.push("/extra/library")}
+          onClick={() => router.push("/extra/books")}
           className="mt-4 text-indigo-600 hover:text-indigo-800 font-semibold"
         >
           ត្រឡប់ទៅទំព័រដើម
@@ -52,14 +52,14 @@ export default function ViewAllByCategory({ books, curriculum, categoryId }: Vie
   }
 
   const handleBookSelected = (bookId: number) => {
-    router.push(`/extra/library?book=${bookId}`);
+    router.push(`/extra/books?book=${bookId}`);
   };
 
   return (
     <div className="w-full">
       <div className="flex items-center gap-3 mb-8">
         <button
-          onClick={() => router.push("/extra/library")}
+          onClick={() => router.push("/extra/books")}
           type="button"
           className="inline-flex items-center gap-2 text-indigo-600 bg-indigo-100 hover:bg-indigo-200 rounded-full px-2 py-2 shadow-sm"
         >

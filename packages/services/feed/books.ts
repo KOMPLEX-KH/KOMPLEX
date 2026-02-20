@@ -11,7 +11,6 @@ export const createFeedBooksService = (api: AxiosInstance) => {
         const response = await api.get<ApiWrapper<Book[]>>(`/feed/books`);
         return response.data as ApiWrapper<Book[]>;
       } catch (error) {
-        console.error("Error fetching all books:", error);
         throw new Error("Failed to fetch books");
       }
     },
