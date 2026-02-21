@@ -28,13 +28,13 @@ export default function Docs() {
             try {
                 const curriculumData = await feedCurriculumsService.getCurriculum();
 
-                if (!curriculumData || curriculumData.length === 0) {
+                if (!curriculumData || curriculumData.data.length === 0) {
                     setFetchError("រកមិនឃើញទិន្នន័យមេរៀន");
                     return;
                 }
 
                 setFetchError(null);
-                setCurriculum(curriculumData);
+                setCurriculum(curriculumData.data);
                 localStorage.setItem("curriculum", JSON.stringify(curriculumData));
             } catch (error) {
                 setFetchError("មានបញ្ហា​ក្នុងការទាញយកមេរៀន សូមព្យាយាមម្តងទៀត។");

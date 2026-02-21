@@ -66,7 +66,7 @@ export default function Page() {
             const fetchCurriculum = async () => {
                 try {
                     const curriculumData = await feedCurriculumsService.getCurriculum();
-                    setCurriculum(curriculumData);
+                    setCurriculum(curriculumData.data);
                     localStorage.setItem('curriculum', JSON.stringify(curriculumData));
                 } catch (error) {
                     console.error('Error fetching curriculum:', error);

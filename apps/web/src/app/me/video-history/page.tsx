@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { Play, Clock, Calendar, Trash2, History, AlertCircle, CheckCircle } from 'lucide-react';
 import { meVideoHistoryService } from '@/services/index';
 import Sidebar from '@/components/pages/me/Sidebar';
-import type { VideoHistory } from '@core-types/api-types';
+import type { VideoHistory } from '@core-types/content/videos';
 import { useAuth } from '@hooks/useAuth';
 
 export default function VideoHistory() {
