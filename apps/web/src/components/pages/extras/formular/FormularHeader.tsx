@@ -2,7 +2,7 @@
 
 import { Search, Filter, ChevronDown, Check, Grid3x3 } from "lucide-react";
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Grade } from "@/types/docs/curriculum";
+import { Grade } from "@core-types/docs/curriculum";
 import { getSubjectIcon } from "@core-utils/transform";
 
 interface FormularHeaderProps {

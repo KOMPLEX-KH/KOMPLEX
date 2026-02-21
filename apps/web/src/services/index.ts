@@ -15,7 +15,7 @@ import { createFeedVideoCommentService } from "@core-services/feed/video-comment
 import { createFeedVideoReplyService } from "@core-services/feed/video-replies";
 import { createFeedSearchForumService } from "@core-services/feed/search/forums";
 import { createFeedSearchVideoService } from "@core-services/feed/search/videos";
-import { createFeedLibraryService } from "@core-services/feed/library";
+import { createFeedBooksService } from "@core-services/feed/books";
 
 // Me services
 import { createMeBlogService } from "@core-services/me/blogs";
@@ -52,7 +52,7 @@ export const feedVideoCommentService = createFeedVideoCommentService(api);
 export const feedVideoReplyService = createFeedVideoReplyService(api);
 export const feedSearchForumService = createFeedSearchForumService(api);
 export const feedSearchVideoService = createFeedSearchVideoService(api);
-export const feedLibraryService = createFeedLibraryService(api);
+export const feedBooksService = createFeedBooksService(api);
 
 // Me services
 export const meBlogService = createMeBlogService(api);

@@ -5,20 +5,7 @@ import Link from 'next/link';
 import { Play, Eye, ThumbsUp, Clock } from 'lucide-react';
 import ContentError from '@/components/common/ContentError';
 import { userVideoService } from '@/services/index';
-
-
-interface Video {
-    id: number;
-    title: string;
-    description: string;
-    thumbnailUrl: string;
-    videoUrl: string;
-    username: string;
-    viewCount: number;
-    likeCount: number;
-    duration: number;
-    createdAt: string;
-}
+import { VideoPost } from '@core-types/content/videos';
 
 interface VideoProps {
     userId: string;
@@ -30,8 +17,8 @@ const formatDuration = (seconds: number): string => {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 };
 
-export default function Video({ userId }: VideoProps) {
-    const [videos, setVideos] = useState<Video[]>([]);
+export default function Videos({ userId }: VideoProps) {
+    const [videos, setVideos] = useState<VideoPost[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -41,7 +28,7 @@ export default function Video({ userId }: VideoProps) {
                 setIsLoading(true);
                 setError(null);
                 const data = await userVideoService.getUserVideos(userId);
-                setVideos(data);
+                setVideos(data.data);
             } catch (error) {
                 console.error('Error fetching user videos:', error);
                 setError('មានបញ្ហាក្នុងការទាញយកវីដេអូរបស់អ្នកប្រើប្រាស់។ សូមព្យាយាមម្តងទៀត។');

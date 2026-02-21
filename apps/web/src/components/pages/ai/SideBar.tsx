@@ -54,8 +54,8 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                     meAiService.getAllAiTopicTabNames(),
                 ]);
 
-                const generalItems = Array.isArray(general) ? general : [];
-                const topicItems = Array.isArray(topics) ? topics : [];
+                const generalItems = Array.isArray(general.data) ? general.data : [];
+                const topicItems = Array.isArray(topics.data) ? topics.data : [];
 
                 setGeneralTabs(generalItems);
                 setTopicTabs(topicItems);

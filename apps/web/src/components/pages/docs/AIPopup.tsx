@@ -16,6 +16,8 @@ import { useParams } from "next/navigation";
 import type { Params } from "next/dist/server/request/params";
 import type { Grade, Lesson, Subject, Topic } from "@core-types/docs/curriculum";
 import ChatSkeleton from "../ai/ChatSkeleton";
+import { ApiWrapper } from "@core-types/apiWrapper";
+import { AIResponse } from "@core-types/content/ai";
 
 interface AIPopupProps {
     isOpen: boolean;
@@ -270,7 +272,7 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
             return;
         }
         try {
-            const response: { data: { aiResult: string; id: number; responseType?: AIResponseType } } =
+            const response: ApiWrapper<AIResponse> =
                 await meAiService.callAiTopic(payload, topicId, selectedResponseType.id);
 
             const resolvedResponseType = response.data.responseType ?? "normal";

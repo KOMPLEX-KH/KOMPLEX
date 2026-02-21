@@ -1,6 +1,6 @@
 "use client";
 import { User } from "lucide-react";
-import { Book } from "@core-types/content/library";
+import { Book } from "@core-types/content/books";
 import Image from "next/image";
 
 type Props = {

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import FormularHeader from "@/components/pages/extras/formular/FormularHeader";
 import FormularContainer from "@/components/pages/extras/formular/FormularContainer";
 import { feedCurriculumsService } from "@/services";
-import { Grade } from "@/types/docs/curriculum";
+import { Grade } from "@core-types/docs/curriculum";
 import { subjectMapping } from "@core-types/content/formular";
 import { mockFormulas } from "@core-types/content/formular";
 
@@ -43,8 +43,8 @@ export default function FormularPage() {
     if (!curriculum.length) {
       const fetchCurriculum = async () => {
         const data = await feedCurriculumsService.getCurriculum();
-        setCurriculum(data);
-        localStorage.setItem("curriculum", JSON.stringify(data));
+        setCurriculum(data.data);
+        localStorage.setItem("curriculum", JSON.stringify(data.data));
       };
       fetchCurriculum();
     }

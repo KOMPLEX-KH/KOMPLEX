@@ -1,5 +1,4 @@
 import type { AxiosInstance } from "axios";
-import type { VideoPost } from "../../types/content/videos";
 
 export const createMeVideoService = (api: AxiosInstance) => {
   return {
@@ -19,9 +18,9 @@ export const createMeVideoService = (api: AxiosInstance) => {
             }[];
           }[]
         | undefined;
-    }): Promise<VideoPost> => {
+    }) => {
       try {
-        const response = await api.post<VideoPost>(`/me/videos`, {
+        const response = await api.post(`/me/videos`, {
           videoKey: videoData.videoKey,
           title: videoData.title,
           duration: videoData.duration,
@@ -37,9 +36,10 @@ export const createMeVideoService = (api: AxiosInstance) => {
     },
 
     // Delete a video
-    deleteVideo: async (id: string): Promise<void> => {
+    deleteVideo: async (id: string) => {
       try {
-        await api.delete(`/me/videos/${id}`);
+        const response = await api.delete(`/me/videos/${id}`);
+        return response.data;
       } catch (error) {
         console.error("Error deleting video:", error);
         throw new Error("Failed to delete video");
@@ -47,10 +47,11 @@ export const createMeVideoService = (api: AxiosInstance) => {
     },
 
     // Like/unlike a video
-    toggleVideoLike: async (id: string, isLiked: boolean): Promise<void> => {
+    toggleVideoLike: async (id: string, isLiked: boolean) => {
       try {
         const endpoint = isLiked ? "unlike" : "like";
-        await api.patch(`/me/videos/${id}/${endpoint}`);
+        const response = await api.patch(`/me/videos/${id}/${endpoint}`);
+        return response.data;
       } catch (error) {
         console.error("Error toggling video like:", error);
         throw new Error("Failed to update video like status");
@@ -58,10 +59,11 @@ export const createMeVideoService = (api: AxiosInstance) => {
     },
 
     // Save/unsave a video
-    toggleVideoSave: async (id: string, isSaved: boolean): Promise<void> => {
+    toggleVideoSave: async (id: string, isSaved: boolean) => {
       try {
         const endpoint = isSaved ? "unsave" : "save";
-        await api.patch(`/me/videos/${id}/${endpoint}`);
+        const response = await api.patch(`/me/videos/${id}/${endpoint}`);
+        return response.data;
       } catch (error) {
         console.error("Error toggling video save:", error);
         throw new Error("Failed to update video save status");
@@ -71,10 +73,10 @@ export const createMeVideoService = (api: AxiosInstance) => {
     // USER CONTENT VIDEOS
 
     // Get user's own videos
-    getUserVideos: async (): Promise<VideoPost[]> => {
+    getUserVideos: async () => {
       try {
-        const response = await api.get<{ data: VideoPost[] }>(`/me/videos`);
-        return response.data.data;
+        const response = await api.get(`/me/videos`);
+        return response.data;
       } catch (error) {
         console.error("Error fetching user videos:", error);
         throw new Error("Failed to fetch user videos");
@@ -99,7 +101,7 @@ export const createMeVideoService = (api: AxiosInstance) => {
           }[];
         }[];
       }
-    ): Promise<{ data: { success: boolean } }> => {
+    ) => {
       try {
         const response = await api.put(`/me/videos/${id}`, payload);
         return response.data;

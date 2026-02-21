@@ -1,6 +1,7 @@
 import type { AxiosInstance } from "axios";
 import type { UploadUrlResponse } from "../types/uploadUrl";
 import axios from "axios";
+import { ApiWrapper } from "@core-types/apiWrapper";
 
 export const createUploadService = (api: AxiosInstance) => {
   return {
@@ -10,25 +11,20 @@ export const createUploadService = (api: AxiosInstance) => {
     getUploadUrl: async (
       fileName: string,
       fileType: string
-    ): Promise<UploadUrlResponse> => {
+    ) => {
       try {
-        const response = await api.post<UploadUrlResponse>(
-          `/upload/upload-url`,
-          {
-            fileName,
-            fileType,
-          },
-          { withCredentials: true }
-        );
+        const response = await api.post<ApiWrapper<UploadUrlResponse>>(`/upload/upload-url`, {
+          fileName,
+          fileType,
+        }, { withCredentials: true });
         return response.data;
       } catch (error) {
-        console.error("Error getting upload URL:", error);
         throw new Error("Failed to get upload URL");
       }
     },
 
     // Upload file to R2 using presigned URL
-    uploadFileToR2: async (signedUrl: string, file: File): Promise<void> => {
+    uploadFileToR2: async (signedUrl: string, file: File) => {
       try {
         await axios.put(signedUrl, file, {
           headers: {
@@ -36,7 +32,6 @@ export const createUploadService = (api: AxiosInstance) => {
           },
         });
       } catch (error) {
-        console.error("Error uploading file to R2:", error);
         throw new Error("Failed to upload file");
       }
     },
@@ -44,18 +39,14 @@ export const createUploadService = (api: AxiosInstance) => {
     // UPLOAD OPERATIONS ===========================================================
 
     // Complete file upload process (get URL + upload)
-    uploadFile: async (file: File): Promise<string> => {
+    uploadFile: async (file: File) => {
       try {
-        const response = await api.post<UploadUrlResponse>(
-          `/upload/upload-url`,
-          {
-            fileName: file.name,
-            fileType: file.type,
-          },
-          { withCredentials: true }
-        );
+        const response = await api.post<ApiWrapper<UploadUrlResponse>>(`/upload/upload-url`, {
+          fileName: file.name,
+          fileType: file.type,
+        }, { withCredentials: true });
 
-        const { signedUrl, key } = response.data;
+        const { signedUrl, key } = response.data.data;
 
         await axios.put(signedUrl, file, {
           headers: {
@@ -65,26 +56,21 @@ export const createUploadService = (api: AxiosInstance) => {
 
         return key;
       } catch (error) {
-        console.error("Error uploading file:", error);
         throw new Error("Failed to upload file");
       }
     },
 
     // Upload multiple files
-    uploadMultipleFiles: async (files: File[]): Promise<string[]> => {
+    uploadMultipleFiles: async (files: File[]) => {
       try {
         const uploadPromises = files.map((file) => {
           return api
-            .post<UploadUrlResponse>(
-              `/upload/upload-url`,
-              {
-                fileName: file.name,
-                fileType: file.type,
-              },
-              { withCredentials: true }
-            )
+            .post<ApiWrapper<UploadUrlResponse>>(`/upload/upload-url`, {
+              fileName: file.name,
+              fileType: file.type,
+            }, { withCredentials: true })
             .then(async (response) => {
-              const { signedUrl, key } = response.data;
+              const { signedUrl, key } = response.data.data;
               await axios.put(signedUrl, file, {
                 headers: {
                   "Content-Type": file.type,
@@ -95,47 +81,42 @@ export const createUploadService = (api: AxiosInstance) => {
         });
         return await Promise.all(uploadPromises);
       } catch (error) {
-        console.error("Error uploading multiple files:", error);
         throw new Error("Failed to upload files");
       }
     },
 
-    // Upload file with progress callback
-    uploadFileWithProgress: async (
-      file: File,
-      onProgress?: (progress: number) => void
-    ): Promise<string> => {
-      try {
-        const response = await api.post<UploadUrlResponse>(
-          `/upload/upload-url`,
-          {
-            fileName: file.name,
-            fileType: file.type,
-          },
-          { withCredentials: true }
-        );
+    //   // Upload file with progress callback
+    //   uploadFileWithProgress: async (
+    //     file: File,
+    //     onProgress?: (progress: number) => void
+    //   ) => {
+    //     try {
+    //       const response = await api.post<ApiWrapper<UploadUrlResponse>>(`/upload/upload-url`, {
+    //         fileName: file.name,
+    //         fileType: file.type,
+    //       }, { withCredentials: true });
 
-        const { signedUrl, key } = response.data;
+    //       const { signedUrl, key } = response.data.data;
 
-        await api.put(signedUrl, file, {
-          headers: {
-            "Content-Type": file.type,
-          },
-          onUploadProgress: (progressEvent) => {
-            if (onProgress && progressEvent.total) {
-              const progress = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              );
-              onProgress(progress);
-            }
-          },
-        });
+    //       await api.put(signedUrl, file, {
+    //         headers: {
+    //           "Content-Type": file.type,
+    //         },
+    //         onUploadProgress: (progressEvent) => {
+    //           if (onProgress && progressEvent.total) {
+    //             const progress = Math.round(
+    //               (progressEvent.loaded * 100) / progressEvent.total
+    //             );
+    //             onProgress(progress);
+    //           }
+    //         },
+    //       });
 
-        return key;
-      } catch (error) {
-        console.error("Error uploading file with progress:", error);
-        throw new Error("Failed to upload file");
-      }
-    },
-  };
+    //       return key;
+    //     } catch (error) {
+    //       throw new Error("Failed to upload file with progress");
+    //     }
+    //   },
+    // };
+  }
 };

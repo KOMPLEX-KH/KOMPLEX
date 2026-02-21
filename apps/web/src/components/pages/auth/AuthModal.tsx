@@ -100,7 +100,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
             const result = await signInWithEmailAndPassword(auth, loginIdentifier, loginPassword);
             await result.user.getIdToken(true);
             const userData = await authService.getCurrentUser();
-            localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('user', JSON.stringify(userData.data));
             closeAndReset();
             router.push('/');
         } catch (error: unknown) {
@@ -144,7 +144,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                 profileImageKey: imageKey,
             });
 
-            localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('user', JSON.stringify(userData.data));
             closeAndReset();
             router.push('/');
         } catch (error: unknown) {
@@ -175,7 +175,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                 profileImageKey: null,
             });
 
-            localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('user', JSON.stringify(userData.data));
             closeAndReset();
             router.push('/');
         } catch (error: unknown) {

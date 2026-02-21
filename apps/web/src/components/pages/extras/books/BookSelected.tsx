@@ -3,8 +3,8 @@
 import { ArrowLeft, User, GraduationCap } from "lucide-react";
 import BookCard from "./BookCard";
 import { useRouter } from "next/navigation";
-import type { Book, Subject } from "@core-types/content/library";
-import type { Grade } from "@/types/docs/curriculum";
+import type { Book } from "@core-types/content/books";
+import type { Grade, Subject } from "@core-types/docs/curriculum";
 
 type Props = {
   book: Book;
@@ -22,7 +22,7 @@ export default function BookSelectedPage({ book, relatedBooks, curriculum }: Pro
       {/* Back Button */}
       <div className="flex items-center gap-3 mb-2">
         <button
-          onClick={() => router.push("/extra/library")}
+          onClick={() => router.push("/extra/books")}
           type="button"
           className="inline-flex items-center gap-2 text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none rounded-full px-2 py-2 font-semibold transition duration-200 select-none shadow-sm"
         >
@@ -60,7 +60,7 @@ export default function BookSelectedPage({ book, relatedBooks, curriculum }: Pro
 
                 <span className="inline-flex items-center gap-2 px-4 py-1 bg-green-100 text-green-700 rounded-full font-medium">
                   <GraduationCap className="w-4 h-4" />
-                  {gradeInfo?.name || `ថ្នាក់ទី ${book.gradeId}`}
+                  {gradeInfo?.name || `ថ្នាក់ទី ${gradeInfo.name}`}
                 </span>
               </div>
 
@@ -97,7 +97,7 @@ export default function BookSelectedPage({ book, relatedBooks, curriculum }: Pro
             "
           >
             {relatedBooks.map((book) => (
-              <BookCard key={book.id} book={book} onClick={() => router.push(`/extra/library?book=${book.id}`)} />
+              <BookCard key={book.id} book={book} onClick={() => router.push(`/extra/books?book=${book.id}`)} />
             ))}
           </div>
         </section>

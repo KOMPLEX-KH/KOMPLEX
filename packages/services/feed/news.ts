@@ -4,14 +4,11 @@ import type { News } from "../../types/content/news";
 export const createFeedNewsService = (api: AxiosInstance) => {
   return {
     // Get all blog posts
-    getAllNews: async (): Promise<{
-      news: News[];
-      hasMore: boolean;
-    }> => {
+    getAllNews: async () => {
       try {
         const response = await api.get(`/feed/news`);
         return {
-          news: response.data.data,
+          news: response.data,
           hasMore: response.data.hasMore,
         };
       } catch (error) {
@@ -24,7 +21,7 @@ export const createFeedNewsService = (api: AxiosInstance) => {
     getNewsById: async (id: string): Promise<News & { isSaved: boolean }> => {
       try {
         const response = await api.get(`/feed/news/${id}`);
-        return response.data.data;
+        return response.data;
       } catch (error) {
         console.error("Error fetching blog post:", error);
         throw new Error("Failed to fetch blog post");

@@ -1,4 +1,3 @@
-export interface UploadUrlResponse {
-  signedUrl: string;
-  key: string;
-}
+import { GetApiSchema, SchemaMap } from "../utils/apiSchema";
+
+export type UploadUrlResponse = GetApiSchema<typeof SchemaMap.UploadUrlResponse>;
