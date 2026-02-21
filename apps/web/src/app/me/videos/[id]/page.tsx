@@ -287,9 +287,9 @@ export default function VideoPost() {
                                 </div>
 
                                 {/* Exercise Section - Under Video for Desktop */}
-                                <div className="hidden lg:block">
+                                {/* <div className="hidden lg:block">
                                     <Exercise exercises={videoPost.exercises || []} />
-                                </div>
+                                </div> */}
                             </div>
 
                             {/* Right Column - Tabs */}
@@ -338,11 +338,11 @@ export default function VideoPost() {
                                         </div>
                                     )}
 
-                                    {activeTab === 'exercise' && (
+                                    {/* {activeTab === 'exercise' && (
                                         <div className="p-6">
                                             <Exercise exercises={videoPost.exercises || []} />
                                         </div>
-                                    )}
+                                    )} */}
                                 </div>
                             </div>
                         </div>
@@ -391,11 +391,11 @@ export default function VideoPost() {
                                     />
                                 </div>
                             )}
-                            {activeTab === 'exercise' && (
+                            {/* {activeTab === 'exercise' && (
                                 <div className="bg-white rounded-3xl p-4 shadow-sm">
                                     <Exercise exercises={videoPost.exercises || []} />
                                 </div>
-                            )}
+                            )} */}
                         </div>
                     </div>
                 </div>
