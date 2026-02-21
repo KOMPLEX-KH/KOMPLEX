@@ -4486,8 +4486,8 @@ export interface components {
             uid: string;
             firstName: string;
             lastName?: string | null;
-            dateOfBirth?: string;
-            phone?: string;
+            dateOfBirth?: string | null;
+            phone?: string | null;
             profileImageKey?: string;
         };
         SocialLoginResponse: {
@@ -4763,7 +4763,16 @@ export interface components {
         UserProfileResponse: {
             id: number;
             username: string;
+            firstName: string;
+            lastName?: string | null;
+            isVerified: boolean;
+            bio?: string | null;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
             profileImage?: string | null;
+            isFollowing: boolean;
             numberOfFollowers: number;
             numberOfFollowing: number;
         };
@@ -4811,9 +4820,9 @@ export interface components {
             numberOfFollowers: number;
             numberOfFollowing: number;
             /** Format: date-time */
-            createdAt: string;
+            createdAt: string | null;
             /** Format: date-time */
-            updatedAt: string;
+            updatedAt: string | null;
         };
         MeDashboardResponse: {
             dashboardData: {
@@ -4880,9 +4889,9 @@ export interface components {
             thumbnailUrlForDeletion?: string | null;
             viewCount: number;
             /** Format: date-time */
-            createdAt: string;
+            createdAt: string | null;
             /** Format: date-time */
-            updatedAt: string;
+            updatedAt: string | null;
             username: string;
             profileImage?: string | null;
             isSaved?: unknown;
