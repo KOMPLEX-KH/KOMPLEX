@@ -1,19 +1,26 @@
 import type { AxiosInstance } from "axios";
-import type { User, SignupData, SocialLoginData } from "../types/auth";
+import type { User, SignupData, SocialLoginData, verifySignupOtpResponse, signupResponse, signupOtpResponse } from "../types/auth";
+import axios from "@/configs/axios";
 
 export const createAuthService = (api: AxiosInstance) => {
   return {
     // AUTH OPERATIONS
 
-    // Register new user
-    signup: async (signupData: SignupData): Promise<User> => {
-      try {
-        const response = await api.post<User>(`/auth/signup`, signupData);
-        return response.data;
-      } catch (error) {
-        console.error("Error during signup:", error);
-        throw new Error("Failed to create account");
-      }
+    sendSignupOtp: async (email: string): Promise<signupOtpResponse> => {
+      const response = await api.post(`/auth/send-signup-otp`, { email });
+      return response.data;
+    },
+
+    // UPDATE verifySignupOtp to return verification token:
+    verifySignupOtp: async (verifyData: { email: string; otp: string }): Promise<verifySignupOtpResponse> => {
+      const response = await api.post(`/auth/verify-signup-otp`, verifyData);
+      return response.data;
+    },
+
+    // UPDATE signup to accept verification token:
+    signup: async (signupData: SignupData & { verificationToken: string }): Promise<signupResponse> => {
+      const response = await api.post(`/auth/signup`, signupData);
+      return response.data;
     },
 
     // Social login
@@ -65,6 +72,8 @@ export const createAuthService = (api: AxiosInstance) => {
     },
   };
 };
+
+// Removed standalone functions - use the service methods instead
 
 // ! FOR FUTURE
 

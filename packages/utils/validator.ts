@@ -112,16 +112,17 @@ export const validateSignupForm = (formData: {
   phone: string;
 }): boolean => {
   return (
-    formData.username.trim().length > 0 &&
     formData.firstName.trim().length > 0 &&
     formData.lastName.trim().length > 0 &&
     formData.email.trim().length > 0 &&
     formData.password.trim().length > 0 &&
     formData.confirmPassword.trim().length > 0 &&
-    isValidUsername(formData.username) &&
     isValidEmail(formData.email) &&
     isValidPassword(formData.password) &&
-    formData.password === formData.confirmPassword
+    formData.password === formData.confirmPassword &&
+    // Optional validation for dateOfBirth and phone (only validate if provided)
+    (formData.dateOfBirth.trim().length === 0 || isValidDate(formData.dateOfBirth)) &&
+    (formData.phone.trim().length === 0 || isValidPhone(formData.phone))
   );
 };
 

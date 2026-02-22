@@ -24,6 +24,20 @@ export interface User {
     dateOfBirth: string;
     phone: string;
     profileImageKey?: string | null;
+    verificationToken: string;
+  }
+
+  export interface verifySignupOtpResponse {
+    verificationToken: string;
+  }
+
+ export interface signupResponse {
+  user: User;
+}
+
+  export interface signupOtpResponse {
+    message: string;
+    expiresIn: number;
   }
   
   // Social login data interface

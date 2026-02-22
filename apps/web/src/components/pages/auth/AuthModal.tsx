@@ -3,9 +3,9 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import Link from 'next/link';
+import { signInWithEmailAndPassword, signInWithPopup, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { auth, googleProvider, microsoftProvider, githubProvider } from '@/configs/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { authService, uploadService } from '@/services/index';
 import {
     validateLoginForm,
@@ -14,6 +14,7 @@ import {
 import LogIn from '@/components/pages/auth/LogIn';
 import SignUp from '@/components/pages/auth/SignUp';
 import Header from '@/components/common/Header';
+import VerifyOtp from '@/components/pages/auth/VerifyOtp';
 
 type ProviderKey = 'google' | 'github' | 'microsoft';
 
@@ -67,6 +68,14 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
     const [loginIdentifier, setLoginIdentifier] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
 
+
+    // otp state
+    const [showOtpModal, setShowOtpModal] = useState(false); //pop up for otp input
+    const [otpCode, setOtpCode] = useState('');
+    const [otpEmail, setOtpEmail] = useState('');
+    const [otpTimer, setOtpTimer] = useState(0);
+    const [otpAttempts, setOtpAttempts] = useState(3);
+
     // Signup form state
     const [signupData, setSignupData] = useState({
         username: '',
@@ -86,6 +95,12 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
     const closeAndReset = () => {
         setIsSubmitting(false);
         setFormError(null);
+        // Add OTP cleanup
+        setShowOtpModal(false);
+        setOtpCode('');
+        setOtpEmail('');
+        setOtpTimer(0);
+        setOtpAttempts(3);
         onClose();
     };
 
@@ -120,36 +135,14 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
         setIsSubmitting(true);
 
         try {
-            let imageKey = '';
-            if (signupData.profileImage) {
-                try {
-                    imageKey = await uploadService.uploadFile(signupData.profileImage);
-                } catch (uploadErr) {
-                    console.error('Upload error:', uploadErr);
-                    setFormError('បញ្ហាក្នុងការបង្ហោះរូបភាព');
-                    setIsSubmitting(false);
-                    return;
-                }
-            }
 
-            const result = await createUserWithEmailAndPassword(auth, signupData.email, signupData.password);
-            const userData = await authService.signup({
-                email: signupData.email,
-                username: signupData.username,
-                uid: result.user.uid,
-                firstName: signupData.firstName,
-                lastName: signupData.lastName,
-                dateOfBirth: signupData.dateOfBirth,
-                phone: signupData.phone,
-                profileImageKey: imageKey,
-            });
-
-            localStorage.setItem('user', JSON.stringify(userData));
-            closeAndReset();
-            router.push('/');
-        } catch (error: unknown) {
+            // only send otp with email
+            const res = await authService.sendSignupOtp(signupData.email);
+            setOtpEmail(signupData.email);
+            setShowOtpModal(true);
+        } catch (error: any) {
             console.error('Signup error:', error);
-            const message = error instanceof Error ? error.message : 'មានបញ្ហាក្នុងការចុះឈ្មោះ';
+            const message = error?.response?.data?.message || error?.message || 'មានបញ្ហាក្នុងការចុះឈ្មោះ';
             setFormError(message);
         } finally {
             setIsSubmitting(false);
@@ -194,8 +187,97 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
         }
     };
 
+
+    const handleVerifyOtp = async () => {
+
+        if (otpCode.length !== 6) return;
+        setIsSubmitting(true);
+        setFormError(null);
+            try{
+                // verify OTP with backend
+                const otpResult = await authService.verifySignupOtp({ email: otpEmail, otp: otpCode });
+
+                //create user firebase account after verify successfully
+                const firebaseResult = await createUserWithEmailAndPassword(auth, otpEmail, signupData.password);
+                
+                let imageKey = null;
+                if (signupData.profileImage) {
+                    try {
+                        imageKey = await uploadService.uploadFile(signupData.profileImage);
+                    } catch (uploadErr) {
+                        console.error('Upload error:', uploadErr);
+                        setFormError('បញ្ហាក្នុងការបង្ហោះរូបភាព');
+                        setIsSubmitting(false);
+                        return;
+                    }
+                }
+                
+                // Generate username from firstName and lastName
+                const generatedUsername = `${signupData.firstName.toLowerCase().trim()}${signupData.lastName.toLowerCase().trim()}${Date.now()}`.replace(/\s/g, '');
+
+                // Final payload stored in DB after OTP verification
+                const finalPayload = {
+                    email: signupData.email,
+                    username: generatedUsername,
+                    uid: firebaseResult.user.uid,
+                    firstName: signupData.firstName,
+                    lastName: signupData.lastName,
+                    dateOfBirth: signupData.dateOfBirth || '',
+                    phone: signupData.phone || '',
+                    profileImageKey: imageKey,
+                    verificationToken: otpResult.verificationToken,
+                };
+
+                const result = await authService.signup(finalPayload);
+
+                localStorage.setItem('user', JSON.stringify(result.user));
+                setShowOtpModal(false);
+                closeAndReset();
+                router.push('/');
+
+            } catch(error: any) {
+                console.error('OTP verification error:', error);
+                const errorData = error?.response?.data;
+                setFormError(errorData?.message || error?.message || 'OTP verification failed');
+
+                if (errorData?.attemptsLeft !== undefined) {
+                    setOtpAttempts(errorData.attemptsLeft);
+                }
+            } finally {
+                setIsSubmitting(false);
+            }
+    }
+
+    const onResendOtp = async () => {
+        if (otpAttempts <= 0) {
+            setFormError('អ្នកបានព្យាយាម OTP លើសកំណត់។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។');
+            return;
+        }
+        setFormError(null);
+        try {
+            await authService.sendSignupOtp(otpEmail);
+            setFormError('OTP បានផ្ញើម្តងទៀតទៅអ៊ីមែលរបស់អ្នក។');
+        } catch (error: unknown) {
+            console.error('Resend OTP error:', error);
+            setFormError('បញ្ហាក្នុងការផ្ញើ OTP ម្តងទៀត។ សូមព្យាយាមម្តងទៀត។');
+        }
+    }
+
     return (
         <Transition.Root show={open} as={Fragment}>
+            <VerifyOtp
+                show={showOtpModal}
+                onClose={() => setShowOtpModal(false)}
+                otpCode={otpCode}
+                setOtpCode={setOtpCode}
+                otpEmail={otpEmail}
+                otpAttempts={otpAttempts}
+                isSubmitting={isSubmitting}
+                errorMessage={formError}
+                onVerify={handleVerifyOtp}
+                onResendOtp={onResendOtp}
+            />
+
             <Dialog as="div" className="relative z-50" onClose={() => { onClose() }}>
                 {/* Backdrop */}
                 <Transition.Child

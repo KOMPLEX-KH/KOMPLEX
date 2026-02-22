@@ -1,6 +1,7 @@
 'use client';
 
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import Link from 'next/link';
 
 interface LoginFormProps {
     loginIdentifier: string;
@@ -32,7 +33,7 @@ export default function LogIn({
             
             <div>
                 <label className="block text-sm font-medium text-black mb-2">
-                    អ៊ីមែល ឬ ឈ្មោះអ្នកប្រើប្រាស់
+                    អ៊ីមែល
                 </label>
                 <div className="relative">
                     <Mail size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-600 z-10" />
@@ -41,7 +42,7 @@ export default function LogIn({
                         value={loginIdentifier}
                         onChange={(e) => setLoginIdentifier(e.target.value)}
                         className="w-full pl-10 pr-4 py-3 border border-indigo-500/20 rounded-full bg-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
-                        placeholder="បញ្ចូលអ៊ីមែល ឬ ឈ្មោះអ្នកប្រើប្រាស់"
+                        placeholder="បញ្ចូលអ៊ីមែលរបស់អ្នក"
                         disabled={isSubmitting}
                     />
                 </div>
@@ -78,7 +79,7 @@ export default function LogIn({
                 </div>
             )}
 
-            {/* <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between">
                 <label className="flex items-center">
                     <input
                         type="checkbox"
@@ -89,14 +90,14 @@ export default function LogIn({
                 <Link href="/forgot-password" className="text-sm text-indigo-600 hover:text-indigo-500 font-medium">
                     ភ្លេចពាក្យសម្ងាត់?
                 </Link>
-            </div> */}
+            </div>
 
             <button
                 type="submit"
                 disabled={!isLoginValid() || isSubmitting}
                 className="w-full bg-indigo-600 text-white py-3 px-4 rounded-full font-semibold hover:bg-indigo-500 transition-colors duration-300 shadow-lg shadow-indigo-500/30 border border-white/20 disabled:cursor-not-allowed"
             >
-                {isSubmitting ? 'កំពុងចូល...' : 'ចូលទៅកាន់'}
+                {isSubmitting ? 'កំពុងចូល...' : 'ចូលប្រេីប្រាស់'}
             </button>
         </form>
     );

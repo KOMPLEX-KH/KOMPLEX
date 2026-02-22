@@ -1,6 +1,6 @@
 'use client';
 
-import { Eye, EyeOff, Mail, Lock, Phone, Calendar, Upload } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, Upload } from 'lucide-react';
 import { getValidationError, validatePasswordConfirmation } from '@core-utils/validator';
 
 interface SignupFormProps {
@@ -53,7 +53,7 @@ export default function SignUp({
     return (
         <form onSubmit={handleSignup} className="space-y-6 mx-auto">
             {/* Profile Image and Basic Info Row */}
-            <div className="flex flex-col lg:flex-row gap-6 items-start">
+            <div className="flex flex-col gap-5 items-start">
                 {/* Profile Image */}
                 <div className="flex-shrink-0">
                     <label className="block text-sm font-medium text-black mb-2">
@@ -83,38 +83,22 @@ export default function SignUp({
 
                 {/* Username, First Name, Last Name */}
                 <div className="flex-1 space-y-4 w-full">
-                    <div>
-                        <label className="block text-sm font-medium text-black mb-2">
-                            ឈ្មោះអ្នកប្រើប្រាស់
-                        </label>
-                        <input
-                            type="text"
-                            value={signupData.username}
-                            onChange={(e) => setSignupData(prev => ({ ...prev, username: e.target.value }))}
-                            className="w-full px-4 py-3 border border-indigo-500/20 rounded-full bg-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
-                            placeholder="បញ្ចូលឈ្មោះអ្នកប្រើប្រាស់"
-                            disabled={isSubmitting}
-                        />
-                        {signupData.username && getValidationError('username', signupData.username) && (
-                            <p className="text-red-500 text-xs mt-1">{getValidationError('username', signupData.username)}</p>
-                        )}
-                    </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                        <div>
+                    <div className="flex flex-wrap gap-3">
+                        <div className='flex-1'>
                             <label className="block text-sm font-medium text-black mb-2">
-                                ឈ្មោះ
+                                នាមខ្លួន
                             </label>
                             <input
                                 type="text"
                                 value={signupData.firstName}
                                 onChange={(e) => setSignupData(prev => ({ ...prev, firstName: e.target.value }))}
                                 className="w-full px-4 py-3 border border-indigo-500/20 rounded-full bg-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
-                                placeholder="ឈ្មោះ"
+                                placeholder="នាមខ្លួន"
                                 disabled={isSubmitting}
                             />
                         </div>
-                        <div>
+                        <div className='flex-1'>
                             <label className="block text-sm font-medium text-black mb-2">
                                 នាមត្រកូល
                             </label>
@@ -132,7 +116,7 @@ export default function SignUp({
             </div>
 
             {/* Email */}
-            <div>
+            <div className=''>
                 <label className="block text-sm font-medium text-black mb-2">
                     អ៊ីមែល
                 </label>
@@ -181,7 +165,7 @@ export default function SignUp({
                         <p className="text-red-500 text-xs mt-1">{getValidationError('password', signupData.password)}</p>
                     )}
                 </div>
-                <div>
+                <div className=''>
                     <label className="block text-sm font-medium text-black mb-2">
                         បញ្ជាក់ពាក្យសម្ងាត់
                     </label>
@@ -209,62 +193,11 @@ export default function SignUp({
                     )}
                 </div>
             </div>
-
-            {/* Date of Birth and Phone */}
-            <div className="grid grid-cols-2 gap-3">
-                <div>
-                    <label className="block text-sm font-medium text-black mb-2">
-                        ថ្ងៃខែឆ្នាំកំណើត
-                    </label>
-                    <div className="relative">
-                        <input
-                            type="date"
-                            value={signupData.dateOfBirth}
-                            onChange={(e) => setSignupData(prev => ({ ...prev, dateOfBirth: e.target.value }))}
-                            className="pl-10 pr-4 py-3 border w-7/10 border-indigo-500/20 rounded-full bg-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
-                            disabled={isSubmitting}
-                        />
-                        {signupData.dateOfBirth && getValidationError('dateOfBirth', signupData.dateOfBirth) && (
-                            <p className="text-red-500 text-xs mt-1">{getValidationError('dateOfBirth', signupData.dateOfBirth)}</p>
-                        )}
-                    </div>
-                </div>
-                <div>
-                    <label className="block text-sm font-medium text-black mb-2">
-                        លេខទូរស័ព្ទ
-                    </label>
-                    <div className="relative">
-                        <Phone size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-600 z-10" />
-                        <input
-                            type="tel"
-                            value={signupData.phone}
-                            onChange={(e) => setSignupData(prev => ({ ...prev, phone: e.target.value }))}
-                            className="w-full pl-10 pr-4 py-3 border border-indigo-500/20 rounded-full bg-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
-                            placeholder="លេខទូរស័ព្ទ"
-                            disabled={isSubmitting}
-                        />
-                    </div>
-                    {signupData.phone && getValidationError('phone', signupData.phone) && (
-                        <p className="text-red-500 text-xs mt-1">{getValidationError('phone', signupData.phone)}</p>
-                    )}
-                </div>
-            </div>
-
             {errorMessage && (
                 <div className="w-full rounded-lg border border-red-200 bg-red-50 text-red-700 text-sm p-3">
                     {errorMessage}
                 </div>
             )}
-
-            {/* <div className="flex items-start">
-                <input
-                    type="checkbox"
-                    className="w-4 h-4 text-indigo-600 border-indigo-500/30 rounded focus:ring-indigo-500/30 mt-1"
-                />
-                <span className="ml-2 text-sm text-gray-600">
-                    ខ្ញុំយល់ស្របជាមួយ <Link href="/terms" className="text-indigo-600 hover:text-indigo-500 font-medium">លក្ខខណ្ឌ</Link> និង <Link href="/privacy" className="text-indigo-600 hover:text-indigo-500 font-medium">គោលការណ៍ភាពឯកជន</Link>
-                </span>
-            </div> */}
 
             <button
                 type="submit"

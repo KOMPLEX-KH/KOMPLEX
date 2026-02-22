@@ -13,6 +13,7 @@ import {
 import { getErrorMessage, isFirebaseAuthError } from '@core-utils/firebaseError';
 import LogIn from '@/components/pages/auth/LogIn';
 import SignUp from '@/components/pages/auth/SignUp';
+import VerifyOtp from '@/components/pages/auth/VerifyOtp';
 import { Logo } from '@/components/common/Logo';
 
 export default function AuthPage() {
@@ -27,7 +28,12 @@ export default function AuthPage() {
     const [loginIdentifier, setLoginIdentifier] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
 
-    // Signup form state
+    // otp state
+    const [showOtpModal, setShowOtpModal] = useState(false);
+    const [otpCode, setOtpCode] = useState('');
+    const [otpEmail, setOtpEmail] = useState('');
+    const [otpAttempts, setOtpAttempts] = useState(3);
+
     const [signupData, setSignupData] = useState({
         username: '',
         firstName: '',
@@ -82,6 +88,31 @@ export default function AuthPage() {
         setIsSubmitting(true);
 
         try {
+            // send otp to email for verify email user ownership
+            const res = await authService.sendSignupOtp(signupData.email);
+            setOtpEmail(signupData.email);
+            setShowOtpModal(true);
+        } catch (error: unknown) {
+            console.error('Signup error:', error);
+            setFormError(getErrorMessage(error, 'signup'));
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleVerifyOtp = async () => {
+        if (otpCode.length !== 6) return;
+        setIsSubmitting(true);
+        setFormError(null);
+
+        try {
+            // Verify OTP with backend
+            const otpResult = await authService.verifySignupOtp({ email: otpEmail, otp: otpCode });
+
+            // Create Firebase account after verification
+            const firebaseResult = await createUserWithEmailAndPassword(auth, otpEmail, signupData.password);
+            
+            // Upload profile image if exists and get the key
             let imageKey = '';
             if (signupData.profileImage) {
                 try {
@@ -89,32 +120,39 @@ export default function AuthPage() {
                 } catch (uploadErr) {
                     console.error('Upload error:', uploadErr);
                     setFormError('បញ្ហាក្នុងការបង្ហោះរូបភាព');
-                    setIsSubmitting(false);
                     return;
                 }
             }
 
-            const result = await createUserWithEmailAndPassword(auth, signupData.email, signupData.password);
-            const userData = await authService.signup({
+            // Generate username from firstName and lastName
+            const generatedUsername = `${signupData.firstName.toLowerCase().trim()}${signupData.lastName.toLowerCase().trim()}${Date.now()}`.replace(/\s/g, '');
+
+            // final result for user to signup
+            const finalPayload = {
                 email: signupData.email,
-                username: signupData.username,
-                uid: result.user.uid,
+                username: generatedUsername,
+                uid: firebaseResult.user.uid,
                 firstName: signupData.firstName,
                 lastName: signupData.lastName,
-                dateOfBirth: signupData.dateOfBirth,
-                phone: signupData.phone,
+                dateOfBirth: signupData.dateOfBirth || '',
+                phone: signupData.phone || '', 
                 profileImageKey: imageKey,
-            });
+                verificationToken: otpResult.verificationToken,
+            };
 
-            localStorage.setItem("user", JSON.stringify(userData));
-
-            // redirect to home page
+            const userData = await authService.signup(finalPayload);
+            localStorage.setItem("user", JSON.stringify(userData.user));
+            setShowOtpModal(false);
             router.push('/');
-        } catch (error: unknown) {
-            console.error('Signup error:', error);
-            setFormError(getErrorMessage(error, 'signup'));
-        }
-        finally {
+        } catch (error: any) {
+            console.error('OTP verification error:', error);
+            const errorData = error?.response?.data;
+            setFormError(errorData?.message || error?.message || 'OTP verification failed');
+            
+            if (errorData?.attemptsLeft !== undefined) {
+                setOtpAttempts(errorData.attemptsLeft);
+            }
+        } finally {
             setIsSubmitting(false);
         }
     };
@@ -173,8 +211,36 @@ export default function AuthPage() {
         }
     };
 
+    const onResendOtp = async () => {
+        if (otpAttempts <= 0) {
+            setFormError('អ្នកបានព្យាយាម OTP លើសកំណត់។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។');
+            return;
+        }
+        setFormError(null);
+        try {
+            await authService.sendSignupOtp(otpEmail);
+            setFormError('OTP បានផ្ញើម្តងទៀតទៅអ៊ីមែលរបស់អ្នក។');
+        } catch (error: unknown) {
+            console.error('Resend OTP error:', error);
+            setFormError('បញ្ហាក្នុងការផ្ញើ OTP ម្តងទៀត។ សូមព្យាយាមម្តងទៀត។');
+        }
+    }
+
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+            <VerifyOtp
+                show={showOtpModal}
+                onClose={() => setShowOtpModal(false)}
+                otpCode={otpCode}
+                setOtpCode={setOtpCode}
+                otpEmail={otpEmail}
+                otpAttempts={otpAttempts}
+                isSubmitting={isSubmitting}
+                errorMessage={formError}
+                onVerify={handleVerifyOtp}
+                onResendOtp={onResendOtp}
+            />
+            
             <div className="w-full max-w-3xl relative z-10 pt-16">
                 {/* Auth Container */}
                 <div className="bg-indigo-500/10 backdrop-blur-sm border border-indigo-600 rounded-3xl shadow-xl shadow-indigo-500/10 p-6">
@@ -183,12 +249,6 @@ export default function AuthPage() {
                         <Link href="/" className="flex items-center justify-center gap-2 mb-4">
                             <Logo size='lg' showBeta={false} />
                         </Link>
-                        {/* <p className="text-gray-700 text-xl font-medium mb-2">
-                            ប្រព័ន្ធសិក្សា សម្រាប់សិស្សកម្ពុជា
-                        </p>
-                        <p className="text-gray-600 text-lg">
-                            បង្កើតឡើងដោយសិស្សកម្ពុជា
-                        </p> */}
                     </div>
 
                     {/* Tab Navigation */}
@@ -200,7 +260,7 @@ export default function AuthPage() {
                                 : 'text-black hover:text-indigo-600'
                                 }`}
                         >
-                            ចូលទៅកាន់
+                            ចូលប្រេីប្រាស់
                         </button>
                         <button
                             onClick={() => setActiveTab('signup')}
