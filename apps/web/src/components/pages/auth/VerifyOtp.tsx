@@ -1,76 +1,113 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
 
 interface VerifyOtpProps {
-    show: boolean;
-    onClose: () => void;
     otpCode: string;
     setOtpCode: (code: string) => void;
     otpEmail: string;
-    otpAttempts: number;
     isSubmitting: boolean;
     errorMessage: string | null;
-    onVerify: () => void;
-    onResendOtp: () => void;
+    onVerify: (e: React.FormEvent) => void;
+    onResendOtp: (e: React.FormEvent) => void;
+    /** OTP expiry in seconds — must be the value returned by the backend (e.g. expiresIn). */
+    resendCooldownSeconds: number;
+    /** Optional back handler — shows a back button at the top when provided. */
+    onBack?: () => void;
 }
 
 export default function VerifyOtp({
-    show,
-    onClose,
     otpCode,
     setOtpCode,
     otpEmail,
-    otpAttempts,
     isSubmitting,
     errorMessage,
     onVerify,
-    onResendOtp
+    onResendOtp,
+    resendCooldownSeconds,
+    onBack,
 }: VerifyOtpProps) {
-    
+
+    // Resend cooldown countdown (seconds) — driven entirely by the backend expiresIn
+    const [resendCountdown, setResendCountdown] = useState(resendCooldownSeconds);
+
+    // Local error — mirrors the prop but clears when the user starts typing again
+    const [localError, setLocalError] = useState<string | null>(errorMessage);
+
     // Refs for each input to manage focus
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-    
+
     // Convert string OTP to array for individual inputs
     const otpArray = otpCode.padEnd(6, '').split('').slice(0, 6);
-    
+
+    // Sync countdown whenever the backend-provided expiry changes (initial mount or after resend)
+    useEffect(() => {
+        setResendCountdown(resendCooldownSeconds);
+    }, [resendCooldownSeconds]);
+
+    // Sync new errors from parent (e.g. wrong OTP response)
+    useEffect(() => {
+        setLocalError(errorMessage);
+    }, [errorMessage]);
+
+    // Resend countdown timer
+    useEffect(() => {
+        if (resendCountdown <= 0) return;
+        const timer = setInterval(() => {
+            setResendCountdown((prev) => {
+                if (prev <= 1) {
+                    clearInterval(timer);
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+        return () => clearInterval(timer);
+    }, [resendCountdown]);
+
+    // Focus first input on mount
+    useEffect(() => {
+        setTimeout(() => inputRefs.current[0]?.focus(), 100);
+    }, []);
+
+    const handlePaste = (e: React.ClipboardEvent) => {
+        e.preventDefault();
+        const pastedCode = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+        if (!pastedCode) return;
+        setLocalError(null);
+        setOtpCode(pastedCode);
+        const nextIndex = Math.min(pastedCode.length - 1, 5);
+        inputRefs.current[nextIndex]?.focus();
+    };
 
     const handleInputChange = (index: number, value: string) => {
-        
         // Handle pasting full OTP
         if (value.length > 1) {
-
-            // Extract only digits and limit to 6 characters
             const pastedCode = value.replace(/\D/g, '').slice(0, 6);
             setOtpCode(pastedCode);
-            
-            // Focus the last filled input or the last input
             const nextIndex = Math.min(pastedCode.length - 1, 5);
             inputRefs.current[nextIndex]?.focus();
             return;
         }
-        
+
         // Prevents typing letters or multiple digits in a single input.
         if (/^\d?$/.test(value)) {
             const newOtpArray = [...otpArray];
             newOtpArray[index] = value;
-
-            // joint all digit into single string
             const newOtpCode = newOtpArray.join('').replace(/\s/g, '');
+            setLocalError(null);
             setOtpCode(newOtpCode);
-            
-            // Move to next input if value entered
             if (value && index < 5) {
                 inputRefs.current[index + 1]?.focus();
             }
         }
     };
-    
+
     // Handle backspace and arrow navigation
     const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
         if (e.key === 'Backspace') {
             if (!otpArray[index] && index > 0) {
-                // Move to previous input if current is empty
                 inputRefs.current[index - 1]?.focus();
             }
         } else if (e.key === 'ArrowLeft' && index > 0) {
@@ -79,92 +116,93 @@ export default function VerifyOtp({
             inputRefs.current[index + 1]?.focus();
         }
     };
-    
-    // Focus first input when modal opens
-    useEffect(() => {
-        if (show) {
-            setTimeout(() => inputRefs.current[0]?.focus(), 100);
-        }
-    }, [show]);
 
-    // Prevent background scroll when modal is open
-    useEffect(() => {
-        if (show) {
-            const originalOverflow = document.body.style.overflow;
-            document.body.style.overflow = 'hidden';          
-            return () => {
-                document.body.style.overflow = originalOverflow;
-            };
-        }
-    }, [show]);
+    const handleResendClick = (e: React.FormEvent) => {
+        if (resendCountdown > 0) return;
+        setLocalError(null);
+        setOtpCode('');
+        onResendOtp(e);
+    };
 
-    if (!show) return null;
+    const formatCountdown = (seconds: number) => {
+        const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const s = (seconds % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+    };
 
     return (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-2xl shadow-xl w-96 flex flex-col items-center gap-3">
-                <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center">
-                    <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                </div>
-                
-                <h3 className="text-2xl font-semibold">បញ្ចូលលេខកូដ OTP</h3>
-                <p className=" text-sm text-gray-500">
-                    យើងបានផ្ញើលេខកូដ 6 ខ្ទង់ទៅ
-                </p>
+        <div className="flex flex-col items-center gap-3 py-4">
 
-                <p className="text-sm text-indigo-600">{otpEmail}</p>
+            {onBack && (
+                <button
+                    type="button"
+                    onClick={onBack}
+                    className="w-full text-sm flex items-center gap-2 text-indigo-600 hover:text-indigo-500 font-medium"
+                >
+                    <ArrowLeft size={16} />
+                    ត្រឡប់ក្រោយ
+                </button>
+            )}
 
-                {/* Input */}
-                <div className="flex gap-2 justify-center">
-                    {Array.from({ length: 6 }, (_, index) => (
-                        <input
-                            key={index}
-                            ref={(el) => {
-                                inputRefs.current[index] = el;
-                            }}
-                            type="text"
-                            inputMode="numeric"
-                            value={otpArray[index] || ''}
-                            onChange={(e) => handleInputChange(index, e.target.value)}
-                            onKeyDown={(e) => handleKeyDown(index, e)}
-                            className="w-12 h-12 border border-indigo-500/20 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                            maxLength={1}
-                            disabled={isSubmitting}
-                        />
-                    ))}
-                </div>
+            <h3 className="text-2xl font-semibold">បញ្ចូលលេខកូដ OTP</h3>
+            <p className="text-sm text-gray-500">
+                យើងបានផ្ញើលេខកូដ 6 ខ្ទង់ទៅ
+            </p>
+            <p className="text-sm text-indigo-600">{otpEmail}</p>
 
-                {errorMessage && (
-                    <p className="text-red-500 text-sm text-center">{errorMessage}</p>
-                )}
-
-                <p className="text-sm text-gray-400 text-center">
-                    ការព្យាយាមនៅសល់: {otpAttempts}
-                </p>
-
-                <div className="flex gap-3 w-full">
-                    <button
-                        onClick={onClose}
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg"
+            {/* OTP Inputs */}
+            <div className="flex gap-2 justify-center">
+                {Array.from({ length: 6 }, (_, index) => (
+                    <input
+                        key={index}
+                        ref={(el) => {
+                            inputRefs.current[index] = el;
+                        }}
+                        type="text"
+                        inputMode="numeric"
+                        value={otpArray[index] || ''}
+                        onChange={(e) => handleInputChange(index, e.target.value)}
+                        onPaste={handlePaste}
+                        onKeyDown={(e) => handleKeyDown(index, e)}
+                        className="w-12 h-12 border border-indigo-500/20 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                        maxLength={1}
                         disabled={isSubmitting}
-                    >
-                        បោះបង់
-                    </button>
-                    <button
-                        onClick={onVerify}
-                        disabled={otpCode.length !== 6 || isSubmitting}
-                        className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg disabled:opacity-50"
-                    >
-                        {isSubmitting ? 'កំពុងផ្ទៀងផ្ទាត់...' : 'ផ្ទៀងផ្ទាត់'}
-                    </button>
-                </div>
+                    />
+                ))}
+            </div>
 
-                <div className='flex items-center gap-4 text-sm'>
-                    <p className='text-sm'>មិនទាន់ទទួល?</p>
-                    <button onClick={onResendOtp} className="text-indigo-600 text-sm  hover:underline">ផ្ញើម្តងទៀត</button>
-                </div>
+            {/* Error message */}
+            {localError && (
+                <p className="text-red-500 text-sm text-center">{localError}</p>
+            )}
+
+            {/* Verify button */}
+            <button
+                onClick={onVerify}
+                disabled={otpCode.length !== 6 || isSubmitting}
+                className="w-full bg-indigo-600 text-white py-3 px-4 rounded-full font-semibold hover:bg-indigo-500 transition-colors duration-300 shadow-lg shadow-indigo-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+                {isSubmitting ? 'កំពុងផ្ទៀងផ្ទាត់...' : 'ផ្ទៀងផ្ទាត់'}
+            </button>
+
+            {/* Resend OTP */}
+            <div className="flex items-center gap-2 text-sm flex-wrap justify-center">
+                <p className="text-gray-500">មិនទាន់ទទួល?</p>
+                {resendCountdown > 0 ? (
+                    <span className="text-gray-400">
+                        ផ្ញើម្តងទៀតក្នុង{' '}
+                        <span className="text-indigo-500 font-medium tabular-nums">
+                            {formatCountdown(resendCountdown)}
+                        </span>
+                    </span>
+                ) : (
+                    <button
+                        onClick={handleResendClick}
+                        className="text-indigo-600 font-medium hover:underline"
+                    >
+                        ផ្ញើម្តងទៀត
+                    </button>
+                )}
             </div>
         </div>
     );

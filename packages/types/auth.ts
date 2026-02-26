@@ -31,9 +31,24 @@ export interface User {
     verificationToken: string;
   }
 
- export interface signupResponse {
-  user: User;
-}
+  export interface signupResponse {
+    user: User;
+  }
+
+  export interface ForgetPasswordOtpResponse {
+    message: string;
+    expiresIn: number;
+  }
+
+  export interface verifyForgetPasswordOtpResponse {
+    resetToken: string;
+    message: string;
+    expiresIn: number;
+  }
+
+  export interface resetPasswordResponse {
+    message: string;
+  }
 
   export interface signupOtpResponse {
     message: string;

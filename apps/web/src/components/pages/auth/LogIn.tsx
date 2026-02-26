@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
-import Link from 'next/link';
+import { authService } from '@/services/index';
+import ForgotPassword from '@/components/pages/auth/ForgetPassword';
 
 interface LoginFormProps {
     loginIdentifier: string;
@@ -14,6 +16,7 @@ interface LoginFormProps {
     handleLogin: (e: React.FormEvent) => void;
     isSubmitting?: boolean;
     errorMessage?: string | null;
+    onForgotPasswordChange?: (active: boolean) => void;
 }
 
 export default function LogIn({
@@ -27,7 +30,131 @@ export default function LogIn({
     handleLogin,
     isSubmitting = false,
     errorMessage = null,
+    onForgotPasswordChange,
 }: LoginFormProps) {
+    const [showForgotPassword, setShowForgotPassword] = useState(false);
+
+    // trigger to show forgot password form
+    const setForgotView = (active: boolean) => {
+        setShowForgotPassword(active);
+        onForgotPasswordChange?.(active);
+    };
+
+    const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
+    const [isOtpSent, setIsOtpSent] = useState(false);
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [forgotError, setForgotError] = useState<string | null>(null);
+    const [isForgotSubmitting, setIsForgotSubmitting] = useState(false);
+    const [resetToken, setResetToken] = useState<string | null>(null);
+    const [forgotOtp, setForgotOtp] = useState('');
+    const [otpExpiresIn, setOtpExpiresIn] = useState<number | undefined>(undefined);
+    const [resetTokenExpiresIn, setResetTokenExpiresIn] = useState<number | undefined>(undefined);
+
+
+    // handle click forgot password link
+    const handleForgotPasswordClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setForgotView(true);
+        setForgotError(null);
+    };
+
+    // handle back to login form
+    const handleBackToLogin = () => {
+        setForgotView(false);
+        setForgotPasswordEmail('');
+        setIsOtpSent(false);
+        setNewPassword('');
+        setConfirmPassword('');
+        setForgotError(null);
+    };
+
+    // handle to send otp for forgot password
+    const handleForgotPasswordSentOtp = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!forgotPasswordEmail) return;
+        setIsForgotSubmitting(true);
+        try {
+            const res = await authService.sendForgetPasswordOtp(forgotPasswordEmail);
+            setOtpExpiresIn(res.expiresIn);
+            setIsOtpSent(true);
+        } catch (error) {
+            const status = (error as any)?.response?.status;
+            if (status === 429) {
+                setForgotError('អ្នកបានព្យាយាមលេីសកំណត់។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។');
+            } else {
+                setForgotError('បញ្ហាក្នុងការស្នើសួតការកំណត់ពាក្យសម្ងាត់ថ្មី។ សូមព្យាយាមម្តងទៀត។');
+            }
+        } finally {
+            setIsForgotSubmitting(false);
+        }
+    };
+
+    const handleVerifyForgetPasswordOtp = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsForgotSubmitting(true);
+        try{
+            const res = await authService.verifyForgetPasswordOtp({email: forgotPasswordEmail, otp: forgotOtp , });
+            setResetToken(res.resetToken);
+            setResetTokenExpiresIn(res.expiresIn);
+        }catch(err){
+            const status = (err as any)?.response?.status;
+            if (status === 429) {
+                setForgotError('អ្នកបានព្យាយាមលេីសកំណត់។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។');
+            } else {
+                setForgotError('ការផ្ទៀងផ្ទាត់ OTP បានបរាជ័យ។ សូមព្យាយាមម្តងទៀត។');
+            }
+        }finally {
+            setIsForgotSubmitting(false);
+        }
+    }
+
+    // handle to reset new password after verify otp
+    const handleNewPasswordSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8) {
+            setForgotError('សូមបញ្ចូលពាក្យសម្ងាត់ត្រឹមត្រូវ');
+            return;
+        }
+        setForgotError(null);
+        setIsForgotSubmitting(true);
+        try {
+            await authService.resetPassword({ email: forgotPasswordEmail, newPassword, resetToken });
+            handleBackToLogin();
+        } catch (error: any) {
+            console.error('Password reset error:', error);
+            setForgotError('បញ្ហាក្នុងការកំណត់ពាក្យសម្ងាត់ថ្មី។ សូមព្យាយាមម្តងទៀត។');
+        } finally {
+            setIsForgotSubmitting(false);
+        }
+    };
+
+    if (showForgotPassword) {
+        return (
+            <ForgotPassword
+                email={forgotPasswordEmail}
+                setEmail={setForgotPasswordEmail}
+                isSubmitting={isForgotSubmitting}
+                errorMessage={forgotError}
+                onOtpSent={handleForgotPasswordSentOtp}
+                onBackToLogin={handleBackToLogin}
+                isOtpSent={isOtpSent}
+                onPasswordReset={handleNewPasswordSubmit}
+                newPassword={newPassword}
+                confirmPassword={confirmPassword}
+                setNewPassword={setNewPassword}
+                setConfirmPassword={setConfirmPassword}
+                passwordError={forgotError}
+                forgotOtpCode={forgotOtp}
+                setForgotOtpCode={setForgotOtp}
+                onVerifyOtp={handleVerifyForgetPasswordOtp}
+                resetToken={resetToken}
+                otpExpiresIn={otpExpiresIn}
+                resetTokenExpiresIn={resetTokenExpiresIn}
+            />
+        );
+    }
+
     return (
         <form onSubmit={handleLogin} className="space-y-4 mx-auto">
             
@@ -87,9 +214,13 @@ export default function LogIn({
                     />
                     <span className="ml-2 text-sm text-gray-600">ចងចាំខ្ញុំ</span>
                 </label>
-                <Link href="/forgot-password" className="text-sm text-indigo-600 hover:text-indigo-500 font-medium">
+                <button
+                    type="button"
+                    onClick={handleForgotPasswordClick}
+                    className="text-sm text-indigo-600 hover:text-indigo-500 font-medium"
+                >
                     ភ្លេចពាក្យសម្ងាត់?
-                </Link>
+                </button>
             </div>
 
             <button

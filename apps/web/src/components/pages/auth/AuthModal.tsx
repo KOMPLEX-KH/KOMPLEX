@@ -14,7 +14,6 @@ import {
 import LogIn from '@/components/pages/auth/LogIn';
 import SignUp from '@/components/pages/auth/SignUp';
 import Header from '@/components/common/Header';
-import VerifyOtp from '@/components/pages/auth/VerifyOtp';
 
 type ProviderKey = 'google' | 'github' | 'microsoft';
 
@@ -59,6 +58,7 @@ const socialPlatforms: Array<{ name: string; provider: ProviderKey; icon: React.
 export default function AuthModal({ open, onClose }: AuthModalProps) {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
+    const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,11 +70,14 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
 
 
     // otp state
-    const [showOtpModal, setShowOtpModal] = useState(false); //pop up for otp input
+    const [isOtpView, setIsOtpView] = useState(false); // inline OTP in signup
     const [otpCode, setOtpCode] = useState('');
     const [otpEmail, setOtpEmail] = useState('');
-    const [otpTimer, setOtpTimer] = useState(0);
-    const [otpAttempts, setOtpAttempts] = useState(3);
+    const [otpExpiresIn, setOtpExpiresIn] = useState(90);
+
+
+
+
 
     // Signup form state
     const [signupData, setSignupData] = useState({
@@ -95,12 +98,11 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
     const closeAndReset = () => {
         setIsSubmitting(false);
         setFormError(null);
-        // Add OTP cleanup
-        setShowOtpModal(false);
+        setIsOtpView(false);
         setOtpCode('');
         setOtpEmail('');
-        setOtpTimer(0);
-        setOtpAttempts(3);
+        setOtpExpiresIn(90);
+        setIsForgotPassword(false);
         onClose();
     };
 
@@ -119,8 +121,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
             closeAndReset();
             router.push('/');
         } catch (error: unknown) {
-            console.error('Login error:', error);
-            const message = error instanceof Error ? error.message : 'មានបញ្ហាក្នុងការចូល';
+            const message =  'មានបញ្ហាក្នុងការចូល';
             setFormError(message);
         } finally {
             setIsSubmitting(false);
@@ -135,15 +136,14 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
         setIsSubmitting(true);
 
         try {
-
             // only send otp with email
             const res = await authService.sendSignupOtp(signupData.email);
+            setOtpExpiresIn(res.expiresIn);
             setOtpEmail(signupData.email);
-            setShowOtpModal(true);
-        } catch (error: any) {
+            setIsOtpView(true);
+        } catch (error: unknown) {
             console.error('Signup error:', error);
-            const message = error?.response?.data?.message || error?.message || 'មានបញ្ហាក្នុងការចុះឈ្មោះ';
-            setFormError(message);
+            setFormError('មានបញ្ហាក្នុងការចុះឈ្មោះ។ សូមព្យាយាមម្តងទៀត។');
         } finally {
             setIsSubmitting(false);
         }
@@ -173,8 +173,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
             router.push('/');
         } catch (error: unknown) {
             console.error('Social login error:', error);
-            const message = error instanceof Error ? error.message : 'មានបញ្ហាក្នុងការចូលដោយប្រើគណនីសង្គម';
-            setFormError(message);
+            setFormError('មានបញ្ហាក្នុងការចូលដោយប្រើគណនីសង្គម។ សូមព្យាយាមម្តងទៀត។');
         } finally {
             setIsSubmitting(false);
         }
@@ -231,17 +230,17 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                 const result = await authService.signup(finalPayload);
 
                 localStorage.setItem('user', JSON.stringify(result.user));
-                setShowOtpModal(false);
+                setIsOtpView(false);
                 closeAndReset();
                 router.push('/');
 
-            } catch(error: any) {
+            } catch(error: unknown) {
                 console.error('OTP verification error:', error);
-                const errorData = error?.response?.data;
-                setFormError(errorData?.message || error?.message || 'OTP verification failed');
-
-                if (errorData?.attemptsLeft !== undefined) {
-                    setOtpAttempts(errorData.attemptsLeft);
+                const status = (error as any)?.response?.status;
+                if (status === 429) {
+                    setFormError('អ្នកបានព្យាយាមលេីសកំណត់។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។');
+                } else {
+                    setFormError('ការផ្ទៀងផ្ទាត់ OTP បានបរាជ័យ។ សូមព្យាយាមម្តងទៀត។');
                 }
             } finally {
                 setIsSubmitting(false);
@@ -249,35 +248,24 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
     }
 
     const onResendOtp = async () => {
-        if (otpAttempts <= 0) {
-            setFormError('អ្នកបានព្យាយាម OTP លើសកំណត់។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។');
-            return;
-        }
         setFormError(null);
         try {
-            await authService.sendSignupOtp(otpEmail);
+            const res = await authService.sendSignupOtp(otpEmail);
+            setOtpExpiresIn(res.expiresIn);
             setFormError('OTP បានផ្ញើម្តងទៀតទៅអ៊ីមែលរបស់អ្នក។');
         } catch (error: unknown) {
             console.error('Resend OTP error:', error);
-            setFormError('បញ្ហាក្នុងការផ្ញើ OTP ម្តងទៀត។ សូមព្យាយាមម្តងទៀត។');
+            const status = (error as any)?.response?.status;
+            if (status === 429) {
+                setFormError('អ្នកបានព្យាយាមលេីសកំណត់។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។');
+            } else {
+                setFormError('បញ្ហាក្នុងការផ្ញើ OTP ម្តងទៀត។ សូមព្យាយាមម្តងទៀត។');
+            }
         }
     }
 
     return (
         <Transition.Root show={open} as={Fragment}>
-            <VerifyOtp
-                show={showOtpModal}
-                onClose={() => setShowOtpModal(false)}
-                otpCode={otpCode}
-                setOtpCode={setOtpCode}
-                otpEmail={otpEmail}
-                otpAttempts={otpAttempts}
-                isSubmitting={isSubmitting}
-                errorMessage={formError}
-                onVerify={handleVerifyOtp}
-                onResendOtp={onResendOtp}
-            />
-
             <Dialog as="div" className="relative z-50" onClose={() => { onClose() }}>
                 {/* Backdrop */}
                 <Transition.Child
@@ -306,7 +294,8 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                             leaveTo="opacity-0 translate-y-2 sm:scale-95"
                         >
                             <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-3xl border border-indigo-600 bg-white backdrop-blur-xl p-6 shadow-xl shadow-indigo-500/10">
-                                <div className="flex items-start justify-between">
+                                {!isForgotPassword && !isOtpView && (
+                                    <div className="flex items-start justify-between">
                                     <Dialog.Title className="sr-only">Authentication</Dialog.Title>
                                     <Link href="/" className="flex items-center justify-center gap-2 mb-4">
                                         <img src="/logo.png" alt="" className='w-8 h-8' />
@@ -316,8 +305,11 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                                         </div>
                                     </Link>
                                 </div>
+                                )}
+                                
 
                                 {/* Tabs */}
+                                {!isForgotPassword && !isOtpView && (
                                 <div className="flex bg-white rounded-3xl p-1 mb-6 border border-indigo-600  mx-auto">
                                     <button
                                         onClick={() => setActiveTab('login')}
@@ -338,6 +330,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                                         ចុះឈ្មោះ
                                     </button>
                                 </div>
+                                )}
 
                                 {/* Forms */}
                                 {activeTab === 'login' && (
@@ -352,6 +345,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                                         handleLogin={handleLogin}
                                         isSubmitting={isSubmitting}
                                         errorMessage={formError}
+                                        onForgotPasswordChange={setIsForgotPassword}
                                     />
                                 )}
 
@@ -368,10 +362,18 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                                         handleProfileImageChange={handleProfileImageChange}
                                         isSubmitting={isSubmitting}
                                         errorMessage={formError}
+                                        showOtpView={isOtpView}
+                                        otpCode={otpCode}
+                                        setOtpCode={setOtpCode}
+                                        otpEmail={otpEmail}
+                                        onVerifyOtp={handleVerifyOtp}
+                                        onResendOtp={onResendOtp}
+                                        otpExpiresIn={otpExpiresIn}
                                     />
                                 )}
 
-                                {/* Divider */}
+                                {/* Divider + Social Login — hidden when forgot password or OTP view is active */}
+                                {!isForgotPassword && !isOtpView && (<>
                                 <div className="my-6 flex items-center  mx-auto">
                                     <div className="flex-1 border-t border-indigo-500/20"></div>
                                     <span className="px-4 text-sm text-gray-500">ឬ</span>
@@ -391,6 +393,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                                         </button>
                                     ))}
                                 </div>
+                                </>)}
                             </Dialog.Panel>
                         </Transition.Child>
                     </div>

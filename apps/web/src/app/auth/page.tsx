@@ -4,21 +4,20 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { auth, googleProvider, microsoftProvider, githubProvider } from '@/configs/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, getAuth, fetchSignInMethodsForEmail } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { authService, uploadService } from '@/services/index';
 import {
     validateLoginForm,
     validateSignupForm,
 } from '@core-utils/validator';
-import { getErrorMessage, isFirebaseAuthError } from '@core-utils/firebaseError';
 import LogIn from '@/components/pages/auth/LogIn';
 import SignUp from '@/components/pages/auth/SignUp';
-import VerifyOtp from '@/components/pages/auth/VerifyOtp';
 import { Logo } from '@/components/common/Logo';
 
 export default function AuthPage() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
+    const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,10 +28,12 @@ export default function AuthPage() {
     const [loginPassword, setLoginPassword] = useState('');
 
     // otp state
-    const [showOtpModal, setShowOtpModal] = useState(false);
+    const [isOtpView, setIsOtpView] = useState(false);
     const [otpCode, setOtpCode] = useState('');
     const [otpEmail, setOtpEmail] = useState('');
-    const [otpAttempts, setOtpAttempts] = useState(3);
+    const [otpExpiresIn, setOtpExpiresIn] = useState(90);
+
+
 
     const [signupData, setSignupData] = useState({
         username: '',
@@ -55,6 +56,7 @@ export default function AuthPage() {
         return validateSignupForm(signupData);
     };
 
+    // used to login user
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!isLoginValid()) return;
@@ -63,23 +65,19 @@ export default function AuthPage() {
         setIsSubmitting(true);
 
         try {
-            // Use Firebase email/password login regardless of username/email entered
             const result = await signInWithEmailAndPassword(auth, loginIdentifier, loginPassword);
             await result.user.getIdToken(true);
             const userData = await authService.getCurrentUser();
-
             localStorage.setItem("user", JSON.stringify(userData));
-
             router.push('/');
         } catch (error: unknown) {
-            console.error('Login error:', error);
-            setFormError(getErrorMessage(error, 'login'));
-        }
-        finally {
+            setFormError('អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ។ សូមព្យាយាមម្តងទៀត។');
+        } finally {
             setIsSubmitting(false);
         }
     };
 
+    // handle signup with otp
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!isSignupValid()) return;
@@ -90,16 +88,18 @@ export default function AuthPage() {
         try {
             // send otp to email for verify email user ownership
             const res = await authService.sendSignupOtp(signupData.email);
+            setOtpExpiresIn(res.expiresIn);
             setOtpEmail(signupData.email);
-            setShowOtpModal(true);
+            setIsOtpView(true);
         } catch (error: unknown) {
             console.error('Signup error:', error);
-            setFormError(getErrorMessage(error, 'signup'));
+            setFormError('មានបញ្ហាក្នុងការចុះឈ្មោះ។ សូមព្យាយាមម្តងទៀត។');
         } finally {
             setIsSubmitting(false);
         }
     };
 
+    // handle to verify otp for signup user
     const handleVerifyOtp = async () => {
         if (otpCode.length !== 6) return;
         setIsSubmitting(true);
@@ -142,15 +142,15 @@ export default function AuthPage() {
 
             const userData = await authService.signup(finalPayload);
             localStorage.setItem("user", JSON.stringify(userData.user));
-            setShowOtpModal(false);
+            setIsOtpView(false);
             router.push('/');
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('OTP verification error:', error);
-            const errorData = error?.response?.data;
-            setFormError(errorData?.message || error?.message || 'OTP verification failed');
-            
-            if (errorData?.attemptsLeft !== undefined) {
-                setOtpAttempts(errorData.attemptsLeft);
+            const status = (error as any)?.response?.status;
+            if (status === 429) {
+                setFormError('អ្នកបានព្យាយាមច្រើនព័កបន្តាច់។ សូមស័កព្វាកៅពេលប្រហែល ១៥ នាតីមុនព្យាយាមម្តងទៀត។');
+            } else {
+                setFormError('ការផ្ទៀងផ្ទាត់ OTP បានបរាជ័យ។ សូមព្យាយាមម្តងទៀត។');
             }
         } finally {
             setIsSubmitting(false);
@@ -183,21 +183,7 @@ export default function AuthPage() {
             router.push('/');
         } catch (error: unknown) {
             console.error('Social login error:', error);
-
-            // Handle special case for account exists with different credential
-            if (isFirebaseAuthError(error) && error.code === "auth/account-exists-with-different-credential") {
-                const email = error.customData?.email;
-                try {
-                    // Get the existing sign-in methods for this email
-                    const methods = await fetchSignInMethodsForEmail(getAuth(), email);
-                    setFormError(getErrorMessage(error, 'social', { email: email || '', methods }));
-                } catch (fetchError) {
-                    console.error('Error fetching sign-in methods:', fetchError);
-                    setFormError(getErrorMessage(error, 'social'));
-                }
-            } else {
-                setFormError(getErrorMessage(error, 'social'));
-            }
+            setFormError('មានបញ្ហាក្នុងការចូលដោយប្រើគណនីសង្គម។ សូមព្យាយាមម្តងទៀត។');
         }
         finally {
             setIsSubmitting(false);
@@ -211,121 +197,128 @@ export default function AuthPage() {
         }
     };
 
+    // handle resend otp
     const onResendOtp = async () => {
-        if (otpAttempts <= 0) {
-            setFormError('អ្នកបានព្យាយាម OTP លើសកំណត់។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។');
-            return;
-        }
         setFormError(null);
         try {
-            await authService.sendSignupOtp(otpEmail);
+            const res = await authService.sendSignupOtp(otpEmail);
+            setOtpExpiresIn(res.expiresIn);
             setFormError('OTP បានផ្ញើម្តងទៀតទៅអ៊ីមែលរបស់អ្នក។');
         } catch (error: unknown) {
             console.error('Resend OTP error:', error);
-            setFormError('បញ្ហាក្នុងការផ្ញើ OTP ម្តងទៀត។ សូមព្យាយាមម្តងទៀត។');
+            const status = (error as any)?.response?.status;
+            if (status === 429) {
+                setFormError('អ្នកបានស្នើសួតថ្មីច្រើនព័កបន្តាច់។ សូមស័កព្វាកៅពេលប្រហែល ១៥ នាតីមុនស័កម្តងទៀត។');
+            } else {
+                setFormError('បញ្ហាក្នុងការផ្ញើ OTP ម្តងទៀត។ សូមព្យាយាមម្តងទៀត។');
+            }
         }
     }
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-            <VerifyOtp
-                show={showOtpModal}
-                onClose={() => setShowOtpModal(false)}
-                otpCode={otpCode}
-                setOtpCode={setOtpCode}
-                otpEmail={otpEmail}
-                otpAttempts={otpAttempts}
-                isSubmitting={isSubmitting}
-                errorMessage={formError}
-                onVerify={handleVerifyOtp}
-                onResendOtp={onResendOtp}
-            />
-            
-            <div className="w-full max-w-3xl relative z-10 pt-16">
+            <div className="w-full max-w-2xl relative z-10 pt-16">
                 {/* Auth Container */}
                 <div className="bg-indigo-500/10 backdrop-blur-sm border border-indigo-600 rounded-3xl shadow-xl shadow-indigo-500/10 p-6">
-                    {/* Logo and Slogan */}
-                    <div className="text-center mb-8">
-                        <Link href="/" className="flex items-center justify-center gap-2 mb-4">
-                            <Logo size='lg' showBeta={false} />
-                        </Link>
-                    </div>
+                        <>
+                            {/* Logo and Slogan */}
+                            {!isForgotPassword && !isOtpView && (
+                                <div className="text-center mb-8">
+                                <Link href="/" className="flex items-center justify-center gap-2 mb-4">
+                                    <Logo size='lg' showBeta={false} />
+                                </Link>
+                            </div>
+                            )}
+                            
 
-                    {/* Tab Navigation */}
-                    <div className="flex bg-white rounded-full p-1 mb-6 border border-indigo-600  mx-auto">
-                        <button
-                            onClick={() => setActiveTab('login')}
-                            className={`flex-1 py-3 px-4 rounded-full text-sm font-medium transition-all hover:bg-gray-50 duration-300 ${activeTab === 'login'
-                                ? 'bg-white text-indigo-600 shadow-sm border border-indigo-600'
-                                : 'text-black hover:text-indigo-600'
-                                }`}
-                        >
-                            ចូលប្រេីប្រាស់
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('signup')}
-                            className={`flex-1 py-3 px-4 rounded-full text-sm font-medium transition-all hover:bg-gray-50 duration-300 ${activeTab === 'signup'
-                                ? 'bg-white text-indigo-600 shadow-sm border border-indigo-600'
-                                : 'text-black hover:text-indigo-600'
-                                }`}
-                        >
-                            ចុះឈ្មោះ
-                        </button>
-                    </div>
+                            {/* Tab Navigation */}
+                            {!isForgotPassword && !isOtpView && (
+                            <div className="flex bg-white rounded-full p-1 mb-6 border border-indigo-600  mx-auto">
+                                <button
+                                    onClick={() => setActiveTab('login')}
+                                    className={`flex-1 py-3 px-4 rounded-full text-sm font-medium transition-all hover:bg-gray-50 duration-300 ${activeTab === 'login'
+                                        ? 'bg-white text-indigo-600 shadow-sm border border-indigo-600'
+                                        : 'text-black hover:text-indigo-600'
+                                        }`}
+                                >
+                                    ចូលប្រេីប្រាស់
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('signup')}
+                                    className={`flex-1 py-3 px-4 rounded-full text-sm font-medium transition-all hover:bg-gray-50 duration-300 ${activeTab === 'signup'
+                                        ? 'bg-white text-indigo-600 shadow-sm border border-indigo-600'
+                                        : 'text-black hover:text-indigo-600'
+                                        }`}
+                                >
+                                    ចុះឈ្មោះ
+                                </button>
+                            </div>
+                            )}
 
-                    {/* Login Form */}
-                    {activeTab === 'login' && (
-                        <LogIn
-                            loginIdentifier={loginIdentifier}
-                            setLoginIdentifier={setLoginIdentifier}
-                            loginPassword={loginPassword}
-                            setLoginPassword={setLoginPassword}
-                            showPassword={showPassword}
-                            setShowPassword={setShowPassword}
-                            isLoginValid={isLoginValid}
-                            handleLogin={handleLogin}
-                            isSubmitting={isSubmitting}
-                            errorMessage={formError}
-                        />
-                    )}
+                            {/* Login Form */}
+                            {activeTab === 'login' && (
+                                <LogIn
+                                    loginIdentifier={loginIdentifier}
+                                    setLoginIdentifier={setLoginIdentifier}
+                                    loginPassword={loginPassword}
+                                    setLoginPassword={setLoginPassword}
+                                    showPassword={showPassword}
+                                    setShowPassword={setShowPassword}
+                                    isLoginValid={isLoginValid}
+                                    handleLogin={handleLogin}
+                                    isSubmitting={isSubmitting}
+                                    errorMessage={formError}
+                                    onForgotPasswordChange={setIsForgotPassword}
+                                />
+                            )}
 
-                    {/* Signup Form */}
-                    {activeTab === 'signup' && (
-                        <SignUp
-                            signupData={signupData}
-                            setSignupData={setSignupData}
-                            showPassword={showPassword}
-                            setShowPassword={setShowPassword}
-                            showConfirmPassword={showConfirmPassword}
-                            setShowConfirmPassword={setShowConfirmPassword}
-                            isSignupValid={isSignupValid}
-                            handleSignup={handleSignup}
-                            handleProfileImageChange={handleProfileImageChange}
-                            isSubmitting={isSubmitting}
-                            errorMessage={formError}
-                        />
-                    )}
+                            {/* Signup Form */}
+                            {activeTab === 'signup' && (
+                                <SignUp
+                                    signupData={signupData}
+                                    setSignupData={setSignupData}
+                                    showPassword={showPassword}
+                                    setShowPassword={setShowPassword}
+                                    showConfirmPassword={showConfirmPassword}
+                                    setShowConfirmPassword={setShowConfirmPassword}
+                                    isSignupValid={isSignupValid}
+                                    handleSignup={handleSignup}
+                                    handleProfileImageChange={handleProfileImageChange}
+                                    isSubmitting={isSubmitting}
+                                    errorMessage={formError}
+                                    showOtpView={isOtpView}
+                                    otpCode={otpCode}
+                                    setOtpCode={setOtpCode}
+                                    otpEmail={otpEmail}
+                                    onVerifyOtp={handleVerifyOtp}
+                                    onResendOtp={onResendOtp}
+                                    otpExpiresIn={otpExpiresIn}
+                                />
+                            )}
 
-                    {/* Divider */}
-                    <div className="my-6 flex items-center  mx-auto">
-                        <div className="flex-1 border-t border-indigo-500/20"></div>
-                        <span className="px-4 text-sm text-gray-500">ឬ</span>
-                        <div className="flex-1 border-t border-indigo-500/20"></div>
-                    </div>
+                            {/* Divider + Social Login — hidden when forgot password or OTP view is active */}
+                            {!isForgotPassword && !isOtpView && (<>
+                            <div className="my-6 flex items-center  mx-auto">
+                                <div className="flex-1 border-t border-indigo-500/20"></div>
+                                <span className="px-4 text-sm text-gray-500">ឬ</span>
+                                <div className="flex-1 border-t border-indigo-500/20"></div>
+                            </div>
 
-                    {/* Social Login */}
-                    <div className="flex gap-2 mx-auto">
-                        {socialPlatforms.map((platform, index) => (
-                            <button
-                                key={index}
-                                onClick={() => handleSocialLogin(platform.provider as 'google' | 'github' | 'microsoft')}
-                                className="flex-1 bg-white border border-indigo-500/20 text-gray-700 py-3 px-4 rounded-full font-medium hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                disabled={isSubmitting}
-                            >
-                                {platform.icon}
-                            </button>
-                        ))}
-                    </div>
+                            {/* Social Login */}
+                            <div className="flex gap-2 mx-auto">
+                                {socialPlatforms.map((platform, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => handleSocialLogin(platform.provider as 'google' | 'github' | 'microsoft')}
+                                        className="flex-1 bg-white border border-indigo-500/20 text-gray-700 py-3 px-4 rounded-full font-medium hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        disabled={isSubmitting}
+                                    >
+                                        {platform.icon}
+                                    </button>
+                                ))}
+                            </div>
+                            </>)}
+                    </>
                 </div>
             </div>
         </div>

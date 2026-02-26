@@ -12,7 +12,7 @@ export const createUploadService = (api: AxiosInstance) => {
       fileType: string
     ): Promise<UploadUrlResponse> => {
       try {
-        const response = await api.post<UploadUrlResponse>(
+        const response = await api.post<{ data: UploadUrlResponse }>(
           `/upload/upload-url`,
           {
             fileName,
@@ -20,7 +20,7 @@ export const createUploadService = (api: AxiosInstance) => {
           },
           { withCredentials: true }
         );
-        return response.data;
+        return response.data.data;
       } catch (error) {
         console.error("Error getting upload URL:", error);
         throw new Error("Failed to get upload URL");
@@ -46,7 +46,7 @@ export const createUploadService = (api: AxiosInstance) => {
     // Complete file upload process (get URL + upload)
     uploadFile: async (file: File): Promise<string> => {
       try {
-        const response = await api.post<UploadUrlResponse>(
+        const response = await api.post<{ data: UploadUrlResponse }>(
           `/upload/upload-url`,
           {
             fileName: file.name,
@@ -55,7 +55,7 @@ export const createUploadService = (api: AxiosInstance) => {
           { withCredentials: true }
         );
 
-        const { signedUrl, key } = response.data;
+        const { signedUrl, key } = response.data.data;
 
         await axios.put(signedUrl, file, {
           headers: {
@@ -70,12 +70,39 @@ export const createUploadService = (api: AxiosInstance) => {
       }
     },
 
+    // Upload file and return both key and public URL (used for profile image)
+    uploadFileForProfile: async (file: File): Promise<{ key: string; publicUrl: string }> => {
+      try {
+        const response = await api.post<{ data: UploadUrlResponse }>(
+          `/upload/upload-url`,
+          {
+            fileName: file.name,
+            fileType: file.type,
+          },
+          { withCredentials: true }
+        );
+
+        const { signedUrl, key, publicUrl } = response.data.data;
+
+        await axios.put(signedUrl, file, {
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
+
+        return { key, publicUrl };
+      } catch (error) {
+        console.error("Error uploading profile file:", error);
+        throw new Error("Failed to upload profile image");
+      }
+    },
+
     // Upload multiple files
     uploadMultipleFiles: async (files: File[]): Promise<string[]> => {
       try {
         const uploadPromises = files.map((file) => {
           return api
-            .post<UploadUrlResponse>(
+            .post<{ data: UploadUrlResponse }>(
               `/upload/upload-url`,
               {
                 fileName: file.name,
@@ -84,7 +111,7 @@ export const createUploadService = (api: AxiosInstance) => {
               { withCredentials: true }
             )
             .then(async (response) => {
-              const { signedUrl, key } = response.data;
+              const { signedUrl, key } = response.data.data;
               await axios.put(signedUrl, file, {
                 headers: {
                   "Content-Type": file.type,
@@ -106,7 +133,7 @@ export const createUploadService = (api: AxiosInstance) => {
       onProgress?: (progress: number) => void
     ): Promise<string> => {
       try {
-        const response = await api.post<UploadUrlResponse>(
+        const response = await api.post<{ data: UploadUrlResponse }>(
           `/upload/upload-url`,
           {
             fileName: file.name,
@@ -115,7 +142,7 @@ export const createUploadService = (api: AxiosInstance) => {
           { withCredentials: true }
         );
 
-        const { signedUrl, key } = response.data;
+        const { signedUrl, key } = response.data.data;
 
         await api.put(signedUrl, file, {
           headers: {

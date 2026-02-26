@@ -27,3 +27,15 @@ export interface User {
     exercises: number;
   };
 }
+
+export interface UpdateProfileDataRequest {
+  profileImage?: string;
+  profileImageKey?: string;
+}
+
+export interface UpdateProfileDataResponse {
+  profileImage?: string;
+  profileImageKey?: string;
+}
+
+

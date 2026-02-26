@@ -1,33 +1,83 @@
 import type { AxiosInstance } from "axios";
-import type { User, SignupData, SocialLoginData, verifySignupOtpResponse, signupResponse, signupOtpResponse } from "../types/auth";
-import axios from "@/configs/axios";
+import type { User, SignupData, SocialLoginData, verifySignupOtpResponse, signupResponse, signupOtpResponse, resetPasswordResponse, verifyForgetPasswordOtpResponse, ForgetPasswordOtpResponse } from "../types/auth";
+import { Trophy } from "lucide-react";
+import { UpdateProfileDataRequest, UpdateProfileDataResponse } from "@core-types/content/profile";
 
 export const createAuthService = (api: AxiosInstance) => {
   return {
     // AUTH OPERATIONS
 
+    // sent otp for signup
     sendSignupOtp: async (email: string): Promise<signupOtpResponse> => {
-      const response = await api.post(`/auth/send-signup-otp`, { email });
-      return response.data;
+      try{
+        const response = await api.post(`/auth/send-signup-otp`, { email });
+        return response.data;
+      }catch (error) {
+        console.error("Error sending signup OTP:", error);
+        throw new Error("Failed to send signup OTP");
+      }
+      
     },
 
-    // UPDATE verifySignupOtp to return verification token:
+    // verify otp
     verifySignupOtp: async (verifyData: { email: string; otp: string }): Promise<verifySignupOtpResponse> => {
-      const response = await api.post(`/auth/verify-signup-otp`, verifyData);
-      return response.data;
+      try{
+        const response = await api.post(`/auth/verify-signup-otp`, verifyData);
+        return response.data;
+      }catch (error) {
+        console.error("Error verifying signup OTP:", error);
+        throw new Error("Failed to verify signup OTP");
+      }
+      
     },
 
-    // UPDATE signup to accept verification token:
+    // do sign up after otp verification
     signup: async (signupData: SignupData & { verificationToken: string }): Promise<signupResponse> => {
-      const response = await api.post(`/auth/signup`, signupData);
-      return response.data;
+      try{
+        const response = await api.post(`/auth/signup`, signupData);
+        return response.data;
+      }catch (error) {
+        console.error("Error during signup:", error);
+        throw new Error("Failed to complete signup");
+      }
+      
+    },
+
+    sendForgetPasswordOtp: async (email: string): Promise<ForgetPasswordOtpResponse> => {
+      try {
+        const response = await api.post(`/auth/send-forget-password-otp`, { email });
+        return response.data;
+      } catch (error) {
+        console.error("Error sending forget password OTP:", error);
+        throw new Error("Failed to send forget password OTP");
+      }
+    },
+
+    verifyForgetPasswordOtp: async (verifyData: { email: string; otp: string }): Promise<verifyForgetPasswordOtpResponse> => {
+      try {
+        const response = await api.post(`/auth/verify-forget-password-otp`, verifyData);
+        return response.data;
+      } catch (error) {
+        console.error("Error verifying forget password OTP:", error);
+        throw new Error("Failed to verify forget password OTP");
+      }
+    },
+
+    resetPassword: async (resetData: { email: string; resetToken: string; newPassword: string }): Promise<resetPasswordResponse> => {
+      try {
+        const response = await api.post(`/auth/reset-password`, resetData);
+        return response.data;
+      } catch (error) {
+        console.error("Error resetting password:", error);
+        throw new Error("Failed to reset password");
+      }
     },
 
     // Social login
     socialLogin: async (socialData: SocialLoginData): Promise<User> => {
       try {
-        const response = await api.post<User>(`/auth/social-login`, socialData);
-        return response.data;
+        const response = await api.post<{ data: User }>(`/auth/social-login`, socialData);
+        return response.data.data;
       } catch (error) {
         console.error("Error during social login:", error);
         throw new Error("Failed to login with social provider");
@@ -36,25 +86,24 @@ export const createAuthService = (api: AxiosInstance) => {
 
     // USER MANAGEMENT
 
-    // Update user profile
-    updateProfile: async (
-      userId: number,
-      profileData: Partial<User>
-    ): Promise<User> => {
+    updateProfileImage: async (data: UpdateProfileDataRequest): Promise<UpdateProfileDataResponse> => {
       try {
-        const response = await api.put<User>(`/profile/${userId}`, profileData);
-        return response.data;
+        const response = await api.put<{ data: UpdateProfileDataResponse }>(
+          `/me/profile`,
+          data
+        );
+        return response.data.data;
       } catch (error) {
-        console.error("Error updating profile:", error);
-        throw new Error("Failed to update profile");
+        console.error("Error updating profile image:", error);
+        throw new Error("Failed to update profile image");
       }
     },
 
     // Get current user profile
     getCurrentUser: async (): Promise<User> => {
       try {
-        const response = await api.get<User>(`/me`);
-        return response.data;
+        const response = await api.get<{ data: User }>(`/me`);
+        return response.data.data;
       } catch (error) {
         console.error("Error fetching current user:", error);
         throw new Error("Failed to fetch user profile");
@@ -63,8 +112,8 @@ export const createAuthService = (api: AxiosInstance) => {
 
     getCurrentUserProfile: async (): Promise<User> => {
       try {
-        const response = await api.get<User>(`/me/profile`);
-        return response.data;
+        const response = await api.get<{ data: User }>(`/me/profile`);
+        return response.data.data;
       } catch (error) {
         console.error("Error fetching current user profile:", error);
         throw new Error("Failed to fetch user profile");

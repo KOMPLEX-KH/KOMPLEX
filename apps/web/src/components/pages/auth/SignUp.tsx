@@ -1,6 +1,7 @@
 'use client';
 
 import { Eye, EyeOff, Mail, Lock, Upload } from 'lucide-react';
+import VerifyOtp from './VerifyOtp';
 import { getValidationError, validatePasswordConfirmation } from '@core-utils/validator';
 
 interface SignupFormProps {
@@ -35,6 +36,14 @@ interface SignupFormProps {
     handleProfileImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     isSubmitting?: boolean;
     errorMessage?: string | null;
+    showOtpView?: boolean;
+    otpCode?: string;
+    setOtpCode?: (code: string) => void;
+    otpEmail?: string;
+    onVerifyOtp?: () => void;
+    onResendOtp?: () => void;
+    onOtpViewChange?: (active: boolean) => void;
+    otpExpiresIn?: number;
 }
 
 export default function SignUp({
@@ -49,7 +58,32 @@ export default function SignUp({
     handleProfileImageChange,
     isSubmitting = false,
     errorMessage = null,
+    showOtpView = false,
+    otpCode = '',
+    setOtpCode,
+    otpEmail = '',
+    onVerifyOtp,
+    onResendOtp,
+    otpExpiresIn,
+    onOtpViewChange,
 }: SignupFormProps) {
+    
+    if (showOtpView) {
+        return (
+            <VerifyOtp
+                otpCode={otpCode}
+                setOtpCode={setOtpCode!}
+                otpEmail={otpEmail}
+                isSubmitting={isSubmitting}
+                errorMessage={errorMessage ?? null}
+                onVerify={onVerifyOtp!}
+                onResendOtp={onResendOtp!}
+                resendCooldownSeconds={otpExpiresIn ?? 90}
+                onBack={() => onOtpViewChange?.(false)}
+            />
+        );
+    }
+
     return (
         <form onSubmit={handleSignup} className="space-y-6 mx-auto">
             {/* Profile Image and Basic Info Row */}
