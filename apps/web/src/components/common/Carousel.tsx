@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Play, Pause, Volume2, VolumeX } from 'lucide-react';
-import { Media } from '@/types/content/media';
+import { Media } from '@core-types/content/media';
 
 
 interface CarouselProps {

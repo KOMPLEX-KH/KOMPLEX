@@ -12,7 +12,7 @@ import {
     Heart,
     MessageCircle,
 } from 'lucide-react';
-import { ForumPost } from '@/types/content/forums';
+import { ForumPost } from '@core-types/content/forums';
 import { meForumService } from '@/services/index';
 import ForumCard from '@/components/pages/me/forums/ForumCard';
 import MeSkeleton from '@/components/pages/me/MeSkeleton';

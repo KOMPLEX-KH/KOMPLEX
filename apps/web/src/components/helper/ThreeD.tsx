@@ -4,7 +4,7 @@ import React, { Suspense, useEffect, useState, Component, ReactNode } from 'reac
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, OrbitControls, Text, Html, useProgress } from '@react-three/drei';
 import { Object3D, Mesh } from 'three';
-import { ThreeDProps } from '@/types/docs/threeD';
+import { ThreeDProps } from '@core-types/docs/threeD';
 import { Logo } from '../common/Logo';
 
 // Error Boundary for catching React rendering errors
@@ -71,6 +71,7 @@ const Model = ({ modelUrl, scale = 0.1, onError }: {
         }
     }, [scene, onError]);
 
+    // @ts-expect-error - primitive is a valid JSX element in react-three/fiber
     return <primitive object={scene} scale={scale} position={[0, 0, 0]} />;
 };
 
@@ -237,7 +238,9 @@ export const ThreeD: React.FC<ThreeDProps> = ({
                         maxDistance={20}
                         target={target}
                     />
+                    {/* @ts-expect-error - ambientLight is a valid JSX element in react-three/fiber */}
                     <ambientLight intensity={0.5} />
+                    {/* @ts-expect-error - directionalLight is a valid JSX element in react-three/fiber */}
                     <directionalLight position={[3, 5, 2]} intensity={1} />
                     <Suspense fallback={null}>
                         {customContent}
@@ -247,6 +250,7 @@ export const ThreeD: React.FC<ThreeDProps> = ({
                 // Render GLB model
                 <ThreeDErrorBoundary onError={handleError}>
                     <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
+                        {/* @ts-expect-error - color is a valid JSX element in react-three/fiber */}
                         <color attach="background" args={[canvasBackgroundColor]} />
 
                         <OrbitControls
@@ -312,7 +316,7 @@ export const ThreeD: React.FC<ThreeDProps> = ({
                                                 color: 'white',
                                                 fontSize: '1.2rem',
                                                 textAlign: 'center',
-                                                ...item.style
+                                                ...(item.style as React.CSSProperties)
                                             }}
                                         >
                                             {item.content}
@@ -324,7 +328,7 @@ export const ThreeD: React.FC<ThreeDProps> = ({
                                             color: 'white',
                                             fontSize: '1.2rem',
                                             textAlign: 'center',
-                                            ...twoDText.style
+                                            ...(twoDText.style as React.CSSProperties)
                                         }}
                                     >
                                         {twoDText.content}
@@ -333,7 +337,9 @@ export const ThreeD: React.FC<ThreeDProps> = ({
                             </Html>
                         )}
 
+                        {/* @ts-expect-error - ambientLight is a valid JSX element in react-three/fiber */}
                         <ambientLight intensity={0.5} />
+                        {/* @ts-expect-error - directionalLight is a valid JSX element in react-three/fiber */}
                         <directionalLight position={[3, 5, 2]} intensity={1} />
                     </Canvas>
                 </ThreeDErrorBoundary>
