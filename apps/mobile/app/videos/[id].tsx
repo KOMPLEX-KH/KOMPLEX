@@ -8,17 +8,15 @@ import VideoDescription from "@/components/screens/videos/VideoDescription";
 import VideoSkeleton from "@/components/screens/videos/VideoSkeleton";
 import ContentError from "@/components/common/ContentError";
 import Comments from "@/components/common/comments/Comments";
-import Exercise from "@/components/screens/videos/Exercise";
-import { BackButton } from "@/components/common/BackButton";
+// import Exercise from "@/components/screens/videos/Exercise";
 import { MessageSquare, BookOpen } from "lucide-react-native";
-import { VideoPost } from "@/types/content/videos";
+import { VideoPost } from "@core-types/content/videos";
 import { feedVideoService, meVideoService } from "@/services/index";
 import { useAuth } from "@/hooks/useAuth";
 import { HEADER_CONFIG } from "@/constants/header-config";
 
 export default function VideoDetailScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
-    const router = useRouter();
     const { user } = useAuth();
     const navigation = useNavigation();
 
@@ -45,7 +43,7 @@ export default function VideoDetailScreen() {
             setIsLoading(true);
             setError(null);
             const video = await feedVideoService.getVideoById(id);
-            setVideoPost(video);
+            setVideoPost(video.data);
         } catch (error) {
             console.error("Error fetching video:", error);
             setError("មានបញ្ហាកើតឡើងពេលផ្ទុកវីដេអូ សូមព្យាយាមម្តងទៀត");
@@ -90,7 +88,7 @@ export default function VideoDetailScreen() {
                 prev
                     ? {
                         ...prev,
-                        isSave: !isSaved,
+                        isSaved: !isSaved,
                         saveCount: isSaved ? prev.saveCount - 1 : prev.saveCount + 1,
                     }
                     : null
@@ -220,9 +218,9 @@ export default function VideoDetailScreen() {
                         />
                     )}
 
-                    {activeTab === "exercise" && (
-                        <Exercise exercises={videoPost.exercises || []} />
-                    )}
+                    {/* {activeTab === "exercise" && (
+                        // <Exercise exercises={videoPost.exercises || []} />
+                    )} */}
                 </View>
             </ScrollView>
         </View>

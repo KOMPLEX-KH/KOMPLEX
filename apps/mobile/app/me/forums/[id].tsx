@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
 import { feedForumService, meForumService } from '@/services/index';
-import { ForumPost } from '@/types/content/forums';
+import { ForumPost } from '@core-types/content/forums';
 import DeleteConfirm from '@/components/common/DeleteConfirm';
 import ContentError from '@/components/common/ContentError';
 import EditForum from '@/components/screens/me/forums/EditForum';
@@ -51,7 +51,7 @@ export default function MyForumDetailPage() {
                 setIsLoading(true);
                 setError(null);
                 const forumPost = await feedForumService.getForumById(id.toString());
-                setPost(forumPost);
+                setPost(forumPost.data);
             } catch (err) {
                 console.error('Error fetching forum post:', err);
                 setError('មានបញ្ហាកើតឡើងពេលទាញយកទិន្នន័យ។ សូមព្យាយាមម្ដងទៀត។');

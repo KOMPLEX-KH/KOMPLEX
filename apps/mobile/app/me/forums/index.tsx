@@ -11,7 +11,7 @@ import {
     Eye,
     Heart,
 } from 'lucide-react-native';
-import { ForumPost } from '@/types/content/forums';
+import { ForumPost } from '@core-types/content/forums';
 import { meForumService } from '@/services/index';
 import ForumCard from '@/components/screens/me/forums/ForumCard';
 import MeSkeleton from '@/components/screens/me/MeSkeleton';
@@ -48,7 +48,7 @@ export default function MyForums() {
                     setIsLoading(true);
                     setError(null);
                     const forums = await meForumService.getUserForums();
-                    setForumPosts(forums);
+                    setForumPosts(forums.data);
                 } catch (error) {
                     console.error('Error fetching forums:', error);
                     setError('មានបញ្ហាកើតឡើងពេលទាញយកទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។');

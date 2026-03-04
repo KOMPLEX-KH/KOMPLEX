@@ -1,4 +1,6 @@
 import type { AxiosInstance } from "axios";
+import { ApiWrapper } from "@core-types/apiWrapper";
+import { VideoPost } from "@core-types/content/videos";
 
 export const createMeVideoService = (api: AxiosInstance) => {
   return {
@@ -10,14 +12,14 @@ export const createMeVideoService = (api: AxiosInstance) => {
       description: string;
       thumbnailKey: string;
       questions:
-        | {
-            title: string;
-            choices: {
-              text: string;
-              isCorrect: boolean;
-            }[];
-          }[]
-        | undefined;
+      | {
+        title: string;
+        choices: {
+          text: string;
+          isCorrect: boolean;
+        }[];
+      }[]
+      | undefined;
     }) => {
       try {
         const response = await api.post(`/me/videos`, {
@@ -73,10 +75,10 @@ export const createMeVideoService = (api: AxiosInstance) => {
     // USER CONTENT VIDEOS
 
     // Get user's own videos
-    getUserVideos: async () => {
+    getUserVideos: async (): Promise<ApiWrapper<VideoPost[]>> => {
       try {
         const response = await api.get(`/me/videos`);
-        return response.data;
+        return response.data as ApiWrapper<VideoPost[]>;
       } catch (error) {
         console.error("Error fetching user videos:", error);
         throw new Error("Failed to fetch user videos");

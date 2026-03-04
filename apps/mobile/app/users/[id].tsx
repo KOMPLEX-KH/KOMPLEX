@@ -11,7 +11,7 @@ import { userProfileService, meFollowService } from '@/services/index';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigation } from '@react-navigation/native';
 import { HEADER_CONFIG } from '@/constants/header-config';
-import { User } from '@core-types/content/profile';
+import { UserProfile } from '@core-types/content/profile';
 
 type TabType = 'videos' | 'forums';
 
@@ -24,7 +24,7 @@ export default function UserProfilePage() {
     const { user: currentUser } = useAuth();
 
     const [activeTab, setActiveTab] = useState<TabType>('videos');
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<UserProfile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isFollowLoading, setIsFollowLoading] = useState(false);
@@ -43,7 +43,7 @@ export default function UserProfilePage() {
                 setIsLoading(true);
                 setError(null);
                 const userData = await userProfileService.getUserProfile(userId);
-                setUser(userData);
+                setUser(userData.data);
             } catch (err) {
                 console.error('Error fetching user:', err);
                 setError('មានបញ្ហាក្នុងការទាញយកព័ត៌មានអ្នកប្រើប្រាស់។ សូមព្យាយាមម្តងទៀត។');
@@ -120,7 +120,7 @@ export default function UserProfilePage() {
 
     return (
         <View style={tw('flex-1 bg-gray-50')}>
-            <ScrollView style={tw('flex-1')}  showsVerticalScrollIndicator={false}>
+            <ScrollView style={tw('flex-1')} showsVerticalScrollIndicator={false}>
                 {/* Profile Header */}
                 <View style={tw('bg-white pb-6 pt-20 px-4')}>
                     <View style={tw('items-center mb-6')}>
@@ -198,7 +198,7 @@ export default function UserProfilePage() {
                         </View>
                     </View>
 
-                    
+
                 </View>
 
                 {/* Tabs */}

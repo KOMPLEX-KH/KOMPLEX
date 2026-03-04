@@ -39,7 +39,7 @@ export default function NewsDetailScreen() {
                 setIsLoading(true);
                 setError(null);
                 const newsData = await feedNewsService.getNewsById(newsId);
-                setNews(newsData);
+                setNews(newsData.data);
             } catch (err: any) {
                 console.error('Error loading news:', err);
                 setError(err.message || 'មានបញ្ហាកើតឡើងពេលទាញយកព័ត៌មាន។ សូមព្យាយាមម្តងទៀត។');
@@ -57,7 +57,7 @@ export default function NewsDetailScreen() {
         const loadNews = async () => {
             try {
                 const newsData = await feedNewsService.getNewsById(newsId);
-                setNews(newsData);
+                setNews(newsData.data);
             } catch (err: any) {
                 console.error('Error loading news:', err);
                 setError(err.message || 'មានបញ្ហាកើតឡើងពេលទាញយកព័ត៌មាន។ សូមព្យាយាមម្តងទៀត។');

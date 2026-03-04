@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { View, ScrollView, TextInput, Pressable, Image, Alert, ActivityIndicator } from 'react-native';
 import { Eye, Image as ImageIcon, Plus, Save, X } from 'lucide-react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { ForumPost } from '@/types/content/forums';
-import { Media } from '@/types/content/media';
+import { ForumPost } from '@core-types/content/forums';
+import { Media } from '@core-types/content/media';
 import { meForumService, feedForumService } from '@/services/index';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
@@ -119,9 +119,9 @@ export default function EditForum({ forum, onCancel }: EditForumProps) {
             await meForumService.updateForum(forum.id.toString(), formData);
             const updatedForum = await feedForumService.getForumById(forum.id.toString());
 
-            setTitle(updatedForum.title);
-            setDescription(updatedForum.description);
-            setExistingImages(updatedForum.media ?? []);
+            setTitle(updatedForum.data.title);
+            setDescription(updatedForum.data.description ?? '');
+            setExistingImages(updatedForum.data.media ?? []);
             setRemovedImages([]);
             setSelectedImages([]);
             onCancel();
@@ -160,10 +160,9 @@ export default function EditForum({ forum, onCancel }: EditForumProps) {
                             onPress={handlePickImage}
                             disabled={existingImages.length + selectedImages.length >= 4}
                             style={tw(
-                                `flex-row items-center gap-2 px-3 py-1.5 rounded-full ${
-                                    existingImages.length + selectedImages.length >= 4
-                                        ? 'bg-gray-200'
-                                        : 'bg-indigo-100'
+                                `flex-row items-center gap-2 px-3 py-1.5 rounded-full ${existingImages.length + selectedImages.length >= 4
+                                    ? 'bg-gray-200'
+                                    : 'bg-indigo-100'
                                 }`
                             )}
                         >
@@ -173,8 +172,7 @@ export default function EditForum({ forum, onCancel }: EditForumProps) {
                             />
                             <Text
                                 style={tw(
-                                    `text-xs font-kh-medium ${
-                                        existingImages.length + selectedImages.length >= 4 ? 'text-gray-500' : 'text-indigo-600'
+                                    `text-xs font-kh-medium ${existingImages.length + selectedImages.length >= 4 ? 'text-gray-500' : 'text-indigo-600'
                                     }`
                                 )}
                             >
@@ -271,8 +269,7 @@ export default function EditForum({ forum, onCancel }: EditForumProps) {
                         onPress={handleSave}
                         disabled={!hasChanges || isSaving}
                         style={tw(
-                            `flex-row items-center gap-2 px-4 py-2 rounded-full ${
-                                !hasChanges || isSaving ? 'bg-indigo-200' : 'bg-indigo-500'
+                            `flex-row items-center gap-2 px-4 py-2 rounded-full ${!hasChanges || isSaving ? 'bg-indigo-200' : 'bg-indigo-500'
                             }`
                         )}
                     >

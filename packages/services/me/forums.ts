@@ -1,4 +1,6 @@
 import type { AxiosInstance } from "axios";
+import { ApiWrapper } from "@core-types/apiWrapper";
+import { ForumPost } from "@core-types/content/forums";
 
 export const createMeForumService = (api: AxiosInstance) => {
   return {
@@ -53,10 +55,10 @@ export const createMeForumService = (api: AxiosInstance) => {
     },
 
     // Get user's own forum posts
-    getUserForums: async () => {
+    getUserForums: async (): Promise<ApiWrapper<ForumPost[]>> => {
       try {
         const response = await api.get(`/me/forums`);
-        return response.data;
+        return response.data as ApiWrapper<ForumPost[]>;
       } catch (error) {
         console.error("Error fetching user forums:", error);
         throw new Error("Failed to fetch user forums");
@@ -64,10 +66,10 @@ export const createMeForumService = (api: AxiosInstance) => {
     },
 
     // Get user's own forum post by ID
-    getUserForumById: async (id: string) => {
+    getUserForumById: async (id: string): Promise<ApiWrapper<ForumPost>> => {
       try {
         const response = await api.get(`/me/forums/${id}`);
-        return response.data;
+        return response.data as ApiWrapper<ForumPost>;
       } catch (error) {
         console.error("Error fetching user forum:", error);
         throw new Error("Failed to fetch user forum");

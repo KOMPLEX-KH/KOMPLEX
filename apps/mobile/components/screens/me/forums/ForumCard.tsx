@@ -1,6 +1,6 @@
 import { View, Pressable, Image, ScrollView } from 'react-native';
-import { ForumPost } from '@/types/content/forums';
-import { Media } from '@/types/content/media';
+import { ForumPost } from '@core-types/content/forums';
+import { Media } from '@core-types/content/media';
 import { useRouter, Href } from 'expo-router';
 import { Eye, MessageCircle, ThumbsUp } from 'lucide-react-native';
 import { tw } from '@/utils/styles';
@@ -116,12 +116,12 @@ export default function ForumCard({ post, isFromMePage }: ForumCardProps) {
                         {post.likeCount}
                     </Text>
                 </View>
-                <View style={tw("flex-row items-center gap-1")}>
+                {/* <View style={tw("flex-row items-center gap-1")}>
                     <MessageCircle size={16} color="#6B7280" />
                     <Text style={tw("text-sm text-gray-600")}>
                         {post.commentCount}
                     </Text>
-                </View>
+                </View> */}
             </View>
         </Pressable>
     );

@@ -3,15 +3,13 @@ import { View, ScrollView, TextInput, Pressable, ActivityIndicator, Alert, Image
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
-import Sidebar from '@/components/screens/me/Sidebar';
 import MeSkeleton from '@/components/screens/me/MeSkeleton';
 import { useAuth } from '@/hooks/useAuth';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
 import { meForumService } from '@/services/index';
-import { BackButton } from '@/components/common/BackButton';
 import { HEADER_CONFIG } from '@/constants/header-config';
-import { MessageCircle, Plus, Trash } from 'lucide-react-native';
+import { Plus, Trash } from 'lucide-react-native';
 
 interface PickedImage {
     uri: string;

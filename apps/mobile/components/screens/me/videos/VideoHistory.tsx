@@ -4,9 +4,8 @@ import { Play, Clock, Calendar, Trash2, History, AlertCircle, CheckCircle } from
 import { useRouter, Href } from 'expo-router';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
-import ContentError from '@/components/common/ContentError';
 import { meVideoHistoryService } from '@/services/index';
-import type { VideoHistory } from '@/types/content/videos';
+import type { VideoHistory } from '@core-types/content/videos';
 
 interface VideoHistoryProps {
     onError?: (error: string) => void;
@@ -28,7 +27,7 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                 setLoading(true);
                 setError(null);
                 const history = await meVideoHistoryService.getUserVideoHistory();
-                setVideoHistory(history);
+                setVideoHistory(history.data);
             } catch (err) {
                 console.error('Error fetching video history:', err);
                 const errorMessage = 'មានបញ្ហាក្នុងការផ្ទុកប្រវត្តិវីដេអូ។ សូមព្យាយាមម្តងទៀត។';
@@ -53,68 +52,68 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
         });
     };
 
-    const handleDeleteHistory = async (historyId: number) => {
-        Alert.alert(
-            'លុបប្រវត្តិ',
-            'តើអ្នកប្រាកដជាចង់លុបវីដេអូនេះចេញពីប្រវត្តិមែនទេ?',
-            [
-                { text: 'បោះបង់', style: 'cancel' },
-                {
-                    text: 'លុប',
-                    style: 'destructive',
-                    onPress: async () => {
-                        try {
-                            setDeletingId(historyId);
-                            await meVideoHistoryService.deleteVideoFromHistory(historyId.toString());
-                            setVideoHistory(prev => prev.filter(item => item.id !== historyId));
-                            setSuccessMessage('លុបចេញពីប្រវត្តិបានជោគជ័យ');
-                            setTimeout(() => setSuccessMessage(null), 3000);
-                        } catch (err) {
-                            console.error('Error deleting history item:', err);
-                            const errorMessage = 'មានបញ្ហាក្នុងការលុបវីដេអូចេញពីប្រវត្តិ';
-                            setError(errorMessage);
-                            onError?.(errorMessage);
-                        } finally {
-                            setDeletingId(null);
-                        }
-                    }
-                }
-            ]
-        );
-    };
+    // const handleDeleteHistory = async (historyId: number) => {
+    //     Alert.alert(
+    //         'លុបប្រវត្តិ',
+    //         'តើអ្នកប្រាកដជាចង់លុបវីដេអូនេះចេញពីប្រវត្តិមែនទេ?',
+    //         [
+    //             { text: 'បោះបង់', style: 'cancel' },
+    //             {
+    //                 text: 'លុប',
+    //                 style: 'destructive',
+    //                 onPress: async () => {
+    //                     try {
+    //                         setDeletingId(historyId);
+    //                         // await meVideoHistoryService.deleteVideoFromHistory(historyId.toString());
+    //                         setVideoHistory(prev => prev.filter(item => item.id !== historyId));
+    //                         setSuccessMessage('លុបចេញពីប្រវត្តិបានជោគជ័យ');
+    //                         setTimeout(() => setSuccessMessage(null), 3000);
+    //                     } catch (err) {
+    //                         console.error('Error deleting history item:', err);
+    //                         const errorMessage = 'មានបញ្ហាក្នុងការលុបវីដេអូចេញពីប្រវត្តិ';
+    //                         setError(errorMessage);
+    //                         onError?.(errorMessage);
+    //                     } finally {
+    //                         setDeletingId(null);
+    //                     }
+    //                 }
+    //             }
+    //         ]
+    //     );
+    // };
 
-    const handleBulkDelete = async () => {
-        if (selectedItems.size === 0) return;
+    // const handleBulkDelete = async () => {
+    //     if (selectedItems.size === 0) return;
 
-        Alert.alert(
-            'លុបប្រវត្តិ',
-            `តើអ្នកប្រាកដជាចង់លុបវីដេអូ ${selectedItems.size} ចេញពីប្រវត្តិមែនទេ?`,
-            [
-                { text: 'បោះបង់', style: 'cancel' },
-                {
-                    text: 'លុប',
-                    style: 'destructive',
-                    onPress: async () => {
-                        try {
-                            const deletePromises = Array.from(selectedItems).map(id =>
-                                meVideoHistoryService.deleteVideoFromHistory(id.toString())
-                            );
-                            await Promise.all(deletePromises);
-                            setVideoHistory(prev => prev.filter(item => !selectedItems.has(item.id)));
-                            setSelectedItems(new Set());
-                            setSuccessMessage(`លុបវីដេអូ ${selectedItems.size} ចេញពីប្រវត្តិបានជោគជ័យ`);
-                            setTimeout(() => setSuccessMessage(null), 3000);
-                        } catch (err) {
-                            console.error('Error bulk deleting history items:', err);
-                            const errorMessage = 'មានបញ្ហាក្នុងការលុបវីដេអូចេញពីប្រវត្តិ';
-                            setError(errorMessage);
-                            onError?.(errorMessage);
-                        }
-                    }
-                }
-            ]
-        );
-    };
+    //     Alert.alert(
+    //         'លុបប្រវត្តិ',
+    //         `តើអ្នកប្រាកដជាចង់លុបវីដេអូ ${selectedItems.size} ចេញពីប្រវត្តិមែនទេ?`,
+    //         [
+    //             { text: 'បោះបង់', style: 'cancel' },
+    //             {
+    //                 text: 'លុប',
+    //                 style: 'destructive',
+    //                 onPress: async () => {
+    //                     try {
+    //                         const deletePromises = Array.from(selectedItems).map(id =>
+    //                             meVideoHistoryService.deleteVideoFromHistory(id.toString())
+    //                         );
+    //                         await Promise.all(deletePromises);
+    //                         setVideoHistory(prev => prev.filter(item => !selectedItems.has(item.id)));
+    //                         setSelectedItems(new Set());
+    //                         setSuccessMessage(`លុបវីដេអូ ${selectedItems.size} ចេញពីប្រវត្តិបានជោគជ័យ`);
+    //                         setTimeout(() => setSuccessMessage(null), 3000);
+    //                     } catch (err) {
+    //                         console.error('Error bulk deleting history items:', err);
+    //                         const errorMessage = 'មានបញ្ហាក្នុងការលុបវីដេអូចេញពីប្រវត្តិ';
+    //                         setError(errorMessage);
+    //                         onError?.(errorMessage);
+    //                     }
+    //                 }
+    //             }
+    //         ]
+    //     );
+    // };
 
     const handleSelectItem = (id: number) => {
         const newSelected = new Set(selectedItems);
@@ -174,7 +173,7 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                                     setLoading(true);
                                     setError(null);
                                     const history = await meVideoHistoryService.getUserVideoHistory();
-                                    setVideoHistory(history);
+                                    setVideoHistory(history.data);
                                 } catch (err) {
                                     console.error('Error fetching video history:', err);
                                 } finally {
@@ -272,7 +271,7 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
 
                         {selectedItems.size > 0 && (
                             <Pressable
-                                onPress={handleBulkDelete}
+                                // onPress={handleBulkDelete}
                                 style={tw("flex-row items-center gap-2 px-4 py-2 bg-red-600 rounded-3xl")}
                             >
                                 <Trash2 size={16} color="white" />
@@ -288,10 +287,9 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                             <View
                                 key={item.id}
                                 style={tw(
-                                    `flex-row items-center gap-4 p-4 border rounded-3xl ${
-                                        selectedItems.has(item.id)
-                                            ? 'border-indigo-300 bg-indigo-50'
-                                            : 'border-gray-200'
+                                    `flex-row items-center gap-4 p-4 border rounded-3xl ${selectedItems.has(item.id)
+                                        ? 'border-indigo-300 bg-indigo-50'
+                                        : 'border-gray-200'
                                     }`
                                 )}
                             >
@@ -307,7 +305,7 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
 
                                 {/* Thumbnail */}
                                 <Pressable
-                                    onPress={() => router.push(`/videos/${item.videoId}` as Href)}
+                                    onPress={() => router.push(`/videos/${item.id}` as Href)}
                                     style={tw("relative")}
                                 >
                                     <View style={tw("relative w-24 h-16 rounded-3xl overflow-hidden")}>
@@ -331,7 +329,7 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
 
                                 {/* Video Info */}
                                 <Pressable
-                                    onPress={() => router.push(`/videos/${item.videoId}` as Href)}
+                                    onPress={() => router.push(`/videos/${item.id}` as Href)}
                                     style={tw("flex-1")}
                                 >
                                     <Text style={tw("font-kh-medium text-gray-900 mb-1")} numberOfLines={1}>
@@ -355,7 +353,7 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
 
                                 {/* Actions */}
                                 <Pressable
-                                    onPress={() => handleDeleteHistory(item.id)}
+                                    // onPress={() => handleDeleteHistory(item.id)}
                                     disabled={deletingId === item.id}
                                     style={tw(`p-2 rounded-3xl ${deletingId === item.id ? 'opacity-50' : ''}`)}
                                 >

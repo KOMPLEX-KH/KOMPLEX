@@ -104,11 +104,11 @@ export default function CreateVideoScreen() {
             const thumbnailKey = await uploadService.getUploadUrl(`thumbnail_${Date.now()}.jpg`, 'image/jpeg');
 
             await meVideoService.createVideo({
-                videoKey: videoKey.key,
+                videoKey: videoKey.data.key,
                 title: title.trim(),
                 description: description.trim(),
                 duration: Math.round(durationSeconds),
-                thumbnailKey: thumbnailKey.key,
+                thumbnailKey: thumbnailKey.data.key,
                 questions: undefined,
             });
 

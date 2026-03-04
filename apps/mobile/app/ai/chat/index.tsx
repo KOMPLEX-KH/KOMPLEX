@@ -5,7 +5,7 @@ import { tw } from '@/utils/styles';
 import { meAiService } from '@/services/index';
 import { useAuth } from '@/hooks/useAuth';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Message, AIHistoryItem, AIResponseType } from '@/types/content/ai';
+import { Message, AIHistoryItem, AIResponseType } from '@core-types/content/ai';
 import MessageItem from '@/components/screens/ai/MessageItem';
 import ChatSkeleton from '@/components/screens/ai/ChatSkeleton';
 import ResponseLoadingState from '@/components/screens/ai/ResponseLoadingState';
@@ -20,6 +20,7 @@ import { Send, Bot, RefreshCw, Square, AlertCircle } from 'lucide-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { HEADER_CONFIG } from '@/constants/header-config';
+import { ApiWrapper } from '@core-types/apiWrapper';
 
 const responseTypeOptions: readonly ResponseTypeOption[] = [
     { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ទាក់ទាញ' },
@@ -206,29 +207,27 @@ export default function AIChat() {
         setError(null);
 
         try {
-            const response: { data: { aiResult: string; id: number; responseType?: AIResponseType } } =
-                await meAiService.callAiGeneralAndWriteToHistory(storedPrompt, tabIdNum, {
-                    responseType: effectiveType,
-                });
-
+            const response = await meAiService.callAiGeneralAndWriteToHistory(storedPrompt, tabIdNum, {
+                responseType: effectiveType,
+            });
             setIsLoading(false);
             setIsRequestInProgress(false);
 
             const resolvedResponseType = response.data.responseType ?? 'normal';
 
-            if (isKomplexType(resolvedResponseType)) {
+            if (isKomplexType(resolvedResponseType as AIResponseType)) {
                 const aiResponse: Message = {
                     id: (Date.now() + 1).toString(),
                     content: response.data.aiResult,
                     sender: 'ai',
                     timestamp: new Date(),
-                    responseType: resolvedResponseType,
+                    responseType: resolvedResponseType as AIResponseType,
                 };
                 setMessages((prev) => [...prev, aiResponse]);
                 setPendingResponseType(null);
                 queueRating(response.data.id, 'general');
             } else {
-                streamText(response.data.aiResult, resolvedResponseType, {
+                streamText(response.data.aiResult, resolvedResponseType as AIResponseType, {
                     onComplete: () => queueRating(response.data.id, 'general'),
                 });
             }
@@ -319,7 +318,7 @@ export default function AIChat() {
         setError(null);
 
         try {
-            let response: { data: { aiResult: string; id: number; responseType?: AIResponseType } };
+            let response: ApiWrapper<any>;
             let ratingScope: 'general' | 'topic' = 'general';
 
             if (tabId) {
@@ -328,7 +327,7 @@ export default function AIChat() {
                     throw new Error('Invalid tabId');
                 }
                 response = await meAiService.callAiGeneralAndWriteToHistory(currentInput, tabIdNum, {
-                    responseType,
+                    responseType: responseType as AIResponseType,
                 });
                 ratingScope = 'general';
             } else if (topicId) {
@@ -336,7 +335,7 @@ export default function AIChat() {
                 if (Number.isNaN(topicIdNum)) {
                     throw new Error('Invalid topicId');
                 }
-                response = await meAiService.callAiTopic(currentInput, topicIdNum, responseType);
+                response = await meAiService.callAiTopic(currentInput, topicIdNum, responseType as AIResponseType);
                 ratingScope = 'topic';
             } else {
                 throw new Error('No tabId or topicId specified');

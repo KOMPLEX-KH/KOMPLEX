@@ -7,7 +7,7 @@ import ForumSkeleton from "@/components/screens/forums/ForumSkeleton";
 import ContentError from "@/components/common/ContentError";
 import Comments from "@/components/common/comments/Comments";
 import { BackButton } from "@/components/common/BackButton";
-import { ForumPost } from "@/types/content/forums";
+import { ForumPost } from "@core-types/content/forums";
 import { feedForumService, meForumService } from "@/services/index";
 import { useAuth } from "@/hooks/useAuth";
 import { HEADER_CONFIG } from "@/constants/header-config";
@@ -38,7 +38,7 @@ export default function ForumDetailScreen() {
             setLoading(true);
             setError(null);
             const postData = await feedForumService.getForumById(id);
-            setPost(postData);
+            setPost(postData.data);
         } catch (error) {
             console.error("Error fetching data:", error);
             setError("មានបញ្ហាក្នុងការទាញយកទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។");

@@ -223,9 +223,9 @@ export default function TopicScreen() {
                     return
                 }
 
-                if (topicData && topicData.component) {
+                if (topicData && topicData.data.component) {
                     // Stringify the component data (it's already an object/array)
-                    setTopicComponent(JSON.stringify(topicData.component))
+                    setTopicComponent(JSON.stringify(topicData.data.component))
                     setError(false)
                 } else {
                     setTopicComponent(null)

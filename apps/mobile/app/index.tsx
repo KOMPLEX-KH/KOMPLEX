@@ -82,7 +82,7 @@ export default function HomeScreen() {
         try {
             setLoadingNews(true);
             const response = await feedNewsService.getAllNews();
-            setNewsItems(response.news);
+            setNewsItems(response.data);
         } catch (err) {
             console.error("Error loading news:", err);
         } finally {
@@ -99,7 +99,7 @@ export default function HomeScreen() {
             const response = await meLastAccessedService.getLastAccessed();
             const items: ContinueItem[] = [];
 
-            const lastAccessed = response.lastAccessed;
+            const lastAccessed = response.data;
 
             // Continue Lesson
             if (lastAccessed.lastTopic) {

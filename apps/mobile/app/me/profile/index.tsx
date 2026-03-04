@@ -6,7 +6,7 @@ import { Text } from '@/components/common/Text';
 import Sidebar from '@/components/screens/me/Sidebar';
 import ContentError from '@/components/common/ContentError';
 import { authService } from '@/services/index';
-import { User } from '@/types/auth';
+import { Profile } from '@core-types/content/profile';
 import { Mail, Calendar, Phone, User as UserIcon, AtSign, ShieldCheck, ShieldAlert, UserCircle } from 'lucide-react-native';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigation } from '@react-navigation/native';
@@ -16,7 +16,7 @@ export default function ProfilePage() {
     const navigation = useNavigation();
     const { user: authUser, loading: authLoading } = useAuth();
     const router = useRouter();
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<Profile | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [avatarError, setAvatarError] = useState(false);
@@ -41,8 +41,8 @@ export default function ProfilePage() {
                 try {
                     setLoading(true);
                     setError(null);
-                    const userData = await authService.getCurrentUser();
-                    setUser(userData);
+                    const userData = await authService.getCurrentUserProfile();
+                    setUser(userData.data);
                 } catch (error) {
                     console.error('Error fetching profile:', error);
                     setError('មានបញ្ហាក្នុងការទាញយកព័ត៌មានប្រវត្តិ។ សូមព្យាយាមម្តងទៀត។');

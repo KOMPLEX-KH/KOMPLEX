@@ -15,7 +15,7 @@ import {
     History,
 } from 'lucide-react-native';
 import { meVideoService } from '@/services/index';
-import { VideoPost } from '@/types/content/videos';
+import { VideoPost } from '@core-types/content/videos';
 import ContentError from '@/components/common/ContentError';
 import MeSkeleton from '@/components/screens/me/MeSkeleton';
 import VideoHistoryComponent from '@/components/screens/me/videos/VideoHistory';
@@ -56,7 +56,7 @@ export default function MyVideos() {
                     setIsLoading(true);
                     setError(null);
                     const userVideos = await meVideoService.getUserVideos();
-                    setVideos(userVideos.map((v) => {
+                    setVideos(userVideos.data.map((v) => {
                         return {
                             id: v.id,
                             userId: v.userId,
@@ -66,17 +66,17 @@ export default function MyVideos() {
                             duration: Number(v.duration),
                             videoUrl: v.videoUrl,
                             thumbnailUrl: v.thumbnailUrl,
-                            videoUrlForDeletion: v.videoUrlForDeletion,
-                            thumbnailUrlForDeletion: v.thumbnailUrlForDeletion,
+                            videoUrlForDeletion: v.videoUrl,
+                            thumbnailUrlForDeletion: v.thumbnailUrl,
                             viewCount: Number(v.viewCount),
                             createdAt: v.createdAt,
                             updatedAt: v.updatedAt,
                             username: v.username,
-                            isSave: v.isSave,
+                            isSaved: v.isSaved,
                             isLiked: v.isLiked,
                             likeCount: Number(v.likeCount),
                             saveCount: Number(v.saveCount),
-                            exercises: v.exercises,
+                            // exercises: v.exercises,
                             isFollowing: v.isFollowing,
                         }
                     }));
@@ -212,10 +212,9 @@ export default function MyVideos() {
                         <Pressable
                             onPress={() => router.push('/me/videos?tab=myVideos' as Href)}
                             style={tw(
-                                `px-4 py-2 rounded-full ${
-                                    activeTab === 'myVideos' || activeTab === null
-                                        ? 'bg-indigo-600'
-                                        : 'bg-white border border-gray-200'
+                                `px-4 py-2 rounded-full ${activeTab === 'myVideos' || activeTab === null
+                                    ? 'bg-indigo-600'
+                                    : 'bg-white border border-gray-200'
                                 }`
                             )}
                         >
@@ -230,10 +229,9 @@ export default function MyVideos() {
                         <Pressable
                             onPress={() => router.push('/me/videos?tab=videoHistory' as Href)}
                             style={tw(
-                                `px-4 py-2 rounded-full ${
-                                    activeTab === 'videoHistory'
-                                        ? 'bg-indigo-600'
-                                        : 'bg-white border border-gray-200'
+                                `px-4 py-2 rounded-full ${activeTab === 'videoHistory'
+                                    ? 'bg-indigo-600'
+                                    : 'bg-white border border-gray-200'
                                 }`
                             )}
                         >

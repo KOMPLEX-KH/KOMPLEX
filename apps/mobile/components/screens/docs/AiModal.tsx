@@ -4,7 +4,7 @@ import { Text } from '@/components/common/Text';
 import { tw } from '@/utils/styles';
 import { meAiService } from '@/services/index';
 import { useAuth } from '@/hooks/useAuth';
-import { Message, AIHistoryItem, AIResponseType } from '@/types/content/ai';
+import { Message, AIHistoryItem, AIResponseType } from '@core-types/content/ai';
 import MessageItem from '@/components/screens/ai/MessageItem';
 import ChatSkeleton from '@/components/screens/ai/ChatSkeleton';
 import ResponseLoadingState from '@/components/screens/ai/ResponseLoadingState';
