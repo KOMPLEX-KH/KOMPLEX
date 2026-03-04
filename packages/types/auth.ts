@@ -1,70 +1,20 @@
+import { GetApiSchema, SchemaMap } from "../utils/apiSchema";
+
 // User interface for auth responses
-export interface User {
-    id: number;
-    username: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    dateOfBirth: string | null;
-    phone: string;
-    profileImage: string | null;
-    isAdmin: boolean;
-    isVerified: boolean;
-    createdAt: string;
-    updatedAt: string;
-  }
-  
-  // Signup data interface
-  export interface SignupData {
-    email: string;
-    username: string;
-    uid: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    phone: string;
-    profileImageKey?: string | null;
-    verificationToken: string;
-  }
+export type User = GetApiSchema<typeof SchemaMap.SignupResponse> | GetApiSchema<typeof SchemaMap.SocialLoginResponse>;
 
-  export interface verifySignupOtpResponse {
-    verificationToken: string;
-  }
+// Signup data interface
+export type SignupData = GetApiSchema<typeof SchemaMap.SignupBody>;
 
-  export interface signupResponse {
-    user: User;
-  }
+// Social login data interface
+export type SocialLoginData = GetApiSchema<typeof SchemaMap.SocialLoginBody>;
 
-  export interface ForgetPasswordOtpResponse {
-    message: string;
-    expiresIn: number;
-  }
+// OTP & password reset auth flows
+export type signupOtpResponse = GetApiSchema<typeof SchemaMap.SendOtpResponse>;
+export type VerifySignupOtpResponse = GetApiSchema<typeof SchemaMap.VerifySignupOtpResponse>;
 
-  export interface verifyForgetPasswordOtpResponse {
-    resetToken: string;
-    message: string;
-    expiresIn: number;
-  }
+export type ForgetPasswordOtpResponse = GetApiSchema<typeof SchemaMap.SendOtpResponse>;
+export type VerifyForgetPasswordOtpResponse = GetApiSchema<typeof SchemaMap.VerifySignupOtpResponse>;
+export type ResetPasswordResponse = GetApiSchema<typeof SchemaMap.ResetPasswordResponse>;
 
-  export interface resetPasswordResponse {
-    message: string;
-  }
-
-  export interface signupOtpResponse {
-    message: string;
-    expiresIn: number;
-  }
-  
-  // Social login data interface
-  export interface SocialLoginData {
-    provider: "google" | "github" | "microsoft";
-    email: string;
-    username: string;
-    uid: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string | null;
-    phone: string;
-    profileImage: string | null;
-    profileImageKey: string | null;
-  }
+export type UpdateProfileDataRequest = GetApiSchema<typeof SchemaMap.UpdateProfileBody>;

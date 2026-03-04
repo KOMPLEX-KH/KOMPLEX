@@ -117,11 +117,11 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
             const result = await signInWithEmailAndPassword(auth, loginIdentifier, loginPassword);
             await result.user.getIdToken(true);
             const userData = await authService.getCurrentUser();
-            localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('user', JSON.stringify(userData.data));
             closeAndReset();
             router.push('/');
         } catch (error: unknown) {
-            const message =  'មានបញ្ហាក្នុងការចូល';
+            const message = 'មានបញ្ហាក្នុងការចូល';
             setFormError(message);
         } finally {
             setIsSubmitting(false);
@@ -138,9 +138,38 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
         try {
             // only send otp with email
             const res = await authService.sendSignupOtp(signupData.email);
-            setOtpExpiresIn(res.expiresIn);
+            setOtpExpiresIn(res.data.expiresIn);
             setOtpEmail(signupData.email);
             setIsOtpView(true);
+            let imageKey = '';
+            if (signupData.profileImage) {
+                try {
+                    imageKey = await uploadService.uploadFile(signupData.profileImage);
+                } catch (uploadErr) {
+                    console.error('Upload error:', uploadErr);
+                    setFormError('បញ្ហាក្នុងការបង្ហោះរូបភាព');
+                    setIsSubmitting(false);
+                    return;
+                }
+            }
+
+            const result = await createUserWithEmailAndPassword(auth, signupData.email, signupData.password);
+            const otpResult = await authService.verifySignupOtp({ email: signupData.email, otp: otpCode });
+            const userData = await authService.signup({
+                email: signupData.email,
+                username: signupData.username,
+                uid: result.user.uid,
+                firstName: signupData.firstName,
+                lastName: signupData.lastName,
+                dateOfBirth: signupData.dateOfBirth,
+                phone: signupData.phone,
+                profileImageKey: imageKey,
+                verificationToken: otpResult.data.verificationToken,
+            });
+
+            localStorage.setItem('user', JSON.stringify(userData.data));
+            closeAndReset();
+            router.push('/');
         } catch (error: unknown) {
             console.error('Signup error:', error);
             setFormError('មានបញ្ហាក្នុងការចុះឈ្មោះ។ សូមព្យាយាមម្តងទៀត។');
@@ -168,7 +197,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                 profileImageKey: null,
             });
 
-            localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('user', JSON.stringify(userData.data));
             closeAndReset();
             router.push('/');
         } catch (error: unknown) {
@@ -192,66 +221,67 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
         if (otpCode.length !== 6) return;
         setIsSubmitting(true);
         setFormError(null);
-            try{
-                // verify OTP with backend
-                const otpResult = await authService.verifySignupOtp({ email: otpEmail, otp: otpCode });
+        try {
+            // verify OTP with backend
+            const otpResult = await authService.verifySignupOtp({ email: otpEmail, otp: otpCode });
 
-                //create user firebase account after verify successfully
-                const firebaseResult = await createUserWithEmailAndPassword(auth, otpEmail, signupData.password);
-                
-                let imageKey = null;
-                if (signupData.profileImage) {
-                    try {
-                        imageKey = await uploadService.uploadFile(signupData.profileImage);
-                    } catch (uploadErr) {
-                        console.error('Upload error:', uploadErr);
-                        setFormError('បញ្ហាក្នុងការបង្ហោះរូបភាព');
-                        setIsSubmitting(false);
-                        return;
-                    }
+            //create user firebase account after verify successfully
+            const firebaseResult = await createUserWithEmailAndPassword(auth, otpEmail, signupData.password);
+
+            let imageKey = null;
+            if (signupData.profileImage) {
+                try {
+                    imageKey = await uploadService.uploadFile(signupData.profileImage);
+                } catch (uploadErr) {
+                    console.error('Upload error:', uploadErr);
+                    setFormError('បញ្ហាក្នុងការបង្ហោះរូបភាព');
+                    setIsSubmitting(false);
+                    return;
                 }
-                
-                // Generate username from firstName and lastName
-                const generatedUsername = `${signupData.firstName.toLowerCase().trim()}${signupData.lastName.toLowerCase().trim()}${Date.now()}`.replace(/\s/g, '');
-
-                // Final payload stored in DB after OTP verification
-                const finalPayload = {
-                    email: signupData.email,
-                    username: generatedUsername,
-                    uid: firebaseResult.user.uid,
-                    firstName: signupData.firstName,
-                    lastName: signupData.lastName,
-                    dateOfBirth: signupData.dateOfBirth || '',
-                    phone: signupData.phone || '',
-                    profileImageKey: imageKey,
-                    verificationToken: otpResult.verificationToken,
-                };
-
-                const result = await authService.signup(finalPayload);
-
-                localStorage.setItem('user', JSON.stringify(result.user));
-                setIsOtpView(false);
-                closeAndReset();
-                router.push('/');
-
-            } catch(error: unknown) {
-                console.error('OTP verification error:', error);
-                const status = (error as any)?.response?.status;
-                if (status === 429) {
-                    setFormError('អ្នកបានព្យាយាមលេីសកំណត់។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។');
-                } else {
-                    setFormError('ការផ្ទៀងផ្ទាត់ OTP បានបរាជ័យ។ សូមព្យាយាមម្តងទៀត។');
-                }
-            } finally {
-                setIsSubmitting(false);
             }
+
+            // Generate username from firstName and lastName
+            const generatedUsername = `${signupData.firstName.toLowerCase().trim()}${signupData.lastName.toLowerCase().trim()}${Date.now()}`.replace(/\s/g, '');
+
+            // Final payload stored in DB after OTP verification
+            const finalPayload = {
+                email: signupData.email,
+                username: generatedUsername,
+                uid: firebaseResult.user.uid,
+                firstName: signupData.firstName,
+                lastName: signupData.lastName,
+                dateOfBirth: signupData.dateOfBirth || '',
+                phone: signupData.phone || '',
+                profileImageKey: imageKey,
+                verificationToken: otpResult.data.verificationToken,
+            };
+
+            const result = await authService.signup(finalPayload);
+            localStorage.setItem('user', JSON.stringify(result.data));
+
+
+            setIsOtpView(false);
+            closeAndReset();
+            router.push('/');
+
+        } catch (error: unknown) {
+            console.error('OTP verification error:', error);
+            const status = (error as any)?.response?.status;
+            if (status === 429) {
+                setFormError('អ្នកបានព្យាយាមលេីសកំណត់។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។');
+            } else {
+                setFormError('ការផ្ទៀងផ្ទាត់ OTP បានបរាជ័យ។ សូមព្យាយាមម្តងទៀត។');
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     const onResendOtp = async () => {
         setFormError(null);
         try {
             const res = await authService.sendSignupOtp(otpEmail);
-            setOtpExpiresIn(res.expiresIn);
+            setOtpExpiresIn(res.data.expiresIn);
             setFormError('OTP បានផ្ញើម្តងទៀតទៅអ៊ីមែលរបស់អ្នក។');
         } catch (error: unknown) {
             console.error('Resend OTP error:', error);
@@ -296,40 +326,40 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                             <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-3xl border border-indigo-600 bg-white backdrop-blur-xl p-6 shadow-xl shadow-indigo-500/10">
                                 {!isForgotPassword && !isOtpView && (
                                     <div className="flex items-start justify-between">
-                                    <Dialog.Title className="sr-only">Authentication</Dialog.Title>
-                                    <Link href="/" className="flex items-center justify-center gap-2 mb-4">
-                                        <img src="/logo.png" alt="" className='w-8 h-8' />
-                                        <div>
-                                            <span className="text-2xl font-extrabold tracking-tight text-indigo-600">KOM</span>
-                                            <span className="text-2xl font-extrabold tracking-tight text-black">PLEX</span>
-                                        </div>
-                                    </Link>
-                                </div>
+                                        <Dialog.Title className="sr-only">Authentication</Dialog.Title>
+                                        <Link href="/" className="flex items-center justify-center gap-2 mb-4">
+                                            <img src="/logo.png" alt="" className='w-8 h-8' />
+                                            <div>
+                                                <span className="text-2xl font-extrabold tracking-tight text-indigo-600">KOM</span>
+                                                <span className="text-2xl font-extrabold tracking-tight text-black">PLEX</span>
+                                            </div>
+                                        </Link>
+                                    </div>
                                 )}
-                                
+
 
                                 {/* Tabs */}
                                 {!isForgotPassword && !isOtpView && (
-                                <div className="flex bg-white rounded-3xl p-1 mb-6 border border-indigo-600  mx-auto">
-                                    <button
-                                        onClick={() => setActiveTab('login')}
-                                        className={`flex-1 py-3 px-4 rounded-3xl text-sm font-medium transition-all hover:bg-gray-50 duration-300 ${activeTab === 'login'
-                                            ? 'bg-white text-indigo-600 shadow-sm border border-indigo-600'
-                                            : 'text-black hover:text-indigo-600'
-                                            }`}
-                                    >
-                                        ចូលទៅកាន់
-                                    </button>
-                                    <button
-                                        onClick={() => setActiveTab('signup')}
-                                        className={`flex-1 py-3 px-4 rounded-3xl text-sm font-medium transition-all hover:bg-gray-50 duration-300 ${activeTab === 'signup'
-                                            ? 'bg-white text-indigo-600 shadow-sm border border-indigo-600'
-                                            : 'text-black hover:text-indigo-600'
-                                            }`}
-                                    >
-                                        ចុះឈ្មោះ
-                                    </button>
-                                </div>
+                                    <div className="flex bg-white rounded-3xl p-1 mb-6 border border-indigo-600  mx-auto">
+                                        <button
+                                            onClick={() => setActiveTab('login')}
+                                            className={`flex-1 py-3 px-4 rounded-3xl text-sm font-medium transition-all hover:bg-gray-50 duration-300 ${activeTab === 'login'
+                                                ? 'bg-white text-indigo-600 shadow-sm border border-indigo-600'
+                                                : 'text-black hover:text-indigo-600'
+                                                }`}
+                                        >
+                                            ចូលទៅកាន់
+                                        </button>
+                                        <button
+                                            onClick={() => setActiveTab('signup')}
+                                            className={`flex-1 py-3 px-4 rounded-3xl text-sm font-medium transition-all hover:bg-gray-50 duration-300 ${activeTab === 'signup'
+                                                ? 'bg-white text-indigo-600 shadow-sm border border-indigo-600'
+                                                : 'text-black hover:text-indigo-600'
+                                                }`}
+                                        >
+                                            ចុះឈ្មោះ
+                                        </button>
+                                    </div>
                                 )}
 
                                 {/* Forms */}
@@ -374,25 +404,25 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
 
                                 {/* Divider + Social Login — hidden when forgot password or OTP view is active */}
                                 {!isForgotPassword && !isOtpView && (<>
-                                <div className="my-6 flex items-center  mx-auto">
-                                    <div className="flex-1 border-t border-indigo-500/20"></div>
-                                    <span className="px-4 text-sm text-gray-500">ឬ</span>
-                                    <div className="flex-1 border-t border-indigo-500/20"></div>
-                                </div>
+                                    <div className="my-6 flex items-center  mx-auto">
+                                        <div className="flex-1 border-t border-indigo-500/20"></div>
+                                        <span className="px-4 text-sm text-gray-500">ឬ</span>
+                                        <div className="flex-1 border-t border-indigo-500/20"></div>
+                                    </div>
 
-                                {/* Social Login */}
-                                <div className="flex gap-2 mx-auto">
-                                    {socialPlatforms.map((platform, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => handleSocialLogin(platform.provider)}
-                                            className="flex-1 bg-white border border-indigo-500/20 text-gray-700 py-3 px-4 rounded-3xl font-medium hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                            disabled={isSubmitting}
-                                        >
-                                            {platform.icon}
-                                        </button>
-                                    ))}
-                                </div>
+                                    {/* Social Login */}
+                                    <div className="flex gap-2 mx-auto">
+                                        {socialPlatforms.map((platform, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => handleSocialLogin(platform.provider)}
+                                                className="flex-1 bg-white border border-indigo-500/20 text-gray-700 py-3 px-4 rounded-3xl font-medium hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                disabled={isSubmitting}
+                                            >
+                                                {platform.icon}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </>)}
                             </Dialog.Panel>
                         </Transition.Child>

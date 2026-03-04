@@ -14,7 +14,7 @@ export const createFeedSearchNewsService = (api: AxiosInstance) => {
           offset,
         },
       });
-      return { data: response.data.data, isMatch: response.data.isMatch };
+      return response.data;
     },
   };
 };

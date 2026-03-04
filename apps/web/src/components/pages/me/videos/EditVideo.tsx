@@ -4,10 +4,9 @@ import { useState, useEffect } from "react";
 import { Save, Upload, Trash, Play } from "lucide-react";
 import type {
   VideoPost,
-  ExerciseQuestion as ApiExerciseQuestion,
-} from "@/types/content/videos";
-import { ExerciseQuestion } from "@core-types/docs/topic";
-import { ExerciseCreationBox } from "@/components/pages/docs/boxes/ExerciseCreationBox";
+} from "@core-types/content/videos";
+// import { ExerciseQuestion } from "@core-types/docs/topic";
+// import { ExerciseCreationBox } from "@/components/pages/docs/boxes/ExerciseCreationBox";
 import BlogEditor from "@/components/common/Editor";
 import {
   meVideoService,
@@ -21,23 +20,31 @@ interface EditVideoProps {
   onCancel: () => void;
 }
 
+// Commented out all exercises-related types and fields
+// interface EditVideoFormData {
+//   title: string;
+//   description: string;
+//   thumbnail: string;
+//   exercises: ExerciseQuestionWithChoiceIds[];
+// }
+
+// interface ExerciseQuestionWithChoiceIds extends ExerciseQuestion {
+//   choiceIds?: number[];
+// }
+
 interface EditVideoFormData {
   title: string;
   description: string;
   thumbnail: string;
-  exercises: ExerciseQuestionWithChoiceIds[];
-}
-
-interface ExerciseQuestionWithChoiceIds extends ExerciseQuestion {
-  choiceIds?: number[];
 }
 
 export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
+  // Removed exercises from state
   const [formData, setFormData] = useState<EditVideoFormData>({
     title: video.title,
     description: video.description,
     thumbnail: video.thumbnailUrl,
-    exercises: [],
+    // exercises: [],
   });
 
   const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
@@ -52,7 +59,7 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
       title: video.title,
       description: video.description,
       thumbnail: video.thumbnailUrl,
-      exercises: [],
+      // exercises: [],
     });
     setSelectedVideo(null);
     setVideoPreview(null);
@@ -60,6 +67,8 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
     setUploadProgress(0);
   }, [video]);
 
+  // --- [EXERCISE] Commented out exercise converter
+  /*
   // Convert API exercise format to ExerciseQuestion format
   const convertApiExerciseToExerciseQuestion = (
     apiExercise: ApiExerciseQuestion
@@ -75,7 +84,10 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
       choiceIds: apiExercise.choices.map((choice) => choice.id), // Store original choice IDs
     };
   };
+  */
 
+  // --- [EXERCISE] Commented out exercise initialization
+  /*
   // Initialize exercises from video data
   useEffect(() => {
     if (video.exercises && video.exercises.length > 0) {
@@ -94,6 +106,7 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
       }
     }
   }, [video.exercises]);
+  */
 
   const handleVideoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -154,11 +167,14 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
   // Handle form changes
   const handleInputChange = (
     field: keyof EditVideoFormData,
-    value: string | ExerciseQuestion[]
+    value: string
+    // value: string | ExerciseQuestion[]
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  // --- [EXERCISE] Commented out MCQ handler
+  /*
   // Handle MCQ exercises
   const handleExercisesChange = (newExercises: ExerciseQuestion[]) => {
     // Convert to ExerciseQuestionWithChoiceIds, preserving choiceIds where possible
@@ -176,6 +192,7 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
       exercises: exercisesWithChoiceIds,
     }));
   };
+  */
 
   // Convert base64 thumbnail to blob for upload
   const base64ToBlob = (base64: string): Blob => {
@@ -191,6 +208,8 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
     return new Blob([ab], { type: mimeString });
   };
 
+  // --- [EXERCISE] Commented out backend conversion
+  /*
   // Convert ExerciseQuestion to the backend format
   const convertExercisesToBackendFormat = (
     exercises: ExerciseQuestionWithChoiceIds[]
@@ -207,6 +226,7 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
       })),
     }));
   };
+  */
 
   const handleSave = async () => {
     if (!formData.title.trim() || !formData.description.trim()) {
@@ -218,8 +238,8 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
       setIsSaving(true);
       setUploadProgress(0);
 
-      let videoKey = video.videoUrlForDeletion;
-      let thumbnailKey = video.thumbnailUrlForDeletion;
+      let videoKey = video.videoUrl;
+      let thumbnailKey = video.thumbnailUrl;
 
       // If new video is selected, upload it
       if (selectedVideo) {
@@ -245,21 +265,21 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
         setUploadProgress(80);
       }
 
-      // Update video data and exercises using the new API
+      // Update video data using the new API
       const updatePayload: {
         title: string;
         description: string;
         videoKey?: string;
         thumbnailKey?: string;
-        questions?: {
-          id?: string;
-          title: string;
-          choices: {
-            id?: string;
-            text: string;
-            isCorrect: boolean;
-          }[];
-        }[];
+        // questions?: {
+        //   id?: string;
+        //   title: string;
+        //   choices: {
+        //     id?: string;
+        //     text: string;
+        //     isCorrect: boolean;
+        //   }[];
+        // }[];
       } = {
         title: formData.title,
         description: formData.description,
@@ -273,11 +293,14 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
         updatePayload.thumbnailKey = thumbnailKey;
       }
 
+      // [EXERCISE] Do not update exercises/questions
+      /*
       if (formData.exercises.length > 0) {
         updatePayload.questions = convertExercisesToBackendFormat(
           formData.exercises
         );
       }
+      */
 
       await meVideoService.updateVideo(video.id.toString(), updatePayload);
 
@@ -287,7 +310,7 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
       const updatedVideo = await feedVideoService.getVideoById(
         video.id.toString()
       );
-      onSave(updatedVideo);
+      onSave(updatedVideo.data);
 
       // Reset edit form states
       setSelectedVideo(null);
@@ -309,7 +332,7 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
       title: video.title,
       description: video.description,
       thumbnail: video.thumbnailUrl,
-      exercises: [],
+      // exercises: [],
     });
     setSelectedVideo(null);
     setVideoPreview(null);
@@ -330,6 +353,10 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
     const hasValidTitle = formData.title.trim();
     const hasValidDescription = formData.description.trim();
 
+    // No exercise validation
+    return hasValidTitle && hasValidDescription;
+
+    /*
     // If no exercises, that's fine - just need title and description
     if (formData.exercises.length === 0) {
       return hasValidTitle && hasValidDescription;
@@ -353,6 +380,7 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
     });
 
     return hasValidTitle && hasValidDescription && hasValidExercises;
+    */
   };
 
   return (
@@ -474,6 +502,7 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
         </div>
 
         {/* MCQ Exercises */}
+        {/* 
         <div>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900">លំហាត់</h3>
@@ -484,6 +513,7 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
             onQuestionsChange={handleExercisesChange}
           />
         </div>
+        */}
 
         {/* Upload Progress */}
         {isSaving && (

@@ -32,6 +32,7 @@
     "mathlive": "^0.107.0",
     "next": "^16.0.7",
     "next-sitemap": "^4.2.3",
+    "openapi-typescript": "^7.13.0",
     "parse5": "^8.0.0",
     "pdfjs-dist": "^5.4.54",
     "property-information": "^7.1.0",

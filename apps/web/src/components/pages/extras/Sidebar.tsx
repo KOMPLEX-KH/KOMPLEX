@@ -8,7 +8,7 @@ interface SidebarProps {
 }
 
 export const ExtraTabs = [
-  { label: 'បណ្ណាល័យ', slug: 'library', href: '/extra/library' },
+  { label: 'បណ្ណាល័យ', slug: 'books', href: '/extra/books' },
   { label: 'រូបមន្ត', slug: 'formula', href: '/extra/formula' },
   { label: 'គណនាពិន្ទុ', slug: 'calculate', href: '/extra/calculate' },
 ];

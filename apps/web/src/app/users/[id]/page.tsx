@@ -8,22 +8,22 @@ import Blogs from '@/components/pages/users/Blogs';
 import VideoTab from '@/components/pages/users/Videos';
 import Forums from '@/components/pages/users/Forums';
 import { userProfileService } from '@/services/index';
-import { User } from '@core-types/content/profile';
+import { Profile, UserProfile } from '@core-types/content/profile';
 import { useAuth } from '@hooks/useAuth';
 import { meFollowService } from '@/services/index';
 
 
 const tabs = [
-    { id: 'blogs', label: 'ប្លុក', icon: BookOpen },
+    // { id: 'blogs', label: 'ប្លុក', icon: BookOpen },
+    { id: 'forums', label: 'ការពិភាក្សា', icon: MessageSquare },
     { id: 'videos', label: 'វីដេអូ', icon: Video },
-    { id: 'forums', label: 'ការពិភាក្សា', icon: MessageSquare }
 ];
 
 export default function UserProfilePage() {
     const params = useParams();
     const userId = params.id as string;
-    const [activeTab, setActiveTab] = useState('blogs');
-    const [user, setUser] = useState<User | null>(null);
+    const [activeTab, setActiveTab] = useState('forums');
+    const [user, setUser] = useState<UserProfile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isFollowLoading, setIsFollowLoading] = useState(false);
@@ -35,7 +35,7 @@ export default function UserProfilePage() {
                 setIsLoading(true);
                 setError(null);
                 const userData = await userProfileService.getUserProfile(userId);
-                setUser(userData);
+                setUser(userData.data);
             } catch (error) {
                 console.error('Error fetching user:', error);
                 setError('មានបញ្ហាក្នុងការទាញយកព័ត៌មានអ្នកប្រើប្រាស់។ សូមព្យាយាមម្តងទៀត។');
@@ -84,14 +84,14 @@ export default function UserProfilePage() {
 
     const renderTabContent = () => {
         switch (activeTab) {
-            case 'blogs':
-                return <Blogs userId={userId} />;
+            // case 'blogs':
+            //     return <Blogs userId={userId} />;
             case 'videos':
                 return <VideoTab userId={userId} />;
             case 'forums':
                 return <Forums userId={userId} />;
             default:
-                return <Blogs userId={userId} />;
+                return <Forums userId={userId} />;
         }
     };
 
@@ -214,7 +214,7 @@ export default function UserProfilePage() {
                                     </svg>
                                     <span>ចូលរួម {new Date(user.createdAt).toLocaleDateString('km-KH')}</span>
                                 </div>
-                                {user.location && (
+                                {/* {user.location && (
                                     <div className="flex items-center gap-2">
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -222,7 +222,7 @@ export default function UserProfilePage() {
                                         </svg>
                                         <span>{user.location}</span>
                                     </div>
-                                )}
+                                )} */}
                             </div>
                         </div>
 

@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ForumComment } from '@/types/content/forums';
-import { VideoComment } from '@/types/content/videos';
+import { ForumComment } from '@core-types/content/forums';
+import type { VideoComment } from '@core-types/content/videos';
 import CommentComponent from './Comment';
 import ContentError from '@/components/common/ContentError';
 import { feedVideoCommentService, meForumCommentService, meVideoCommentService, feedForumCommentService } from '@/services/index';
@@ -34,11 +34,21 @@ export default function Comments({ type, parentId, focusInput = false, isReadOnl
                 setIsLoading(true);
                 setCommentsError(null);
 
-                let fetchedComments: ForumComment[] | VideoComment[];
+                let fetchedComments: ForumComment[] | VideoComment[] = [];
                 if (type === 'video') {
-                    fetchedComments = await feedVideoCommentService.getVideoComments(parentId.toString());
+                    const response = await feedVideoCommentService.getVideoComments(parentId.toString());
+                    if (response.success) {
+                        fetchedComments = response.data as VideoComment[];
+                    } else {
+                        setCommentsError('មានបញ្ហាក្នុងការទាញយកការឆ្លើយតប។ សូមព្យាយាមម្តងទៀត។');
+                    }
                 } else {
-                    fetchedComments = await feedForumCommentService.getForumComments(parentId.toString());
+                    const response = await feedForumCommentService.getForumComments(parentId.toString());
+                    if (response.success) {
+                        fetchedComments = response.data as ForumComment[];
+                    } else {
+                        setCommentsError('មានបញ្ហាក្នុងការទាញយកការឆ្លើយតប។ សូមព្យាយាមម្តងទៀត។');
+                    }
                 }
 
                 setComments(fetchedComments);
@@ -259,7 +269,7 @@ export default function Comments({ type, parentId, focusInput = false, isReadOnl
                     {comments.map((comment, index) => (
                         <CommentComponent
                             key={`${type}-${comment.id || `temp-${index}`}-${comment.createdAt || Date.now()}`}
-                            comment={comment as ForumComment | VideoComment}
+                            comment={comment}
                             commentType={type}
                             isReadOnly={isReadOnly}
                         />

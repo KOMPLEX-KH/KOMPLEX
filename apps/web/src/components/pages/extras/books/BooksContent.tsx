@@ -3,17 +3,17 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { BookOpen, ArrowRight } from "lucide-react";
-import BookCard from "@/components/pages/extras/library/BookCard";
-import ViewAllByCategory from "@/components/pages/extras/library/ViewAllBooks";
-import { ViewAllByCategorySkeleton } from "@/components/pages/extras/library/BookSkeleton";
-import { feedLibraryService, feedCurriculumsService } from "@/services";
-import LibraryHeader from "@/components/pages/extras/library/LibrayHeader";
-import BookSelectedPage from "@/components/pages/extras/library/BookSelected";
-import type { Subject, Book } from "@core-types/content/library";
-import type { Grade } from "@/types/docs/curriculum";
+import BookCard from "@/components/pages/extras/books/BookCard";
+import ViewAllByCategory from "@/components/pages/extras/books/ViewAllBooks";
+import { ViewAllByCategorySkeleton } from "@/components/pages/extras/books/BookSkeleton";
+import { feedBooksService, feedCurriculumsService } from "@/services";
+import BooksHeader from "@/components/pages/extras/books/BooksHeader";
+import BookSelectedPage from "@/components/pages/extras/books/BookSelected";
+import type { Book } from "@core-types/content/books";
+import type { Grade, Subject } from "@core-types/docs/curriculum";
 
-export default function LibraryContent() {
- 
+export default function BooksContent() {
+
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -22,12 +22,12 @@ export default function LibraryContent() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
 
-  
+
   // URL parameters for routing
   const category = searchParams.get("category");
   const bookId = searchParams.get("book");
-    
-  
+
+
   // fetch curriculum from local storage
   const [curriculum, setCurriculum] = useState<Grade[]>(() => {
     if (typeof window !== 'undefined') {
@@ -40,7 +40,7 @@ export default function LibraryContent() {
   const filterRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  
+
   // Initial books data fetch
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
@@ -49,8 +49,8 @@ export default function LibraryContent() {
       setLoading(true);
 
       try {
-        const data = await feedLibraryService.getAllBooks();
-        setBooks(data.books);
+        const data = await feedBooksService.getAllBooks();
+        setBooks(data.data);
         setSubjects([]);
       } catch (err) {
         console.error(err);
@@ -72,7 +72,7 @@ export default function LibraryContent() {
       if (curriculum.length === 0) {
         try {
           const curriculumData = await feedCurriculumsService.getCurriculum();
-          setCurriculum(curriculumData);
+          setCurriculum(curriculumData.data);
           localStorage.setItem('curriculum', JSON.stringify(curriculumData));
         } catch (error) {
           console.error("Error fetching curriculum data:", error);
@@ -83,19 +83,19 @@ export default function LibraryContent() {
     fetchCurriculum();
   }, [curriculum.length]);
 
-   // Handle book selection
+  // Handle book selection
   const handleBookSelected = (bookId: number) => {
-    router.push(`/extra/library?book=${bookId}`);
+    router.push(`/extra/books?book=${bookId}`);
   };
 
-  
+
   // Handle category view
   if (category) {
     return (
       <div className="relative">
         <div className="max-w-6xl mx-auto pt-5">
-          <ViewAllByCategory 
-            key={category} 
+          <ViewAllByCategory
+            key={category}
             books={books}
             curriculum={curriculum}
             categoryId={category}
@@ -109,15 +109,15 @@ export default function LibraryContent() {
   if (bookId) {
     const selectedBook = books.find(book => book.id === Number(bookId));
     if (selectedBook) {
-      const relatedBooks = books.filter(book => 
-        book.subjectId === selectedBook.subjectId && 
+      const relatedBooks = books.filter(book =>
+        book.subjectId === selectedBook.subjectId &&
         book.id !== selectedBook.id
       ).slice(0, 10);
-      
+
       return (
         <div className="relative">
           <div className="max-w-6xl mx-auto pt-5">
-            <BookSelectedPage 
+            <BookSelectedPage
               book={selectedBook}
               relatedBooks={relatedBooks}
               curriculum={curriculum}
@@ -129,17 +129,18 @@ export default function LibraryContent() {
   }
 
   // filter recommended books
+  // should have filter
   const recommendedBooks = books.filter((b) => b.isRecommended);
 
   // flat subjects from all grade into single array
   const allSubjects = curriculum.flatMap(grade =>
-    grade.subjects.map(subject =>({
-      id : subject.id,
+    grade.subjects.map(subject => ({
+      id: subject.id,
       name: subject.name,
       icon: subject.icon
     }))
   );
-  
+
   // Only show subjects that have associated books
   const displaySubjects = allSubjects.filter(subject =>
     books.some(book => book.subjectId === subject.id)
@@ -147,7 +148,7 @@ export default function LibraryContent() {
 
   return (
     <div className="relative">
-      <LibraryHeader
+      <BooksHeader
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         filterRef={filterRef}
@@ -162,7 +163,7 @@ export default function LibraryContent() {
           <ViewAllByCategorySkeleton />
         ) : (
           <div className="flex flex-col pt-3">
-            
+
             {/* recommendation book */}
             {recommendedBooks.length > 0 ? (
               <section className="flex flex-col gap-4 rounded-3xl border-none pb-4">
@@ -213,7 +214,7 @@ export default function LibraryContent() {
                     </div>
 
                     <button
-                      onClick={() => router.push(`/extra/library?category=${subject.id}`)}
+                      onClick={() => router.push(`/extra/books?category=${subject.id}`)}
                       className="text-indigo-600 bg-indigo-50/80 font-semibold px-4 py-2 rounded-3xl hover:bg-indigo-100 transition-colors flex items-center gap-2 group text-sm sm:text-base"
                     >
                       <span className="hidden sm:inline">មើលទាំងអស់</span>

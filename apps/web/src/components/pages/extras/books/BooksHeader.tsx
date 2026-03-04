@@ -3,7 +3,7 @@
 import { Search, BookOpen, User, ChevronRight } from "lucide-react";
 import { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
-import type { Book } from "@core-types/content/library";
+import type { Book } from "@core-types/content/books";
 
 interface Props {
   searchQuery: string;
@@ -15,7 +15,7 @@ interface Props {
   currentSubjectId?: number | null;
 }
 
-export default function LibraryHeader({
+export default function BooksHeader({
   searchQuery,
   setSearchQuery,
   books,

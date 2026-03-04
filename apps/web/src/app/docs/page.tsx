@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Logo } from "@/components/common/Logo";
-import { Grade } from "@/types/docs/curriculum";
+import { Grade } from "@core-types/docs/curriculum";
 import { feedCurriculumsService, meLastAccessedService } from "@/services";
 import ContentError from "@/components/common/ContentError";
 import { useAuth } from "@/hooks/useAuth";
@@ -28,16 +28,15 @@ export default function Docs() {
             try {
                 const curriculumData = await feedCurriculumsService.getCurriculum();
 
-                if (!curriculumData || curriculumData.length === 0) {
+                if (!curriculumData || curriculumData.data.length === 0) {
                     setFetchError("រកមិនឃើញទិន្នន័យមេរៀន");
                     return;
                 }
 
                 setFetchError(null);
-                setCurriculum(curriculumData);
+                setCurriculum(curriculumData.data);
                 localStorage.setItem("curriculum", JSON.stringify(curriculumData));
             } catch (error) {
-                console.error("Error fetching curriculum:", error);
                 setFetchError("មានបញ្ហា​ក្នុងការទាញយកមេរៀន សូមព្យាយាមម្តងទៀត។");
             }
         };
@@ -59,7 +58,7 @@ export default function Docs() {
 
             // Get last accessed topic
             const response = await meLastAccessedService.getLastAccessed();
-            const lastAccessed = response.lastAccessed;
+            const lastAccessed = response.data;
 
             // If no last topic, navigate to default
             if (!lastAccessed.lastTopic) {

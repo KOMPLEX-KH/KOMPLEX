@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { ThumbsUp, MessageCircle, Send } from 'lucide-react';
 import Link from 'next/link';
-import { ForumComment, ForumReply } from '@/types/content/forums';
+import { ForumComment, ForumReply } from '@core-types/content/forums';
 import { getTimeAgo } from '@core-utils/formater';
 import ReplyComponent from './Reply';
-import { VideoComment, VideoReply } from '@/types/content/videos';
+import { VideoComment, VideoReply } from '@core-types/content/videos';
 import { meForumCommentService, meVideoCommentService, meForumReplyService, meVideoReplyService, feedVideoReplyService, feedForumReplyService } from '@/services/index';
 import { useAuth } from '@hooks/useAuth';
 
@@ -47,9 +47,19 @@ export default function CommentComponent({
 
             let fetchedReplies: ForumReply[] | VideoReply[] = [];
             if (commentType === 'video') {
-                fetchedReplies = await feedVideoReplyService.getVideoReplies(comment.id);
+                const response = await feedVideoReplyService.getVideoReplies(comment.id);
+                // if (response.success) {
+                //     fetchedReplies = response.data as VideoReply[];
+                // } else {
+                //     setRepliesError('មានបញ្ហាក្នុងការទាញយកការឆ្លើយតប។ សូមព្យាយាមម្តងទៀត។');
+                // }
             } else {
-                fetchedReplies = await feedForumReplyService.getForumReplies(comment.id);
+                const response = await feedForumReplyService.getForumReplies(comment.id);
+                if (response.success) {
+                    fetchedReplies = response.data as ForumReply[];
+                } else {
+                    setRepliesError('មានបញ្ហាក្នុងការទាញយកការឆ្លើយតប។ សូមព្យាយាមម្តងទៀត។');
+                }
             }
 
             setReplies(fetchedReplies);

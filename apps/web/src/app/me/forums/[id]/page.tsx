@@ -8,7 +8,7 @@ import ContentError from '@/components/common/ContentError';
 import DeleteConfirm from '@/components/common/DeleteConfirm';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ForumPost } from '@/types/content/forums';
+import { ForumPost } from '@core-types/content/forums';
 import { feedForumService, meForumService } from '@/services/index';
 import { useAuth } from '@hooks/useAuth';
 import { BackButton } from '@/components/common/BackButton';
@@ -39,7 +39,7 @@ export default function MyForumDetail() {
                     setLoading(true);
                     setError(null);
                     const forumPost = await feedForumService.getForumById(id);
-                    setPost(forumPost);
+                    setPost(forumPost.data);
                 } catch (err) {
                     console.error('Error fetching forum post:', err);
                     setError('មានបញ្ហាកើតឡើងពេលទាញយកទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។');

@@ -84,14 +84,14 @@ export default function TopicWrapper({ title, children, prev, next }: TopicWrapp
                             {isFullScreen ? (
                                 <button
                                     onClick={handleFullScreen}
-                                    className="text-gray-900 text-gray-700 group flex w-full items-center text-sm"
+                                    className=" text-gray-700 group flex w-full items-center text-sm"
                                 >
                                     <X className="mr-3 h-4 w-4 text-gray-400" />
                                 </button>
                             ) : (
                                 <button
                                     onClick={handleFullScreen}
-                                    className="text-gray-900 text-gray-700 group flex w-full items-center text-sm"
+                                    className=" text-gray-700 group flex w-full items-center text-sm"
                                 >
                                     <Maximize2 className="mr-3 h-4 w-4 text-gray-400" />
                                 </button>

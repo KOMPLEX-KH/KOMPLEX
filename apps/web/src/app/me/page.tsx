@@ -8,11 +8,11 @@ import { Video, MessageSquare, UserCircle, Mail, AtSign, Phone, Calendar, Shield
 import { useAuth } from '@hooks/useAuth';
 import MeSkeleton from '@/components/pages/me/MeSkeleton';
 import { authService, uploadService } from '@/services/index';
-import type { User } from '@/types/auth';
 import ContentError from '@/components/common/ContentError';
 import Link from 'next/link';
 import AllMeForums from '@/components/pages/me/forums/AllMeForums';
 import AllMeVideos from '@/components/pages/me/videos/AllMeVideos';
+import { Profile } from '@core-types/content/profile';
 import { formatToKhmerMonthYear } from '@core-utils/formater';
 
 
@@ -30,7 +30,7 @@ function MePageContent() {
     const searchParams = useSearchParams();
     const activeTab = searchParams.get('tab') || 'profile';
 
-    const [profile, setProfile] = useState<User | null>(null);
+    const [profile, setProfile] = useState<Profile | null>(null);
     const [isProfileLoading, setIsProfileLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isHoveringAvatar, setIsHoveringAvatar] = useState(false);
@@ -55,19 +55,19 @@ function MePageContent() {
             const { key, publicUrl } = await uploadService.uploadFileForProfile(file);
 
             //Update backend to update profile image and profile image key
-            const result = await authService.updateProfileImage({
+            const { data } = await authService.updateProfileImage({
                 profileImage: publicUrl,
                 profileImageKey: key,
             });
 
             //Update local state with the confirmed URL from the server
-            setProfile(prev => prev ? { ...prev, profileImage: result.profileImage, profileImageKey: result.profileImageKey } : prev);
+            setProfile(prev => prev ? { ...prev, profileImage: data.profileImage, profileImageKey: data.profileImageKey } : prev);
 
             // 4. Sync localStorage
             const stored = localStorage.getItem('user');
             if (stored) {
                 const parsed = JSON.parse(stored);
-                localStorage.setItem('user', JSON.stringify({ ...parsed, profileImage: result.profileImage }));
+                localStorage.setItem('user', JSON.stringify({ ...parsed, profileImage: data.profileImage }));
             }
         } catch (err) {
             console.error('Profile image upload error:', err);
@@ -93,8 +93,9 @@ function MePageContent() {
             try {
                 setIsProfileLoading(true);
                 setError(null);
-                const userData = await authService.getCurrentUser();
-                setProfile(userData as User);
+                // Use detailed profile endpoint that includes follower stats
+                const userData = await authService.getCurrentUserProfile();
+                setProfile(userData.data);
             } catch (err) {
                 console.error('Error fetching profile:', err);
                 setError('មានបញ្ហាក្នុងការទាញយកព័ត៌មានប្រវត្តិ។ សូមព្យាយាមម្តងទៀត។');

@@ -1,21 +1,16 @@
 import type { AxiosInstance } from "axios";
-import type { VideoPost } from "../../types/content/videos";
+import type { RecommendedVideos, VideoPost } from "../../types/content/videos";
+import { ApiWrapper } from "../../types/apiWrapper";
 
 export const createFeedVideoService = (api: AxiosInstance) => {
   return {
     // Get all videos
-    getAllVideos: async (): Promise<{
-      data: VideoPost[];
-      hasMore: boolean;
-    }> => {
+    getAllVideos: async (): Promise<ApiWrapper<VideoPost[]>> => {
       try {
-        const response = await api.get<{ data: VideoPost[]; hasMore: boolean }>(
+        const response = await api.get<ApiWrapper<VideoPost[]>>(
           `/feed/videos`
         );
-        return {
-          data: response.data.data,
-          hasMore: response.data.hasMore,
-        };
+        return response.data;
       } catch (error) {
         console.error("Error fetching all videos:", error);
         throw new Error("Failed to fetch videos");
@@ -23,12 +18,10 @@ export const createFeedVideoService = (api: AxiosInstance) => {
     },
 
     // Get video by ID
-    getVideoById: async (id: string): Promise<VideoPost> => {
+    getVideoById: async (id: string): Promise<ApiWrapper<VideoPost>> => {
       try {
-        const response = await api.get<{ data: VideoPost }>(
-          `/feed/videos/${id}`
-        );
-        return response.data.data;
+        const response = await api.get<ApiWrapper<VideoPost>>(`/feed/videos/${id}`);
+        return response.data ;
       } catch (error) {
         console.error("Error fetching video by ID:", error);
         throw new Error("Failed to fetch video");
@@ -38,9 +31,7 @@ export const createFeedVideoService = (api: AxiosInstance) => {
     // Get exercises for a video
     getVideoExercises: async (videoId: string): Promise<unknown[]> => {
       try {
-        const response = await api.get<unknown[]>(
-          `/feed/videos/${videoId}/exercise`
-        );
+        const response = await api.get(`/feed/videos/${videoId}/exercise`);
         return response.data;
       } catch (error) {
         console.error("Error fetching video exercises:", error);
@@ -54,12 +45,12 @@ export const createFeedVideoService = (api: AxiosInstance) => {
       videoId: number,
       limit: number = 5,
       offset: number = 0
-    ): Promise<VideoPost[]> => {
+    ): Promise<ApiWrapper<RecommendedVideos[]>> => {
       try {
-        const response = await api.get<{ data: VideoPost[] }>(
+        const response = await api.get<ApiWrapper<RecommendedVideos[]>>(
           `/feed/videos/${videoId}/recommended?limit=${limit}&offset=${offset}`
         );
-        return response.data.data;
+        return response.data;
       } catch (error) {
         console.error("Error fetching recommended videos:", error);
         throw new Error("Failed to fetch recommended videos");

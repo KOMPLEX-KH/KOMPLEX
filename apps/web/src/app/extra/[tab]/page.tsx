@@ -7,7 +7,7 @@ import NotFound from '@/app/not-found';
 
 // Import content components
 import FormularContent from '@/components/pages/extras/formular/FormularContent';
-import LibraryContent from '@/components/pages/extras/library/LibraryContent';
+import BooksContent from '@/components/pages/extras/books/BooksContent';
 import CalculateContent from '@/components/pages/extras/calculate/CalculateContent';
 // import { useRouter } from 'next/router';
 
@@ -16,11 +16,11 @@ type Params = { tab: string };
 export default function ExtraTabPage() {
   const params = useParams() as Params;
   const { tab } = params;
-//   const router = useRouter();
+  //   const router = useRouter();
 
   // Check if the tab exists in our ExtraTabs
   const validTab = ExtraTabs.find(t => t.slug === tab);
-  
+
   if (!validTab) {
     notFound();
   }
@@ -31,8 +31,8 @@ export default function ExtraTabPage() {
   // Render content based on tab parameter
   const renderContent = () => {
     switch (tab) {
-      case 'library':
-        return <LibraryContent />;
+      case 'books':
+        return <BooksContent />;
       case 'formula':
         return <FormularContent />;
       case 'calculate':

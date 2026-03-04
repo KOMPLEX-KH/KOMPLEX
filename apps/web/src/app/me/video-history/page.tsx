@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { Play, Clock, Calendar, Trash2, History, AlertCircle, CheckCircle } from 'lucide-react';
 import { meVideoHistoryService } from '@/services/index';
 import Sidebar from '@/components/pages/me/Sidebar';
-import type { VideoHistory } from '@/types/content/videos';
+import type { VideoHistory } from '@core-types/content/videos';
 import { useAuth } from '@hooks/useAuth';
 
 export default function VideoHistory() {
@@ -34,7 +34,7 @@ export default function VideoHistory() {
                     setLoading(true);
                     setError(null);
                     const history = await meVideoHistoryService.getUserVideoHistory();
-                    setVideoHistory(history);
+                    setVideoHistory(history.data || []);
                 } catch (err) {
                     console.error('Error fetching video history:', err);
                     setError('មានបញ្ហាក្នុងការផ្ទុកប្រវត្តិវីដេអូ។ សូមព្យាយាមម្តងទៀត។');
@@ -58,64 +58,64 @@ export default function VideoHistory() {
         });
     };
 
-    const handleDeleteHistory = async (historyId: number) => {
-        if (!confirm('តើអ្នកប្រាកដជាចង់លុបវីដេអូនេះចេញពីប្រវត្តិមែនទេ?')) {
-            return;
-        }
+    // const handleDeleteHistory = async (historyId: number) => {
+    //     if (!confirm('តើអ្នកប្រាកដជាចង់លុបវីដេអូនេះចេញពីប្រវត្តិមែនទេ?')) {
+    //         return;
+    //     }
 
-        try {
-            setDeletingId(historyId);
-            await meVideoHistoryService.deleteVideoFromHistory(historyId.toString());
-            setVideoHistory(prev => prev.filter(item => item.id !== historyId));
-            setSuccessMessage('លុបចេញពីប្រវត្តិបានជោគជ័យ');
-            setTimeout(() => setSuccessMessage(null), 3000);
-        } catch (err) {
-            console.error('Error deleting history item:', err);
-            setError('មានបញ្ហាក្នុងការលុបវីដេអូចេញពីប្រវត្តិ');
-        } finally {
-            setDeletingId(null);
-        }
-    };
+    //     try {
+    //         setDeletingId(historyId);
+    //         await meVideoHistoryService.deleteVideoFromHistory(historyId.toString());
+    //         setVideoHistory(prev => prev.filter(item => item.id !== historyId));
+    //         setSuccessMessage('លុបចេញពីប្រវត្តិបានជោគជ័យ');
+    //         setTimeout(() => setSuccessMessage(null), 3000);
+    //     } catch (err) {
+    //         console.error('Error deleting history item:', err);
+    //         setError('មានបញ្ហាក្នុងការលុបវីដេអូចេញពីប្រវត្តិ');
+    //     } finally {
+    //         setDeletingId(null);
+    //     }
+    // };
 
-    const handleBulkDelete = async () => {
-        if (selectedItems.size === 0) return;
+    // const handleBulkDelete = async () => {
+    //     if (selectedItems.size === 0) return;
 
-        if (!confirm(`តើអ្នកប្រាកដជាចង់លុបវីដេអូ ${selectedItems.size} ចេញពីប្រវត្តិមែនទេ?`)) {
-            return;
-        }
+    //     if (!confirm(`តើអ្នកប្រាកដជាចង់លុបវីដេអូ ${selectedItems.size} ចេញពីប្រវត្តិមែនទេ?`)) {
+    //         return;
+    //     }
 
-        try {
-            const deletePromises = Array.from(selectedItems).map(id =>
-                meVideoHistoryService.deleteVideoFromHistory(id.toString())
-            );
-            await Promise.all(deletePromises);
-            setVideoHistory(prev => prev.filter(item => !selectedItems.has(item.id)));
-            setSelectedItems(new Set());
-            setSuccessMessage(`លុបវីដេអូ ${selectedItems.size} ចេញពីប្រវត្តិបានជោគជ័យ`);
-            setTimeout(() => setSuccessMessage(null), 3000);
-        } catch (err) {
-            console.error('Error bulk deleting history items:', err);
-            setError('មានបញ្ហាក្នុងការលុបវីដេអូចេញពីប្រវត្តិ');
-        }
-    };
+    //     try {
+    //         const deletePromises = Array.from(selectedItems).map(id =>
+    //             meVideoHistoryService.deleteVideoFromHistory(id.toString())
+    //         );
+    //         await Promise.all(deletePromises);
+    //         setVideoHistory(prev => prev.filter(item => !selectedItems.has(item.id)));
+    //         setSelectedItems(new Set());
+    //         setSuccessMessage(`លុបវីដេអូ ${selectedItems.size} ចេញពីប្រវត្តិបានជោគជ័យ`);
+    //         setTimeout(() => setSuccessMessage(null), 3000);
+    //     } catch (err) {
+    //         console.error('Error bulk deleting history items:', err);
+    //         setError('មានបញ្ហាក្នុងការលុបវីដេអូចេញពីប្រវត្តិ');
+    //     }
+    // };
 
-    const handleSelectItem = (id: number) => {
-        const newSelected = new Set(selectedItems);
-        if (newSelected.has(id)) {
-            newSelected.delete(id);
-        } else {
-            newSelected.add(id);
-        }
-        setSelectedItems(newSelected);
-    };
+    // const handleSelectItem = (id: number) => {
+    //     const newSelected = new Set(selectedItems);
+    //     if (newSelected.has(id)) {
+    //         newSelected.delete(id);
+    //     } else {
+    //         newSelected.add(id);
+    //     }
+    //     setSelectedItems(newSelected);
+    // };
 
-    const handleSelectAll = () => {
-        if (selectedItems.size === videoHistory.length) {
-            setSelectedItems(new Set());
-        } else {
-            setSelectedItems(new Set(videoHistory.map(item => item.id)));
-        }
-    };
+    // const handleSelectAll = () => {
+    //     if (selectedItems.size === videoHistory.length) {
+    //         setSelectedItems(new Set());
+    //     } else {
+    //         setSelectedItems(new Set(videoHistory.map(item => item.id)));
+    //     }
+    // };
 
     // Show loading while checking auth or fetching data
     if (authLoading || loading) {
@@ -247,7 +247,7 @@ export default function VideoHistory() {
                                         <h3 className="text-lg font-semibold text-gray-900">
                                             វីដេអូដែលបានមើល ({videoHistory.length})
                                         </h3>
-                                        {videoHistory.length > 0 && (
+                                        {/* {videoHistory.length > 0 && (
                                             <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
                                                 <input
                                                     type="checkbox"
@@ -257,10 +257,10 @@ export default function VideoHistory() {
                                                 />
                                                 ជ្រើសរើសទាំងអស់
                                             </label>
-                                        )}
+                                        )} */}
                                     </div>
 
-                                    {selectedItems.size > 0 && (
+                                    {/* {selectedItems.size > 0 && (
                                         <button
                                             onClick={handleBulkDelete}
                                             className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
@@ -268,7 +268,7 @@ export default function VideoHistory() {
                                             <Trash2 size={16} />
                                             លុប {selectedItems.size} វីដេអូ
                                         </button>
-                                    )}
+                                    )} */}
                                 </div>
 
                                 <div className="space-y-3">
@@ -281,16 +281,16 @@ export default function VideoHistory() {
                                                 }`}
                                         >
                                             {/* Selection Checkbox */}
-                                            <input
+                                            {/* <input
                                                 type="checkbox"
                                                 checked={selectedItems.has(item.id)}
                                                 onChange={() => handleSelectItem(item.id)}
                                                 className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                            />
+                                            /> */}
 
                                             {/* Thumbnail */}
                                             <div className="relative flex-shrink-0">
-                                                <Link href={`/video/${item.videoId}`}>
+                                                <Link href={`/video/${item.id}`}>
                                                     <div className="relative w-24 h-16 rounded-lg overflow-hidden group">
                                                         <Image
                                                             src={item.thumbnailUrl}
@@ -307,7 +307,7 @@ export default function VideoHistory() {
                                             </div>
 
                                             {/* Video Info */}
-                                            <Link href={`/video/${item.videoId}`} className="flex-1 min-w-0 group">
+                                            <Link href={`/video/${item.id}`} className="flex-1 min-w-0 group">
                                                 <h4 className="font-medium text-gray-900 mb-1 truncate group-hover:text-indigo-600 transition-colors">
                                                     {item.title}
                                                 </h4>
@@ -324,7 +324,7 @@ export default function VideoHistory() {
                                             </Link>
 
                                             {/* Actions */}
-                                            <div className="flex items-center gap-2">
+                                            {/* <div className="flex items-center gap-2">
                                                 <button
                                                     onClick={(e) => {
                                                         e.preventDefault();
@@ -340,7 +340,7 @@ export default function VideoHistory() {
                                                         <Trash2 size={18} />
                                                     )}
                                                 </button>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     ))}
                                 </div>

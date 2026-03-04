@@ -68,7 +68,9 @@ export default function AuthPage() {
             const result = await signInWithEmailAndPassword(auth, loginIdentifier, loginPassword);
             await result.user.getIdToken(true);
             const userData = await authService.getCurrentUser();
-            localStorage.setItem("user", JSON.stringify(userData));
+
+            localStorage.setItem("user", JSON.stringify(userData.data));
+
             router.push('/');
         } catch (error: unknown) {
             setFormError('អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ។ សូមព្យាយាមម្តងទៀត។');
@@ -88,7 +90,7 @@ export default function AuthPage() {
         try {
             // send otp to email for verify email user ownership
             const res = await authService.sendSignupOtp(signupData.email);
-            setOtpExpiresIn(res.expiresIn);
+            setOtpExpiresIn(res.data.expiresIn);
             setOtpEmail(signupData.email);
             setIsOtpView(true);
         } catch (error: unknown) {
@@ -111,7 +113,7 @@ export default function AuthPage() {
 
             // Create Firebase account after verification
             const firebaseResult = await createUserWithEmailAndPassword(auth, otpEmail, signupData.password);
-            
+
             // Upload profile image if exists and get the key
             let imageKey = '';
             if (signupData.profileImage) {
@@ -135,13 +137,13 @@ export default function AuthPage() {
                 firstName: signupData.firstName,
                 lastName: signupData.lastName,
                 dateOfBirth: signupData.dateOfBirth || '',
-                phone: signupData.phone || '', 
+                phone: signupData.phone || '',
                 profileImageKey: imageKey,
-                verificationToken: otpResult.verificationToken,
+                verificationToken: otpResult.data.verificationToken,
             };
 
             const userData = await authService.signup(finalPayload);
-            localStorage.setItem("user", JSON.stringify(userData.user));
+            localStorage.setItem("user", JSON.stringify(userData.data));
             setIsOtpView(false);
             router.push('/');
         } catch (error: unknown) {
@@ -179,7 +181,7 @@ export default function AuthPage() {
                 profileImageKey: null,
             });
 
-            localStorage.setItem("user", JSON.stringify(userData));
+            localStorage.setItem("user", JSON.stringify(userData.data));
             router.push('/');
         } catch (error: unknown) {
             console.error('Social login error:', error);
@@ -202,7 +204,7 @@ export default function AuthPage() {
         setFormError(null);
         try {
             const res = await authService.sendSignupOtp(otpEmail);
-            setOtpExpiresIn(res.expiresIn);
+            setOtpExpiresIn(res.data.expiresIn);
             setFormError('OTP បានផ្ញើម្តងទៀតទៅអ៊ីមែលរបស់អ្នក។');
         } catch (error: unknown) {
             console.error('Resend OTP error:', error);
@@ -220,19 +222,19 @@ export default function AuthPage() {
             <div className="w-full max-w-2xl relative z-10 pt-16">
                 {/* Auth Container */}
                 <div className="bg-indigo-500/10 backdrop-blur-sm border border-indigo-600 rounded-3xl shadow-xl shadow-indigo-500/10 p-6">
-                        <>
-                            {/* Logo and Slogan */}
-                            {!isForgotPassword && !isOtpView && (
-                                <div className="text-center mb-8">
+                    <>
+                        {/* Logo and Slogan */}
+                        {!isForgotPassword && !isOtpView && (
+                            <div className="text-center mb-8">
                                 <Link href="/" className="flex items-center justify-center gap-2 mb-4">
                                     <Logo size='lg' showBeta={false} />
                                 </Link>
                             </div>
-                            )}
-                            
+                        )}
 
-                            {/* Tab Navigation */}
-                            {!isForgotPassword && !isOtpView && (
+
+                        {/* Tab Navigation */}
+                        {!isForgotPassword && !isOtpView && (
                             <div className="flex bg-white rounded-full p-1 mb-6 border border-indigo-600  mx-auto">
                                 <button
                                     onClick={() => setActiveTab('login')}
@@ -253,51 +255,51 @@ export default function AuthPage() {
                                     ចុះឈ្មោះ
                                 </button>
                             </div>
-                            )}
+                        )}
 
-                            {/* Login Form */}
-                            {activeTab === 'login' && (
-                                <LogIn
-                                    loginIdentifier={loginIdentifier}
-                                    setLoginIdentifier={setLoginIdentifier}
-                                    loginPassword={loginPassword}
-                                    setLoginPassword={setLoginPassword}
-                                    showPassword={showPassword}
-                                    setShowPassword={setShowPassword}
-                                    isLoginValid={isLoginValid}
-                                    handleLogin={handleLogin}
-                                    isSubmitting={isSubmitting}
-                                    errorMessage={formError}
-                                    onForgotPasswordChange={setIsForgotPassword}
-                                />
-                            )}
+                        {/* Login Form */}
+                        {activeTab === 'login' && (
+                            <LogIn
+                                loginIdentifier={loginIdentifier}
+                                setLoginIdentifier={setLoginIdentifier}
+                                loginPassword={loginPassword}
+                                setLoginPassword={setLoginPassword}
+                                showPassword={showPassword}
+                                setShowPassword={setShowPassword}
+                                isLoginValid={isLoginValid}
+                                handleLogin={handleLogin}
+                                isSubmitting={isSubmitting}
+                                errorMessage={formError}
+                                onForgotPasswordChange={setIsForgotPassword}
+                            />
+                        )}
 
-                            {/* Signup Form */}
-                            {activeTab === 'signup' && (
-                                <SignUp
-                                    signupData={signupData}
-                                    setSignupData={setSignupData}
-                                    showPassword={showPassword}
-                                    setShowPassword={setShowPassword}
-                                    showConfirmPassword={showConfirmPassword}
-                                    setShowConfirmPassword={setShowConfirmPassword}
-                                    isSignupValid={isSignupValid}
-                                    handleSignup={handleSignup}
-                                    handleProfileImageChange={handleProfileImageChange}
-                                    isSubmitting={isSubmitting}
-                                    errorMessage={formError}
-                                    showOtpView={isOtpView}
-                                    otpCode={otpCode}
-                                    setOtpCode={setOtpCode}
-                                    otpEmail={otpEmail}
-                                    onVerifyOtp={handleVerifyOtp}
-                                    onResendOtp={onResendOtp}
-                                    otpExpiresIn={otpExpiresIn}
-                                />
-                            )}
+                        {/* Signup Form */}
+                        {activeTab === 'signup' && (
+                            <SignUp
+                                signupData={signupData}
+                                setSignupData={setSignupData}
+                                showPassword={showPassword}
+                                setShowPassword={setShowPassword}
+                                showConfirmPassword={showConfirmPassword}
+                                setShowConfirmPassword={setShowConfirmPassword}
+                                isSignupValid={isSignupValid}
+                                handleSignup={handleSignup}
+                                handleProfileImageChange={handleProfileImageChange}
+                                isSubmitting={isSubmitting}
+                                errorMessage={formError}
+                                showOtpView={isOtpView}
+                                otpCode={otpCode}
+                                setOtpCode={setOtpCode}
+                                otpEmail={otpEmail}
+                                onVerifyOtp={handleVerifyOtp}
+                                onResendOtp={onResendOtp}
+                                otpExpiresIn={otpExpiresIn}
+                            />
+                        )}
 
-                            {/* Divider + Social Login — hidden when forgot password or OTP view is active */}
-                            {!isForgotPassword && !isOtpView && (<>
+                        {/* Divider + Social Login — hidden when forgot password or OTP view is active */}
+                        {!isForgotPassword && !isOtpView && (<>
                             <div className="my-6 flex items-center  mx-auto">
                                 <div className="flex-1 border-t border-indigo-500/20"></div>
                                 <span className="px-4 text-sm text-gray-500">ឬ</span>
@@ -317,7 +319,7 @@ export default function AuthPage() {
                                     </button>
                                 ))}
                             </div>
-                            </>)}
+                        </>)}
                     </>
                 </div>
             </div>

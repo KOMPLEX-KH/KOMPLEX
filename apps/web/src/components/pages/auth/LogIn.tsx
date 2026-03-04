@@ -76,7 +76,7 @@ export default function LogIn({
         setIsForgotSubmitting(true);
         try {
             const res = await authService.sendForgetPasswordOtp(forgotPasswordEmail);
-            setOtpExpiresIn(res.expiresIn);
+            setOtpExpiresIn(res.data.expiresIn);
             setIsOtpSent(true);
         } catch (error) {
             const status = (error as any)?.response?.status;
@@ -93,18 +93,18 @@ export default function LogIn({
     const handleVerifyForgetPasswordOtp = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsForgotSubmitting(true);
-        try{
-            const res = await authService.verifyForgetPasswordOtp({email: forgotPasswordEmail, otp: forgotOtp , });
-            setResetToken(res.resetToken);
-            setResetTokenExpiresIn(res.expiresIn);
-        }catch(err){
+        try {
+            const res = await authService.verifyForgetPasswordOtp({ email: forgotPasswordEmail, otp: forgotOtp, });
+            setResetToken(res.data.verificationToken);
+            setResetTokenExpiresIn(res.data.expiresIn);
+        } catch (err) {
             const status = (err as any)?.response?.status;
             if (status === 429) {
                 setForgotError('អ្នកបានព្យាយាមលេីសកំណត់។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។');
             } else {
                 setForgotError('ការផ្ទៀងផ្ទាត់ OTP បានបរាជ័យ។ សូមព្យាយាមម្តងទៀត។');
             }
-        }finally {
+        } finally {
             setIsForgotSubmitting(false);
         }
     }
@@ -157,7 +157,7 @@ export default function LogIn({
 
     return (
         <form onSubmit={handleLogin} className="space-y-4 mx-auto">
-            
+
             <div>
                 <label className="block text-sm font-medium text-black mb-2">
                     អ៊ីមែល

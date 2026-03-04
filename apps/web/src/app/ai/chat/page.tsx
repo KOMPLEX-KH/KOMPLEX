@@ -5,7 +5,7 @@ import { Send, Bot, RefreshCw, Square, ChevronDown, AlertCircle } from 'lucide-r
 import { meAiService } from '@/services/index';
 import MarkdownRenderer from '@/components/helper/MarkDownRenderer';
 import { useAuth } from '@hooks/useAuth';
-import { Message, AIHistoryItem, AIResponseType } from '@/types/content/ai';
+import type { AiHistoryItem, AIResponseType } from '@core-types/content/ai';
 import { useRouter, useSearchParams } from 'next/navigation';
 import MessageItem from '../../../components/pages/ai/MessageItem';
 import ChatSkeleton from '../../../components/pages/ai/ChatSkeleton';
@@ -14,6 +14,16 @@ import ResponseTypeDropdown, { ResponseTypeOption } from '../../../components/pa
 import PromptTextarea from '../../../components/pages/ai/PromptTextarea';
 import AiRating from '../../../components/pages/ai/AiRating';
 import SideBar from '../../../components/pages/ai/SideBar';
+import { ApiWrapper } from '@core-types/apiWrapper';
+
+interface Message {
+    id: string;
+    content: string;
+    sender: 'user' | 'ai';
+    timestamp: Date;
+    isFromHistory?: boolean;
+    responseType?: AIResponseType;
+}
 
 const responseTypeOptions: readonly ResponseTypeOption[] = [
     { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ទាក់ទាញ' },
@@ -68,7 +78,7 @@ function AIChatInner() {
         }
     }, [user, loading, router]);
 
-    const convertHistoryToMessages = (historyItems: AIHistoryItem[]): Message[] => {
+    const convertHistoryToMessages = (historyItems: AiHistoryItem[]): Message[] => {
         const msgs: Message[] = [];
         historyItems.forEach((item) => {
             // Add user message
@@ -214,30 +224,29 @@ function AIChatInner() {
         setError(null);
 
         try {
-            const response: { data: { aiResult: string; id: number; responseType?: AIResponseType } } =
-                await meAiService.callAiGeneralAndWriteToHistory(storedPrompt, tabIdNum, {
-                    responseType: effectiveType,
-                });
+            const response = await meAiService.callAiGeneralAndWriteToHistory(storedPrompt, tabIdNum, {
+                responseType: effectiveType,
+            });
 
             setIsLoading(false);
             setIsRequestInProgress(false);
 
             const resolvedResponseType = response.data.responseType ?? 'normal';
 
-            if (isKomplexType(resolvedResponseType)) {
+            if (isKomplexType(resolvedResponseType as AIResponseType)) {
                 const aiResponse: Message = {
                     id: (Date.now() + 1).toString(),
                     content: response.data.aiResult,
                     sender: 'ai',
                     timestamp: new Date(),
-                    responseType: resolvedResponseType,
+                    responseType: resolvedResponseType as AIResponseType,
                 };
                 setMessages((prev) => [...prev, aiResponse]);
                 setPendingResponseType(null);
                 queueRating(response.data.id, 'general');
             } else {
                 // Use streaming path for normal responses
-                streamText(response.data.aiResult, resolvedResponseType, {
+                streamText(response.data.aiResult, resolvedResponseType as AIResponseType, {
                     onComplete: () => queueRating(response.data.id, 'general'),
                 });
             }
@@ -357,7 +366,7 @@ function AIChatInner() {
         setError(null); // Clear any previous errors
 
         try {
-            let response: { data: { aiResult: string; id: number; responseType?: AIResponseType } };
+            let response: ApiWrapper<any>;
             let ratingScope: 'general' | 'topic' = 'general';
 
             if (tabId) {

@@ -71,7 +71,6 @@ const Model = ({ modelUrl, scale = 0.1, onError }: {
         }
     }, [scene, onError]);
 
-    // @ts-expect-error - primitive is a valid JSX element in react-three/fiber
     return <primitive object={scene} scale={scale} position={[0, 0, 0]} />;
 };
 
@@ -238,9 +237,7 @@ export const ThreeD: React.FC<ThreeDProps> = ({
                         maxDistance={20}
                         target={target}
                     />
-                    {/* @ts-expect-error - ambientLight is a valid JSX element in react-three/fiber */}
                     <ambientLight intensity={0.5} />
-                    {/* @ts-expect-error - directionalLight is a valid JSX element in react-three/fiber */}
                     <directionalLight position={[3, 5, 2]} intensity={1} />
                     <Suspense fallback={null}>
                         {customContent}
@@ -250,7 +247,6 @@ export const ThreeD: React.FC<ThreeDProps> = ({
                 // Render GLB model
                 <ThreeDErrorBoundary onError={handleError}>
                     <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
-                        {/* @ts-expect-error - color is a valid JSX element in react-three/fiber */}
                         <color attach="background" args={[canvasBackgroundColor]} />
 
                         <OrbitControls
@@ -337,9 +333,7 @@ export const ThreeD: React.FC<ThreeDProps> = ({
                             </Html>
                         )}
 
-                        {/* @ts-expect-error - ambientLight is a valid JSX element in react-three/fiber */}
                         <ambientLight intensity={0.5} />
-                        {/* @ts-expect-error - directionalLight is a valid JSX element in react-three/fiber */}
                         <directionalLight position={[3, 5, 2]} intensity={1} />
                     </Canvas>
                 </ThreeDErrorBoundary>

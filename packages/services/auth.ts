@@ -1,122 +1,130 @@
 import type { AxiosInstance } from "axios";
-import type { User, SignupData, SocialLoginData, verifySignupOtpResponse, signupResponse, signupOtpResponse, resetPasswordResponse, verifyForgetPasswordOtpResponse, ForgetPasswordOtpResponse } from "../types/auth";
-import { Trophy } from "lucide-react";
-import { UpdateProfileDataRequest, UpdateProfileDataResponse } from "@core-types/content/profile";
+import type {
+  User,
+  SignupData,
+  SocialLoginData,
+  signupOtpResponse,
+  VerifySignupOtpResponse,
+  ForgetPasswordOtpResponse,
+  VerifyForgetPasswordOtpResponse,
+  ResetPasswordResponse,
+  UpdateProfileDataRequest,
+} from "../types/auth";
+import { ApiWrapper } from "@core-types/apiWrapper";
+import { Profile } from "@core-types/content/profile";
 
 export const createAuthService = (api: AxiosInstance) => {
   return {
     // AUTH OPERATIONS
 
-    // sent otp for signup
-    sendSignupOtp: async (email: string): Promise<signupOtpResponse> => {
-      try{
+    // send otp for signup
+    sendSignupOtp: async (email: string): Promise<ApiWrapper<signupOtpResponse>> => {
+      try {
         const response = await api.post(`/auth/send-signup-otp`, { email });
         return response.data;
-      }catch (error) {
-        console.error("Error sending signup OTP:", error);
-        throw new Error("Failed to send signup OTP");
+      } catch (error) {
+        throw error;
       }
-      
     },
 
     // verify otp
-    verifySignupOtp: async (verifyData: { email: string; otp: string }): Promise<verifySignupOtpResponse> => {
-      try{
+    verifySignupOtp: async (verifyData: { email: string; otp: string }): Promise<ApiWrapper<VerifySignupOtpResponse>> => {
+      try {
         const response = await api.post(`/auth/verify-signup-otp`, verifyData);
         return response.data;
-      }catch (error) {
-        console.error("Error verifying signup OTP:", error);
-        throw new Error("Failed to verify signup OTP");
+      } catch (error) {
+        throw error;
       }
-      
     },
 
     // do sign up after otp verification
-    signup: async (signupData: SignupData & { verificationToken: string }): Promise<signupResponse> => {
-      try{
-        const response = await api.post(`/auth/signup`, signupData);
+    signup: async (
+      signupData: SignupData & { verificationToken: string }
+    ): Promise<ApiWrapper<User>> => {
+      try {
+        const response = await api.post<ApiWrapper<User>>(`/auth/signup`, signupData);
         return response.data;
-      }catch (error) {
-        console.error("Error during signup:", error);
-        throw new Error("Failed to complete signup");
+      } catch (error) {
+        throw error;
       }
-      
     },
 
-    sendForgetPasswordOtp: async (email: string): Promise<ForgetPasswordOtpResponse> => {
+    sendForgetPasswordOtp: async (email: string): Promise<ApiWrapper<ForgetPasswordOtpResponse>> => {
       try {
         const response = await api.post(`/auth/send-forget-password-otp`, { email });
         return response.data;
       } catch (error) {
-        console.error("Error sending forget password OTP:", error);
-        throw new Error("Failed to send forget password OTP");
+        throw error;
       }
     },
 
-    verifyForgetPasswordOtp: async (verifyData: { email: string; otp: string }): Promise<verifyForgetPasswordOtpResponse> => {
+    verifyForgetPasswordOtp: async (
+      verifyData: { email: string; otp: string }
+    ): Promise<ApiWrapper<VerifyForgetPasswordOtpResponse>> => {
       try {
         const response = await api.post(`/auth/verify-forget-password-otp`, verifyData);
         return response.data;
       } catch (error) {
-        console.error("Error verifying forget password OTP:", error);
-        throw new Error("Failed to verify forget password OTP");
+        throw error;
       }
     },
 
-    resetPassword: async (resetData: { email: string; resetToken: string; newPassword: string }): Promise<resetPasswordResponse> => {
+    resetPassword: async (
+      resetData: { email: string; resetToken: string; newPassword: string }
+    ): Promise<ApiWrapper<ResetPasswordResponse>> => {
       try {
         const response = await api.post(`/auth/reset-password`, resetData);
         return response.data;
       } catch (error) {
-        console.error("Error resetting password:", error);
-        throw new Error("Failed to reset password");
+        throw error;
       }
     },
 
     // Social login
-    socialLogin: async (socialData: SocialLoginData): Promise<User> => {
+    socialLogin: async (
+      socialData: SocialLoginData
+    ): Promise<ApiWrapper<User>> => {
       try {
-        const response = await api.post<{ data: User }>(`/auth/social-login`, socialData);
-        return response.data.data;
+        const response = await api.post<ApiWrapper<User>>(`/auth/social-login`, socialData);
+        return response.data;
       } catch (error) {
-        console.error("Error during social login:", error);
-        throw new Error("Failed to login with social provider");
+        throw error;
       }
     },
 
     // USER MANAGEMENT
 
-    updateProfileImage: async (data: UpdateProfileDataRequest): Promise<UpdateProfileDataResponse> => {
+    // // Update user profile
+    updateProfileImage: async (
+      data: UpdateProfileDataRequest
+    ): Promise<ApiWrapper<UpdateProfileDataRequest & { profileImageKey: string }>> => {
       try {
-        const response = await api.put<{ data: UpdateProfileDataResponse }>(
+        const response = await api.put<ApiWrapper<UpdateProfileDataRequest & { profileImageKey: string }>>(
           `/me/profile`,
           data
         );
-        return response.data.data;
+        return response.data;
       } catch (error) {
-        console.error("Error updating profile image:", error);
-        throw new Error("Failed to update profile image");
+        throw error;
       }
     },
 
     // Get current user profile
-    getCurrentUser: async (): Promise<User> => {
+    getCurrentUser: async (): Promise<ApiWrapper<User>> => {
       try {
-        const response = await api.get<{ data: User }>(`/me`);
-        return response.data.data;
+        const response = await api.get<ApiWrapper<User>>(`/me`);
+        return response.data;
       } catch (error) {
-        console.error("Error fetching current user:", error);
-        throw new Error("Failed to fetch user profile");
+        throw error;
       }
     },
 
-    getCurrentUserProfile: async (): Promise<User> => {
+    getCurrentUserProfile: async (): Promise<ApiWrapper<Profile>> => {
       try {
-        const response = await api.get<{ data: User }>(`/me/profile`);
-        return response.data.data;
+        const response = await api.get<ApiWrapper<Profile>>(`/me/profile`);
+        return response.data;
       } catch (error) {
-        console.error("Error fetching current user profile:", error);
-        throw new Error("Failed to fetch user profile");
+        throw error;
       }
     },
   };
