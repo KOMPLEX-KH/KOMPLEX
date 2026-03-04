@@ -41,10 +41,14 @@ export const createUploadService = (api: AxiosInstance) => {
     // Complete file upload process (get URL + upload)
     uploadFile: async (file: File) => {
       try {
-        const response = await api.post<ApiWrapper<UploadUrlResponse>>(`/upload/upload-url`, {
-          fileName: file.name,
-          fileType: file.type,
-        }, { withCredentials: true });
+        const response = await api.post<{ data: UploadUrlResponse }>(
+          `/upload/upload-url`,
+          {
+            fileName: file.name,
+            fileType: file.type,
+          },
+          { withCredentials: true }
+        );
 
         const { signedUrl, key } = response.data.data;
 
@@ -57,6 +61,33 @@ export const createUploadService = (api: AxiosInstance) => {
         return key;
       } catch (error) {
         throw new Error("Failed to upload file");
+      }
+    },
+
+    // Upload file and return both key and public URL (used for profile image)
+    uploadFileForProfile: async (file: File): Promise<{ key: string; publicUrl: string }> => {
+      try {
+        const response = await api.post<{ data: UploadUrlResponse }>(
+          `/upload/upload-url`,
+          {
+            fileName: file.name,
+            fileType: file.type,
+          },
+          { withCredentials: true }
+        );
+
+        const { signedUrl, key, publicUrl } = response.data.data;
+
+        await axios.put(signedUrl, file, {
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
+
+        return { key, publicUrl };
+      } catch (error) {
+        console.error("Error uploading profile file:", error);
+        throw new Error("Failed to upload profile image");
       }
     },
 

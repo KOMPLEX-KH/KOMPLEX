@@ -3,7 +3,7 @@
 import React, { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { ChevronUp, PenTool } from "lucide-react";
-import { AIResponseType } from "@/types/content/ai";
+import { AIResponseType } from "@core-types/content/ai";
 
 export interface ResponseTypeOption {
     id: AIResponseType;

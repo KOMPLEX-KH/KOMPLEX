@@ -4,7 +4,7 @@ import React, { Suspense, useEffect, useState, Component, ReactNode } from 'reac
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, OrbitControls, Text, Html, useProgress } from '@react-three/drei';
 import { Object3D, Mesh } from 'three';
-import { ThreeDProps } from '@/types/docs/threeD';
+import { ThreeDProps } from '@core-types/docs/threeD';
 import { Logo } from '../common/Logo';
 
 // Error Boundary for catching React rendering errors
@@ -316,7 +316,7 @@ export const ThreeD: React.FC<ThreeDProps> = ({
                                                 color: 'white',
                                                 fontSize: '1.2rem',
                                                 textAlign: 'center',
-                                                ...item.style
+                                                ...(item.style as React.CSSProperties)
                                             }}
                                         >
                                             {item.content}
@@ -328,7 +328,7 @@ export const ThreeD: React.FC<ThreeDProps> = ({
                                             color: 'white',
                                             fontSize: '1.2rem',
                                             textAlign: 'center',
-                                            ...twoDText.style
+                                            ...(twoDText.style as React.CSSProperties)
                                         }}
                                     >
                                         {twoDText.content}

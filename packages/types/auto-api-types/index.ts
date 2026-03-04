@@ -13,7 +13,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Signup */
+        /** Create user account with verified email */
         post: {
             parameters: {
                 query?: never;
@@ -27,7 +27,7 @@ export interface paths {
                 };
             };
             responses: {
-                /** @description User signed up successfully */
+                /** @description User created successfully */
                 200: {
                     headers: {
                         [name: string]: unknown;
@@ -41,6 +41,120 @@ export interface paths {
                     };
                 };
                 /** @description Invalid input */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: false;
+                            error: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/komplex/auth/send-signup-otp": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Send OTP for email verification */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["SendOtpBody"];
+                };
+            };
+            responses: {
+                /** @description Verification code sent successfully */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: true;
+                            data: components["schemas"]["SendOtpResponse"];
+                        };
+                    };
+                };
+                /** @description User already exists or invalid email */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: false;
+                            error: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/komplex/auth/verify-signup-otp": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Verify OTP and get verification token */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["VerifySignupOtpBody"];
+                };
+            };
+            responses: {
+                /** @description OTP verified, token provided for signup */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: true;
+                            data: components["schemas"]["VerifySignupOtpResponse"];
+                        };
+                    };
+                };
+                /** @description Invalid OTP or expired */
                 400: {
                     headers: {
                         [name: string]: unknown;
@@ -99,6 +213,216 @@ export interface paths {
                 };
                 /** @description Invalid input */
                 400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: false;
+                            error: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/komplex/auth/send-forget-password-otp": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Send OTP for password reset */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["SendForgetPwOtpBody"];
+                };
+            };
+            responses: {
+                /** @description Verification code sent successfully */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: true;
+                            data: components["schemas"]["SendForgetPwOtpResponse"];
+                        };
+                    };
+                };
+                /** @description OTP already sent or invalid email */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: false;
+                            error: string;
+                        };
+                    };
+                };
+                /** @description No account found with this email */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: false;
+                            error: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/komplex/auth/verify-forget-password-otp": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Verify OTP for password reset */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["VerifyOtpBody"];
+                };
+            };
+            responses: {
+                /** @description OTP verified, reset token provided */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: true;
+                            data: components["schemas"]["VerifyOtpResponse"];
+                        };
+                    };
+                };
+                /** @description Invalid OTP or expired */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: false;
+                            error: string;
+                        };
+                    };
+                };
+                /** @description Maximum attempts exceeded */
+                429: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: false;
+                            error: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/komplex/auth/reset-password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reset password with reset token */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["ResetPasswordBody"];
+                };
+            };
+            responses: {
+                /** @description Password reset successfully */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: true;
+                            data: components["schemas"]["ResetPasswordResponse"];
+                        };
+                    };
+                };
+                /** @description Invalid or expired reset token */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: false;
+                            error: string;
+                        };
+                    };
+                };
+                /** @description User not found */
+                404: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -1501,9 +1825,9 @@ export interface paths {
                                 topic?: string | null;
                                 viewCount: number;
                                 /** Format: date-time */
-                                createdAt: string;
+                                createdAt: string | null;
                                 /** Format: date-time */
-                                updatedAt: string;
+                                updatedAt: string | null;
                                 username: string;
                                 media: components["schemas"]["MediaSchema"][];
                             }[];
@@ -1631,7 +1955,61 @@ export interface paths {
                 };
             };
         };
-        put?: never;
+        /** Update current user profile */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["UpdateProfileBody"];
+                };
+            };
+            responses: {
+                /** @description Profile updated successfully */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: true;
+                            data: unknown;
+                        };
+                    };
+                };
+                /** @description Invalid input */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: false;
+                            error: string;
+                        };
+                    };
+                };
+                /** @description Unauthorized */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: false;
+                            error: string;
+                        };
+                    };
+                };
+            };
+        };
         post?: never;
         delete?: never;
         options?: never;
@@ -4457,27 +4835,15 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         SignupResponse: {
-            id: number;
-            uid: string;
-            username: string;
-            firstName: string;
-            lastName: string;
-            dateOfBirth?: string | null;
-            isAdmin: boolean;
-            isVerified: boolean;
-            isSocial: boolean;
-            /** Format: email */
-            email: string;
-            phone?: string | null;
-            profileImage?: string | null;
-            profileImageKey?: string | null;
-            lastTopicId?: number | null;
-            lastVideoId?: number | null;
-            lastAiTabId?: number | null;
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
+            message: string;
+            user: {
+                id: string;
+                email: string;
+                username: string;
+                firstName: string;
+                lastName: string | null;
+                uid: string;
+            };
         };
         SignupBody: {
             /** Format: email */
@@ -4489,6 +4855,25 @@ export interface components {
             dateOfBirth?: string | null;
             phone?: string | null;
             profileImageKey?: string;
+            verificationToken: string;
+        };
+        SendOtpResponse: {
+            message: string;
+            expiresIn: number;
+        };
+        SendOtpBody: {
+            /** Format: email */
+            email: string;
+        };
+        VerifySignupOtpResponse: {
+            message: string;
+            verificationToken: string;
+            expiresIn: number;
+        };
+        VerifySignupOtpBody: {
+            /** Format: email */
+            email: string;
+            otp: string;
         };
         SocialLoginResponse: {
             id: number;
@@ -4526,9 +4911,37 @@ export interface components {
             profileImage?: string | null;
             profileImageKey?: string | null;
         };
+        SendForgetPwOtpResponse: {
+            message: string;
+            expiresIn: number;
+        };
+        SendForgetPwOtpBody: {
+            /** Format: email */
+            email: string;
+        };
+        VerifyOtpResponse: {
+            message: string;
+            resetToken?: string;
+            expiresIn?: number;
+        };
+        VerifyOtpBody: {
+            /** Format: email */
+            email: string;
+            otp: string;
+        };
+        ResetPasswordResponse: {
+            message: string;
+        };
+        ResetPasswordBody: {
+            /** Format: email */
+            email: string;
+            resetToken: string;
+            newPassword: string;
+        };
         UploadUrlResponse: {
             signedUrl: string;
             key: string;
+            publicUrl: string;
         };
         UploadUrlBody: {
             fileName: string;
@@ -4795,9 +5208,9 @@ export interface components {
             lastVideoId?: number | null;
             lastAiTabId?: number | null;
             /** Format: date-time */
-            createdAt: string;
+            createdAt: string | null;
             /** Format: date-time */
-            updatedAt: string;
+            updatedAt: string | null;
         };
         MeProfileResponse: {
             id: number;
@@ -4823,6 +5236,11 @@ export interface components {
             createdAt: string | null;
             /** Format: date-time */
             updatedAt: string | null;
+        };
+        UpdateProfileBody: {
+            /** Format: uri */
+            profileImage: string;
+            profileImageKey: string;
         };
         MeDashboardResponse: {
             dashboardData: {

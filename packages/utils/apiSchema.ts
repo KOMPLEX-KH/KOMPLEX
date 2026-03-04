@@ -13,6 +13,13 @@ export const SchemaMap = {
     SignupBody: "SignupBody",
     SocialLoginResponse: "SocialLoginResponse",
     SocialLoginBody: "SocialLoginBody",
+    SendOtpResponse: "SendOtpResponse",
+    SendOtpBody: "SendOtpBody",
+    VerifySignupOtpResponse: "VerifySignupOtpResponse",
+    VerifySignupOtpBody: "VerifySignupOtpBody",
+    ResetPasswordResponse: "ResetPasswordResponse",
+    ResetPasswordBody: "ResetPasswordBody",
+    UpdateProfileBody: "UpdateProfileBody",
 
     // Upload
     UploadUrlResponse: "UploadUrlResponse",

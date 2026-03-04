@@ -10,5 +10,5 @@ declare module "desmos" {
     expressions?: boolean;
   }
 
-  export class Calculator extends Component<CalculatorOptions> {}
+  export class Calculator extends Component<CalculatorOptions> { }
 }

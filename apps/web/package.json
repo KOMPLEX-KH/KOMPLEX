@@ -20,6 +20,7 @@
     "@toast-ui/react-editor": "^3.2.3",
     "axios": "^1.12.2",
     "delayed-stream": "^1.0.0",
+    "desmos": "^1.5.4",
     "dom-to-image": "^2.6.0",
     "firebase": "^12.2.1",
     "framer-motion": "^12.23.12",
