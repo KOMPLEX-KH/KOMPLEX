@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
-import type { Book } from "../../types/content/books";
-import { ApiWrapper } from "../../types/apiWrapper";
+import type { Book } from "../../types/api-types/books";
+import { ApiWrapper } from "../../types/api-types/apiWrapper";
 
 export const createFeedBooksService = (api: AxiosInstance) => {
   return {

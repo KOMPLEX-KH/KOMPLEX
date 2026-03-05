@@ -4,7 +4,7 @@ import { Text } from '@/components/common/Text';
 import { tw } from '@/utils/styles';
 import { meAiService } from '@/services/index';
 import { useAuth } from '@/hooks/useAuth';
-import { Message, AIHistoryItem, AIResponseType } from '@core-types/content/ai';
+import { Message, AIHistoryItem, AIResponseType } from '@core-types/api-types/ai';
 import MessageItem from '@/components/screens/ai/MessageItem';
 import ChatSkeleton from '@/components/screens/ai/ChatSkeleton';
 import ResponseLoadingState from '@/components/screens/ai/ResponseLoadingState';
@@ -349,7 +349,7 @@ export default function AiModal({ isOpen, onClose, topicId, topicTitle }: AiModa
                         style={tw('flex-1')}
                         onPress={onClose}
                     />
-                    <View style={[tw(' bg-white rounded-t-3xl border border-indigo-50'), {minHeight: Dimensions.get('window').height - 100}]}>
+                    <View style={[tw(' bg-white rounded-t-3xl border border-indigo-50'), { minHeight: Dimensions.get('window').height - 100 }]}>
                         {/* Header */}
                         <View style={tw('flex-row items-center justify-between px-5 py-4 border-b border-gray-200')}>
                             <View style={tw('flex-row items-center gap-3')}>

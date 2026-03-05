@@ -1,7 +1,7 @@
 import type { AxiosInstance } from "axios";
-import type { UploadUrlResponse } from "../types/uploadUrl";
+import type { UploadUrlResponse } from "../types/api-types/uploadUrl";
 import axios from "axios";
-import { ApiWrapper } from "@core-types/apiWrapper";
+import { ApiWrapper } from "@core-types/api-types/apiWrapper";
 
 export const createUploadService = (api: AxiosInstance) => {
   return {

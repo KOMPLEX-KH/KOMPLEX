@@ -1,6 +1,6 @@
-import { MeLastAccessedResponse } from "@core-types/docs/curriculum";
+import { MeLastAccessedResponse } from "@core-types/api-types/curriculum";
 import type { AxiosInstance } from "axios";
-import { ApiWrapper } from "@core-types/apiWrapper";
+import { ApiWrapper } from "@core-types/api-types/apiWrapper";
 
 export const createMeLastAccessedService = (api: AxiosInstance) => {
   return {

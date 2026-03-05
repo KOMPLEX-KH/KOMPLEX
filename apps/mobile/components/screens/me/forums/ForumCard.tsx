@@ -1,6 +1,6 @@
 import { View, Pressable, Image, ScrollView } from 'react-native';
-import { ForumPost } from '@core-types/content/forums';
-import { Media } from '@core-types/content/media';
+import { ForumPost } from '@core-types/api-types/forums';
+import { Media } from '@core-types/api-types/media';
 import { useRouter, Href } from 'expo-router';
 import { Eye, MessageCircle, ThumbsUp } from 'lucide-react-native';
 import { tw } from '@/utils/styles';

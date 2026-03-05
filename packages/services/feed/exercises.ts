@@ -2,7 +2,7 @@ import type { AxiosInstance } from "axios";
 import type {
   Exercise,
   ExerciseWithQuestions,
-} from "../../types/content/exercises";
+} from "../../types/api-types/exercises";
 
 export const createFeedExerciseService = (api: AxiosInstance) => {
   return {

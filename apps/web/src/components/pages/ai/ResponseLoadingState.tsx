@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { Check, Loader2, Sparkles } from "lucide-react";
-import { AIResponseType } from "@core-types/content/ai";
+import { AIResponseType } from "@core-types/api-types/ai";
 
 interface Props {
     responseType: AIResponseType;

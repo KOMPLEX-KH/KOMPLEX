@@ -12,7 +12,7 @@ import NewsCard from '@/components/screens/news/NewsCard';
 import NewsSkeleton from '@/components/screens/news/NewsSkeleton';
 import ContinueSkeleton from '@/components/screens/home/ContinueSkeleton';
 import { feedNewsService, meLastAccessedService, feedSearchNewsService } from '@/services';
-import type { News } from '@core-types/content/news';
+import type { News } from '@core-types/api-types/news';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '@/hooks/useAuth';
 import SearchBar from '@/components/common/SearchBar';

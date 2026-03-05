@@ -1,4 +1,4 @@
-import { GetApiSchema, SchemaMap } from "../../utils/apiSchema";
+import { GetApiSchema, SchemaMap } from "../../../utils/apiSchema";
 
 type FeedForumItemSchema = GetApiSchema<typeof SchemaMap.FeedForumItemSchema>;
 export type ForumPost = FeedForumItemSchema;

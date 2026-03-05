@@ -10,7 +10,7 @@ import { HEADER_CONFIG } from "@/constants/header-config"
 import { feedCurriculumsService } from "@/services"
 import { deserializeTopicContentV3 } from "@/components/screens/docs/utils/ContentDeserializer"
 import ContentRenderer from "@/components/screens/docs/utils/ContentRenderer"
-import { Grade } from "@core-types/docs/curriculum"
+import { Grade } from "@core-types/api-types/curriculum"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import AiButton from "@/components/screens/docs/AiButton"
 

@@ -12,7 +12,7 @@ import ContentError from '@/components/common/ContentError';
 import Link from 'next/link';
 import AllMeForums from '@/components/pages/me/forums/AllMeForums';
 import AllMeVideos from '@/components/pages/me/videos/AllMeVideos';
-import { Profile } from '@core-types/content/profile';
+import { Profile } from '@core-types/api-types/profile';
 import { formatToKhmerMonthYear } from '@core-utils/formater';
 
 

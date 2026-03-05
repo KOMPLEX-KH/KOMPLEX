@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ChevronDown, ChevronRight } from 'lucide-react';
-import { Grade } from '@core-types/docs/curriculum';
+import { Grade } from '@core-types/api-types/curriculum';
 import { ICON_MAP } from '@/utils/icon';
 import SidebarSkeleton from './SidebarSkeleton';
 import { feedCurriculumsService } from '@/services';

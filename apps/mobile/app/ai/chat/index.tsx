@@ -5,7 +5,7 @@ import { tw } from '@/utils/styles';
 import { meAiService } from '@/services/index';
 import { useAuth } from '@/hooks/useAuth';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Message, AIHistoryItem, AIResponseType } from '@core-types/content/ai';
+import { Message, AIHistoryItem, AIResponseType } from '@core-types/api-types/ai';
 import MessageItem from '@/components/screens/ai/MessageItem';
 import ChatSkeleton from '@/components/screens/ai/ChatSkeleton';
 import ResponseLoadingState from '@/components/screens/ai/ResponseLoadingState';
@@ -20,7 +20,7 @@ import { Send, Bot, RefreshCw, Square, AlertCircle } from 'lucide-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { HEADER_CONFIG } from '@/constants/header-config';
-import { ApiWrapper } from '@core-types/apiWrapper';
+import { ApiWrapper } from '@core-types/api-types/apiWrapper';
 
 const responseTypeOptions: readonly ResponseTypeOption[] = [
     { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ទាក់ទាញ' },

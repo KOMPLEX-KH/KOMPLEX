@@ -5,7 +5,7 @@ import { tw } from "@/utils/styles";
 import ForumCard from "@/components/screens/forums/ForumCard";
 import ForumSkeleton from "@/components/screens/forums/ForumSkeleton";
 import ContentError from "@/components/common/ContentError";
-import { ForumPost } from "@core-types/content/forums";
+import { ForumPost } from "@core-types/api-types/forums";
 import { feedForumService, feedSearchForumService, meForumService } from "@/services/index";
 import { useNavigation, useRouter } from "expo-router";
 import { HEADER_CONFIG } from "@/constants/header-config";

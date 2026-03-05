@@ -2,8 +2,8 @@
 // import { View, ScrollView, Pressable, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
 // import { Eye, Image as ImageIcon, Plus, Save, X } from 'lucide-react-native';
 // import * as ImagePicker from 'expo-image-picker';
-// import { Blog } from '@core-types/content/blogs';
-// import { Media } from '@core-types/content/media';
+// import { Blog } from '@core-types/api-types/blogs';
+// import { Media } from '@core-types/api-types/media';
 // import { meBlogService, feedBlogService } from '@/services/index';
 // import { tw } from '@/utils/styles';
 // import { Text } from '@/components/common/Text';

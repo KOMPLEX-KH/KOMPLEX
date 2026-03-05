@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
-import type { ForumReply } from "../../types/content/forums";
-import { ApiWrapper } from "../../types/apiWrapper";
+import type { ForumReply } from "../../types/api-types/forums";
+import { ApiWrapper } from "../../types/api-types/apiWrapper";
 
 export const createFeedForumReplyService = (api: AxiosInstance) => {
   return {

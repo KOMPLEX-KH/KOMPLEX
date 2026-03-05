@@ -6,7 +6,7 @@ import { TAILWIND_COLORS } from '@/constants/styles/tailwind-colors';
 import Dropdown2 from '@/components/common/DropDown2';
 import { useEffect, useRef, useState } from 'react';
 import { feedCurriculumsService } from '../../../services';
-import { Grade } from '@core-types/docs/curriculum';
+import { Grade } from '@core-types/api-types/curriculum';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 

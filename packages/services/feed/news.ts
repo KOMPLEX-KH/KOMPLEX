@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
-import type { News } from "../../types/content/news";
-import { ApiWrapper } from "@core-types/apiWrapper";
+import type { News } from "../../types/api-types/news";
+import { ApiWrapper } from "@core-types/api-types/apiWrapper";
 
 export const createFeedNewsService = (api: AxiosInstance) => {
   return {

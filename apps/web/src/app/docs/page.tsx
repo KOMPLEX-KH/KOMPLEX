@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Logo } from "@/components/common/Logo";
-import { Grade } from "@core-types/docs/curriculum";
+import { Grade } from "@core-types/api-types/curriculum";
 import { feedCurriculumsService, meLastAccessedService } from "@/services";
 import ContentError from "@/components/common/ContentError";
 import { useAuth } from "@/hooks/useAuth";

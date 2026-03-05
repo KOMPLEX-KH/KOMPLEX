@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Play, Eye, ThumbsUp, Clock } from 'lucide-react';
 import ContentError from '@/components/common/ContentError';
 import { userVideoService } from '@/services/index';
-import { VideoPost } from '@core-types/content/videos';
+import { VideoPost } from '@core-types/api-types/videos';
 
 interface VideoProps {
     userId: string;

@@ -8,7 +8,7 @@ import Blogs from '@/components/pages/users/Blogs';
 import VideoTab from '@/components/pages/users/Videos';
 import Forums from '@/components/pages/users/Forums';
 import { userProfileService } from '@/services/index';
-import { Profile, UserProfile } from '@core-types/content/profile';
+import { Profile, UserProfile } from '@core-types/api-types/profile';
 import { useAuth } from '@hooks/useAuth';
 import { meFollowService } from '@/services/index';
 

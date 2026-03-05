@@ -2,7 +2,7 @@ import { Text } from "@/components/common/Text";
 import { useAuth } from "@/hooks/useAuth";
 import { meFollowService } from "@/services/index";
 import { tw } from "@/utils/styles";
-import { VideoPost } from "@core-types/content/videos";
+import { VideoPost } from "@core-types/api-types/videos";
 import {
   Bookmark,
   Share2,

@@ -9,7 +9,7 @@ import { HEADER_CONFIG } from '@/constants/header-config';
 import { AlertCircle, RefreshCw } from 'lucide-react-native';
 import Carousel from '@/components/common/Carousel';
 import NewsDetailSkeleton from '@/components/screens/news/NewsDetailSkeleton';
-import type { News } from '@core-types/content/news';
+import type { News } from '@core-types/api-types/news';
 
 export default function NewsDetailScreen() {
     const navigation = useNavigation();

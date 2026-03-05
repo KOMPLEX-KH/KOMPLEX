@@ -1,4 +1,4 @@
-import { GetApiSchema, SchemaMap } from "../utils/apiSchema";
+import { GetApiSchema, SchemaMap } from "../../utils/apiSchema";
 
 // User interface for auth responses
 export type User = GetApiSchema<typeof SchemaMap.SignupResponse> | GetApiSchema<typeof SchemaMap.SocialLoginResponse>;

@@ -4,7 +4,7 @@ import { Video as ExpoVideo, ResizeMode } from 'expo-av';
 import { Eye, Save } from 'lucide-react-native';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
-import type { VideoPost } from '@core-types/content/videos';
+import type { VideoPost } from '@core-types/api-types/videos';
 import { meVideoService, feedVideoService } from '@/services/index';
 
 interface EditVideoProps {

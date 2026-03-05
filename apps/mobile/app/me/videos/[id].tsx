@@ -10,7 +10,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
 import { feedVideoService, meVideoService } from '@/services/index';
-import type { VideoPost } from '@core-types/content/videos';
+import type { VideoPost } from '@core-types/api-types/videos';
 import DeleteConfirm from '@/components/common/DeleteConfirm';
 import ContentError from '@/components/common/ContentError';
 import Comments from '@/components/common/comments/Comments';

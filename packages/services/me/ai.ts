@@ -4,8 +4,8 @@ import type {
   AiHistoryItem,
   AIResponseType,
   AiTab,
-} from "../../types/content/ai";
-import { ApiWrapper } from "../../types/apiWrapper";
+} from "../../types/api-types/ai";
+import { ApiWrapper } from "../../types/api-types/apiWrapper";
 
 export const createMeAiService = (api: AxiosInstance) => {
   return {

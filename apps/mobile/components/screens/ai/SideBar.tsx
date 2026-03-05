@@ -3,7 +3,7 @@ import { View, Pressable, Modal, ScrollView, TextInput, Alert, Dimensions } from
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { meAiService } from '@/services/index';
 import { Edit, Menu, X, MoreVertical, Check, Trash2 } from 'lucide-react-native';
-import { AiTab } from '@core-types/content/ai';
+import { AiTab } from '@core-types/api-types/ai';
 import TabSkeleton from './TabSkeleton';
 import { Text } from '@/components/common/Text';
 import { tw } from '@/utils/styles';

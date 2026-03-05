@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
-import { ApiWrapper } from "@core-types/apiWrapper";
-import { ForumPost } from "@core-types/content/forums";
+import { ApiWrapper } from "@core-types/api-types/apiWrapper";
+import { ForumPost } from "@core-types/api-types/forums";
 
 export const createMeForumService = (api: AxiosInstance) => {
   return {

@@ -4,7 +4,7 @@ import { tw } from "@/utils/styles";
 import VideoCard from "@/components/screens/videos/VideoCard";
 import VideoCardSkeleton from "@/components/screens/videos/VideoCardSkeleton";
 import ContentError from "@/components/common/ContentError";
-import { VideoPost } from "@core-types/content/videos";
+import { VideoPost } from "@core-types/api-types/videos";
 import { feedSearchVideoService, feedVideoService } from "@/services/index";
 import { useNavigation, useRouter } from "expo-router";
 import { HEADER_CONFIG } from "@/constants/header-config";

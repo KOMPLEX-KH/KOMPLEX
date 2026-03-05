@@ -11,7 +11,7 @@ import {
     Eye,
     Heart,
 } from 'lucide-react-native';
-import { ForumPost } from '@core-types/content/forums';
+import { ForumPost } from '@core-types/api-types/forums';
 import { meForumService } from '@/services/index';
 import ForumCard from '@/components/screens/me/forums/ForumCard';
 import MeSkeleton from '@/components/screens/me/MeSkeleton';

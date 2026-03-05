@@ -3,7 +3,7 @@
 import { Search, BookOpen, User, ChevronRight } from "lucide-react";
 import { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
-import type { Book } from "@core-types/content/books";
+import type { Book } from "@core-types/api-types/books";
 
 interface Props {
   searchQuery: string;
@@ -87,15 +87,15 @@ export default function BooksHeader({
                   <Image src={book.imageUrl} alt={book.title} fill className="object-cover" unoptimized />
                 </div>
                 <div className="flex justify-between items-center w-full">
-                    <div className="flex-1 text-left">
-                      <h4 className="font-semibold text-sm truncate group-hover:text-indigo-600">
-                        {book.title}
-                      </h4>
+                  <div className="flex-1 text-left">
+                    <h4 className="font-semibold text-sm truncate group-hover:text-indigo-600">
+                      {book.title}
+                    </h4>
 
-                      <div className="flex items-center text-xs text-gray-500">
-                        <User className="w-3 h-3 mr-1" />
-                        {book.author}
-                      </div>
+                    <div className="flex items-center text-xs text-gray-500">
+                      <User className="w-3 h-3 mr-1" />
+                      {book.author}
+                    </div>
                   </div>
                   <ChevronRight className="w-5 h-5 text-gray-400 opacity-0 group-hover:opacity-100" />
                 </div>

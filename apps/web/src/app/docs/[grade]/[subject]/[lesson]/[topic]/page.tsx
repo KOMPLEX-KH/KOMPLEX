@@ -5,7 +5,7 @@ import Sidebar from "@/components/pages/docs/Sidebar";
 import TopicWrapper from "@/components/pages/docs/TopicWrapper";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Grade } from "@core-types/docs/curriculum";
+import { Grade } from "@core-types/api-types/curriculum";
 import { deserializeTopicContentV3 } from "@/components/pages/docs/utils/ContentSerializerV2";
 import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
 import ComingSoon from "@/components/pages/docs/ComingSoon";

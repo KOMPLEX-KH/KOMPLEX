@@ -7,7 +7,7 @@ import ForumSkeleton from "@/components/screens/forums/ForumSkeleton";
 import ContentError from "@/components/common/ContentError";
 import Comments from "@/components/common/comments/Comments";
 import { BackButton } from "@/components/common/BackButton";
-import { ForumPost } from "@core-types/content/forums";
+import { ForumPost } from "@core-types/api-types/forums";
 import { feedForumService, meForumService } from "@/services/index";
 import { useAuth } from "@/hooks/useAuth";
 import { HEADER_CONFIG } from "@/constants/header-config";

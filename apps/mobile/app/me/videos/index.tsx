@@ -15,7 +15,7 @@ import {
     History,
 } from 'lucide-react-native';
 import { meVideoService } from '@/services/index';
-import { VideoPost } from '@core-types/content/videos';
+import { VideoPost } from '@core-types/api-types/videos';
 import ContentError from '@/components/common/ContentError';
 import MeSkeleton from '@/components/screens/me/MeSkeleton';
 import VideoHistoryComponent from '@/components/screens/me/videos/VideoHistory';

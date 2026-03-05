@@ -10,7 +10,7 @@ import ContentError from "@/components/common/ContentError";
 import Comments from "@/components/common/comments/Comments";
 // import Exercise from "@/components/screens/videos/Exercise";
 import { MessageSquare, BookOpen } from "lucide-react-native";
-import { VideoPost } from "@core-types/content/videos";
+import { VideoPost } from "@core-types/api-types/videos";
 import { feedVideoService, meVideoService } from "@/services/index";
 import { useAuth } from "@/hooks/useAuth";
 import { HEADER_CONFIG } from "@/constants/header-config";

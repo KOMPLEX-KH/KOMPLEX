@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
-import type { Grade, CurriculumTopicResponse } from "../../types/docs/curriculum";
-import { ApiWrapper } from './../../types/apiWrapper';
+import type { Grade, CurriculumTopicResponse } from "../../types/api-types/curriculum";
+import { ApiWrapper } from '../../types/api-types/apiWrapper';
 
 export const createFeedCurriculumsService = (api: AxiosInstance) => {
   return {

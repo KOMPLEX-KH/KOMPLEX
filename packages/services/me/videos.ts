@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
-import { ApiWrapper } from "@core-types/apiWrapper";
-import { VideoPost } from "@core-types/content/videos";
+import { ApiWrapper } from "@core-types/api-types/apiWrapper";
+import { VideoPost } from "@core-types/api-types/videos";
 
 export const createMeVideoService = (api: AxiosInstance) => {
   return {

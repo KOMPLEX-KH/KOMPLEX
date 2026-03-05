@@ -5,7 +5,7 @@ import { Send, Bot, RefreshCw, Square, ChevronDown, AlertCircle } from 'lucide-r
 import { meAiService } from '@/services/index';
 import MarkdownRenderer from '@/components/helper/MarkDownRenderer';
 import { useAuth } from '@hooks/useAuth';
-import type { AiHistoryItem, AIResponseType } from '@core-types/content/ai';
+import type { AiHistoryItem, AIResponseType } from '@core-types/api-types/ai';
 import { useRouter, useSearchParams } from 'next/navigation';
 import MessageItem from '../../../components/pages/ai/MessageItem';
 import ChatSkeleton from '../../../components/pages/ai/ChatSkeleton';
@@ -14,7 +14,7 @@ import ResponseTypeDropdown, { ResponseTypeOption } from '../../../components/pa
 import PromptTextarea from '../../../components/pages/ai/PromptTextarea';
 import AiRating from '../../../components/pages/ai/AiRating';
 import SideBar from '../../../components/pages/ai/SideBar';
-import { ApiWrapper } from '@core-types/apiWrapper';
+import { ApiWrapper } from '@core-types/api-types/apiWrapper';
 
 interface Message {
     id: string;

@@ -7,7 +7,7 @@ import ContentError from '@/components/common/ContentError';
 import { userForumService } from '@/services/index';
 import Carousel from '@/components/common/Carousel';
 import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
-import { ForumPost } from '@core-types/content/forums';
+import { ForumPost } from '@core-types/api-types/forums';
 
 interface ForumsProps {
     userId: string;

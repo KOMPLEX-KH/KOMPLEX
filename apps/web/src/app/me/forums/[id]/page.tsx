@@ -8,7 +8,7 @@ import ContentError from '@/components/common/ContentError';
 import DeleteConfirm from '@/components/common/DeleteConfirm';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ForumPost } from '@core-types/content/forums';
+import { ForumPost } from '@core-types/api-types/forums';
 import { feedForumService, meForumService } from '@/services/index';
 import { useAuth } from '@hooks/useAuth';
 import { BackButton } from '@/components/common/BackButton';

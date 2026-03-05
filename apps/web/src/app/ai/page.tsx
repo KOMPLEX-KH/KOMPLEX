@@ -9,7 +9,7 @@ import PromptTextarea from '../../components/pages/ai/PromptTextarea';
 import ResponseTypeDropdown, {
     ResponseTypeOption,
 } from '../../components/pages/ai/ResponseTypeDropdown';
-import type { AIResponseType } from '@core-types/content/ai';
+import type { AIResponseType } from '@core-types/api-types/ai';
 
 const responseTypeOptions: readonly ResponseTypeOption[] = [
     { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ KOMPLEX' },

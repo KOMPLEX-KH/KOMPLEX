@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useCallback  } from "react";
+import { useState, useCallback } from "react";
 import FormularCard from "./FormularCard";
 import EmptyState from "./EmptyState";
-import { Formula } from "@core-types/content/formular";
+import { Formula } from "@/components/pages/extras/formula/FormulaData";
 import { X, BookOpen, Tag, Calculator, Copy, Check } from "lucide-react";
 
 interface FormularPageProps {
@@ -17,7 +17,7 @@ export default function FormularPage({
   searchQuery,
   selectedSubject
 }: FormularPageProps) {
-  
+
   const [selectedFormula, setSelectedFormula] = useState<Formula | null>(null);
 
   const handleFormulaClick = useCallback((id: string) => {
@@ -27,7 +27,7 @@ export default function FormularPage({
   const handleCloseDetail = () => {
     setSelectedFormula(null);
   };
-  
+
   // pop  up
   if (selectedFormula) {
     return (
@@ -63,7 +63,7 @@ export default function FormularPage({
                 <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
                   <Calculator className="w-5 h-5 text-indigo-600" />
                   រូបមន្ត
-                </h3>               
+                </h3>
               </div>
               <div className="text-2xl font-mono text-center py-4 text-gray-800 z-10 relative">
                 {selectedFormula.formula}

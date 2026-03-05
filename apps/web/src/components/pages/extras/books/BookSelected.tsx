@@ -3,8 +3,8 @@
 import { ArrowLeft, User, GraduationCap } from "lucide-react";
 import BookCard from "./BookCard";
 import { useRouter } from "next/navigation";
-import type { Book } from "@core-types/content/books";
-import type { Grade, Subject } from "@core-types/docs/curriculum";
+import type { Book } from "@core-types/api-types/books";
+import type { Grade, Subject } from "@core-types/api-types/curriculum";
 
 type Props = {
   book: Book;

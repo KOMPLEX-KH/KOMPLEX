@@ -9,8 +9,8 @@ import {
   meVideoReplyService,
 } from "@/services/index";
 import { tw } from "@/utils/styles";
-import { ForumComment, ForumReply } from "@core-types/content/forums";
-import { VideoComment, VideoReply } from "@core-types/content/videos";
+import { ForumComment, ForumReply } from "@core-types/api-types/forums";
+import { VideoComment, VideoReply } from "@core-types/api-types/videos";
 import { getTimeAgo } from "@core-utils/formater";
 import { Href, useRouter } from "expo-router";
 import { MessageCircle, Send, ThumbsUp } from "lucide-react-native";

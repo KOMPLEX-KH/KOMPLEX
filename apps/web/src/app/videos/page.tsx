@@ -7,7 +7,7 @@ import VideoCard from "@/components/pages/videos/VideoCard";
 import VideoCardSkeleton from "@/components/pages/videos/VideoCardSkeleton";
 import Sidebar from "@/components/pages/videos/Sidebar";
 import ContentError from "@/components/common/ContentError";
-import { VideoPost } from "@core-types/content/videos";
+import { VideoPost } from "@core-types/api-types/videos";
 import { feedVideoService, feedSearchVideoService } from "@/services/index";
 
 export default function VideoPage() {

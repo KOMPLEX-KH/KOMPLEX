@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Save, Upload, Trash, Play } from "lucide-react";
 import type {
   VideoPost,
-} from "@core-types/content/videos";
+} from "@core-types/api-types/videos";
 // import { ExerciseQuestion } from "@core-types/docs/topic";
 // import { ExerciseCreationBox } from "@/components/pages/docs/boxes/ExerciseCreationBox";
 import BlogEditor from "@/components/common/Editor";

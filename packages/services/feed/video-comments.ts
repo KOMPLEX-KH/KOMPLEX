@@ -1,5 +1,5 @@
-import { ApiWrapper } from "@core-types/apiWrapper";
-import { VideoComment } from "@core-types/content/videos";
+import { ApiWrapper } from "@core-types/api-types/apiWrapper";
+import { VideoComment } from "@core-types/api-types/videos";
 import type { AxiosInstance } from "axios";
 
 export const createFeedVideoCommentService = (api: AxiosInstance) => {

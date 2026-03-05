@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
-import type { RecommendedVideos, VideoPost } from "../../types/content/videos";
-import { ApiWrapper } from "../../types/apiWrapper";
+import type { RecommendedVideos, VideoPost } from "../../types/api-types/videos";
+import { ApiWrapper } from "../../types/api-types/apiWrapper";
 
 export const createFeedVideoService = (api: AxiosInstance) => {
   return {
@@ -21,7 +21,7 @@ export const createFeedVideoService = (api: AxiosInstance) => {
     getVideoById: async (id: string): Promise<ApiWrapper<VideoPost>> => {
       try {
         const response = await api.get<ApiWrapper<VideoPost>>(`/feed/videos/${id}`);
-        return response.data ;
+        return response.data;
       } catch (error) {
         console.error("Error fetching video by ID:", error);
         throw new Error("Failed to fetch video");

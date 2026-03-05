@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Save, X, Eye } from 'lucide-react';
-import { ForumPost } from '@core-types/content/forums';
-import { Media } from '@core-types/content/media';
+import { ForumPost } from '@core-types/api-types/forums';
+import { Media } from '@core-types/api-types/media';
 import { meForumService, feedForumService } from '@/services/index';
 import { useRouter } from 'next/navigation';
 import BlogEditor from '@/components/common/Editor';

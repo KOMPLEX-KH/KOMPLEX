@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
-import { ApiWrapper } from "@core-types/apiWrapper";
-import { UserProfile } from "@core-types/content/profile";
+import { ApiWrapper } from "@core-types/api-types/apiWrapper";
+import { UserProfile } from "@core-types/api-types/profile";
 
 export const createUserProfileService = (api: AxiosInstance) => {
   return {

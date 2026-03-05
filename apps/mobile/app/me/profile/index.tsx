@@ -6,7 +6,7 @@ import { Text } from '@/components/common/Text';
 import Sidebar from '@/components/screens/me/Sidebar';
 import ContentError from '@/components/common/ContentError';
 import { authService } from '@/services/index';
-import { Profile } from '@core-types/content/profile';
+import { Profile } from '@core-types/api-types/profile';
 import { Mail, Calendar, Phone, User as UserIcon, AtSign, ShieldCheck, ShieldAlert, UserCircle } from 'lucide-react-native';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigation } from '@react-navigation/native';

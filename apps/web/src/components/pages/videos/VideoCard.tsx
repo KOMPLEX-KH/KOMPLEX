@@ -3,7 +3,7 @@
 import React from 'react';
 import { User, Eye } from 'lucide-react';
 import Link from 'next/link';
-import { VideoPost } from '@core-types/content/videos';
+import { VideoPost } from '@core-types/api-types/videos';
 
 interface VideoCardProps {
     video: VideoPost;

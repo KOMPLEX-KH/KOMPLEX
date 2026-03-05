@@ -1,9 +1,9 @@
 import { View, Pressable, Image } from "react-native";
 import { Eye, User } from "lucide-react-native";
 import { useRouter, Href } from "expo-router";
-import { VideoPost } from "@core-types/content/videos";
+import { VideoPost } from "@core-types/api-types/videos";
 import { tw } from "@/utils/styles";
-import {Text} from '@/components/common/Text'
+import { Text } from '@/components/common/Text'
 
 interface VideoCardProps {
     video: VideoPost;

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { View, Pressable, Alert } from "react-native";
 import { Check, Copy, AlertCircle } from "lucide-react-native";
-import { Message } from "@core-types/content/ai";
+import { Message } from "@core-types/api-types/ai";
 import ContentRenderer from "@/components/screens/docs/utils/ContentRenderer";
 import { deserializeTopicContentV3 } from "@/components/screens/docs/utils/ContentDeserializer";
 import MarkdownRenderer from "@/components/helper/MarkDownRenderer";

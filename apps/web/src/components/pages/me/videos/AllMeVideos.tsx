@@ -11,7 +11,7 @@ import {
     Calendar,
 } from 'lucide-react';
 import { meVideoService } from '@/services/index';
-import { VideoPost } from '@core-types/content/videos';
+import { VideoPost } from '@core-types/api-types/videos';
 import ContentError from '@/components/common/ContentError';
 import MeSkeleton from '@/components/pages/me/MeSkeleton';
 import { useAuth } from '@hooks/useAuth';

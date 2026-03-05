@@ -2,7 +2,7 @@
 
 import { Search, Filter, ChevronDown, Check, Grid3x3 } from "lucide-react";
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Grade } from "@core-types/docs/curriculum";
+import { Grade } from "@core-types/api-types/curriculum";
 import { getSubjectIcon } from "@core-utils/transform";
 
 interface FormularHeaderProps {
@@ -134,7 +134,7 @@ export default function FormularHeader({
         </div>
 
         <button
-           onClick={() => setFilterOpen(!filterOpen)}
+          onClick={() => setFilterOpen(!filterOpen)}
           className="bg-indigo-600 text-white p-4 rounded-full"
         >
           <Filter className="w-5 h-5" />
@@ -166,9 +166,9 @@ export default function FormularHeader({
                     <span>{selectedSubjectData?.name || "គ្រប់មុខវិជ្ជា"}</span>
                   </div>
                   <div className="absolute right-3">
-                      <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openSubjectDropdown ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openSubjectDropdown ? 'rotate-180' : ''}`} />
                   </div>
-                  
+
                 </button>
 
                 {openSubjectDropdown && (
@@ -185,11 +185,10 @@ export default function FormularHeader({
                               setSelectedCategory("all");
                               setOpenSubjectDropdown(false);
                             }}
-                            className={`w-full text-left px-4 py-2.5 transition-all duration-150 text-sm font-medium ${
-                              isSelected
+                            className={`w-full text-left px-4 py-2.5 transition-all duration-150 text-sm font-medium ${isSelected
                                 ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600'
                                 : 'hover:bg-gray-50 border-l-4 border-transparent text-gray-700'
-                            }`}
+                              }`}
                           >
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
@@ -216,9 +215,9 @@ export default function FormularHeader({
                 >
                   <span>{categories.find(c => c.id === selectedCategory)?.name || "គ្រប់មេរៀន"}</span>
                   <div className="absolute right-3">
-                      <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openCategoryDropdown ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openCategoryDropdown ? 'rotate-180' : ''}`} />
                   </div>
-                  
+
                 </button>
 
                 {openCategoryDropdown && (
@@ -233,11 +232,10 @@ export default function FormularHeader({
                               setSelectedCategory(category.id);
                               setOpenCategoryDropdown(false);
                             }}
-                            className={`w-full text-left px-4 py-2.5 transition-all duration-150 text-sm font-medium ${
-                              isSelected
+                            className={`w-full text-left px-4 py-2.5 transition-all duration-150 text-sm font-medium ${isSelected
                                 ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600'
                                 : 'hover:bg-gray-50 border-l-4 border-transparent text-gray-700'
-                            }`}
+                              }`}
                           >
                             <div className="flex items-center justify-between">
                               <span>{category.name}</span>

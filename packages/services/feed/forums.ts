@@ -1,5 +1,5 @@
-import { ApiWrapper } from './../../types/apiWrapper';
-import { ForumPost } from '@core-types/content/forums';
+import { ApiWrapper } from '../../types/api-types/apiWrapper';
+import { ForumPost } from '@core-types/api-types/forums';
 
 import type { AxiosInstance } from "axios";
 

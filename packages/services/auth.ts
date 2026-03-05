@@ -9,9 +9,9 @@ import type {
   VerifyForgetPasswordOtpResponse,
   ResetPasswordResponse,
   UpdateProfileDataRequest,
-} from "../types/auth";
-import { ApiWrapper } from "@core-types/apiWrapper";
-import { Profile } from "@core-types/content/profile";
+} from "../types/api-types/auth";
+import { ApiWrapper } from "@core-types/api-types/apiWrapper";
+import { Profile } from "@core-types/api-types/profile";
 
 export const createAuthService = (api: AxiosInstance) => {
   return {

@@ -1,6 +1,6 @@
 import type { AxiosInstance } from "axios";
-import type { ForumComment } from "../../types/content/forums";
-import { ApiWrapper } from "../../types/apiWrapper";
+import type { ForumComment } from "../../types/api-types/forums";
+import { ApiWrapper } from "../../types/api-types/apiWrapper";
 
 export const createFeedForumCommentService = (api: AxiosInstance) => {
   return {

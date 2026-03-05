@@ -8,12 +8,12 @@ import Comments from '@/components/common/comments/Comments';
 import VideoCard from '@/components/pages/videos/VideoCard';
 import VideoSkeleton from '@/components/pages/videos/VideoSkeleton';
 import ContentError from '@/components/common/ContentError';
-import type { VideoPost } from '@core-types/content/videos';
+import type { VideoPost } from '@core-types/api-types/videos';
 import { feedVideoService, meVideoService } from '@/services/index';
 import VideoDescription from '@/components/pages/videos/VideoDescription';
 import { useAuth } from '@hooks/useAuth';
-import type { RecommendedVideos } from '@core-types/content/videos';
-import { ApiWrapper } from '@core-types/apiWrapper';
+import type { RecommendedVideos } from '@core-types/api-types/videos';
+import { ApiWrapper } from '@core-types/api-types/apiWrapper';
 
 
 // API function to fetch recommended videos

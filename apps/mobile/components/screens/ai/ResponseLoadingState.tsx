@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { View, Animated } from "react-native";
 import { Check, Loader2, Sparkles } from "lucide-react-native";
-import { AIResponseType } from "@core-types/content/ai";
+import { AIResponseType } from "@core-types/api-types/ai";
 import { Text } from "@/components/common/Text";
 import { tw } from "@/utils/styles";
 

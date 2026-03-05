@@ -8,7 +8,7 @@ import PromptTextarea from '@/components/screens/ai/PromptTextarea';
 import ResponseTypeDropdown, { ResponseTypeOption } from '@/components/screens/ai/ResponseTypeDropdown';
 import { Bot, Send } from 'lucide-react-native';
 import { router } from 'expo-router';
-import { AIResponseType } from '@core-types/content/ai';
+import { AIResponseType } from '@core-types/api-types/ai';
 import { useAuth } from '@/hooks/useAuth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';

@@ -9,8 +9,8 @@ import { ViewAllByCategorySkeleton } from "@/components/pages/extras/books/BookS
 import { feedBooksService, feedCurriculumsService } from "@/services";
 import BooksHeader from "@/components/pages/extras/books/BooksHeader";
 import BookSelectedPage from "@/components/pages/extras/books/BookSelected";
-import type { Book } from "@core-types/content/books";
-import type { Grade, Subject } from "@core-types/docs/curriculum";
+import type { Book } from "@core-types/api-types/books";
+import type { Grade, Subject } from "@core-types/api-types/curriculum";
 
 export default function BooksContent() {
 

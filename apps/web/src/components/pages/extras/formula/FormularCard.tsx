@@ -2,7 +2,7 @@
 
 import { BookOpen, Eye, Bookmark, Calculator, Atom, Beaker, Microscope } from "lucide-react";
 
-import type { Formular } from "@core-types/content/formular";
+import type { Formular } from "@/components/pages/extras/formula/FormulaData";
 
 interface FormularCardProps {
   formula: Formular;

@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
 import { feedForumService, meForumService } from '@/services/index';
-import { ForumPost } from '@core-types/content/forums';
+import { ForumPost } from '@core-types/api-types/forums';
 import DeleteConfirm from '@/components/common/DeleteConfirm';
 import ContentError from '@/components/common/ContentError';
 import EditForum from '@/components/screens/me/forums/EditForum';
@@ -167,7 +167,7 @@ export default function MyForumDetailPage() {
                         parentId={post.id}
                         focusInput={false}
                         isReadOnly
-                        onClose={() => {}}
+                        onClose={() => { }}
                     />
                 </View>
             </ScrollView>

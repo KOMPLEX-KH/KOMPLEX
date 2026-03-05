@@ -6,7 +6,7 @@ import ContentError from "@/components/common/ContentError";
 import { useState, useEffect } from "react";
 import { feedForumService, feedSearchForumService, meForumService } from "@/services/index";
 import Sidebar from "@/components/pages/forums/Sidebar";
-import { ForumPost } from "@core-types/content/forums";
+import { ForumPost } from "@core-types/api-types/forums";
 
 export default function Forum() {
 	const [searchQuery, setSearchQuery] = useState("");

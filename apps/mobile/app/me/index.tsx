@@ -9,8 +9,8 @@ import MeSkeleton from '@/components/screens/me/MeSkeleton';
 import { useNavigation } from '@react-navigation/native';
 import { HEADER_CONFIG } from '@/constants/header-config';
 import { meForumService, meVideoService, authService } from '@/services/index';
-import { ForumPost } from '@core-types/content/forums';
-import { VideoPost } from '@core-types/content/videos';
+import { ForumPost } from '@core-types/api-types/forums';
+import { VideoPost } from '@core-types/api-types/videos';
 import ForumCard from '@/components/screens/me/forums/ForumCard';
 import ContentError from '@/components/common/ContentError';
 

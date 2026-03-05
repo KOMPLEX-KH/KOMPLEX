@@ -1,7 +1,7 @@
 'use client';
 
-import { ForumPost } from '@core-types/content/forums';
-import { Media } from '@core-types/content/media';
+import { ForumPost } from '@core-types/api-types/forums';
+import { Media } from '@core-types/api-types/media';
 import Carousel from '@/components/common/Carousel';
 import { useRouter } from 'next/navigation';
 import { Eye, MessageCircle, Heart, ThumbsUp } from 'lucide-react';

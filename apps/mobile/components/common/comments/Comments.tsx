@@ -16,8 +16,8 @@ import {
     meVideoCommentService,
     feedForumCommentService,
 } from "@/services/index";
-import { ForumComment } from "@core-types/content/forums";
-import { VideoComment } from "@core-types/content/videos";
+import { ForumComment } from "@core-types/api-types/forums";
+import { VideoComment } from "@core-types/api-types/videos";
 import { useAuth } from "@/hooks/useAuth";
 import { tw } from "@/utils/styles";
 import { useRouter } from "expo-router";

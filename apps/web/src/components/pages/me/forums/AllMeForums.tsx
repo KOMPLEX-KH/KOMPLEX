@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ContentError from '@/components/common/ContentError';
 import { Plus } from 'lucide-react';
-import { ForumPost } from '@core-types/content/forums';
+import { ForumPost } from '@core-types/api-types/forums';
 import { meForumService } from '@/services/index';
 import ForumCard from '@/components/pages/me/forums/ForumCard';
 import MeSkeleton from '@/components/pages/me/MeSkeleton';

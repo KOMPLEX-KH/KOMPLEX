@@ -6,7 +6,7 @@ import Sidebar, { ExtraTabs } from '@/components/pages/extras/Sidebar';
 import NotFound from '@/app/not-found';
 
 // Import content components
-import FormularContent from '@/components/pages/extras/formular/FormularContent';
+import FormularContent from '@/components/pages/extras/formula/FormularContent';
 import BooksContent from '@/components/pages/extras/books/BooksContent';
 import CalculateContent from '@/components/pages/extras/calculate/CalculateContent';
 // import { useRouter } from 'next/router';

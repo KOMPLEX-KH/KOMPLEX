@@ -4,8 +4,8 @@ import React, { useMemo } from "react";
 import BookCard from "./BookCard";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import type { Book } from "@core-types/content/books";
-import type { Grade } from "@core-types/docs/curriculum";
+import type { Book } from "@core-types/api-types/books";
+import type { Grade } from "@core-types/api-types/curriculum";
 
 interface ViewAllByCategoryProps {
   books: Book[];

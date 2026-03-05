@@ -1,5 +1,5 @@
-import { ApiWrapper } from "@core-types/apiWrapper";
-import { VideoHistory } from "@core-types/content/videos";
+import { ApiWrapper } from "@core-types/api-types/apiWrapper";
+import { VideoHistory } from "@core-types/api-types/videos";
 import type { AxiosInstance } from "axios";
 
 export const createMeVideoHistoryService = (api: AxiosInstance) => {

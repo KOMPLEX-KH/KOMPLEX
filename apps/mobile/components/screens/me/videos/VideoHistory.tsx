@@ -5,7 +5,7 @@ import { useRouter, Href } from 'expo-router';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
 import { meVideoHistoryService } from '@/services/index';
-import type { VideoHistory } from '@core-types/content/videos';
+import type { VideoHistory } from '@core-types/api-types/videos';
 
 interface VideoHistoryProps {
     onError?: (error: string) => void;

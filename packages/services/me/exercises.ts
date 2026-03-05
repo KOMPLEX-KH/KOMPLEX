@@ -4,8 +4,8 @@ import type {
   ExerciseHistory,
   ExerciseWithAttempts,
   ExerciseReport,
-} from "../../types/user-content/exercise";
-import type { Exercise } from "../../types/content/exercises";
+} from "../../types/api-types/user-content/exercise";
+import type { Exercise } from "../../types/api-types/exercises";
 
 export const createMeExerciseService = (api: AxiosInstance) => {
   return {

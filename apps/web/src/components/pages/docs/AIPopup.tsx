@@ -10,7 +10,7 @@ import {
   Maximize,
   Minimize,
 } from "lucide-react";
-import { Message, AIHistoryItem, AIResponseType } from "@core-types/content/ai";
+import { Message, AIHistoryItem, AIResponseType } from "@core-types/api-types/ai";
 import { meAiService } from "@/services/index";
 import MarkdownRenderer from "@/components/helper/MarkDownRenderer";
 import { useAuth } from "@hooks/useAuth";
@@ -29,10 +29,10 @@ import type {
   Lesson,
   Subject,
   Topic,
-} from "@core-types/docs/curriculum";
+} from "@core-types/api-types/curriculum";
 import ChatSkeleton from "../ai/ChatSkeleton";
-import { ApiWrapper } from "@core-types/apiWrapper";
-import { AIResponse } from "@core-types/content/ai";
+import { ApiWrapper } from "@core-types/api-types/apiWrapper";
+import { AIResponse } from "@core-types/api-types/ai";
 
 interface AIPopupProps {
   isOpen: boolean;
@@ -431,11 +431,10 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
               className={`relative flex w-full h-full ${isDesktop ? "justify-end p-6" : "items-end"}`}
             >
               <div
-                className={`pointer-events-auto flex flex-col  transition-all duration-300 ease-out ${
-                  isDesktop
-                    ? `${isPopupMaximized ? "w-full h-full" : "w-[700px] h-full"} rounded-3xl bg-white/95 backdrop-blur-xl border border-gray-200 shadow-2xl`
-                    : "w-full h-[80vh] rounded-t-3xl bg-white"
-                }`}
+                className={`pointer-events-auto flex flex-col  transition-all duration-300 ease-out ${isDesktop
+                  ? `${isPopupMaximized ? "w-full h-full" : "w-[700px] h-full"} rounded-3xl bg-white/95 backdrop-blur-xl border border-gray-200 shadow-2xl`
+                  : "w-full h-[80vh] rounded-t-3xl bg-white"
+                  }`}
               >
                 <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 rounded-t-3xl">
                   <div className="flex items-center gap-3">

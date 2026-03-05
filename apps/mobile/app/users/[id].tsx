@@ -11,7 +11,7 @@ import { userProfileService, meFollowService } from '@/services/index';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigation } from '@react-navigation/native';
 import { HEADER_CONFIG } from '@/constants/header-config';
-import { UserProfile } from '@core-types/content/profile';
+import { UserProfile } from '@core-types/api-types/profile';
 
 type TabType = 'videos' | 'forums';
 

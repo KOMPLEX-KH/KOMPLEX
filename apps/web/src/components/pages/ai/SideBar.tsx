@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { meAiService } from '@/services/index';
 import { ChevronLeft, ChevronRight, Edit, Menu, X, MoreVertical, Check, Trash2 } from 'lucide-react';
-import { AiTab } from '@core-types/content/ai';
+import { AiTab } from '@core-types/api-types/ai';
 import TabSkeleton from './TabSkeleton';
 import Link from 'next/link';
 import { Transition } from '@headlessui/react';
