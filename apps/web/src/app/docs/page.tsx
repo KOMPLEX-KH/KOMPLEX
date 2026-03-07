@@ -35,7 +35,7 @@ export default function Docs() {
 
                 setFetchError(null);
                 setCurriculum(curriculumData.data);
-                localStorage.setItem("curriculum", JSON.stringify(curriculumData));
+                localStorage.setItem("curriculum", JSON.stringify(curriculumData.data));
             } catch (error) {
                 setFetchError("មានបញ្ហា​ក្នុងការទាញយកមេរៀន សូមព្យាយាមម្តងទៀត។");
             }

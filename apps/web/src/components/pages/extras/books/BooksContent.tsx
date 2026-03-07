@@ -73,7 +73,7 @@ export default function BooksContent() {
         try {
           const curriculumData = await feedCurriculumsService.getCurriculum();
           setCurriculum(curriculumData.data);
-          localStorage.setItem('curriculum', JSON.stringify(curriculumData));
+          localStorage.setItem('curriculum', JSON.stringify(curriculumData.data));
         } catch (error) {
           console.error("Error fetching curriculum data:", error);
         }
