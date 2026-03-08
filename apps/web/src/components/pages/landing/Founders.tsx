@@ -106,7 +106,7 @@ export default function Founders() {
         }
     }
     return (
-        <section id="founders" className="pb-20 px-5 bg-white">
+        <section id="founders" className="pb-20 px-5 bg-white dark:bg-black text-gray-900 dark:text-white">
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
@@ -115,7 +115,7 @@ export default function Founders() {
                     transition={{ duration: 0.8 }}
                     className="text-center mb-15"
                 >
-                    <h2 className="text-4xl font-extrabold text-gray-900 mb-4">ស្ថាបនិក</h2>
+                    <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-4">ស្ថាបនិក</h2>
                 </motion.div>
 
                 <motion.div
@@ -132,7 +132,7 @@ export default function Founders() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className={`${founder.bgColor} ${founder.borderColor} border-2 rounded-3xl lg:p-8 p-4 shadow-lg transition-all duration-300 backdrop-blur-sm hover:scale-101`}
+                            className={`${founder.bgColor} ${founder.borderColor} border-2 rounded-3xl lg:p-8 p-4 shadow-lg transition-all duration-300 backdrop-blur-sm hover:scale-101 dark:bg-black/60`}
                         >
                             <motion.div
                                 initial={{ scale: 0 }}
@@ -152,12 +152,19 @@ export default function Founders() {
                                     }}
                                 />
                             </motion.div>
-                            <h3 className="lg:text-2xl text-xl text-center font-bold text-gray-900 mb-2">{founder.name}</h3>
+                            <h3 className="lg:text-2xl text-xl text-center font-bold text-gray-900 dark:text-white mb-2">
+                                {founder.name}
+                            </h3>
                             <div className={`${founder.iconColor} font-semibold lg:text-base text-sm mb-4 text-center`}>{founder.role}</div>
                             <div className="flex items-center justify-center gap-2">
                                 {
                                     founder.contacts.map((contact, index) => (
-                                        <Link href={contact.href} key={index} className="hover:text-indigo-600 transition-colors" target="_blank">
+                                        <Link
+                                            href={contact.href}
+                                            key={index}
+                                            className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                                            target="_blank"
+                                        >
                                             {getContactIcon(contact.type)}
                                         </Link>
                                     ))

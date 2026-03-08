@@ -6,7 +6,8 @@ import Header from "@/components/common/Header";
 import ModalRoot from "@/components/common/ModalRoot";
 import Script from "next/script";
 import { AuthProvider } from "@hooks/useAuth";
-import { Suspense, useEffect } from "react";
+import { ThemeProvider } from "@hooks/useTheme";
+import { Suspense, useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { feedCurriculumsService } from "@/services";
 import "katex/dist/katex.min.css";
 import { GA_MEASUREMENT_ID } from "@/configs/googleAnalytics";
@@ -29,11 +30,47 @@ const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
 });
 
-export default function RootLayout({
+function RootLayoutInner({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [theme, setThemeState] = useState<'light' | 'dark'>('light');
+  const isFirstPersistRun = useRef(true);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const stored = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    const preferDark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    setThemeState(preferDark ? 'dark' : 'light');
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (isFirstPersistRun.current) {
+      isFirstPersistRun.current = false;
+      return;
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  // Sync theme to <html> so Tailwind dark: works (Next.js may not re-patch root html on state change)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
+
+  const setTheme = useCallback((next: 'light' | 'dark') => setThemeState(next), []);
+  const toggleTheme = useCallback(() => setThemeState((prev) => (prev === 'dark' ? 'light' : 'dark')), []);
+  const themeValue = useMemo(
+    () => ({
+      theme,
+      setTheme,
+      toggleTheme,
+      isDark: theme === 'dark',
+    }),
+    [theme, setTheme, toggleTheme]
+  );
 
   useEffect(() => {
     const stored = localStorage.getItem("curriculum");
@@ -54,10 +91,19 @@ export default function RootLayout({
     fetchCurriculum();
   }, []);
 
+  // Runs before first paint — prevents flash of wrong theme (must match init logic in useEffect below)
+  const themeScript = `
+(function() {
+  var stored = localStorage.getItem('theme');
+  var dark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.classList.toggle('dark', dark);
+})();
+`;
 
   return (
-    <html lang="kh" className={poppins.className}>
+    <html lang="kh" className={`${poppins.className} ${theme === 'dark' ? 'dark' : ''}`} suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta httpEquiv="x-ua-compatible" content="IE=edge" />
@@ -193,12 +239,18 @@ export default function RootLayout({
           {`eruda.init();`}
         </Script> */}
 
-        <AuthProvider>
-          <Header />
-          {children}
-          <ModalRoot />
-        </AuthProvider>
+        <ThemeProvider value={themeValue}>
+          <AuthProvider>
+            <Header />
+            {children}
+            <ModalRoot />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
+}
+
+export default function RootLayout(props: Readonly<{ children: React.ReactNode }>) {
+  return <RootLayoutInner {...props} />;
 }

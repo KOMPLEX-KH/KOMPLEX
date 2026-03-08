@@ -44,9 +44,9 @@ export default function FeatureSection({
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay: 0.2 }}
-      className={`space-y-6 flex-1   ${contentClassName}`}
+      className={`space-y-6 flex-1 ${contentClassName}`}
     >
-      <h3 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+      <h3 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
         <Icon size={24} className="text-indigo-600 mt-2" />
         {title}
       </h3>
@@ -55,7 +55,7 @@ export default function FeatureSection({
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.4 }}
-        className="space-y-3 text-gray-600"
+        className="space-y-3 text-gray-600 dark:text-gray-300"
       >
         {listItems.map((item, index) => (
           <motion.li

@@ -2,9 +2,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+/* Class-based dark theme (toggle in app); body uses var(--background) / var(--foreground) */
+html.dark {
+  --background: #111827;
+  --foreground: #f9fafb;
 }
 
 @theme inline {
@@ -147,14 +155,13 @@ a {
   font-weight: bold;
 }
 
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
-input[type=number] {
-    -moz-appearance:textfield;
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 @keyframes slide-down {
@@ -196,10 +203,10 @@ input[type=number] {
 }
 
 .scrollbar-hide {
-  -ms-overflow-style: none;     /* IE & Edge */
-  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none;                /* Chrome, Safari */
+  display: none; /* Chrome, Safari */
 }

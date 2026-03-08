@@ -84,7 +84,7 @@ export default function AboutFeatures() {
   const features = [
     {
       media: (
-        <div className="bg-white rounded-3xl p-2 shadow-lg">
+        <div className="bg-white dark:bg-black rounded-3xl p-2 shadow-lg">
           <img
             src="/landing/lesson.png"
             alt="lesson"
@@ -201,8 +201,8 @@ export default function AboutFeatures() {
     // },
     {
       media: (
-        <div className="bg-white rounded-3xl p-2 shadow-lg">
-          <div className="w-full h-80 bg-gray-100 rounded-3xl flex items-center justify-center">
+        <div className="bg-white dark:bg-black rounded-3xl p-2 shadow-lg">
+          <div className="w-full h-80 bg-gray-100 dark:bg-gray-900 rounded-3xl flex items-center justify-center">
             <img
               src="/landing/dara.png"
               alt="dara"
@@ -214,7 +214,7 @@ export default function AboutFeatures() {
       title: (
         <div className="flex items-center">
           <span className="text-indigo-500">តា</span>{" "}
-          <span className="text-black mr-2">រា</span> AI
+          <span className="text-black dark:text-white mr-2">រា</span> AI
         </div>
       ),
       icon: Bot,
@@ -228,8 +228,8 @@ export default function AboutFeatures() {
     },
     {
       media: (
-        <div className="bg-white rounded-3xl p-2 shadow-lg">
-          <div className="w-full h-80 bg-gray-100 rounded-3xl flex items-center justify-center">
+        <div className="bg-white dark:bg-black rounded-3xl p-2 shadow-lg">
+          <div className="w-full h-80 bg-gray-100 dark:bg-gray-900 rounded-3xl flex items-center justify-center">
             <img
               src="/landing/forums.png"
               alt="forum"
@@ -250,8 +250,8 @@ export default function AboutFeatures() {
     },
     {
       media: (
-        <div className="bg-white rounded-3xl p-2 shadow-lg">
-          <div className="w-full h-80 bg-gray-100 rounded-3xl flex items-center justify-center">
+        <div className="bg-white dark:bg-black rounded-3xl p-2 shadow-lg">
+          <div className="w-full h-80 bg-gray-100 dark:bg-gray-900 rounded-3xl flex items-center justify-center">
             <img
               src="/landing/videos.png"
               alt="videos"
@@ -272,7 +272,7 @@ export default function AboutFeatures() {
     },
   ];
   return (
-    <section className="py-20 px-5 bg-white">
+    <section className="py-20 px-5 bg-white dark:bg-black text-gray-900 dark:text-white">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -281,7 +281,7 @@ export default function AboutFeatures() {
           transition={{ duration: 0.8 }}
           className="text-center mb-15"
         >
-          <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
+          <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
             អំពីមុខងារ
           </h2>
         </motion.div>
