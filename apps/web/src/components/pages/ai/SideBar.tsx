@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { meAiService } from '@/services/index';
 import { ChevronLeft, ChevronRight, Edit, Menu, X, MoreVertical, Check, Trash2 } from 'lucide-react';
-import { AiTab } from '@core-types/content/ai';
+import { AiTab } from '@core-types/api-types/ai';
 import TabSkeleton from './TabSkeleton';
 import Link from 'next/link';
 import { Transition } from '@headlessui/react';
@@ -54,8 +54,8 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                     meAiService.getAllAiTopicTabNames(),
                 ]);
 
-                const generalItems = Array.isArray(general) ? general : [];
-                const topicItems = Array.isArray(topics) ? topics : [];
+                const generalItems = Array.isArray(general.data) ? general.data : [];
+                const topicItems = Array.isArray(topics.data) ? topics.data : [];
 
                 setGeneralTabs(generalItems);
                 setTopicTabs(topicItems);

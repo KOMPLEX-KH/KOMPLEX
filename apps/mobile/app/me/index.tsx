@@ -9,8 +9,8 @@ import MeSkeleton from '@/components/screens/me/MeSkeleton';
 import { useNavigation } from '@react-navigation/native';
 import { HEADER_CONFIG } from '@/constants/header-config';
 import { meForumService, meVideoService, authService } from '@/services/index';
-import { ForumPost } from '@/types/content/forums';
-import { VideoPost } from '@/types/content/videos';
+import { ForumPost } from '@core-types/api-types/forums';
+import { VideoPost } from '@core-types/api-types/videos';
 import ForumCard from '@/components/screens/me/forums/ForumCard';
 import ContentError from '@/components/common/ContentError';
 
@@ -77,7 +77,7 @@ export default function MyContent() {
                     setIsLoadingForums(true);
                     setForumError(null);
                     const forums = await meForumService.getUserForums();
-                    setForumPosts(forums);
+                    setForumPosts(forums.data);
                 } catch (error) {
                     console.error('Error fetching forums:', error);
                     setForumError('មានបញ្ហាកើតឡើងពេលទាញយកទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។');
@@ -97,7 +97,7 @@ export default function MyContent() {
                     setIsLoadingVideos(true);
                     setVideoError(null);
                     const userVideos = await meVideoService.getUserVideos();
-                    setVideos(userVideos.map((v) => ({
+                    setVideos(userVideos.data.map((v: VideoPost) => ({
                         id: v.id,
                         userId: v.userId,
                         profileImage: v.profileImage,
@@ -106,17 +106,17 @@ export default function MyContent() {
                         duration: Number(v.duration),
                         videoUrl: v.videoUrl,
                         thumbnailUrl: v.thumbnailUrl,
-                        videoUrlForDeletion: v.videoUrlForDeletion,
-                        thumbnailUrlForDeletion: v.thumbnailUrlForDeletion,
+                        videoUrlForDeletion: v.videoUrl,
+                        thumbnailUrlForDeletion: v.thumbnailUrl,
                         viewCount: Number(v.viewCount),
                         createdAt: v.createdAt,
                         updatedAt: v.updatedAt,
                         username: v.username,
-                        isSave: v.isSave,
+                        isSaved: v.isSaved,
                         isLiked: v.isLiked,
                         likeCount: Number(v.likeCount),
                         saveCount: Number(v.saveCount),
-                        exercises: v.exercises,
+
                         isFollowing: v.isFollowing,
                     })));
                 } catch (error) {

@@ -4,15 +4,16 @@
 
 import { useEffect, useState, type ReactNode, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Video, MessageSquare, UserCircle, Mail, AtSign, Phone, Calendar, ShieldCheck, ShieldAlert, User as UserIcon } from 'lucide-react';
+import { Video, MessageSquare, UserCircle, Mail, AtSign, Phone, Calendar, ShieldCheck, ShieldAlert, User as UserIcon, Camera } from 'lucide-react';
 import { useAuth } from '@hooks/useAuth';
 import MeSkeleton from '@/components/pages/me/MeSkeleton';
-import { authService } from '@/services/index';
-import type { User } from '@/types/auth';
+import { authService, uploadService } from '@/services/index';
 import ContentError from '@/components/common/ContentError';
 import Link from 'next/link';
 import AllMeForums from '@/components/pages/me/forums/AllMeForums';
 import AllMeVideos from '@/components/pages/me/videos/AllMeVideos';
+import { Profile } from '@core-types/api-types/profile';
+import { formatToKhmerMonthYear } from '@core-utils/formater';
 
 
 export default function MePage() {
@@ -29,9 +30,55 @@ function MePageContent() {
     const searchParams = useSearchParams();
     const activeTab = searchParams.get('tab') || 'profile';
 
-    const [profile, setProfile] = useState<User | null>(null);
+    const [profile, setProfile] = useState<Profile | null>(null);
     const [isProfileLoading, setIsProfileLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isHoveringAvatar, setIsHoveringAvatar] = useState(false);
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
+    const [imageUploadError, setImageUploadError] = useState<string | null>(null);
+
+
+    const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+
+        const file = e.target.files?.[0];
+        if (!file || !profile) return;
+
+        // Optimistic preview while uploading
+        const localPreviewUrl = URL.createObjectURL(file);
+        // Immediately update UI with local preview
+        setProfile(prev => prev ? { ...prev, profileImage: localPreviewUrl } : prev);
+        setIsUploadingImage(true);
+        setImageUploadError(null);
+
+        try {
+            //Upload to R2, get both the storage key and the public URL
+            const { key, publicUrl } = await uploadService.uploadFileForProfile(file);
+
+            //Update backend to update profile image and profile image key
+            const { data } = await authService.updateProfileImage({
+                profileImage: publicUrl,
+                profileImageKey: key,
+            });
+
+            //Update local state with the confirmed URL from the server
+            setProfile(prev => prev ? { ...prev, profileImage: data.profileImage, profileImageKey: data.profileImageKey } : prev);
+
+            // 4. Sync localStorage
+            const stored = localStorage.getItem('user');
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                localStorage.setItem('user', JSON.stringify({ ...parsed, profileImage: data.profileImage }));
+            }
+        } catch (err) {
+            console.error('Profile image upload error:', err);
+            setImageUploadError('មានបញ្ហាក្នុងការបង្ហោះរូបភាព។ សូមព្យាយាមម្តងទៀត។');
+            // Revert on failure
+            setProfile(prev => prev ? { ...prev, profileImage: profile.profileImage } : prev);
+        } finally {
+            setIsUploadingImage(false);
+            URL.revokeObjectURL(localPreviewUrl);
+        }
+    };
 
     useEffect(() => {
         if (!authLoading && !authUser) {
@@ -48,7 +95,7 @@ function MePageContent() {
                 setError(null);
                 // Use detailed profile endpoint that includes follower stats
                 const userData = await authService.getCurrentUserProfile();
-                setProfile(userData as User);
+                setProfile(userData.data);
             } catch (err) {
                 console.error('Error fetching profile:', err);
                 setError('មានបញ្ហាក្នុងការទាញយកព័ត៌មានប្រវត្តិ។ សូមព្យាយាមម្តងទៀត។');
@@ -123,6 +170,7 @@ function MePageContent() {
                         </div>
                     </div>
 
+
                     {/* Tab Content */}
                     {activeTab === 'profile' && (
                         <section>
@@ -131,18 +179,53 @@ function MePageContent() {
                             {!error && profile && (
                                 <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-6">
                                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                                        <div className="flex items-center gap-4">
-                                            {profile.profileImage ? (
-                                                <img
-                                                    src={profile.profileImage}
-                                                    alt="Profile"
-                                                    className="w-20 h-20 rounded-full object-cover border-2 border-indigo-500 shadow-lg"
+                                        <div className="flex items-center gap-4 w-full">
+                                            {/* Avatar with hover overlay */}
+                                            <div
+                                                className={`relative w-20 h-20 ${isUploadingImage ? 'cursor-wait' : 'cursor-pointer'}`}
+                                                onMouseEnter={() => setIsHoveringAvatar(true)}
+                                                onMouseLeave={() => setIsHoveringAvatar(false)}
+                                                onClick={() => !isUploadingImage && document.getElementById('avatar-upload')?.click()}
+                                            >
+                                                <input
+                                                    id="avatar-upload"
+                                                    type="file"
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                    disabled={isUploadingImage}
+                                                    onChange={handleImageSelect}
                                                 />
-                                            ) : (
-                                                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
-                                                    {((`${profile.firstName || ''} ${profile.lastName || ''}`.trim()) || profile.username || profile.email || 'U').charAt(0)}
+                                                {profile.profileImage ? (
+                                                    <img
+                                                        src={profile.profileImage}
+                                                        alt="Profile"
+                                                        className="w-20 h-20 rounded-full object-cover border-2 border-indigo-500 shadow-lg"
+                                                        onError={(e) => {
+                                                            e.currentTarget.style.display = 'none';
+                                                            e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                                                        }}
+                                                    />
+                                                ) : null}
+                                                <div className={`w-20 h-20 rounded-full bg-indigo-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg ${profile.profileImage ? 'hidden' : ''}`}>
+                                                    {((`${profile.firstName || ''} ${profile.lastName || ''}`.trim()) || profile.username || profile.email || 'U').charAt(0).toUpperCase()}
                                                 </div>
-                                            )}
+                                                {/* Spinner while uploading */}
+                                                {isUploadingImage && (
+                                                    <div className="absolute inset-0 rounded-full bg-black/60 flex items-center justify-center">
+                                                        <svg className="animate-spin w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                                                        </svg>
+                                                    </div>
+                                                )}
+                                                {/* Hover overlay — hidden while uploading */}
+                                                {!isUploadingImage && isHoveringAvatar && (
+                                                    <div className="absolute inset-0 rounded-full bg-black/50 flex flex-col items-center justify-center gap-1">
+                                                        <Camera size={25} className="text-white" />
+                                                    </div>
+                                                )}
+                                            </div>
+
                                             <div>
                                                 <div className="flex items-center gap-2 flex-wrap">
                                                     <h3 className="text-2xl font-semibold text-gray-900">
@@ -157,18 +240,18 @@ function MePageContent() {
                                                 </div>
                                                 <div className="mt-1 flex items-center gap-2 text-gray-600">
                                                     <Mail size={16} />
-                                                    <span className="text-sm">{profile.email}</span>
+                                                    <span className="text-sm">{profile.email} </span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
+                                    {imageUploadError && (
+                                        <p className="text-xs text-red-500 mt-3">{imageUploadError}</p>
+                                    )}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <ProfileField icon={<AtSign size={16} />} label="ឈ្មោះអ្នកប្រើប្រាស់" value={profile.username} />
-                                        <ProfileField icon={<UserIcon size={16} />} label="ឈ្មោះ" value={profile.firstName || '-'} />
-                                        <ProfileField icon={<UserIcon size={16} />} label="នាមត្រកូល" value={profile.lastName || '-'} />
-                                        <ProfileField icon={<Calendar size={16} />} label="ថ្ងៃខែឆ្នាំកំណើត" value={profile.dateOfBirth || '-'} />
-                                        <ProfileField icon={<Phone size={16} />} label="លេខទូរស័ព្ទ" value={profile.phone || '-'} />
+                                        <ProfileField icon={<AtSign size={16} />} label="នាមខ្លួន" value={profile.firstName} />
+                                        <ProfileField icon={<AtSign size={16} />} label="នាមត្រកូល" value={profile.lastName} />
+                                        <ProfileField icon={<Calendar size={16} />} label="ចូលរួមនៅ" value={formatToKhmerMonthYear(profile.createdAt)} />
                                         <ProfileField
                                             icon={profile.isVerified ? <ShieldCheck size={16} /> : <ShieldAlert size={16} />}
                                             label="ស្ថានភាព"

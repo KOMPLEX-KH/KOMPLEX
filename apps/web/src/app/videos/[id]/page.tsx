@@ -4,40 +4,43 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Play, MessageSquare, BookOpen } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import Comments from '@/components/common/comments/Comments';
-import Exercise from '@/components/pages/videos/Exercise';
+// import Exercise from '@/components/pages/videos/Exercise';
 import VideoCard from '@/components/pages/videos/VideoCard';
 import VideoSkeleton from '@/components/pages/videos/VideoSkeleton';
 import ContentError from '@/components/common/ContentError';
-import type { VideoPost } from '@/types/content/videos';
+import type { VideoPost } from '@core-types/api-types/videos';
 import { feedVideoService, meVideoService } from '@/services/index';
 import VideoDescription from '@/components/pages/videos/VideoDescription';
 import { useAuth } from '@hooks/useAuth';
+import type { RecommendedVideos } from '@core-types/api-types/videos';
+import { ApiWrapper } from '@core-types/api-types/apiWrapper';
 
 
 // API function to fetch recommended videos
-const fetchRecommendedVideos = async (userId: number, videoId: number, limit: number = 5): Promise<VideoPost[]> => {
+const fetchRecommendedVideos = async (userId: number, videoId: number, limit: number = 5): Promise<RecommendedVideos[]> => {
     try {
         const data = await feedVideoService.getRecommendedVideos(userId, videoId, limit, 0);
-        return data;
+        return data.data;
     } catch (error) {
         console.error('Error fetching recommended videos:', error);
         // Fallback to fetching all videos and filtering
-        try {
-            const { data } = await feedVideoService.getAllVideos();
-            return data.filter(v => v.id !== videoId).slice(0, limit);
-        } catch (fallbackError) {
-            console.error('Error in fallback video fetch:', fallbackError);
-            return [];
-        }
+        // try {
+        //     const { data } = await feedVideoService.getAllVideos();
+        //     return data.filter(v => v.id !== videoId).slice(0, limit);
+        // } catch (fallbackError) {
+        //     console.error('Error in fallback video fetch:', fallbackError);
+        //     return [];
+        // }
     }
 };
 
 // API function to fetch video by ID
-const fetchVideoById = async (id: number): Promise<VideoPost | null> => {
+const fetchVideoById = async (id: number): Promise<ApiWrapper<VideoPost>> => {
     try {
-        return await feedVideoService.getVideoById(id.toString());
+        const data = await feedVideoService.getVideoById(id.toString());
+        return data;
     } catch (error) {
-        console.error('Error fetching video:', error);
+        console.error('Error fetching video by ID:', error);
         return null;
     }
 };
@@ -49,7 +52,7 @@ export default function VideoDetailPage() {
     const [video, setVideo] = useState<VideoPost | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [recommendedVideos, setRecommendedVideos] = useState<VideoPost[]>([]);
+    const [recommendedVideos, setRecommendedVideos] = useState<RecommendedVideos[]>([]);
     const [videosLoading, setVideosLoading] = useState(false);
 
     const { user, openLoginModal } = useAuth();
@@ -94,7 +97,7 @@ export default function VideoDetailPage() {
 
                 // Set video data
                 if (videoData) {
-                    setVideo(videoData);
+                    setVideo(videoData.data);
 
                     // Fetch recommended videos based on current video
                     // Use user ID if available, otherwise use 0 for anonymous users
@@ -130,18 +133,18 @@ export default function VideoDetailPage() {
         }
     }
 
-    const handleSave = async (videoId: number, isSaved: boolean, video: VideoPost) => {
-        try {
-            if (!user) {
-                openLoginModal();
-                return;
-            }
-            await meVideoService.toggleVideoSave(videoId.toString(), isSaved);
-            setVideo({ ...video!, isSave: !isSaved });
-        } catch (error) {
-            console.error('Error saving video:', error);
-        }
-    }
+    // const handleSave = async (videoId: number, isSaved: boolean, video: VideoPost) => {
+    //     try {
+    //         if (!user) {
+    //             openLoginModal();
+    //             return;
+    //         }
+    //         await meVideoService.toggleVideoSave(videoId.toString(), isSaved);
+    //         setVideo({ ...video!, isSaved: !isSaved });
+    //     } catch (error) {
+    //         console.error('Error saving video:', error);
+    //     }
+    // }
 
     // Loading state
     if (loading) {
@@ -177,7 +180,7 @@ export default function VideoDetailPage() {
     );
 
     const renderVideoInfo = () => (
-        <VideoDescription video={video} onLike={handleLike} onBookmark={handleSave}></VideoDescription>
+        <VideoDescription video={video} onLike={handleLike}></VideoDescription>
     );
 
     const renderDesktopTabs = () => (
@@ -224,7 +227,7 @@ export default function VideoDetailPage() {
                         ) : recommendedVideos.length > 0 ? (
                             <div className="space-y-4">
                                 {recommendedVideos.map((relatedVideo) => (
-                                    <VideoCard key={relatedVideo.id} video={relatedVideo} variant="compact" />
+                                    <VideoCard key={relatedVideo.id} video={{ ...relatedVideo, isFollowing: false }} variant="compact" />
                                 ))}
                             </div>
                         ) : (
@@ -286,10 +289,10 @@ export default function VideoDetailPage() {
                 </div>
             </div>
 
-            {/* Mobile Tab Content */}
+            {/* Mobile Tab Content
             {activeTab === 'exercise' && (
-                <Exercise exercises={video.exercises} />
-            )}
+                <Exercise exercises={[]} />
+            )} */}
             {activeTab === 'comments' && (
                 <Comments type='video' parentId={videoId} isReadOnly={true} />
             )}
@@ -306,7 +309,7 @@ export default function VideoDetailPage() {
                             {recommendedVideos.slice(0, 6).map((relatedVideo) => (
                                 <VideoCard
                                     key={relatedVideo.id}
-                                    video={relatedVideo}
+                                    video={{ ...relatedVideo, isFollowing: false }}
                                     variant="compact"
                                 />
                             ))}
@@ -330,9 +333,9 @@ export default function VideoDetailPage() {
                         {renderVideoInfo()}
 
                         {/* Exercise Section - Under Video for Desktop */}
-                        <div className="hidden lg:block">
-                            <Exercise exercises={video.exercises} />
-                        </div>
+                        {/* <div className="hidden lg:block">
+                            <Exercise exercises={[]} />
+                        </div> */}
                     </div>
 
                     {/* Right Column - Sidebar */}

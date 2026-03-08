@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Play, Clock, Calendar, Trash2, History, AlertCircle, CheckCircle } from 'lucide-react';
 import { meVideoHistoryService } from '@/services/index';
-import type { VideoHistory } from '@/types/content/videos';
+import type { VideoHistory } from '@core-types/api-types/videos';
 
 interface VideoHistoryProps {
     onError?: (error: string) => void;
@@ -25,7 +25,7 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                 setLoading(true);
                 setError(null);
                 const history = await meVideoHistoryService.getUserVideoHistory();
-                setVideoHistory(history);
+                setVideoHistory(history.data);
             } catch (err) {
                 console.error('Error fetching video history:', err);
                 const errorMessage = 'មានបញ្ហាក្នុងការផ្ទុកប្រវត្តិវីដេអូ។ សូមព្យាយាមម្តងទៀត។';
@@ -57,7 +57,7 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
 
         try {
             setDeletingId(historyId);
-            await meVideoHistoryService.deleteVideoFromHistory(historyId.toString());
+            // await meVideoHistoryService.deleteVideoFromHistory(historyId.toString());
             setVideoHistory(prev => prev.filter(item => item.id !== historyId));
             setSuccessMessage('លុបចេញពីប្រវត្តិបានជោគជ័យ');
             setTimeout(() => setSuccessMessage(null), 3000);
@@ -71,29 +71,29 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
         }
     };
 
-    const handleBulkDelete = async () => {
-        if (selectedItems.size === 0) return;
+    // const handleBulkDelete = async () => {
+    //     if (selectedItems.size === 0) return;
 
-        if (!confirm(`តើអ្នកប្រាកដជាចង់លុបវីដេអូ ${selectedItems.size} ចេញពីប្រវត្តិមែនទេ?`)) {
-            return;
-        }
+    //     if (!confirm(`តើអ្នកប្រាកដជាចង់លុបវីដេអូ ${selectedItems.size} ចេញពីប្រវត្តិមែនទេ?`)) {
+    //         return;
+    //     }
 
-        try {
-            const deletePromises = Array.from(selectedItems).map(id =>
-                meVideoHistoryService.deleteVideoFromHistory(id.toString())
-            );
-            await Promise.all(deletePromises);
-            setVideoHistory(prev => prev.filter(item => !selectedItems.has(item.id)));
-            setSelectedItems(new Set());
-            setSuccessMessage(`លុបវីដេអូ ${selectedItems.size} ចេញពីប្រវត្តិបានជោគជ័យ`);
-            setTimeout(() => setSuccessMessage(null), 3000);
-        } catch (err) {
-            console.error('Error bulk deleting history items:', err);
-            const errorMessage = 'មានបញ្ហាក្នុងការលុបវីដេអូចេញពីប្រវត្តិ';
-            setError(errorMessage);
-            onError?.(errorMessage);
-        }
-    };
+    //     try {
+    //         const deletePromises = Array.from(selectedItems).map(id =>
+    //             meVideoHistoryService.deleteVideoFromHistory(id.toString())
+    //         );
+    //         await Promise.all(deletePromises);
+    //         setVideoHistory(prev => prev.filter(item => !selectedItems.has(item.id)));
+    //         setSelectedItems(new Set());
+    //         setSuccessMessage(`លុបវីដេអូ ${selectedItems.size} ចេញពីប្រវត្តិបានជោគជ័យ`);
+    //         setTimeout(() => setSuccessMessage(null), 3000);
+    //     } catch (err) {
+    //         console.error('Error bulk deleting history items:', err);
+    //         const errorMessage = 'មានបញ្ហាក្នុងការលុបវីដេអូចេញពីប្រវត្តិ';
+    //         setError(errorMessage);
+    //         onError?.(errorMessage);
+    //     }
+    // };
 
     const handleSelectItem = (id: number) => {
         const newSelected = new Set(selectedItems);
@@ -214,7 +214,7 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                             )}
                         </div>
 
-                        {selectedItems.size > 0 && (
+                        {/* {selectedItems.size > 0 && (
                             <button
                                 onClick={handleBulkDelete}
                                 className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-3xl hover:bg-red-700 transition-colors font-medium"
@@ -222,7 +222,7 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                                 <Trash2 size={16} />
                                 លុប {selectedItems.size} វីដេអូ
                             </button>
-                        )}
+                        )} */}
                     </div>
 
                     <div className="space-y-3">
@@ -243,7 +243,7 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                                 />
 
                                 {/* Thumbnail */}
-                                <div className="relative flex-shrink-0">
+                                {/* <div className="relative flex-shrink-0">
                                     <Link href={`/video/${item.videoId}`}>
                                         <div className="relative w-24 h-16 rounded-3xl overflow-hidden group">
                                             <Image
@@ -258,10 +258,10 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                                             </div>
                                         </div>
                                     </Link>
-                                </div>
+                                </div> */}
 
                                 {/* Video Info */}
-                                <Link href={`/video/${item.videoId}`} className="flex-1 min-w-0 group">
+                                {/* <Link href={`/video/${item.videoId}`} className="flex-1 min-w-0 group">
                                     <h4 className="font-medium text-gray-900 mb-1 truncate group-hover:text-indigo-600 transition-colors">
                                         {item.title}
                                     </h4>
@@ -275,7 +275,7 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                                             ចុងក្រោយ: {formatDate(item.updatedAt)}
                                         </span>
                                     </div>
-                                </Link>
+                                </Link> */}
 
                                 {/* Actions */}
                                 <div className="flex items-center gap-2">

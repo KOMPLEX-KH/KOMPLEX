@@ -10,7 +10,7 @@ import { HEADER_CONFIG } from "@/constants/header-config"
 import { feedCurriculumsService } from "@/services"
 import { deserializeTopicContentV3 } from "@/components/screens/docs/utils/ContentDeserializer"
 import ContentRenderer from "@/components/screens/docs/utils/ContentRenderer"
-import { Grade } from "@core-types/docs/curriculum"
+import { Grade } from "@core-types/api-types/curriculum"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import AiButton from "@/components/screens/docs/AiButton"
 
@@ -223,9 +223,9 @@ export default function TopicScreen() {
                     return
                 }
 
-                if (topicData && topicData.component) {
+                if (topicData && topicData.data.component) {
                     // Stringify the component data (it's already an object/array)
-                    setTopicComponent(JSON.stringify(topicData.component))
+                    setTopicComponent(JSON.stringify(topicData.data.component))
                     setError(false)
                 } else {
                     setTopicComponent(null)

@@ -7,7 +7,7 @@ import VideoCard from "@/components/pages/videos/VideoCard";
 import VideoCardSkeleton from "@/components/pages/videos/VideoCardSkeleton";
 import Sidebar from "@/components/pages/videos/Sidebar";
 import ContentError from "@/components/common/ContentError";
-import { VideoPost } from "@/types/content/videos";
+import { VideoPost } from "@core-types/api-types/videos";
 import { feedVideoService, feedSearchVideoService } from "@/services/index";
 
 export default function VideoPage() {
@@ -28,14 +28,13 @@ export default function VideoPage() {
 		try {
 			setLoading(true);
 			setError(null);
-			const { data } = await feedVideoService.getAllVideos();
-			if (data.length > 0) {
-				setVideos(data);
+			const response = await feedVideoService.getAllVideos();
+			if (response.success) {
+				setVideos(response.data);
 			} else {
-				setError("គ្មានវីដេអូ");
+				setError("មានបញ្ហាក្នុងការទាញយកវីដេអូ");
 			}
 		} catch (error) {
-			console.error("Error fetching videos:", error);
 			setError("មានបញ្ហាក្នុងការទាញយកវីដេអូ");
 		} finally {
 			setLoading(false);

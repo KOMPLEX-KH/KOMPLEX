@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AiModal from "./AiModal";
-import type { Grade, Subject, Lesson, Topic } from "@core-types/docs/curriculum";
+import type { Grade, Subject, Lesson, Topic } from "@core-types/api-types/curriculum";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function AiButton() {

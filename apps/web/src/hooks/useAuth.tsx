@@ -9,7 +9,7 @@ import {
   useMemo,
   ReactNode,
 } from "react";
-import { User as UserType } from "@/types/user-content/user";
+import { User as UserType } from "@core-types/api-types/user-content/user";
 import { usePathname } from "next/navigation";
 
 interface AuthContextType {

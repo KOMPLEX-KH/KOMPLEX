@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { Send, ThumbsUp } from 'lucide-react';
 import Link from 'next/link';
-import { ForumReply } from "@/types/content/forums";
+import { ForumReply } from "@core-types/api-types/forums";
 import { getTimeAgo } from '@core-utils/formater';
 import { meForumReplyService, meVideoReplyService } from '@/services/index';
-import { VideoReply } from '@/types/content/videos';
+import { VideoReply } from '@core-types/api-types/videos';
 import { useAuth } from "@hooks/useAuth";
 
 

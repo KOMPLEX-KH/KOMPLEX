@@ -2,7 +2,7 @@
 
 import React, { useMemo, useRef, useState } from "react";
 import { Check, Copy, AlertCircle, Download, Loader } from "lucide-react";
-import { Message } from "@/types/content/ai";
+import { Message } from "@core-types/api-types/ai";
 import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
 import { deserializeTopicContentV3 } from "@/components/pages/docs/utils/ContentSerializerV2";
 import MarkdownRenderer from "@/components/helper/MarkDownRenderer";

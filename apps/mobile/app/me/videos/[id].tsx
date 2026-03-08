@@ -10,11 +10,11 @@ import { useAuth } from '@/hooks/useAuth';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
 import { feedVideoService, meVideoService } from '@/services/index';
-import type { VideoPost } from '@/types/content/videos';
+import type { VideoPost } from '@core-types/api-types/videos';
 import DeleteConfirm from '@/components/common/DeleteConfirm';
 import ContentError from '@/components/common/ContentError';
 import Comments from '@/components/common/comments/Comments';
-import Exercise from '@/components/screens/videos/Exercise';
+// import Exercise from '@/components/screens/videos/Exercise';
 import EditVideo from '@/components/screens/me/videos/EditVideo';
 import { BackButton } from '@/components/common/BackButton';
 // import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
@@ -54,7 +54,7 @@ export default function MyVideoDetailPage() {
                 setIsLoading(true);
                 setError(null);
                 const video = await feedVideoService.getVideoById(id.toString());
-                setVideoPost(video);
+                setVideoPost(video.data);
             } catch (err) {
                 console.error('Error fetching video:', err);
                 setError('មានបញ្ហាកើតឡើងពេលផ្ទុកវីដេអូ សូមព្យាយាមம្តងទៀត');
@@ -265,21 +265,15 @@ export default function MyVideoDetailPage() {
                         </Pressable>
                     </View>
 
-                    {activeTab === 'comments' ? (
-                        <View style={tw('p-4')}>
-                            <Comments
-                                type="video"
-                                parentId={videoPost.id}
-                                focusInput={false}
-                                isReadOnly
-                                onClose={() => { }}
-                            />
-                        </View>
-                    ) : (
-                        <View style={tw('p-4')}>
-                            <Exercise exercises={videoPost.exercises || []} />
-                        </View>
-                    )}
+                    <View style={tw('p-4')}>
+                        <Comments
+                            type="video"
+                            parentId={videoPost.id}
+                            focusInput={false}
+                            isReadOnly
+                            onClose={() => { }}
+                        />
+                    </View>
                 </View>
             </ScrollView>
 

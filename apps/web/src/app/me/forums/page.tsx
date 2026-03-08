@@ -12,7 +12,7 @@ import {
     Heart,
     MessageCircle,
 } from 'lucide-react';
-import { ForumPost } from '@/types/content/forums';
+import { ForumPost } from '@core-types/api-types/forums';
 import { meForumService } from '@/services/index';
 import ForumCard from '@/components/pages/me/forums/ForumCard';
 import MeSkeleton from '@/components/pages/me/MeSkeleton';
@@ -39,7 +39,7 @@ export default function MyForums() {
                     setIsLoading(true);
                     setError(null);
                     const forums = await meForumService.getUserForums();
-                    setForumPosts(forums);
+                    setForumPosts(forums.data);
                 } catch (error) {
                     console.error('Error fetching forums:', error);
                     setError('មានបញ្ហាកើតឡើងពេលទាញយកទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។');

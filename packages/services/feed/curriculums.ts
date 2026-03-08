@@ -1,26 +1,25 @@
 import type { AxiosInstance } from "axios";
-import type { Grade } from "../../types/docs/curriculum";
+import type { Grade, CurriculumTopicResponse } from "../../types/api-types/curriculum";
+import { ApiWrapper } from '../../types/api-types/apiWrapper';
 
 export const createFeedCurriculumsService = (api: AxiosInstance) => {
   return {
     // Get all curriculum data (grades, subjects, lessons, topics)
-    getCurriculum: async (): Promise<Grade[]> => {
+    getCurriculum: async (): Promise<ApiWrapper<Grade[]>> => {
       try {
         const response = await api.get("/feed/curriculums");
-        return response.data.data;
+        return response.data as ApiWrapper<Grade[]>;
       } catch (error) {
-        console.error("Error fetching curriculum:", error);
         throw new Error("Failed to fetch curriculum");
       }
     },
 
     // Get a specific topic component by ID
-    getTopicComponent: async (topicId: string): Promise<any> => {
+    getTopicComponent: async (topicId: string): Promise<ApiWrapper<CurriculumTopicResponse>> => {
       try {
-        const response = await api.get(`/feed/curriculums/${topicId}`);
-        return response.data.data;
+        const response = await api.get<ApiWrapper<CurriculumTopicResponse>>(`/feed/curriculums/${topicId}`);
+        return response.data;
       } catch (error) {
-        console.error("Error fetching curriculum component:", error);
         throw new Error("Failed to fetch curriculum component");
       }
     },

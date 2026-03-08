@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { View, Image, Pressable, FlatList, Dimensions } from "react-native";
 import { Video, ResizeMode } from "expo-av";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
-import { Media } from "@/types/content/media";
+import { Media } from "@core-types/api-types/media";
 import { tw } from "@/utils/styles";
 import { Text } from "@/components/common/Text";
 

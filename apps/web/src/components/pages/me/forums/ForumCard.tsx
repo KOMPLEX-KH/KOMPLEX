@@ -1,7 +1,7 @@
 'use client';
 
-import { ForumPost } from '@/types/content/forums';
-import { Media } from '@/types/content/media';
+import { ForumPost } from '@core-types/api-types/forums';
+import { Media } from '@core-types/api-types/media';
 import Carousel from '@/components/common/Carousel';
 import { useRouter } from 'next/navigation';
 import { Eye, MessageCircle, Heart, ThumbsUp } from 'lucide-react';
@@ -84,7 +84,7 @@ export default function ForumCard({ post, isFromMePage }: ForumCardProps) {
             </div>
 
             {post.media && post.media.length > 0 && (
-                <Carousel media={getImageUrls(post.media).map(url => ({ url, type: 'image' }))} />
+                <Carousel media={post.media.map(m => ({ url: m.url, type: m.type as 'image' | 'video' }))} />
             )}
 
             <div className="flex items-center gap-4 mt-4">
@@ -96,10 +96,10 @@ export default function ForumCard({ post, isFromMePage }: ForumCardProps) {
                     <ThumbsUp className="w-4 h-4" />
                     {post.likeCount}
                 </div>
-                <div className="flex items-center gap-1">
+                {/* <div className="flex items-center gap-1">
                     <MessageCircle className="w-4 h-4" />
-                    {post.commentCount}
-                </div>
+                    {post.replyCount}
+                </div> */}
             </div>
         </div>
     );

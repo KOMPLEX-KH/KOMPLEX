@@ -11,7 +11,7 @@ import {
     Calendar,
 } from 'lucide-react';
 import { meVideoService } from '@/services/index';
-import { VideoPost } from '@/types/content/videos';
+import { VideoPost } from '@core-types/api-types/videos';
 import ContentError from '@/components/common/ContentError';
 import MeSkeleton from '@/components/pages/me/MeSkeleton';
 import { useAuth } from '@hooks/useAuth';
@@ -38,7 +38,7 @@ export default function AllMeVideos() {
                     setIsLoading(true);
                     setError(null);
                     const userVideos = await meVideoService.getUserVideos();
-                    setVideos(userVideos.map((v) => {
+                    setVideos(userVideos.data.map((v) => {
                         return {
                             id: v.id,
                             userId: v.userId,
@@ -48,17 +48,17 @@ export default function AllMeVideos() {
                             duration: Number(v.duration),
                             videoUrl: v.videoUrl,
                             thumbnailUrl: v.thumbnailUrl,
-                            videoUrlForDeletion: v.videoUrlForDeletion,
-                            thumbnailUrlForDeletion: v.thumbnailUrlForDeletion,
+                            videoUrlForDeletion: v.videoUrl,
+                            thumbnailUrlForDeletion: v.thumbnailUrl,
                             viewCount: Number(v.viewCount),
                             createdAt: v.createdAt,
                             updatedAt: v.updatedAt,
                             username: v.username,
-                            isSave: v.isSave,
+                            isSaved: v.isSaved,
                             isLiked: v.isLiked,
                             likeCount: Number(v.likeCount),
                             saveCount: Number(v.saveCount),
-                            exercises: v.exercises,
+                            // exercises: v.exercises,
                             isFollowing: v.isFollowing,
                         }
                     }));

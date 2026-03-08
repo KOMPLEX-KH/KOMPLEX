@@ -8,8 +8,8 @@ import Comments from '@/components/common/comments/Comments';
 import EditVideo from '@/components/pages/me/videos/EditVideo';
 import ContentError from '@/components/common/ContentError';
 import DeleteConfirm from '@/components/common/DeleteConfirm';
-import Exercise from '@/components/pages/videos/Exercise';
-import type { VideoPost } from '@/types/content/videos';
+// import Exercise from '@/components/pages/videos/Exercise';
+import type { VideoPost } from '@core-types/api-types/videos';
 import { useAuth } from '@hooks/useAuth';
 import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
 import { BackButton } from '@/components/common/BackButton';
@@ -94,7 +94,7 @@ export default function VideoPost() {
                     setIsLoading(true);
                     setError(null);
                     const video = await feedVideoService.getVideoById(id);
-                    setVideoPost(video);
+                    setVideoPost(video.data);
                 } catch (error) {
                     console.error('Error fetching video:', error);
                     setError('មានបញ្ហាកើតឡើងពេលផ្ទុកវីដេអូ សូមព្យាយាមម្តងទៀត');
@@ -287,9 +287,9 @@ export default function VideoPost() {
                                 </div>
 
                                 {/* Exercise Section - Under Video for Desktop */}
-                                <div className="hidden lg:block">
+                                {/* <div className="hidden lg:block">
                                     <Exercise exercises={videoPost.exercises || []} />
-                                </div>
+                                </div> */}
                             </div>
 
                             {/* Right Column - Tabs */}
@@ -338,11 +338,11 @@ export default function VideoPost() {
                                         </div>
                                     )}
 
-                                    {activeTab === 'exercise' && (
+                                    {/* {activeTab === 'exercise' && (
                                         <div className="p-6">
                                             <Exercise exercises={videoPost.exercises || []} />
                                         </div>
-                                    )}
+                                    )} */}
                                 </div>
                             </div>
                         </div>
@@ -391,11 +391,11 @@ export default function VideoPost() {
                                     />
                                 </div>
                             )}
-                            {activeTab === 'exercise' && (
+                            {/* {activeTab === 'exercise' && (
                                 <div className="bg-white rounded-3xl p-4 shadow-sm">
                                     <Exercise exercises={videoPost.exercises || []} />
                                 </div>
-                            )}
+                            )} */}
                         </div>
                     </div>
                 </div>

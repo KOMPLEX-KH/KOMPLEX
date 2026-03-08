@@ -7,26 +7,14 @@ import ContentError from '@/components/common/ContentError';
 import { userForumService } from '@/services/index';
 import Carousel from '@/components/common/Carousel';
 import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
-
-
-interface Forum {
-    id: number;
-    title: string;
-    description: string;
-    username: string;
-    viewCount: number;
-    likeCount: number;
-    commentCount: number;
-    createdAt: string;
-    media: { url: string; type: string }[];
-}
+import { ForumPost } from '@core-types/api-types/forums';
 
 interface ForumsProps {
     userId: string;
 }
 
 export default function Forums({ userId }: ForumsProps) {
-    const [forums, setForums] = useState<Forum[]>([]);
+    const [forums, setForums] = useState<ForumPost[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -36,7 +24,7 @@ export default function Forums({ userId }: ForumsProps) {
                 setIsLoading(true);
                 setError(null);
                 const data = await userForumService.getUserForums(userId);
-                setForums(data);
+                setForums(data.data);
             } catch (error) {
                 console.error('Error fetching user forums:', error);
                 setError('មានបញ្ហាក្នុងការទាញយកព័ត៌មានរបស់អ្នកប្រើប្រាស់។ សូមព្យាយាមម្តងទៀត។');
@@ -155,10 +143,10 @@ export default function Forums({ userId }: ForumsProps) {
                                     <ThumbsUp className="w-4 h-4" />
                                     {forum.likeCount}
                                 </div>
-                                <div className="flex items-center gap-1 text-gray-600 text-sm">
+                                {/* <div className="flex items-center gap-1 text-gray-600 text-sm">
                                     <MessageCircle className="w-4 h-4" />
                                     {forum.commentCount}
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </Link>

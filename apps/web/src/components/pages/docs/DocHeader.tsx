@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { ChevronDown, Check } from 'lucide-react';
-import { Grade } from '@core-types/docs/curriculum';
+import { Grade } from '@core-types/api-types/curriculum';
 import { ICON_MAP } from '@/utils/icon';
 import { feedCurriculumsService } from '@/services';
 import DocHeaderSkeleton from './DocHeaderSkeleton';
@@ -42,8 +42,8 @@ export default function DocHeader({
             const fetchCurriculum = async () => {
                 try {
                     const curriculumData = await feedCurriculumsService.getCurriculum();
-                    setCurriculum(curriculumData);
-                    localStorage.setItem('curriculum', JSON.stringify(curriculumData));
+                    setCurriculum(curriculumData.data);
+                    localStorage.setItem('curriculum', JSON.stringify(curriculumData.data));
                 } catch (error) {
                     console.error('Error fetching curriculum:', error);
                 }

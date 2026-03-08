@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { Calculator } from "lucide-react";
-import { Subject, SubjectKey } from "@/types/extra/calculation";
+import { Subject, SubjectKey } from "@core-types/extra/calculation";
 import SubjectCard from "@/components/pages/extras/calculate/SubjectCard";
-import { ScienceSubjects, SocialScienceSubjects, getSubjectScienceGrade, getSubjectSocialScienceGrade } from "@/types/extra/calculation";
+import { ScienceSubjects, SocialScienceSubjects, getSubjectScienceGrade, getSubjectSocialScienceGrade } from "@core-types/extra/calculation";
 import ResultCard from "@/components/pages/extras/calculate/ResultCard";
-import { Scores } from "@/types/extra/calculation";
-import { calculateTotalGrade } from "@/types/extra/calculation";
+import { Scores } from "@core-types/extra/calculation";
+import { calculateTotalGrade } from "@core-types/extra/calculation";
 
 
 export default function CalculatePage() {

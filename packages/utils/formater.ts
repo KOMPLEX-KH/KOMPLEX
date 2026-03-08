@@ -52,6 +52,22 @@ export const formatToKhmerDate = (dateString: string): string => {
   return `ថ្ងៃទី ${khmerDay} ខែ${khmerMonth} ឆ្នាំ ${khmerYear}`;
 };
 
+export const formatToKhmerMonthYear = (dateString: string): string => {
+  const date = new Date(dateString);
+  const month = date.toLocaleString("en-US", { month: "long" });
+  const year = date.getFullYear();
+
+  const khmerYear = year
+    .toString()
+    .split("")
+    .map((d) => khmerNumbers[d as keyof typeof khmerNumbers])
+    .join("");
+
+  const khmerMonth = months[month as keyof typeof months];
+
+  return `ខែ​${khmerMonth} ${khmerYear}`;
+};
+
 export const getTimeAgo = (dateString: string): string => {
   const date = new Date(dateString);
   const now = new Date();

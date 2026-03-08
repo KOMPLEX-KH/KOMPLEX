@@ -4,7 +4,7 @@ import { Video as ExpoVideo, ResizeMode } from 'expo-av';
 import { Eye, Save } from 'lucide-react-native';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
-import type { VideoPost } from '@/types/content/videos';
+import type { VideoPost } from '@core-types/api-types/videos';
 import { meVideoService, feedVideoService } from '@/services/index';
 
 interface EditVideoProps {
@@ -15,12 +15,12 @@ interface EditVideoProps {
 
 export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
   const [title, setTitle] = useState(video.title);
-  const [description, setDescription] = useState(video.description);
+  const [description, setDescription] = useState(video.description ?? '');
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     setTitle(video.title);
-    setDescription(video.description);
+    setDescription(video.description ?? '');
     setIsSaving(false);
   }, [video]);
 
@@ -45,7 +45,7 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
       });
 
       const updated = await feedVideoService.getVideoById(video.id.toString());
-      onSave(updated);
+      onSave(updated.data);
     } catch (error) {
       console.error('Error updating video:', error);
       Alert.alert('បរាជ័យ', 'មានបញ្ហាកើតឡើងពេលរក្សាទុកវីដេអូ សូមព្យាយាមម្ដងទៀត');

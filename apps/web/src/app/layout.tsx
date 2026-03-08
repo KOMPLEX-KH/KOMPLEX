@@ -44,7 +44,9 @@ export default function RootLayout({
       try {
         const curriculumData = await feedCurriculumsService.getCurriculum();
 
-        localStorage.setItem('curriculum', JSON.stringify(curriculumData));
+        if (curriculumData.data) {
+          localStorage.setItem('curriculum', JSON.stringify(curriculumData.data));
+        }
       } catch (error) {
         console.error('Error fetching curriculum:', error);
       }

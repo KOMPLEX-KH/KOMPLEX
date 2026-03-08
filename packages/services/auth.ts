@@ -1,70 +1,136 @@
 import type { AxiosInstance } from "axios";
-import type { User, SignupData, SocialLoginData } from "../types/auth";
+import type {
+  User,
+  SignupData,
+  SocialLoginData,
+  signupOtpResponse,
+  VerifySignupOtpResponse,
+  ForgetPasswordOtpResponse,
+  VerifyForgetPasswordOtpResponse,
+  ResetPasswordResponse,
+  UpdateProfileDataRequest,
+} from "../types/api-types/auth";
+import { ApiWrapper } from "@core-types/api-types/apiWrapper";
+import { Profile } from "@core-types/api-types/profile";
 
 export const createAuthService = (api: AxiosInstance) => {
   return {
     // AUTH OPERATIONS
 
-    // Register new user
-    signup: async (signupData: SignupData): Promise<User> => {
+    // send otp for signup
+    sendSignupOtp: async (email: string): Promise<ApiWrapper<signupOtpResponse>> => {
       try {
-        const response = await api.post<User>(`/auth/signup`, signupData);
+        const response = await api.post(`/auth/send-signup-otp`, { email });
         return response.data;
       } catch (error) {
-        console.error("Error during signup:", error);
-        throw new Error("Failed to create account");
+        throw error;
+      }
+    },
+
+    // verify otp
+    verifySignupOtp: async (verifyData: { email: string; otp: string }): Promise<ApiWrapper<VerifySignupOtpResponse>> => {
+      try {
+        const response = await api.post(`/auth/verify-signup-otp`, verifyData);
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    // do sign up after otp verification
+    signup: async (
+      signupData: SignupData & { verificationToken: string }
+    ): Promise<ApiWrapper<User>> => {
+      try {
+        const response = await api.post<ApiWrapper<User>>(`/auth/signup`, signupData);
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    sendForgetPasswordOtp: async (email: string): Promise<ApiWrapper<ForgetPasswordOtpResponse>> => {
+      try {
+        const response = await api.post(`/auth/send-forget-password-otp`, { email });
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    verifyForgetPasswordOtp: async (
+      verifyData: { email: string; otp: string }
+    ): Promise<ApiWrapper<VerifyForgetPasswordOtpResponse>> => {
+      try {
+        const response = await api.post(`/auth/verify-forget-password-otp`, verifyData);
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    resetPassword: async (
+      resetData: { email: string; resetToken: string; newPassword: string }
+    ): Promise<ApiWrapper<ResetPasswordResponse>> => {
+      try {
+        const response = await api.post(`/auth/reset-password`, resetData);
+        return response.data;
+      } catch (error) {
+        throw error;
       }
     },
 
     // Social login
-    socialLogin: async (socialData: SocialLoginData): Promise<User> => {
+    socialLogin: async (
+      socialData: SocialLoginData
+    ): Promise<ApiWrapper<User>> => {
       try {
-        const response = await api.post<User>(`/auth/social-login`, socialData);
+        const response = await api.post<ApiWrapper<User>>(`/auth/social-login`, socialData);
         return response.data;
       } catch (error) {
-        console.error("Error during social login:", error);
-        throw new Error("Failed to login with social provider");
+        throw error;
       }
     },
 
     // USER MANAGEMENT
 
-    // Update user profile
-    updateProfile: async (
-      userId: number,
-      profileData: Partial<User>
-    ): Promise<User> => {
+    // // Update user profile
+    updateProfileImage: async (
+      data: UpdateProfileDataRequest
+    ): Promise<ApiWrapper<UpdateProfileDataRequest & { profileImageKey: string }>> => {
       try {
-        const response = await api.put<User>(`/profile/${userId}`, profileData);
+        const response = await api.put<ApiWrapper<UpdateProfileDataRequest & { profileImageKey: string }>>(
+          `/me/profile`,
+          data
+        );
         return response.data;
       } catch (error) {
-        console.error("Error updating profile:", error);
-        throw new Error("Failed to update profile");
+        throw error;
       }
     },
 
     // Get current user profile
-    getCurrentUser: async (): Promise<User> => {
+    getCurrentUser: async (): Promise<ApiWrapper<User>> => {
       try {
-        const response = await api.get<User>(`/me`);
+        const response = await api.get<ApiWrapper<User>>(`/me`);
         return response.data;
       } catch (error) {
-        console.error("Error fetching current user:", error);
-        throw new Error("Failed to fetch user profile");
+        throw error;
       }
     },
 
-    getCurrentUserProfile: async (): Promise<User> => {
+    getCurrentUserProfile: async (): Promise<ApiWrapper<Profile>> => {
       try {
-        const response = await api.get<User>(`/me/profile`);
+        const response = await api.get<ApiWrapper<Profile>>(`/me/profile`);
         return response.data;
       } catch (error) {
-        console.error("Error fetching current user profile:", error);
-        throw new Error("Failed to fetch user profile");
+        throw error;
       }
     },
   };
 };
+
+// Removed standalone functions - use the service methods instead
 
 // ! FOR FUTURE
 

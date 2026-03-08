@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Save, X, Eye } from 'lucide-react';
-import { ForumPost } from '@/types/content/forums';
-import { Media } from '@/types/content/media';
+import { ForumPost } from '@core-types/api-types/forums';
+import { Media } from '@core-types/api-types/media';
 import { meForumService, feedForumService } from '@/services/index';
 import { useRouter } from 'next/navigation';
 import BlogEditor from '@/components/common/Editor';
@@ -36,8 +36,8 @@ export default function EditForum({ forum, onCancel }: EditForumProps) {
         setRemovedImages([]);
 
         if (forum.media && forum.media.length > 0) {
-            setExistingImages(forum.media);
-            const urls = forum.media.map((media: Media) => media.url);
+            setExistingImages(forum.media.map(media => media as Media) || []);
+            const urls = forum.media.map(media => media.url) || [];
             setImagePreviews(urls);
             setPreviewSources(new Array(urls.length).fill('existing'));
         } else {
@@ -127,11 +127,11 @@ export default function EditForum({ forum, onCancel }: EditForumProps) {
             router.push(`/me/forums/${forum.id}`);
 
             // Update the forum state with the new data
-            setTitle(updatedForum.title);
-            setDescription(updatedForum.description);
-            setExistingImages(updatedForum.media || []);
-            setImagePreviews(updatedForum.media?.map(media => media.url) || []);
-            setPreviewSources(updatedForum.media?.map(() => 'existing') || []);
+            setTitle(updatedForum.data.title);
+            setDescription(updatedForum.data.description);
+            setExistingImages(updatedForum.data.media.map(media => media as Media) || []);
+            setImagePreviews(updatedForum.data.media.map(media => media.url) || []);
+            setPreviewSources(updatedForum.data.media.map(() => 'existing') || []);
 
             // Reset edit form states
             setSelectedImages([]);
@@ -151,8 +151,8 @@ export default function EditForum({ forum, onCancel }: EditForumProps) {
         setRemovedImages([]);
 
         if (forum.media && forum.media.length > 0) {
-            setExistingImages(forum.media);
-            setImagePreviews(forum.media.map(media => media.url));
+            setExistingImages(forum.media.map(media => media as Media) || []);
+            setImagePreviews(forum.media.map(media => media.url) || []);
             setPreviewSources(new Array(forum.media.length).fill('existing'));
         } else {
             setExistingImages([]);

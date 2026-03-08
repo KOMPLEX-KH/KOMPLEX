@@ -3,7 +3,7 @@
 import React from 'react';
 import { User, Eye } from 'lucide-react';
 import Link from 'next/link';
-import { VideoPost } from '@/types/content/videos';
+import { VideoPost } from '@core-types/api-types/videos';
 
 interface VideoCardProps {
     video: VideoPost;
@@ -52,12 +52,12 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
                 >
                     <div className="relative w-32 h-36 flex-1 overflow-hidden">
                         <video
-                            poster={video.thumbnailUrl}
+                            poster={video.thumbnailUrl ?? ''}
                             className="w-full h-full object-cover rounded-3xl"
                             muted
                             preload="metadata"
                         >
-                            <source src={video.videoUrl} type="video/mp4" />
+                            <source src={video.videoUrl ?? ''} type="video/mp4" />
                         </video>
                         {/* <div className="absolute bottom-1 right-1 bg-black/50 text-white text-xs px-1 py-0.5 rounded-3xl">
                             {formatDuration(video.duration)}

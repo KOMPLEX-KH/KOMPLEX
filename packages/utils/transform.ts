@@ -7,7 +7,7 @@ import {
   ExerciseWithQuestions,
   ExerciseSection,
   Question,
-} from "../types/content/exercises";
+} from "../types/api-types/exercises";
 
 // SUBJECT UTILITIES ==========================================================
 

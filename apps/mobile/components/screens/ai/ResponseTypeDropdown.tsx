@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { View } from "react-native";
-import { AIResponseType } from "@core-types/content/ai";
+import { AIResponseType } from "@core-types/api-types/ai";
 import { tw } from "@/utils/styles";
 import Dropdown2 from "@/components/common/DropDown2";
 

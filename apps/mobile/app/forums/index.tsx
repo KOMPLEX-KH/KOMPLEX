@@ -5,7 +5,7 @@ import { tw } from "@/utils/styles";
 import ForumCard from "@/components/screens/forums/ForumCard";
 import ForumSkeleton from "@/components/screens/forums/ForumSkeleton";
 import ContentError from "@/components/common/ContentError";
-import { ForumPost } from "@/types/content/forums";
+import { ForumPost } from "@core-types/api-types/forums";
 import { feedForumService, feedSearchForumService, meForumService } from "@/services/index";
 import { useNavigation, useRouter } from "expo-router";
 import { HEADER_CONFIG } from "@/constants/header-config";
@@ -34,9 +34,9 @@ export default function ForumsScreen() {
         try {
             setLoading(true);
             setError(null);
-            const { forums } = await feedForumService.getAllForums();
-            if (forums.length > 0) {
-                setForumPosts(forums);
+            const { data } = await feedForumService.getAllForums();
+            if (data.length > 0) {
+                setForumPosts(data);
             } else {
                 setError("រកមិនឃើញអត្ថបទ");
             }

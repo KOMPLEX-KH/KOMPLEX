@@ -15,7 +15,7 @@ import {
     History,
 } from 'lucide-react';
 import { meVideoService } from '@/services/index';
-import { VideoPost } from '@/types/content/videos';
+import { VideoPost } from '@core-types/api-types/videos';
 import ContentError from '@/components/common/ContentError';
 import MeSkeleton from '@/components/pages/me/MeSkeleton';
 import VideoHistoryComponent from '@/components/pages/me/videos/VideoHistory';
@@ -53,7 +53,7 @@ function MyVideosContent() {
                     setIsLoading(true);
                     setError(null);
                     const userVideos = await meVideoService.getUserVideos();
-                    setVideos(userVideos.map((v) => {
+                    setVideos(userVideos.data.map((v) => {
                         return {
                             id: v.id,
                             userId: v.userId,
@@ -63,20 +63,19 @@ function MyVideosContent() {
                             duration: Number(v.duration),
                             videoUrl: v.videoUrl,
                             thumbnailUrl: v.thumbnailUrl,
-                            videoUrlForDeletion: v.videoUrlForDeletion,
-                            thumbnailUrlForDeletion: v.thumbnailUrlForDeletion,
+                            videoUrlForDeletion: v.videoUrl,
+                            thumbnailUrlForDeletion: v.thumbnailUrl,
                             viewCount: Number(v.viewCount),
                             createdAt: v.createdAt,
                             updatedAt: v.updatedAt,
                             username: v.username,
-                            isSave: v.isSave,
+                            isSaved: v.isSaved,
                             isLiked: v.isLiked,
                             likeCount: Number(v.likeCount),
                             saveCount: Number(v.saveCount),
-                            exercises: v.exercises,
                             isFollowing: v.isFollowing,
                         }
-                    }));
+                    }))
                 } catch (error) {
                     console.error('Error fetching videos:', error);
                     setError('មានបញ្ហាកើតឡើងពេលទាញយកទិន្នន័យ។ សូមព្យាយាមម្តងទៀត។');

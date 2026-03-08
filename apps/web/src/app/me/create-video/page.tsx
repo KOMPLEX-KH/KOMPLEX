@@ -6,20 +6,28 @@ import {
     ArrowLeft,
     Save
 } from 'lucide-react';
-import { ExerciseCreationBox } from '@/components/pages/docs/boxes/ExerciseCreationBox';
+// import { ExerciseCreationBox } from '@/components/pages/docs/boxes/ExerciseCreationBox';
 import VideoUpload from '@/components/pages/me/create-video/VideoUpload';
 import Description from '@/components/pages/me/create-video/Description';
-import { ExerciseQuestion } from '@core-types/docs/topic';
+// import { ExerciseQuestion } from '@core-types/docs/topic';
 import Link from 'next/link';
 import { uploadService, meVideoService } from '@/services/index';
 import { useAuth } from '@hooks/useAuth';
 import { BackButton } from '@/components/common/BackButton';
 
+// Commented out exercises related fields
+// interface VideoFormData {
+//     title: string;
+//     description: string;
+//     thumbnail: string;
+//     exercises: ExerciseQuestion[];
+// }
+
 interface VideoFormData {
     title: string;
     description: string;
     thumbnail: string;
-    exercises: ExerciseQuestion[];
+    // exercises: ExerciseQuestion[];
 }
 
 export default function CreateVideoPage() {
@@ -42,11 +50,18 @@ export default function CreateVideoPage() {
         }
     }, []);
 
+    // const [formData, setFormData] = useState<VideoFormData>({
+    //     title: '',
+    //     description: '',
+    //     thumbnail: '',
+    //     exercises: []
+    // });
+
     const [formData, setFormData] = useState<VideoFormData>({
         title: '',
         description: '',
         thumbnail: '',
-        exercises: []
+        // exercises: []
     });
 
     const handleVideoSelect = (file: File) => {
@@ -100,21 +115,21 @@ export default function CreateVideoPage() {
     };
 
     // Handle form changes
-    const handleInputChange = (field: keyof VideoFormData, value: string | ExerciseQuestion[]) => {
+    const handleInputChange = (field: keyof VideoFormData, value: string /* | ExerciseQuestion[] */) => {
         setFormData(prev => ({ ...prev, [field]: value }));
         // Clear error when user makes changes
         if (error) setError('');
     };
 
     // Handle MCQ exercises
-    const handleExercisesChange = (newExercises: ExerciseQuestion[]) => {
-        setFormData(prev => ({
-            ...prev,
-            exercises: newExercises
-        }));
-        // Clear error when user makes changes
-        if (error) setError('');
-    };
+    // const handleExercisesChange = (newExercises: ExerciseQuestion[]) => {
+    //     setFormData(prev => ({
+    //         ...prev,
+    //         exercises: newExercises
+    //     }));
+    //     // Clear error when user makes changes
+    //     if (error) setError('');
+    // };
 
     // Convert base64 thumbnail to blob for upload
     const base64ToBlob = (base64: string): Blob => {
@@ -131,21 +146,21 @@ export default function CreateVideoPage() {
     };
 
     // Convert ExerciseQuestion to the backend format
-    const convertExercisesToBackendFormat = (exercises: ExerciseQuestion[]): {
-        title: string;
-        choices: {
-            text: string;
-            isCorrect: boolean;
-        }[];
-    }[] => {
-        return exercises.map(exercise => ({
-            title: exercise.question as string,
-            choices: exercise.options.map((option, index) => ({
-                text: option as string,
-                isCorrect: index === exercise.correctAnswer
-            }))
-        }));
-    };
+    // const convertExercisesToBackendFormat = (exercises: ExerciseQuestion[]): {
+    //     title: string;
+    //     choices: {
+    //         text: string;
+    //         isCorrect: boolean;
+    //     }[];
+    // }[] => {
+    //     return exercises.map(exercise => ({
+    //         title: exercise.question as string,
+    //         choices: exercise.options.map((option, index) => ({
+    //             text: option as string,
+    //             isCorrect: index === exercise.correctAnswer
+    //         }))
+    //     }));
+    // };
 
     // Handle upload process
     const handleUpload = async () => {
@@ -180,7 +195,7 @@ export default function CreateVideoPage() {
                 description: formData.description,
                 thumbnailKey, // The service expects thumbnailUrl but we're passing the key
                 duration: videoDuration,
-                questions: formData.exercises.length > 0 ? convertExercisesToBackendFormat(formData.exercises) : undefined
+                questions: undefined
             });
 
             setUploadProgress(90);
@@ -205,19 +220,19 @@ export default function CreateVideoPage() {
         return videoFile &&
             formData.title.trim() &&
             formData.description.trim() &&
-            !error && // Don't allow submission if there's an error
-            (
-                formData.exercises.every(ex => {
-                    const questionText = typeof ex.question === 'string' ? ex.question : '';
-                    const optionsText = ex.options.map(opt => typeof opt === 'string' ? opt : '');
-                    const correctAnswer = typeof ex.correctAnswer === 'number' ? ex.correctAnswer : 0;
+            !error;
+        // && (
+        //     formData.exercises.every(ex => {
+        //         const questionText = typeof ex.question === 'string' ? ex.question : '';
+        //         const optionsText = ex.options.map(opt => typeof opt === 'string' ? opt : '');
+        //         const correctAnswer = typeof ex.correctAnswer === 'number' ? ex.correctAnswer : 0;
 
-                    return questionText.trim() !== '' &&
-                        optionsText.every(opt => opt.trim() !== '') &&
-                        correctAnswer >= 0 &&
-                        correctAnswer < ex.options.length;
-                })
-            );
+        //         return questionText.trim() !== '' &&
+        //             optionsText.every(opt => opt.trim() !== '') &&
+        //             correctAnswer >= 0 &&
+        //             correctAnswer < ex.options.length;
+        //     })
+        // );
     };
 
     // Show loading while checking auth
@@ -270,10 +285,10 @@ export default function CreateVideoPage() {
                 </div>
 
                 {/* MCQ Exercises - Using ExerciseCreationBox */}
-                <ExerciseCreationBox
+                {/* <ExerciseCreationBox
                     questions={formData.exercises}
                     onQuestionsChange={handleExercisesChange}
-                />
+                /> */}
 
                 {/* Error Message */}
                 {error && (
@@ -351,7 +366,8 @@ export default function CreateVideoPage() {
                                     {uploadProgress < 70 ? 'កំពុងផ្ទុកវីដេអូ...' :
                                         uploadProgress < 90 ? 'កំពុងផ្ទុករូបភាព...' :
                                             uploadProgress < 95 ? 'កំពុងបង្កើតវីដេអូ...' :
-                                                'កំពុងបន្ថែមលំហាត់...'}
+                                                /* 'កំពុងបន្ថែមលំហាត់...' */ 'កំពុងបន្ថែមវីដេអូ...'
+                                    }
                                 </span>
                                 <span className="text-sm text-indigo-600 font-semibold">{uploadProgress}%</span>
                             </div>

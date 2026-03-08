@@ -38,10 +38,10 @@ export default function LessonsScreen() {
 
             // Get last accessed topic
             const response = await meLastAccessedService.getLastAccessed()
-            const lastAccessed = response.lastAccessed
+            const lastAccessed = response.data.lastTopic
 
             // If no last topic, navigate to default
-            if (!lastAccessed.lastTopic) {
+            if (!lastAccessed) {
                 router.replace("/docs/1/1/1/1" as any)
                 return
             }
@@ -55,7 +55,7 @@ export default function LessonsScreen() {
             }
 
             const curriculumData = JSON.parse(stored)
-            const topicId = lastAccessed.lastTopic.id
+            const topicId = lastAccessed.id
 
             // Search through all grades, subjects, lessons to find the topic
             let foundGrade: any = null

@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import { Text } from '@/components/common/Text'
 import { Send, ThumbsUp } from "lucide-react-native";
-import { ForumReply } from "@/types/content/forums";
-import { VideoReply } from "@/types/content/videos";
+import { ForumReply } from "@core-types/api-types/forums";
+import { VideoReply } from "@core-types/api-types/videos";
 import { getTimeAgo } from "@core-utils/formater";
 import {
     meForumReplyService,

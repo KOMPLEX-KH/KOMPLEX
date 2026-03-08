@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { ThumbsUp, Share, Bookmark, Check, LinkIcon, UserPlus, UserCheck } from 'lucide-react';
 import { Menu, Transition } from '@headlessui/react';
-import { VideoPost } from '@/types/content/videos';
+import type { VideoPost } from '@core-types/api-types/videos';
 import Link from 'next/link';
 import { meFollowService } from '@/services/index';
 import { useAuth } from '@hooks/useAuth';
@@ -12,10 +12,10 @@ import MarkDownRenderer from '@/components/helper/MarkDownRenderer';
 interface VideoDescriptionProps {
     video: VideoPost;
     onLike: (videoId: number, isLiked: boolean, video: VideoPost) => void;
-    onBookmark: (videoId: number, isSaved: boolean, video: VideoPost) => void;
+    // onBookmark: (videoId: number, isSaved: boolean, video: VideoPost) => void;
 }
 
-export default function VideoDescription({ video, onLike, onBookmark }: VideoDescriptionProps) {
+export default function VideoDescription({ video, onLike }: VideoDescriptionProps) {
     const [showFullDescription, setShowFullDescription] = useState(false);
     const [copied, setCopied] = useState(false);
     const [isFollowing, setIsFollowing] = useState(video.isFollowing);
@@ -168,16 +168,16 @@ export default function VideoDescription({ video, onLike, onBookmark }: VideoDes
 
 
 
-                    <button
-                        onClick={() => onBookmark(video.id, video.isSave, video)}
-                        className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full transition-colors ${video.isSave
+                    {/* <button
+                        onClick={() => onBookmark(video.id, video.isSaved, video)}
+                        className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full transition-colors ${video.isSaved
                             ? 'text-indigo-600 '
                             : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50'
                             }`}
                     >
-                        <Bookmark size={18} className={`${video.isSave ? 'fill-indigo-600' : ''}`} />
+                        <Bookmark size={18} className={`${video.isSaved ? 'fill-indigo-600' : ''}`} />
                         <span className="text-xs sm:text-sm font-medium">រក្សាទុក</span>
-                    </button>
+                    </button> */}
                     <Menu as="div" className="relative">
                         <Menu.Button className="flex items-center gap-2 px-3 sm:px-4 py-2 text-gray-700 rounded-full hover:text-indigo-600 hover:bg-gray-50 transition-colors focus:outline-none">
                             <Share size={18} />

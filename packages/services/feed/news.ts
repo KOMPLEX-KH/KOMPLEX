@@ -1,19 +1,14 @@
 import type { AxiosInstance } from "axios";
-import type { News } from "../../types/content/news";
+import type { News } from "../../types/api-types/news";
+import { ApiWrapper } from "@core-types/api-types/apiWrapper";
 
 export const createFeedNewsService = (api: AxiosInstance) => {
   return {
     // Get all blog posts
-    getAllNews: async (): Promise<{
-      news: News[];
-      hasMore: boolean;
-    }> => {
+    getAllNews: async (): Promise<ApiWrapper<News[]>> => {
       try {
         const response = await api.get(`/feed/news`);
-        return {
-          news: response.data.data,
-          hasMore: response.data.hasMore,
-        };
+        return response.data as ApiWrapper<News[]>;
       } catch (error) {
         console.error("Error fetching all blogs:", error);
         throw new Error("Failed to fetch blog posts");
@@ -21,10 +16,10 @@ export const createFeedNewsService = (api: AxiosInstance) => {
     },
 
     // Get a single blog post by ID
-    getNewsById: async (id: string): Promise<News & { isSaved: boolean }> => {
+    getNewsById: async (id: string): Promise<ApiWrapper<News>> => {
       try {
         const response = await api.get(`/feed/news/${id}`);
-        return response.data.data;
+        return response.data as ApiWrapper<News>;
       } catch (error) {
         console.error("Error fetching blog post:", error);
         throw new Error("Failed to fetch blog post");

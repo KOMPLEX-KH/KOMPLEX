@@ -6,7 +6,7 @@ import {
     ActivityIndicator,
     ScrollView,
 } from "react-native";
-import {Text} from '@/components/common/Text'
+import { Text } from '@/components/common/Text'
 import { AlertCircle } from "lucide-react-native";
 import CommentComponent from "./Comment";
 import ContentError from "@/components/common/ContentError";
@@ -16,8 +16,8 @@ import {
     meVideoCommentService,
     feedForumCommentService,
 } from "@/services/index";
-import { ForumComment } from "@/types/content/forums";
-import { VideoComment } from "@/types/content/videos";
+import { ForumComment } from "@core-types/api-types/forums";
+import { VideoComment } from "@core-types/api-types/videos";
 import { useAuth } from "@/hooks/useAuth";
 import { tw } from "@/utils/styles";
 import { useRouter } from "expo-router";
@@ -67,13 +67,15 @@ export default function Comments({
 
                 let fetchedComments: ForumComment[] | VideoComment[];
                 if (type === "video") {
-                    fetchedComments = await feedVideoCommentService.getVideoComments(
+                    const response = await feedVideoCommentService.getVideoComments(
                         parentId.toString()
                     );
+                    fetchedComments = response.data;
                 } else {
-                    fetchedComments = await feedForumCommentService.getForumComments(
+                    const response = await feedForumCommentService.getForumComments(
                         parentId.toString()
                     );
+                    fetchedComments = response.data;
                 }
 
                 setComments(fetchedComments);

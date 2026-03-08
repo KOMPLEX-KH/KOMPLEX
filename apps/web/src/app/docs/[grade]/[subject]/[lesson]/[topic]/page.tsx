@@ -5,7 +5,7 @@ import Sidebar from "@/components/pages/docs/Sidebar";
 import TopicWrapper from "@/components/pages/docs/TopicWrapper";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Grade } from "@/types/docs/curriculum";
+import { Grade } from "@core-types/api-types/curriculum";
 import { deserializeTopicContentV3 } from "@/components/pages/docs/utils/ContentSerializerV2";
 import ContentRendererV3 from "@/components/pages/docs/utils/ContentRendererV2";
 import ComingSoon from "@/components/pages/docs/ComingSoon";
@@ -66,8 +66,8 @@ export default function Page() {
             const fetchCurriculum = async () => {
                 try {
                     const curriculumData = await feedCurriculumsService.getCurriculum();
-                    setCurriculum(curriculumData);
-                    localStorage.setItem('curriculum', JSON.stringify(curriculumData));
+                    setCurriculum(curriculumData.data);
+                    localStorage.setItem('curriculum', JSON.stringify(curriculumData.data));
                 } catch (error) {
                     console.error('Error fetching curriculum:', error);
                 }
@@ -83,7 +83,7 @@ export default function Page() {
             try {
                 setIsLoadingTopic(true);
                 const topicData = await feedCurriculumsService.getTopicComponent(params.topic);
-                setTopicComponent(topicData ? JSON.stringify(topicData.component) : null);
+                setTopicComponent(topicData.data ? JSON.stringify(topicData.data?.component) : null);
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
                 // If we get an error, handle 404 or others properly for redirect
@@ -162,7 +162,7 @@ export default function Page() {
     }
 
     // Show not found if no topic component
-    if (!topicComponent || JSON.parse(topicComponent).length === 0) {
+    if (!topicComponent || JSON.parse(topicComponent)?.length === 0) {
         console.log("No topic component");
         return (
             <div className="flex bg-gray-50 min-h-screen">

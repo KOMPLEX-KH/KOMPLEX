@@ -158,6 +158,7 @@ export default function AuthPage() {
                 dateOfBirth: signupData.dateOfBirth,
                 phone: signupData.phone,
                 profileImageKey: imageKey,
+                verificationToken: '',
             });
 
             await AsyncStorage.setItem("user", JSON.stringify(userData));
@@ -180,7 +181,7 @@ export default function AuthPage() {
 
             // Get upload URL from backend
             const uploadUrlResponse = await uploadService.getUploadUrl(image.name, image.type);
-            const { signedUrl, key } = uploadUrlResponse;
+            const { signedUrl, key } = uploadUrlResponse.data;
 
             // Read file from URI and upload
             if (Platform.OS === 'web') {

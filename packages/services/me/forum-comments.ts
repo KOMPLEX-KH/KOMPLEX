@@ -1,5 +1,4 @@
 import type { AxiosInstance } from "axios";
-import type { ForumComment } from "../../types/content/forums";
 
 export const createMeForumCommentService = (api: AxiosInstance) => {
   return {
@@ -7,7 +6,7 @@ export const createMeForumCommentService = (api: AxiosInstance) => {
     createForumComment: async (
       forumId: number,
       description: string
-    ): Promise<ForumComment> => {
+    ) => {
       try {
         const response = await api.post(`/me/forum-comments/${forumId}`, {
           description,
@@ -23,10 +22,11 @@ export const createMeForumCommentService = (api: AxiosInstance) => {
     toggleForumCommentLike: async (
       commentId: number,
       isLiked: boolean
-    ): Promise<void> => {
+    ) => {
       try {
         const endpoint = isLiked ? "unlike" : "like";
-        await api.patch(`/me/forum-comments/${commentId}/${endpoint}`);
+        const response = await api.patch(`/me/forum-comments/${commentId}/${endpoint}`);
+        return response.data;
       } catch (error) {
         console.error("Error toggling forum comment like:", error);
         throw new Error("Failed to update forum comment like status");
@@ -37,12 +37,12 @@ export const createMeForumCommentService = (api: AxiosInstance) => {
     editForumComment: async (
       commentId: number,
       description: string
-    ): Promise<ForumComment> => {
+    ) => {
       try {
         const response = await api.put(`/me/forum-comments/${commentId}`, {
           description,
         });
-        return response.data.data;
+        return response.data;
       } catch (error) {
         console.error("Error editing forum comment:", error);
         throw new Error("Failed to edit forum comment");
@@ -50,9 +50,10 @@ export const createMeForumCommentService = (api: AxiosInstance) => {
     },
 
     // delete forum comment
-    deleteForumComment: async (commentId: number): Promise<void> => {
+    deleteForumComment: async (commentId: number) => {
       try {
-        await api.delete(`/me/forum-comments/${commentId}`);
+        const response = await api.delete(`/me/forum-comments/${commentId}`);
+        return response.data;
       } catch (error) {
         console.error("Error deleting forum comment:", error);
         throw new Error("Failed to delete forum comment");

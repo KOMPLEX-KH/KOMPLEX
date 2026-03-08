@@ -14,8 +14,8 @@ import {
     UserPlus,
     UserCheck,
 } from "lucide-react-native";
-import { ForumPost } from "@/types/content/forums";
-import { Media } from "@/types/content/media";
+import { ForumPost } from "@core-types/api-types/forums";
+import { Media } from "@core-types/api-types/media";
 // import MarkDownRenderer from "@/components/helper/MarkDownRenderer";
 import { tw } from "@/utils/styles";
 import { useRouter, Href } from "expo-router";

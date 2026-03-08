@@ -9,7 +9,7 @@ import PromptTextarea from '../../components/pages/ai/PromptTextarea';
 import ResponseTypeDropdown, {
     ResponseTypeOption,
 } from '../../components/pages/ai/ResponseTypeDropdown';
-import { AIResponseType } from '@/types/content/ai';
+import type { AIResponseType } from '@core-types/api-types/ai';
 
 const responseTypeOptions: readonly ResponseTypeOption[] = [
     { id: 'komplex', name: 'KOMPLEX', description: 'បង្ហាញជាប្រអប់ KOMPLEX' },
@@ -73,14 +73,12 @@ function AIWelcomePageInner() {
 
                 // Backend now returns the new tab metadata without calling AI:
                 // response.data: { id, name, prompt, responseType, ... }
-                const base = (response as {
-                    data?: { id?: number; name?: string; prompt?: string; responseType?: string };
-                }) || {};
-                const payload = (base.data ?? base) as {
+                const base = response.data || {};
+                const payload = (base ?? {}) as {
                     id?: number;
-                    name?: string;
-                    prompt?: string;
-                    responseType?: string;
+                    name: string;
+                    prompt: string;
+                    responseType: string;
                 };
 
                 const tabId: number | undefined = payload.id;
@@ -211,4 +209,4 @@ export default function AIWelcomePage() {
             <AIWelcomePageInner />
         </Suspense>
     );
-}
+}   
