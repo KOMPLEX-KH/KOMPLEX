@@ -10,6 +10,7 @@ import type {
   ResetPasswordResponse,
   UpdateProfileDataRequest,
 } from "../types/api-types/auth";
+import { User as CurrentUser } from "../types/api-types/user-content/user";
 import { ApiWrapper } from "@core-types/api-types/apiWrapper";
 import { Profile } from "@core-types/api-types/profile";
 
@@ -28,7 +29,7 @@ export const createAuthService = (api: AxiosInstance) => {
     },
 
     // verify otp
-    verifySignupOtp: async (verifyData: { email: string; otp: string }): Promise<ApiWrapper<VerifySignupOtpResponse>> => {
+    verifySignupOtp: async (verifyData: { email: string; otp: string }): Promise<VerifySignupOtpResponse> => {
       try {
         const response = await api.post(`/auth/verify-signup-otp`, verifyData);
         return response.data;
@@ -110,9 +111,9 @@ export const createAuthService = (api: AxiosInstance) => {
     },
 
     // Get current user profile
-    getCurrentUser: async (): Promise<ApiWrapper<User>> => {
+    getCurrentUser: async (): Promise<ApiWrapper<CurrentUser>> => {
       try {
-        const response = await api.get<ApiWrapper<User>>(`/me`);
+        const response = await api.get<ApiWrapper<CurrentUser>>(`/me`);
         return response.data;
       } catch (error) {
         throw error;

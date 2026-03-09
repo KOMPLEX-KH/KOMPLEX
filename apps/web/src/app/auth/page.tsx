@@ -139,7 +139,7 @@ export default function AuthPage() {
                 dateOfBirth: signupData.dateOfBirth || '',
                 phone: signupData.phone || '',
                 profileImageKey: imageKey,
-                verificationToken: otpResult.data.verificationToken,
+                verificationToken: otpResult.verificationToken,
             };
 
             const userData = await authService.signup(finalPayload);
@@ -150,7 +150,7 @@ export default function AuthPage() {
             console.error('OTP verification error:', error);
             const status = (error as any)?.response?.status;
             if (status === 429) {
-                setFormError('អ្នកបានព្យាយាមច្រើនព័កបន្តាច់។ សូមស័កព្វាកៅពេលប្រហែល ១៥ នាតីមុនព្យាយាមម្តងទៀត។');
+                setFormError('អ្នកព្យាយាមផ្ទៀងផ្ទាត់ OTP លេីសកំណត់។ សូមព្យាយាមម្តងទៀតម្តងទៀតក្រោយ១៥ នា។');
             } else {
                 setFormError('ការផ្ទៀងផ្ទាត់ OTP បានបរាជ័យ។ សូមព្យាយាមម្តងទៀត។');
             }
