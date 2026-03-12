@@ -33,7 +33,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black text-gray-900 dark:text-white overflow-hidden scroll-smooth">
+    <div className="min-h-screen bg-bg text-foreground overflow-hidden scroll-smooth">
       <Header />
       <Hero />
       <Features />

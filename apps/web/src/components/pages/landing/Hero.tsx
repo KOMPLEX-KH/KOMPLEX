@@ -7,7 +7,7 @@ import { Logo } from "@/components/common/Logo";
 
 export default function Hero() {
     return (
-        <section className="mt-13 pt-40 pb-40 px-5 bg-indigo-600 text-white text-center relative">
+        <section className="mt-13 pt-40 pb-40 px-5 bg-primary text-white text-center relative">
 
             {/* 3D Image Placeholders */}
             <div className="absolute inset-0 overflow-hidden">
@@ -108,7 +108,7 @@ export default function Hero() {
                 >
                     <Link
                         href="/docs"
-                        className="bg-white text-indigo-600 px-8 py-4 rounded-full no-underline font-semibold text-base transition-all duration-300 hover:bg-gray-100 flex items-center gap-2"
+                        className="bg-surface-1 text-primary px-8 py-4 rounded-full no-underline font-semibold text-base transition-all duration-300 hover:bg-primary-soft flex items-center gap-2"
                     >
                         <Play size={20} />
                         ចាប់ផ្តើមរៀន
@@ -125,5 +125,4 @@ export default function Hero() {
         </section>
     );
 }
-
 

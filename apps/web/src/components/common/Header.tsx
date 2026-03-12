@@ -118,7 +118,7 @@ export default function Header() {
 
     return (
         <>
-            <div className={`bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-indigo-500/10 dark:border-indigo-900/30 fixed top-0 left-0 right-0 z-50 w-full transition-transform duration-300 ${isScrollingDown ? 'md:translate-y-0 -translate-y-full' : 'translate-y-0'}`}>
+            <div className={`bg-surface-1/95 backdrop-blur-md border-b border-border-subtle fixed top-0 left-0 right-0 z-50 w-full transition-transform duration-300 ${isScrollingDown ? 'md:translate-y-0 -translate-y-full' : 'translate-y-0'}`}>
                 <div className="max-w-full px-6 py-2 flex justify-between items-center">
                     {/* Logo */}
                     <Link href="/" className="text-decoration-none flex items-center gap-2">
@@ -128,7 +128,7 @@ export default function Header() {
                     {/* Mobile: menu only (theme toggle is inside dropdown below name/email) */}
                     <div className="md:hidden flex items-center gap-1">
                         <HeadlessMenu as="div" className="relative">
-                            <HeadlessMenu.Button className="bg-none border-none focus:outline-none text-2xl text-gray-700 dark:text-white cursor-pointer py-2 rounded-full transition-colors duration-200">
+                            <HeadlessMenu.Button className="bg-none border-none focus:outline-none text-2xl text-foreground cursor-pointer py-2 rounded-full transition-colors duration-200">
                                 <EllipsisVertical size={24} />
                             </HeadlessMenu.Button>
 
@@ -140,7 +140,7 @@ export default function Header() {
                                 leaveFrom="transform scale-100 opacity-100"
                                 leaveTo="transform scale-95 opacity-0"
                             >
-                                <HeadlessMenu.Items className="absolute -right-5 mt-3 w-50 bg-white/95 dark:bg-black/95 rounded-3xl shadow-4xl border border-indigo-500/10 dark:border-gray-600 z-50 focus:outline-none p-2">
+                                <HeadlessMenu.Items className="absolute -right-5 mt-3 w-50 bg-surface-1/95 rounded-3xl shadow-4xl border border-border-subtle z-50 focus:outline-none p-2">
                                     <div className="space-y-1">
                                         {navLinks.map((link) => {
                                             const Icon = link.icon;
@@ -154,7 +154,7 @@ export default function Header() {
                                                         link.href ? (
                                                             <Link
                                                                 href={link.href}
-                                                                className={`flex items-center gap-3 bg-transparent w-full text-left px-4 py-3 rounded-full text-sm text-gray-600 dark:text-white no-underline font-medium  transition-all duration-300 ${isActive
+                                                                className={`flex items-center gap-3 bg-transparent w-full text-left px-4 py-3 rounded-full text-sm text-foreground no-underline font-medium  transition-all duration-300 ${isActive
                                                                     ? 'text-indigo-600 dark:text-indigo-400'
                                                                     : 'hover:text-indigo-600 dark:hover:text-indigo-400 bg-transparent'
                                                                     }`}
@@ -164,7 +164,7 @@ export default function Header() {
                                                             </Link>
                                                         ) : (
                                                             <div
-                                                                className={`flex items-center gap-3 bg-transparent w-full text-left px-4 py-3 rounded-full text-sm text-gray-600 dark:text-white no-underline font-medium  transition-all duration-300 cursor-default opacity-60`}
+                                                                className={`flex items-center gap-3 bg-transparent w-full text-left px-4 py-3 rounded-full text-sm text-muted no-underline font-medium  transition-all duration-300 cursor-default opacity-60`}
                                                             >
                                                                 <Icon size={18} />
                                                                 {link.label}
@@ -197,10 +197,10 @@ export default function Header() {
                                                         </div>}
 
                                                         <div>
-                                                            <div className="text-sm font-semibold text-gray-900 dark:text-white">
+                                                            <div className="text-sm font-semibold text-foreground">
                                                                 {user ? ((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || 'Unknown') : 'Unknown'}
                                                             </div>
-                                                            <div className="text-xs text-gray-500 dark:text-white">
+                                                            <div className="text-xs text-muted">
                                                                 {user ? (user.email || '') : ''}
                                                             </div>
                                                         </div>
@@ -210,7 +210,7 @@ export default function Header() {
                                                         <button
                                                             type="button"
                                                             onClick={toggleTheme}
-                                                            className="flex items-center justify-center w-9 h-9 rounded-full text-gray-600 dark:text-white hover:bg-gray-100 dark:hover:bg-indigo-900/30 transition-colors"
+                                                            className="flex items-center justify-center w-9 h-9 rounded-full text-muted hover:bg-surface-2/80 transition-colors"
                                                             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
                                                         >
                                                             {isDark ? <Sun size={20} /> : <Moon size={20} />}
@@ -283,7 +283,7 @@ export default function Header() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={`flex items-center gap-2 no-underline font-semibold text-sm px-3 py-2.5 rounded-full transition-all duration-300 relative ${isPrimaryBtn ? 'text-white' : 'text-gray-600 dark:text-white'} ${isActive ? 'text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 dark:border-indigo-400/30 bg-indigo-50/90 dark:bg-indigo-900/30 shadow-sm ' : link.style}`}
+                                    className={`flex items-center gap-2 no-underline font-semibold text-sm px-3 py-2.5 rounded-full transition-all duration-300 relative ${isPrimaryBtn ? 'text-white' : 'text-foreground'} ${isActive ? 'text-indigo-600 dark:text-indigo-400 border border-border-strong bg-primary-soft dark:bg-primary-soft-dark shadow-sm ' : link.style}`}
                                 >
                                     <Icon size={18} />
                                     {link.label}
@@ -291,7 +291,7 @@ export default function Header() {
                             ) : (
                                 <div
                                     key={link.label}
-                                    className={`flex items-center gap-2 text-gray-600 dark:text-white no-underline font-semibold  text-sm px-3 py-2.5 rounded-full transition-all duration-300 relative cursor-default opacity-60 ${link.style}`}
+                                    className={`flex items-center gap-2 text-muted no-underline font-semibold  text-sm px-3 py-2.5 rounded-full transition-all duration-300 relative cursor-default opacity-60 ${link.style}`}
                                 >
                                     <Icon size={18} />
                                     {link.label}
@@ -329,7 +329,7 @@ export default function Header() {
                                     leaveFrom="transform scale-100 opacity-100"
                                     leaveTo="transform scale-95 opacity-0"
                                 >
-                                    <HeadlessMenu.Items className="absolute  right-0 mt-3 focus:outline-none w-72 bg-white/95 dark:bg-black/95 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-600 z-50 p-4">
+                                    <HeadlessMenu.Items className="absolute  right-0 mt-3 focus:outline-none w-72 bg-surface-1/95 rounded-3xl shadow-2xl border border-border-subtle z-50 p-4">
                                         {/* User Info Section: name/email (link) + theme toggle to the right */}
                                         <div className="flex items-center justify-between gap-3">
                                             <Link href="/me" className="flex items-center gap-3 flex-1 min-w-0">
@@ -348,10 +348,10 @@ export default function Header() {
                                                     {((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || user.email || 'U').charAt(0)}
                                                 </div>
                                                 <div className="min-w-0">
-                                                    <h3 className="font-semibold text-gray-900 dark:text-white text-sm truncate">
+                                                    <h3 className="font-semibold text-foreground text-sm truncate">
                                                         {((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || 'User')}
                                                     </h3>
-                                                    <p className="text-gray-500 dark:text-white text-xs truncate">
+                                                    <p className="text-muted text-xs truncate">
                                                         {user.email || ''}
                                                     </p>
                                                 </div>

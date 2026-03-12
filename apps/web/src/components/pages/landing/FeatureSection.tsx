@@ -5,6 +5,8 @@ import { CheckCircle, LucideIcon } from "lucide-react";
 import { ReactNode } from "react";
 import Link from "next/link";
 
+// Use semantic color tokens and consistent font/spacing per Header & globals.css
+
 interface FeatureSectionProps {
   media: ReactNode;
   title: string | ReactNode;
@@ -32,7 +34,7 @@ export default function FeatureSection({
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay: 0.3 }}
-      className={"flex-1"}
+      className={`flex-1 ${mediaClassName}`}
     >
       {media}
     </motion.div>
@@ -46,8 +48,8 @@ export default function FeatureSection({
       transition={{ duration: 0.8, delay: 0.2 }}
       className={`space-y-6 flex-1 ${contentClassName}`}
     >
-      <h3 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-        <Icon size={24} className="text-indigo-600 mt-2" />
+      <h3 className="text-3xl font-bold text-foreground flex items-center gap-3 tracking-tight leading-tight">
+        <Icon size={24} className="text-primary mt-1" />
         {title}
       </h3>
       <motion.ul
@@ -55,7 +57,7 @@ export default function FeatureSection({
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.4 }}
-        className="space-y-3 text-gray-600 dark:text-gray-300"
+        className="space-y-3 text-muted"
       >
         {listItems.map((item, index) => (
           <motion.li
@@ -64,9 +66,9 @@ export default function FeatureSection({
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-            className="flex items-center gap-3"
+            className="flex items-center gap-3 font-medium"
           >
-            <CheckCircle className="w-5 h-5 text-indigo-500" />
+            <CheckCircle className="w-5 h-5 text-primary" />
             {item}
           </motion.li>
         ))}
@@ -80,31 +82,41 @@ export default function FeatureSection({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
-      className={`flex ${isMediaFirst ? "flex-col-reverse" : "flex-col"} lg:flex-row gap-12 lg:items-center justify-between mb-20`}
+      className={`flex ${
+        isMediaFirst ? "flex-col-reverse" : "flex-col"
+      } lg:flex-row gap-12 lg:items-center justify-between mb-20`}
     >
-      {
-        isMediaFirst ? (
-          <>
-            {mediaLink ? (
-              <Link href={mediaLink} className="lg:w-1/2">{mediaContent}</Link>
-            ) : (
-              mediaContent
-            )}
-            {contentSection}
-          </>
-        ) : (
-          <>
-            {contentSection}
-            {mediaLink ? (
-              <Link href={mediaLink} className="lg:w-1/2" >{mediaContent}</Link>
-            ) : (
-              mediaContent
-            )}
-          </>
-        )
-      }
-
-    </motion.div >
+      {isMediaFirst ? (
+        <>
+          {mediaLink ? (
+            <Link
+              href={mediaLink}
+              className="lg:w-1/2 block hover:underline focus:outline-none"
+              tabIndex={0}
+            >
+              {mediaContent}
+            </Link>
+          ) : (
+            mediaContent
+          )}
+          {contentSection}
+        </>
+      ) : (
+        <>
+          {contentSection}
+          {mediaLink ? (
+            <Link
+              href={mediaLink}
+              className="lg:w-1/2 block hover:underline focus:outline-none"
+              tabIndex={0}
+            >
+              {mediaContent}
+            </Link>
+          ) : (
+            mediaContent
+          )}
+        </>
+      )}
+    </motion.div>
   );
 }
-

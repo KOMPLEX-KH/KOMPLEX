@@ -2,40 +2,95 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
+/* Tailwind v4: dark: utilities are active when .dark is on an ancestor */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* === Semantic color tokens ============================================= */
+
+/* Light theme (default) */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Background / surfaces */
+  --color-bg: #f9fafb;            /* page background (gray-50-ish) */
+  --color-surface-1: #ffffff;     /* main cards / header */
+  --color-surface-2: #f3f4f6;     /* subtle inset areas */
+
+  /* Borders */
+  --color-border-subtle: #e5e7eb; /* gray-200 */
+  --color-border-strong: #4f46e5; /* indigo-600 */
+
+  /* Text */
+  --color-foreground: #111827;    /* gray-900 */
+  --color-muted: #6b7280;         /* gray-600 */
+
+  /* Primary accent (indigo) */
+  --color-primary: #4f46e5;       /* indigo-600 */
+  --color-primary-soft: #eef2ff;  /* indigo-50 */
+  --color-primary-soft-dark: #312e81; /* indigo-900-ish overlay */
+
+  /* Status (basic) */
+  --color-danger: #ef4444;
+  --color-success: #10b981;
+
+  /* Back-compat aliases used elsewhere */
+  --background: var(--color-bg);
+  --foreground: var(--color-foreground);
 }
 
-/* Class-based dark theme (toggle in app); body uses var(--background) / var(--foreground) */
+/* Dark theme (zinc-based neutrals) */
 html.dark {
-  --background: #111827;
-  --foreground: #f9fafb;
+  /* neutrals from zinc scale (OKLCH-based palette in mobile) */
+  --color-bg: oklch(0.21 0.006 285.885);           /* zinc-950 */
+  --color-surface-1: oklch(0.141 0.005 285.823);    /* same as bg for seamless shell */
+  --color-surface-2: oklch(0.21 0.006 285.885);     /* zinc-900-ish */
+
+  --color-border-subtle: oklch(0.274 0.006 286.033); /* zinc-800-ish */
+  --color-border-strong: #4f46e5;                    /* keep indigo accent */
+
+  --color-foreground: #f9fafb;
+  --color-muted: #9ca3af;
+
+  --color-primary: #6366f1;          /* slightly brighter indigo-500 */
+  --color-primary-soft: oklch(0.21 0.006 285.885);      /* soft raised surface */
+  --color-primary-soft-dark: oklch(0.274 0.006 286.033);
+
+  --color-danger: #f97373;
+  --color-success: #34d399;
+
+  /* Back-compat aliases */
+  --background: var(--color-bg);
+  --foreground: var(--color-foreground);
 }
 
+/* Expose tokens to Tailwind v4 as colors (bg-bg, bg-surface-1, text-foreground, etc.) */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--color-bg);
+  --color-surface-1: var(--color-surface-1);
+  --color-surface-2: var(--color-surface-2);
+
+  --color-border-subtle: var(--color-border-subtle);
+  --color-border-strong: var(--color-border-strong);
+
+  --color-foreground: var(--color-foreground);
+  --color-muted: var(--color-muted);
+
+  --color-primary: var(--color-primary);
+  --color-primary-soft: var(--color-primary-soft);
+  --color-primary-soft-dark: var(--color-primary-soft-dark);
+
+  --color-danger: var(--color-danger);
+  --color-success: var(--color-success);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-koh-santepheap: var(--font-koh-santepheap);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #f9fafb;
-    --foreground: black;
-  }
 }
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-bg);
+  color: var(--color-foreground);
   font-family:
     "Noto Sans Khmer", "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 500;

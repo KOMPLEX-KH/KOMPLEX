@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { Github, Globe } from "lucide-react";
 import Link from "next/link";
 
+// Adapted style rules to match the KOMPLEX project semantic tokens and design system per Header.tsx and globals.css
+
 const FOUNDERS = [
     {
         image: "/landing/founders/raksa.jpeg",
@@ -17,9 +19,9 @@ const FOUNDERS = [
         name: "អោយ ចន្ទ័រក្សា",
         role: "Full Stack Developer",
         color: "indigo",
-        bgColor: "bg-indigo-50/80",
-        borderColor: "border-indigo-600",
-        iconColor: "text-indigo-600"
+        bgColor: "bg-surface-2 dark:bg-surface-1/80",
+        borderColor: "border-primary",
+        iconColor: "text-primary"
     },
     {
         image: "/landing/founders/vatana.jpg",
@@ -30,7 +32,7 @@ const FOUNDERS = [
         }],
         role: "Frontend Developer",
         color: "green",
-        bgColor: "bg-green-50/80",
+        bgColor: "bg-green-50/80 dark:bg-green-950/50",
         borderColor: "border-green-600",
         iconColor: "text-green-600"
     },
@@ -49,7 +51,7 @@ const FOUNDERS = [
         ],
         role: "Frontend Developer",
         color: "blue",
-        bgColor: "bg-blue-50/80",
+        bgColor: "bg-blue-50/80 dark:bg-blue-950/50",
         borderColor: "border-blue-600",
         iconColor: "text-blue-600"
     },
@@ -62,7 +64,7 @@ const FOUNDERS = [
         }],
         role: "Frontend Developer",
         color: "purple",
-        bgColor: "bg-purple-50/80",
+        bgColor: "bg-purple-50/80 dark:bg-purple-950/50",
         borderColor: "border-purple-600",
         iconColor: "text-purple-600"
     },
@@ -75,7 +77,7 @@ const FOUNDERS = [
         }],
         role: "Backend Developer",
         color: "red",
-        bgColor: "bg-red-50/80",
+        bgColor: "bg-red-50/80 dark:bg-red-950/50",
         borderColor: "border-red-600",
         iconColor: "text-red-600"
     },
@@ -88,7 +90,7 @@ const FOUNDERS = [
         }],
         role: "Frontend Developer",
         color: "orange",
-        bgColor: "bg-orange-50/80",
+        bgColor: "bg-orange-50/80 dark:bg-orange-950/50",
         borderColor: "border-orange-600",
         iconColor: "text-orange-600"
     }
@@ -106,18 +108,20 @@ export default function Founders() {
         }
     }
     return (
-        <section id="founders" className="pb-20 px-5 bg-white dark:bg-black text-gray-900 dark:text-white">
+        <section
+            id="founders"
+            className="pb-20 px-5 bg-surface-1 dark:bg-surface-1 text-foreground"
+        >
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
-                    className="text-center mb-15"
+                    className="text-center mb-12"
                 >
-                    <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-4">ស្ថាបនិក</h2>
+                    <h2 className="text-4xl font-extrabold text-foreground mb-4">ស្ថាបនិក</h2>
                 </motion.div>
-
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -132,14 +136,26 @@ export default function Founders() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className={`${founder.bgColor} ${founder.borderColor} border-2 rounded-3xl lg:p-8 p-4 shadow-lg transition-all duration-300 backdrop-blur-sm hover:scale-101 dark:bg-black/60`}
+                            className={`
+                                ${founder.bgColor} ${founder.borderColor}
+                                border-2 rounded-3xl
+                                lg:p-8 p-4 shadow-lg
+                                transition-all duration-300 backdrop-blur-sm
+                                hover:scale-[1.01]
+                                dark:bg-surface-2/80
+                                border-border-strong
+                            `}
                         >
                             <motion.div
                                 initial={{ scale: 0 }}
                                 whileInView={{ scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
-                                className={`w-20 h-20 ${founder.bgColor} ${founder.borderColor} border-2 rounded-full flex items-center justify-center mx-auto mb-5 overflow-hidden`}
+                                className={`
+                                    w-20 h-20
+                                    ${founder.bgColor} ${founder.borderColor}
+                                    border-2 rounded-full flex items-center justify-center mx-auto mb-5 overflow-hidden
+                                `}
                             >
                                 <img
                                     src={founder.image}
@@ -152,23 +168,27 @@ export default function Founders() {
                                     }}
                                 />
                             </motion.div>
-                            <h3 className="lg:text-2xl text-xl text-center font-bold text-gray-900 dark:text-white mb-2">
+                            <h3 className="lg:text-2xl text-xl text-center font-bold text-foreground mb-2">
                                 {founder.name}
                             </h3>
-                            <div className={`${founder.iconColor} font-semibold lg:text-base text-sm mb-4 text-center`}>{founder.role}</div>
+                            <div className={`${founder.iconColor} font-semibold lg:text-base text-sm mb-4 text-center`}>
+                                {founder.role}
+                            </div>
                             <div className="flex items-center justify-center gap-2">
-                                {
-                                    founder.contacts.map((contact, index) => (
-                                        <Link
-                                            href={contact.href}
-                                            key={index}
-                                            className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-                                            target="_blank"
-                                        >
-                                            {getContactIcon(contact.type)}
-                                        </Link>
-                                    ))
-                                }
+                                {founder.contacts.map((contact, index) => (
+                                    <Link
+                                        href={contact.href}
+                                        key={index}
+                                        className={`
+                                            hover:text-primary dark:hover:text-primary
+                                            focus-visible:outline-none transition-colors
+                                            text-foreground
+                                        `}
+                                        target="_blank"
+                                    >
+                                        {getContactIcon(contact.type)}
+                                    </Link>
+                                ))}
                             </div>
                         </motion.div>
                     ))}
@@ -177,5 +197,3 @@ export default function Founders() {
         </section>
     );
 }
-
-

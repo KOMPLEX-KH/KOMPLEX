@@ -272,7 +272,7 @@ export default function AboutFeatures() {
     },
   ];
   return (
-    <section className="py-20 px-5 bg-white dark:bg-black text-gray-900 dark:text-white">
+    <section className="py-20 px-5 bg-bg text-foreground">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -281,7 +281,7 @@ export default function AboutFeatures() {
           transition={{ duration: 0.8 }}
           className="text-center mb-15"
         >
-          <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-4xl font-extrabold text-foreground mb-4">
             អំពីមុខងារ
           </h2>
         </motion.div>
