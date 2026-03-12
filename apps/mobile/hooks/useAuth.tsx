@@ -117,16 +117,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             }
           }
         } else {
-          // User is signed out or no Firebase session
-          const storedData = await AsyncStorage.getItem("user");
-          if (storedData) {
-            // Keep the stored session to prevent a null flash if backend is temporarily unavailable
-            setUser(JSON.parse(storedData));
-          } else {
-            await AsyncStorage.removeItem("user");
-            setUser(null);
-
-          }
+          // User is signed out — clear storage and state unconditionally.
+          // The initial hydration effect already covers the "show cached user while
+          // Firebase initialises" case, so we don't need to preserve stale data here.
+          await AsyncStorage.removeItem("user");
+          setUser(null);
         }
       } catch (error) {
         console.error("Error in auth state listener:", error);

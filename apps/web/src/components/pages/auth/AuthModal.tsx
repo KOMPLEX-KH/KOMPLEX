@@ -154,6 +154,8 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
             }
 
             const result = await createUserWithEmailAndPassword(auth, signupData.email, signupData.password);
+            // Get Firebase token to ensure authentication is ready
+            await result.user.getIdToken(true);
             const otpResult = await authService.verifySignupOtp({ email: signupData.email, otp: otpCode });
             const userData = await authService.signup({
                 email: signupData.email,
@@ -164,7 +166,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                 dateOfBirth: signupData.dateOfBirth,
                 phone: signupData.phone,
                 profileImageKey: imageKey,
-                verificationToken: otpResult.data.verificationToken,
+                verificationToken: otpResult.verificationToken,
             });
 
             localStorage.setItem('user', JSON.stringify(userData.data));
@@ -227,6 +229,8 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
 
             //create user firebase account after verify successfully
             const firebaseResult = await createUserWithEmailAndPassword(auth, otpEmail, signupData.password);
+            // Get Firebase token to ensure authentication is ready
+            await firebaseResult.user.getIdToken(true);
 
             let imageKey = null;
             if (signupData.profileImage) {
@@ -253,7 +257,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                 dateOfBirth: signupData.dateOfBirth || '',
                 phone: signupData.phone || '',
                 profileImageKey: imageKey,
-                verificationToken: otpResult.data.verificationToken,
+                verificationToken: otpResult.verificationToken,
             };
 
             const result = await authService.signup(finalPayload);
