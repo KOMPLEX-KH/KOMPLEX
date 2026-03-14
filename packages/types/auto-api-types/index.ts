@@ -499,6 +499,63 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/komplex/upload-profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload Profile */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["UploadProfileBody"];
+                };
+            };
+            responses: {
+                /** @description Upload Profile */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: true;
+                            data: components["schemas"]["UploadProfileResponse"];
+                        };
+                    };
+                };
+                /** @description Invalid input */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: false;
+                            error: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/feed/videos": {
         parameters: {
             query?: never;
@@ -4837,7 +4894,7 @@ export interface components {
         SignupResponse: {
             message: string;
             user: {
-                id: string;
+                id: number;
                 email: string;
                 username: string;
                 firstName: string;
@@ -4944,6 +5001,15 @@ export interface components {
             publicUrl: string;
         };
         UploadUrlBody: {
+            fileName: string;
+            fileType: string;
+        };
+        UploadProfileResponse: {
+            signedUrl: string;
+            key: string;
+            publicUrl: string;
+        };
+        UploadProfileBody: {
             fileName: string;
             fileType: string;
         };

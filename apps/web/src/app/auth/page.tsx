@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { auth, googleProvider, microsoftProvider, githubProvider } from '@/configs/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { authService, uploadService } from '@/services/index';
+import { authService } from '@/services/index';
 import {
     validateLoginForm,
     validateSignupForm,
@@ -108,23 +108,24 @@ export default function AuthPage() {
         setFormError(null);
 
         try {
+            // still note complte overall, since creating but this is the safest order without implementing rollback
+            // usecase: at the very least user can log in, but if sigbup here fails in the future the getCurretnUser might fail
             // Verify OTP with backend
             const otpResult = await authService.verifySignupOtp({ email: otpEmail, otp: otpCode });
 
             // Create Firebase account after verification
-            const firebaseResult = await createUserWithEmailAndPassword(auth, otpEmail, signupData.password);
-
             // Upload profile image if exists and get the key
             let imageKey = '';
             if (signupData.profileImage) {
                 try {
-                    imageKey = await uploadService.uploadFile(signupData.profileImage);
+                    imageKey = await authService.uploadInitialProfile(signupData.profileImage);
                 } catch (uploadErr) {
-                    console.error('Upload error:', uploadErr);
                     setFormError('បញ្ហាក្នុងការបង្ហោះរូបភាព');
                     return;
                 }
             }
+
+            const firebaseResult = await createUserWithEmailAndPassword(auth, otpEmail, signupData.password);
 
             // Generate username from firstName and lastName
             const generatedUsername = `${signupData.firstName.toLowerCase().trim()}${signupData.lastName.toLowerCase().trim()}${Date.now()}`.replace(/\s/g, '');
@@ -150,7 +151,7 @@ export default function AuthPage() {
             console.error('OTP verification error:', error);
             const status = (error as any)?.response?.status;
             if (status === 429) {
-                setFormError('អ្នកបានព្យាយាមច្រើនព័កបន្តាច់។ សូមស័កព្វាកៅពេលប្រហែល ១៥ នាតីមុនព្យាយាមម្តងទៀត។');
+                setFormError('អ្នកព្យាយាមផ្ទៀងផ្ទាត់ OTP លេីសកំណត់។ សូមព្យាយាមម្តងទៀតម្តងទៀតក្រោយ១៥ នា។');
             } else {
                 setFormError('ការផ្ទៀងផ្ទាត់ OTP បានបរាជ័យ។ សូមព្យាយាមម្តងទៀត។');
             }
@@ -295,6 +296,7 @@ export default function AuthPage() {
                                 onVerifyOtp={handleVerifyOtp}
                                 onResendOtp={onResendOtp}
                                 otpExpiresIn={otpExpiresIn}
+                                onOtpViewChange={() => setIsOtpView(false)}
                             />
                         )}
 

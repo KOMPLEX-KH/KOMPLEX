@@ -11,6 +11,8 @@ import { auth } from '@/configs/firebase';
 import { useEffect, useState, useRef } from 'react';
 import { Logo } from './Logo';
 import { Extrude } from '@react-three/drei';
+import { authService } from '@/services/index';
+import { Profile } from '@core-types/api-types/profile';
 
 const navLinks = [
     {
@@ -59,9 +61,10 @@ const navLinks = [
 export default function Header() {
     const router = useRouter();
     const pathname = usePathname();
-    const { user, loading } = useAuth();
+    const { user: authUser, loading: authLoading } = useAuth();
 
-
+    const [profile, setProfile] = useState<Profile | null>(null);
+    const [isProfileLoading, setIsProfileLoading] = useState(true);
     const [showFeedbackModal, setShowFeedbackModal] = useState(false);
     const [mounted, setMounted] = useState(false);
     const [isScrollingDown, setIsScrollingDown] = useState(false);
@@ -71,6 +74,31 @@ export default function Header() {
     useEffect(() => {
         setMounted(true);
     }, []);
+
+   
+    // Fetch profile data from API when authUser changes
+    useEffect(() => {
+        if (!authUser) {
+            setProfile(null);
+            setIsProfileLoading(false);
+            return;
+        }
+
+        const fetchProfile = async () => {
+            try {
+                setIsProfileLoading(true);
+                const userData = await authService.getCurrentUserProfile();
+                setProfile(userData.data);
+            } catch (err) {
+                console.error('Error fetching profile:', err);
+                setProfile(null);
+            } finally {
+                setIsProfileLoading(false);
+            }
+        };
+
+        fetchProfile();
+    }, [authUser]);
 
     // Handle scroll direction detection for mobile header hiding
     useEffect(() => {
@@ -174,15 +202,15 @@ export default function Header() {
                                     })}
                                 </div>
                                 {/* Mobile: User area and actions */}
-                                {mounted && !loading && (
+                                {mounted && !authLoading && !isProfileLoading && (
                                     <div className="mt-2 p-2">
                                         <div className='h-0.5  my-2'></div>
-                                        {user ? (
+                                        {profile ? (
                                             <>
                                                 <Link href={"/me"} className="flex items-center gap-3 px-2 py-2 overflow-hidden">
-                                                    {user?.profileImage ? (
+                                                    {profile?.profileImage ? (
                                                         <img
-                                                            src={user.profileImage}
+                                                            src={profile.profileImage}
                                                             alt="Profile"
                                                             className="w-8 h-8 border border-indigo-500 rounded-full object-cover"
                                                             onError={(e) => {
@@ -190,16 +218,16 @@ export default function Header() {
                                                                 e.currentTarget.nextElementSibling?.classList.remove('hidden');
                                                             }}
                                                         />
-                                                    ) : <div className={`w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-sm ${user?.profileImage ? 'hidden' : ''}`}>
-                                                        {((`${user?.firstName || ''} ${user?.lastName || ''}`.trim()) || user?.username || user?.email || 'U').toUpperCase().charAt(0)}
+                                                    ) : <div className={`w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-sm ${profile?.profileImage ? 'hidden' : ''}`}>
+                                                        {((`${profile?.firstName || ''} ${profile?.lastName || ''}`.trim()) || profile?.username || profile?.email || 'U').toUpperCase().charAt(0)}
                                                     </div>}
 
                                                     <div>
                                                         <div className="text-sm font-semibold text-gray-900">
-                                                            {user ? ((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || 'Unknown') : 'Unknown'}
+                                                            {profile ? ((`${profile.firstName || ''} ${profile.lastName || ''}`.trim()) || profile.username || 'Unknown') : 'Unknown'}
                                                         </div>
                                                         <div className="text-xs text-gray-500">
-                                                            {user ? (user.email || '') : ''}
+                                                            {profile ? (profile.email || '') : ''}
                                                         </div>
                                                     </div>
                                                 </Link>
@@ -285,14 +313,14 @@ export default function Header() {
                         })}
 
                         {/* User Menu or Sign Up Button */}
-                        {pathname === "/auth" ? null : !mounted || loading ? (
+                        {pathname === "/auth" ? null : !mounted || authLoading || isProfileLoading ? (
                             <div className="ml-2" />
-                        ) : user ? (
+                        ) : profile ? (
                             <HeadlessMenu as="div" className="relative ml-2">
                                 <HeadlessMenu.Button className="flex items-center gap-2 rounded-full transition-colors duration-200 cursor-pointer focus:outline-none">
-                                    {user.profileImage ? (
+                                    {profile.profileImage ? (
                                         <img
-                                            src={user.profileImage}
+                                            src={profile.profileImage}
                                             alt="Profile"
                                             className="w-8 h-8 border border-indigo-500 rounded-full object-cover"
                                             onError={(e) => {
@@ -301,8 +329,8 @@ export default function Header() {
                                             }}
                                         />
                                     ) : null}
-                                    <div className={`w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-sm ${user.profileImage ? 'hidden' : ''}`}>
-                                        {((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || user.email || 'U').charAt(0)}
+                                    <div className={`w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-sm ${profile.profileImage ? 'hidden' : ''}`}>
+                                        {((`${profile.firstName || ''} ${profile.lastName || ''}`.trim()) || profile.username || profile.email || 'U').charAt(0)}
                                     </div>
                                 </HeadlessMenu.Button>
 
@@ -317,9 +345,9 @@ export default function Header() {
                                     <HeadlessMenu.Items className="absolute  right-0 mt-3 focus:outline-none w-72 bg-white/95 rounded-3xl shadow-2xl border border-gray-200  z-50 p-4">
                                         {/* User Info Section */}
                                         <Link href="/me" className="flex items-center gap-3">
-                                            {user.profileImage ? (
+                                            {profile.profileImage ? (
                                                 <img
-                                                    src={user.profileImage}
+                                                    src={profile.profileImage}
                                                     alt="Profile"
                                                     className="w-12 h-12 border border-indigo-500 rounded-full object-cover"
                                                     onError={(e) => {
@@ -328,15 +356,15 @@ export default function Header() {
                                                     }}
                                                 />
                                             ) : null}
-                                            <div className={`w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-lg ${user.profileImage ? 'hidden' : ''}`}>
-                                                {((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || user.email || 'U').charAt(0)}
+                                            <div className={`w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-lg ${profile.profileImage ? 'hidden' : ''}`}>
+                                                {((`${profile.firstName || ''} ${profile.lastName || ''}`.trim()) || profile.username || profile.email || 'U').charAt(0)}
                                             </div>
                                             <div>
                                                 <h3 className="font-semibold text-gray-900 text-sm">
-                                                    {((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || 'User')}
+                                                    {((`${profile.firstName || ''} ${profile.lastName || ''}`.trim()) || profile.username || 'User')}
                                                 </h3>
                                                 <p className="text-gray-500 text-xs">
-                                                    {user.email || ''}
+                                                    {profile.email || ''}
                                                 </p>
                                             </div>
                                         </Link>
