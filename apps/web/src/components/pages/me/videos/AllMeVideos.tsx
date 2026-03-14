@@ -99,13 +99,13 @@ export default function AllMeVideos() {
     }
 
     return (
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-200">
-            <div className="p-6 border-b border-gray-200">
+        <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm border border-gray-200 dark:border-zinc-800">
+            <div className="p-6 border-b border-gray-200 dark:border-zinc-800">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-gray-900">វីដេអូ</h2>
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-zinc-400">វីដេអូ</h2>
                     <Link
                         href="/me/create-video"
-                        className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-medium transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-indigo-600 dark:bg-zinc-800 hover:bg-indigo-700 dark:hover:bg-zinc-700 text-white rounded-full font-medium transition-colors"
                     >
                         <Plus className="w-4 h-4" />
                         បង្ហោះវីដេអូថ្មី
@@ -124,7 +124,7 @@ export default function AllMeVideos() {
                             <Link
                                 key={video.id}
                                 href={`/me/videos/${video.id}`}
-                                className="group bg-white rounded-3xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-200 border border-gray-200 hover:border-indigo-300"
+                                className="group bg-white dark:bg-zinc-900 rounded-3xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-200 border border-gray-200 dark:border-zinc-800 hover:border-indigo-300"
                             >
                                 {/* Thumbnail */}
                                 <div className="relative">
@@ -139,7 +139,7 @@ export default function AllMeVideos() {
 
                                     {/* Duration Badge */}
                                     {video.duration && (
-                                        <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded">
+                                        <div className="absolute bottom-2 right-2 bg-black/80 dark:bg-zinc-800 text-white text-xs px-2 py-1 rounded">
                                             {formatDuration(video.duration)}
                                         </div>
                                     )}
@@ -147,31 +147,31 @@ export default function AllMeVideos() {
                                     {/* Play Button Overlay */}
                                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                         <div className="bg-white/90 p-3 rounded-full shadow-lg">
-                                            <Play className="w-6 h-6 text-indigo-600 ml-1" />
+                                            <Play className="w-6 h-6 text-indigo-600 dark:text-zinc-400 ml-1" />
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Video Info */}
                                 <div className="p-4">
-                                    <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                                    <h3 className="font-semibold text-gray-900 dark:text-zinc-400 mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
                                         {video.title || 'Untitled Video'}
                                     </h3>
                                     <div className="text-sm text-gray-600 mb-3 line-clamp-2">
-                                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                                        <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3 line-clamp-2">
                                             {video.description || 'No description available'}
                                         </p>
                                     </div>
 
                                     {/* Stats */}
-                                    <div className="flex items-center justify-between text-sm text-gray-500">
+                                    <div className="flex items-center justify-between text-sm text-gray-500 dark:text-zinc-400">
                                         <div className="flex items-center gap-4">
                                             <span className="flex items-center gap-1">
-                                                <Eye className="w-4 h-4" />
+                                                <Eye className="w-4 h-4 text-zinc-400" />
                                                 {(video.viewCount || 0).toLocaleString()}
                                             </span>
                                             <span className="flex items-center gap-1">
-                                                <Heart className="w-4 h-4" />
+                                                <Heart className="w-4 h-4 text-zinc-400" />
                                                 {video.likeCount || 0}
                                             </span>
                                         </div>

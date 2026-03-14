@@ -115,16 +115,16 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
 
     if (loading) {
         return (
-            <div className="bg-white rounded-2xl shadow-sm p-6">
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm p-6">
                 <div className="space-y-4">
                     {[...Array(3)].map((_, i) => (
-                        <div key={i} className="flex items-center gap-4 p-4 border border-gray-200 rounded-xl animate-pulse">
-                            <div className="w-24 h-16 bg-gray-200 rounded-3xl"></div>
+                        <div key={i} className="flex items-center gap-4 p-4 border border-gray-200 dark:border-zinc-800 rounded-xl animate-pulse">
+                            <div className="w-24 h-16 bg-gray-200 dark:bg-zinc-800 rounded-3xl"></div>
                             <div className="flex-1">
-                                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                                <div className="h-4 bg-gray-200 dark:bg-zinc-800 rounded w-3/4 mb-2"></div>
+                                <div className="h-3 bg-gray-200 dark:bg-zinc-800 rounded w-1/2"></div>
                             </div>
-                            <div className="w-8 h-8 bg-gray-200 rounded"></div>
+                            <div className="w-8 h-8 bg-gray-200 dark:bg-zinc-800 rounded"></div>
                         </div>
                     ))}
                 </div>
@@ -134,13 +134,13 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
 
     if (error) {
         return (
-            <div className="bg-white rounded-2xl shadow-sm p-6">
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm p-6">
                 <div className="text-center py-12">
                     <div className="w-16 h-16 rounded-3xl bg-red-100 flex items-center justify-center mx-auto mb-4">
                         <AlertCircle className="w-8 h-8 text-red-600" />
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-900 mb-2">មានបញ្ហាក្នុងការផ្ទុក</h2>
-                    <p className="text-gray-600 mb-6">{error}</p>
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-zinc-400 mb-2">មានបញ្ហាក្នុងការផ្ទុក</h2>
+                    <p className="text-gray-600 dark:text-zinc-400 mb-6">{error}</p>
                     <button
                         onClick={() => window.location.reload()}
                         className="px-6 py-3 bg-indigo-600 text-white rounded-3xl hover:bg-indigo-700 transition-colors font-medium"
@@ -153,14 +153,14 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
     }
 
     return (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200">
+        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800">
             {videoHistory.length === 0 ? (
                 <div className="p-12 text-center">
-                    <div className="w-16 h-16 rounded-3xl bg-gray-100 flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 rounded-3xl bg-gray-100 dark:bg-zinc-800 flex items-center justify-center mx-auto mb-4">
                         <History className="w-8 h-8 text-gray-400" />
                     </div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">គ្មានប្រវត្តិវីដេអូ</h3>
-                    <p className="text-gray-500 mb-6">អ្នកមិនទាន់មានប្រវត្តិវីដេអូណាមួយនៅឡើយទេ។</p>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-zinc-400 mb-2">គ្មានប្រវត្តិវីដេអូ</h3>
+                    <p className="text-gray-500 dark:text-zinc-400 mb-6">អ្នកមិនទាន់មានប្រវត្តិវីដេអូណាមួយនៅឡើយទេ។</p>
                     <Link
                         href="/video"
                         className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-3xl hover:bg-indigo-700 transition-colors font-medium"
@@ -174,10 +174,10 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                     {/* Success Message */}
                     {successMessage && (
                         <div className="mb-6">
-                            <div className="bg-green-50 border border-green-200 rounded-3xl p-4">
+                            <div className="bg-green-50 dark:bg-zinc-800 border border-green-200 dark:border-zinc-800 rounded-3xl p-4">
                                 <div className="flex items-center">
                                     <CheckCircle className="h-5 w-5 text-green-400 mr-3" />
-                                    <p className="text-sm text-green-800">{successMessage}</p>
+                                    <p className="text-sm text-green-800 dark:text-zinc-400">{successMessage}</p>
                                 </div>
                             </div>
                         </div>
@@ -186,10 +186,10 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                     {/* Error Message */}
                     {error && (
                         <div className="mb-6">
-                            <div className="bg-red-50 border border-red-200 rounded-3xl p-4">
+                            <div className="bg-red-50 dark:bg-zinc-800 border border-red-200 dark:border-zinc-800 rounded-3xl p-4">
                                 <div className="flex items-center">
                                     <AlertCircle className="h-5 w-5 text-red-400 mr-3" />
-                                    <p className="text-sm text-red-800">{error}</p>
+                                    <p className="text-sm text-red-800 dark:text-zinc-400">{error}</p>
                                 </div>
                             </div>
                         </div>
@@ -198,11 +198,11 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                     {/* Header with Actions */}
                     <div className="mb-6 flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                            <h3 className="text-lg font-semibold text-gray-900">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-zinc-400">
                                 វីដេអូដែលបានមើល ({videoHistory.length})
                             </h3>
                             {videoHistory.length > 0 && (
-                                <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-zinc-400 cursor-pointer">
                                     <input
                                         type="checkbox"
                                         checked={selectedItems.size === videoHistory.length}
@@ -230,8 +230,8 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                             <div
                                 key={item.id}
                                 className={`flex items-center gap-4 p-4 border rounded-xl transition-all duration-200 ${selectedItems.has(item.id)
-                                    ? 'border-indigo-300 bg-indigo-50'
-                                    : 'border-gray-200 hover:border-indigo-300 hover:shadow-sm'
+                                    ? 'border-indigo-300 bg-indigo-50 dark:bg-zinc-800'
+                                    : 'border-gray-200 dark:border-zinc-800 hover:border-indigo-300 hover:shadow-sm'
                                     }`}
                             >
                                 {/* Selection Checkbox */}
@@ -239,7 +239,7 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                                     type="checkbox"
                                     checked={selectedItems.has(item.id)}
                                     onChange={() => handleSelectItem(item.id)}
-                                    className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                    className="rounded border-gray-300 dark:border-zinc-800 text-indigo-600 focus:ring-indigo-500"
                                 />
 
                                 {/* Thumbnail */}
@@ -285,11 +285,11 @@ export default function VideoHistoryComponent({ onError }: VideoHistoryProps) {
                                             handleDeleteHistory(item.id);
                                         }}
                                         disabled={deletingId === item.id}
-                                        className="p-2 text-red-600 hover:bg-red-50 rounded-3xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-zinc-800 rounded-3xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                         title="លុបចេញពីប្រវត្តិ"
                                     >
                                         {deletingId === item.id ? (
-                                            <div className="animate-spin rounded-3xl h-4 w-4 border-b-2 border-red-600"></div>
+                                            <div className="animate-spin rounded-3xl h-4 w-4 border-b-2 border-red-600 dark:border-red-400"></div>
                                         ) : (
                                             <Trash2 size={18} />
                                         )}

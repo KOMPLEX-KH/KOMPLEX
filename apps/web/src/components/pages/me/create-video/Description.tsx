@@ -14,7 +14,7 @@ interface DescriptionProps {
 
 export default function Description({ title, description, thumbnail, onTitleChange, onDescriptionChange }: DescriptionProps) {
     return (
-        <div className="lg:bg-white bg-gray-50 rounded-3xl lg:shadow-sm lg:p-6">
+        <div className="lg:bg-white bg-gray-50 dark:bg-zinc-900 rounded-3xl lg:shadow-sm lg:p-6">
             <div className="flex items-center justify-between mb-6 pb-4 ">
                 <div className="text-indigo-600 font-semibold text-xl flex gap-3 items-center">
                     <FileText className="text-indigo-600" />
@@ -23,7 +23,7 @@ export default function Description({ title, description, thumbnail, onTitleChan
             </div>
             <div className="space-y-4">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-400 mb-2">
                         ចំណងជើងវីដេអូ
                     </label>
                     <input
@@ -31,12 +31,12 @@ export default function Description({ title, description, thumbnail, onTitleChan
                         placeholder="ចំណងជើងវីដេអូ..."
                         value={title}
                         onChange={(e) => onTitleChange(e.target.value)}
-                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-400 mb-2">
                         ការពិពណ៌នា
                     </label>
                     <BlogEditor
@@ -49,10 +49,10 @@ export default function Description({ title, description, thumbnail, onTitleChan
                 {/* Thumbnail Preview */}
                 {thumbnail && (
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-400 mb-2">
                             រូបភាពតូច
                         </label>
-                        <div className="aspect-video bg-gray-100 rounded-3xl overflow-hidden">
+                        <div className="aspect-video bg-gray-100 dark:bg-zinc-800 rounded-3xl overflow-hidden">
                             <img
                                 src={thumbnail}
                                 alt="Thumbnail"

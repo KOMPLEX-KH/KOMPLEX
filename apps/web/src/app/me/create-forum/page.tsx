@@ -116,11 +116,11 @@ export default function CreateForum() {
     // Show loading while checking auth
     if (authLoading) {
         return (
-            <div className='min-h-screen bg-gray-50 pt-32 lg:pt-20'>
+            <div className='min-h-screen bg-gray-50 dark:bg-zinc-900 pt-32 lg:pt-20'>
                 <div className='max-w-6xl mx-auto p-5'>
                     <div className='animate-pulse space-y-6'>
-                        <div className='h-8 bg-gray-200 rounded w-1/3'></div>
-                        <div className='h-64 bg-gray-200 rounded'></div>
+                        <div className='h-8 bg-gray-200 dark:bg-zinc-800 rounded w-1/3'></div>
+                        <div className='h-64 bg-gray-200 dark:bg-zinc-800 rounded'></div>
                     </div>
                 </div>
             </div>
@@ -202,7 +202,7 @@ export default function CreateForum() {
     };
 
     return (
-        <div className="flex min-h-screen bg-gray-50">
+        <div className="flex min-h-screen bg-gray-50 dark:bg-zinc-900">
 
             {/* Main Content */}
             <div className="flex-1  pt-32 lg:pt-20">
@@ -213,15 +213,15 @@ export default function CreateForum() {
                     </div>
 
                     {/* Create Post Form */}
-                    <div className="bg-white rounded-2xl shadow-lg shadow-indigo-500/10 border border-indigo-500/10 p-6">
+                    <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg shadow-indigo-500/10 border border-indigo-500/10 p-6">
                         {/* Header */}
                         <div className="mb-6">
-                            <h1 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-2"><MessageCircle className='w-6 h-6 text-indigo-500' />បង្កើតការពិភាក្សា</h1>
+                            <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-400 mb-2 flex items-center gap-2"><MessageCircle className='w-6 h-6 text-indigo-500' />បង្កើតការពិភាក្សា</h1>
                         </div>
 
                         {/* Title Input */}
                         <div className="mb-6">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-zinc-400 mb-2">
                                 ចំណងជើង
                             </label>
                             <input
@@ -229,11 +229,11 @@ export default function CreateForum() {
                                 value={title}
                                 onChange={handleTitleChange}
                                 placeholder="សរសេរចំណងជើងការឆ្លើយតបរបស់អ្នក..."
-                                className="w-full px-4 py-3 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                className="w-full px-4 py-3 border border-gray-300 dark:border-zinc-800 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                                 maxLength={300}
                             />
                             <div className="flex justify-between items-center mt-2">
-                                <span className="text-xs text-gray-500">
+                                <span className="text-xs text-gray-500 dark:text-zinc-400">
                                     {titleCharCount}/300
                                 </span>
                             </div>
@@ -389,7 +389,7 @@ export default function CreateForum() {
                         </div> */}
 
                         <div className="mb-6">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-zinc-400 mb-2">
                                 រូបគំរូ (អតិបរមា 4 រូប)
                             </label>
                             <input
@@ -404,7 +404,7 @@ export default function CreateForum() {
                             {/* 2x2 Grid for Images */}
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                                 {imagePreviews.map((preview, index) => (
-                                    <div key={index} className="relative aspect-video rounded-3xl overflow-hidden border border-gray-200">
+                                    <div key={index} className="relative aspect-video rounded-3xl overflow-hidden border border-gray-200 dark:border-zinc-800">
                                         <Image
                                             src={preview}
                                             alt={`Preview ${index + 1}`}
@@ -436,14 +436,14 @@ export default function CreateForum() {
                             </div>
 
                             {/* Image Count Info */}
-                            <div className="mt-2 text-xs text-gray-500">
+                            <div className="mt-2 text-xs text-gray-500 dark:text-zinc-400">
                                 {imagePreviews.length}/4 រូប
                             </div>
                         </div>
 
                         {/* Body Text */}
                         <div className="mb-6">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-zinc-400 mb-2">
                                 មាតិកា
                             </label>
                             <BlogEditor
@@ -456,7 +456,7 @@ export default function CreateForum() {
                         {/* Error Message */}
                         {error && (
                             <div className="mb-6">
-                                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                                <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-800 rounded-lg p-4">
                                     <div className="flex items-center">
                                         <div className="flex-shrink-0">
                                             <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -464,7 +464,7 @@ export default function CreateForum() {
                                             </svg>
                                         </div>
                                         <div className="ml-3">
-                                            <p className="text-sm text-red-800">{error}</p>
+                                            <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -474,7 +474,7 @@ export default function CreateForum() {
                         {/* Success Message */}
                         {success && (
                             <div className="mb-6">
-                                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                                <div className="bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-800 rounded-lg p-4">
                                     <div className="flex items-center">
                                         <div className="flex-shrink-0">
                                             <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
@@ -482,7 +482,7 @@ export default function CreateForum() {
                                             </svg>
                                         </div>
                                         <div className="ml-3">
-                                            <p className="text-sm text-green-800">បង្កើតវេទិកាបានជោគជ័យ! កំពុងបញ្ជូនទៅទំព័រវេទិកា...</p>
+                                            <p className="text-sm text-green-800 dark:text-green-200">បង្កើតវេទិកាបានជោគជ័យ! កំពុងបញ្ជូនទៅទំព័រវេទិកា...</p>
                                         </div>
                                     </div>
                                 </div>
@@ -490,13 +490,13 @@ export default function CreateForum() {
                         )}
 
                         {/* Action Buttons */}
-                        <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                        <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-zinc-800">
                             <button
                                 onClick={handleSubmit}
                                 disabled={!isFormValid() || isSubmitting}
                                 className={`px-6 py-2 rounded-full transition-all duration-200 font-medium ${isFormValid() && !isSubmitting
                                     ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
-                                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    : 'bg-gray-300 dark:bg-zinc-800 text-gray-500 dark:text-zinc-400 cursor-not-allowed'
                                     }`}
                             >
                                 {isSubmitting ? (
@@ -522,7 +522,7 @@ export default function CreateForum() {
                             <div className="mt-4 flex justify-center">
                                 <button
                                     onClick={handleSubmit}
-                                    className="flex items-center gap-2 px-6 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors duration-200"
+                                    className="flex items-center gap-2 px-6 py-2 bg-red-600 dark:bg-red-900 text-white dark:text-white rounded-full hover:bg-red-700 dark:hover:bg-red-800 transition-colors duration-200"
                                 >
                                     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

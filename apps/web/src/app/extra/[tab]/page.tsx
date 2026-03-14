@@ -43,12 +43,12 @@ export default function ExtraTabPage() {
   };
 
   return (
-    <div className="bg-gray-50 relative">
+    <div className="bg-gray-50 dark:bg-zinc-900 relative">
       <div className="pt-22 lg:pt-19 max-w-7xl mx-auto h-screen">
         <div className="flex gap-5 h-[calc(100vh-7rem)] lg:h-[calc(100vh-5rem)]">
           <Sidebar currentPath={currentPath} />
 
-          <main className="flex-1 h-full bg-white rounded-3xl p-5 relative">
+          <main className="flex-1 h-full bg-white dark:bg-zinc-900 rounded-3xl p-5 relative">
             <div className="h-full overflow-auto scrollbar-hide">
               {renderContent()}
             </div>

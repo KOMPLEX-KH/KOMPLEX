@@ -384,11 +384,11 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-sm p-8">
+    <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm p-8">
       <div className="space-y-8">
         {/* Title Input */}
         <div>
-          <label className="block text-sm font-medium mb-3 text-gray-700">
+          <label className="block text-sm font-medium mb-3 text-gray-700 dark:text-zinc-400">
             ចំណងជើង
           </label>
           <input
@@ -396,21 +396,21 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
             value={formData.title}
             onChange={(e) => handleInputChange("title", e.target.value)}
             placeholder="សរសេរចំណងជើងវីដេអូរបស់អ្នក..."
-            className="w-full px-4 py-3 bg-white rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors duration-200 border border-gray-200"
+            className="w-full px-4 py-3 bg-white dark:bg-zinc-900 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors duration-200 border border-gray-200 dark:border-zinc-800"
           />
         </div>
 
         {/* Video Replacement Section */}
         <div>
-          <label className="block text-sm font-medium mb-4 text-gray-700">
+          <label className="block text-sm font-medium mb-4 text-gray-700 dark:text-zinc-400">
             ជំនួសវីដេអូ
           </label>
 
           {/* Current Video Display */}
-          <div className="mb-6 p-4 bg-gray-50 rounded-3xl">
+          <div className="mb-6 p-4 bg-gray-50 dark:bg-zinc-800 rounded-3xl">
             <div className="flex items-center gap-3 mb-4">
               <Play className="w-5 h-5 text-indigo-600" />
-              <span className="font-medium text-gray-900">
+              <span className="font-medium text-gray-900 dark:text-zinc-400">
                 វីដេអូបច្ចុប្បន្ន
               </span>
             </div>
@@ -421,25 +421,25 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
                 className="w-full aspect-video object-cover rounded-3xl"
                 controls
               />
-              <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded">
+              <div className="absolute bottom-2 right-2 bg-black/80 dark:bg-zinc-800 text-white text-xs px-2 py-1 rounded">
                 {formatDuration(video.duration)}
               </div>
             </div>
-            <p className="text-sm text-gray-600 mt-3">
+            <p className="text-sm text-gray-600 dark:text-zinc-400 mt-3">
               ទំហំ: {video.title} • រយៈពេល: {formatDuration(video.duration)}
             </p>
           </div>
 
           {/* New Video Upload */}
-          <div className="border-2 border-dashed border-gray-300 rounded-3xl p-8 text-center hover:border-indigo-400 transition-colors duration-200">
+          <div className="border-2 border-dashed border-gray-300 dark:border-zinc-800 rounded-3xl p-8 text-center hover:border-indigo-400 transition-colors duration-200">
             {!selectedVideo ? (
               <div>
-                <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600 mb-2">អូសវីដេអូឬជ្រើសរើសឯកសារ</p>
-                <p className="text-sm text-gray-500 mb-4">
+                <Upload className="w-12 h-12 text-gray-400 dark:text-zinc-400 mx-auto mb-4" />
+                <p className="text-gray-600 dark:text-zinc-400 mb-2">អូសវីដេអូឬជ្រើសរើសឯកសារ</p>
+                <p className="text-sm text-gray-500 dark:text-zinc-400 mb-4">
                   គាំទ្រទម្រង់ MP4, MOV, AVI • ទំហំអតិបរមា 100MB
                 </p>
-                <label className="cursor-pointer inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-3xl hover:bg-indigo-700 transition-colors duration-200">
+                <label className="cursor-pointer inline-flex items-center px-4 py-2 bg-indigo-600 dark:bg-zinc-800 text-white rounded-3xl hover:bg-indigo-700 dark:hover:bg-zinc-700 transition-colors duration-200">
                   <Upload className="w-4 h-4 mr-2" />
                   ជ្រើសរើសវីដេអូ
                   <input
@@ -460,15 +460,15 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
                   />
                   <button
                     onClick={removeVideo}
-                    className="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors duration-200"
+                    className="absolute top-2 right-2 w-8 h-8 bg-red-500 dark:bg-zinc-800 text-white rounded-full flex items-center justify-center hover:bg-red-600 dark:hover:bg-zinc-700 transition-colors duration-200"
                   >
                     <Trash className="w-4 h-4" />
                   </button>
                 </div>
-                <p className="text-sm text-gray-600 mb-2">
+                <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">
                   ឯកសារថ្មី: {selectedVideo.name}
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-zinc-400">
                   ទំហំ: {(selectedVideo.size / (1024 * 1024)).toFixed(2)} MB
                 </p>
               </div>
@@ -476,7 +476,7 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
           </div>
 
           {error && (
-            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-full">
+            <div className="mt-4 p-3 bg-red-50 dark:bg-zinc-800 border border-red-200 dark:border-zinc-800 rounded-full">
               <p className="text-red-600 text-sm">{error}</p>
             </div>
           )}
@@ -484,7 +484,7 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium mb-3 text-gray-700">
+          <label className="block text-sm font-medium mb-3 text-gray-700 dark:text-zinc-400">
             មាតិកា
           </label>
           <BlogEditor
@@ -519,14 +519,14 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
         {isSaving && (
           <div className="p-6 bg-gray-50 rounded-full">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-medium text-gray-700">
+              <span className="text-sm font-medium text-gray-700 dark:text-zinc-400">
                 កំពុងរក្សាទុក...
               </span>
-              <span className="text-sm text-gray-500 font-medium">
+              <span className="text-sm text-gray-500 dark:text-zinc-400 font-medium">
                 {uploadProgress}%
               </span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-3">
+            <div className="w-full bg-gray-200 dark:bg-zinc-800 rounded-full h-3">
               <div
                 className="bg-indigo-600 h-3 rounded-full transition-all duration-300"
                 style={{ width: `${uploadProgress}%` }}
@@ -536,20 +536,20 @@ export default function EditVideo({ video, onSave, onCancel }: EditVideoProps) {
         )}
 
         {/* Action Buttons */}
-        <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
+        <div className="flex justify-end gap-3 pt-6 border-t border-gray-200 dark:border-zinc-800">
           <button
             onClick={() => {
               resetEditForm();
               onCancel();
             }}
-            className="px-6 py-2 bg-gray-500 text-white rounded-full transition-colors duration-200 hover:bg-gray-600 font-medium"
+            className="px-6 py-2 bg-gray-500 dark:bg-zinc-800 text-white rounded-full transition-colors duration-200 hover:bg-gray-600 dark:hover:bg-zinc-700 font-medium"
           >
             បោះបង់
           </button>
           <button
             onClick={handleSave}
             disabled={!isFormValid() || isSaving}
-            className="px-6 py-2 bg-indigo-500 text-white rounded-full transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center gap-2"
+            className="px-6 py-2 bg-indigo-500 dark:bg-zinc-700 text-white rounded-full transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center gap-2"
           >
             {isSaving ? (
               <>

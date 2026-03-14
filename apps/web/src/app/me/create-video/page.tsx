@@ -6,11 +6,8 @@ import {
     ArrowLeft,
     Save
 } from 'lucide-react';
-// import { ExerciseCreationBox } from '@/components/pages/docs/boxes/ExerciseCreationBox';
 import VideoUpload from '@/components/pages/me/create-video/VideoUpload';
 import Description from '@/components/pages/me/create-video/Description';
-// import { ExerciseQuestion } from '@core-types/docs/topic';
-import Link from 'next/link';
 import { uploadService, meVideoService } from '@/services/index';
 import { useAuth } from '@hooks/useAuth';
 import { BackButton } from '@/components/common/BackButton';
@@ -238,11 +235,11 @@ export default function CreateVideoPage() {
     // Show loading while checking auth
     if (authLoading) {
         return (
-            <div className='min-h-screen bg-gray-50 pt-32 lg:pt-20'>
+            <div className='min-h-screen bg-gray-50 dark:bg-zinc-900 pt-32 lg:pt-20'>
                 <div className='max-w-6xl mx-auto p-6'>
                     <div className='animate-pulse space-y-6'>
-                        <div className='h-8 bg-gray-200 rounded w-1/3'></div>
-                        <div className='h-64 bg-gray-200 rounded'></div>
+                        <div className='h-8 bg-gray-200 dark:bg-zinc-800 rounded w-1/3'></div>
+                        <div className='h-64 bg-gray-200 dark:bg-zinc-800 rounded'></div>
                     </div>
                 </div>
             </div>
@@ -255,7 +252,7 @@ export default function CreateVideoPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-32 lg:pt-20">
+        <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-32 lg:pt-20">
             <div className="max-w-6xl mx-auto p-6">
                 <BackButton href='/me?tab=videos' />
 
@@ -293,7 +290,7 @@ export default function CreateVideoPage() {
                 {/* Error Message */}
                 {error && (
                     <div className="mt-8 max-w-md mx-auto">
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-800 rounded-lg p-4">
                             <div className="flex items-center">
                                 <div className="flex-shrink-0">
                                     <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -301,7 +298,7 @@ export default function CreateVideoPage() {
                                     </svg>
                                 </div>
                                 <div className="ml-3">
-                                    <p className="text-sm text-red-800">{error}</p>
+                                    <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
                                 </div>
                             </div>
                         </div>
@@ -311,7 +308,7 @@ export default function CreateVideoPage() {
                 {/* Success Message */}
                 {success && (
                     <div className="mt-8 max-w-md mx-auto">
-                        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div className="bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-800 rounded-lg p-4">
                             <div className="flex items-center">
                                 <div className="flex-shrink-0">
                                     <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
@@ -319,7 +316,7 @@ export default function CreateVideoPage() {
                                     </svg>
                                 </div>
                                 <div className="ml-3">
-                                    <p className="text-sm text-green-800">ផ្ទុកវីដេអូបានជោគជ័យ! កំពុងបញ្ជូនទៅទំព័រវីដេអូ...</p>
+                                    <p className="text-sm text-green-800 dark:text-green-200">ផ្ទុកវីដេអូបានជោគជ័យ! កំពុងបញ្ជូនទៅទំព័រវីដេអូ...</p>
                                 </div>
                             </div>
                         </div>
@@ -332,8 +329,8 @@ export default function CreateVideoPage() {
                         onClick={handleUpload}
                         disabled={!isFormValid() || isUploading}
                         className={`flex items-center gap-3 px-10 py-4 rounded-lg font-semibold text-lg transition-all duration-200 ${isFormValid() && !isUploading
-                            ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
-                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            ? 'bg-indigo-600  text-white hover:bg-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
+                            : 'bg-gray-300 dark:bg-zinc-800 text-gray-500 dark:text-zinc-400 cursor-not-allowed'
                             }`}
                     >
                         {isUploading ? (
@@ -360,9 +357,9 @@ export default function CreateVideoPage() {
                 {/* Upload Progress */}
                 {isUploading && (
                     <div className="mt-8 max-w-md mx-auto">
-                        <div className="bg-white rounded-lg p-6 shadow-lg border border-gray-200">
+                        <div className="bg-white dark:bg-zinc-900 rounded-lg p-6 shadow-lg border border-gray-200 dark:border-zinc-800">
                             <div className="flex items-center justify-between mb-3">
-                                <span className="text-sm font-medium text-gray-700">
+                                <span className="text-sm font-medium text-gray-700 dark:text-zinc-400">
                                     {uploadProgress < 70 ? 'កំពុងផ្ទុកវីដេអូ...' :
                                         uploadProgress < 90 ? 'កំពុងផ្ទុករូបភាព...' :
                                             uploadProgress < 95 ? 'កំពុងបង្កើតវីដេអូ...' :
@@ -371,13 +368,13 @@ export default function CreateVideoPage() {
                                 </span>
                                 <span className="text-sm text-indigo-600 font-semibold">{uploadProgress}%</span>
                             </div>
-                            <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                            <div className="w-full bg-gray-200 dark:bg-zinc-800 rounded-full h-3 overflow-hidden">
                                 <div
                                     className="bg-gradient-to-r from-indigo-500 to-indigo-600 h-3 rounded-full transition-all duration-500 ease-out"
                                     style={{ width: `${uploadProgress}%` }}
                                 ></div>
                             </div>
-                            <div className="mt-2 text-xs text-gray-500 text-center">
+                            <div className="mt-2 text-xs text-gray-500 dark:text-zinc-400 text-center">
                                 សូមកុំបិទអេក្រង់នេះ
                             </div>
                         </div>
@@ -389,7 +386,7 @@ export default function CreateVideoPage() {
                     <div className="mt-4 flex justify-center">
                         <button
                             onClick={handleUpload}
-                            className="flex items-center gap-2 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
+                            className="flex items-center gap-2 px-6 py-2 bg-red-600 dark:bg-red-900 text-white dark:text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-800 transition-colors duration-200"
                         >
                             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

@@ -43,13 +43,13 @@ export default function Videos({ userId }: VideoProps) {
     if (isLoading) {
         return (
             <div className="p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">វីដេអូ</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-zinc-400 mb-6">វីដេអូ</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {[...Array(6)].map((_, index) => (
                         <div key={index} className="animate-pulse">
                             <div className="aspect-video bg-gray-200 rounded-2xl mb-4"></div>
-                            <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                            <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                            <div className="h-4 bg-gray-200 dark:bg-zinc-800 rounded w-3/4 mb-2"></div>
+                            <div className="h-3 bg-gray-200 dark:bg-zinc-800 rounded w-1/2"></div>
                         </div>
                     ))}
                 </div>
@@ -60,7 +60,7 @@ export default function Videos({ userId }: VideoProps) {
     if (error) {
         return (
             <div className="p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">វីដេអូ</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-zinc-400 mb-6">វីដេអូ</h2>
                 <ContentError
                     type="error"
                     message={error}
@@ -72,7 +72,7 @@ export default function Videos({ userId }: VideoProps) {
     if (videos.length === 0) {
         return (
             <div className="p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">វីដេអូ</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-zinc-400 mb-6">វីដេអូ</h2>
                 <ContentError
                     type="no-results"
                     message="អ្នកប្រើប្រាស់នេះមិនទាន់មានវីដេអូទេ។"
@@ -83,7 +83,7 @@ export default function Videos({ userId }: VideoProps) {
 
     return (
         <div className="p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">វីដេអូ ({videos.length})</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-zinc-400 mb-6">វីដេអូ ({videos.length})</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {videos.map((video) => (
@@ -92,7 +92,7 @@ export default function Videos({ userId }: VideoProps) {
                         href={`/videos/${video.id}`}
                         className="group block"
                     >
-                        <div className="bg-white rounded-3xl shadow-lg shadow-indigo-500/10 border border-indigo-500/10 transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/15 hover:-translate-y-1 overflow-hidden">
+                        <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-lg shadow-indigo-500/10 border border-indigo-500/10 transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/15 hover:-translate-y-1 overflow-hidden">
                             {/* Video Thumbnail */}
                             <div className="relative aspect-video">
                                 <img
@@ -120,11 +120,11 @@ export default function Videos({ userId }: VideoProps) {
 
                             {/* Video Info */}
                             <div className="p-4">
-                                <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                                <h3 className="font-bold text-gray-900 dark:text-zinc-400 mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
                                     {video.title}
                                 </h3>
 
-                                <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                                <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-zinc-400 mb-3">
                                     <div className="flex items-center gap-1">
                                         <Eye className="w-4 h-4" />
                                         {video.viewCount}
@@ -135,7 +135,7 @@ export default function Videos({ userId }: VideoProps) {
                                     </div>
                                 </div>
 
-                                <div className="text-xs text-gray-500">
+                                <div className="text-xs text-gray-500 dark:text-zinc-400">
                                     {new Date(video.createdAt).toLocaleDateString('km-KH', {
                                         year: 'numeric',
                                         month: 'long',
