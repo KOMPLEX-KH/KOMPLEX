@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { View, TextInput, Pressable, StyleSheet } from 'react-native';
-import { Eye, EyeOff, Mail, Lock } from 'lucide-react-native';
+import { Eye, EyeOff } from 'lucide-react-native';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
+import { authService } from '@/services/index';
+import ForgetPassword from './ForgetPassword';
 
 interface LoginFormProps {
     loginIdentifier: string;
@@ -14,6 +17,7 @@ interface LoginFormProps {
     handleLogin: () => void;
     isSubmitting?: boolean;
     errorMessage?: string | null;
+    onForgotPasswordChange?: (active: boolean) => void;
 }
 
 export default function LogIn({
@@ -27,19 +31,137 @@ export default function LogIn({
     handleLogin,
     isSubmitting = false,
     errorMessage = null,
+    onForgotPasswordChange,
 }: LoginFormProps) {
+    const [showForgotPassword, setShowForgotPassword] = useState(false);
+    const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
+    const [isOtpSent, setIsOtpSent] = useState(false);
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [forgotError, setForgotError] = useState<string | null>(null);
+    const [isForgotSubmitting, setIsForgotSubmitting] = useState(false);
+    const [resetToken, setResetToken] = useState<string | null>(null);
+    const [forgotOtp, setForgotOtp] = useState('');
+    const [otpExpiresIn, setOtpExpiresIn] = useState<number | undefined>(undefined);
+    const [resetTokenExpiresIn, setResetTokenExpiresIn] = useState<number | undefined>(undefined);
+
+    const setForgotView = (active: boolean) => {
+        setShowForgotPassword(active);
+        onForgotPasswordChange?.(active);
+    };
+
+    const handleForgotPasswordClick = () => {
+        setForgotView(true);
+        setForgotError(null);
+    };
+
+    const handleBackToLogin = () => {
+        setForgotView(false);
+        setForgotPasswordEmail('');
+        setIsOtpSent(false);
+        setNewPassword('');
+        setConfirmPassword('');
+        setForgotError(null);
+    };
+
+    const handleForgotPasswordSentOtp = async () => {
+        if (!forgotPasswordEmail) return;
+        setIsForgotSubmitting(true);
+        setForgotError(null);
+        try {
+            const res = await authService.sendForgetPasswordOtp(forgotPasswordEmail);
+            setOtpExpiresIn(res.data.expiresIn);
+            setIsOtpSent(true);
+        } catch (error: unknown) {
+            const status = (error as { response?: { status?: number } })?.response?.status;
+            if (status === 429) {
+                setForgotError('អ្នកបានព្យាយាមលេីសកំណត់។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។');
+            } else {
+                setForgotError('បញ្ហាក្នុងការស្នើសួតការកំណត់ពាក្យសម្ងាត់ថ្មី។ សូមព្យាយាមម្តងទៀត។');
+            }
+        } finally {
+            setIsForgotSubmitting(false);
+        }
+    };
+
+    const handleVerifyForgetPasswordOtp = async () => {
+        setIsForgotSubmitting(true);
+        setForgotError(null);
+        try {
+            const res = await authService.verifyForgetPasswordOtp({ email: forgotPasswordEmail, otp: forgotOtp });
+            setResetToken(res.data.verificationToken);
+            setResetTokenExpiresIn(res.data.expiresIn);
+        } catch (err) {
+            const status = (err as { response?: { status?: number } })?.response?.status;
+            if (status === 429) {
+                setForgotError('អ្នកបានព្យាយាមលេីសកំណត់។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ។');
+            } else {
+                setForgotError('ការផ្ទៀងផ្ទាត់ OTP បានបរាជ័យ។ សូមព្យាយាមម្តងទៀត។');
+            }
+        } finally {
+            setIsForgotSubmitting(false);
+        }
+    };
+
+    const handleNewPasswordSubmit = async () => {
+        if (!newPassword || !confirmPassword || newPassword !== confirmPassword || newPassword.length < 8) {
+            setForgotError('សូមបញ្ចូលពាក្យសម្ងាត់ត្រឹមត្រូវ');
+            return;
+        }
+        setForgotError(null);
+        setIsForgotSubmitting(true);
+        try {
+            await authService.resetPassword({
+                email: forgotPasswordEmail,
+                newPassword,
+                resetToken: resetToken!,
+            });
+            handleBackToLogin();
+        } catch {
+            setForgotError('បញ្ហាក្នុងការកំណត់ពាក្យសម្ងាត់ថ្មី។ សូមព្យាយាមម្តងទៀត។');
+        } finally {
+            setIsForgotSubmitting(false);
+        }
+    };
+
+    if (showForgotPassword) {
+        return (
+            <ForgetPassword
+                email={forgotPasswordEmail}
+                setEmail={setForgotPasswordEmail}
+                isSubmitting={isForgotSubmitting}
+                errorMessage={forgotError}
+                onOtpSent={handleForgotPasswordSentOtp}
+                onBackToLogin={handleBackToLogin}
+                isOtpSent={isOtpSent}
+                onPasswordReset={handleNewPasswordSubmit}
+                newPassword={newPassword}
+                confirmPassword={confirmPassword}
+                setNewPassword={setNewPassword}
+                setConfirmPassword={setConfirmPassword}
+                passwordError={forgotError}
+                forgotOtpCode={forgotOtp}
+                setForgotOtpCode={setForgotOtp}
+                onVerifyOtp={handleVerifyForgetPasswordOtp}
+                resetToken={resetToken}
+                otpExpiresIn={otpExpiresIn}
+                resetTokenExpiresIn={resetTokenExpiresIn}
+            />
+        );
+    }
+
     return (
         <View style={tw("gap-6")}>
             <View>
                 <Text style={tw("text-sm font-kh-medium text-gray-700 mb-3")}>
-                    អ៊ីមែល ឬ ឈ្មោះអ្នកប្រើប្រាស់
+                    អ៊ីមែល
                 </Text>
                 <View style={styles.inputContainer}>
                     <TextInput
                         value={loginIdentifier}
                         onChangeText={setLoginIdentifier}
                         style={[tw("flex-1 p-4  bg-gray-50 rounded-full font-kh-medium"), styles.input]}
-                        placeholder="បញ្ចូលអ៊ីមែល ឬ ឈ្មោះអ្នកប្រើប្រាស់"
+                        placeholder="បញ្ចូលអ៊ីមែលរបស់អ្នក"
                         placeholderTextColor="#9ca3af"
                         editable={!isSubmitting}
                         autoCapitalize="none"
@@ -79,6 +201,12 @@ export default function LogIn({
                     </Text>
                 </View>
             )}
+
+            <View style={tw("flex-row items-center justify-end")}>
+                <Pressable onPress={handleForgotPasswordClick}>
+                    <Text style={tw("text-sm text-indigo-600 font-medium")}>ភ្លេចពាក្យសម្ងាត់?</Text>
+                </Pressable>
+            </View>
 
             <Pressable
                 onPress={handleLogin}

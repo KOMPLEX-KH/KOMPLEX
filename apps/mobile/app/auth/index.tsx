@@ -71,6 +71,7 @@ const socialPlatforms: { name: string; provider: ProviderKey; icon: React.ReactN
 export default function AuthPage() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
+    const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -79,6 +80,12 @@ export default function AuthPage() {
     // Login form state
     const [loginIdentifier, setLoginIdentifier] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
+
+    // OTP state (signup flow)
+    const [isOtpView, setIsOtpView] = useState(false);
+    const [otpCode, setOtpCode] = useState('');
+    const [otpEmail, setOtpEmail] = useState('');
+    const [otpExpiresIn, setOtpExpiresIn] = useState(90);
 
     // Signup form state
     const [signupData, setSignupData] = useState({
@@ -116,11 +123,10 @@ export default function AuthPage() {
             await result.user.getIdToken(true);
             const userData = await authService.getCurrentUser();
 
-            await AsyncStorage.setItem("user", JSON.stringify(userData));
+            await AsyncStorage.setItem("user", JSON.stringify(userData.data));
 
             router.replace('/');
         } catch (error: unknown) {
-            console.error('Login error:', error);
             setFormError(getErrorMessage(error, 'login'));
         }
         finally {
@@ -128,6 +134,7 @@ export default function AuthPage() {
         }
     };
 
+    // Step 1: Send OTP to email, then show OTP view
     const handleSignup = async () => {
         if (!isSignupValid()) return;
 
@@ -135,42 +142,81 @@ export default function AuthPage() {
         setIsSubmitting(true);
 
         try {
+            const res = await authService.sendSignupOtp(signupData.email);
+            setOtpExpiresIn(res.data.expiresIn);
+            setOtpEmail(signupData.email);
+            setIsOtpView(true);
+        } catch (error: unknown) {
+            setFormError('មានបញ្ហាក្នុងការចុះឈ្មោះ។ សូមព្យាយាមម្តងទៀត។');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    // Step 2: Verify OTP then create Firebase account and signup
+    const handleVerifyOtp = async () => {
+        if (otpCode.length !== 6) return;
+        setIsSubmitting(true);
+        setFormError(null);
+
+        try {
+            const otpResult = await authService.verifySignupOtp({ email: otpEmail, otp: otpCode });
+
             let imageKey = '';
             if (signupData.profileImage) {
                 try {
-                    // For React Native image upload, we'll use a helper function
                     imageKey = await uploadImageFromURI(signupData.profileImage);
                 } catch (uploadErr) {
-                    console.error('Upload error:', uploadErr);
                     setFormError('បញ្ហាក្នុងការបង្ហោះរូបភាព');
                     setIsSubmitting(false);
                     return;
                 }
             }
 
-            const result = await createUserWithEmailAndPassword(auth, signupData.email, signupData.password);
-            const userData = await authService.signup({
+            const firebaseResult = await createUserWithEmailAndPassword(auth, otpEmail, signupData.password);
+            const generatedUsername = `${signupData.firstName.toLowerCase().trim()}${signupData.lastName.toLowerCase().trim()}${Date.now()}`.replace(/\s/g, '');
+
+            const finalPayload = {
                 email: signupData.email,
-                username: signupData.username,
-                uid: result.user.uid,
+                username: generatedUsername,
+                uid: firebaseResult.user.uid,
                 firstName: signupData.firstName,
                 lastName: signupData.lastName,
-                dateOfBirth: signupData.dateOfBirth,
-                phone: signupData.phone,
+                dateOfBirth: signupData.dateOfBirth || '',
+                phone: signupData.phone || '',
                 profileImageKey: imageKey,
-                verificationToken: '',
-            });
+                verificationToken: otpResult.data.verificationToken,
+            };
 
-            await AsyncStorage.setItem("user", JSON.stringify(userData));
-
-            // redirect to home page
+            const userData = await authService.signup(finalPayload);
+            await AsyncStorage.setItem("user", JSON.stringify(userData.data));
+            setIsOtpView(false);
             router.replace('/');
         } catch (error: unknown) {
-            console.error('Signup error:', error);
-            setFormError(getErrorMessage(error, 'signup'));
-        }
-        finally {
+            const status = (error as { response?: { status?: number } })?.response?.status;
+            if (status === 429) {
+                setFormError('អ្នកព្យាយាមផ្ទៀងផ្ទាត់ OTP លេីសកំណត់។ សូមព្យាយាមម្តងទៀតម្តងទៀតក្រោយ១៥ នា។');
+            } else {
+                setFormError('ការផ្ទៀងផ្ទាត់ OTP បានបរាជ័យ។ សូមព្យាយាមម្តងទៀត។');
+            }
+        } finally {
             setIsSubmitting(false);
+        }
+    };
+
+    const onResendOtp = async () => {
+        setFormError(null);
+        try {
+            const res = await authService.sendSignupOtp(otpEmail);
+            setOtpExpiresIn(res.data.expiresIn);
+            setFormError('OTP បានផ្ញើម្តងទៀតទៅអ៊ីមែលរបស់អ្នក។');
+        } catch (error: unknown) {
+            const status = (error as { response?: { status?: number } })?.response?.status;
+            if (status === 429) {
+                setFormError('អ្នកបានស្នើសួតថ្មីច្រើនព័កបន្តាច់។ សូមស័កព្វាកៅពេលប្រហែល ១៥ នាតីមុនស័កម្តងទៀត។');
+            } else {
+                setFormError('បញ្ហាក្នុងការផ្ញើ OTP ម្តងទៀត។ សូមព្យាយាមម្តងទៀត។');
+            }
         }
     };
 
@@ -229,7 +275,6 @@ export default function AuthPage() {
 
             return key;
         } catch (error) {
-            console.error('Error uploading image:', error);
             throw error;
         }
     };
@@ -265,39 +310,22 @@ export default function AuthPage() {
             });
 
             // If proxy didn't work (still exp://), manually construct HTTPS proxy URL
-            // Note: You may need to replace 'your-expo-username' with your actual Expo username
-            // or use the format that works with your Expo account
             if (redirectUri.startsWith('exp://')) {
-                // Try to get username from Constants, fallback to manual entry needed
                 const expoUsername = Constants.expoConfig?.owner || Constants.manifest?.owner?.username || 'ocraksa';
                 redirectUri = `https://auth.expo.io/${expoUsername}/${expoSlug}`;
-                console.log('⚠️ Proxy not available, using manual HTTPS proxy URL');
-                console.log('📝 If this doesn\'t work, replace "your-expo-username" with your actual Expo username');
             }
-
-            // Log the redirect URI for debugging - add this exact HTTPS URI to Google Cloud Console
-            console.log('OAuth Redirect URI:', redirectUri);
-            console.log('⚠️ IMPORTANT: Add this exact HTTPS URI to Google Cloud Console > OAuth 2.0 Client IDs > Web Client > Authorized redirect URIs');
 
             let discovery: AuthSession.DiscoveryDocument;
             let request: AuthSession.AuthRequest;
 
             // Configure OAuth based on provider
-            // When using Expo proxy (HTTPS redirect URI), we MUST use Web client ID
             if (providerKey === 'google') {
                 discovery = {
                     authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
                     tokenEndpoint: 'https://oauth2.googleapis.com/token',
                     revocationEndpoint: 'https://oauth2.googleapis.com/revoke',
                 };
-                // Use Web client ID when using Expo proxy (HTTPS redirect URI)
                 const googleClientId = process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID || process.env.EXPO_PUBLIC_FIREBASE_GOOGLE_CLIENT_ID || '';
-
-                // Log client ID for debugging (first 20 chars only for security)
-                console.log('🔑 Using Google Client ID:', googleClientId ? `${googleClientId.substring(0, 20)}...` : '❌ MISSING');
-                console.log('📱 Platform:', Platform.OS);
-                console.log('🔗 Redirect URI:', redirectUri);
-
                 request = new AuthSession.AuthRequest({
                     clientId: googleClientId,
                     scopes: ['openid', 'profile', 'email'],
@@ -334,14 +362,6 @@ export default function AuthPage() {
                 throw new Error(`Missing OAuth client ID for ${providerKey}. Please configure it in your environment variables.`);
             }
 
-            // Log OAuth request details for debugging
-            console.log('🚀 Starting OAuth flow with:');
-            console.log('   Client ID:', request.clientId ? `${request.clientId.substring(0, 30)}...` : 'MISSING');
-            console.log('   Redirect URI:', redirectUri);
-            console.log('   Scopes:', request.scopes || ['openid', 'profile', 'email']);
-            console.log('   ⚠️ Make sure this exact redirect URI is registered in Google Cloud Console for this Client ID');
-
-            // Start the OAuth flow
             const result = await request.promptAsync(discovery);
 
             if (result.type !== 'success') {
@@ -356,10 +376,8 @@ export default function AuthPage() {
             tokenRequestParams.append('redirect_uri', redirectUri);
             tokenRequestParams.append('grant_type', 'authorization_code');
 
-            // Add client secret for providers that require it (Google Web client requires secret)
             if (providerKey === 'google' && process.env.EXPO_PUBLIC_GOOGLE_CLIENT_SECRET) {
                 tokenRequestParams.append('client_secret', process.env.EXPO_PUBLIC_GOOGLE_CLIENT_SECRET);
-                console.log('🔐 Using Google client secret for token exchange');
             }
             if (providerKey === 'github' && process.env.EXPO_PUBLIC_GITHUB_CLIENT_SECRET) {
                 tokenRequestParams.append('client_secret', process.env.EXPO_PUBLIC_GITHUB_CLIENT_SECRET);
@@ -377,17 +395,8 @@ export default function AuthPage() {
             const tokenData = await tokenResponse.json();
 
             if (!tokenData.access_token) {
-                console.error('❌ Token exchange failed:', tokenData);
-                console.error('📋 Request details:', {
-                    clientId: request.clientId ? `${request.clientId.substring(0, 20)}...` : 'MISSING',
-                    redirectUri,
-                    code: result.params.code ? 'present' : 'missing',
-                    tokenEndpoint: discovery.tokenEndpoint,
-                });
                 throw new Error(`Failed to get access token: ${JSON.stringify(tokenData)}`);
             }
-
-            console.log('✅ Successfully obtained access token');
 
             // Create Firebase credential from OAuth token
             let credential;
@@ -399,7 +408,6 @@ export default function AuthPage() {
                     accessToken: tokenData.access_token,
                 });
             } else if (providerKey === 'github') {
-                // GitHub doesn't provide idToken, use access token
                 credential = GithubAuthProvider.credential(tokenData.access_token);
             } else {
                 throw new Error('Unsupported provider');
@@ -409,22 +417,17 @@ export default function AuthPage() {
             const firebaseResult = await signInWithCredential(auth, credential);
             await firebaseResult.user.getIdToken(true);
 
-            // The auth state listener in useAuth.tsx will handle user creation
-            // if the user doesn't exist in the backend
             setIsSubmitting(false);
         } catch (error: unknown) {
-            console.error('Social login error:', error);
             setIsSubmitting(false);
 
             // Handle special case for account exists with different credential
             if (isFirebaseAuthError(error) && error.code === "auth/account-exists-with-different-credential") {
                 const email = error.customData?.email;
                 try {
-                    // Get the existing sign-in methods for this email
                     const methods = await fetchSignInMethodsForEmail(getAuth(), email);
                     setFormError(getErrorMessage(error, 'social', { email: email || '', methods }));
                 } catch (fetchError) {
-                    console.error('Error fetching sign-in methods:', fetchError);
                     setFormError(getErrorMessage(error, 'social'));
                 }
             } else {
@@ -457,12 +460,15 @@ export default function AuthPage() {
                 keyboardShouldPersistTaps="handled"
                 showsVerticalScrollIndicator={false}
             >
-                {/* Logo */}
-                <View style={tw("items-center mb-6")}>
-                    <Logo size='lg' />
-                </View>
+                {/* Logo — hidden when forgot password or OTP view */}
+                {!isForgotPassword && !isOtpView && (
+                    <View style={tw("items-center mb-6")}>
+                        <Logo size='lg' />
+                    </View>
+                )}
 
-                {/* Tab Navigation - Native Style */}
+                {/* Tab Navigation — hidden when forgot password or OTP view */}
+                {!isForgotPassword && !isOtpView && (
                 <View style={tw("flex-row mb-8 bg-gray-100 rounded-full p-1")}>
                     <Pressable
                         onPress={() => setActiveTab('login')}
@@ -493,6 +499,7 @@ export default function AuthPage() {
                         </Text>
                     </Pressable>
                 </View>
+                )}
 
                 {/* Login Form */}
                 {activeTab === 'login' && (
@@ -507,6 +514,7 @@ export default function AuthPage() {
                         handleLogin={handleLogin}
                         isSubmitting={isSubmitting}
                         errorMessage={formError}
+                        onForgotPasswordChange={setIsForgotPassword}
                     />
                 )}
 
@@ -524,6 +532,14 @@ export default function AuthPage() {
                         handleProfileImageChange={handleProfileImageChange}
                         isSubmitting={isSubmitting}
                         errorMessage={formError}
+                        showOtpView={isOtpView}
+                        otpCode={otpCode}
+                        setOtpCode={setOtpCode}
+                        otpEmail={otpEmail}
+                        onVerifyOtp={handleVerifyOtp}
+                        onResendOtp={onResendOtp}
+                        otpExpiresIn={otpExpiresIn}
+                        onOtpViewChange={() => setIsOtpView(false)}
                     />
                 )}
 

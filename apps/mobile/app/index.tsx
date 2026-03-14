@@ -44,10 +44,10 @@ const MAIN_FEATURES = {
         href: '/forums',
         spanRows: 1,
     },
-    utilities: {
+    extras: {
         title: 'បន្ថែម',
         icon: <Library size={28} color={"white"} />,
-        href: '/utilities',
+        href: '/extras',
         spanRows: 1,
     },
 }
@@ -320,12 +320,12 @@ export default function HomeScreen() {
                                     href={MAIN_FEATURES.forums.href as any}
                                 />
                             </View>
-                            {/* Utilities */}
+                            {/* Extras */}
                             <View style={tw("flex-1")}>
                                 <FeatureCard
-                                    title={MAIN_FEATURES.utilities.title}
-                                    icon={MAIN_FEATURES.utilities.icon}
-                                    onPress={() => setShowComingSoon(true)}
+                                    title={MAIN_FEATURES.extras.title}
+                                    icon={MAIN_FEATURES.extras.icon}
+                                    href={MAIN_FEATURES.extras.href as any}
                                 />
                             </View>
                         </View>
