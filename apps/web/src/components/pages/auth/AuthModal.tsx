@@ -166,7 +166,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                 dateOfBirth: signupData.dateOfBirth,
                 phone: signupData.phone,
                 profileImageKey: imageKey,
-                verificationToken: otpResult.verificationToken,
+                verificationToken: otpResult.data.verificationToken,
             });
 
             localStorage.setItem('user', JSON.stringify(userData.data));
@@ -257,7 +257,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                 dateOfBirth: signupData.dateOfBirth || '',
                 phone: signupData.phone || '',
                 profileImageKey: imageKey,
-                verificationToken: otpResult.verificationToken,
+                verificationToken: otpResult.data.verificationToken,
             };
 
             const result = await authService.signup(finalPayload);

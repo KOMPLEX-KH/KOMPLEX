@@ -21,7 +21,7 @@ export const createAuthService = (api: AxiosInstance) => {
     // send otp for signup
     sendSignupOtp: async (email: string): Promise<ApiWrapper<signupOtpResponse>> => {
       try {
-        const response = await api.post(`/auth/send-signup-otp`, { email });
+        const response = await api.post<ApiWrapper<signupOtpResponse>>(`/auth/send-signup-otp`, { email });
         return response.data;
       } catch (error) {
         throw error;
@@ -29,9 +29,9 @@ export const createAuthService = (api: AxiosInstance) => {
     },
 
     // verify otp
-    verifySignupOtp: async (verifyData: { email: string; otp: string }): Promise<VerifySignupOtpResponse> => {
+    verifySignupOtp: async (verifyData: { email: string; otp: string }): Promise<ApiWrapper<VerifySignupOtpResponse>> => {
       try {
-        const response = await api.post(`/auth/verify-signup-otp`, verifyData);
+        const response = await api.post<ApiWrapper<VerifySignupOtpResponse>>(`/auth/verify-signup-otp`, verifyData);
         return response.data;
       } catch (error) {
         throw error;
@@ -52,7 +52,7 @@ export const createAuthService = (api: AxiosInstance) => {
 
     sendForgetPasswordOtp: async (email: string): Promise<ApiWrapper<ForgetPasswordOtpResponse>> => {
       try {
-        const response = await api.post(`/auth/send-forget-password-otp`, { email });
+        const response = await api.post<ApiWrapper<ForgetPasswordOtpResponse>>(`/auth/send-forget-password-otp`, { email });
         return response.data;
       } catch (error) {
         throw error;
@@ -63,7 +63,7 @@ export const createAuthService = (api: AxiosInstance) => {
       verifyData: { email: string; otp: string }
     ): Promise<ApiWrapper<VerifyForgetPasswordOtpResponse>> => {
       try {
-        const response = await api.post(`/auth/verify-forget-password-otp`, verifyData);
+        const response = await api.post<ApiWrapper<VerifyForgetPasswordOtpResponse>>(`/auth/verify-forget-password-otp`, verifyData);
         return response.data;
       } catch (error) {
         throw error;
@@ -74,7 +74,7 @@ export const createAuthService = (api: AxiosInstance) => {
       resetData: { email: string; resetToken: string; newPassword: string }
     ): Promise<ApiWrapper<ResetPasswordResponse>> => {
       try {
-        const response = await api.post(`/auth/reset-password`, resetData);
+        const response = await api.post<ApiWrapper<ResetPasswordResponse>>(`/auth/reset-password`, resetData);
         return response.data;
       } catch (error) {
         throw error;

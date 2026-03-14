@@ -120,7 +120,6 @@ export default function AuthPage() {
                 try {
                     imageKey = await uploadService.uploadFile(signupData.profileImage);
                 } catch (uploadErr) {
-                    console.error('Upload error:', uploadErr);
                     setFormError('បញ្ហាក្នុងការបង្ហោះរូបភាព');
                     return;
                 }
@@ -139,7 +138,7 @@ export default function AuthPage() {
                 dateOfBirth: signupData.dateOfBirth || '',
                 phone: signupData.phone || '',
                 profileImageKey: imageKey,
-                verificationToken: otpResult.verificationToken,
+                verificationToken: otpResult.data.verificationToken,
             };
 
             const userData = await authService.signup(finalPayload);
