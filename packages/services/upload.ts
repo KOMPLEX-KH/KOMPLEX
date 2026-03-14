@@ -16,7 +16,7 @@ export const createUploadService = (api: AxiosInstance) => {
         const response = await api.post<ApiWrapper<UploadUrlResponse>>(`/upload/upload-url`, {
           fileName,
           fileType,
-        }, { withCredentials: true });
+        }, { withCredentials: false });
         return response.data;
       } catch (error) {
         throw new Error("Failed to get upload URL");
@@ -47,7 +47,7 @@ export const createUploadService = (api: AxiosInstance) => {
             fileName: file.name,
             fileType: file.type,
           },
-          { withCredentials: true }
+          { withCredentials: false }
         );
 
         const { signedUrl, key } = response.data.data;
@@ -73,7 +73,7 @@ export const createUploadService = (api: AxiosInstance) => {
             fileName: file.name,
             fileType: file.type,
           },
-          { withCredentials: true }
+          { withCredentials: false }
         );
 
         const { signedUrl, key, publicUrl } = response.data.data;
@@ -99,7 +99,7 @@ export const createUploadService = (api: AxiosInstance) => {
             .post<ApiWrapper<UploadUrlResponse>>(`/upload/upload-url`, {
               fileName: file.name,
               fileType: file.type,
-            }, { withCredentials: true })
+            }, { withCredentials: false })
             .then(async (response) => {
               const { signedUrl, key } = response.data.data;
               await axios.put(signedUrl, file, {

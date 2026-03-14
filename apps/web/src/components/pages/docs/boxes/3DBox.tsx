@@ -22,9 +22,9 @@ export function ThreeDBox({
 
   return (
     <>
-      <div className="bg-indigo-50/80 border border-indigo-600 my-6 rounded-3xl p-4 shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+      <div className="bg-indigo-50/80 dark:bg-indigo-900/40 border border-indigo-600 dark:border-indigo-500 my-6 rounded-3xl p-4 shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
         {/* 3D Canvas */}
-        <div className="relative group bg-white rounded-3xl">
+        <div className="relative group bg-white dark:bg-zinc-900 rounded-3xl">
           <ThreeD
             src={src}
             scale={scale}
@@ -37,7 +37,7 @@ export function ThreeDBox({
           />
           <button
             onClick={() => setIsModalOpen(true)}
-            className="absolute -top-2 -right-2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 lg:group-hover:opacity-100 transition-opacity duration-200"
+            className="absolute -top-2 -right-2 bg-black/50 dark:bg-zinc-900/50 hover:bg-black/70 dark:hover:bg-zinc-900/70 text-white p-2 rounded-full opacity-0 lg:group-hover:opacity-100 transition-opacity duration-200"
           >
             <Maximize2 size={16} />
           </button>
@@ -47,11 +47,11 @@ export function ThreeDBox({
         {content && (
           <div className="mt-4">
             {typeof content === "string" ? (
-              <div className="leading-relaxed text-base text-gray-700">
+              <div className="leading-relaxed text-base text-gray-700 dark:text-zinc-300">
                 {content}
               </div>
             ) : (
-              <div className="leading-relaxed text-base text-gray-700">
+              <div className="leading-relaxed text-base text-gray-700 dark:text-zinc-300">
                 {content}
               </div>
             )}
@@ -77,7 +77,7 @@ export function ThreeDBox({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" />
+            <div className="fixed inset-0 bg-black/80 dark:bg-zinc-900/80 backdrop-blur-sm" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -91,13 +91,13 @@ export function ThreeDBox({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="relative w-full max-w-6xl transform overflow-hidden rounded-3xl bg-white text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="relative w-full max-w-6xl transform overflow-hidden rounded-3xl bg-white dark:bg-zinc-900 text-left align-middle shadow-xl transition-all">
                   <div className="relative">
                     <button
                       onClick={() => {
                         window.location.reload();
                       }}
-                      className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+                      className="absolute top-4 right-4 z-10 bg-black/50 dark:bg-zinc-900/50 hover:bg-black/70 dark:hover:bg-zinc-900/70 text-white p-2 rounded-full transition-colors"
                     >
                       <X size={20} />
                     </button>

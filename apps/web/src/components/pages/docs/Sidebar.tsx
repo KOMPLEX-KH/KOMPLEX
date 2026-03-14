@@ -116,9 +116,9 @@ export default function Sidebar({
     return (
         <div
             ref={sidebarRef}
-            className="hidden lg:block w-70 bg-white/95 backdrop-blur-md border-r border-indigo-500/10 overflow-y-auto fixed h-[calc(100vh-56px)] top-28 z-40 shadow-lg scrollbar-hide"
+            className="hidden lg:block w-70 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border-r border-indigo-500/10 overflow-y-auto fixed h-[calc(100vh-56px)] top-28 z-40 shadow-lg scrollbar-hide"
         >
-            <div className="pb-12"> {/* Added bottom padding to ensure last lesson is visible */}
+            <div className="pb-12">
                 <div className="p-4">
                     <div className="space-y-4">
                         {subjectData.lessons.map((lessonData) => {
@@ -132,9 +132,9 @@ export default function Sidebar({
                                     <button
                                         data-lesson={lessonData.id}
                                         onClick={(e) => toggleLesson(e, lessonData.id)}
-                                        className={`w-full flex items-center justify-between p-4 rounded-full shadow-lg shadow-indigo-500/15 ${isActive
-                                            ? 'bg-indigo-50 text-indigo-600 border-l-4 border-indigo-500 '
-                                            : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
+                                        className={`w-full flex items-center justify-between p-4 rounded-full shadow-lg shadow-indigo-500/15 dark:shadow-indigo-900/15 ${isActive
+                                            ? 'bg-indigo-50 dark:bg-indigo-900/90 text-indigo-600 dark:text-white border-l-4 border-indigo-500 '
+                                            : 'bg-gray-50 dark:bg-zinc-900/90 hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-700 dark:text-zinc-400 hover:dark:text-white transition-all duration-200'
                                             }`}
                                     >
                                         <div className="flex items-center gap-3">
@@ -144,9 +144,9 @@ export default function Sidebar({
                                             </span>
                                         </div>
                                         {isExpanded ? (
-                                            <ChevronDown size={18} className={isActive ? 'text-indigo-500' : 'text-gray-500'} />
+                                            <ChevronDown size={18} className={isActive ? 'text-indigo-500 dark:text-white' : 'text-gray-500 dark:text-zinc-400'} />
                                         ) : (
-                                            <ChevronRight size={18} className={isActive ? 'text-indigo-500' : 'text-gray-500'} />
+                                            <ChevronRight size={18} className={isActive ? 'text-indigo-500 dark:text-white' : 'text-gray-500 dark:text-zinc-400'} />
                                         )}
                                     </button>
 
@@ -160,9 +160,9 @@ export default function Sidebar({
                                                         key={index}
                                                         href={`/docs/${currentGrade?.id}/${currentSubject?.id}/${lessonData.id}/${topicData.id}`}
                                                         onClick={handleLinkClick}
-                                                        className={`block px-4 py-3 rounded-full text-sm font-medium ${isTopicActive
-                                                            ? 'text-indigo-600 bg-indigo-50/80 font-semibold'
-                                                            : 'text-gray-600 hover:text-indigo-500 hover:bg-indigo-50/60'
+                                                        className={`block px-4 py-3 rounded-full text-sm font-medium transition-all duration-200 ${isTopicActive
+                                                            ? 'text-indigo-600 dark:text-white bg-indigo-50/80 dark:bg-indigo-900/80 font-semibold'
+                                                            : 'text-zinc-600 dark:text-zinc-300 hover:text-indigo-500 hover:bg-indigo-50/60 dark:hover:bg-indigo-900/60 duration-300'
                                                             }`}
                                                     >
                                                         {topicData.name}

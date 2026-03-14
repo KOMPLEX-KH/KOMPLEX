@@ -133,7 +133,7 @@ export default function DocHeader({
     return (
         <>
             {/* Desktop Subject Header */}
-            <div className="hidden lg:block fixed w-full top-14 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10">
+            <div className="hidden lg:block fixed w-full top-14 z-40 bg-white/95 dark:bg-zinc-900/95 dark:border-zinc-800 backdrop-blur-md border-b border-indigo-500/10">
                 <div className="max-w-full mx-auto px-5 py-2">
                     <div className="flex items-center justify-between gap-5">
                         <div className="flex items-center gap-4">
@@ -144,9 +144,9 @@ export default function DocHeader({
                                     <Link
                                         key={subject.id}
                                         href={`/docs/${gradeData.id}/${subject.id}/${subject.lessons[0].id}/${subject.lessons[0].topics[0].id}`}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm ${isActive
-                                            ? 'text-indigo-600 bg-indigo-50/90 border border-indigo-500/20 shadow-sm'
-                                            : 'text-gray-600 bg-white/80 backdrop-blur-sm border border-indigo-500/10 hover:text-indigo-600 hover:bg-indigo-50/90'
+                                        className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 font-medium text-sm dark:hover:border-indigo-500/20 ${isActive
+                                            ? 'text-indigo-600 dark:text-white bg-indigo-50/90 dark:bg-indigo-900/90 border border-indigo-500/20 shadow-sm dark:hover:border-indigo-500/20'
+                                            : 'text-gray-600 dark:text-zinc-400 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-indigo-500/10 hover:text-indigo-600 hover:bg-indigo-50/90 dark:hover:border-indigo-500/20'
                                             }`}
                                     >
                                         <Icon size={18} />
@@ -156,7 +156,7 @@ export default function DocHeader({
                             })}
                         </div>
                         {/* Grade select for desktop */}
-                        <div className="hidden lg:flex items-center bg-indigo-50/50 p-1 gap-4 rounded-full">
+                        <div className="hidden lg:flex items-center bg-zinc-800 p-1 gap-4 rounded-full">
                             {grades.map((grade) => {
                                 const isActive = gradeData.id === grade.value;
                                 return (
@@ -164,8 +164,8 @@ export default function DocHeader({
                                         key={grade.value}
                                         onClick={() => handleChangeGrade(grade.value)}
                                         className={`flex items-center gap-2 p-2 rounded-full text-sm font-medium cursor-pointer transition-all duration-300 backdrop-blur-sm ${isActive
-                                            ? 'text-indigo-600 bg-indigo-100/80 border border-indigo-500/30 shadow-sm'
-                                            : 'text-gray-700 hover:text-indigo-600 hover:bg-indigo-50/80 hover:border-indigo-500/20 border border-transparent'
+                                            ? 'text-indigo-600 dark:text-white bg-indigo-100/80 dark:bg-indigo-900/80 border border-indigo-500/30 shadow-sm dark:hover:border-indigo-500/30 hover:bg-indigo-100/80 dark:hover:bg-indigo-900/80'
+                                            : 'text-gray-700 dark:text-zinc-400 hover:text-indigo-600 hover:bg-indigo-50/80 hover:border-indigo-500/20 border border-transparent dark:hover:border-indigo-500/20'
                                             }`}
                                         // Add focus:outline-none
                                         tabIndex={0}
@@ -186,9 +186,9 @@ export default function DocHeader({
                                 }
                             }}>
                                 <div className="relative">
-                                    <Listbox.Button className="bg-white/95 border border-indigo-500/20 rounded-full px-4 py-2 text-sm font-medium text-gray-700 cursor-pointer transition-all duration-300 backdrop-blur-sm hover:border-indigo-500 focus:outline-none  flex items-center justify-between  min-w-[120px] ">
+                                    <Listbox.Button className="bg-white/95 dark:bg-zinc-900/95 border border-indigo-500/20 rounded-full px-4 py-2 text-sm font-medium text-gray-700 dark:text-zinc-400 cursor-pointer transition-all duration-300 backdrop-blur-sm hover:border-indigo-500 focus:outline-none  flex items-center justify-between  min-w-[120px] dark:hover:border-indigo-500/40">
                                         <span>{currentGradeData?.label}</span>
-                                        <ChevronDown size={16} className="text-gray-500" />
+                                        <ChevronDown size={16} className="text-gray-500 dark:text-zinc-400" />
                                     </Listbox.Button>
                                     <Transition
                                         enter="transition duration-100 ease-out"
@@ -198,20 +198,20 @@ export default function DocHeader({
                                         leaveFrom="transform scale-100 opacity-100"
                                         leaveTo="transform scale-95 opacity-0"
                                     >
-                                        <Listbox.Options className="absolute right-0 mt-2 w-48 bg-white rounded-full border border-indigo-500/20 shadow-lg backdrop-blur-sm z-50 max-h-60 overflow-auto">
+                                        <Listbox.Options className="absolute right-0 mt-2 w-48 bg-white dark:bg-zinc-900 rounded-full border border-indigo-500/20 shadow-lg backdrop-blur-sm z-50 max-h-60 overflow-auto dark:hover:border-indigo-500/40">
                                             {grades.map((grade) => (
                                                 <Listbox.Option
                                                     key={grade.value}
                                                     value={grade}
                                                     className={({ active }) =>
-                                                        `relative cursor-pointer select-none py-3 px-4 text-sm ${active ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700'
+                                                        `relative cursor-pointer select-none py-3 px-4 text-sm ${active ? 'bg-indigo-50 dark:bg-indigo-900/90 text-indigo-600 dark:text-white' : 'text-gray-700 dark:text-zinc-400'
                                                         }`
                                                     }
                                                 >
                                                     {({ selected }) => (
                                                         <div className="flex items-center justify-between">
                                                             <span>{grade.label}</span>
-                                                            {selected && <Check size={16} className="text-indigo-600" />}
+                                                            {selected && <Check size={16} className="text-indigo-600 dark:text-white" />}
                                                         </div>
                                                     )}
                                                 </Listbox.Option>
@@ -226,7 +226,7 @@ export default function DocHeader({
             </div>
 
             {/* Mobile Subject Navigation */}
-            <div className={`lg:hidden fixed w-full top-14 z-40 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-[300%]' : 'translate-y-0'
+            <div className={`lg:hidden fixed w-full top-14 z-40 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-[300%]' : 'translate-y-0'
                 }`}>
                 <div className="max-w-full mx-auto px-5 py-2">
                     <div className="flex items-center justify-between gap-3">
@@ -239,8 +239,8 @@ export default function DocHeader({
                                         key={subject.id}
                                         href={`/docs/${gradeData.id}/${subject.id}/${subject.lessons[0].id}/${subject.lessons[0].topics[0].id}`}
                                         className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-xs whitespace-nowrap flex-shrink-0 ${isActive
-                                            ? 'text-indigo-600 bg-indigo-50/90 border border-indigo-500/20 shadow-sm'
-                                            : 'text-gray-600 bg-white/80 backdrop-blur-sm border border-indigo-500/10 hover:text-indigo-600 hover:bg-indigo-50/90'
+                                            ? 'text-indigo-600 dark:text-white bg-indigo-50/90 dark:bg-indigo-900/90 border border-indigo-500/20 shadow-sm'
+                                            : 'text-gray-600 dark:text-zinc-400 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-indigo-500/10 hover:text-indigo-600 hover:bg-indigo-50/90 dark:hover:border-indigo-500/20'
                                             }`}
                                     >
                                         <Icon size={18} />
@@ -260,9 +260,9 @@ export default function DocHeader({
                             }
                         }}>
                             <div className="relative">
-                                <Listbox.Button className="bg-white/95 border border-indigo-500/20 rounded-full px-2 py-2 text-xs font-medium text-gray-700 cursor-pointer transition-all duration-300 backdrop-blur-sm  focus:outline-none  flex items-center justify-between  max-w-[80px] min-w-[60px] ">
+                                <Listbox.Button className="bg-white/95 dark:bg-zinc-900/95 border border-indigo-500/20 rounded-full px-2 py-2 text-xs font-medium text-gray-700 dark:text-zinc-400 cursor-pointer transition-all duration-300 backdrop-blur-sm  focus:outline-none  flex items-center justify-between  max-w-[80px] min-w-[60px] dark:hover:border-indigo-500/40">
                                     <span className="truncate">{currentGradeData?.label}</span>
-                                    <ChevronDown size={14} className="text-gray-500 flex-shrink-0" />
+                                    <ChevronDown size={14} className="text-gray-500 dark:text-zinc-400 flex-shrink-0" />
                                 </Listbox.Button>
                                 <Transition
                                     enter="transition duration-100 ease-out"
@@ -272,20 +272,20 @@ export default function DocHeader({
                                     leaveFrom="transform scale-100 opacity-100"
                                     leaveTo="transform scale-95 opacity-0"
                                 >
-                                    <Listbox.Options className="absolute right-0 mt-2 w-40 bg-white/95 rounded-3xl border border-indigo-500/20 shadow-lg backdrop-blur-sm z-50 max-h-60 overflow-auto scrollbar-hide p-1.5 focus:outline-none">
+                                    <Listbox.Options className="absolute right-0 mt-2 w-40 bg-white/95 dark:bg-zinc-900/95 rounded-3xl border border-indigo-500/20 shadow-lg backdrop-blur-sm z-50 max-h-60 overflow-auto scrollbar-hide p-1.5 focus:outline-none">
                                         {grades.map((grade) => (
                                             <Listbox.Option
                                                 key={grade.value}
                                                 value={grade}
                                                 className={({ active }) =>
-                                                    `relative cursor-pointer select-none py-2 px-2 text-xs rounded-full ${active ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700'
+                                                    `relative cursor-pointer select-none py-2 px-2 text-xs rounded-full ${active ? 'bg-indigo-50 dark:bg-indigo-900/90 text-indigo-600 dark:text-white' : 'text-gray-700 dark:text-zinc-400'
                                                     }`
                                                 }
                                             >
                                                 {({ selected }) => (
                                                     <div className="flex items-center justify-between">
                                                         <span>{grade.label}</span>
-                                                        {selected && <Check size={14} className="text-indigo-600" />}
+                                                        {selected && <Check size={14} className="text-indigo-600 dark:text-white" />}
                                                     </div>
                                                 )}
                                             </Listbox.Option>
@@ -299,7 +299,7 @@ export default function DocHeader({
             </div>
 
             {/* Mobile Content Navigation */}
-            <div className={`lg:hidden fixed w-full top-27 z-30 bg-white/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-[300%]' : 'translate-y-0'
+            <div className={`lg:hidden fixed w-full top-27 z-30 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border-b border-indigo-500/10 transition-transform duration-300 ${isScrollingDown ? '-translate-y-[300%]' : 'translate-y-0'
                 }`}>
                 <div className="max-w-full mx-auto px-5 py-2">
                     <div className="flex items-center justify-start gap-3">
@@ -310,9 +310,9 @@ export default function DocHeader({
                             }
                         }}>
                             <div className="relative">
-                                <Listbox.Button className="bg-white/95 border border-indigo-500/20 rounded-full px-2 py-2 text-xs font-medium text-gray-700 cursor-pointer transition-all duration-300 backdrop-blur-sm  focus:outline-none  flex items-center justify-between  max-w-[80px] min-w-[60px] ">
+                                <Listbox.Button className="bg-white/95 dark:bg-zinc-900/95 border border-indigo-500/20 rounded-full px-2 py-2 text-xs font-medium text-gray-700 dark:text-zinc-400 cursor-pointer transition-all duration-300 backdrop-blur-sm  focus:outline-none  flex items-center justify-between  max-w-[80px] min-w-[60px] ">
                                     <span className="truncate">{currentLessonData?.name}</span>
-                                    <ChevronDown size={14} className="text-gray-500 flex-shrink-0" />
+                                    <ChevronDown size={14} className="text-gray-500 dark:text-zinc-400 flex-shrink-0" />
                                 </Listbox.Button>
                                 <Transition
                                     enter="transition duration-100 ease-out"
@@ -322,20 +322,20 @@ export default function DocHeader({
                                     leaveFrom="transform scale-100 opacity-100"
                                     leaveTo="transform scale-95 opacity-0"
                                 >
-                                    <Listbox.Options className="absolute left-0 mt-2 w-48 bg-white/95 rounded-3xl border border-indigo-500/20 shadow-lg backdrop-blur-sm z-50 max-h-60 overflow-auto scrollbar-hide p-1.5 focus:outline-none">
+                                    <Listbox.Options className="absolute left-0 mt-2 w-48 bg-white/95 dark:bg-zinc-900/95 rounded-3xl border border-indigo-500/20 shadow-lg backdrop-blur-sm z-50 max-h-60 overflow-auto scrollbar-hide p-1.5 focus:outline-none">
                                         {subjects.find(s => s.id === currentSubject.id)?.lessons.map(lesson => (
                                             <Listbox.Option
                                                 key={lesson.id}
                                                 value={lesson}
                                                 className={({ active }) =>
-                                                    `relative cursor-pointer select-none py-2 px-2 text-xs rounded-full ${active ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700'
+                                                    `relative cursor-pointer select-none py-2 px-2 text-xs rounded-full ${active ? 'bg-indigo-50 dark:bg-indigo-900/90 text-indigo-600 dark:text-white' : 'text-gray-700 dark:text-zinc-400'
                                                     }`
                                                 }
                                             >
                                                 {({ selected }) => (
                                                     <div className="flex items-center justify-between">
                                                         <span>{lesson.name}</span>
-                                                        {selected && <Check size={14} className="text-indigo-600" />}
+                                                        {selected && <Check size={14} className="text-indigo-600 dark:text-white" />}
                                                     </div>
                                                 )}
                                             </Listbox.Option>
@@ -354,8 +354,8 @@ export default function DocHeader({
                                         key={topic.id}
                                         href={`/docs/${gradeData.id}/${currentSubject.id}/${currentLesson.id}/${topic.id}`}
                                         className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-300 font-medium text-xs whitespace-nowrap flex-shrink-0 ${isActive
-                                            ? 'text-indigo-600 bg-indigo-50/90 border border-indigo-500/20 shadow-sm'
-                                            : 'text-gray-600 bg-white/80 backdrop-blur-sm border border-indigo-500/10 hover:text-indigo-600 hover:bg-indigo-50/90'
+                                            ? 'text-indigo-600 dark:text-white bg-indigo-50/90 dark:bg-indigo-900/90 border border-indigo-500/20 shadow-sm'
+                                            : 'text-gray-600 dark:text-zinc-400 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-indigo-500/10 hover:text-indigo-600 hover:bg-indigo-50/90 dark:hover:border-indigo-500/20'
                                             }`}
                                         data-topic-index={index}
                                         data-is-active={isActive}

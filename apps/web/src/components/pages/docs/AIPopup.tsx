@@ -412,7 +412,7 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="absolute inset-0 bg-black/30 "
+              className="absolute inset-0 bg-black/40"
               onClick={handleBackdropClick}
             />
             <motion.div
@@ -432,13 +432,13 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
             >
               <div
                 className={`pointer-events-auto flex flex-col  transition-all duration-300 ease-out ${isDesktop
-                  ? `${isPopupMaximized ? "w-full h-full" : "w-[700px] h-full"} rounded-3xl bg-white/95 backdrop-blur-xl border border-gray-200 shadow-2xl`
-                  : "w-full h-[80vh] rounded-t-3xl bg-white"
+                  ? `${isPopupMaximized ? "w-full h-full" : "w-[700px] h-full"} rounded-3xl bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-gray-200 dark:border-zinc-800 shadow-2xl`
+                  : "w-full h-[80vh] rounded-t-3xl bg-white dark:bg-zinc-900"
                   }`}
               >
-                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 rounded-t-3xl">
+                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-zinc-800 rounded-t-3xl">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
                       <Bot className="w-5 h-5 text-indigo-500" />
                     </div>
                     <div className="flex gap-1">
@@ -454,22 +454,22 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                     {isDesktop && (
                       <button
                         onClick={handleMaximize}
-                        className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                        className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors duration-200"
                         disabled={isRequestInProgress}
                       >
                         {isPopupMaximized ? (
-                          <Minimize className="w-5 h-5 text-gray-600" />
+                          <Minimize className="w-5 h-5 text-gray-600 dark:text-zinc-400" />
                         ) : (
-                          <Maximize className="w-5 h-5 text-gray-600" />
+                          <Maximize className="w-5 h-5 text-gray-600 dark:text-zinc-400" />
                         )}
                       </button>
                     )}
                     <button
                       onClick={closePopup}
-                      className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors duration-200"
                       disabled={isRequestInProgress}
                     >
-                      <X className="w-5 h-5 text-gray-600" />
+                      <X className="w-5 h-5 text-gray-600 dark:text-zinc-400" />
                     </button>
                   </div>
                 </div>
@@ -486,7 +486,7 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                       <ChatSkeleton />
                     ) : messages.length === 0 && error ? (
                       <div className="flex items-center justify-center py-10">
-                        <div className="text-sm text-gray-500">{error}</div>
+                        <div className="text-sm text-gray-500 dark:text-zinc-400">{error}</div>
                         <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
                           <AlertCircle className="w-10 h-10 text-red-600" />
                         </div>
@@ -499,11 +499,11 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                             <div className=" bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6 p-4">
                               <Bot className="w-10 h-10 text-indigo-600" />
                             </div>
-                            <p className="text-gray-600 mb-4 font-bold text-lg">
+                            <p className="text-gray-600 dark:text-zinc-400 mb-4 font-bold text-lg">
                               <span className="text-indigo-600">តារា AI</span>{" "}
                               សូមស្វាគមន៍!
                             </p>
-                            <p className="text-gray-600 mb-4">
+                            <p className="text-gray-600 dark:text-zinc-400 mb-4">
                               តើអ្នកចង់សួរអ្វីអំពី{" "}
                               <span className="font-bold text-indigo-600">
                                 {topicTitle}
@@ -511,7 +511,7 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                               ដែរ?
                             </p>
                             {error && (
-                              <p className="mt-2 text-sm text-red-600">
+                              <p className="mt-2 text-sm text-red-600 dark:text-red-400">
                                 {error}
                               </p>
                             )}
@@ -537,11 +537,11 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                         )}
                         {isStreaming && (
                           <div className="flex justify-start">
-                            <div className="bg-white border border-gray-200 rounded-3xl p-4 shadow-sm w-full">
+                            <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl p-4 shadow-sm w-full">
                               <MarkdownRenderer content={streamingMessage} />
-                              <div className="flex justify-end mt-2 text-[10px] text-gray-500 uppercase tracking-wider">
+                              <div className="flex justify-end mt-2 text-[10px] text-gray-500 dark:text-zinc-400 uppercase tracking-wider">
                                 <span className="text-purple-600">KOM</span>
-                                <span className="font-bold text-black">
+                                <span className="font-bold text-black dark:text-white">
                                   PLEX
                                 </span>{" "}
                                 Beta -{" "}
@@ -558,7 +558,7 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                 {/* Error */}
                 {error && (
                   <div className="px-4 pb-2">
-                    <div className="bg-red-50 border border-red-200 text-sm text-red-600 rounded-2xl px-4 py-2">
+                    <div className="bg-red-50 border border-red-200 text-sm text-red-600 dark:text-red-400 rounded-2xl px-4 py-2">
                       {error}
                     </div>
                   </div>
@@ -578,7 +578,7 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                     <div
                       className={`${isPopupMaximized ? "lg:px-0 px-4 lg:max-w-4xl lg:mx-auto" : "px-0 lg:px-4"}`}
                     >
-                      <div className="bg-white max-w-4xl mx-auto shadow-lg border border-gray-200 rounded-3xl p-2 transition-all duration-200">
+                      <div className="bg-white dark:bg-zinc-900 max-w-4xl mx-auto shadow-lg border border-gray-200 dark:border-zinc-800 rounded-3xl p-2 transition-all duration-200">
                         <div className="flex-1  ">
                           <PromptTextarea
                             ref={textareaRef}
@@ -616,14 +616,14 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                                 disabled={
                                   !inputMessage.trim() || isInputDisabled
                                 }
-                                className="px-2 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                className="px-2 py-2 bg-indigo-600 text-white dark:text-zinc-900 rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                               >
                                 <Send className="w-4 h-4" />
                               </button>
                             ) : (
                               <button
                                 onClick={handleStop}
-                                className="px-2 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors.duration-200 flex items-center gap-2"
+                                className="px-2 py-2 bg-red-600 text-white dark:text-zinc-900 rounded-full hover:bg-red-700 transition-colors duration-200 flex items-center gap-2"
                               >
                                 <Square className="w-4 h-4" />
                               </button>
@@ -633,7 +633,7 @@ export default function AIPopup({ isOpen, onClose }: AIPopupProps) {
                       </div>
                     </div>
                   )}
-                  <div className="text-center text-xs text-gray-500 mb-1">
+                  <div className="text-center text-xs text-gray-500 dark:text-zinc-400 mb-1">
                     តារា អាចមានកំហុស។ សូមពិនិត្យព័ត៌មានសំខាន់។
                   </div>
                 </div>

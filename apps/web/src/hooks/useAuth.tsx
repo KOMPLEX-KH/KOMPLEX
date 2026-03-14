@@ -35,7 +35,8 @@ const AuthProviderInternal = ({ children }: { children: ReactNode }) => {
     if (typeof window === 'undefined') return null;
     try {
       const storedUserJson = localStorage.getItem("user");
-      return storedUserJson ? JSON.parse(storedUserJson) : null;
+      const parsedUser = storedUserJson ? JSON.parse(storedUserJson) : null;
+      return parsedUser;
     } catch {
       return null;
     }
@@ -52,7 +53,8 @@ const AuthProviderInternal = ({ children }: { children: ReactNode }) => {
     // Re-sync on route change in case auth state changed elsewhere
     try {
       const storedUserJson = localStorage.getItem("user");
-      setUser(storedUserJson ? JSON.parse(storedUserJson) : null);
+      const parsedUser = storedUserJson ? JSON.parse(storedUserJson) : null;
+      setUser(parsedUser);
     } catch {
       setUser(null);
     }

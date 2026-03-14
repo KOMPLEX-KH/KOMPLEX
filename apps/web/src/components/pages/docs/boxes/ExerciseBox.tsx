@@ -202,18 +202,18 @@ export function ExerciseBox({ questions }: ExerciseBoxProps) {
   const isLastQuestion = currentQuestionIndex === shuffledQuestions.length - 1;
 
   return (
-    <div className="bg-white/95 backdrop-blur-sm border-2 border-indigo-500/20 rounded-3xl p-4 my-6 shadow-lg shadow-indigo-500/15">
+    <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-sm border-2 border-indigo-500/20 dark:border-indigo-500/20 rounded-3xl p-4 my-6 shadow-lg shadow-indigo-500/15">
       {/* Header */}
       <div className="flex items-center justify-between mb-6 pb-4 border-b border-indigo-500/20">
-        <div className="text-indigo-600 font-semibold text-lg flex gap-2 items-center">
-          <BookAIcon className="text-indigo-600" />
+        <div className="text-indigo-600 dark:text-indigo-400 font-semibold text-lg flex gap-2 items-center">
+          <BookAIcon className="text-indigo-600 dark:text-indigo-400" />
           លំហាត់អនុវត្តន៍
         </div>
-        <div className="text-gray-600 text-sm flex items-center gap-2">
+        <div className="text-gray-600 dark:text-zinc-300 text-sm flex items-center gap-2">
           <span>{currentQuestionIndex + 1}/{shuffledQuestions.length}</span>
           {(
             <span className={`${correctPercentage >= 80 ? 'text-green-500' : correctPercentage >= 60 ? 'text-yellow-500' : 'text-red-500'} font-semibold`}>
-              <span className="text-gray-600">|</span> <span className="">{correctPercentage}%</span>
+              <span className="text-gray-600 dark:text-zinc-300">|</span> <span className="">{correctPercentage}%</span>
             </span>
           )}
         </div>
@@ -221,7 +221,7 @@ export function ExerciseBox({ questions }: ExerciseBoxProps) {
 
       {/* Question */}
       <div className="mb-6">
-        <h4 className="text-gray-800 font-semibold text-lg mb-4">
+        <h4 className="text-gray-800 dark:text-zinc-300 font-semibold text-lg mb-4">
           {currentQuestion.question}
         </h4>
 
@@ -240,28 +240,27 @@ export function ExerciseBox({ questions }: ExerciseBoxProps) {
                 key={index}
                 onClick={() => handleAnswerSelect(index)}
                 disabled={showResult}
-                className={`w-full text-left p-4 rounded-full border-2 border-gray-200 transition-all duration-300 font-medium ${isSelected && !showResult
-                  ? "border-indigo-500 bg-indigo-50/80 text-indigo-700"
+                className={`w-full text-left p-4 rounded-full border-2 border-gray-200 dark:border-zinc-700 transition-all duration-300 font-medium ${isSelected && !showResult
+                  ? "border-indigo-500 dark:border-indigo-500/50 bg-indigo-50/80 dark:bg-indigo-900/80 text-indigo-700 dark:text-indigo-400"
                   : !showResult
-                    ? "border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/40 text-gray-700 cursor-pointer"
+                    ? "border-gray-200 dark:border-zinc-700 hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:bg-indigo-50/40 dark:hover:bg-indigo-900/40 text-gray-700 dark:text-zinc-300 cursor-pointer"
                     : ""
                   } ${showCorrect
-                    ? "border-green-500 bg-green-50/80 text-green-700"
+                    ? "border-green-500 dark:border-green-500/50 bg-green-50/80 dark:bg-green-900/80 text-green-700 dark:text-green-400"
                     : ""
                   } ${showIncorrect
-                    ? "border-red-500 bg-red-50/80 text-red-700"
+                    ? "border-red-500 dark:border-red-500/50 bg-red-50/80 dark:bg-red-900/80 text-red-700 dark:text-red-400"
                     : ""
                   } ${showCorrectAnswer
-                    ? "border-green-500 bg-green-50/60 text-green-700"
+                    ? "border-green-500 dark:border-green-500/50 bg-green-50/60 dark:bg-green-900/60 text-green-700 dark:text-green-400"
                     : ""
                   } ${showResult ? "cursor-default" : ""}`}
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-lg font-semibold">
+                  <span className="text-lg font-semibold dark:text-white">
                     {String.fromCharCode(0x1780 + index)}{" "}
-                    {/* Khmer letters: ក, ខ, គ, ឃ */}
                   </span>
-                  <span>
+                  <span className="text-gray-700 dark:text-zinc-300">
                     {typeof option === "string" &&
                       (option.startsWith("\\") || option.includes("{")) ? (
                       <InlineMath math={option} />
@@ -272,11 +271,11 @@ export function ExerciseBox({ questions }: ExerciseBoxProps) {
                   {showResult && (
                     <div className="ml-auto">
                       {showCorrect ? (
-                        <CheckCircle size={20} className="text-green-600" />
+                        <CheckCircle size={20} className="text-green-600 dark:text-green-400" />
                       ) : showIncorrect ? (
-                        <XCircle size={20} className="text-red-600" />
+                        <XCircle size={20} className="text-red-600 dark:text-red-400" />
                       ) : showCorrectAnswer ? (
-                        <CheckCircle size={20} className="text-green-600" />
+                        <CheckCircle size={20} className="text-green-600 dark:text-green-400" />
                       ) : null}
                     </div>
                   )}
@@ -292,7 +291,7 @@ export function ExerciseBox({ questions }: ExerciseBoxProps) {
         <button
           onClick={prevQuestion}
           disabled={currentQuestionIndex === 0}
-          className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 disabled:bg-gray-50 disabled:text-gray-400 text-white px-4 py-2 rounded-3xl transition-all duration-300"
+          className="flex items-center gap-2 bg-indigo-500 dark:bg-indigo-600 hover:bg-indigo-600 disabled:bg-gray-50 disabled:text-gray-400 dark:disabled:text-zinc-400 text-white px-4 py-2 rounded-3xl transition-all duration-300"
         >
           <ChevronLeft size={18} />
           មុន
@@ -311,9 +310,9 @@ export function ExerciseBox({ questions }: ExerciseBoxProps) {
                   ? "bg-indigo-600 ring-2 ring-indigo-300 ring-offset-1"
                   : hasAnswer
                     ? isAnswered
-                      ? "bg-green-500"
-                      : "bg-red-500"
-                    : "bg-gray-100 hover:bg-gray-200"
+                      ? "bg-green-500 dark:bg-green-500/50"
+                      : "bg-red-500 dark:bg-red-500/50"
+                    : "bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700"
                   }`}
                 title={
                   hasAnswer
@@ -330,7 +329,7 @@ export function ExerciseBox({ questions }: ExerciseBoxProps) {
         {isLastQuestion ? (
           <button
             onClick={handleRetry}
-            className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-3xl transition-all duration-300"
+            className="flex items-center gap-2 bg-indigo-500 dark:bg-indigo-600 hover:bg-indigo-600 text-white px-4 py-2 rounded-3xl transition-all duration-300"
           >
             <RotateCcw size={18} />
             ធ្វើម្តងទៀត
@@ -338,7 +337,7 @@ export function ExerciseBox({ questions }: ExerciseBoxProps) {
         ) : (
           <button
             onClick={nextQuestion}
-            className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-3xl transition-all duration-300"
+            className="flex items-center gap-2 bg-indigo-500 dark:bg-indigo-600 hover:bg-indigo-600 text-white px-4 py-2 rounded-3xl transition-all duration-300"
           >
             បន្ទាប់
             <ChevronRight size={18} />

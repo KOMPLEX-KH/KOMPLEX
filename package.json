@@ -18,7 +18,7 @@
     "lint": "pnpm --filter web lint && pnpm --filter mobile lint",
     "lint:web": "pnpm --filter web lint",
     "lint:mobile": "pnpm --filter mobile lint",
-    "generate:api": "openapi-typescript http://localhost:6767/open.json -o packages/types/auto-api-types/index.ts",
+    "generate:api": "openapi-typescript http://localhost:6969/open.json -o packages/types/auto-api-types/index.ts",
     "install:all": "pnpm install"
   },
   "dependencies": {

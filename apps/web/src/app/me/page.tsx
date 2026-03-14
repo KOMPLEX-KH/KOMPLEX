@@ -39,44 +39,54 @@ function MePageContent() {
 
 
     const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-
         const file = e.target.files?.[0];
         if (!file || !profile) return;
 
-        // Optimistic preview while uploading
+        const originalImage = profile.profileImage;
         const localPreviewUrl = URL.createObjectURL(file);
-        // Immediately update UI with local preview
+
         setProfile(prev => prev ? { ...prev, profileImage: localPreviewUrl } : prev);
         setIsUploadingImage(true);
         setImageUploadError(null);
 
         try {
-            //Upload to R2, get both the storage key and the public URL
             const { key, publicUrl } = await uploadService.uploadFileForProfile(file);
 
-            //Update backend to update profile image and profile image key
-            const { data } = await authService.updateProfileImage({
+            const response = await authService.updateProfileImage({
                 profileImage: publicUrl,
                 profileImageKey: key,
             });
 
-            //Update local state with the confirmed URL from the server
-            setProfile(prev => prev ? { ...prev, profileImage: data.profileImage, profileImageKey: data.profileImageKey } : prev);
+            const updatedProfile = response?.data || { 
+                profileImage: publicUrl, 
+                profileImageKey: key 
+            };
 
-            // 4. Sync localStorage
+            setProfile(prev => prev ? { 
+                ...prev, 
+                profileImage: updatedProfile.profileImage,
+                profileImageKey: updatedProfile.profileImageKey
+            } : prev);
+
             const stored = localStorage.getItem('user');
             if (stored) {
                 const parsed = JSON.parse(stored);
-                localStorage.setItem('user', JSON.stringify({ ...parsed, profileImage: data.profileImage }));
+                localStorage.setItem('user', JSON.stringify({ 
+                    ...parsed, 
+                    profileImage: updatedProfile.profileImage 
+                }));
+                window.dispatchEvent(new Event('user-updated'));
             }
+
+            setTimeout(() => URL.revokeObjectURL(localPreviewUrl), 1000);
+
         } catch (err) {
             console.error('Profile image upload error:', err);
             setImageUploadError('មានបញ្ហាក្នុងការបង្ហោះរូបភាព។ សូមព្យាយាមម្តងទៀត។');
-            // Revert on failure
-            setProfile(prev => prev ? { ...prev, profileImage: profile.profileImage } : prev);
+            setProfile(prev => prev ? { ...prev, profileImage: originalImage } : prev);
+            URL.revokeObjectURL(localPreviewUrl);
         } finally {
             setIsUploadingImage(false);
-            URL.revokeObjectURL(localPreviewUrl);
         }
     };
 

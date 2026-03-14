@@ -48,8 +48,8 @@ export default function FeatureSection({
       transition={{ duration: 0.8, delay: 0.2 }}
       className={`space-y-6 flex-1 ${contentClassName}`}
     >
-      <h3 className="text-3xl font-bold text-foreground flex items-center gap-3 tracking-tight leading-tight">
-        <Icon size={24} className="text-primary mt-1" />
+      <h3 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-3 tracking-tight leading-tight">
+        <Icon size={24} className="text-indigo-600 mt-1" />
         {title}
       </h3>
       <motion.ul
@@ -57,7 +57,7 @@ export default function FeatureSection({
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.4 }}
-        className="space-y-3 text-muted"
+        className="space-y-3 text-zinc-600 dark:text-zinc-300"
       >
         {listItems.map((item, index) => (
           <motion.li
@@ -68,7 +68,7 @@ export default function FeatureSection({
             transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
             className="flex items-center gap-3 font-medium"
           >
-            <CheckCircle className="w-5 h-5 text-primary" />
+            <CheckCircle className="w-5 h-5 text-indigo-600" />
             {item}
           </motion.li>
         ))}

@@ -68,7 +68,7 @@ export default function TopicWrapper({ title, children, prev, next }: TopicWrapp
     const content = (
         <div
             ref={contentRef}
-            className={` bg-gray-50 rounded-3xl  lg:p-5 p-0 ${isFullScreen ? "w-full h-full p-6 " : "lg:shadow-lg lg:bg-white"
+            className={`bg-zinc-50 dark:lg:bg-zinc-900 dark:bg-transparent rounded-3xl lg:p-5 p-0 ${isFullScreen ? "w-full h-full p-6" : "lg:shadow-lg lg:bg-white dark:lg:bg-zinc-900"
                 }`}
         >
             <div className="flex items-center justify-between">
@@ -84,20 +84,20 @@ export default function TopicWrapper({ title, children, prev, next }: TopicWrapp
                             {isFullScreen ? (
                                 <button
                                     onClick={handleFullScreen}
-                                    className=" text-gray-700 group flex w-full items-center text-sm"
+                                    className="text-zinc-700 dark:text-zinc-300 group flex w-full items-center text-sm"
                                 >
-                                    <X className="mr-3 h-4 w-4 text-gray-400" />
+                                    <X className="mr-3 h-4 w-4 text-zinc-400 dark:text-zinc-500" />
                                 </button>
                             ) : (
                                 <button
                                     onClick={handleFullScreen}
-                                    className=" text-gray-700 group flex w-full items-center text-sm"
+                                    className="text-zinc-700 dark:text-zinc-300 group flex w-full items-center text-sm"
                                 >
-                                    <Maximize2 className="mr-3 h-4 w-4 text-gray-400" />
+                                    <Maximize2 className="mr-3 h-4 w-4 text-zinc-400 dark:text-zinc-500" />
                                 </button>
                             )}
-                            <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 px-3 py-2 text-sm font-semibold text-gray-900 focus:outline-none">
-                                <Share2 className="w-4 h-4 text-gray-600" />
+                            <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 px-3 py-2 text-sm font-semibold text-zinc-900 dark:text-zinc-100 focus:outline-none">
+                                <Share2 className="w-4 h-4 text-zinc-600 dark:text-zinc-300" />
                             </Menu.Button>
                         </div>
 
@@ -110,16 +110,22 @@ export default function TopicWrapper({ title, children, prev, next }: TopicWrapp
                             leaveFrom="transform opacity-100 scale-100"
                             leaveTo="transform opacity-0 scale-95"
                         >
-                            <Menu.Items ref={shareItemsRef} className="absolute right-2 z-10 mt-2 p-2 w-56 origin-top-right rounded-3xl bg-white shadow-lg border border-gray-200 ring-opacity-5 focus:outline-none">
+                            <Menu.Items
+                                ref={shareItemsRef}
+                                className="absolute right-2 z-10 mt-2 p-2 w-56 origin-top-right rounded-3xl bg-white dark:bg-zinc-900 shadow-lg border border-gray-200 dark:border-zinc-700 ring-opacity-5 focus:outline-none"
+                            >
                                 <div className="py-1">
                                     <Menu.Item>
                                         {({ active }) => (
                                             <button
                                                 onClick={handleDownloadAsImage}
-                                                className={`rounded-full ${active ? "bg-gray-100 text-gray-900" : "text-gray-700"
-                                                    } group flex w-full items-center px-4 py-2 text-sm`}
+                                                className={`rounded-full ${
+                                                    active
+                                                        ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"
+                                                        : "text-zinc-700 dark:text-zinc-300"
+                                                } group flex w-full items-center px-4 py-2 text-sm`}
                                             >
-                                                <Download className="mr-3 h-4 w-4 text-gray-400" />
+                                                <Download className="mr-3 h-4 w-4 text-zinc-400 dark:text-zinc-500" />
                                                 ទាញយកជារូបភាព
                                             </button>
                                         )}
@@ -128,10 +134,13 @@ export default function TopicWrapper({ title, children, prev, next }: TopicWrapp
                                         {({ active }) => (
                                             <button
                                                 onClick={handleShare}
-                                                className={`${active ? "bg-gray-100 rounded-full text-gray-900" : "text-gray-700"
-                                                    } group flex w-full items-center px-4 py-2 text-sm`}
+                                                className={`rounded-full ${
+                                                    active
+                                                        ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"
+                                                        : "text-zinc-700 dark:text-zinc-300"
+                                                } group flex w-full items-center px-4 py-2 text-sm`}
                                             >
-                                                <Copy className="mr-3 h-4 w-4 text-gray-400" />
+                                                <Copy className="mr-3 h-4 w-4 text-zinc-400 dark:text-zinc-500" />
                                                 ចម្លងតំណភ្ជាប់
                                             </button>
                                         )}
@@ -142,19 +151,19 @@ export default function TopicWrapper({ title, children, prev, next }: TopicWrapp
                     </Menu>
                 </div>
             </div>
-            <div className="w-full h-0.5 bg-gray-50 mt-6"></div>
+            <div className="w-full h-0.5 bg-zinc-100 dark:bg-zinc-800 mt-6"></div>
             {children}
             <div className="w-full flex justify-between items-center mt-6 gap-6">
                 {prev ? (
                     <Link href={prev.link} className="max-w-[150px] lg:max-w-none">
-                        <button className="bg-indigo-500 text-white px-4 py-2 rounded-full flex items-center gap-2 hover:bg-indigo-600 transition-colors">
+                        <button className="bg-indigo-600 text-white px-4 py-2 rounded-full flex items-center gap-2 hover:bg-indigo-600 transition-colors">
                             <ArrowLeft className="w-4 h-4" />
                             <span className="line-clamp-1">{prev.title}</span>
                         </button>
                     </Link>
                 ) : (
                     <button
-                        className="bg-gray-50 text-gray-400 px-4 py-2 rounded-full flex items-center gap-2 cursor-not-allowed"
+                        className="bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 px-4 py-2 rounded-full flex items-center gap-2 cursor-not-allowed"
                         disabled
                     >
                         <ArrowLeft className="w-4 h-4" />
@@ -164,14 +173,14 @@ export default function TopicWrapper({ title, children, prev, next }: TopicWrapp
 
                 {next ? (
                     <Link href={next.link} className="max-w-[150px] lg:max-w-none">
-                        <button className="bg-indigo-500 text-white px-4 py-2 rounded-full flex items-center gap-2 hover:bg-indigo-600 transition-colors">
+                        <button className="bg-indigo-600 text-white px-4 py-2 rounded-full flex items-center gap-2 hover:bg-indigo-600 transition-colors">
                             <span className="line-clamp-1">{next.title}</span>
                             <ArrowRight className="w-4 h-4" />
                         </button>
                     </Link>
                 ) : (
                     <button
-                        className="bg-gray-50 text-gray-400 px-4 py-2 rounded-full flex items-center gap-2 cursor-not-allowed"
+                        className="bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 px-4 py-2 rounded-full flex items-center gap-2 cursor-not-allowed"
                         disabled
                     >
                         <span>បន្ទាប់</span>
@@ -186,7 +195,7 @@ export default function TopicWrapper({ title, children, prev, next }: TopicWrapp
         <>
             {isFullScreen
                 ? ReactDOM.createPortal(
-                    <div className="fixed inset-0 z-50 bg-gray-50 overflow-auto  ">
+                    <div className="fixed inset-0 z-50 bg-zinc-50 dark:bg-zinc-900 overflow-auto  ">
                         <div className="pb-2">{content}</div>
                     </div>,
                     document.body

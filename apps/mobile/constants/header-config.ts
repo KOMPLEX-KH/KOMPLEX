@@ -37,7 +37,7 @@ const renderHeader = (props: NativeStackHeaderProps) => {
           size: 24,
           color: TAILWIND_COLORS["indigo-600"],
         });
-      case "ជំនួយ":
+      case "បន្ធែម":
         return React.createElement(Library, {
           size: 24,
           color: TAILWIND_COLORS["indigo-600"],

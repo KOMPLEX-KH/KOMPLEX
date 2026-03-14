@@ -1,9 +1,10 @@
 import { View, TextInput, Pressable, Image, StyleSheet, Alert } from 'react-native';
-import { Eye, EyeOff, Mail, Lock, Phone, Upload } from 'lucide-react-native';
+import { Eye, EyeOff, Upload } from 'lucide-react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { tw } from '@/utils/styles';
 import { Text } from '@/components/common/Text';
 import { getValidationError, validatePasswordConfirmation } from '@core-utils/validator';
+import VerifyOTP from './VerifyOTP';
 
 interface SignupFormProps {
     signupData: {
@@ -37,6 +38,14 @@ interface SignupFormProps {
     handleProfileImageChange: (image: { uri: string; type: string; name: string } | null) => void;
     isSubmitting?: boolean;
     errorMessage?: string | null;
+    showOtpView?: boolean;
+    otpCode?: string;
+    setOtpCode?: (code: string) => void;
+    otpEmail?: string;
+    onVerifyOtp?: () => void;
+    onResendOtp?: () => void;
+    onOtpViewChange?: (active: boolean) => void;
+    otpExpiresIn?: number;
 }
 
 export default function SignUp({
@@ -51,7 +60,31 @@ export default function SignUp({
     handleProfileImageChange,
     isSubmitting = false,
     errorMessage = null,
+    showOtpView = false,
+    otpCode = '',
+    setOtpCode,
+    otpEmail = '',
+    onVerifyOtp,
+    onResendOtp,
+    otpExpiresIn,
+    onOtpViewChange,
 }: SignupFormProps) {
+    if (showOtpView) {
+        return (
+            <VerifyOTP
+                otpCode={otpCode}
+                setOtpCode={setOtpCode!}
+                otpEmail={otpEmail}
+                isSubmitting={isSubmitting}
+                errorMessage={errorMessage ?? null}
+                onVerify={onVerifyOtp!}
+                onResendOtp={onResendOtp!}
+                resendCooldownSeconds={otpExpiresIn ?? 90}
+                onBack={() => onOtpViewChange?.(false)}
+            />
+        );
+    }
+
     const pickImage = async () => {
         try {
             // Request permission

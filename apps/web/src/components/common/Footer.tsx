@@ -18,7 +18,7 @@ const ABOUT_LINKS = [
 
 export default function Footer() {
     return (
-        <footer className="bg-white dark:bg-black text-gray-900 dark:text-white py-15 px-5">
+        <footer className="bg-white dark:bg-zinc-900 text-gray-900 dark:text-white py-15 px-5">
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-2  lg:grid-cols-4 gap-10">
                     <div>
@@ -26,7 +26,7 @@ export default function Footer() {
                             <img src="/logo.png" alt="KOMPLEX" className="w-6 h-6" />
                             KOMPLEX
                         </h3>
-                        <p className="text-gray-900 dark:text-white leading-relaxed">
+                        <p className="text-black dark:text-white leading-relaxed">
                             ប្រព័ន្ធសិក្សា សម្រាប់សិស្សកម្ពុជា បង្កើតឡើងដោយសិស្សកម្ពុជា
                         </p>
                     </div>
