@@ -17,10 +17,10 @@ export default function CalculatePage() {
   const [result, setResult] = useState<{ average: number; grade: string } | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
   const [subjectType, setSubjectType] = useState("science");
-  const activeSubjects : Subject[] = subjectType === "science" ? ScienceSubjects : SocialScienceSubjects;
+  const activeSubjects: Subject[] = subjectType === "science" ? ScienceSubjects : SocialScienceSubjects;
 
   const canCalculate = activeSubjects.every(
-    s=> tempScores[s.key]?.trim()
+    s => tempScores[s.key]?.trim()
   );
 
   // scroll user to result section
@@ -35,7 +35,7 @@ export default function CalculatePage() {
 
 
   const handleScoreChange = (key: SubjectKey, value: string) => {
-    const max = activeSubjects.find(s=>s.key === key)!.maxScore;
+    const max = activeSubjects.find(s => s.key === key)!.maxScore;
     const numValue = Number(value);
 
     if (value === "" || (numValue >= 0 && numValue <= max)) {
@@ -80,7 +80,7 @@ export default function CalculatePage() {
 
 
     setResult({ average: Math.round(totalPoint), grade });
-  } ;
+  };
 
 
   const getSubjectGrade = (key: SubjectKey, score: number) => {
@@ -93,7 +93,7 @@ export default function CalculatePage() {
     <div className="min-h-screen">
       <div className="max-w-6xl mx-auto mt-3">
 
-        <div className="bg-indigo-600 text-white py-12 px-4 rounded-t-3xl">
+        <div className="bg-indigo-600 dark:bg-indigo-900 text-white py-12 px-4 rounded-t-3xl">
           <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-4 lg:gap-0 justify-center lg:justify-between items-center">
             {/* Title */}
             <div className="flex items-center gap-3 mb-2">
@@ -102,13 +102,13 @@ export default function CalculatePage() {
             </div>
 
             <div className="flex items-center justify-center mt-4 lg:mt-0 lg:justify-end rounded-md w-full lg:w-auto">
-              <div className="bg-gray-200 rounded-3xl p-1 w-full lg:w-[260px] flex gap-2">
+              <div className="bg-gray-200 dark:bg-zinc-800 rounded-3xl p-1 w-full lg:w-[260px] flex gap-2">
                 <button
                   onClick={() => setSubjectType("science")}
                   className={`flex-1 py-2 rounded-3xl text-sm font-medium transition-all duration-300 border border-transparent
                     ${subjectType === "science"
                       ? "bg-indigo-600 text-white border-indigo-600"
-                      : "text-gray-600 hover:bg-indigo-50 hover:border-indigo-600"
+                      : "text-gray-600 dark:text-zinc-400 hover:bg-indigo-50 hover:border-indigo-600"
                     }
                   `}
                 >
@@ -120,7 +120,7 @@ export default function CalculatePage() {
                   className={`flex-1 py-2 rounded-3xl text-sm font-medium transition-all duration-300 border border-transparent
                     ${subjectType === "social"
                       ? "bg-indigo-600 text-white border-indigo-600"
-                      : "text-gray-600 hover:bg-indigo-50 hover:border-indigo-600"
+                      : "text-gray-600 dark:text-zinc-400 hover:bg-indigo-50 hover:border-indigo-600"
                     }
                   `}
                 >
@@ -155,8 +155,8 @@ export default function CalculatePage() {
             className={`
               px-16 py-4 rounded-full text-xl font-bold shadow-sm  transition-all duration-300
               ${canCalculate && !isCalculating
-                ? "bg-indigo-600 hover:bg-indigo-500 text-white active:scale-95 hover:scale-105"
-                : "bg-blue-300 text-white cursor-not-allowed"
+                ? "bg-indigo-600 dark:bg-indigo-900 hover:bg-indigo-500 text-white active:scale-95 hover:scale-105"
+                : "bg-blue-300 dark:bg-zinc-800 text-white cursor-not-allowed"
               }
             `}
             style={{ cursor: (!canCalculate || isCalculating) ? "not-allowed" : "pointer" }}

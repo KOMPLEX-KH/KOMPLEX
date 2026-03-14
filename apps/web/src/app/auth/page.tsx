@@ -219,10 +219,10 @@ export default function AuthPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+        <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 flex flex-col items-center justify-center p-4">
             <div className="w-full max-w-2xl relative z-10 pt-16">
                 {/* Auth Container */}
-                <div className="bg-indigo-500/10 backdrop-blur-sm border border-indigo-600 rounded-3xl shadow-xl shadow-indigo-500/10 p-6">
+                <div className="bg-indigo-500/10 dark:bg-indigo-900/10 backdrop-blur-sm border border-indigo-600 dark:border-indigo-800 rounded-3xl shadow-xl shadow-indigo-500/10 p-6">
                     <>
                         {/* Logo and Slogan */}
                         {!isForgotPassword && !isOtpView && (
@@ -236,11 +236,11 @@ export default function AuthPage() {
 
                         {/* Tab Navigation */}
                         {!isForgotPassword && !isOtpView && (
-                            <div className="flex bg-white rounded-full p-1 mb-6 border border-indigo-600  mx-auto">
+                            <div className="flex bg-white dark:bg-zinc-900 rounded-full p-1 mb-6 border border-indigo-600 dark:border-indigo-800  mx-auto">
                                 <button
                                     onClick={() => setActiveTab('login')}
                                     className={`flex-1 py-3 px-4 rounded-full text-sm font-medium transition-all hover:bg-gray-50 duration-300 ${activeTab === 'login'
-                                        ? 'bg-white text-indigo-600 shadow-sm border border-indigo-600'
+                                        ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm border border-indigo-600 dark:border-indigo-800'
                                         : 'text-black hover:text-indigo-600'
                                         }`}
                                 >
@@ -249,7 +249,7 @@ export default function AuthPage() {
                                 <button
                                     onClick={() => setActiveTab('signup')}
                                     className={`flex-1 py-3 px-4 rounded-full text-sm font-medium transition-all hover:bg-gray-50 duration-300 ${activeTab === 'signup'
-                                        ? 'bg-white text-indigo-600 shadow-sm border border-indigo-600'
+                                        ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm border border-indigo-600 dark:border-indigo-800'
                                         : 'text-black hover:text-indigo-600'
                                         }`}
                                 >
@@ -303,9 +303,9 @@ export default function AuthPage() {
                         {/* Divider + Social Login — hidden when forgot password or OTP view is active */}
                         {!isForgotPassword && !isOtpView && (<>
                             <div className="my-6 flex items-center  mx-auto">
-                                <div className="flex-1 border-t border-indigo-500/20"></div>
-                                <span className="px-4 text-sm text-gray-500">ឬ</span>
-                                <div className="flex-1 border-t border-indigo-500/20"></div>
+                                <div className="flex-1 border-t border-indigo-500/20 dark:border-indigo-800/20"></div>
+                                <span className="px-4 text-sm text-gray-500 dark:text-zinc-400">ឬ</span>
+                                <div className="flex-1 border-t border-indigo-500/20 dark:border-indigo-800/20"></div>
                             </div>
 
                             {/* Social Login */}
@@ -314,7 +314,7 @@ export default function AuthPage() {
                                     <button
                                         key={index}
                                         onClick={() => handleSocialLogin(platform.provider as 'google' | 'github' | 'microsoft')}
-                                        className="flex-1 bg-white border border-indigo-500/20 text-gray-700 py-3 px-4 rounded-full font-medium hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="flex-1 bg-white dark:bg-zinc-900 border border-indigo-500/20 dark:border-indigo-800 text-gray-700 dark:text-zinc-400 py-3 px-4 rounded-full font-medium hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                         disabled={isSubmitting}
                                     >
                                         {platform.icon}

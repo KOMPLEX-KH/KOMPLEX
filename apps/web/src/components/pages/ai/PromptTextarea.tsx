@@ -6,8 +6,8 @@ const PromptTextarea = forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttribu
     ({ className = "", ...rest }, ref) => {
         const baseClasses = "w-full px-3 py-2 text-base focus:outline-none resize-none bg-transparent border-none";
         const stateClasses = rest.disabled
-            ? "placeholder-gray-300 text-gray-400 cursor-not-allowed"
-            : "placeholder-gray-400";
+            ? "placeholder-gray-300 dark:placeholder-zinc-400 text-gray-400 dark:text-zinc-400 cursor-not-allowed"
+            : "placeholder-gray-400 dark:placeholder-zinc-400";
 
         return (
             <textarea

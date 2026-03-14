@@ -137,7 +137,7 @@ export default function VerifyOtp({
                 <button
                     type="button"
                     onClick={onBack}
-                    className="w-full text-sm flex items-center gap-2 text-indigo-600 hover:text-indigo-500 font-medium"
+                    className="w-full text-sm flex items-center gap-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-600 font-medium"
                 >
                     <ArrowLeft size={16} />
                     ត្រឡប់ក្រោយ
@@ -145,10 +145,10 @@ export default function VerifyOtp({
             )}
 
             <h3 className="text-2xl font-semibold">បញ្ចូលលេខកូដ OTP</h3>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-zinc-400">
                 យើងបានផ្ញើលេខកូដ 6 ខ្ទង់ទៅ
             </p>
-            <p className="text-sm text-indigo-600">{otpEmail}</p>
+            <p className="text-sm text-indigo-600 dark:text-indigo-400">{otpEmail}</p>
 
             {/* OTP Inputs */}
             <div className="flex gap-2 justify-center">
@@ -164,7 +164,7 @@ export default function VerifyOtp({
                         onChange={(e) => handleInputChange(index, e.target.value)}
                         onPaste={handlePaste}
                         onKeyDown={(e) => handleKeyDown(index, e)}
-                        className="w-12 h-12 border border-indigo-500/20 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                        className="w-12 h-12 border border-indigo-500/20 dark:border-indigo-800/20 rounded-lg text-center text-lg font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                         maxLength={1}
                         disabled={isSubmitting}
                     />
@@ -173,32 +173,32 @@ export default function VerifyOtp({
 
             {/* Error message */}
             {localError && (
-                <p className="text-red-500 text-sm text-center">{localError}</p>
+                <p className="text-red-500 text-sm text-center dark:text-red-400">{localError}</p>
             )}
 
             {/* Verify button */}
             <button
                 onClick={onVerify}
                 disabled={otpCode.length !== 6 || isSubmitting}
-                className="w-full bg-indigo-600 text-white py-3 px-4 rounded-full font-semibold hover:bg-indigo-500 transition-colors duration-300 shadow-lg shadow-indigo-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-indigo-600 text-white dark:text-zinc-900 py-3 px-4 rounded-full font-semibold hover:bg-indigo-500 dark:hover:bg-indigo-600 transition-colors duration-300 shadow-lg shadow-indigo-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 {isSubmitting ? 'កំពុងផ្ទៀងផ្ទាត់...' : 'ផ្ទៀងផ្ទាត់'}
             </button>
 
             {/* Resend OTP */}
             <div className="flex items-center gap-2 text-sm flex-wrap justify-center">
-                <p className="text-gray-500">មិនទាន់ទទួល?</p>
+                <p className="text-gray-500 dark:text-zinc-400">មិនទាន់ទទួល?</p>
                 {resendCountdown > 0 ? (
                     <span className="text-gray-400">
                         ផ្ញើម្តងទៀតក្នុង{' '}
-                        <span className="text-indigo-500 font-medium tabular-nums">
+                        <span className="text-indigo-500 dark:text-indigo-400 font-medium tabular-nums">
                             {formatCountdown(resendCountdown)}
                         </span>
                     </span>
                 ) : (
                     <button
                         onClick={handleResendClick}
-                        className="text-indigo-600 font-medium hover:underline"
+                        className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline dark:hover:text-indigo-600"
                     >
                         ផ្ញើម្តងទៀត
                     </button>

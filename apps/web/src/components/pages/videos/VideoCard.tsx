@@ -46,7 +46,7 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
         return (
             <Link href={`/videos/${video.id}`} className="block group overflow-hidden">
                 <div
-                    className="flex gap-3 hover:bg-gray-50 p-2 rounded-3xl transition-colors flex-wrap items-center cursor-pointer overflow-hidden"
+                    className="flex gap-3 hover:bg-gray-50 dark:hover:bg-zinc-800 p-2 rounded-3xl transition-colors flex-wrap items-center cursor-pointer overflow-hidden"
                     onMouseEnter={handleCardHover}
                     onMouseLeave={handleCardLeave}
                 >
@@ -64,13 +64,13 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
                         </div> */}
                     </div>
                     <div className="min-w-0 flex-2">
-                        <h4 className="font-bold text-gray-900 text-md line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                        <h4 className="font-bold text-gray-900 dark:text-zinc-400 text-md line-clamp-2 group-hover:text-indigo-600 transition-colors">
                             {video.title}
                         </h4>
-                        <Link href={`/users/${video.userId}`} className="text-xs text-gray-600 mt-1 hover:text-indigo-600 hover:underline transition-colors">
+                        <Link href={`/users/${video.userId}`} className="text-xs text-gray-600 dark:text-zinc-400 mt-1 hover:text-indigo-600 hover:underline transition-colors">
                             {video.username}
                         </Link>
-                        <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
+                        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-zinc-400 mt-1">
                             <span className='flex items-center gap-1'>
                                 <Eye size={12} />
                                 {video.viewCount}
@@ -88,7 +88,7 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
         return (
             <div className="block group cursor-pointer" onClick={onClick}>
                 <div
-                    className=" lg:rounded-3xl lg:bg-white lg:border lg:border-gray-200  backdrop-blur-sm  transition-all duration-300 transform overflow-hidden cursor-pointer"
+                    className=" lg:rounded-3xl lg:bg-white lg:border lg:border-gray-200 dark:lg:border-zinc-800  backdrop-blur-sm  transition-all duration-300 transform overflow-hidden cursor-pointer"
                     onMouseEnter={handleCardHover}
                     onMouseLeave={handleCardLeave}
                 >
@@ -107,11 +107,11 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
                     </div>
 
                     <div className="p-3">
-                        <h4 className="font-bold text-gray-900 text-sm line-clamp-2 mb-2">
+                        <h4 className="font-bold text-gray-900 dark:text-zinc-400 text-sm line-clamp-2 mb-2">
                             {video.title}
                         </h4>
 
-                        <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-zinc-400 mb-2">
                             <Link href={`/users/${video.userId}`} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
                                 {video.profileImage ? (
                                     <img
@@ -133,7 +133,7 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
                             <span>{formatDate(video.createdAt)}</span>
                         </div>
 
-                        <span className="text-xs text-gray-500 flex items-center gap-1">
+                        <span className="text-xs text-gray-500 dark:text-zinc-400 flex items-center gap-1">
                             <Eye size={12} />
                             {video.viewCount}
                         </span>
@@ -151,7 +151,7 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
             onMouseEnter={handleCardHover}
             onMouseLeave={handleCardLeave}
         >
-            <div className=" lg:rounded-3xl lg:bg-white lg:border lg:border-gray-200  backdrop-blur-sm  transition-all duration-300 transform overflow-hidden">
+            <div className=" lg:rounded-3xl lg:bg-white lg:border lg:border-gray-200 dark:lg:border-zinc-800  backdrop-blur-sm  transition-all duration-300 transform overflow-hidden">
                 <div className="relative overflow-hidden">
                     <video
                         className="w-full aspect-video object-cover lg:rounded-t-3xl lg:rounded-b-none rounded-3xl z-10 group-hover:scale-105 transition-all duration-300 overflow-hidden"
@@ -168,11 +168,11 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
                 </div>
 
                 <div className="p-4">
-                    <h3 className="font-bold text-gray-900 text-md line-clamp-2 mb-2">
+                    <h3 className="font-bold text-gray-900 dark:text-zinc-400 text-md line-clamp-2 mb-2">
                         {video.title}
                     </h3>
 
-                    <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
+                    <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-zinc-400 mb-3">
                         <Link href={`/users/${video.userId}`} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
                             {video.profileImage ? (
                                 <img
@@ -194,7 +194,7 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
                         <span>{formatDate(video.createdAt)}</span>
                     </div>
 
-                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                    <span className="text-xs text-gray-500 dark:text-zinc-400 flex items-center gap-1">
                         <Eye size={16} />
                         {video.viewCount}
                     </span>

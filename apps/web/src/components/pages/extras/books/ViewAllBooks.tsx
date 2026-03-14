@@ -28,7 +28,7 @@ export default function ViewAllByCategory({ books, curriculum, categoryId }: Vie
   if (!categoryId) {
     return (
       <div className="p-8 text-center">
-        <p className="text-gray-500 text-lg">មិនមានប្រភេទសៀវភៅនេះ</p>
+        <p className="text-gray-500 dark:text-zinc-400 text-lg">មិនមានប្រភេទសៀវភៅនេះ</p>
       </div>
     );
   }
@@ -40,7 +40,7 @@ export default function ViewAllByCategory({ books, curriculum, categoryId }: Vie
   if (!subject) {
     return (
       <div className="p-8 text-center">
-        <p className="text-gray-500 text-lg">រកមិនឃើញប្រភេទសៀវភៅ</p>
+        <p className="text-gray-500 dark:text-zinc-400 text-lg">រកមិនឃើញប្រភេទសៀវភៅ</p>
         <button
           onClick={() => router.push("/extra/books")}
           className="mt-4 text-indigo-600 hover:text-indigo-800 font-semibold"
@@ -68,7 +68,7 @@ export default function ViewAllByCategory({ books, curriculum, categoryId }: Vie
       </div>
 
       {booksInCategory.length === 0 ? (
-        <p className="text-gray-500 p-4">គ្មានសៀវភៅសម្រាប់ប្រភេទនេះ</p>
+        <p className="text-gray-500 dark:text-zinc-400 p-4">គ្មានសៀវភៅសម្រាប់ប្រភេទនេះ</p>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {booksInCategory.map(b => (

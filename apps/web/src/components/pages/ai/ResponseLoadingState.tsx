@@ -46,25 +46,25 @@ const ResponseLoadingState: React.FC<Props> = React.memo(({ responseType }) => {
             {steps.map((step, index) => {
                 const isActive = index === activeStep;
                 const isComplete = index < activeStep;
-                const baseColor = "bg-gray-50/80";
-                const activeColor = "bg-white border-indigo-100";
-                const textColor = "text-gray-800";
+                const baseColor = "bg-gray-50/80 dark:bg-zinc-800/80";
+                const activeColor = "bg-white dark:bg-zinc-800 border-indigo-100 dark:border-indigo-800";
+                const textColor = "text-gray-800 dark:text-zinc-400";
 
                 return (
                     <div
                         key={step.id}
                         className={`flex items-center gap-3 rounded-3xl border px-3 py-2 transition-colors ${isActive ? activeColor : baseColor
-                            } border-gray-200`}
+                            } border-gray-200 dark:border-zinc-700`}
                     >
                         <div
                             className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold ${isComplete
-                                ? "bg-indigo-500 text-white"
+                                ? "bg-indigo-500 text-white dark:text-white"
                                 : isActive
                                     ? "bg-indigo-100 text-indigo-700 animate-pulse"
-                                    : "bg-gray-100 text-gray-500"
+                                    : "bg-gray-100 text-gray-500 dark:text-zinc-400"
                                 }`}
                         >
-                            {isComplete ? <Check className="w-4 h-4" /> : <Loader2 className="w-4 h-4 animate-spin" />}
+                            {isComplete ? <Check className="w-4 h-4 text-white dark:text-white" /> : <Loader2 className="w-4 h-4 animate-spin text-gray-600 dark:text-zinc-400" />}
                         </div>
                         <p className={`text-sm ${textColor}`}>{step.label}</p>
                     </div>
@@ -75,13 +75,13 @@ const ResponseLoadingState: React.FC<Props> = React.memo(({ responseType }) => {
 
     return (
         <div className="w-full">
-            <div className="bg-indigo-50 border border-indigo-500 rounded-3xl p-6 shadow-sm">
-                <div className="flex items-center gap-2 text-indigo-600 font-semibold text-sm">
+            <div className="bg-indigo-50 dark:bg-indigo-900 border border-indigo-500 dark:border-indigo-800 rounded-3xl p-6 shadow-sm">
+                <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-semibold text-sm">
                     <Sparkles className="w-4 h-4 animate-pulse" />
-                    <p className="text-sm font-medium text-gray-900">តារាកំពុងត្រៀមចម្លើយឱ្យអ្នក...</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-zinc-400">តារាកំពុងត្រៀមចម្លើយឱ្យអ្នក...</p>
                 </div>
-                <div className="mt-4 h-2 rounded-full bg-indigo-100 overflow-hidden">
-                    <div className="h-full bg-indigo-500 transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
+                <div className="mt-4 h-2 rounded-full bg-indigo-100 dark:bg-indigo-900 overflow-hidden">
+                    <div className="h-full bg-indigo-500 dark:bg-indigo-400 transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
                 </div>
                 {renderTimeline()}
             </div>

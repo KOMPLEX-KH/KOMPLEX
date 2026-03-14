@@ -9,7 +9,7 @@ export default function CalculateContentSkeleton() {
 
         {/* Header Skeleton */}
         <div className="text-center mb-12">
-          <div className="bg-indigo-600 py-8 px-4 rounded-t-3xl">
+          <div className="bg-indigo-600 dark:bg-indigo-900 py-8 px-4 rounded-t-3xl">
             <div className="max-w-6xl mx-auto flex flex-col justify-center items-center">
               <div className="flex items-center gap-3 mb-2 justify-center">
                 <div className="w-8 h-8 bg-white rounded-full"></div>
@@ -17,7 +17,7 @@ export default function CalculateContentSkeleton() {
               </div>
 
               <div className="flex w-full items-center mt-4 justify-center sm:justify-end rounded-md">
-                <div className="bg-gray-300 rounded-3xl p-1 w-full sm:w-[260px] flex gap-2">
+                <div className="bg-gray-300 dark:bg-zinc-800 rounded-3xl p-1 w-full sm:w-[260px] flex gap-2">
                   <div className="flex-1 h-10 bg-gray-400 rounded-full"></div>
                   <div className="flex-1 h-10 bg-gray-400 rounded-full"></div>
                 </div>
@@ -36,7 +36,7 @@ export default function CalculateContentSkeleton() {
             md:[&>*:last-child]:mx-auto"
         >
           {[...Array(skeletonCount)].map((_, i) => (
-            <div key={i} className="w-full border-1 border-gray-400 rounded-3xl shadow-sm bg-white p-4">
+            <div key={i} className="w-full border-1 border-gray-400 dark:border-zinc-800 rounded-3xl shadow-sm bg-white dark:bg-zinc-900 p-4">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-14 h-14 rounded-full bg-gray-300 shadow-md"></div>
                 <div className="h-6 w-3/5 bg-gray-300 rounded"></div>
@@ -48,11 +48,11 @@ export default function CalculateContentSkeleton() {
 
         {/* Calculate Button Skeleton */}
         <div className="flex flex-col items-center mb-8">
-          <div className="px-16 py-4 rounded-3xl text-xl font-bold shadow-sm bg-gray-300 w-[250px]"></div>
+          <div className="px-16 py-4 rounded-3xl text-xl font-bold shadow-sm bg-gray-300 dark:bg-zinc-800 w-[250px]"></div>
         </div>
 
         {/* Result Card Skeleton */}
-        <div className="w-full flex flex-col shadow-sm rounded-3xl p-4 bg-white">
+        <div className="w-full flex flex-col shadow-sm rounded-3xl p-4 bg-white dark:bg-zinc-900">
           <div className="flex items-center justify-center mt-4">
             <div className="h-10 w-72 bg-gray-300 rounded-md"></div>
           </div>

@@ -646,7 +646,7 @@ function AIChatInner() {
     };
 
     return (
-        <div className="min-h-screen relative bg-gray-50 pt-16 pb-4">
+        <div className="min-h-screen relative bg-gray-50 dark:bg-zinc-900 pt-16 pb-4">
             <Suspense fallback={null}>
                 <SideBar onCollapsedChange={setIsSideBarCollapsed} />
             </Suspense>
@@ -665,13 +665,13 @@ function AIChatInner() {
                             // Welcome screen
                             <div className="flex flex-col items-center justify-center h-full">
                                 <div className="text-center max-w-2xl">
-                                    <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <div className="w-20 h-20 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center mx-auto mb-6">
                                         <Bot className="w-10 h-10 text-indigo-600" />
                                     </div>
-                                    <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+                                    <h2 className="text-2xl font-semibold text-gray-900 dark:text-zinc-400 mb-4">
                                         ស្វាគមន៍!
                                     </h2>
-                                    <p className="text-gray-600 mb-8">
+                                    <p className="text-gray-600 dark:text-zinc-400 mb-8">
                                         ខ្ញុំឈ្មោះតារា ជា AI ជំនួយការរៀន។ តើអ្នកចង់សួរអ្វីអំពីអ្វីដែរ?
                                     </p>
                                 </div>
@@ -680,7 +680,7 @@ function AIChatInner() {
                             // Error screen
                             <div className="flex flex-col items-center justify-center h-full">
                                 <div className="text-center max-w-2xl">
-                                    <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <div className="w-20 h-20 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center mx-auto mb-6">
                                         <AlertCircle className="w-10 h-10 text-red-600" />
                                     </div>
                                 </div>
@@ -694,7 +694,7 @@ function AIChatInner() {
                                         <button
                                             onClick={loadMoreHistory}
                                             disabled={isLoadingMore}
-                                            className="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="px-4 py-2 text-sm text-gray-600 dark:text-zinc-400 bg-gray-100 dark:bg-zinc-800 rounded-full hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             {isLoadingMore ? (
                                                 <div className="flex items-center gap-2">
@@ -725,13 +725,13 @@ function AIChatInner() {
 
                                 {isStreaming && (
                                     <div className="w-full">
-                                        <div className="relative bg-white border border-gray-200 rounded-3xl p-4 shadow-sm">
+                                        <div className="relative bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-3xl p-4 shadow-sm">
                                             <MarkdownRenderer content={streamingMessage} />
                                             <div className="flex items-center justify-end mt-2">
-                                                <div className="text-xs text-gray-500">
-                                                    <span className="text-purple-600">KOM</span>
-                                                    <span className="text-black font-bold">PLEX</span> Beta -{' '}
-                                                    <span className="font-medium">តារា AI</span>
+                                                <div className="text-xs text-gray-500 dark:text-zinc-400">
+                                                    <span className="text-indigo-600 dark:text-indigo-400">KOM</span>
+                                                    <span className="text-black dark:text-white font-bold">PLEX</span> Beta -{' '}
+                                                    <span className="font-medium text-gray-500 dark:text-zinc-400">តារា AI</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -740,13 +740,13 @@ function AIChatInner() {
 
                                 {error && (
                                     <div className="w-full">
-                                        <div className="bg-red-50 border border-red-200 rounded-2xl p-4">
+                                        <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-800 rounded-2xl p-4">
                                             <div className="flex items-center gap-2">
-                                                <div className="w-2 h-2 bg-red-500 rounded-full" />
-                                                <span className="text-sm text-red-700">{error}</span>
+                                                <div className="w-2 h-2 bg-red-500 dark:bg-red-400 rounded-full" />
+                                                <span className="text-sm text-red-700 dark:text-red-300">{error}</span>
                                                 <button
                                                     onClick={handleTryAgain}
-                                                    className="ml-auto text-red-500 hover:text-red-700 transition-colors"
+                                                    className="ml-auto text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-600 transition-colors"
                                                 >
                                                     <RefreshCw className="w-4 h-4" />
                                                 </button>
@@ -761,7 +761,7 @@ function AIChatInner() {
 
                     {/* Bottom input & rating area, anchored within right panel */}
                     <div className={`mt-3 px-4 pb-2 fixed bottom-0 ${isSideBarCollapsed ? 'lg:left-4' : 'lg:left-76'} left-0 right-0  `}>
-                        <div className="absolute bottom-0 left-0 right-0 bg-gray-50 max-w-5xl mx-auto h-36 "></div>
+                        <div className="absolute bottom-0 left-0 right-0 bg-gray-50 dark:bg-zinc-900 max-w-5xl mx-auto h-36 "></div>
                         {activeRating ? (
                             <div className=" px-4 relative z-10">
                                 <AiRating
@@ -772,7 +772,7 @@ function AIChatInner() {
                             </div>
                         ) : (
                             <div className=" max-w-5xl mx-auto w-full">
-                                <div className="bg-white max-w-5xl mx-auto shadow-lg border border-gray-200 rounded-3xl p-2 mb-2 transition-all duration-200 space-y-2 relative z-10">
+                                <div className="bg-white dark:bg-zinc-900 max-w-5xl mx-auto shadow-lg border border-gray-200 dark:border-zinc-700 rounded-3xl p-2 mb-2 transition-all duration-200 space-y-2 relative z-10">
                                     <div className="flex-1">
                                         <PromptTextarea
                                             ref={textareaRef}
@@ -807,14 +807,14 @@ function AIChatInner() {
                                                 <button
                                                     onClick={handleSendMessage}
                                                     disabled={!inputMessage.trim() || isInputDisabled}
-                                                    className="px-2 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    className="px-2 py-2 bg-indigo-600 dark:bg-indigo-400 text-white dark:text-white rounded-full hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 >
                                                     <Send className="w-4 h-4" />
                                                 </button>
                                             ) : (
                                                 <button
                                                     onClick={handleStopStreaming}
-                                                    className="px-2 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors duration-200"
+                                                    className="px-2 py-2 bg-red-600 dark:bg-red-400 text-white dark:text-white rounded-full hover:bg-red-700 dark:hover:bg-red-600 transition-colors duration-200"
                                                 >
                                                     <Square className="w-4 h-4" />
                                                 </button>
@@ -826,7 +826,7 @@ function AIChatInner() {
                         )}
                         {/* Warning Text */}
                         <div className="text-center mt-1 relative z-10">
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500 dark:text-zinc-400">
                                 <span className="font-black">តារា</span> អាចមានកំហុស។ សូមពិនិត្យព័ត៌មានសំខាន់។
                             </p>
                         </div>
@@ -839,11 +839,11 @@ function AIChatInner() {
                 <div className="fixed bottom-40 left-1/2 transform -translate-x-1/2 z-50">
                     <button
                         onClick={scrollToBottom}
-                        className="bg-indigo-600 text-white p-3 rounded-full shadow-lg hover:bg-indigo-700 transition-colors duration-200 flex items-center gap-2"
+                        className="bg-indigo-600 dark:bg-indigo-400 text-white dark:text-white p-3 rounded-full shadow-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors duration-200 flex items-center gap-2"
                         title="Scroll to bottom"
                     >
                         <ChevronDown className="w-4 h-4" />
-                        <span className="text-sm font-medium">Scroll to bottom</span>
+                        <span className="text-sm font-medium text-gray-500 dark:text-zinc-400">Scroll to bottom</span>
                     </button>
                 </div>
             )}

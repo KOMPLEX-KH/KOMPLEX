@@ -97,7 +97,7 @@ export default function VideoDescription({ video, onLike }: VideoDescriptionProp
     return (
         <div className="lg:bg-white lg:rounded-3xl lg:p-4 lg:shadow-sm  mt-6 lg:my-6">
             {/* Video Title */}
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 line-clamp-2 leading-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-zinc-400 mb-4 line-clamp-2 leading-tight">
                 {video.title}
             </h1>
 
@@ -110,7 +110,7 @@ export default function VideoDescription({ video, onLike }: VideoDescriptionProp
                             <img
                                 src={video.profileImage}
                                 alt={video.username}
-                                className="w-10 h-10 rounded-full object-cover border-2 border-indigo-500"
+                                className="w-10 h-10 rounded-full object-cover border-2 border-indigo-500 dark:border-zinc-400"
 
                                 onError={(e) => {
                                     e.currentTarget.style.display = 'none';
@@ -119,12 +119,12 @@ export default function VideoDescription({ video, onLike }: VideoDescriptionProp
                             />
                         ) : null}
                         <div className={`w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 ${video.profileImage ? 'hidden' : ''}`}>
-                            <span className="text-indigo-600 font-semibold text-sm">
+                            <span className="text-indigo-600 dark:text-zinc-400 font-semibold text-sm">
                                 {video.username.charAt(0).toUpperCase()}
                             </span>
                         </div>
                         <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate hover:underline">{video.username}</h3>
+                            <h3 className="font-semibold text-gray-900 dark:text-zinc-400 text-sm sm:text-base truncate hover:underline">{video.username}</h3>
                         </div>
                     </Link>
 
@@ -134,7 +134,7 @@ export default function VideoDescription({ video, onLike }: VideoDescriptionProp
                         disabled={isFollowLoading}
                         className={`flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-medium rounded-full transition-colors flex-shrink-0 ${isFollowing
                             ? 'bg-indigo-100 text-indigo-700 border border-indigo-200 hover:bg-indigo-200'
-                            : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                            : 'bg-indigo-600 text-white dark:text-zinc-400 hover:bg-indigo-700'
                             } ${isFollowLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                         {isFollowLoading ? (
@@ -158,8 +158,8 @@ export default function VideoDescription({ video, onLike }: VideoDescriptionProp
                     <button
                         onClick={() => onLike(video.id, video.isLiked, video)}
                         className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full transition-colors ${video.isLiked
-                            ? 'text-indigo-600 '
-                            : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50'
+                            ? 'text-indigo-600 dark:text-zinc-400 '
+                            : 'text-gray-700 dark:text-zinc-400 hover:text-indigo-600 hover:bg-gray-50'
                             }`}
                     >
                         <ThumbsUp size={18} className={`${video.isLiked ? 'fill-indigo-600' : ''}`} />
@@ -179,7 +179,7 @@ export default function VideoDescription({ video, onLike }: VideoDescriptionProp
                         <span className="text-xs sm:text-sm font-medium">រក្សាទុក</span>
                     </button> */}
                     <Menu as="div" className="relative">
-                        <Menu.Button className="flex items-center gap-2 px-3 sm:px-4 py-2 text-gray-700 rounded-full hover:text-indigo-600 hover:bg-gray-50 transition-colors focus:outline-none">
+                        <Menu.Button className="flex items-center gap-2 px-3 sm:px-4 py-2 text-gray-700 dark:text-zinc-400 rounded-full hover:text-indigo-600 hover:bg-gray-50 transition-colors focus:outline-none">
                             <Share size={18} />
                             <span className="text-xs sm:text-sm font-medium">ចែករំលែក</span>
                         </Menu.Button>
@@ -192,12 +192,12 @@ export default function VideoDescription({ video, onLike }: VideoDescriptionProp
                             leaveFrom="transform scale-100 opacity-100"
                             leaveTo="transform scale-95 opacity-0"
                         >
-                            <Menu.Items className="absolute right-0 mt-2 p-2 w-48 bg-white rounded-3xl border border-gray-200 shadow-lg z-50 focus:outline-none">
+                            <Menu.Items className="absolute right-0 mt-2 p-2 w-48 bg-white dark:bg-zinc-900 rounded-3xl border border-gray-200 dark:border-zinc-800 shadow-lg z-50 focus:outline-none">
                                 <Menu.Item>
                                     {({ active }) => (
                                         <button
                                             onClick={handleCopyLink}
-                                            className={`w-full flex items-center rounded-full gap-3 px-4 py-3 text-sm transition-colors ${active ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700'
+                                            className={`w-full flex items-center rounded-full gap-3 px-4 py-3 text-sm transition-colors ${active ? 'bg-indigo-50 text-indigo-600 dark:text-zinc-400' : 'text-gray-700 dark:text-zinc-400'
                                                 }`}
                                         >
                                             {copied ? (
@@ -223,12 +223,12 @@ export default function VideoDescription({ video, onLike }: VideoDescriptionProp
             {/* Description with Stats */}
             <div className="lg:bg-gray-50 lg:rounded-xl lg:p-4">
                 {/* Stats in description */}
-                <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-zinc-400 mb-4">
                     <span className="font-medium">{formatViewCount(video.viewCount)} views</span>
                     <span>{getTimeAgo(video.createdAt)}</span>
                 </div>
 
-                <div className="text-gray-700 leading-relaxed text-sm">
+                <div className="text-gray-700 dark:text-zinc-400 leading-relaxed text-sm">
                     <MarkDownRenderer content={displayText} />
                     {isTruncated && !showFullDescription && '...'}
                 </div>
@@ -236,7 +236,7 @@ export default function VideoDescription({ video, onLike }: VideoDescriptionProp
                 {isTruncated && (
                     <button
                         onClick={() => setShowFullDescription(!showFullDescription)}
-                        className="text-indigo-600 hover:text-indigo-700 font-medium mt-3 text-sm"
+                        className="text-indigo-600 dark:text-zinc-400 hover:text-indigo-700 font-medium mt-3 text-sm"
                     >
                         {showFullDescription ? 'បង្ហាញតិចជាង' : 'បង្ហាញច្រើនជាង'}
                     </button>

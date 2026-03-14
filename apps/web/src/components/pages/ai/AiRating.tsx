@@ -62,12 +62,12 @@ export default function AiRating({ responseId, scope = "general", onComplete, cl
         >
             <div className="flex flex-col gap-4 items-center">
                 {successMessage ? (
-                    <div className="rounded-full bg-green-50 px-3 py-2 text-sm text-green-700">{successMessage}</div>
+                    <div className="rounded-full bg-green-50 dark:bg-green-900 px-3 py-2 text-sm text-green-700 dark:text-green-300">{successMessage}</div>
                 ) : errorMessage ? (
-                    <div className="rounded-full bg-red-50 px-3 py-2 text-sm text-red-700">{errorMessage}</div>
+                    <div className="rounded-full bg-red-50 dark:bg-red-900 px-3 py-2 text-sm text-red-700 dark:text-red-300">{errorMessage}</div>
                 ) : (
                     <div>
-                        <p className="text-sm font-medium text-gray-900 mb-2">តើអ្នកយល់យ៉ាងណា ចំពោះការឆ្លើយតបនេះ?</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-zinc-400 mb-2">តើអ្នកយល់យ៉ាងណា ចំពោះការឆ្លើយតបនេះ?</p>
                         <div className="flex items-center gap-2">
                             {STAR_VALUES.map((value) => {
                                 const isActive = currentFill != null && value <= currentFill;
@@ -89,7 +89,7 @@ export default function AiRating({ responseId, scope = "general", onComplete, cl
                                         aria-label={`វាយតម្លៃ ${value} ផ្កាយ`}
                                     >
                                         <Star
-                                            className={`h-7 w-7 transition-colors ${isActive ? "fill-indigo-600 text-indigo-600" : "text-gray-300"
+                                            className={`h-7 w-7 transition-colors ${isActive ? "fill-indigo-600 text-indigo-600" : "text-gray-300 dark:text-zinc-400"
                                                 }`}
                                         />
                                     </button>
