@@ -88,45 +88,45 @@ export default function ReplyComponent({ reply, commentId, onSubmitReply, replyT
                         <img
                             src={reply.profileImage}
                             alt={reply.username?.toString() || 'User'}
-                            className="w-7 h-7 rounded-full object-cover border-2 border-indigo-500"
+                            className="w-7 h-7 rounded-full object-cover border-2 border-indigo-500 dark:border-indigo-400"
                             onError={(e) => {
                                 e.currentTarget.style.display = 'none';
                                 e.currentTarget.nextElementSibling?.classList.remove('hidden');
                             }}
                         />
                     ) : null}
-                    <div className={`w-7 h-7 rounded-full bg-gray-500 flex items-center justify-center text-white font-semibold text-xs ${reply.profileImage ? 'hidden' : ''}`}>
+                    <div className={`w-7 h-7 rounded-full bg-gray-500 dark:bg-zinc-400 flex items-center justify-center text-white font-semibold text-xs ${reply.profileImage ? 'hidden' : ''}`}>
                         {reply.username?.charAt(0)}
                     </div>
                 </Link>
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                        <Link href={`/users/${reply.userId}`} className="font-semibold text-gray-900 text-sm hover:underline transition-colors">
+                        <Link href={`/users/${reply.userId}`} className="font-semibold text-gray-900 dark:text-zinc-400 text-sm hover:underline transition-colors">
                             {reply.username?.toString()}
                         </Link>
-                        <span className="text-gray-500 text-xs">{getTimeAgo(reply.createdAt)}</span>
+                        <span className="text-gray-500 dark:text-zinc-400 text-xs">{getTimeAgo(reply.createdAt)}</span>
                     </div>
-                    <div className="text-gray-700 text-sm leading-relaxed mb-2">{reply.description}</div>
+                    <div className="text-gray-700 dark:text-zinc-400 text-sm leading-relaxed mb-2">{reply.description}</div>
                     <div className="flex items-center gap-4">
                         {!isReadOnly ? (
                             <>
                                 <button
                                     onClick={handleReplyLike}
                                     disabled={isLiking}
-                                    className={`flex items-center gap-1 text-xs font-medium transition-all duration-200 py-1 px-2 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed ${replyUpvoted ? 'text-indigo-600' : 'text-gray-500'}`}
+                                    className={`flex items-center gap-1 text-xs font-medium transition-all duration-200 py-1 px-2 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed ${replyUpvoted ? 'text-indigo-600' : 'text-gray-500 dark:text-zinc-400'}`}
                                 >
                                     <ThumbsUp className={`w-3 h-3 ${replyUpvoted ? 'fill-indigo-600' : ''}`} />
                                     <span>{typeof likeCount === 'number' ? likeCount : 0}</span>
                                 </button>
                                 <button
                                     onClick={() => setIsReplying(!isReplying)}
-                                    className="text-xs text-gray-500 hover:text-indigo-600 transition-colors duration-200 rounded-full"
+                                    className="text-xs text-gray-500 dark:text-zinc-400 hover:text-indigo-600 transition-colors duration-200 rounded-full"
                                 >
                                     ឆ្លើយតប
                                 </button>
                             </>
                         ) : (
-                            <div className="flex items-center gap-1 text-xs text-gray-500">
+                            <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-zinc-400">
                                 <ThumbsUp className="w-3 h-3" />
                                 <span>{typeof likeCount === 'number' ? likeCount : 0}</span>
                             </div>
@@ -145,7 +145,7 @@ export default function ReplyComponent({ reply, commentId, onSubmitReply, replyT
                                 value={replyText}
                                 onChange={(e) => setReplyText(e.target.value)}
                                 placeholder="សរសេរការឆ្លើយតប..."
-                                className="flex-1 pl-20 pr-3 py-3 text-sm border border-gray-200 rounded-full focus:outline-none focus:border-indigo-500"
+                                className="flex-1 pl-20 pr-3 py-3 text-sm border border-gray-200 dark:border-zinc-700 rounded-full focus:outline-none focus:border-indigo-500"
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                         handleSubmitReply();
@@ -153,12 +153,12 @@ export default function ReplyComponent({ reply, commentId, onSubmitReply, replyT
                                 }}
                             />
                             <div className="absolute left-2 top-2 bg-indigo-50  px-2 py-2 rounded-full">
-                                <p className="text-black text-xs ">@{reply.username?.toString()}</p>
+                                <p className="text-black dark:text-white text-xs ">@{reply.username?.toString()}</p>
                             </div>
                             <button
                                 onClick={handleSubmitReply}
                                 disabled={!replyText.trim()}
-                                className="px-3 py-1 text-sm text-white bg-indigo-600 rounded-full hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="px-3 py-1 text-sm text-white bg-indigo-600 dark:bg-indigo-400 rounded-full hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <Send />
                             </button>

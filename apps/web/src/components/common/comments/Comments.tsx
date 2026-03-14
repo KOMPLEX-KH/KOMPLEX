@@ -145,19 +145,19 @@ export default function Comments({ type, parentId, focusInput = false, isReadOnl
     const CommentSkeleton = () => (
         <div className="mb-4">
             <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse border-2 border-indigo-500/20"></div>
+                <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-zinc-800 animate-pulse border-2 border-indigo-500/20"></div>
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                        <div className="w-20 h-4 bg-gray-200 rounded animate-pulse"></div>
-                        <div className="w-16 h-3 bg-gray-200 rounded animate-pulse"></div>
+                        <div className="w-20 h-4 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
+                        <div className="w-16 h-3 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
                     </div>
                     <div className="space-y-2 mb-2">
-                        <div className="w-full h-4 bg-gray-200 rounded animate-pulse"></div>
-                        <div className="w-3/4 h-4 bg-gray-200 rounded animate-pulse"></div>
+                        <div className="w-full h-4 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
+                        <div className="w-3/4 h-4 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
                     </div>
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-6 bg-gray-200 rounded animate-pulse"></div>
-                        <div className="w-16 h-6 bg-gray-200 rounded animate-pulse"></div>
+                        <div className="w-12 h-6 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
+                        <div className="w-16 h-6 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
                     </div>
                 </div>
             </div>
@@ -165,21 +165,21 @@ export default function Comments({ type, parentId, focusInput = false, isReadOnl
     );
 
     return (
-        <div className="lg:bg-white lg:rounded-3xl lg:p-6 lg:shadow-lg lg:shadow-indigo-500/10 lg:border lg:border-indigo-500/10">
-            <h1 className='text-gray-900 font-bold mb-6'>ការឆ្លើយតប</h1>
+        <div className="lg:bg-white dark:bg-zinc-900 lg:rounded-3xl lg:p-6 lg:shadow-lg lg:shadow-indigo-500/10 lg:border lg:border-indigo-500/10">
+            <h1 className='text-gray-900 dark:text-zinc-400 font-bold mb-6'>ការឆ្លើយតប</h1>
 
             {/* Error Message */}
             {error && (
                 <div className="mb-6">
-                    <div className="bg-red-50 border border-red-200 rounded-full p-4">
+                    <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-800 rounded-full p-4">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
-                                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                <svg className="h-5 w-5 text-red-400 dark:text-red-600" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                                 </svg>
                             </div>
                             <div className="ml-3">
-                                <p className="text-sm text-red-800">{error}</p>
+                                <p className="text-sm text-red-800 dark:text-red-600">{error}</p>
                             </div>
                         </div>
                     </div>
@@ -195,44 +195,44 @@ export default function Comments({ type, parentId, focusInput = false, isReadOnl
                             // Inactive state - clickable placeholder
                             <div
                                 onClick={handleInputClick}
-                                className="w-full p-4 border border-gray-300 rounded-full cursor-text  "
+                                className="w-full p-4 border border-gray-300 dark:border-zinc-700 rounded-full cursor-text  "
                             >
                                 <div className="flex items-center justify-between">
-                                    <span className="text-gray-500 text-sm">ចូលរួមការសន្ទនា...</span>
+                                    <span className="text-gray-500 dark:text-zinc-400 text-sm">ចូលរួមការសន្ទនា...</span>
                                 </div>
                             </div>
                         ) : (
                             // Active state - textarea with buttons
-                            <div className="w-full border border-gray-300 rounded-3xl overflow-hidden">
+                            <div className="w-full border border-gray-300 dark:border-zinc-700 rounded-3xl overflow-hidden">
                                 <div className="relative">
                                     <textarea
                                         value={newComment}
                                         onChange={(e) => setNewComment(e.target.value)}
                                         placeholder="សរសេរការឆ្លើយតបរបស់អ្នក..."
-                                        className="w-full p-4 pr-20 text-sm focus:outline-none resize-none border-none placeholder-gray-400"
+                                        className="w-full p-4 pr-20 text-sm focus:outline-none resize-none border-none placeholder-gray-400 dark:placeholder-zinc-400"
                                         rows={3}
                                         autoFocus
                                     />
                                     <div className="absolute bottom-3 right-3 flex items-center gap-2">
                                         <button
                                             onClick={handleCancel}
-                                            className="px-3 py-1.5 text-sm bg-gray-50 rounded-full text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                                            className="px-3 py-1.5 text-sm bg-gray-50 dark:bg-zinc-800 rounded-full text-gray-600 dark:text-zinc-400 hover:text-gray-800 dark:hover:text-zinc-600 transition-colors duration-200"
                                         >
                                             បោះបង់
                                         </button>
                                         <button
                                             onClick={handleSubmitComment}
                                             disabled={!newComment.trim() || isSubmitting}
-                                            className="px-4 py-1.5 bg-indigo-600 text-white text-sm rounded-full hover:bg-indigo-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                            className="px-4 py-1.5 bg-indigo-600 dark:bg-indigo-400 text-white dark:text-white text-sm rounded-full hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                         >
                                             {isSubmitting ? (
                                                 <>
-                                                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                                                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white dark:border-white"></div>
                                                     កំពុងបោះផ្សាយ...
                                                 </>
                                             ) : (
                                                 <>
-                                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg className="w-3 h-3 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                                                     </svg>
                                                     បោះផ្សាយ

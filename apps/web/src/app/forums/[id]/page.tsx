@@ -71,7 +71,7 @@ export default function ForumDiscussion() {
     // Early returns for loading and error states
     if (loading) {
         return (
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-gray-50 dark:bg-zinc-900">
                 <div className="max-w-7xl mx-auto p-5 pt-20">
                     <ForumSkeleton count={1} />
                 </div>
@@ -81,7 +81,7 @@ export default function ForumDiscussion() {
 
     if (error || !post) {
         return (
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-gray-50 dark:bg-zinc-900">
                 <div className="max-w-7xl mx-auto p-5 pt-20">
                     <ContentError
                         type="error"
@@ -93,7 +93,7 @@ export default function ForumDiscussion() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 dark:bg-zinc-900">
             <div className="max-w-7xl mx-auto p-5 pt-20">
 
                 {/* Back Button */}
@@ -106,7 +106,7 @@ export default function ForumDiscussion() {
                     <ForumCard post={post} isFromBasePage={false} onCommentClick={handleCommentToggle} onLikeClick={() => handleLikeClick(post.id, post.isLiked)} />
                 </div>
 
-                <div className='w-full h-0.5 bg-gray-200 mb-6'></div>
+                <div className='w-full h-0.5 bg-gray-200 dark:bg-zinc-700 mb-6'></div>
 
                 <Comments type='forum' parentId={post.id} focusInput={isCommentInputActive} onClose={handleCommentClose} />
             </div>

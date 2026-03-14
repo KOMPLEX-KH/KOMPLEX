@@ -143,7 +143,7 @@ export default function ForumCard({ isFromBasePage, post, onCommentClick, onLike
     }
 
     return (
-        <div className={`lg:bg-white lg:rounded-3xl lg:p-6 py-6 lg:border lg:border-indigo-500/10 overflow-hidden   ${isFromBasePage ? 'cursor-pointer border-b border-indigo-500/10' : ''}`} onClick={handleCardClick}>
+        <div className={`lg:bg-white dark:bg-zinc-900 lg:rounded-3xl lg:p-6 py-6 lg:border lg:border-indigo-500/10 overflow-hidden   ${isFromBasePage ? 'cursor-pointer border-b border-indigo-500/10' : ''}`} onClick={handleCardClick}>
             <div className="flex items-center gap-6 mb-4">
                 <Link href={`/users/${post.userId}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                     {post.profileImage ? (
@@ -161,10 +161,10 @@ export default function ForumCard({ isFromBasePage, post, onCommentClick, onLike
                         {getAvatar(post.username)}
                     </div>
                     <div className="flex-1">
-                        <div className="font-semibold text-gray-900 text-sm mb-0.5 hover:underline">
+                        <div className="font-semibold text-gray-900 dark:text-white text-sm mb-0.5 hover:underline">
                             {post.username}
                         </div>
-                        <div className="text-gray-500 text-xs">
+                        <div className="text-gray-500 dark:text-zinc-400 text-xs">
                             {getTimeAgo(post.createdAt)}
                         </div>
                     </div>
@@ -197,11 +197,11 @@ export default function ForumCard({ isFromBasePage, post, onCommentClick, onLike
                 )}
             </div>
 
-            <div className="text-lg font-bold text-gray-900 mb-2.5 leading-relaxed">
+            <div className="text-lg font-bold text-gray-900 dark:text-white mb-2.5 leading-relaxed">
                 {post.title}
             </div>
 
-            <div className="text-gray-700 text-sm leading-relaxed mb-4 line-clamp-3">
+            <div className="text-gray-700 dark:text-zinc-400 text-sm leading-relaxed mb-4 line-clamp-3">
                 <MarkDownRenderer content={post.description} />
             </div>
 
@@ -212,18 +212,18 @@ export default function ForumCard({ isFromBasePage, post, onCommentClick, onLike
             <div className="flex items-center gap-5 pt-4 ">
                 <button
                     onClick={handleUpvote}
-                    className={`flex items-center gap-1.5 text-indigo-500 text-sm font-medium cursor-pointer transition-all duration-200 py-1.5 px-3 rounded-full border-none bg-none hover:text-indigo-600 hover:bg-indigo-50/60 ${upvoted ? 'text-indigo-600 ' : ''}`}
+                    className={`flex items-center gap-1.5 text-indigo-500 dark:text-indigo-400 text-sm font-medium cursor-pointer transition-all duration-200 py-1.5 px-3 rounded-full border-none bg-none hover:text-indigo-600 hover:bg-indigo-50/60 ${upvoted ? 'text-indigo-600 ' : ''}`}
                 >
-                    <ThumbsUp className={`w-4 h-4 ${upvoted ? 'fill-indigo-600' : ''}`} /> <span className="font-semibold text-gray-500">{upvoteCount}</span>
+                    <ThumbsUp className={`w-4 h-4 ${upvoted ? 'fill-indigo-600' : ''}`} /> <span className="font-semibold text-gray-500 dark:text-zinc-400">{upvoteCount}</span>
                 </button>
                 {
                     isFromBasePage ? (
                         <Link href={`/forum/${post.id}`} className="flex items-center gap-1.5 text-indigo-500 text-sm font-medium cursor-pointer transition-all duration-200 py-1.5 px-3 rounded-full border-none bg-none hover:text-indigo-600 hover:bg-indigo-50/60">
-                            <MessageCircle className="w-4 h-4" /> <span className="text-gray-500">ឆ្លើយតប </span>
+                            <MessageCircle className="w-4 h-4" /> <span className="text-gray-500 dark:text-zinc-400">ឆ្លើយតប </span>
                         </Link>
                     ) : (
                         <button onClick={handleCommentClick} className="flex items-center gap-1.5 text-indigo-500 text-sm font-medium cursor-pointer transition-all duration-200 py-1.5 px-3 rounded-full border-none bg-none hover:text-indigo-600 hover:bg-indigo-50/60">
-                            <MessageCircle className="w-4 h-4" /> <span className="text-gray-500">ឆ្លើយតប </span>
+                            <MessageCircle className="w-4 h-4" /> <span className="text-gray-500 dark:text-zinc-400">ឆ្លើយតប </span>
                         </button>
                     )
                 }
@@ -234,7 +234,7 @@ export default function ForumCard({ isFromBasePage, post, onCommentClick, onLike
                         className="flex items-center gap-1.5 text-indigo-500 text-sm font-medium cursor-pointer transition-all duration-200 py-1.5 px-3 rounded-full border-none bg-none hover:text-indigo-600 hover:bg-indigo-50/60 focus:outline-none"
                     >
                         <Share className="w-4 h-4" />
-                        <span className="text-gray-500">ចែករំលែក</span>
+                        <span className="text-gray-500 dark:text-zinc-400">ចែករំលែក</span>
                     </Menu.Button>
 
                     <Transition
@@ -245,23 +245,23 @@ export default function ForumCard({ isFromBasePage, post, onCommentClick, onLike
                         leaveFrom="transform scale-100 opacity-100"
                         leaveTo="transform scale-95 opacity-0"
                     >
-                        <Menu.Items className="absolute left-0  w-48 bg-white rounded-3xl p-2 border border-gray-200 shadow-lg z-50 focus:outline-none">
+                        <Menu.Items className="absolute left-0  w-48 bg-white dark:bg-zinc-900 rounded-3xl p-2 border border-gray-200 dark:border-zinc-700 shadow-lg z-50 focus:outline-none">
                             <Menu.Item>
                                 {({ active }) => (
                                     <button
                                         onClick={handleCopyLink}
-                                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-full text-sm transition-colors ${active ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700'
+                                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-full text-sm transition-colors ${active ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 dark:text-zinc-400'
                                             }`}
                                     >
                                         {copied ? (
                                             <>
-                                                <Check className="w-4 h-4 text-green-500" />
-                                                <span>បានចម្លង!</span>
+                                                <Check className="w-4 h-4 text-green-500 dark:text-green-400" />
+                                                <span className="text-gray-700 dark:text-zinc-400">បានចម្លង!</span>
                                             </>
                                         ) : (
                                             <>
                                                 <LinkIcon className="w-4 h-4" />
-                                                <span>ចម្លងតំណ</span>
+                                                <span className="text-gray-700 dark:text-zinc-400">ចម្លងតំណ</span>
                                             </>
                                         )}
                                     </button>

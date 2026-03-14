@@ -110,7 +110,7 @@ function BetaDialog({
     setIsBetaDialogOpen: (open: boolean) => void;
 }) {
     return (
-    <Transition appear show={isBetaDialogOpen} as={Fragment}>
+        <Transition appear show={isBetaDialogOpen} as={Fragment}>
             <Dialog as="div" className="relative z-50" onClose={() => setIsBetaDialogOpen(false)}>
                 <Transition.Child
                     as={Fragment}
@@ -121,7 +121,7 @@ function BetaDialog({
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm" />
+                    <div className="fixed inset-0 bg-black/20 dark:bg-zinc-900/20 backdrop-blur-sm" />
                 </Transition.Child>
 
                 <div className="fixed inset-0 overflow-y-auto">
@@ -135,24 +135,24 @@ function BetaDialog({
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden rounded-3xl bg-white shadow-xl transition-all">
+                            <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden rounded-3xl bg-white dark:bg-zinc-900 shadow-xl transition-all">
                                 <div className="relative bg-indigo-600  px-6 py-4">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3">
-                                            <div className="p-2 bg-white/20 rounded-full backdrop-blur-sm">
+                                            <div className="p-2 bg-white/20 dark:bg-zinc-800/20 rounded-full backdrop-blur-sm">
                                                 <Sparkles className="w-6 h-6 text-white" />
                                             </div>
                                             <div>
-                                                <Dialog.Title as="h3" className="text-2xl font-bold text-white">
+                                                <Dialog.Title as="h3" className="text-2xl font-bold text-white dark:text-white">
                                                     ស្វាគមន៍មកកាន់ KOMPLEX Beta
                                                 </Dialog.Title>
                                             </div>
                                         </div>
                                         <button
                                             onClick={() => setIsBetaDialogOpen(false)}
-                                            className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                                            className="p-2 hover:bg-white/20 dark:hover:bg-zinc-800/20 rounded-full transition-colors"
                                         >
-                                            <X className="w-5 h-5 text-white" />
+                                            <X className="w-5 h-5 text-white dark:text-white" />
                                         </button>
                                     </div>
                                 </div>
@@ -162,7 +162,7 @@ function BetaDialog({
                                     <div>
                                         <div className="flex items-center gap-2 mb-4">
                                             <CheckCircle className="w-5 h-5 text-green-500" />
-                                            <h4 className="text-lg font-semibold text-gray-900">លក្ខណៈពិសេស</h4>
+                                            <h4 className="text-lg font-semibold text-gray-900 dark:text-zinc-400">លក្ខណៈពិសេស</h4>
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             {betaFeatures.map((feature, index) => {
@@ -170,17 +170,17 @@ function BetaDialog({
                                                 return (
                                                     <div
                                                         key={index}
-                                                        className="p-4 bg-indigo-50 rounded-3xl border border-indigo-100 hover:border-indigo-300 transition-colors"
+                                                        className="p-4 bg-indigo-50 dark:bg-indigo-900 rounded-3xl border border-indigo-100 dark:border-indigo-800 hover:border-indigo-300 transition-colors"
                                                     >
                                                         <div className="flex items-start gap-3">
-                                                            <div className="p-2 bg-indigo-500 rounded-full">
-                                                                <Icon className="w-5 h-5 text-white" />
+                                                            <div className="p-2 bg-indigo-500 dark:bg-indigo-400 rounded-full">
+                                                                <Icon className="w-5 h-5 text-white dark:text-white" />
                                                             </div>
                                                             <div className="flex-1">
-                                                                <h5 className="font-semibold text-gray-900 mb-1">
+                                                                <h5 className="font-semibold text-gray-900 dark:text-zinc-400 mb-1">
                                                                     {feature.title}
                                                                 </h5>
-                                                                <p className="text-sm text-gray-600">
+                                                                <p className="text-sm text-gray-600 dark:text-zinc-400">
                                                                     {feature.description}
                                                                 </p>
                                                             </div>
@@ -195,7 +195,7 @@ function BetaDialog({
                                     <div>
                                         <div className="flex items-center gap-2 mb-4">
                                             <Rocket className="w-5 h-5 text-indigo-500" />
-                                            <h4 className="text-lg font-semibold text-gray-900">នឹងមកដល់ឆាប់ៗ</h4>
+                                            <h4 className="text-lg font-semibold text-gray-900 dark:text-zinc-400">នឹងមកដល់ឆាប់ៗ</h4>
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             {futureFeatures.map((feature, index) => {
@@ -203,22 +203,22 @@ function BetaDialog({
                                                 return (
                                                     <div
                                                         key={index}
-                                                        className="p-4 bg-indigo-50 rounded-3xl border border-indigo-100 hover:border-indigo-300 transition-colors opacity-75"
+                                                        className="p-4 bg-indigo-50 dark:bg-indigo-900 rounded-3xl border border-indigo-100 dark:border-indigo-800 hover:border-indigo-300 transition-colors opacity-75"
                                                     >
                                                         <div className="flex items-start gap-3">
-                                                            <div className="p-2 bg-indigo-500 rounded-full">
-                                                                <Icon className="w-5 h-5 text-white" />
+                                                            <div className="p-2 bg-indigo-500 dark:bg-indigo-400 rounded-full">
+                                                                <Icon className="w-5 h-5 text-white dark:text-white" />
                                                             </div>
                                                             <div className="flex-1">
                                                                 <div className="flex items-center gap-2 mb-1">
-                                                                    <h5 className="font-semibold text-gray-900">
+                                                                    <h5 className="font-semibold text-gray-900 dark:text-zinc-400">
                                                                         {feature.title}
                                                                     </h5>
-                                                                    <span className="text-xs px-2 py-0.5 bg-indigo-200 text-indigo-700 rounded-full font-medium">
+                                                                    <span className="text-xs px-2 py-0.5 bg-indigo-200 dark:bg-indigo-800 text-indigo-700 dark:text-indigo-300 rounded-full font-medium">
                                                                         ឆាប់ៗ
                                                                     </span>
                                                                 </div>
-                                                                <p className="text-sm text-gray-600">
+                                                                <p className="text-sm text-gray-600 dark:text-zinc-400">
                                                                     {feature.description}
                                                                 </p>
                                                             </div>
@@ -233,23 +233,23 @@ function BetaDialog({
                                     <div>
                                         <div className="flex items-center gap-2 mb-4">
                                             <AlertTriangle className="w-5 h-5 text-amber-500" />
-                                            <h4 className="text-lg font-semibold text-gray-900">កំណត់សម្គាល់ និងការកំណត់</h4>
+                                            <h4 className="text-lg font-semibold text-gray-900 dark:text-zinc-400">កំណត់សម្គាល់ និងការកំណត់</h4>
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             {limitations.map((limitation, index) => (
                                                 <div
                                                     key={index}
-                                                    className="p-4 bg-amber-50 rounded-3xl border border-amber-200 hover:border-amber-300 transition-colors"
+                                                    className="p-4 bg-amber-50 dark:bg-amber-900 rounded-3xl border border-amber-200 dark:border-amber-800 hover:border-amber-300 transition-colors"
                                                 >
                                                     <div className="flex items-start gap-3">
-                                                        <div className="p-2 bg-amber-500 rounded-full flex-shrink-0">
-                                                            <AlertTriangle className="w-5 h-5 text-white" />
+                                                        <div className="p-2 bg-amber-500 dark:bg-amber-400 rounded-full flex-shrink-0">
+                                                            <AlertTriangle className="w-5 h-5 text-white dark:text-white" />
                                                         </div>
                                                         <div className="flex-1">
-                                                            <h5 className="font-semibold text-gray-900 mb-1">
+                                                            <h5 className="font-semibold text-gray-900 dark:text-zinc-400 mb-1">
                                                                 {limitation.title}
                                                             </h5>
-                                                            <p className="text-sm text-gray-600">
+                                                            <p className="text-sm text-gray-600 dark:text-zinc-400">
                                                                 {limitation.description}
                                                             </p>
                                                         </div>
@@ -260,12 +260,12 @@ function BetaDialog({
                                     </div>
 
                                     {/* Footer Note */}
-                                    <div className="pt-4 border-t border-gray-200">
+                                    <div className="pt-4 border-t border-gray-200 dark:border-zinc-700">
                                         <Link
                                             href="https://www.facebook.com/profile.php?id=61579280685130"
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex items-center justify-center gap-2 text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
+                                            className="flex items-center justify-center gap-2 text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-600 font-medium transition-colors"
                                         >
                                             <Facebook className="w-4 h-4" />
                                             <span>តាមដានវឌ្ឍនភាពរបស់យើងនៅទំព័រ Facebook</span>
