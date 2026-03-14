@@ -108,12 +108,12 @@ export default function AuthPage() {
         setFormError(null);
 
         try {
+            // still note complte overall, since creating but this is the safest order without implementing rollback
+            // usecase: at the very least user can log in, but if sigbup here fails in the future the getCurretnUser might fail
             // Verify OTP with backend
             const otpResult = await authService.verifySignupOtp({ email: otpEmail, otp: otpCode });
 
             // Create Firebase account after verification
-            const firebaseResult = await createUserWithEmailAndPassword(auth, otpEmail, signupData.password);
-
             // Upload profile image if exists and get the key
             let imageKey = '';
             if (signupData.profileImage) {
@@ -124,6 +124,8 @@ export default function AuthPage() {
                     return;
                 }
             }
+            
+            const firebaseResult = await createUserWithEmailAndPassword(auth, otpEmail, signupData.password);
 
             // Generate username from firstName and lastName
             const generatedUsername = `${signupData.firstName.toLowerCase().trim()}${signupData.lastName.toLowerCase().trim()}${Date.now()}`.replace(/\s/g, '');
