@@ -18,3 +18,4 @@ export type VerifyForgetPasswordOtpResponse = GetApiSchema<typeof SchemaMap.Veri
 export type ResetPasswordResponse = GetApiSchema<typeof SchemaMap.ResetPasswordResponse>;
 
 export type UpdateProfileDataRequest = GetApiSchema<typeof SchemaMap.UpdateProfileBody>;
+export type UploadProfileResponse = GetApiSchema<typeof SchemaMap.UploadProfileResponse>;

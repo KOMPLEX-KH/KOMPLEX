@@ -1,3 +1,4 @@
+import { ApiWrapper } from './../types/api-types/apiWrapper';
 import type { AxiosInstance } from "axios";
 import type {
   User,
@@ -9,10 +10,11 @@ import type {
   VerifyForgetPasswordOtpResponse,
   ResetPasswordResponse,
   UpdateProfileDataRequest,
+  UploadProfileResponse,
 } from "../types/api-types/auth";
 import { User as CurrentUser } from "../types/api-types/user-content/user";
-import { ApiWrapper } from "@core-types/api-types/apiWrapper";
-import { Profile } from "@core-types/api-types/profile";
+import { Profile } from "../types/api-types/profile";
+import axios from 'axios';
 
 export const createAuthService = (api: AxiosInstance) => {
   return {
@@ -128,6 +130,32 @@ export const createAuthService = (api: AxiosInstance) => {
         throw error;
       }
     },
+
+    uploadInitialProfile: async (file: File) => {
+      try {
+        const response = await api.post<ApiWrapper<UploadProfileResponse>>(
+          `/upload/upload-profile`,
+          {
+            fileName: file.name,
+            fileType: file.type,
+          },
+          { withCredentials: true }
+        );
+
+        const { signedUrl, key } = response.data.data;
+
+        await axios.put(signedUrl, file, {
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
+
+        return key;
+      } catch (error) {
+        throw new Error("Failed to upload file");
+      }
+    },
+
   };
 };
 

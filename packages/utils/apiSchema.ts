@@ -24,6 +24,7 @@ export const SchemaMap = {
     // Upload
     UploadUrlResponse: "UploadUrlResponse",
     UploadUrlBody: "UploadUrlBody",
+    UploadProfileResponse : "UploadProfileResponse",
 
     // Feed - Videos
     FeedVideoItemSchema: "FeedVideoItemSchema",

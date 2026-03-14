@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { auth, googleProvider, microsoftProvider, githubProvider } from '@/configs/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { authService, uploadService } from '@/services/index';
+import { authService } from '@/services/index';
 import {
     validateLoginForm,
     validateSignupForm,
@@ -118,13 +118,13 @@ export default function AuthPage() {
             let imageKey = '';
             if (signupData.profileImage) {
                 try {
-                    imageKey = await uploadService.uploadFile(signupData.profileImage);
+                    imageKey = await authService.uploadInitialProfile(signupData.profileImage);
                 } catch (uploadErr) {
                     setFormError('បញ្ហាក្នុងការបង្ហោះរូបភាព');
                     return;
                 }
             }
-            
+
             const firebaseResult = await createUserWithEmailAndPassword(auth, otpEmail, signupData.password);
 
             // Generate username from firstName and lastName
@@ -296,6 +296,7 @@ export default function AuthPage() {
                                 onVerifyOtp={handleVerifyOtp}
                                 onResendOtp={onResendOtp}
                                 otpExpiresIn={otpExpiresIn}
+                                onOtpViewChange={() => setIsOtpView(false)}
                             />
                         )}
 
