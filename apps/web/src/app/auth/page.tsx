@@ -13,9 +13,11 @@ import {
 import LogIn from '@/components/pages/auth/LogIn';
 import SignUp from '@/components/pages/auth/SignUp';
 import { Logo } from '@/components/common/Logo';
+import { useTheme } from '@/hooks/useTheme';
 
 export default function AuthPage() {
     const router = useRouter();
+    const { isDark } = useTheme();
     const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
     const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -222,13 +224,13 @@ export default function AuthPage() {
         <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 flex flex-col items-center justify-center p-4">
             <div className="w-full max-w-2xl relative z-10 pt-16">
                 {/* Auth Container */}
-                <div className="bg-indigo-500/10 dark:bg-indigo-900/10 backdrop-blur-sm border border-indigo-600 dark:border-indigo-800 rounded-3xl shadow-xl shadow-indigo-500/10 p-6">
+                <div className={`bg-indigo-500/10 dark:bg-zinc-900 backdrop-blur-sm border border-indigo-600 dark:border-indigo-800 rounded-3xl shadow-xl shadow-indigo-500/10 p-6 ${isDark ? 'dark:bg-zinc-900' : 'bg-white'}`}>
                     <>
                         {/* Logo and Slogan */}
                         {!isForgotPassword && !isOtpView && (
                             <div className="text-center mb-8">
                                 <Link href="/" className="flex items-center justify-center gap-2 mb-4">
-                                    <Logo size='lg' showBeta={false} />
+                                    <Logo variant={isDark ? 'light' : 'default'} size='lg' showBeta={false} />
                                 </Link>
                             </div>
                         )}
@@ -236,12 +238,12 @@ export default function AuthPage() {
 
                         {/* Tab Navigation */}
                         {!isForgotPassword && !isOtpView && (
-                            <div className="flex bg-white dark:bg-zinc-900 rounded-full p-1 mb-6 border border-indigo-600 dark:border-indigo-800  mx-auto">
+                            <div className="flex bg-white dark:bg-indigo-900/80 rounded-full p-1 mb-6 border border-indigo-600 dark:border-indigo-800  mx-auto">
                                 <button
                                     onClick={() => setActiveTab('login')}
                                     className={`flex-1 py-3 px-4 rounded-full text-sm font-medium transition-all hover:bg-gray-50 duration-300 ${activeTab === 'login'
-                                        ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm border border-indigo-600 dark:border-indigo-800'
-                                        : 'text-black hover:text-indigo-600'
+                                        ? 'bg-white dark:bg-indigo-900/80 text-indigo-600 dark:text-indigo-400 shadow-sm border border-indigo-600 dark:border-indigo-800'
+                                        : 'text-black dark:text-zinc-400 hover:text-indigo-600'
                                         }`}
                                 >
                                     ចូលប្រេីប្រាស់
@@ -249,8 +251,8 @@ export default function AuthPage() {
                                 <button
                                     onClick={() => setActiveTab('signup')}
                                     className={`flex-1 py-3 px-4 rounded-full text-sm font-medium transition-all hover:bg-gray-50 duration-300 ${activeTab === 'signup'
-                                        ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm border border-indigo-600 dark:border-indigo-800'
-                                        : 'text-black hover:text-indigo-600'
+                                        ? 'bg-white dark:bg-indigo-900/80 text-indigo-600 dark:text-indigo-400 shadow-sm border border-indigo-600 dark:border-indigo-800'
+                                        : 'text-black dark:text-zinc-400 hover:text-indigo-600'
                                         }`}
                                 >
                                     ចុះឈ្មោះ

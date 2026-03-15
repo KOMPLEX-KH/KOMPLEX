@@ -397,14 +397,14 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                             <button
                                 type="button"
                                 onClick={() => setIsCollapsed(false)}
-                                className="w-10 h-10 rounded-full flex items-center justify-center text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-800 transition-colors shadow-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900"
+                                className="w-10 h-10 rounded-full flex items-center justify-center text-indigo-600 dark:text-zinc-400 hover:text-indigo-800 dark:hover:text-indigo-800 transition-colors shadow-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900"
                                 aria-label="បើក Sidebar វិញ"
                             >
                                 <ChevronRight className="w-5 h-5" />
                             </button>
                             <Link
                                 href="/ai"
-                                className="w-10 h-10 rounded-full flex items-center justify-center text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-800 transition-colors shadow-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900"
+                                className="w-10 h-10 rounded-full flex items-center justify-center text-indigo-600 dark:text-zinc-400 hover:text-indigo-800 dark:hover:text-indigo-800 transition-colors shadow-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900"
                                 aria-label="សន្ទនាថ្មី"
                             >
                                 <Edit className="w-5 h-5" />
@@ -412,15 +412,15 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                         </div>
                     ) : (
                         <div className="pl-6 pt-20 pb-6 h-full">
-                            <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-sm shadow-xl border border-indigo-100 dark:border-indigo-800 rounded-3xl flex flex-col w-72 h-full transition-all duration-200 ease-out overflow-hidden">
+                            <div className="bg-white dark:bg-zinc-900/95 backdrop-blur-sm shadow-xl border border-indigo-100 dark:border-indigo-800/10 rounded-3xl flex flex-col w-72 h-full transition-all duration-200 ease-out overflow-hidden">
                                 {/* Header */}
                                 <div className="flex items-center justify-between px-4 py-3 border-b border-indigo-50 dark:border-indigo-800">
                                     <div className="flex items-center gap-4">
                                         <div className="flex ">
-                                            <span className="text-xl font-bold tracking-wide text-indigo-600 uppercase">
+                                            <span className="text-xl font-bold tracking-wide text-indigo-600 dark:text-zinc-400 uppercase">
                                                 តា
                                             </span>
-                                            <span className="text-xl font-bold tracking-wide text-indigo-500 uppercase">
+                                            <span className="text-xl font-bold tracking-wide text-indigo-500 dark:text-zinc-400 uppercase">
                                                 រា  <span className="text-base text-gray-500 dark:text-zinc-400"> AI 1.0</span>
                                             </span>
                                         </div>
@@ -428,7 +428,7 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                                     <button
                                         type="button"
                                         onClick={() => setIsCollapsed(true)}
-                                        className="inline-flex items-center justify-center w-8 h-8 rounded-full border border-indigo-100 dark:border-indigo-800 bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-800 hover:border-indigo-200 dark:hover:border-indigo-200 transition-colors"
+                                        className="inline-flex items-center justify-center w-8 h-8 rounded-full border border-indigo-100 dark:border-indigo-800 bg-white dark:bg-zinc-900 text-indigo-600 dark:text-zinc-400 hover:bg-indigo-50 dark:hover:bg-indigo-800 hover:border-indigo-200 dark:hover:border-indigo-200 transition-colors"
                                         aria-label="បិទ Sidebar"
                                     >
                                         <ChevronLeft className="w-4 h-4" />
@@ -439,7 +439,7 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                                 <div className="px-4 pt-3 pb-2">
                                     <Link
                                         href="/ai"
-                                        className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 dark:bg-indigo-400 text-white dark:text-white text-sm font-medium py-2.5 shadow-md hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors"
+                                        className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 dark:bg-indigo-600 text-white dark:text-white text-sm font-medium py-2.5 shadow-md hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors"
                                     >
                                         <Edit className="w-4 h-4" />
                                         <span className="text-sm font-medium">សន្ទនាថ្មី</span>
@@ -448,13 +448,13 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
 
                                 {/* Tabs */}
                                 <div className="px-3 pt-2 pb-3">
-                                    <div className="flex p-1 rounded-full bg-indigo-50 dark:bg-indigo-900">
+                                    <div className="flex p-1 rounded-full bg-indigo-50 dark:bg-zinc-900">
                                         <button
                                             type="button"
                                             onClick={() => setActiveTab('general')}
                                             className={`flex-1 px-4 py-2 text-sm font-semibold rounded-full transition-colors ${activeTab === 'general'
-                                                ? 'bg-white dark:bg-zinc-900 text-indigo-700 dark:text-indigo-400 shadow-sm'
-                                                : 'text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-600'
+                                                ? 'bg-white dark:bg-indigo-900/50 text-indigo-700 dark:text-white shadow-sm'
+                                                : 'text-indigo-500 dark:text-zinc-400 hover:text-indigo-700 dark:hover:text-indigo-600'
                                                 }`}
                                         >
                                             ទូទៅ
@@ -463,8 +463,8 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                                             type="button"
                                             onClick={() => setActiveTab('topic')}
                                             className={`flex-1 px-4 py-2 text-sm font-semibold rounded-full transition-colors ${activeTab === 'topic'
-                                                ? 'bg-white dark:bg-zinc-900 text-indigo-700 dark:text-indigo-400 shadow-sm'
-                                                : 'text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-600'
+                                                ? 'bg-white dark:bg-indigo-900/50 text-indigo-700 dark:text-white shadow-sm'
+                                                : 'text-indigo-500 dark:text-zinc-400 hover:text-indigo-700 dark:hover:text-indigo-600'
                                                 }`}
                                         >
                                             មេរៀន
@@ -492,7 +492,7 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
 
             {/* Mobile secondary header + overlay menu */}
             <div
-                className={`fixed top-14 left-0 right-0 z-30 px-4 py-2 flex items-center justify-between bg-white/95 dark:bg-zinc-900/95 lg:hidden transition-transform duration-300 ${isScrollingDown ? '-translate-y-[200%]' : 'translate-y-0'
+                className={`fixed top-14 left-0 right-0 z-30 px-4 py-2 flex items-center justify-between bg-white dark:bg-zinc-900/95 lg:hidden transition-transform duration-300 ${isScrollingDown ? '-translate-y-[200%]' : 'translate-y-0'
                     }`}
             >
                 {/* Left: menu button */}
@@ -517,20 +517,20 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
             {/* Mobile overlay menu */}
             {isMobileMenuOpen && (
                 <div
-                    className="fixed inset-0 z-40 lg:hidden bg-black/10 backdrop-blur-sm"
+                    className="fixed inset-0 z-40 lg:hidden bg-black/10 dark:bg-zinc-900/10 backdrop-blur-sm"
                     onClick={() => setIsMobileMenuOpen(false)}
                 >
                     <div
-                        className="absolute top-16 left-3 right-12 max-w-xs bg-white/95 dark:bg-zinc-900/95 backdrop-blur-sm shadow-xl border border-indigo-100 dark:border-indigo-800 rounded-3xl flex flex-col overflow-hidden h-[calc(100vh-5rem)]"
+                        className="absolute top-16 left-3 right-12 max-w-xs bg-white dark:bg-zinc-900/95 backdrop-blur-sm shadow-xl border border-indigo-100 dark:border-indigo-800/10 rounded-3xl flex flex-col overflow-hidden h-[calc(100vh-5rem)]"
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Tabs header inside overlay */}
                         <div className="flex items-center justify-between px-4 py-3 border-b border-indigo-50 dark:border-indigo-800">
                             <div className="flex ">
-                                <span className="text-xl font-bold tracking-wide text-indigo-600 uppercase">
+                                <span className="text-xl font-bold tracking-wide text-indigo-600 dark:text-zinc-400 uppercase">
                                     តា
                                 </span>
-                                <span className="text-xl font-bold tracking-wide text-indigo-500 uppercase">
+                                <span className="text-xl font-bold tracking-wide text-indigo-500 dark:text-zinc-400 uppercase">
                                     រា  <span className="text-base text-gray-500 dark:text-zinc-400"> AI 1.0</span>
                                 </span>
                             </div>
@@ -546,13 +546,13 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
 
                         {/* Tabs switcher */}
                         <div className="px-3 pt-2 pb-2">
-                            <div className="flex p-1 rounded-full bg-indigo-50 dark:bg-indigo-900">
+                            <div className="flex p-1 rounded-full bg-indigo-50 dark:bg-zinc-900">
                                 <button
                                     type="button"
                                     onClick={() => setActiveTab('general')}
                                     className={`flex-1 px-3 py-1.5 text-sm font-semibold rounded-full transition-colors ${activeTab === 'general'
-                                        ? 'bg-white dark:bg-zinc-900 text-indigo-700 dark:text-indigo-400 shadow-sm'
-                                        : 'text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-600'
+                                        ? 'bg-white dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-400 shadow-sm'
+                                        : 'text-indigo-500 dark:text-zinc-400 hover:text-indigo-700 dark:hover:text-indigo-600'
                                         }`}
                                 >
                                     ទូទៅ
@@ -561,8 +561,8 @@ const SideBar: React.FC<SideBarProps> = ({ onCollapsedChange }) => {
                                     type="button"
                                     onClick={() => setActiveTab('topic')}
                                     className={`flex-1 px-3 py-1.5 text-sm font-semibold rounded-full transition-colors ${activeTab === 'topic'
-                                        ? 'bg-white dark:bg-zinc-900 text-indigo-700 dark:text-indigo-400 shadow-sm'
-                                        : 'text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-600'
+                                        ? 'bg-white dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-400 shadow-sm'
+                                        : 'text-indigo-500 dark:text-zinc-400 hover:text-indigo-700 dark:hover:text-indigo-600'
                                         }`}
                                 >
                                     មេរៀន

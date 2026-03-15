@@ -127,12 +127,12 @@ export default function ForgotPassword({
                                 ពាក្យសម្ងាត់ថ្មី
                             </label>
                             <div className="relative w-full">
-                                <Lock size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-600 z-10" />
+                                <Lock size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-600 dark:text-indigo-400 z-10" />
                                 <input
                                     type={showNewPassword ? "text" : "password"}
                                     value={newPassword}
                                     onChange={(e) => setNewPassword?.(e.target.value)}
-                                    className="w-full pl-10 pr-12 py-3 border border-indigo-500/20 dark:border-indigo-800/20 rounded-full bg-white dark:bg-zinc-900 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
+                                    className="w-full pl-10 pr-12 py-3 border border-indigo-500/20 dark:border-zinc-600 rounded-full bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder:text-gray-500 dark:placeholder:text-zinc-400 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
                                     placeholder="បញ្ចូលពាក្យសម្ងាត់ថ្មីរបស់អ្នក"
                                     disabled={isSubmitting}
                                     required
@@ -141,7 +141,7 @@ export default function ForgotPassword({
                                 <button
                                     type="button"
                                     onClick={() => setShowNewPassword(!showNewPassword)}
-                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-zinc-400 hover:text-gray-600 dark:hover:text-zinc-400 transition-colors"
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
                                 >
                                     {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
@@ -149,7 +149,7 @@ export default function ForgotPassword({
 
                             {/* Password validation */}
                             {newPassword && newPassword.length < 8 && (
-                                <p className="text-red-500 text-sm mt-1">ពាក្យសម្ងាត់ត្រូវតែមានយ៉ាងតិច ៨ តួអក្សរ</p>
+                                <p className="text-red-500 dark:text-red-400 text-sm mt-1">ពាក្យសម្ងាត់ត្រូវតែមានយ៉ាងតិច ៨ តួអក្សរ</p>
                             )}
                         </div>
 
@@ -159,12 +159,12 @@ export default function ForgotPassword({
                                 បញ្ជាក់ពាក្យសម្ងាត់
                             </label>
                             <div className="relative w-full">
-                                <Lock size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-600 z-10" />
+                                <Lock size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-600 dark:text-indigo-400 z-10" />
                                 <input
                                     type={showConfirmPassword ? "text" : "password"}
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword?.(e.target.value)}
-                                    className="w-full pl-10 pr-12 py-3 border border-indigo-500/20 dark:border-indigo-800/20 rounded-full bg-white dark:bg-zinc-900 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
+                                    className="w-full pl-10 pr-12 py-3 border border-indigo-500/20 dark:border-zinc-600 rounded-full bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder:text-gray-500 dark:placeholder:text-zinc-400 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
                                     placeholder="បញ្ជាក់ពាក្យសម្ងាត់របស់អ្នក"
                                     disabled={isSubmitting}
                                     required
@@ -172,7 +172,7 @@ export default function ForgotPassword({
                                 <button
                                     type="button"
                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-zinc-400 hover:text-gray-600 dark:hover:text-zinc-400 transition-colors"
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
                                 >
                                     {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
@@ -180,14 +180,14 @@ export default function ForgotPassword({
 
                             {/* Password match validation */}
                             {confirmPassword && newPassword !== confirmPassword && (
-                                <p className="text-red-500 text-sm mt-1">ពាក្យសម្ងាត់មិនត្រូវគ្នាទេ</p>
+                                <p className="text-red-500 dark:text-red-400 text-sm mt-1">ពាក្យសម្ងាត់មិនត្រូវគ្នាទេ</p>
                             )}
                         </div>
                     </div>
 
                     {/* Error message */}
                     {passwordError && (
-                        <div className="w-full rounded-3xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900 text-red-700 dark:text-red-300 text-sm p-3">
+                        <div className="w-full rounded-3xl border border-red-200 dark:border-red-800/50 bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 text-sm p-3">
                             {passwordError}
                         </div>
                     )}
@@ -203,7 +203,7 @@ export default function ForgotPassword({
                             isSubmitting ||
                             isTokenExpired
                         }
-                        className="w-full bg-indigo-600 text-white dark:text-zinc-900 py-3 px-4 rounded-full font-semibold hover:bg-indigo-500 dark:hover:bg-indigo-600 transition-colors duration-300 shadow-lg shadow-indigo-500/30 border border-white/20 dark:border-zinc-800/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-indigo-600 text-white py-3 px-4 rounded-full font-semibold hover:bg-indigo-500 dark:hover:bg-indigo-500 transition-colors duration-300 shadow-lg shadow-indigo-500/30 border border-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isSubmitting ? 'កំពុងកំណត់...' : 'កំណត់ពាក្យសម្ងាត់'}
                     </button>
@@ -237,12 +237,12 @@ export default function ForgotPassword({
                         អ៊ីមែល
                     </label>
                     <div className="relative">
-                        <Mail size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-600 z-10" />
+                        <Mail size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-600 dark:text-indigo-400 z-10" />
                         <input
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 border border-indigo-500/20 dark:border-indigo-800/20 rounded-full bg-white dark:bg-zinc-900 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
+                            className="w-full pl-10 pr-4 py-3 border border-indigo-500/20 dark:border-zinc-600 rounded-full bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder:text-gray-500 dark:placeholder:text-zinc-400 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
                             placeholder="បញ្ចូលអ៊ីមែលរបស់អ្នក"
                             disabled={isSubmitting}
                             required
@@ -251,12 +251,12 @@ export default function ForgotPassword({
 
                     {/* validate email */}
                     {email && getValidationError('email', email) && (
-                        <p className="text-red-500 text-sm mt-1">{getValidationError('email', email)}</p>
+                        <p className="text-red-500 dark:text-red-400 text-sm mt-1">{getValidationError('email', email)}</p>
                     )}
                 </div>
 
                 {errorMessage && (
-                    <div className="w-full rounded-3xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900 text-red-700 dark:text-red-300 text-sm p-3">
+                    <div className="w-full rounded-3xl border border-red-200 dark:border-red-800/50 bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 text-sm p-3">
                         {errorMessage}
                     </div>
                 )}

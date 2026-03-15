@@ -170,7 +170,7 @@ function BetaDialog({
                                                 return (
                                                     <div
                                                         key={index}
-                                                        className="p-4 bg-indigo-50 dark:bg-indigo-900 rounded-3xl border border-indigo-100 dark:border-indigo-800 hover:border-indigo-300 transition-colors"
+                                                        className="p-4 bg-indigo-50 dark:bg-zinc-900 rounded-3xl border border-indigo-100 dark:border-indigo-800 hover:border-indigo-300 transition-colors"
                                                     >
                                                         <div className="flex items-start gap-3">
                                                             <div className="p-2 bg-indigo-500 dark:bg-indigo-400 rounded-full">
@@ -203,7 +203,7 @@ function BetaDialog({
                                                 return (
                                                     <div
                                                         key={index}
-                                                        className="p-4 bg-indigo-50 dark:bg-indigo-900 rounded-3xl border border-indigo-100 dark:border-indigo-800 hover:border-indigo-300 transition-colors opacity-75"
+                                                        className="p-4 bg-indigo-50 dark:bg-zinc-900 rounded-3xl border border-indigo-100 dark:border-indigo-800 hover:border-indigo-300 transition-colors opacity-75"
                                                     >
                                                         <div className="flex items-start gap-3">
                                                             <div className="p-2 bg-indigo-500 dark:bg-indigo-400 rounded-full">
@@ -239,7 +239,7 @@ function BetaDialog({
                                             {limitations.map((limitation, index) => (
                                                 <div
                                                     key={index}
-                                                    className="p-4 bg-amber-50 dark:bg-amber-900 rounded-3xl border border-amber-200 dark:border-amber-800 hover:border-amber-300 transition-colors"
+                                                    className="p-4 bg-amber-50 dark:bg-amber-900/30 rounded-3xl border border-amber-200 dark:border-amber-800 hover:border-amber-300 transition-colors"
                                                 >
                                                     <div className="flex items-start gap-3">
                                                         <div className="p-2 bg-amber-500 dark:bg-amber-400 rounded-full flex-shrink-0">

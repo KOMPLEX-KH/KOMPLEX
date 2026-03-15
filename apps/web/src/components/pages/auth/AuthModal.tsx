@@ -327,7 +327,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-2 sm:scale-95"
                         >
-                            <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-3xl border border-indigo-600 bg-white dark:bg-zinc-900 backdrop-blur-xl p-6 shadow-xl shadow-indigo-500/10">
+                            <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-3xl border border-indigo-500/20 dark:border-zinc-700 bg-white dark:bg-zinc-900 backdrop-blur-xl p-6 shadow-xl shadow-indigo-500/10">
                                 {!isForgotPassword && !isOtpView && (
                                     <div className="flex items-start justify-between">
                                         <Dialog.Title className="sr-only">Authentication</Dialog.Title>
@@ -335,7 +335,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                                             <img src="/logo.png" alt="" className='w-8 h-8' />
                                             <div>
                                                 <span className="text-2xl font-extrabold tracking-tight text-indigo-600 dark:text-indigo-400">KOM</span>
-                                                <span className="text-2xl font-extrabold tracking-tight text-black">PLEX</span>
+                                                <span className="text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">PLEX</span>
                                             </div>
                                         </Link>
                                     </div>
@@ -344,21 +344,21 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
 
                                 {/* Tabs */}
                                 {!isForgotPassword && !isOtpView && (
-                                    <div className="flex bg-white dark:bg-zinc-900 rounded-3xl p-1 mb-6 border border-indigo-600  mx-auto">
+                                    <div className="flex bg-zinc-100 dark:bg-zinc-800/80 rounded-3xl p-1 mb-6 border border-indigo-500/20 dark:border-zinc-600 mx-auto">
                                         <button
                                             onClick={() => setActiveTab('login')}
-                                            className={`flex-1 py-3 px-4 rounded-3xl text-sm font-medium transition-all hover:bg-gray-50 duration-300 ${activeTab === 'login'
-                                                ? 'bg-white dark:bg-zinc-900 text-indigo-600 shadow-sm border border-indigo-600'
-                                                : 'text-black dark:text-zinc-400 hover:text-indigo-600'
+                                            className={`flex-1 py-3 px-4 rounded-3xl text-sm font-medium transition-all duration-300 ${activeTab === 'login'
+                                                ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm border border-indigo-500/30 dark:border-zinc-600'
+                                                : 'text-zinc-700 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white/50 dark:hover:bg-zinc-800'
                                                 }`}
                                         >
                                             ចូលទៅកាន់
                                         </button>
                                         <button
                                             onClick={() => setActiveTab('signup')}
-                                            className={`flex-1 py-3 px-4 rounded-3xl text-sm font-medium transition-all hover:bg-gray-50 duration-300 ${activeTab === 'signup'
-                                                ? 'bg-white dark:bg-zinc-900 text-indigo-600 shadow-sm border border-indigo-600'
-                                                : 'text-black dark:text-zinc-400 hover:text-indigo-600'
+                                            className={`flex-1 py-3 px-4 rounded-3xl text-sm font-medium transition-all duration-300 ${activeTab === 'signup'
+                                                ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm border border-indigo-500/30 dark:border-zinc-600'
+                                                : 'text-zinc-700 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white/50 dark:hover:bg-zinc-800'
                                                 }`}
                                         >
                                             ចុះឈ្មោះ
@@ -420,7 +420,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                                             <button
                                                 key={index}
                                                 onClick={() => handleSocialLogin(platform.provider)}
-                                                className="flex-1 bg-white dark:bg-zinc-900 border border-indigo-500/20 text-gray-700 dark:text-zinc-400 py-3 px-4 rounded-3xl font-medium hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                className="flex-1 bg-white dark:bg-zinc-800 border border-indigo-500/20 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 py-3 px-4 rounded-3xl font-medium hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 disabled={isSubmitting}
                                             >
                                                 {platform.icon}

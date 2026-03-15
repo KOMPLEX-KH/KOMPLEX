@@ -2,7 +2,10 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { FileText, MessageSquare, Bot, Camera, Pencil, LogOut, BookMarked, MessageCircle, UserIcon, EllipsisVertical, HelpCircle, Plus, PlusCircle, Moon, Sun } from 'lucide-react';
+import {
+    FileText, MessageSquare, Bot, Camera, Pencil, LogOut, BookMarked, MessageCircle,
+    UserIcon, EllipsisVertical, HelpCircle, Plus, PlusCircle, Moon, Sun
+} from 'lucide-react';
 import { Menu as HeadlessMenu, Transition } from '@headlessui/react';
 import FeedbackModal from '../pages/feedbacks/FeedbackModal';
 import { useAuth } from '@hooks/useAuth';
@@ -52,7 +55,7 @@ const navLinks = [
         label: 'តារា AI',
         href: '/ai',
         icon: Bot,
-        style: "bg-indigo-600 text-white no-underline hover:bg-indigo-500 dark:hover:bg-indigo-500"
+        style: "bg-indigo-500 dark:bg-indigo-600 text-white no-underline hover:bg-indigo-500 dark:hover:bg-indigo-500"
     },
 ]
 
@@ -60,7 +63,6 @@ export default function Header() {
     const router = useRouter();
     const pathname = usePathname();
     const { user, loading } = useAuth();
-
 
     const { isDark, toggleTheme } = useTheme();
     const [showFeedbackModal, setShowFeedbackModal] = useState(false);
@@ -115,7 +117,6 @@ export default function Header() {
         }
     };
 
-
     return (
         <>
             <div className={`bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800 fixed top-0 left-0 right-0 z-50 w-full transition-transform duration-300 ${isScrollingDown ? 'md:translate-y-0 -translate-y-full' : 'translate-y-0'}`}>
@@ -154,9 +155,9 @@ export default function Header() {
                                                         link.href ? (
                                                             <Link
                                                                 href={link.href}
-                                                                className={`flex items-center gap-3 bg-transparent w-full text-left px-4 py-3 rounded-full text-sm text-zinc-900 dark:text-white no-underline font-medium  transition-all duration-300 ${isActive
-                                                                    ? 'text-indigo-600 dark:text-indigo-400'
-                                                                    : 'hover:text-indigo-600 dark:hover:text-indigo-400 bg-transparent'
+                                                                className={`flex items-center gap-3 w-full text-left px-4 py-3 rounded-full text-sm no-underline font-medium transition-all duration-300 ${isActive
+                                                                    ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800'
+                                                                    : 'text-zinc-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50/80 dark:hover:bg-indigo-900/20 bg-transparent'
                                                                     }`}
                                                             >
                                                                 <Icon size={18} />
@@ -250,13 +251,24 @@ export default function Header() {
                                                                 </button>
                                                             )}
                                                         </HeadlessMenu.Item>
+
                                                     </div>
                                                 </>
                                             ) : pathname === "/auth" ? null : (
-                                                <div className="px-2 py-2">
+                                                <div className="px-2 py-2 flex flex-col items-center gap-2">
+                                                    <div className='flex items-center justify-center'>
+                                                        <button
+                                                            type="button"
+                                                            onClick={toggleTheme}
+                                                            className="flex items-center justify-center w-9 h-9 rounded-full text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors flex-shrink-0"
+                                                            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                                                        >
+                                                            {isDark ? <Sun size={20} /> : <Moon size={20} />}
+                                                        </button>
+                                                    </div>
                                                     <Link
                                                         href="/auth"
-                                                        className="w-full bg-indigo-600 text-white px-4 py-2.5 rounded-full font-semibold text-sm hover:bg-indigo-500 transition-colors duration-300 border border-white/20 flex items-center justify-center gap-2"
+                                                        className="flex-1 bg-indigo-600 dark:bg-indigo-600 text-white px-4 py-2.5 rounded-full font-semibold text-sm hover:bg-indigo-500 dark:hover:bg-indigo-500 transition-colors duration-300 border border-white/20 flex items-center justify-center gap-2"
                                                     >
                                                         <UserIcon />
                                                         ចុះឈ្មោះ
@@ -278,12 +290,12 @@ export default function Header() {
                             const pathSegment = pathname.split("/")[1];
                             const linkSegment = link.href ? link.href.split("/")[1] : null;
                             const isActive = linkSegment ? pathSegment === linkSegment : false;
-                            const isPrimaryBtn = link.style.includes('bg-indigo-600');
+                            const isPrimaryBtn = link.style.includes('bg-indigo-600') || link.style.includes('bg-indigo-500');
                             return link.href ? (
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={`flex items-center gap-2 no-underline font-semibold text-sm px-3 py-2.5 rounded-full transition-all duration-300 relative ${isPrimaryBtn ? 'text-white' : 'text-zinc-900 dark:text-white'} ${isActive ? 'text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-900/30 shadow-sm ' : link.style}`}
+                                    className={`flex items-center gap-2 no-underline font-semibold text-sm px-3 py-2.5 rounded-full transition-all duration-300 relative ${isPrimaryBtn ? 'text-indigo-600' : 'text-zinc-900 dark:text-white'} ${isActive ? 'text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-900/30 shadow-sm ' : link.style}`}
                                 >
                                     <Icon size={18} />
                                     {link.label}
@@ -300,7 +312,17 @@ export default function Header() {
                         })}
 
                         {/* User Menu or Sign Up Button */}
-                        {pathname === "/auth" ? null : !mounted || loading ? (
+                        {pathname === "/auth" ? (
+                            // On /auth show only the theme button aligned right
+                            <button
+                                type="button"
+                                onClick={toggleTheme}
+                                className="ml-2 flex items-center justify-center w-9 h-9 rounded-full text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-indigo-900/30 transition-colors"
+                                aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                            >
+                                {isDark ? <Sun size={18} /> : <Moon size={18} />}
+                            </button>
+                        ) : !mounted || loading ? (
                             <div className="ml-2" />
                         ) : user ? (
                             <HeadlessMenu as="div" className="relative ml-2">
@@ -309,14 +331,14 @@ export default function Header() {
                                         <img
                                             src={user.profileImage}
                                             alt="Profile"
-                                            className="w-8 h-8 border border-indigo-500 rounded-full object-cover"
+                                            className="w-8 h-8 border border-indigo-600 dark:border-indigo-400 rounded-full object-cover"
                                             onError={(e) => {
                                                 e.currentTarget.style.display = 'none';
                                                 e.currentTarget.nextElementSibling?.classList.remove('hidden');
                                             }}
                                         />
                                     ) : null}
-                                    <div className={`w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-sm ${user.profileImage ? 'hidden' : ''}`}>
+                                    <div className={`w-8 h-8 rounded-full bg-indigo-600 dark:bg-indigo-400 flex items-center justify-center text-white font-semibold text-sm ${user.profileImage ? 'hidden' : ''}`}>
                                         {((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || user.email || 'U').charAt(0)}
                                     </div>
                                 </HeadlessMenu.Button>
@@ -337,14 +359,14 @@ export default function Header() {
                                                     <img
                                                         src={user.profileImage}
                                                         alt="Profile"
-                                                        className="w-12 h-12 border border-indigo-500 rounded-full object-cover flex-shrink-0"
+                                                        className="w-12 h-12 border border-indigo-600 dark:border-indigo-400 rounded-full object-cover flex-shrink-0"
                                                         onError={(e) => {
                                                             e.currentTarget.style.display = 'none';
                                                             e.currentTarget.nextElementSibling?.classList.remove('hidden');
                                                         }}
                                                     />
                                                 ) : null}
-                                                <div className={`w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-lg flex-shrink-0 ${user.profileImage ? 'hidden' : ''}`}>
+                                                <div className={`w-12 h-12 rounded-full bg-indigo-600 dark:bg-indigo-400 flex items-center justify-center text-white font-semibold text-lg flex-shrink-0 ${user.profileImage ? 'hidden' : ''}`}>
                                                     {((`${user.firstName || ''} ${user.lastName || ''}`.trim()) || user.username || user.email || 'U').charAt(0)}
                                                 </div>
                                                 <div className="min-w-0">
@@ -413,14 +435,22 @@ export default function Header() {
                                 </Transition>
                             </HeadlessMenu>
                         ) : (
-                            <div className="ml-1">
+                            <div className="ml-1 flex items-center gap-1">
                                 <Link
                                     href="/auth"
-                                    className="flex items-center gap-2 no-underline font-semibold text-sm px-3 py-2.5 rounded-full transition-all duration-300 relative bg-indigo-600 dark:bg-indigo-500 text-white"
+                                    className="flex items-center gap-2 no-underline font-semibold text-sm px-3 py-2.5 rounded-full transition-all duration-300 relative bg-indigo-600 dark:bg-indigo-600 text-white hover:bg-indigo-500 dark:hover:bg-indigo-500"
                                 >
                                     <UserIcon size={16} />
                                     ចុះឈ្មោះ
                                 </Link>
+                                <button
+                                    type="button"
+                                    onClick={toggleTheme}
+                                    className="flex items-center justify-center w-9 h-9 rounded-full text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-indigo-900/30 transition-colors"
+                                    aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                                >
+                                    {isDark ? <Sun size={18} /> : <Moon size={18} />}
+                                </button>
                             </div>
                         )}
                     </div>

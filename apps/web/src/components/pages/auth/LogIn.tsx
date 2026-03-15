@@ -168,7 +168,7 @@ export default function LogIn({
                         type="text"
                         value={loginIdentifier}
                         onChange={(e) => setLoginIdentifier(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 border border-indigo-500/20 dark:border-indigo-800/20 rounded-full bg-white dark:bg-zinc-900 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
+                        className="w-full pl-10 pr-4 py-3 border border-indigo-500/20 dark:border-zinc-600 rounded-full bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder:text-gray-500 dark:placeholder:text-zinc-400 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
                         placeholder="បញ្ចូលអ៊ីមែលរបស់អ្នក"
                         disabled={isSubmitting}
                     />
@@ -185,14 +185,14 @@ export default function LogIn({
                         type={showPassword ? 'text' : 'password'}
                         value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
-                        className="w-full pl-10 pr-12 py-3 border border-indigo-500/20 dark:border-indigo-800/20 rounded-full bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
+                        className="w-full pl-10 pr-12 py-3 border border-indigo-500/20 dark:border-zinc-600 rounded-full bg-white/80 dark:bg-zinc-900 backdrop-blur-sm text-zinc-900 dark:text-zinc-100 placeholder:text-gray-500 dark:placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/40 transition-all duration-300"
                         placeholder="បញ្ចូលពាក្យសម្ងាត់"
                         disabled={isSubmitting}
                     />
                     <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-600 dark:text-indigo-400 hover:text-gray-600 dark:hover:text-zinc-400 transition-colors"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-indigo-600 dark:text-indigo-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
                         disabled={isSubmitting}
                     >
                         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -212,7 +212,7 @@ export default function LogIn({
                         type="checkbox"
                         className="w-4 h-4 text-indigo-600 border-indigo-500/30 rounded focus:ring-indigo-500/30"
                     />
-                    <span className="ml-2 text-sm text-gray-600 dark:text-zinc-400">ចងចាំខ្ញុំ</span>
+                    <span className="ml-2 text-sm text-zinc-600 dark:text-zinc-400">ចងចាំខ្ញុំ</span>
                 </label>
                 <button
                     type="button"
@@ -223,11 +223,11 @@ export default function LogIn({
                 </button>
             </div>
 
-            <button
-                type="submit"
-                disabled={!isLoginValid() || isSubmitting}
-                className="w-full bg-indigo-600 text-white py-3 px-4 rounded-full font-semibold hover:bg-indigo-500 transition-colors duration-300 shadow-lg shadow-indigo-500/30 border border-white/20 disabled:cursor-not-allowed"
-            >
+                <button
+                    type="submit"
+                    disabled={!isLoginValid() || isSubmitting}
+                    className="w-full bg-indigo-600 text-white py-3 px-4 rounded-full font-semibold hover:bg-indigo-500 dark:hover:bg-indigo-500 transition-colors duration-300 shadow-lg shadow-indigo-500/30 border border-white/20 disabled:cursor-not-allowed"
+                >
                 {isSubmitting ? 'កំពុងចូល...' : 'ចូលប្រេីប្រាស់'}
             </button>
         </form>
