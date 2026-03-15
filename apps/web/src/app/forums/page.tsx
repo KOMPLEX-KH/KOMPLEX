@@ -85,7 +85,7 @@ export default function Forum() {
 	// Early returns for loading and error states
 	if (loading || isSearching) {
 		return (
-			<div className="min-h-screen bg-gray-50">
+			<div className="min-h-screen bg-gray-50 dark:bg-zinc-900">
 				{/* Main Content */}
 				<div className="lg:pt-20 pt-36 p-5 max-w-7xl mx-auto">
 					<div className="flex gap-6">
@@ -102,7 +102,7 @@ export default function Forum() {
 
 	if (error) {
 		return (
-			<div className="min-h-screen bg-gray-50">
+			<div className="min-h-screen bg-gray-50 dark:bg-zinc-900">
 				{/* Main Content */}
 				<div className="pt-36 lg:pt-20 p-5 max-w-7xl mx-auto">
 					<div className="flex gap-6">
@@ -118,7 +118,7 @@ export default function Forum() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50">
+		<div className="min-h-screen bg-gray-50 dark:bg-zinc-900">
 
 			{/* Main Content */}
 			<div className="pt-36 lg:pt-20 p-5 max-w-7xl mx-auto">
@@ -131,7 +131,7 @@ export default function Forum() {
 						{/* Search Results Header */}
 						{searchQuery && (
 							<div className="mb-6">
-								<p className={`text-lg font-semibold ${match ? "text-gray-700" : "text-red-600"}`}>
+								<p className={`text-lg font-semibold ${match ? "text-gray-700 dark:text-zinc-400" : "text-red-600"}`}>
 									{match ? "លទ្ធផលស្វែងរក" : "គ្មានលទ្ធផល"}: &ldquo;{searchQuery}&rdquo;
 								</p>
 							</div>

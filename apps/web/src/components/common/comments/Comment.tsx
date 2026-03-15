@@ -142,32 +142,32 @@ export default function CommentComponent({
                         <img
                             src={comment.profileImage}
                             alt={comment.username}
-                            className="w-8 h-8 rounded-full object-cover border-2 border-indigo-500"
+                            className="w-8 h-8 rounded-full object-cover border-2 border-indigo-500 dark:border-indigo-400"
                             onError={(e) => {
                                 e.currentTarget.style.display = 'none';
                                 e.currentTarget.nextElementSibling?.classList.remove('hidden');
                             }}
                         />
                     ) : null}
-                    <div className={`w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-sm ${comment.profileImage ? 'hidden' : ''}`}>
+                    <div className={`w-8 h-8 rounded-full bg-indigo-600 dark:bg-indigo-400 flex items-center justify-center text-white font-semibold text-sm ${comment.profileImage ? 'hidden' : ''}`}>
                         {comment.username.charAt(0)}
                     </div>
                 </Link>
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                        <Link href={`/users/${comment.userId}`} className="font-semibold text-gray-900 text-sm hover:underline transition-colors">
+                        <Link href={`/users/${comment.userId}`} className="font-semibold text-gray-900 dark:text-zinc-400 text-sm hover:underline transition-colors">
                             {comment.username}
                         </Link>
-                        <span className="text-gray-500 text-xs">{getTimeAgo(comment.createdAt)}</span>
+                        <span className="text-gray-500 dark:text-zinc-400 text-xs">{getTimeAgo(comment.createdAt)}</span>
                     </div>
-                    <div className="text-gray-700 text-sm leading-relaxed mb-2">{comment.description}</div>
+                    <div className="text-gray-700 dark:text-zinc-400 text-sm leading-relaxed mb-2">{comment.description}</div>
                     <div className="flex items-center gap-4">
                         {!isReadOnly ? (
                             <>
                                 <button
                                     onClick={handleCommentLike}
                                     disabled={isLiking}
-                                    className={`flex items-center gap-1 text-xs font-medium transition-all duration-200 py-1 px-2 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed ${commentUpvoted ? 'text-indigo-600' : 'text-gray-500'
+                                    className={`flex items-center gap-1 text-xs font-medium transition-all duration-200 py-1 px-2 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed ${commentUpvoted ? 'text-indigo-600' : 'text-gray-500 dark:text-zinc-400'
                                         }`}
                                 >
                                     <ThumbsUp className={`w-3 h-3 ${commentUpvoted ? 'fill-indigo-600' : ''}`} />
@@ -175,13 +175,13 @@ export default function CommentComponent({
                                 </button>
                                 <button
                                     onClick={() => setIsReplying(!isReplying)}
-                                    className="text-xs text-gray-500 hover:text-indigo-600 transition-colors duration-200 rounded-full"
+                                    className="text-xs text-gray-500 dark:text-zinc-400 hover:text-indigo-600 transition-colors duration-200 rounded-full"
                                 >
                                     ឆ្លើយតប
                                 </button>
                             </>
                         ) : (
-                            <div className="flex items-center gap-1 text-xs text-gray-500">
+                            <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-zinc-400">
                                 <ThumbsUp className="w-3 h-3" />
                                 <span>{typeof likeCount === 'number' ? likeCount : 0}</span>
                             </div>
@@ -189,7 +189,7 @@ export default function CommentComponent({
                         <button
                             onClick={fetchReplies}
                             disabled={isLoadingReplies}
-                            className="flex items-center gap-1 text-xs text-gray-500 hover:text-indigo-600 transition-colors duration-200 disabled:opacity-50 rounded-full"
+                            className="flex items-center gap-1 text-xs text-gray-500 dark:text-zinc-400 hover:text-indigo-600 transition-colors duration-200 disabled:opacity-50 rounded-full"
                         >
                             <MessageCircle className="w-3 h-3" />
                             {isLoadingReplies ? 'កំពុងដំណើរការ...' :
@@ -207,7 +207,7 @@ export default function CommentComponent({
                                         value={replyText}
                                         onChange={(e) => setReplyText(e.target.value)}
                                         placeholder="សរសេរការឆ្លើយតប..."
-                                        className="flex-1 px-3 py-3 text-sm border border-gray-200 rounded-full focus:outline-none focus:border-indigo-500"
+                                        className="flex-1 px-3 py-3 text-sm border border-gray-200 dark:border-zinc-700 rounded-full focus:outline-none focus:border-indigo-500"
                                         onKeyDown={(e) => {
                                             if (e.key === 'Enter') {
                                                 handleSubmitDirectReply();
@@ -217,7 +217,7 @@ export default function CommentComponent({
                                     <button
                                         onClick={handleSubmitDirectReply}
                                         disabled={!replyText.trim()}
-                                        className="p-3  text-sm text-white bg-indigo-600 rounded-full hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="p-3  text-sm text-white bg-indigo-600 dark:bg-indigo-400 rounded-full hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         <Send></Send>
                                     </button>
@@ -232,7 +232,7 @@ export default function CommentComponent({
             {isShowingReplies && (
                 <div className="mt-3">
                     {repliesError ? (
-                        <div className="text-red-500 text-sm p-2 bg-red-50 rounded">
+                        <div className="text-red-500 dark:text-red-400 text-sm p-2 bg-red-50 dark:bg-red-900 rounded">
                             {repliesError}
                         </div>
                     ) : replies.length > 0 ? (
@@ -247,7 +247,7 @@ export default function CommentComponent({
                             />
                         ))
                     ) : (
-                        <div className="text-gray-400 text-sm p-2 ml-10">
+                        <div className="text-gray-400 dark:text-zinc-400 text-sm p-2 ml-10">
                             មិនមានការឆ្លើយតប
                         </div>
                     )}

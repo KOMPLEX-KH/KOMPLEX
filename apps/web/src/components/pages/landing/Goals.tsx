@@ -13,7 +13,7 @@ const GOAL_LIST_ITEMS = [
 
 export default function Goals() {
     return (
-        <section id="goals" className="py-20 px-5 bg-white">
+        <section id="goals" className="py-20 px-5 bg-bg text-foreground">
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
@@ -22,8 +22,8 @@ export default function Goals() {
                     transition={{ duration: 0.8 }}
                     className="text-center mb-15"
                 >
-                    <h2 className="text-4xl font-extrabold text-gray-900 mb-4">គោលដៅរបស់យើង</h2>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                    <h2 className="text-4xl font-extrabold text-foreground mb-4">គោលដៅរបស់យើង</h2>
+                    <p className="text-lg text-muted max-w-2xl mx-auto">
                         យើងចង់ជួយដោះស្រាយបញ្ហានៅក្នុងប្រព័ន្ធអប់រំខ្មែរ
                     </p>
                 </motion.div>
@@ -41,7 +41,7 @@ export default function Goals() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="bg-red-50/80 border-2 border-red-600 rounded-2xl p-8 shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-101"
+                        className="bg-surface-1 border border-border-subtle rounded-2xl p-8 shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-101"
                     >
                         <div className="flex items-center gap-3 mb-6">
                             <motion.div
@@ -56,7 +56,7 @@ export default function Goals() {
                             </motion.div>
                             <h3 className="text-2xl font-bold text-gray-900">បញ្ហាបច្ចុប្បន្ន</h3>
                         </div>
-                        <p className="text-gray-700 leading-relaxed mb-6">
+                        <p className="text-muted leading-relaxed mb-6">
                             កម្ពុជាមានបញ្ហាជាច្រើនក្នុងប្រព័ន្ធអប់រំ ដែលសិស្សជាច្រើនពឹងផ្អែកលើការបង្រៀនឯកជន និងសៀវភៅសង្ខេបដែលត្រូវបង់ប្រាក់ដើម្បីយល់គោលគំនិតមូលដ្ឋាន។
                         </p>
                         <motion.ul
@@ -89,8 +89,8 @@ export default function Goals() {
                         initial={{ opacity: 0, x: 0 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.3 }}
-                        className="bg-green-50/80 border-2 border-green-600 rounded-2xl p-8 shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-101"
+                            transition={{ duration: 0.8, delay: 0.3 }}
+                        className="bg-surface-1 border border-border-subtle rounded-2xl p-8 shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-101"
                     >
                         <div className="flex items-center gap-3 mb-6">
                             <motion.div
@@ -105,7 +105,7 @@ export default function Goals() {
                             </motion.div>
                             <h3 className="text-2xl font-bold text-gray-900">ដំណោះស្រាយរបស់យើង</h3>
                         </div>
-                        <p className="text-gray-700 leading-relaxed mb-6">
+                        <p className="text-muted leading-relaxed mb-6">
                             បង្កើតប្រព័ន្ធរៀន STEM ដែលឥតគិតថ្លៃ និងមានប្រសិទ្ធភាពសម្រាប់សិស្សខ្មែរ ដើម្បីជួយដោះស្រាយបញ្ហានៅក្នុងប្រព័ន្ធអប់រំ និងផ្តល់ជាជម្រីសឥតគិតថ្លៃជាមួយនឹងការរៀនដោយខ្លួនឯកដែលគាំទ្រការយល់ជ្រៅជាងការចងចាំដោយគ្មានការយល់។
                         </p>
                         <motion.div

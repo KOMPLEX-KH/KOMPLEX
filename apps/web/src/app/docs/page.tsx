@@ -139,7 +139,7 @@ export default function Docs() {
 
     if (fetchError) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-zinc-900 px-4">
                 <ContentError type="error" message={fetchError} />
             </div>
         );
@@ -147,23 +147,23 @@ export default function Docs() {
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 max-w-md w-full">
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-zinc-900 px-4">
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-sm border border-gray-200 dark:border-zinc-800 max-w-md w-full">
                     <div className="flex flex-col items-center gap-4">
                         <div className="p-4 rounded-full bg-red-100">
-                            <AlertCircle size={48} className="text-red-600" />
+                            <AlertCircle size={48} className="text-red-600 dark:text-red-400" />
                         </div>
                         <div className="text-center">
-                            <h2 className="text-xl font-bold text-gray-900 mb-2">
+                            <h2 className="text-xl font-bold text-gray-900 dark:text-zinc-100 mb-2">
                                 មានបញ្ហាកើតឡើង
                             </h2>
-                            <p className="text-base text-gray-600">
+                            <p className="text-base text-gray-600 dark:text-zinc-400">
                                 {error}
                             </p>
                         </div>
                         <button
                             onClick={handleRetry}
-                            className="flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-full mt-4 hover:bg-indigo-700 transition-colors"
+                            className="flex items-center gap-2 bg-indigo-600 text-white dark:text-zinc-900 px-6 py-3 rounded-full mt-4 hover:bg-indigo-700 transition-colors"
                         >
                             <RefreshCw size={18} />
                             <span className="font-medium">ព្យាយាមម្តងទៀត</span>
@@ -175,7 +175,7 @@ export default function Docs() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 animation-pulse">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-zinc-900 animation-pulse">
             <Logo isVertical={true} size="xl" isLoading={true} showBeta={false} />
         </div>
     );

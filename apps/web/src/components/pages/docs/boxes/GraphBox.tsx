@@ -13,8 +13,8 @@ export function GraphBox({ expressions, options }: GraphBoxProps) {
 
     return (
         <>
-            <div className="bg-indigo-50/80 border border-indigo-600 my-6 rounded-3xl p-4 shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
-                <div className="relative group bg-white rounded-3xl">
+            <div className="bg-indigo-50/80 dark:bg-indigo-900/40 border border-indigo-600 dark:border-indigo-500 my-6 rounded-3xl p-4 shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+                <div className="relative group bg-white dark:bg-zinc-900 rounded-3xl">
                     <Graph expressions={expressions} options={desmosOptions} />
                     <button
                         onClick={() => setIsModalOpen(true)}
@@ -37,7 +37,7 @@ export function GraphBox({ expressions, options }: GraphBoxProps) {
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" />
+                        <div className="fixed inset-0 bg-black/80 dark:bg-zinc-900/80 backdrop-blur-sm" />
                     </Transition.Child>
 
                     <div className="fixed inset-0 overflow-y-auto">
@@ -51,11 +51,11 @@ export function GraphBox({ expressions, options }: GraphBoxProps) {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="relative w-full max-w-6xl transform overflow-hidden rounded-3xl bg-white text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="relative w-full max-w-6xl transform overflow-hidden rounded-3xl bg-white dark:bg-zinc-900 text-left align-middle shadow-xl transition-all">
                                     <div className="relative">
                                         <button
                                             onClick={() => setIsModalOpen(false)}
-                                            className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+                                            className="absolute top-4 right-4 z-10 bg-black/50 dark:bg-zinc-900/50 hover:bg-black/70 dark:hover:bg-zinc-900/70 text-white p-2 rounded-full transition-colors"
                                         >
                                             <X size={20} />
                                         </button>

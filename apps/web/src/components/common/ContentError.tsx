@@ -20,13 +20,13 @@ export default function ContentError({ type, message }: ContentErrorProps) {
             ) : (
                 <Book className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             )}
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-zinc-400 mb-2">
                 {message ||
                     (isError
                         ? 'មានបញ្ហាក្នុងការទាញយកប្លុក'
                         : 'រកមិនឃើញប្លុក')}
             </h3>
-           
+
             <button
                 onClick={handleRetry}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-medium transition-colors"

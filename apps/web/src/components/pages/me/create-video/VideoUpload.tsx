@@ -45,7 +45,7 @@ export default function VideoUpload({ videoFile, videoPreview, onVideoSelect, on
     };
 
     return (
-        <div className="lg:bg-white bg-gray-50 rounded-3xl lg:shadow-sm lg:p-6">
+        <div className="lg:bg-white dark:bg-zinc-900 bg-gray-50 rounded-3xl lg:shadow-sm lg:p-6">
             <div className="hidden lg:flex items-center justify-between mb-6 pb-4 ">
                 <div className="text-indigo-600 font-semibold text-xl flex gap-3 items-center">
                     <Upload className="text-indigo-600" />
@@ -57,17 +57,17 @@ export default function VideoUpload({ videoFile, videoPreview, onVideoSelect, on
                 <div
                     className={`border-2 border-dashed rounded-3xl p-12 text-center transition-colors ${isDragging
                         ? 'border-indigo-500 bg-indigo-50'
-                        : 'border-gray-300 hover:border-gray-400'
+                        : 'border-gray-300 dark:border-zinc-800 hover:border-gray-400 dark:hover:border-zinc-700'
                         }`}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
                 >
-                    <Upload size={80} className="text-gray-400 mx-auto mb-6" />
-                    <p className="text-gray-600 mb-3 text-xl">
+                    <Upload size={80} className="text-gray-400 dark:text-zinc-400 mx-auto mb-6" />
+                    <p className="text-gray-600 dark:text-zinc-400 mb-3 text-xl">
                         អូសវីដេអូមកទីនេះ ឬ <span className="text-indigo-600 font-medium">ជ្រើសរើសឯកសារ</span>
                     </p>
-                    <p className="text-base text-gray-500 mb-6">
+                    <p className="text-base text-gray-500 dark:text-zinc-400 mb-6">
                         MP4, WebM, ឬ MOV រហូតដល់ 500MB
                     </p>
                     <input
@@ -79,7 +79,7 @@ export default function VideoUpload({ videoFile, videoPreview, onVideoSelect, on
                     />
                     <label
                         htmlFor="video-upload"
-                        className="inline-flex items-center gap-3 px-8 py-4 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors cursor-pointer text-lg font-medium"
+                        className="inline-flex items-center gap-3 px-8 py-4 bg-indigo-600 dark:bg-zinc-700 text-white rounded-full hover:bg-indigo-700 dark:hover:bg-zinc-600 transition-colors cursor-pointer text-lg font-medium"
                     >
                         <Upload size={24} />
                         ជ្រើសរើសវីដេអូ
@@ -89,18 +89,18 @@ export default function VideoUpload({ videoFile, videoPreview, onVideoSelect, on
                 <div className="space-y-6">
                     <div className="relative">
                         <video
-                            className="w-full aspect-video rounded-3xl bg-black"
+                            className="w-full aspect-video rounded-3xl bg-black dark:bg-zinc-900"
                             controls
                             src={videoPreview}
                         />
                         <button
                             onClick={onVideoRemove}
-                            className="absolute top-4 right-4 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                            className="absolute top-4 right-4 p-2 bg-red-500 dark:bg-zinc-800 text-white rounded-full hover:bg-red-600 dark:hover:bg-zinc-700 transition-colors"
                         >
                             <X size={20} />
                         </button>
                     </div>
-                    <div className="text-base text-gray-600 bg-gray-50 p-4 rounded-3xl">
+                    <div className="text-base text-gray-600 dark:text-zinc-400 bg-gray-50 dark:bg-zinc-900 p-4 rounded-3xl">
                         <p className="font-medium">ឯកសារ: {videoFile.name}</p>
                         <p>ទំហំ: {(videoFile.size / (1024 * 1024)).toFixed(2)} MB</p>
                     </div>

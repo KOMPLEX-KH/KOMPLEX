@@ -57,13 +57,13 @@ function MePageContent() {
                 profileImageKey: key,
             });
 
-            const updatedProfile = response?.data || { 
-                profileImage: publicUrl, 
-                profileImageKey: key 
+            const updatedProfile = response?.data || {
+                profileImage: publicUrl,
+                profileImageKey: key
             };
 
-            setProfile(prev => prev ? { 
-                ...prev, 
+            setProfile(prev => prev ? {
+                ...prev,
                 profileImage: updatedProfile.profileImage,
                 profileImageKey: updatedProfile.profileImageKey
             } : prev);
@@ -71,9 +71,9 @@ function MePageContent() {
             const stored = localStorage.getItem('user');
             if (stored) {
                 const parsed = JSON.parse(stored);
-                localStorage.setItem('user', JSON.stringify({ 
-                    ...parsed, 
-                    profileImage: updatedProfile.profileImage 
+                localStorage.setItem('user', JSON.stringify({
+                    ...parsed,
+                    profileImage: updatedProfile.profileImage
                 }));
                 window.dispatchEvent(new Event('user-updated'));
             }
@@ -127,13 +127,13 @@ function MePageContent() {
     }
 
     return (
-        <div className="flex min-h-screen bg-gray-50">
+        <div className="flex min-h-screen bg-gray-50 dark:bg-zinc-900">
             <div className="flex-1 pt-32 lg:pt-20">
                 <div className="max-w-6xl mx-auto p-6">
                     {/* Header */}
                     <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">គ្រប់គ្រងមាតិកា</h1>
-                        <p className="text-gray-600">គ្រប់គ្រងមាតិកា និងព័ត៌មានផ្ទាល់ខ្លួនរបស់អ្នក</p>
+                        <h1 className="text-3xl font-bold text-gray-900 dark:text-zinc-400 mb-2">គ្រប់គ្រងមាតិកា</h1>
+                        <p className="text-gray-600 dark:text-zinc-400">គ្រប់គ្រងមាតិកា និងព័ត៌មានផ្ទាល់ខ្លួនរបស់អ្នក</p>
                     </div>
 
                     {/* Tabs */}
@@ -144,7 +144,7 @@ function MePageContent() {
                                     href="/me?tab=profile"
                                     className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === 'profile' || activeTab === null
                                         ? 'bg-indigo-600 text-white'
-                                        : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                                        : 'bg-white text-gray-600 dark:text-zinc-400 border border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800'
                                         }`}
                                 >
                                     <span className="inline-flex items-center gap-2">
@@ -156,7 +156,7 @@ function MePageContent() {
                                     href="/me?tab=forums"
                                     className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === 'forums'
                                         ? 'bg-indigo-600 text-white'
-                                        : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                                        : 'bg-white text-gray-600 dark:text-zinc-400 border border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800'
                                         }`}
                                 >
                                     <span className="inline-flex items-center gap-2">
@@ -168,7 +168,7 @@ function MePageContent() {
                                     href="/me?tab=videos"
                                     className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === 'videos'
                                         ? 'bg-indigo-600 text-white'
-                                        : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                                        : 'bg-white text-gray-600 dark:text-zinc-400 border border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800'
                                         }`}
                                 >
                                     <span className="inline-flex items-center gap-2">
@@ -187,7 +187,7 @@ function MePageContent() {
                             {error && <ContentError type="error" message={error} />}
 
                             {!error && profile && (
-                                <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm space-y-6">
+                                <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm space-y-6">
                                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                                         <div className="flex items-center gap-4 w-full">
                                             {/* Avatar with hover overlay */}
@@ -209,19 +209,19 @@ function MePageContent() {
                                                     <img
                                                         src={profile.profileImage}
                                                         alt="Profile"
-                                                        className="w-20 h-20 rounded-full object-cover border-2 border-indigo-500 shadow-lg"
+                                                        className="w-20 h-20 rounded-full object-cover border-2 border-indigo-500 dark:border-indigo-400 shadow-lg"
                                                         onError={(e) => {
                                                             e.currentTarget.style.display = 'none';
                                                             e.currentTarget.nextElementSibling?.classList.remove('hidden');
                                                         }}
                                                     />
                                                 ) : null}
-                                                <div className={`w-20 h-20 rounded-full bg-indigo-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg ${profile.profileImage ? 'hidden' : ''}`}>
+                                                <div className={`w-20 h-20 rounded-full bg-indigo-600 dark:bg-zinc-700 flex items-center justify-center text-white text-2xl font-bold shadow-lg ${profile.profileImage ? 'hidden' : ''}`}>
                                                     {((`${profile.firstName || ''} ${profile.lastName || ''}`.trim()) || profile.username || profile.email || 'U').charAt(0).toUpperCase()}
                                                 </div>
                                                 {/* Spinner while uploading */}
                                                 {isUploadingImage && (
-                                                    <div className="absolute inset-0 rounded-full bg-black/60 flex items-center justify-center">
+                                                    <div className="absolute inset-0 rounded-full bg-black/60 dark:bg-zinc-800 flex items-center justify-center">
                                                         <svg className="animate-spin w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
@@ -230,7 +230,7 @@ function MePageContent() {
                                                 )}
                                                 {/* Hover overlay — hidden while uploading */}
                                                 {!isUploadingImage && isHoveringAvatar && (
-                                                    <div className="absolute inset-0 rounded-full bg-black/50 flex flex-col items-center justify-center gap-1">
+                                                    <div className="absolute inset-0 rounded-full bg-black/50 dark:bg-zinc-800 flex flex-col items-center justify-center gap-1">
                                                         <Camera size={25} className="text-white" />
                                                     </div>
                                                 )}
@@ -238,7 +238,7 @@ function MePageContent() {
 
                                             <div>
                                                 <div className="flex items-center gap-2 flex-wrap">
-                                                    <h3 className="text-2xl font-semibold text-gray-900">
+                                                    <h3 className="text-2xl font-semibold text-gray-900 dark:text-zinc-400">
                                                         {`${profile.firstName || ''} ${profile.lastName || ''}`.trim() || profile.username}
                                                     </h3>
                                                     {profile.isVerified && (
@@ -248,7 +248,7 @@ function MePageContent() {
                                                         </div>
                                                     )}
                                                 </div>
-                                                <div className="mt-1 flex items-center gap-2 text-gray-600">
+                                                <div className="mt-1 flex items-center gap-2 text-gray-600 dark:text-zinc-400">
                                                     <Mail size={16} />
                                                     <span className="text-sm">{profile.email} </span>
                                                 </div>
@@ -256,7 +256,7 @@ function MePageContent() {
                                         </div>
                                     </div>
                                     {imageUploadError && (
-                                        <p className="text-xs text-red-500 mt-3">{imageUploadError}</p>
+                                        <p className="text-xs text-red-500 dark:text-red-400 mt-3">{imageUploadError}</p>
                                     )}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <ProfileField icon={<AtSign size={16} />} label="នាមខ្លួន" value={profile.firstName} />
@@ -293,12 +293,12 @@ interface ProfileFieldProps {
 function ProfileField({ icon, label, value, badgeClass }: ProfileFieldProps) {
     const iconClasses = badgeClass ?? 'bg-indigo-100 text-indigo-600';
     return (
-        <div className="bg-white rounded-3xl p-4 border border-gray-200 hover:border-indigo-200 transition-colors">
+        <div className="bg-white dark:bg-zinc-900 rounded-3xl p-4 border border-gray-200 dark:border-zinc-800 hover:border-indigo-200 transition-colors">
             <div className="flex items-center gap-3">
                 <div className={`p-2 rounded-full ${iconClasses}`}>{icon}</div>
                 <div>
-                    <div className="text-xs text-gray-500 font-medium">{label}</div>
-                    <div className="text-gray-900 font-semibold">{value}</div>
+                    <div className="text-xs text-gray-500 dark:text-zinc-400 font-medium">{label}</div>
+                    <div className="text-gray-900 dark:text-zinc-400 font-semibold">{value}</div>
                 </div>
             </div>
         </div>

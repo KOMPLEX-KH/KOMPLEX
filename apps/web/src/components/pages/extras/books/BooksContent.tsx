@@ -169,12 +169,12 @@ export default function BooksContent() {
               <section className="flex flex-col gap-4 rounded-3xl border-none pb-4">
                 <div className="flex items-center justify-between flex-wrap gap-3">
                   <div className="flex items-center gap-2 sm:gap-3">
-                    <div className="p-2 bg-blue-600 rounded-3xl">
-                      <BookOpen className="w-5 h-5 text-white" />
+                    <div className="p-2 bg-indigo-600  dark:text-white dark:bg-indigo-900/80 rounded-3xl">
+                      <BookOpen className="w-5 h-5 text-white dark:text-white" />
                     </div>
                     <div>
-                      <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">ណែនាំ</h2>
-                      <p className="text-gray-500 text-xs sm:text-sm">សៀវភៅដែលអ្នកនឹងចូលចិត្ត</p>
+                      <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 dark:text-zinc-400">ណែនាំ</h2>
+                      <p className="text-gray-500 dark:text-zinc-400 text-xs sm:text-sm">សៀវភៅដែលអ្នកនឹងចូលចិត្ត</p>
                     </div>
                   </div>
                 </div>
@@ -204,12 +204,12 @@ export default function BooksContent() {
                   {/* Header */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-blue-600 rounded-3xl">
-                        <BookOpen className="w-5 h-5 text-white" />
+                      <div className="p-2 bg-indigo-600 dark:bg-indigo-900/80 rounded-3xl">
+                        <BookOpen className="w-5 h-5 text-white dark:text-white" />
                       </div>
                       <div>
-                        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">{subject.name}</h2>
-                        <p className="text-gray-500 text-xs sm:text-sm">សៀវភៅដែលមានការពេញនិយម</p>
+                        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 dark:text-zinc-400">{subject.name}</h2>
+                        <p className="text-gray-500 dark:text-zinc-400 text-xs sm:text-sm">សៀវភៅដែលមានការពេញនិយម</p>
                       </div>
                     </div>
 

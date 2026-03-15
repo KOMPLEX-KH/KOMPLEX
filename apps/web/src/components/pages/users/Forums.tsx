@@ -43,18 +43,18 @@ export default function Forums({ userId }: ForumsProps) {
                 <div className="space-y-4">
                     {[...Array(3)].map((_, index) => (
                         <div key={index} className="animate-pulse">
-                            <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
+                            <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 shadow-sm border border-gray-200">
                                 <div className="flex items-center gap-3 mb-4">
-                                    <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
+                                    <div className="w-10 h-10 bg-gray-200 dark:bg-zinc-800 rounded-full"></div>
                                     <div className="flex-1">
-                                        <div className="h-4 bg-gray-200 rounded w-32 mb-2"></div>
-                                        <div className="h-3 bg-gray-200 rounded w-24"></div>
+                                        <div className="h-4 bg-gray-200 dark:bg-zinc-800 rounded w-32 mb-2"></div>
+                                        <div className="h-3 bg-gray-200 dark:bg-zinc-800 rounded w-24"></div>
                                     </div>
                                 </div>
-                                <div className="h-6 bg-gray-200 rounded w-3/4 mb-3"></div>
+                                <div className="h-6 bg-gray-200 dark:bg-zinc-800 rounded w-3/4 mb-3"></div>
                                 <div className="space-y-2">
-                                    <div className="h-4 bg-gray-200 rounded w-full"></div>
-                                    <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                                    <div className="h-4 bg-gray-200 dark:bg-zinc-800 rounded w-full"></div>
+                                    <div className="h-4 bg-gray-200 dark:bg-zinc-800 rounded w-2/3"></div>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +90,7 @@ export default function Forums({ userId }: ForumsProps) {
 
     return (
         <div className="p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">ព័ត៌មាន ({forums.length})</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-zinc-400 mb-6">ព័ត៌មាន ({forums.length})</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {forums.map((forum) => (
@@ -99,16 +99,16 @@ export default function Forums({ userId }: ForumsProps) {
                         href={`/forums/${forum.id}`}
                         className="block group"
                     >
-                        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200 transition-all duration-300 hover:shadow-lg hover:border-indigo-300 group-hover:-translate-y-0.5">
+                        <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800 transition-all duration-300 hover:shadow-lg hover:border-indigo-300 group-hover:-translate-y-0.5">
                             <div className="flex items-center gap-3 mb-4">
                                 <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-sm">
                                     {forum.username.charAt(0)}
                                 </div>
                                 <div className="flex-1">
-                                    <div className="font-semibold text-gray-900 text-sm mb-0.5">
+                                    <div className="font-semibold text-gray-900 dark:text-zinc-400 text-sm mb-0.5">
                                         {forum.username}
                                     </div>
-                                    <div className="text-gray-500 text-xs flex items-center gap-1">
+                                    <div className="text-gray-500 dark:text-zinc-400 text-xs flex items-center gap-1">
                                         <Calendar className="w-3 h-3" />
                                         {new Date(forum.createdAt).toLocaleDateString('km-KH', {
                                             year: 'numeric',
@@ -119,11 +119,11 @@ export default function Forums({ userId }: ForumsProps) {
                                 </div>
                             </div>
 
-                            <div className="text-lg font-bold text-gray-900 mb-2.5 leading-relaxed group-hover:text-indigo-600 transition-colors">
+                            <div className="text-lg font-bold text-gray-900 dark:text-zinc-400 mb-2.5 leading-relaxed group-hover:text-indigo-600 transition-colors">
                                 {forum.title}
                             </div>
 
-                            <div className="text-gray-700 text-sm leading-relaxed mb-4 line-clamp-2">
+                            <div className="text-gray-700 dark:text-zinc-400 text-sm leading-relaxed mb-4 line-clamp-2">
                                 <MarkDownRenderer content={forum.description} />
                             </div>
 
@@ -135,11 +135,11 @@ export default function Forums({ userId }: ForumsProps) {
                             />
 
                             <div className="flex items-center gap-4 mt-4">
-                                <div className="flex items-center gap-1 text-gray-600 text-sm">
+                                <div className="flex items-center gap-1 text-gray-600 dark:text-zinc-400 text-sm">
                                     <Eye className="w-4 h-4" />
                                     {forum.viewCount}
                                 </div>
-                                <div className="flex items-center gap-1 text-gray-600 text-sm">
+                                <div className="flex items-center gap-1 text-gray-600 dark:text-zinc-400 text-sm">
                                     <ThumbsUp className="w-4 h-4" />
                                     {forum.likeCount}
                                 </div>

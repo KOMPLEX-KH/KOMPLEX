@@ -7,7 +7,7 @@ import { Logo } from "@/components/common/Logo";
 
 export default function Hero() {
     return (
-        <section className="mt-13 pt-40 pb-40 px-5 bg-indigo-600 text-white text-center relative">
+        <section className="mt-13 pt-40 pb-40 px-5 bg-indigo-600 dark:bg-zinc-900 text-white text-center relative">
 
             {/* 3D Image Placeholders */}
             <div className="absolute inset-0 overflow-hidden">
@@ -23,7 +23,7 @@ export default function Hero() {
                         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
                         className="flex items-center justify-center"
                     >
-                        <Calculator className="w-24 h-24 md:w-48 md:h-48 text-white/40" />
+                        <Calculator className="w-24 h-24 md:w-48 md:h-48 text-indigo-400/60" />
                     </motion.div>
                 </motion.div>
 
@@ -39,7 +39,7 @@ export default function Hero() {
                         transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                         className="flex items-center justify-center"
                     >
-                        <Atom className="w-20 h-20 md:w-48 md:h-48 text-white/40" />
+                        <Atom className="w-20 h-20 md:w-48 md:h-48 text-indigo-400/60" />
                     </motion.div>
                 </motion.div>
 
@@ -54,7 +54,7 @@ export default function Hero() {
                         transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
                         className="flex items-center justify-center"
                     >
-                        <Dna className="w-24 h-24 md:w-48 md:h-48 text-white/40" />
+                        <Dna className="w-24 h-24 md:w-48 md:h-48 text-indigo-400/60" />
                     </motion.div>
                 </motion.div>
 
@@ -70,7 +70,7 @@ export default function Hero() {
                         transition={{ duration: 8.5, repeat: Infinity, ease: "easeInOut", delay: 1.4 }}
                         className="flex items-center justify-center"
                     >
-                        <FlaskConical className="w-20 h-20 md:w-48 md:h-48 text-white/40" />
+                        <FlaskConical className="w-20 h-20 md:w-48 md:h-48 text-indigo-400/60" />
                     </motion.div>
                 </motion.div>
             </div>
@@ -108,14 +108,14 @@ export default function Hero() {
                 >
                     <Link
                         href="/docs"
-                        className="bg-white text-indigo-600 px-8 py-4 rounded-full no-underline font-semibold text-base transition-all duration-300 hover:bg-gray-100 flex items-center gap-2"
+                        className="bg-white dark:bg-indigo-600 text-black dark:text-white px-8 py-4 rounded-full no-underline font-semibold text-base transition-all duration-300 dark:hover:bg-indigo-500 hover:bg-indigo-50/90 flex items-center gap-2"
                     >
                         <Play size={20} />
                         ចាប់ផ្តើមរៀន
                     </Link>
                     <a
                         href="#features"
-                        className="bg-transparent text-white px-8 py-4 rounded-full no-underline font-semibold text-base transition-all duration-300 border-2 border-white hover:bg-white/10 flex items-center gap-2"
+                        className="bg-transparent text-white dark:text-white px-8 py-4 rounded-full no-underline font-semibold text-base transition-all duration-300 border-2 border-indigo-400 dark:hover:bg-indigo-500/20 hover:bg-white/10 flex items-center gap-2"
                     >
                         <ArrowRight size={20} />
                         ស្វែងយល់បន្ថែម
@@ -125,5 +125,4 @@ export default function Hero() {
         </section>
     );
 }
-
 

@@ -7,91 +7,70 @@ import Link from "next/link";
 const FOUNDERS = [
     {
         image: "/landing/founders/raksa.jpeg",
-        contacts: [{
-            type: "website",
-            href: "https://raksa.netlify.app/"
-        }, {
-            type: "github",
-            href: "https://github.com/RaksaOC"
-        }],
+        contacts: [
+            { type: "website", href: "https://raksa.netlify.app/" },
+            { type: "github", href: "https://github.com/RaksaOC" },
+        ],
         name: "អោយ ចន្ទ័រក្សា",
         role: "Full Stack Developer",
         color: "indigo",
-        bgColor: "bg-indigo-50/80",
-        borderColor: "border-indigo-600",
-        iconColor: "text-indigo-600"
+        bgColor: "bg-indigo-50/80 dark:bg-indigo-950/50",
+        borderColor: "border-indigo-600 dark:border-indigo-500",
+        iconColor: "text-indigo-600 dark:text-indigo-400",
     },
     {
         image: "/landing/founders/vatana.jpg",
         name: "អ៊ុក វឌ្ឍនា",
-        contacts: [{
-            type: "github",
-            href: "https://github.com/ouk-vatana"
-        }],
+        contacts: [{ type: "github", href: "https://github.com/ouk-vatana" }],
         role: "Frontend Developer",
         color: "green",
-        bgColor: "bg-green-50/80",
-        borderColor: "border-green-600",
-        iconColor: "text-green-600"
+        bgColor: "bg-green-50/80 dark:bg-green-950/50",
+        borderColor: "border-green-600 dark:border-green-500",
+        iconColor: "text-green-600 dark:text-green-400",
     },
     {
         image: "/landing/founders/rafat.jpg",
         name: "ម៉ាន អារ៉ាហ្វាត",
         contacts: [
-            {
-                type: "website",
-                href: "https://rafat21.vercel.app"
-            },
-            {
-                type: "github",
-                href: "https://github.com/Ra-Fat"
-            },
+            { type: "website", href: "https://rafat21.vercel.app" },
+            { type: "github", href: "https://github.com/Ra-Fat" },
         ],
         role: "Frontend Developer",
         color: "blue",
-        bgColor: "bg-blue-50/80",
-        borderColor: "border-blue-600",
-        iconColor: "text-blue-600"
+        bgColor: "bg-blue-50/80 dark:bg-blue-950/50",
+        borderColor: "border-blue-600 dark:border-blue-500",
+        iconColor: "text-blue-600 dark:text-blue-400",
     },
     {
         image: "/landing/founders/kimly.jpg",
         name: "ហាក់ គីមលី",
-        contacts: [{
-            type: "github",
-            href: "https://github.com/Kim-ly25"
-        }],
+        contacts: [{ type: "github", href: "https://github.com/Kim-ly25" }],
         role: "Frontend Developer",
         color: "purple",
-        bgColor: "bg-purple-50/80",
-        borderColor: "border-purple-600",
-        iconColor: "text-purple-600"
+        bgColor: "bg-purple-50/80 dark:bg-purple-950/50",
+        borderColor: "border-purple-600 dark:border-purple-500",
+        iconColor: "text-purple-600 dark:text-purple-400",
     },
     {
         image: "/landing/founders/visal.jpg",
         name: "សៅ វិសាល",
-        contacts: [{
-            type: "github",
-            href: "https://github.com/salxz696969"
-        }],
+        contacts: [{ type: "github", href: "https://github.com/salxz696969" }],
         role: "Backend Developer",
         color: "red",
-        bgColor: "bg-red-50/80",
-        borderColor: "border-red-600",
-        iconColor: "text-red-600"
+        bgColor: "bg-red-50/80 dark:bg-red-950/50",
+        borderColor: "border-red-600 dark:border-red-500",
+        iconColor: "text-red-600 dark:text-red-400",
     },
     {
         image: "/landing/founders/neitong.jpg",
         name: "កែវ ហេងណៃតុង",
-        contacts: [{
-            type: "github",
-            href: "https://github.com/Neitong"
-        }],
+        contacts: [{ type: "github", href: "https://github.com/Neitong" }],
         role: "Frontend Developer",
         color: "orange",
-        bgColor: "bg-orange-50/80",
-        borderColor: "border-orange-600",
-        iconColor: "text-orange-600"
-    }
+        bgColor: "bg-orange-50/80 dark:bg-orange-950/50",
+        borderColor: "border-orange-600 dark:border-orange-500",
+        iconColor: "text-orange-600 dark:text-orange-400",
+    },
 ];
 
 export default function Founders() {
@@ -106,18 +85,22 @@ export default function Founders() {
         }
     }
     return (
-        <section id="founders" className="pb-20 px-5 bg-white">
+        <section
+            id="founders"
+            className="pb-20 px-5 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100"
+        >
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
-                    className="text-center mb-15"
+                    className="text-center mb-12"
                 >
-                    <h2 className="text-4xl font-extrabold text-gray-900 mb-4">ស្ថាបនិក</h2>
+                    <h2 className="text-4xl font-extrabold text-zinc-900 dark:text-zinc-100 mb-4">
+                        ស្ថាបនិក
+                    </h2>
                 </motion.div>
-
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -132,14 +115,22 @@ export default function Founders() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className={`${founder.bgColor} ${founder.borderColor} border-2 rounded-3xl lg:p-8 p-4 shadow-lg transition-all duration-300 backdrop-blur-sm hover:scale-101`}
+                            className={`
+                                ${founder.bgColor} ${founder.borderColor}
+                                border-2 rounded-3xl lg:p-8 p-4 shadow-lg
+                                transition-all duration-300 backdrop-blur-sm
+                                hover:scale-[1.01]
+                            `}
                         >
                             <motion.div
                                 initial={{ scale: 0 }}
                                 whileInView={{ scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
-                                className={`w-20 h-20 ${founder.bgColor} ${founder.borderColor} border-2 rounded-full flex items-center justify-center mx-auto mb-5 overflow-hidden`}
+                                className={`
+                                    w-20 h-20 ${founder.bgColor} ${founder.borderColor}
+                                    border-2 rounded-full flex items-center justify-center mx-auto mb-5 overflow-hidden
+                                `}
                             >
                                 <img
                                     src={founder.image}
@@ -152,16 +143,23 @@ export default function Founders() {
                                     }}
                                 />
                             </motion.div>
-                            <h3 className="lg:text-2xl text-xl text-center font-bold text-gray-900 mb-2">{founder.name}</h3>
-                            <div className={`${founder.iconColor} font-semibold lg:text-base text-sm mb-4 text-center`}>{founder.role}</div>
+                            <h3 className="lg:text-2xl text-xl text-center font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+                                {founder.name}
+                            </h3>
+                            <div className={`${founder.iconColor} font-semibold lg:text-base text-sm mb-4 text-center`}>
+                                {founder.role}
+                            </div>
                             <div className="flex items-center justify-center gap-2">
-                                {
-                                    founder.contacts.map((contact, index) => (
-                                        <Link href={contact.href} key={index} className="hover:text-indigo-600 transition-colors" target="_blank">
-                                            {getContactIcon(contact.type)}
-                                        </Link>
-                                    ))
-                                }
+                                {founder.contacts.map((contact, index) => (
+                                    <Link
+                                        href={contact.href}
+                                        key={index}
+                                        className="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 focus-visible:outline-none transition-colors"
+                                        target="_blank"
+                                    >
+                                        {getContactIcon(contact.type)}
+                                    </Link>
+                                ))}
                             </div>
                         </motion.div>
                     ))}
@@ -170,5 +168,3 @@ export default function Founders() {
         </section>
     );
 }
-
-

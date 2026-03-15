@@ -33,7 +33,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 overflow-hidden scroll-smooth">
+    <div className="min-h-screen bg-bg text-foreground overflow-hidden scroll-smooth">
       <Header />
       <Hero />
       <Features />
@@ -42,7 +42,10 @@ export default function Home() {
       <Founders />
       <Footer />
       {hasCheckedBetaDialog && (
-        <BetaDialog isBetaDialogOpen={isBetaDialogOpen} setIsBetaDialogOpen={handleBetaDialogVisibility} />
+        <BetaDialog
+          isBetaDialogOpen={isBetaDialogOpen}
+          setIsBetaDialogOpen={handleBetaDialogVisibility}
+        />
       )}
     </div>
   );

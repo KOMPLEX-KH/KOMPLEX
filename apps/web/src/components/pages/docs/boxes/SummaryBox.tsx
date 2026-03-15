@@ -19,15 +19,15 @@ export function SummaryBox({
         return (
           <div
             key={section.key ?? index}
-            className="bg-white p-4 rounded-3xl border border-indigo-100 shadow-sm"
+            className="bg-white p-4 rounded-3xl border border-indigo-100 dark:bg-zinc-900 dark:border-indigo-500 shadow-sm"
           >
-            <h4 className="font-semibold text-indigo-800 mb-3 flex items-center gap-2">
+            <h4 className="font-semibold text-indigo-800 dark:text-indigo-400 mb-3 flex items-center gap-2">
               {SectionIcon ? (
-                <SectionIcon size={20} className="text-indigo-600" />
-              ) : <Lightbulb size={20} className="text-indigo-600" />}
+                <SectionIcon size={20} className="text-indigo-600 dark:text-indigo-400" />
+              ) : <Lightbulb size={20} className="text-indigo-600 dark:text-indigo-400" />}
               {section.title}
             </h4>
-            <div className="text-sm space-y-2">{section.content}</div>
+            <div className="text-sm space-y-2 text-gray-700 dark:text-zinc-300">{section.content}</div>
           </div>
         );
       })}
@@ -37,15 +37,14 @@ export function SummaryBox({
   // This is the wrapper JSX from TipBox.
   // By moving it here, we break the circular import.
   return (
-    <div className="lg:bg-indigo-50/80 lg:border-l-4 lg:border-indigo-600  lg:p-4 my-6 lg:rounded-r-3xl lg:shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+    <div className="lg:bg-indigo-50/80 dark:bg-indigo-900/40 lg:border-l-4 lg:border-indigo-600 dark:border-indigo-500 lg:p-4 my-6 lg:rounded-r-3xl lg:shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
       {title && (
         <div className="flex items-center gap-3 mb-3">
           <Lightbulb size={20} className="text-indigo-600" />
           <h4 className="text-indigo-600 font-semibold text-xl">{title}</h4>
         </div>
       )}
-      <div className="text-gray-700 leading-relaxed text-base">
-        {/* Render your grid content directly */}
+      <div className="text-gray-700 dark:text-zinc-300 leading-relaxed text-base">
         {sectionsContent}
       </div>
     </div>

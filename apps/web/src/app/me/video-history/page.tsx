@@ -120,7 +120,7 @@ export default function VideoHistory() {
     // Show loading while checking auth or fetching data
     if (authLoading || loading) {
         return (
-            <div className="flex min-h-screen transition-colors duration-200 bg-gray-50">
+            <div className="flex min-h-screen transition-colors duration-200 bg-gray-50 dark:bg-zinc-900">
                 <Sidebar />
                 <div className="flex-1 lg:ml-64 pt-32 lg:pt-20">
                     <div className="max-w-7xl mx-auto p-5">
@@ -131,10 +131,10 @@ export default function VideoHistory() {
                         </div>
 
                         {/* Content Skeleton */}
-                        <div className="bg-white rounded-2xl shadow-sm p-6">
+                        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm p-6 dark:border-zinc-800">
                             <div className="space-y-4">
                                 {[...Array(3)].map((_, i) => (
-                                    <div key={i} className="flex items-center gap-4 p-4 border border-gray-200 rounded-xl animate-pulse">
+                                    <div key={i} className="flex items-center gap-4 p-4 border border-gray-200 dark:border-zinc-800 rounded-xl animate-pulse">
                                         <div className="w-24 h-16 bg-gray-200 rounded-lg"></div>
                                         <div className="flex-1">
                                             <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
@@ -158,7 +158,7 @@ export default function VideoHistory() {
 
     if (error) {
         return (
-            <div className="flex min-h-screen transition-colors duration-200 bg-gray-50">
+            <div className="flex min-h-screen transition-colors duration-200 bg-gray-50 dark:bg-zinc-900">
                 <Sidebar />
                 <div className="flex-1 lg:ml-64 pt-32 lg:pt-20">
                     <div className="max-w-7xl mx-auto p-5">
@@ -182,7 +182,7 @@ export default function VideoHistory() {
     }
 
     return (
-        <div className="flex min-h-screen transition-colors duration-200 bg-gray-50">
+        <div className="flex min-h-screen transition-colors duration-200 bg-gray-50 dark:bg-zinc-900">
             {/* Sidebar */}
             <Sidebar />
 
@@ -223,17 +223,17 @@ export default function VideoHistory() {
                     )}
 
                     {/* Video History List */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-200">
+                    <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800">
                         {videoHistory.length === 0 ? (
                             <div className="p-12 text-center">
-                                <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+                                <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-zinc-800 flex items-center justify-center mx-auto mb-4">
                                     <History className="w-8 h-8 text-gray-400" />
                                 </div>
-                                <h3 className="text-lg font-medium text-gray-900 mb-2">គ្មានប្រវត្តិវីដេអូ</h3>
-                                <p className="text-gray-500 mb-6">អ្នកមិនទាន់មានប្រវត្តិវីដេអូណាមួយនៅឡើយទេ។</p>
+                                <h3 className="text-lg font-medium text-gray-900 dark:text-zinc-400 mb-2">គ្មានប្រវត្តិវីដេអូ</h3>
+                                <p className="text-gray-500 dark:text-zinc-400 mb-6">អ្នកមិនទាន់មានប្រវត្តិវីដេអូណាមួយនៅឡើយទេ។</p>
                                 <Link
                                     href="/video"
-                                    className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+                                    className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white dark:text-white rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-800 transition-colors font-medium"
                                 >
                                     <Play size={16} />
                                     មើលវីដេអូ
@@ -244,11 +244,11 @@ export default function VideoHistory() {
                                 {/* Header with Actions */}
                                 <div className="mb-6 flex items-center justify-between">
                                     <div className="flex items-center gap-4">
-                                        <h3 className="text-lg font-semibold text-gray-900">
+                                        <h3 className="text-lg font-semibold text-gray-900 dark:text-zinc-400">
                                             វីដេអូដែលបានមើល ({videoHistory.length})
                                         </h3>
                                         {/* {videoHistory.length > 0 && (
-                                            <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                            <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-zinc-400 cursor-pointer">
                                                 <input
                                                     type="checkbox"
                                                     checked={selectedItems.size === videoHistory.length}
@@ -263,7 +263,7 @@ export default function VideoHistory() {
                                     {/* {selectedItems.size > 0 && (
                                         <button
                                             onClick={handleBulkDelete}
-                                            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+                                            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white dark:text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-800 transition-colors font-medium"
                                         >
                                             <Trash2 size={16} />
                                             លុប {selectedItems.size} វីដេអូ
@@ -276,8 +276,8 @@ export default function VideoHistory() {
                                         <div
                                             key={item.id}
                                             className={`flex items-center gap-4 p-4 border rounded-xl transition-all duration-200 ${selectedItems.has(item.id)
-                                                ? 'border-indigo-300 bg-indigo-50'
-                                                : 'border-gray-200 hover:border-indigo-300 hover:shadow-sm'
+                                                ? 'border-indigo-300 bg-indigo-50 dark:bg-indigo-900'
+                                                : 'border-gray-200 dark:border-zinc-800 hover:border-indigo-300 hover:shadow-sm'
                                                 }`}
                                         >
                                             {/* Selection Checkbox */}
@@ -291,7 +291,7 @@ export default function VideoHistory() {
                                             {/* Thumbnail */}
                                             <div className="relative flex-shrink-0">
                                                 <Link href={`/video/${item.id}`}>
-                                                    <div className="relative w-24 h-16 rounded-lg overflow-hidden group">
+                                                    <div className="relative w-24 h-16 rounded-lg overflow-hidden group dark:bg-zinc-800">
                                                         <Image
                                                             src={item.thumbnailUrl}
                                                             alt={item.title}
@@ -308,10 +308,10 @@ export default function VideoHistory() {
 
                                             {/* Video Info */}
                                             <Link href={`/video/${item.id}`} className="flex-1 min-w-0 group">
-                                                <h4 className="font-medium text-gray-900 mb-1 truncate group-hover:text-indigo-600 transition-colors">
+                                                <h4 className="font-medium text-gray-900 dark:text-zinc-400 mb-1 truncate group-hover:text-indigo-600 transition-colors">
                                                     {item.title}
                                                 </h4>
-                                                <div className="flex items-center gap-4 text-sm text-gray-500">
+                                                <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-zinc-400">
                                                     <span className="flex items-center gap-1">
                                                         <Calendar size={14} />
                                                         មើល: {formatDate(item.createdAt)}

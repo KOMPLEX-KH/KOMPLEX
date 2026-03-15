@@ -27,9 +27,9 @@ export const ThreeDExplanationBox = ({
     return (
         <>
             <div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-6 gap-2 my-6'>
-                <div className="bg-indigo-50/80 border border-indigo-600 p-4 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+                <div className="bg-indigo-50/80 dark:bg-indigo-900/40 border border-indigo-600 dark:border-indigo-500 p-4 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
                     <div className="grid grid-cols-1 gap-6">
-                        <div className="w-full relative group bg-white rounded-3xl">
+                        <div className="w-full relative group bg-white dark:bg-zinc-900 rounded-3xl">
                             <ThreeD
                                 src={src}
                                 scale={scale}
@@ -51,19 +51,31 @@ export const ThreeDExplanationBox = ({
                     <div className="lg:hidden flex flex-col my-6 w-full">
                         <div className="flex items-center gap-3 mb-4">
                             <Box size={20} className='text-indigo-600' />
-                            <h3 className="text-xl font-bold text-gray-900">{title}</h3>
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white">{title}</h3>
                         </div>
-                        {explanation}
+                        {typeof explanation === 'string' ? (
+                            <div className="text-gray-700 dark:text-zinc-300 leading-relaxed text-base">{explanation}</div>
+                        ) : (
+                            <div className="text-gray-700 dark:text-zinc-300 leading-relaxed text-base">
+                                {explanation}
+                            </div>
+                        )}
                     </div>
                 </div>
-                <div className="hidden lg:flex bg-indigo-50/80 border border-indigo-600 p-6 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+                <div className="hidden lg:flex bg-indigo-50/80 dark:bg-indigo-900/40 border border-indigo-600 dark:border-indigo-500 p-6 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
                     <div className="grid grid-cols-1 gap-6">
                         <div className="w-full">
                             <div className="flex items-center gap-3 mb-4">
                                 <Box size={20} className='text-indigo-600' />
-                                <h3 className="text-xl font-bold text-gray-900">{title}</h3>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{title}</h3>
                             </div>
-                            {explanation}
+                            {typeof explanation === 'string' ? (
+                                <div className="text-gray-700 dark:text-zinc-300 leading-relaxed text-base">{explanation}</div>
+                            ) : (
+                                <div className="text-gray-700 dark:text-zinc-300 leading-relaxed text-base">
+                                    {explanation}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -81,7 +93,7 @@ export const ThreeDExplanationBox = ({
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" />
+                        <div className="fixed inset-0 bg-black/80 dark:bg-zinc-900/80 backdrop-blur-sm" />
                     </Transition.Child>
 
                     <div className="fixed inset-0 overflow-y-auto">
@@ -99,7 +111,7 @@ export const ThreeDExplanationBox = ({
                                     <div className="relative">
                                         <button
                                             onClick={handleCloseModal}
-                                            className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+                                            className="absolute top-4 right-4 z-10 bg-black/50 dark:bg-zinc-900/50 hover:bg-black/70 dark:hover:bg-zinc-900/70 text-white p-2 rounded-full transition-colors"
                                         >
                                             <X size={20} />
                                         </button>

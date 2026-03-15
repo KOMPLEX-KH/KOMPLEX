@@ -32,22 +32,22 @@ export default function FormularPage({
   if (selectedFormula) {
     return (
       <div
-        className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+        className="fixed inset-0 z-50 bg-black/50 dark:bg-zinc-900/50 backdrop-blur-sm flex items-center justify-center p-4"
         onClick={handleCloseDetail}
       >
         <div
-          className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto scrollbar-hide"
+          className="bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto scrollbar-hide"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="sticky top-0 z-20 bg-indigo-600  text-white p-6 rounded-t-3xl">
+          <div className="sticky top-0 z-20 bg-indigo-600 dark:bg-indigo-900  text-white p-6 rounded-t-3xl">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h2 className="text-2xl sm:text-3xl font-bold mb-2">{selectedFormula.title}</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-800 dark:text-zinc-400">{selectedFormula.title}</h2>
               </div>
               <button
                 onClick={handleCloseDetail}
-                className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                className="p-2 hover:bg-white/20 dark:hover:bg-zinc-800/20 rounded-full transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -58,44 +58,44 @@ export default function FormularPage({
           {/* Content */}
           <div className="p-6 space-y-6">
             {/* Formula Display */}
-            <div className="bg-gray-50 rounded-3xl p-6 border-2 border-indigo-200">
+            <div className="bg-gray-50 dark:bg-zinc-800 rounded-3xl p-6 border-2 border-indigo-200 dark:border-indigo-800">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                  <Calculator className="w-5 h-5 text-indigo-600" />
+                  <Calculator className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                   រូបមន្ត
                 </h3>
               </div>
-              <div className="text-2xl font-mono text-center py-4 text-gray-800 z-10 relative">
+              <div className="text-2xl font-mono text-center py-4 text-gray-800 dark:text-zinc-400 z-10 relative">
                 {selectedFormula.formula}
               </div>
             </div>
 
             {/* Description  */}
             {selectedFormula.description && selectedFormula.description.trim() !== '' && (
-              <div className="bg-white rounded-2xl p-6 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">ពណ៌នា</h3>
-                <div className="text-gray-700 leading-relaxed whitespace-pre-line">
+              <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-gray-200 dark:border-zinc-800">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-zinc-400 mb-4">ពណ៌នា</h3>
+                <div className="text-gray-700 dark:text-zinc-400 leading-relaxed whitespace-pre-line">
                   {selectedFormula.description}
                 </div>
               </div>
             )}
 
             {selectedFormula.variables && selectedFormula.variables.length > 0 && (
-              <div className="bg-white rounded-3xl p-6 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">អថេរ</h3>
+              <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-gray-200 dark:border-zinc-800">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-zinc-400 mb-4">អថេរ</h3>
                 <div className="space-y-3">
                   {selectedFormula.variables.map((variable, index) => (
                     <div
                       key={index}
-                      className="flex items-center gap-3 p-3 bg-gray-50 rounded-3xl"
+                      className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-zinc-800 rounded-3xl"
                     >
                       <span className="font-mono font-bold text-indigo-600 text-lg min-w-[40px]">
                         {variable.symbol}
                       </span>
                       <div>
-                        <p className="font-medium text-gray-800">{variable.name}</p>
+                        <p className="font-medium text-gray-800 dark:text-zinc-400">{variable.name}</p>
                         {variable.unit && (
-                          <p className="text-sm text-gray-600 mt-1">
+                          <p className="text-sm text-gray-600 dark:text-zinc-400 mt-1">
                             ឯកតា: <span className="font-mono">{variable.unit}</span>
                           </p>
                         )}

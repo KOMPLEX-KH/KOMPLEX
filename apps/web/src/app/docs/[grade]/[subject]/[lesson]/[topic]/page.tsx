@@ -127,7 +127,7 @@ export default function Page() {
     // Show loading while topic is loading
     if (isLoadingTopic) {
         return (
-            <div className="flex bg-gray-50 min-h-screen">
+            <div className="flex bg-gray-50 dark:bg-zinc-900 min-h-screen">
                 <Sidebar
                     currentGrade={curriculum.length > 0 ? { id: parseInt(params.grade) } : undefined}
                     currentSubject={curriculum.length > 0 ? { id: parseInt(params.subject) } : undefined}
@@ -165,7 +165,7 @@ export default function Page() {
     if (!topicComponent || JSON.parse(topicComponent)?.length === 0) {
         console.log("No topic component");
         return (
-            <div className="flex bg-gray-50 min-h-screen">
+            <div className="flex bg-gray-50 dark:bg-zinc-900 min-h-screen">
                 <Sidebar
                     currentGrade={{ id: parseInt(params.grade) }}
                     currentSubject={{ id: parseInt(params.subject) }}
@@ -193,7 +193,7 @@ export default function Page() {
 
     if (error) {
         return (
-            <div className="flex bg-gray-50 min-h-screen">
+            <div className="flex bg-gray-50 dark:bg-zinc-900 min-h-screen">
                 <Sidebar
                     currentGrade={{ id: parseInt(params.grade) }}
                     currentSubject={{ id: parseInt(params.subject) }}
@@ -222,7 +222,7 @@ export default function Page() {
     const Component = topicComponent ? deserializeTopicContentV3(topicComponent as string) : null;
 
     return (
-        <div className="flex bg-gray-50 min-h-screen ">
+        <div className="flex bg-gray-50 dark:lg:bg-zinc-800 dark:bg-zinc-900 min-h-screen ">
             <Sidebar
                 currentGrade={{ id: parseInt(params.grade) }}
                 currentSubject={{ id: parseInt(params.subject) }}

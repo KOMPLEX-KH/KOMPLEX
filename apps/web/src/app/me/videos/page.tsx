@@ -119,7 +119,7 @@ function MyVideosContent() {
     }
 
     return (
-        <div className="flex min-h-screen bg-gray-50">
+        <div className="flex min-h-screen bg-gray-50 dark:bg-zinc-900">
             {/* Sidebar */}
             <Sidebar />
 
@@ -128,8 +128,8 @@ function MyVideosContent() {
                 <div className="p-6">
                     {/* Header */}
                     <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">វីដេអូរបស់ខ្ញុំ</h1>
-                        <p className="text-gray-600">គ្រប់គ្រងវីដេអូនិងមើលដំណើរការរបស់អ្នក</p>
+                        <h1 className="text-3xl font-bold text-gray-900 dark:text-zinc-400 mb-2">វីដេអូរបស់ខ្ញុំ</h1>
+                        <p className="text-gray-600 dark:text-zinc-400">គ្រប់គ្រងវីដេអូនិងមើលដំណើរការរបស់អ្នក</p>
                     </div>
 
                     {/* Tabs - pill style, horizontally scrollable */}
@@ -137,10 +137,10 @@ function MyVideosContent() {
 
                     {/* Stats Cards - Only show for My Videos tab */}
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
+                        <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm font-medium text-gray-600">វីដេអូសរុប</p>
+                                    <p className="text-sm font-medium text-gray-600 dark:text-zinc-400">វីដេអូសរុប</p>
                                     <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
                                 </div>
                                 <div className="p-3 bg-indigo-100 rounded-full">
@@ -149,10 +149,10 @@ function MyVideosContent() {
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
+                        <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm font-medium text-gray-600">ទស្សនាសរុប</p>
+                                    <p className="text-sm font-medium text-gray-600 dark:text-zinc-400">ទស្សនាសរុប</p>
                                     <p className="text-2xl font-bold text-blue-600">{stats.totalViews.toLocaleString()}</p>
                                 </div>
                                 <div className="p-3 bg-blue-100 rounded-full">
@@ -161,10 +161,10 @@ function MyVideosContent() {
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
+                        <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm font-medium text-gray-600">ចូលចិត្តសរុប</p>
+                                    <p className="text-sm font-medium text-gray-600 dark:text-zinc-400">ចូលចិត្តសរុប</p>
                                     <p className="text-2xl font-bold text-green-600">{stats.totalLikes}</p>
                                 </div>
                                 <div className="p-3 bg-green-100 rounded-full">
@@ -173,10 +173,10 @@ function MyVideosContent() {
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
+                        <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm font-medium text-gray-600">ពេលវេលាសរុប</p>
+                                    <p className="text-sm font-medium text-gray-600 dark:text-zinc-400">ពេលវេលាសរុប</p>
                                     <p className="text-2xl font-bold text-purple-600">{Math.floor(stats.totalDuration / 60)} នាទី</p>
                                 </div>
                                 <div className="p-3 bg-purple-100 rounded-full">
@@ -193,7 +193,7 @@ function MyVideosContent() {
                                     href="/me/videos?tab=myVideos"
                                     className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === 'myVideos' || activeTab === null
                                         ? 'bg-indigo-600 text-white'
-                                        : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                                        : 'bg-white text-gray-600 dark:text-zinc-400 border border-gray-200 dark:border-zinc-800 hover:bg-gray-50'
                                         }`}
                                 >
                                     <span className="inline-flex items-center gap-2">
@@ -205,7 +205,7 @@ function MyVideosContent() {
                                     href="/me/videos?tab=likedVideos"
                                     className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === 'likedVideos'
                                         ? 'bg-indigo-600 text-white'
-                                        : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                                        : 'bg-white text-gray-600 dark:text-zinc-400 border border-gray-200 dark:border-zinc-800 hover:bg-gray-50'
                                         }`}
                                 >
                                     <span className="inline-flex items-center gap-2">
@@ -229,7 +229,7 @@ function MyVideosContent() {
                                     href="/me/videos?tab=videoHistory"
                                     className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === 'videoHistory'
                                         ? 'bg-indigo-600 text-white'
-                                        : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                                        : 'bg-white text-gray-600 dark:text-zinc-400 border border-gray-200 dark:border-zinc-800 hover:bg-gray-50'
                                         }`}
                                 >
                                     <span className="inline-flex items-center gap-2">
@@ -243,10 +243,10 @@ function MyVideosContent() {
 
                     {/* Tab Content */}
                     {activeTab === 'myVideos' && (
-                        <div className="bg-white rounded-3xl shadow-sm border border-gray-200">
+                        <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm border border-gray-200 dark:border-zinc-800">
                             <div className="p-6 border-b border-gray-200">
                                 <div className="flex items-center justify-between">
-                                    <h2 className="text-lg font-semibold text-gray-900">វីដេអូ</h2>
+                                    <h2 className="text-lg font-semibold text-gray-900 dark:text-zinc-400">វីដេអូ</h2>
                                     <Link
                                         href="/me/create-video"
                                         className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-medium transition-colors"
@@ -268,7 +268,7 @@ function MyVideosContent() {
                                             <Link
                                                 key={video.id}
                                                 href={`/me/videos/${video.id}`}
-                                                className="group bg-white rounded-3xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-200 border border-gray-200 hover:border-indigo-300"
+                                                className="group bg-white dark:bg-zinc-900 rounded-3xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-200 border border-gray-200 dark:border-zinc-800 hover:border-indigo-300"
                                             >
                                                 {/* Thumbnail */}
                                                 <div className="relative">
@@ -283,13 +283,13 @@ function MyVideosContent() {
 
                                                     {/* Duration Badge */}
                                                     {video.duration && (
-                                                        <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded">
+                                                        <div className="absolute bottom-2 right-2 bg-black/80 text-white dark:text-zinc-400 text-xs px-2 py-1 rounded">
                                                             {formatDuration(video.duration)}
                                                         </div>
                                                     )}
 
                                                     {/* Play Button Overlay */}
-                                                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <div className="absolute inset-0 bg-black/20 dark:bg-zinc-800/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                                         <div className="bg-white/90 p-3 rounded-full shadow-lg">
                                                             <Play className="w-6 h-6 text-indigo-600 ml-1" />
                                                         </div>
@@ -298,18 +298,18 @@ function MyVideosContent() {
 
                                                 {/* Video Info */}
                                                 <div className="p-4">
-                                                    <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                                                    <h3 className="font-semibold text-gray-900 dark:text-zinc-400 mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
                                                         {video.title || 'Untitled Video'}
                                                     </h3>
-                                                    <div className="text-sm text-gray-600 mb-3 line-clamp-2">
+                                                    <div className="text-sm text-gray-600 dark:text-zinc-400 mb-3 line-clamp-2">
                                                         {/* <MarkDownRenderer content={video.description || 'No description available'} /> */}
-                                                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                                                        <p className="text-sm text-gray-600 dark:text-zinc-400 mb-3 line-clamp-2">
                                                             {video.description || 'No description available'}
                                                         </p>
                                                     </div>
 
                                                     {/* Stats */}
-                                                    <div className="flex items-center justify-between text-sm text-gray-500">
+                                                    <div className="flex items-center justify-between text-sm text-gray-500 dark:text-zinc-400">
                                                         <div className="flex items-center gap-4">
                                                             <span className="flex items-center gap-1">
                                                                 <Eye className="w-4 h-4" />
@@ -342,7 +342,7 @@ function MyVideosContent() {
                     )}
 
                     {activeTab === 'likedVideos' && (
-                        <div className="bg-white rounded-3xl shadow-sm border border-gray-200">
+                        <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm border border-gray-200 dark:border-zinc-800">
                             <div className="p-6">
                                 <ContentError
                                     type="no-results"
@@ -353,7 +353,7 @@ function MyVideosContent() {
                     )}
 
                     {activeTab === 'savedVideos' && (
-                        <div className="bg-white rounded-3xl shadow-sm border border-gray-200">
+                        <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm border border-gray-200 dark:border-zinc-800">
                             <div className="p-6">
                                 <ContentError
                                     type="no-results"

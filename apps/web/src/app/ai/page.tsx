@@ -125,7 +125,7 @@ function AIWelcomePageInner() {
     };
 
     return (
-        <div className="min-h-screen relative bg-gray-50 pt-16 pb-16">
+        <div className="min-h-screen relative bg-gray-50 dark:bg-zinc-900 pt-16 pb-16">
             <Suspense fallback={null}>
                 <SideBar onCollapsedChange={setIsSideBarCollapsed} />
             </Suspense>
@@ -137,17 +137,17 @@ function AIWelcomePageInner() {
                     <div className="flex items-center justify-center">
                         <div className="max-w-4xl w-full">
                             <div className=" max-w-4xl mx-auto rounded-3xl px-6 py-10 flex flex-col items-center text-center">
-                                <div className=" bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6 p-4">
+                                <div className=" bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center mx-auto mb-6 p-4">
                                     <Bot className="w-10 h-10 text-indigo-600" />
                                 </div>
-                                <p className="text-gray-600 mb-4 font-bold text-lg">
+                                <p className="text-gray-600 dark:text-zinc-400 mb-4 font-bold text-lg">
                                     <span className='text-indigo-600'>តារា AI</span> សូមស្វាគមន៍!
                                 </p>
-                                <p className="text-gray-600 mb-4">
+                                <p className="text-gray-600 dark:text-zinc-400 mb-4">
                                     តើអ្នកចង់សួរអ្វីអំពី អ្វីដែរ?
                                 </p>
                                 {error && (
-                                    <p className="mt-2 text-sm text-red-600">
+                                    <p className="mt-2 text-sm text-red-600 dark:text-red-400">
                                         {error}
                                     </p>
                                 )}
@@ -156,7 +156,7 @@ function AIWelcomePageInner() {
                     </div>
 
                     {/* Input area (no longer fixed, centered with max width) */}
-                    <div className="bg-white max-w-4xl mx-auto shadow-lg border border-gray-200 rounded-3xl p-2 transition-all duration-200 space-y-2">
+                    <div className="bg-white dark:bg-zinc-900 max-w-4xl mx-auto shadow-lg border border-gray-200 dark:border-zinc-700 rounded-3xl p-2 transition-all duration-200 space-y-2">
                         <div className="flex-1">
                             <PromptTextarea
                                 ref={textareaRef}
@@ -190,7 +190,7 @@ function AIWelcomePageInner() {
                                 <button
                                     onClick={handleSendFirstMessage}
                                     disabled={!inputMessage.trim() || isLoading || isPending}
-                                    className="px-2 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="px-2 py-2 bg-indigo-600 dark:bg-indigo-400 text-white dark:text-white rounded-full hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     <Send className="w-4 h-4" />
                                 </button>

@@ -8,7 +8,7 @@ const TabSkeleton: React.FC = () => {
             {Array.from({ length: 5 }).map((_, index) => (
                 <div
                     key={index}
-                    className="h-8 rounded-full bg-indigo-50/80 animate-pulse"
+                    className="h-8 rounded-full bg-indigo-50/80 dark:bg-indigo-900/80 animate-pulse"
                 />
             ))}
         </div>

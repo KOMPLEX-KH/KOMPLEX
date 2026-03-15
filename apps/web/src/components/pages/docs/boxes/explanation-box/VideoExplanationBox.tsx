@@ -17,9 +17,9 @@ export const VideoExplanationBox = ({ src, videoTitle, explanation }: VideoBoxPr
     return (
         <>
             <div className='grid grid-cols-1 lg:grid-cols-2 lg:gap-6 gap-2 my-6'>
-                <div className="bg-indigo-50/80 border border-indigo-600 p-4 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+                <div className="bg-indigo-50/80 dark:bg-indigo-900/40 border border-indigo-600 dark:border-indigo-500 p-4 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
                     <div className="grid grid-cols-1 gap-6">
-                        <div className="w-full relative group">
+                        <div className="w-full relative group bg-white dark:bg-zinc-900 rounded-3xl">
                             {source ? (
                                 <>
                                     <VideoPlayer
@@ -29,13 +29,13 @@ export const VideoExplanationBox = ({ src, videoTitle, explanation }: VideoBoxPr
                                     />
                                     <button
                                         onClick={() => setIsModalOpen(true)}
-                                        className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-lg lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-200"
+                                        className="absolute top-2 right-2 bg-black/50 dark:bg-zinc-900/50 hover:bg-black/70 dark:hover:bg-zinc-900/70 text-white p-2 rounded-lg lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-200"
                                     >
                                         <Maximize2 size={16} />
                                     </button>
                                 </>
                             ) : (
-                                <div className="w-full h-64 bg-gray-200 rounded-xl shadow-md flex items-center justify-center">
+                                <div className="w-full h-64 bg-gray-200 dark:bg-zinc-800 rounded-xl shadow-md flex items-center justify-center">
                                     <div className="text-center">
                                         <Video className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                                         <p className="text-gray-500">{videoTitle || 'Video content will be displayed here'}</p>
@@ -47,32 +47,32 @@ export const VideoExplanationBox = ({ src, videoTitle, explanation }: VideoBoxPr
                     <div className="lg:hidden flex flex-col my-6 w-full">
                         <div className="flex items-center gap-3 mb-4">
                             <Video size={20} className='text-indigo-600' />
-                            <h3 className="text-xl font-bold text-gray-900">ការពន្យល់</h3>
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white">ការពន្យល់</h3>
                         </div>
                         {typeof explanation === 'string' ? (
-                            <p className="text-gray-700 text-base">
+                            <p className="text-gray-700 dark:text-zinc-300 text-base">
                                 {explanation}
                             </p>
-                        )  : (
-                            <div className="text-gray-700 text-base">
+                        ) : (
+                            <div className="text-gray-700 dark:text-zinc-300 text-base">
                                 {explanation}
                             </div>
                         )}
                     </div>
                 </div>
-                <div className="hidden lg:flex bg-indigo-50/80 border border-indigo-600 p-6 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
+                <div className="hidden lg:flex bg-indigo-50/80 dark:bg-indigo-900/40 border border-indigo-600 dark:border-indigo-500 p-6 rounded-3xl shadow-lg shadow-indigo-500/10 backdrop-blur-sm">
                     <div className="grid grid-cols-1 gap-6">
                         <div className="w-full">
                             <div className="flex items-center gap-3 mb-4">
                                 <Video size={20} className='text-indigo-600' />
-                                <h3 className="text-xl font-bold text-gray-900">ការពន្យល់</h3>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">ការពន្យល់</h3>
                             </div>
                             {typeof explanation === 'string' ? (
-                                <p className="text-gray-700 leading-relaxed text-base">
+                                <p className="text-gray-700 dark:text-zinc-300 leading-relaxed text-base">
                                     {explanation}
                                 </p>
-                            )  : (
-                                <div className="text-gray-700 leading-relaxed text-base">
+                            ) : (
+                                <div className="text-gray-700 dark:text-zinc-300 leading-relaxed text-base">
                                     {explanation}
                                 </div>
                             )}
@@ -93,7 +93,7 @@ export const VideoExplanationBox = ({ src, videoTitle, explanation }: VideoBoxPr
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" />
+                        <div className="fixed inset-0 bg-black/80 dark:bg-zinc-900/80 backdrop-blur-sm" />
                     </Transition.Child>
 
                     <div className="fixed inset-0 overflow-y-auto">
@@ -111,7 +111,7 @@ export const VideoExplanationBox = ({ src, videoTitle, explanation }: VideoBoxPr
                                     <div className="relative">
                                         <button
                                             onClick={() => setIsModalOpen(false)}
-                                            className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-lg transition-colors"
+                                            className="absolute top-4 right-4 z-10 bg-black/50 dark:bg-zinc-900/50 hover:bg-black/70 dark:hover:bg-zinc-900/70 text-white p-2 rounded-lg transition-colors"
                                         >
                                             <X size={20} />
                                         </button>
@@ -122,10 +122,10 @@ export const VideoExplanationBox = ({ src, videoTitle, explanation }: VideoBoxPr
                                                 className="w-full h-auto max-h-[80vh] object-contain"
                                             />
                                         ) : (
-                                            <div className="w-full h-96 bg-gray-200 flex items-center justify-center">
+                                            <div className="w-full h-96 bg-gray-200 dark:bg-zinc-800 flex items-center justify-center">
                                                 <div className="text-center">
-                                                    <Video className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                                                    <p className="text-gray-500">{videoTitle || 'Video content will be displayed here'}</p>
+                                                    <Video className="w-16 h-16 text-gray-400 dark:text-zinc-400 mx-auto mb-4" />
+                                                    <p className="text-gray-500 dark:text-zinc-400">{videoTitle || 'Video content will be displayed here'}</p>
                                                 </div>
                                             </div>
                                         )}

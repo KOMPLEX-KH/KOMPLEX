@@ -78,24 +78,24 @@ export default function MyForumDetail() {
     // Show loading while checking auth or fetching data
     if (authLoading || loading) {
         return (
-            <div className="min-h-screen bg-gray-50 pt-32 lg:pt-20">
+            <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-32 lg:pt-20">
                 <div className="max-w-4xl mx-auto p-5">
                     {/* Loading Skeleton */}
                     <div className="mb-6 relative">
-                        <div className="w-32 h-6 bg-gray-200 rounded animate-pulse"></div>
+                        <div className="w-32 h-6 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
                     </div>
-                    <div className="bg-white rounded-2xl p-6 shadow-lg shadow-indigo-500/10 border border-indigo-500/10 animate-pulse">
+                    <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg shadow-indigo-500/10 border border-indigo-500/10 animate-pulse">
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="w-10 h-10 rounded-full bg-gray-200"></div>
+                            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-zinc-800"></div>
                             <div className="flex-1">
-                                <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
-                                <div className="h-3 bg-gray-200 rounded w-16"></div>
+                                <div className="h-4 bg-gray-200 dark:bg-zinc-800 rounded w-24 mb-2"></div>
+                                <div className="h-3 bg-gray-200 dark:bg-zinc-800 rounded w-16"></div>
                             </div>
                         </div>
-                        <div className="h-6 bg-gray-200 rounded w-3/4 mb-3"></div>
+                        <div className="h-6 bg-gray-200 dark:bg-zinc-800 rounded w-3/4 mb-3"></div>
                         <div className="space-y-2">
-                            <div className="h-4 bg-gray-200 rounded w-full"></div>
-                            <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                            <div className="h-4 bg-gray-200 dark:bg-zinc-800 rounded w-full"></div>
+                            <div className="h-4 bg-gray-200 dark:bg-zinc-800 rounded w-2/3"></div>
                         </div>
                     </div>
                 </div>
@@ -111,7 +111,7 @@ export default function MyForumDetail() {
     // Handle all error states at the top level
     if (error || !post) {
         return (
-            <div className="min-h-screen bg-gray-50 pt-32 lg:pt-20">
+            <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-32 lg:pt-20">
                 <div className="max-w-4xl mx-auto p-5">
                     <BackButton href='/me?tab=forums' />
                     <div className="mb-6 relative">
@@ -126,7 +126,7 @@ export default function MyForumDetail() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-32 lg:pt-20">
+        <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-32 lg:pt-20">
             <div className="max-w-6xl mx-auto p-5">
                 {/* Header with Back Button and Actions */}
                 <BackButton href='/me?tab=forums' />
@@ -135,14 +135,14 @@ export default function MyForumDetail() {
                         <div className='flex gap-2 items-center'>
                             <button
                                 onClick={handleDeleteClick}
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors font-medium"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 dark:bg-red-900 text-white dark:text-white rounded-full hover:bg-red-700 dark:hover:bg-red-800 transition-colors font-medium"
                             >
                                 <Trash className="w-4 h-4" />
                                 លុប
                             </button>
                             <button
                                 onClick={() => setIsEditMode(true)}
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors font-medium"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 dark:bg-indigo-900 text-white dark:text-white rounded-full hover:bg-indigo-700 dark:hover:bg-indigo-800 transition-colors font-medium"
                             >
                                 <Edit className="w-4 h-4" />
                                 កែប្រែ
@@ -152,7 +152,7 @@ export default function MyForumDetail() {
                     {isEditMode && (
                         <button
                             onClick={handleCancel}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-full hover:bg-gray-700 transition-colors font-medium"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 dark:bg-zinc-800 text-white dark:text-white rounded-full hover:bg-gray-700 dark:hover:bg-gray-800 transition-colors font-medium"
                         >
                             <Eye className="w-4 h-4" />
                             មើល

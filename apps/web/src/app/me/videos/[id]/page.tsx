@@ -17,46 +17,46 @@ import { BackButton } from '@/components/common/BackButton';
 // Skeleton Loading Component for Display Mode
 function VideoPostSkeleton() {
     return (
-        <div className="min-h-screen bg-gray-50 pt-32 lg:pt-20">
+        <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-32 lg:pt-20">
             <div className="max-w-6xl mx-auto p-5">
                 {/* Back Button Skeleton */}
                 <div className="mb-6">
-                    <div className="w-32 h-6 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="w-32 h-6 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
                 </div>
 
                 {/* Video Post Skeleton */}
-                <article className="bg-white rounded-3xl shadow-lg shadow-indigo-500/10 border border-indigo-500/10 overflow-hidden">
+                <article className="bg-white dark:bg-zinc-900 rounded-3xl shadow-lg shadow-indigo-500/10 border border-indigo-500/10 dark:border-indigo-800/10 overflow-hidden">
                     <div className="p-6 md:p-8">
                         {/* Video Player Skeleton */}
-                        <div className="w-full h-96 bg-gray-200 rounded-lg animate-pulse mb-6"></div>
+                        <div className="w-full h-96 bg-gray-200 dark:bg-zinc-800 rounded-lg animate-pulse mb-6"></div>
 
                         {/* Title Skeleton */}
                         <div className="mb-2">
-                            <div className="w-3/4 h-8 bg-gray-200 rounded animate-pulse"></div>
+                            <div className="w-3/4 h-8 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
                         </div>
 
                         {/* User Info Skeleton */}
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse"></div>
+                            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-zinc-800 animate-pulse"></div>
                             <div className="flex items-center gap-2">
-                                <div className="w-24 h-4 bg-gray-200 rounded animate-pulse"></div>
-                                <div className="w-2 h-4 bg-gray-200 rounded animate-pulse"></div>
-                                <div className="w-32 h-4 bg-gray-200 rounded animate-pulse"></div>
+                                <div className="w-24 h-4 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
+                                <div className="w-2 h-4 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
+                                <div className="w-32 h-4 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
                             </div>
                         </div>
 
                         {/* Stats Skeleton */}
                         <div className="flex items-center gap-6 mb-6">
-                            <div className="w-20 h-6 bg-gray-200 rounded animate-pulse"></div>
-                            <div className="w-20 h-6 bg-gray-200 rounded animate-pulse"></div>
-                            <div className="w-20 h-6 bg-gray-200 rounded animate-pulse"></div>
+                            <div className="w-20 h-6 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
+                            <div className="w-20 h-6 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
+                            <div className="w-20 h-6 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
                         </div>
 
                         {/* Description Skeleton */}
                         <div className="space-y-3">
-                            <div className="w-full h-4 bg-gray-200 rounded animate-pulse"></div>
-                            <div className="w-5/6 h-4 bg-gray-200 rounded animate-pulse"></div>
-                            <div className="w-4/5 h-4 bg-gray-200 rounded animate-pulse"></div>
+                            <div className="w-full h-4 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
+                            <div className="w-5/6 h-4 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
+                            <div className="w-4/5 h-4 bg-gray-200 dark:bg-zinc-800 rounded animate-pulse"></div>
                         </div>
                     </div>
                 </article>
@@ -169,7 +169,7 @@ export default function VideoPost() {
 
     if (error || !videoPost) {
         return (
-            <div className="min-h-screen bg-gray-50 pt-32 lg:pt-20">
+            <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-32 lg:pt-20">
                 <div className="max-w-6xl mx-auto p-5">
                     <div className="mb-6">
                         <BackButton href="/me?tab=videos" />
@@ -187,7 +187,7 @@ export default function VideoPost() {
     if (!isEditMode) {
         return (
             <>
-                <div className="min-h-screen bg-gray-50 pt-32 lg:pt-20">
+                <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-32 lg:pt-20">
                     <div className="max-w-6xl mx-auto p-5">
                         <div className="mb-6">
                             <BackButton href="/me?tab=videos" />
@@ -217,7 +217,7 @@ export default function VideoPost() {
                             {/* Left Column - Video Player and Info */}
                             <div className="space-y-4">
                                 {/* Video Player */}
-                                <div className="bg-black rounded-3xl overflow-hidden shadow-lg">
+                                <div className="bg-black dark:bg-zinc-900 rounded-3xl overflow-hidden shadow-lg">
                                     <video
                                         className="w-full aspect-video"
                                         controls
@@ -233,21 +233,21 @@ export default function VideoPost() {
                                 </div>
 
                                 {/* Video Description */}
-                                <div className="bg-white rounded-3xl shadow-sm p-6">
-                                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 leading-tight">
+                                <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm p-6">
+                                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-zinc-400 mb-4 leading-tight">
                                         {videoPost.title}
                                     </h1>
 
                                     {/* User Info and Stats */}
                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold">
+                                            <div className="w-10 h-10 rounded-full bg-indigo-600 dark:bg-indigo-800 flex items-center justify-center text-white font-semibold">
                                                 {videoPost.username.split(" ")[0].charAt(0)}
                                             </div>
                                             <div className='flex items-center gap-2'>
-                                                <span className="font-semibold text-gray-900">{videoPost.username}</span>
+                                                <span className="font-semibold text-gray-900 dark:text-zinc-400">{videoPost.username}</span>
                                                 <span>|</span>
-                                                <span className="text-gray-500 text-sm">{formatDate(videoPost.createdAt)}</span>
+                                                <span className="text-gray-500 dark:text-zinc-400 text-sm">{formatDate(videoPost.createdAt)}</span>
                                             </div>
                                         </div>
 
@@ -269,7 +269,7 @@ export default function VideoPost() {
                                     </div>
 
                                     {/* Stats */}
-                                    <div className="flex items-center gap-6 mb-6 text-gray-600">
+                                    <div className="flex items-center gap-6 mb-6 text-gray-600 dark:text-zinc-400">
                                         <span className="flex items-center gap-2">
                                             <Eye className="w-5 h-5" />
                                             {videoPost.viewCount.toLocaleString()} ទស្សនា
@@ -295,13 +295,13 @@ export default function VideoPost() {
                             {/* Right Column - Tabs */}
                             <div className="self-start h-fit lg:top-6">
                                 {/* Tab Navigation */}
-                                <div className="bg-white rounded-3xl shadow-sm mb-4">
+                                <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm mb-4">
                                     <div className="flex">
                                         <button
                                             onClick={() => setActiveTab('comments')}
                                             className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activeTab === 'comments'
                                                 ? 'text-indigo-600 underline underline-offset-8'
-                                                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                                                : 'text-gray-500 dark:text-zinc-400 hover:text-gray-700 hover:bg-gray-50'
                                                 }`}
                                         >
                                             <div className="flex items-center gap-2 justify-center">
@@ -313,7 +313,7 @@ export default function VideoPost() {
                                             onClick={() => setActiveTab('exercise')}
                                             className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activeTab === 'exercise'
                                                 ? 'text-indigo-600 underline underline-offset-8'
-                                                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                                                : 'text-gray-500 dark:text-zinc-400 hover:text-gray-700 hover:bg-gray-50'
                                                 }`}
                                         >
                                             <div className="flex items-center gap-2 justify-center">
@@ -325,7 +325,7 @@ export default function VideoPost() {
                                 </div>
 
                                 {/* Tab Content */}
-                                <div className="bg-white rounded-3xl shadow-sm">
+                                <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm">
                                     {activeTab === 'comments' && (
                                         <div>
                                             <Comments
@@ -350,13 +350,13 @@ export default function VideoPost() {
                         {/* Mobile Tab System */}
                         <div className="lg:hidden mt-8">
                             {/* Mobile Tab Navigation */}
-                            <div className="bg-white rounded-3xl shadow-sm mb-4">
+                            <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm mb-4">
                                 <div className="flex">
                                     <button
                                         onClick={() => setActiveTab('comments')}
                                         className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activeTab === 'comments'
                                             ? 'text-indigo-600 underline underline-offset-8'
-                                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                                            : 'text-gray-500 dark:text-zinc-400 hover:text-gray-700 hover:bg-gray-50'
                                             }`}
                                     >
                                         <div className="flex items-center gap-2 justify-center">
@@ -368,7 +368,7 @@ export default function VideoPost() {
                                         onClick={() => setActiveTab('exercise')}
                                         className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activeTab === 'exercise'
                                             ? 'text-indigo-600 underline underline-offset-8'
-                                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                                            : 'text-gray-500 dark:text-zinc-400 hover:text-gray-700 hover:bg-gray-50'
                                             }`}
                                     >
                                         <div className="flex items-center gap-2 justify-center">
@@ -381,7 +381,7 @@ export default function VideoPost() {
 
                             {/* Mobile Tab Content */}
                             {activeTab === 'comments' && (
-                                <div className="bg-white rounded-3xl p-4 shadow-sm">
+                                <div className="bg-white dark:bg-zinc-900 rounded-3xl p-4 shadow-sm">
                                     <Comments
                                         type='video'
                                         parentId={videoPost.id}
@@ -415,14 +415,14 @@ export default function VideoPost() {
     // Edit Mode
     return (
         <>
-            <div className="min-h-screen bg-gray-50 pt-32 lg:pt-20">
+            <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-32 lg:pt-20">
                 <div className="max-w-6xl mx-auto p-5">
                     <div className="mb-6">
                         <BackButton href="/me?tab=videos" />
                     </div>
                     {/* Header with Back Button */}
                     <div className="mb-6 flex items-center justify-end">
-                        <button className='bg-gray-500 text-white rounded-full p-2 flex items-center gap-2' onClick={() => setIsEditMode(false)}><Eye className="w-4 h-4" />មើល</button>
+                        <button className='bg-gray-500 dark:bg-zinc-800 text-white dark:text-zinc-400 rounded-full p-2 flex items-center gap-2' onClick={() => setIsEditMode(false)}><Eye className="w-4 h-4" />មើល</button>
                     </div>
 
                     {/* Edit Video Component */}

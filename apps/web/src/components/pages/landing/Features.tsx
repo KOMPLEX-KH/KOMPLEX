@@ -12,9 +12,9 @@ const FEATURES = [
         description:
             "សិក្សានិងស្រាវជ្រាវ ដោយមានមេរៀនងាយយល់ និងរូបភាពច្បាស់លាស់",
         color: "indigo",
-        bgColor: "bg-indigo-50/80",
-        borderColor: "border-indigo-600",
-        iconColor: "text-indigo-600",
+        bgColor: "bg-indigo-50/80 dark:bg-indigo-950/50",
+        borderColor: "border-indigo-600 dark:border-indigo-500",
+        iconColor: "text-indigo-600 dark:text-indigo-400",
     },
     {
         icon: Edit,
@@ -22,9 +22,9 @@ const FEATURES = [
         description:
             "អនុវត្តលំហាត់ដើម្បីបង្កើនជំនាញ ដោះស្រាយបញ្ហា និងទទួលបានរបាយការណ៍ជាក់លាក់",
         color: "orange",
-        bgColor: "bg-orange-50/80",
-        borderColor: "border-orange-600",
-        iconColor: "text-orange-600",
+        bgColor: "bg-orange-50/80 dark:bg-orange-950/50",
+        borderColor: "border-orange-600 dark:border-orange-500",
+        iconColor: "text-orange-600 dark:text-orange-400",
     },
     {
         icon: Bot,
@@ -33,9 +33,9 @@ const FEATURES = [
         description:
             "ប្រើប្រាស់ តារា AI ជាអ្នកជួយសិក្សា ដោះស្រាយបញ្ហា និងផ្តល់ការណែនាំឆាប់រហ័ស",
         color: "blue",
-        bgColor: "bg-blue-50/80",
-        borderColor: "border-blue-600",
-        iconColor: "text-blue-600",
+        bgColor: "bg-blue-50/80 dark:bg-blue-950/50",
+        borderColor: "border-blue-600 dark:border-blue-500",
+        iconColor: "text-blue-600 dark:text-blue-400",
     },
     {
         icon: MessageSquare,
@@ -44,9 +44,9 @@ const FEATURES = [
         description:
             "ចែករំលែកចំណេះដឹង សួរសំណួរ និងពិភាក្សាជាមួយសិស្សដទៃទៀត",
         color: "green",
-        bgColor: "bg-green-50/80",
-        borderColor: "border-green-600",
-        iconColor: "text-green-600",
+        bgColor: "bg-green-50/80 dark:bg-green-950/50",
+        borderColor: "border-green-600 dark:border-green-500",
+        iconColor: "text-green-600 dark:text-green-400",
     },
     {
         icon: Video,
@@ -55,16 +55,16 @@ const FEATURES = [
         description:
             "មើលវីដេអូសិក្សា ដែលពន្យល់អំពីគោលគំនិតសំខាន់ៗ និងមានលំហាត់អនុវត្តន៍ភ្ជាប់នឹងវីដេអូ",
         color: "red",
-        bgColor: "bg-red-50/80",
-        borderColor: "border-red-600",
-        iconColor: "text-red-600",
+        bgColor: "bg-red-50/80 dark:bg-red-950/50",
+        borderColor: "border-red-600 dark:border-red-500",
+        iconColor: "text-red-600 dark:text-red-400",
     },
 ];
 
 
 export default function Features() {
     return (
-        <section id="features" className="py-20 px-5 bg-white scroll-m-14">
+        <section id="features" className="py-20 px-5 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 scroll-m-14">
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
@@ -73,7 +73,9 @@ export default function Features() {
                     transition={{ duration: 0.8 }}
                     className="text-center mb-15"
                 >
-                    <h2 className="text-4xl font-extrabold text-gray-900 mb-4">មុខងារសំខាន់ៗ</h2>
+                    <h2 className="text-4xl font-extrabold text-zinc-900 dark:text-zinc-100 mb-4">
+                        មុខងារសំខាន់ៗ
+                    </h2>
 
                 </motion.div>
 
@@ -89,7 +91,7 @@ export default function Features() {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.6, delay: index * 0.1 }}
-                                    className={`${feature.bgColor} ${feature.borderColor} border-2 rounded-3xl lg:p-8 p-4 shadow-lg transition-all duration-300 backdrop-blur-sm ${feature.href ? 'hover:scale-105 cursor-pointer' : 'hover:scale-105 cursor-default opacity-60'} w-full  sm:flex-1`}
+                                    className={` dark:bg-zinc-800/80 border ${feature.borderColor} ${feature.bgColor} rounded-3xl lg:p-8 p-4 shadow-lg transition-all duration-300 backdrop-blur-sm ${feature.href ? 'hover:scale-105 cursor-pointer' : 'hover:scale-105 cursor-default opacity-60'} w-full sm:flex-1`}
                                 >
                                     {feature.href ? (
                                         <Link href={feature.href}>
@@ -99,12 +101,14 @@ export default function Features() {
                                                 viewport={{ once: true }}
                                                 transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
                                                 whileHover={{ rotate: 360 }}
-                                                className={`w-20 h-20 ${feature.bgColor} ${feature.borderColor} border-2 rounded-full flex items-center justify-center mx-auto mb-5`}
+                                                className={`w-20 h-20 ${feature.bgColor} border-2 ${feature.borderColor}   rounded-full flex items-center justify-center mx-auto mb-5`}
                                             >
                                                 <Icon size={32} className={feature.iconColor} />
                                             </motion.div>
-                                            <h3 className="lg:text-2xl text-xl font-bold text-center text-gray-900 mb-3">{feature.title}</h3>
-                                            <p className="text-gray-600 leading-relaxed text-center text-sm lg:text-base">
+                                            <h3 className="lg:text-2xl text-xl font-bold text-center text-zinc-900 dark:text-zinc-100 mb-3">
+                                                {feature.title}
+                                            </h3>
+                                            <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed text-center text-sm lg:text-base">
                                                 {feature.description}
                                             </p>
                                         </Link>
@@ -115,12 +119,14 @@ export default function Features() {
                                                 whileInView={{ scale: 1 }}
                                                 viewport={{ once: true }}
                                                 transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
-                                                className={`w-20 h-20 ${feature.bgColor} ${feature.borderColor} border-2 rounded-full flex items-center justify-center mx-auto mb-5`}
+                                                className={`w-20 h-20 ${feature.bgColor} border-2 ${feature.borderColor} rounded-full flex items-center justify-center mx-auto mb-5`}
                                             >
                                                 <Icon size={32} className={feature.iconColor} />
                                             </motion.div>
-                                            <h3 className="lg:text-2xl text-xl font-bold text-center text-gray-900 mb-3">{feature.title}</h3>
-                                            <p className="text-gray-600 leading-relaxed text-center text-sm lg:text-base">
+                                            <h3 className="lg:text-2xl text-xl font-bold text-center text-zinc-900 dark:text-zinc-100 mb-3">
+                                                {feature.title}
+                                            </h3>
+                                            <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed text-center text-sm lg:text-base">
                                                 {feature.description}
                                             </p>
                                         </>
@@ -142,7 +148,7 @@ export default function Features() {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ duration: 0.6, delay: actualIndex * 0.1 }}
-                                    className={`${feature.bgColor} ${feature.borderColor} border-2 rounded-3xl lg:p-8 p-4 shadow-lg transition-all duration-300 backdrop-blur-sm ${feature.href ? 'hover:scale-105 cursor-pointer' : 'cursor-default opacity-60'} w-full sm:max-w-none lg:max-w-sm sm:flex-1 `}
+                                    className={` dark:bg-zinc-800/80 border ${feature.borderColor} ${feature.bgColor} rounded-3xl lg:p-8 p-4 shadow-lg transition-all duration-300 backdrop-blur-sm ${feature.href ? 'hover:scale-105 cursor-pointer' : 'cursor-default opacity-60'} w-full sm:max-w-none lg:max-w-sm sm:flex-1`}
                                 >
                                     {feature.href ? (
                                         <Link href={feature.href}>
@@ -152,12 +158,14 @@ export default function Features() {
                                                 viewport={{ once: true }}
                                                 transition={{ duration: 0.5, delay: actualIndex * 0.1 + 0.2 }}
                                                 whileHover={{ rotate: 360 }}
-                                                className={`w-20 h-20 ${feature.bgColor} ${feature.borderColor} border-2 rounded-full flex items-center justify-center mx-auto mb-5`}
+                                                className={`w-20 h-20 ${feature.bgColor} border-2 ${feature.borderColor} rounded-full flex items-center justify-center mx-auto mb-5`}
                                             >
                                                 <Icon size={32} className={feature.iconColor} />
                                             </motion.div>
-                                            <h3 className="lg:text-2xl text-xl font-bold text-center text-gray-900 mb-3">{feature.title}</h3>
-                                            <p className="text-gray-600 leading-relaxed text-center text-sm lg:text-base">
+                                            <h3 className="lg:text-2xl text-xl font-bold text-center text-zinc-900 dark:text-zinc-100 mb-3">
+                                                {feature.title}
+                                            </h3>
+                                            <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed text-center text-sm lg:text-base">
                                                 {feature.description}
                                             </p>
                                         </Link>
@@ -172,8 +180,10 @@ export default function Features() {
                                             >
                                                 <Icon size={32} className={feature.iconColor} />
                                             </motion.div>
-                                            <h3 className="lg:text-2xl text-xl font-bold text-center text-gray-900 mb-3">{feature.title}</h3>
-                                            <p className="text-gray-600 leading-relaxed text-center text-sm lg:text-base">
+                                            <h3 className="lg:text-2xl text-xl font-bold text-center text-zinc-900 dark:text-zinc-100 mb-3">
+                                                {feature.title}
+                                            </h3>
+                                            <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed text-center text-sm lg:text-base">
                                                 {feature.description}
                                             </p>
                                         </>

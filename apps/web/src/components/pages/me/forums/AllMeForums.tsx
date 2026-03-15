@@ -55,13 +55,13 @@ export default function AllMeForums() {
     }
 
     return (
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-200">
-            <div className="p-6 border-b border-gray-200">
+        <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm border border-gray-200 dark:border-zinc-800">
+            <div className="p-6 border-b border-gray-200 dark:border-zinc-800">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-gray-900">អត្ថបទវេទិកា</h2>
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-zinc-400">អត្ថបទវេទិកា</h2>
                     <Link
                         href="/me/create-forum"
-                        className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-medium transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-indigo-600 dark:bg-zinc-700 hover:bg-indigo-700 dark:hover:bg-zinc-600 text-white rounded-full font-medium transition-colors"
                     >
                         <Plus className="w-4 h-4" />
                         បង្កើតអត្ថបទថ្មី
