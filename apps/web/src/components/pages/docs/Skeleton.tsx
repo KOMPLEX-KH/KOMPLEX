@@ -6,8 +6,11 @@ import { HintBox } from "./boxes/HintBox";
 import { WarningBox } from "./boxes/WarningBox";
 import { ExampleBox } from "./boxes/ExampleBox";
 import { ImageExplanationBox } from "./boxes/explanation-box/ImageExplanationBox";
+import { useTheme } from "@/hooks/useTheme";
+
 
 export default function Skeleton() {
+    const { isDark } = useTheme();
     // Generic data for background components
     const genericDefinition = {
         title: "ចំណងជើងមេរៀន",
@@ -87,10 +90,10 @@ export default function Skeleton() {
             </div>
 
             {/* Overlay Content */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/10 dark:bg-zinc-900/10 backdrop-blur-sm">
+            <div className={`absolute inset-0 flex flex-col items-center justify-center ${isDark ? 'bg-zinc-900/10' : 'bg-white/10'} backdrop-blur-sm`}>
                 <div className="text-center space-y-4 p-8">
                     {/* Icon Skeleton */}
-                    <Logo isLoading={true} size="xl" isVertical={true} showBeta={false} />
+                    <Logo variant={isDark ? 'light' : 'default'} isLoading={true} size="xl" isVertical={true} showBeta={false} />
                 </div>
             </div>
         </div>

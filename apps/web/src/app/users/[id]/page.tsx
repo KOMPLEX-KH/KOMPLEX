@@ -97,10 +97,10 @@ export default function UserProfilePage() {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-gray-50 pt-32">
+            <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-32">
                 <div className="w-full px-4 lg:px-8">
                     <div className="animate-pulse">
-                        <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-sm border border-gray-200 mb-6">
+                        <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 lg:p-8 shadow-sm border border-gray-200 dark:border-zinc-800 mb-6">
                             <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6 mb-6">
                                 <div className="w-24 h-24 bg-gray-200 rounded-full"></div>
                                 <div className="flex-1 w-full lg:w-auto">
@@ -110,7 +110,7 @@ export default function UserProfilePage() {
                                 </div>
                             </div>
                         </div>
-                        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+                        <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-zinc-800">
                             <div className="h-6 bg-gray-200 rounded w-32 mb-4"></div>
                             <div className="space-y-4">
                                 <div className="h-4 bg-gray-200 rounded w-full"></div>
@@ -125,7 +125,7 @@ export default function UserProfilePage() {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-gray-50 pt-32">
+            <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-32">
                 <div className="w-full px-4 lg:px-8">
                     <ContentError
                         type="error"
@@ -138,7 +138,7 @@ export default function UserProfilePage() {
 
     if (!user) {
         return (
-            <div className="min-h-screen bg-gray-50 pt-32">
+            <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-32">
                 <div className="w-full px-4 lg:px-8">
                     <ContentError
                         type="error"
@@ -150,10 +150,10 @@ export default function UserProfilePage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-20">
             <div className="w-full px-4 lg:px-8">
                 {/* Profile Header */}
-                <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-sm border border-gray-200 mb-6">
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 lg:p-8 shadow-sm border border-gray-200 dark:border-zinc-800 mb-6">
                     <div className="flex flex-col lg:flex-row items-center  gap-6 mb-6">
                         {/* Avatar */}
                         <div className="w-24 h-24 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-2xl flex-shrink-0 overflow-hidden">
@@ -180,14 +180,14 @@ export default function UserProfilePage() {
                         <div className="flex-1 w-full lg:w-auto text-center lg:text-left">
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
                                 <div className="flex flex-col">
-                                    <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+                                    <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-zinc-400">
                                         {user.firstName && user.lastName
                                             ? `${user.firstName} ${user.lastName}`.trim()
                                             : user.username
                                         }
                                     </h1>
                                     {user.firstName && user.lastName && user.username !== `${user.firstName} ${user.lastName}`.trim() && (
-                                        <p className="text-sm text-gray-500">@{user.username}</p>
+                                        <p className="text-sm text-gray-500 dark:text-zinc-400">@{user.username}</p>
                                     )}
                                 </div>
                                 {user.isVerified && (
@@ -201,13 +201,13 @@ export default function UserProfilePage() {
                             </div>
 
                             {user.bio && (
-                                <p className="text-gray-600 mb-4 max-w-2xl mx-auto lg:mx-0">
+                                <p className="text-gray-600 dark:text-zinc-400 mb-4 max-w-2xl mx-auto lg:mx-0">
                                     {user.bio}
                                 </p>
                             )}
 
                             {/* Additional Info */}
-                            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 text-sm text-gray-600">
+                            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 text-sm text-gray-600 dark:text-zinc-400">
                                 <div className="flex items-center gap-2">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -233,7 +233,7 @@ export default function UserProfilePage() {
                                     onClick={handleFollow}
                                     disabled={isFollowLoading}
                                     className={`px-6 py-2 rounded-lg font-medium transition-all duration-200 ${user.isFollowing
-                                        ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        ? 'bg-gray-100 text-gray-700 dark:text-zinc-400 hover:bg-gray-200'
                                         : 'bg-indigo-600 text-white hover:bg-indigo-700'
                                         } ${isFollowLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 >
@@ -260,20 +260,20 @@ export default function UserProfilePage() {
 
                     {/* Stats Grid */}
                     <div className="grid grid-cols-2 gap-4 md:grid-cols-2">
-                        <div className="text-center p-4 bg-gray-50 rounded-lg border border-indigo-500/20">
-                            <div className="text-2xl font-bold text-gray-900">{user.numberOfFollowers}</div>
-                            <div className="text-sm text-gray-600">អ្នកតាមដាន</div>
+                        <div className="text-center p-4 bg-gray-50 dark:bg-zinc-900 text-gray-900 dark:text-zinc-400 rounded-lg border border-indigo-500/20">
+                            <div className="text-2xl font-bold ">{user.numberOfFollowers}</div>
+                            <div className="text-sm text-gray-600 dark:text-zinc-400">អ្នកតាមដាន</div>
                         </div>
-                        <div className="text-center p-4 bg-gray-50 rounded-lg border border-indigo-500/20">
-                            <div className="text-2xl font-bold text-gray-900">{user.numberOfFollowing}</div>
-                            <div className="text-sm text-gray-600">កំពុងតាមដាន</div>
+                        <div className="text-center p-4 bg-gray-50 dark:bg-zinc-900 text-gray-900 dark:text-zinc-400 rounded-lg border border-indigo-500/20">
+                            <div className="text-2xl font-bold ">{user.numberOfFollowing}</div>
+                            <div className="text-sm text-gray-600 dark:text-zinc-400">កំពុងតាមដាន</div>
                         </div>
                     </div>
                 </div>
 
                 {/* Tab Navigation */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 mb-6">
-                    <div className="flex border-b border-gray-200">
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 mb-6">
+                    <div className="flex border-b border-gray-200 dark:border-zinc-800">
                         {tabs.map((tab) => {
                             const Icon = tab.icon;
                             return (
@@ -281,8 +281,8 @@ export default function UserProfilePage() {
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
                                     className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 text-sm font-medium transition-all duration-200 ${activeTab === tab.id
-                                        ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50'
-                                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                                        ? 'text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50 dark:bg-indigo-900/80'
+                                        : 'text-gray-600 dark:text-zinc-400 hover:text-gray-900 hover:bg-gray-50 dark:hover:bg-zinc-800'
                                         }`}
                                 >
                                     <Icon className="w-4 h-4" />
@@ -294,7 +294,7 @@ export default function UserProfilePage() {
                 </div>
 
                 {/* Tab Content */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-200">
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800">
                     {renderTabContent()}
                 </div>
             </div>

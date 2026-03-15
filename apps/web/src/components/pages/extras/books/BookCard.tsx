@@ -19,7 +19,7 @@ export default function BookCard({ book, onClick }: Props) {
                     src={book.imageUrl}
                     alt={book.title}
                     fill
-                    className="object-cover transition-transform duration-300 ease-in-out hover:scale-110 dark:invert"
+                    className="object-cover transition-transform duration-300 ease-in-out hover:scale-110 "
                     unoptimized
                 />
             </div>

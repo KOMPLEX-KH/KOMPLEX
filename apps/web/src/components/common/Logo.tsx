@@ -47,18 +47,18 @@ export const Logo = ({ isVertical = false, size = "md", isLoading = false, varia
     const variantConfig = {
         default: {
             logo: "/logo.png",
-            textColor: "text-indigo-500",
-            textColor2: "text-black"
+            textColor: "text-indigo-500 dark:text-indigo-400",
+            textColor2: "text-black dark:text-zinc-400"
         },
         light: {
             logo: "/logo-2.png",
-            textColor: "text-white",
-            textColor2: "text-white"
+            textColor: "text-white dark:text-zinc-400",
+            textColor2: "text-white dark:text-zinc-400"
         },
         dark: {
             logo: "/logo-3.png",
-            textColor: "text-black",
-            textColor2: "text-black"
+            textColor: "text-black dark:text-zinc-400",
+            textColor2: "text-black dark:text-zinc-400"
         }
     };
 
@@ -75,7 +75,7 @@ export const Logo = ({ isVertical = false, size = "md", isLoading = false, varia
                             e.preventDefault();
                             setIsBetaDialogOpen(true)
                         }}
-                        className={`absolute flex items-center gap-1 ${isVertical ? '-top-4 right-0' : ' top-[6px] -right-14'} py-0.5 px-2 text-indigo-500 bg-indigo-500/10 border border-indigo-500 rounded-full hover:bg-indigo-500/20 transition-colors cursor-pointer`}
+                        className={`absolute flex items-center gap-1 ${isVertical ? '-top-4 right-0' : ' top-[6px] -right-14'} py-0.5 px-2 text-indigo-500 bg-indigo-500/10 border border-indigo-500 rounded-full hover:bg-indigo-500/20 transition-colors cursor-pointer dark:text-white dark:bg-indigo-900/80 dark:border-indigo-800/80 dark:hover:bg-indigo-900/80`}
                     >
                         <span className="text-xs font-bold">Beta</span>
                     </button>

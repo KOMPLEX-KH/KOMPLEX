@@ -25,8 +25,8 @@ export default function Sidebar({ currentPath }: SidebarProps) {
             <Link key={tab.slug}
               href={tab.href}
               className={`px-3.5 py-1.5 rounded-full border border-indigo-500/10 dark:border-indigo-800/10 sm:text-sm text-[13px] transition ${currentPath.startsWith(tab.href)
-                  ? 'text-indigo-600 bg-indigo-50/80 dark:bg-indigo-900/80 font-semibold'
-                  : 'text-gray-600 hover:text-indigo-500 hover:bg-indigo-50/60'
+                ? 'text-indigo-600 bg-indigo-50/80 dark:bg-indigo-900/80 font-semibold'
+                : 'text-gray-600 hover:text-indigo-500 hover:bg-indigo-50/60'
                 }`}
             >
               {tab.label}
@@ -49,8 +49,8 @@ export default function Sidebar({ currentPath }: SidebarProps) {
               key={tab.slug}
               href={tab.href}
               className={`text-left px-3 py-2 rounded-3xl transition-colors ${currentPath.startsWith(tab.href)
-                  ? 'text-indigo-600 bg-indigo-50/80 dark:bg-indigo-900/80 font-semibold'
-                  : 'text-gray-600 hover:text-indigo-500 hover:bg-indigo-50/60'
+                ? 'text-indigo-600  bg-indigo-50/80 dark:bg-indigo-900/80 font-semibold'
+                : 'text-gray-600 dark:text-zinc-400 hover:text-indigo-500 hover:bg-indigo-50/60'
                 }`}
             >
               {tab.label}

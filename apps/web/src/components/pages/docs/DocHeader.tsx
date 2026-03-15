@@ -156,7 +156,7 @@ export default function DocHeader({
                             })}
                         </div>
                         {/* Grade select for desktop */}
-                        <div className="hidden lg:flex items-center bg-zinc-800 p-1 gap-4 rounded-full">
+                        <div className="hidden lg:flex items-center bg-indigo-100/80 dark:bg-zinc-800 p-1 gap-4 rounded-full">
                             {grades.map((grade) => {
                                 const isActive = gradeData.id === grade.value;
                                 return (

@@ -225,7 +225,7 @@ function RootLayoutInner({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased bg-zinc-900`}
       >
         <Suspense fallback={null}>
           <AnalyticsListener />

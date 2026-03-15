@@ -46,7 +46,7 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
         return (
             <Link href={`/videos/${video.id}`} className="block group overflow-hidden">
                 <div
-                    className="flex gap-3 hover:bg-gray-50 dark:hover:bg-zinc-800 p-2 rounded-3xl transition-colors flex-wrap items-center cursor-pointer overflow-hidden"
+                    className="flex gap-3 hover:bg-gray-50 bg-gray-50 dark:bg-zinc-900 dark:hover:bg-zinc-800 p-2 rounded-3xl transition-colors flex-wrap items-center cursor-pointer overflow-hidden"
                     onMouseEnter={handleCardHover}
                     onMouseLeave={handleCardLeave}
                 >
@@ -88,7 +88,7 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
         return (
             <div className="block group cursor-pointer" onClick={onClick}>
                 <div
-                    className=" lg:rounded-3xl lg:bg-white lg:border lg:border-gray-200 dark:lg:border-zinc-800  backdrop-blur-sm  transition-all duration-300 transform overflow-hidden cursor-pointer"
+                    className=" lg:rounded-3xl lg:bg-white bg-gray-50 dark:bg-zinc-900 lg:border lg:border-gray-200 dark:lg:border-zinc-800  backdrop-blur-sm  transition-all duration-300 transform overflow-hidden cursor-pointer"
                     onMouseEnter={handleCardHover}
                     onMouseLeave={handleCardLeave}
                 >
@@ -151,7 +151,7 @@ export default function VideoCard({ video, variant = 'default', onClick }: Video
             onMouseEnter={handleCardHover}
             onMouseLeave={handleCardLeave}
         >
-            <div className=" lg:rounded-3xl lg:bg-white lg:border lg:border-gray-200 dark:lg:border-zinc-800  backdrop-blur-sm  transition-all duration-300 transform overflow-hidden">
+            <div className=" lg:rounded-3xl lg:bg-white bg-gray-50 dark:bg-zinc-900 lg:border lg:border-gray-200 dark:lg:border-zinc-800  backdrop-blur-sm  transition-all duration-300 transform overflow-hidden">
                 <div className="relative overflow-hidden">
                     <video
                         className="w-full aspect-video object-cover lg:rounded-t-3xl lg:rounded-b-none rounded-3xl z-10 group-hover:scale-105 transition-all duration-300 overflow-hidden"

@@ -154,7 +154,7 @@ export default function VideoDetailPage() {
     // Error state
     if (error || !video) {
         return (
-            <div className="min-h-screen bg-gray-50 pt-15">
+            <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-15">
                 <div className="w-full mx-auto px-5 py-6">
                     <ContentError
                         type="error"
@@ -166,7 +166,7 @@ export default function VideoDetailPage() {
     }
 
     const renderVideoPlayer = () => (
-        <div className="bg-black rounded-3xl overflow-hidden shadow-lg">
+        <div className="bg-black dark:bg-zinc-900 rounded-3xl overflow-hidden shadow-lg">
             <video
                 className="w-full aspect-video"
                 controls
@@ -186,13 +186,13 @@ export default function VideoDetailPage() {
     const renderDesktopTabs = () => (
         <div className="hidden lg:block">
             {/* Tab Navigation */}
-            <div className="lg:bg-white lg:rounded-3xl lg:shadow-sm mb-4">
+            <div className="lg:bg-white dark:bg-zinc-900 lg:rounded-3xl lg:shadow-sm mb-4">
                 <div className="flex">
                     <button
                         onClick={() => setActiveTab('related')}
                         className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activeTab === 'related'
                             ? 'text-indigo-600 underline underline-offset-8'
-                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                            : 'text-gray-500 dark:text-zinc-400 hover:text-gray-700 hover:bg-gray-50'
                             }`}
                     >
                         <div className="flex items-center gap-2 justify-center">
@@ -204,7 +204,7 @@ export default function VideoDetailPage() {
                         onClick={() => setActiveTab('comments')}
                         className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activeTab === 'comments'
                             ? 'text-indigo-600 underline underline-offset-8'
-                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                            : 'text-gray-500 dark:text-zinc-400 hover:text-gray-700 hover:bg-gray-50'
                             }`}
                     >
                         <div className="flex items-center gap-2 justify-center">
@@ -216,13 +216,13 @@ export default function VideoDetailPage() {
             </div>
 
             {/* Tab Content */}
-            <div className="lg:bg-white lg:rounded-3xl lg:shadow-sm">
+            <div className="lg:bg-white dark:bg-zinc-900 lg:rounded-3xl lg:shadow-sm">
                 {activeTab === 'related' && (
                     <div className="p-6">
                         {videosLoading ? (
                             <div className="text-center">
                                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-                                <p className="text-gray-600">កំពុងផ្ទុកវីដេអូ...</p>
+                                <p className="text-gray-600 dark:text-zinc-400">កំពុងផ្ទុកវីដេអូ...</p>
                             </div>
                         ) : recommendedVideos.length > 0 ? (
                             <div className="space-y-4">
@@ -248,13 +248,13 @@ export default function VideoDetailPage() {
     const renderMobileTabs = () => (
         <div className="lg:hidden mt-8">
             {/* Mobile Tab Navigation */}
-            <div className="lg:bg-white lg:rounded-3xl lg:shadow-sm mb-4">
+            <div className="lg:bg-white dark:bg-zinc-900 lg:rounded-3xl lg:shadow-sm mb-4">
                 <div className="flex">
                     <button
                         onClick={() => setActiveTab('exercise')}
                         className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activeTab === 'exercise'
                             ? 'text-indigo-600 underline underline-offset-8'
-                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                            : 'text-gray-500 dark:text-zinc-400 hover:text-gray-700 hover:bg-gray-50'
                             }`}
                     >
                         <div className="flex items-center gap-2 justify-center">
@@ -266,7 +266,7 @@ export default function VideoDetailPage() {
                         onClick={() => setActiveTab('related')}
                         className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activeTab === 'related'
                             ? 'text-indigo-600 underline underline-offset-8'
-                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                            : 'text-gray-500 dark:text-zinc-400 hover:text-gray-700 hover:bg-gray-50'
                             }`}
                     >
                         <div className="flex items-center gap-2 justify-center">
@@ -278,7 +278,7 @@ export default function VideoDetailPage() {
                         onClick={() => setActiveTab('comments')}
                         className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activeTab === 'comments'
                             ? 'text-indigo-600 underline underline-offset-8'
-                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                            : 'text-gray-500 dark:text-zinc-400 hover:text-gray-700 hover:bg-gray-50'
                             }`}
                     >
                         <div className="flex items-center gap-2 justify-center">
@@ -297,12 +297,12 @@ export default function VideoDetailPage() {
                 <Comments type='video' parentId={videoId} isReadOnly={true} />
             )}
             {activeTab === 'related' && (
-                <div className="lg:bg-white lg:rounded-3xl lg:p-4 lg:shadow-sm">
+                <div className="lg:bg-white dark:bg-zinc-900 lg:rounded-3xl lg:p-4 lg:shadow-sm">
                     <h3 className="font-semibold text-gray-900 mb-4 text-lg">វីដេអូដទៃទៀត</h3>
                     {videosLoading ? (
                         <div className="text-center py-8">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-                            <p className="text-gray-600">កំពុងផ្ទុកវីដេអូ...</p>
+                            <p className="text-gray-600 dark:text-zinc-400">កំពុងផ្ទុកវីដេអូ...</p>
                         </div>
                     ) : recommendedVideos.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -323,7 +323,7 @@ export default function VideoDetailPage() {
     );
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-15">
+        <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-15">
             <div className="w-full mx-auto px-5 py-6">
                 {/* Main Grid Layout - Desktop */}
                 <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-0 lg:gap-6 items-start">

@@ -47,39 +47,39 @@ export default function ForumCard({ post, isFromMePage }: ForumCardProps) {
     }
 
     return (
-        <div className={`lg:bg-white lg:rounded-3xl lg:p-6 lg:border lg:border-indigo-500/10 transition-all duration-300  ${isFromMePage ? 'cursor-pointer' : 'cursor-default'}`} onClick={handleCardClick}>
+        <div className={`lg:bg-white dark:bg-zinc-900 lg:rounded-3xl lg:p-6 lg:border lg:border-indigo-500/10 transition-all duration-300  ${isFromMePage ? 'cursor-pointer' : 'cursor-default'}`} onClick={handleCardClick}>
             <div className="flex items-center gap-3 mb-4">
                 <div className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                     {post.profileImage ? (
                         <img
                             src={post.profileImage}
                             alt={post.username}
-                            className="w-10 h-10 rounded-full object-cover border-2 border-indigo-500"
+                            className="w-10 h-10 rounded-full object-cover border-2 border-indigo-500 dark:border-indigo-400"
                             onError={(e) => {
                                 e.currentTarget.style.display = 'none';
                                 e.currentTarget.nextElementSibling?.classList.remove('hidden');
                             }}
                         />
                     ) : null}
-                    <div className={`w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold text-base ${post.profileImage ? 'hidden' : ''}`}>
+                    <div className={`w-10 h-10 rounded-full bg-indigo-600 dark:bg-zinc-700 flex items-center justify-center text-white font-semibold text-base ${post.profileImage ? 'hidden' : ''}`}>
                         {getAvatar(post.username)}
                     </div>
                     <div className="flex-1">
-                        <div className="font-semibold text-gray-900 text-sm mb-0.5 hover:underline">
+                        <div className="font-semibold text-gray-900 dark:text-zinc-400 text-sm mb-0.5 hover:underline">
                             {post.username}
                         </div>
-                        <div className="text-gray-500 text-xs">
+                        <div className="text-gray-500 dark:text-zinc-400 text-xs">
                             {getTimeAgo(post.createdAt)}
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="text-lg font-bold text-gray-900 mb-2.5 leading-relaxed">
+            <div className="text-lg font-bold text-gray-900 dark:text-zinc-400 mb-2.5 leading-relaxed">
                 {post.title}
             </div>
 
-            <div className="text-gray-700 text-sm leading-relaxed mb-4 line-clamp-3">
+            <div className="text-gray-700 dark:text-zinc-400 text-sm leading-relaxed mb-4 line-clamp-3">
                 <MarkDownRenderer content={post.description} />
             </div>
 
