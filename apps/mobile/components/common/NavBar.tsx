@@ -13,6 +13,7 @@ import {
 import { TAILWIND_COLORS } from '@/constants/styles/tailwind-colors';
 import { BlurView } from 'expo-blur';
 import { useEffect, useRef } from 'react';
+import { useTheme } from '@/src/providers/ThemeProvider';
 
 const NAV_ITEMS = [
     { name: 'home', icon: Home, href: '/' },
@@ -27,9 +28,13 @@ export default function NavBar() {
     const router = useRouter();
     const pathname = usePathname();
     const aiButtonTranslate = useRef(new Animated.Value(24));
+    const { theme, resolvedMode } = useTheme();
 
 
     const isDocsPath = pathname?.startsWith('/docs');
+    const isHomePath = pathname === '/';
+    const isAiPath = pathname === '/ai' || pathname === '/(modal)/ai' || pathname === '/ai/chat';
+    const isMePath = pathname === '/me';
 
     useEffect(() => {
         if (isDocsPath) {
@@ -49,45 +54,81 @@ export default function NavBar() {
     }
 
 
+    const isActiveTab = (href: string) => {
+        if (href === '/') return NAV_ITEMS.some(item => item.href === pathname);
+        if (href === '/docs') return isDocsPath;
+        if (href === '/ai') return NAV_ITEMS.some(item => item.href === pathname);
+        if (href === '/me') return NAV_ITEMS.some(item => item.href === pathname);
+        return pathname === href;
+    };
+
     return (
         <View style={tw("absolute bottom-4 left-4 right-4 z-50 bg-transparent")}>
-            <BlurView intensity={5} style={tw("rounded-full bg-indigo-50/40  border border-indigo-50 px-1 py-2 overflow-hidden w-full")}>
+            <View
+                style={{
+                    borderRadius: 999,
+                    backgroundColor: theme.colors.navBackground,
+                    borderWidth: 1,
+                    borderColor: theme.colors.navBorder,
+                    paddingHorizontal: 8,
+                    paddingVertical: 10,
+                    shadowColor: theme.colors.shadow,
+                    shadowOpacity: resolvedMode === 'dark' ? 0.35 : 0.12,
+                    shadowRadius: 10,
+                    shadowOffset: { width: 0, height: 4 },
+                    elevation: 8,
+                }}
+            >
                 <View style={tw("flex-row items-center justify-around")}>
                     {NAV_ITEMS.map((item) => {
                         const Icon = item.icon;
-                        const isActive = pathname === item.href;
+                        const isActive = isActiveTab(item.href);
 
                         return (
                             <Pressable
                                 key={item.name}
-                                style={tw(`p-2 rounded-full ${isActive ? 'bg-indigo-600' : 'bg-transparent'}`)}
+                                style={{
+                                    width: 44,
+                                    height: 44,
+                                    borderRadius: 999,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    backgroundColor: isActive ? theme.colors.primary : 'transparent',
+                                }}
                                 onPress={() => router.push(item.href as Href)}
                             >
                                 <Icon
                                     size={20}
-                                    color={isActive ? "white" : `${TAILWIND_COLORS["gray-500"]}`}
+                                    color={isActive ? theme.colors.textInverse : TAILWIND_COLORS["gray-500"]}
                                 />
                             </Pressable>
                         );
                     })}
                 </View>
-            </BlurView>
-            {
-                isDocsPath ? (
-                    <Animated.View style={[tw("absolute bottom-16 right-2"), { transform: [{ translateY: aiButtonTranslate }] }]}>
-                        < BlurView intensity={5} style={tw("rounded-full bg-indigo-50/50 border border-indigo-50 p-2 shadow-lg shadow-indigo-500 overflow-hidden")}>
-                            <Pressable
-                                style={tw(`p-2 rounded-full bg-indigo-600`)}
-                                onPress={() => router.push('/(modal)/ai' as Href)}
-                            >
-                                <BotIcon
-                                    size={20}
-                                    color="white"
-                                />
-                            </Pressable>
-                        </ BlurView>
-                    </Animated.View>) : null
-            }
-        </View >
+            </View>
+
+            {isDocsPath ? (
+                <Animated.View style={[tw("absolute bottom-16 right-2"), { transform: [{ translateY: aiButtonTranslate }] }]}>
+                    <Pressable
+                        style={{
+                            width: 44,
+                            height: 44,
+                            borderRadius: 999,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: theme.colors.primary,
+                            shadowColor: theme.colors.shadow,
+                            shadowOpacity: 0.2,
+                            shadowRadius: 8,
+                            shadowOffset: { width: 0, height: 4 },
+                            elevation: 6,
+                        }}
+                        onPress={() => router.push('/(modal)/ai' as Href)}
+                    >
+                        <BotIcon size={20} color={theme.colors.textInverse} />
+                    </Pressable>
+                </Animated.View>
+            ) : null}
+        </View>
     );
 }

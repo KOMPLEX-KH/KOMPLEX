@@ -1,6 +1,7 @@
 import { View, Text, Image, Animated } from 'react-native'
 import { tw } from '@/utils/styles'
 import { useEffect, useRef } from 'react'
+import { useTheme } from '@/src/providers/ThemeProvider'
 
 interface LogoProps {
     isVertical?: boolean
@@ -18,6 +19,7 @@ export default function Logo({
     showText = true
 }: LogoProps) {
     const fadeAnim = useRef(new Animated.Value(1)).current
+    const { resolvedMode } = useTheme()
 
     // Size configurations
     const sizeConfig = {
@@ -86,7 +88,10 @@ export default function Logo({
     }, [isLoading, fadeAnim])
 
     const currentSize = sizeConfig[size]
-    const currentVariant = variantConfig[variant]
+    const effectiveVariant = variant === "default"
+        ? (resolvedMode === "dark" ? "light" : "default")
+        : variant
+    const currentVariant = variantConfig[effectiveVariant]
 
     return (
         <Animated.View style={[

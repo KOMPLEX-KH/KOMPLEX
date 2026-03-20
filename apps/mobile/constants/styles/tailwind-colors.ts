@@ -218,6 +218,7 @@ const BASE_COLORS = {
   "slate-900": oklchToHex("oklch(0.208 0.042 265.755)"),
   "slate-950": oklchToHex("oklch(0.129 0.042 264.695)"),
 
+  "gray-0": oklchToHex("oklch(0.985 0.000 0.000)"),
   "gray-50": oklchToHex("oklch(0.985 0.002 247.839)"),
   "gray-100": oklchToHex("oklch(0.967 0.003 264.542)"),
   "gray-200": oklchToHex("oklch(0.928 0.006 264.531)"),
@@ -266,7 +267,7 @@ const BASE_COLORS = {
   "stone-900": oklchToHex("oklch(0.216 0.006 56.043)"),
   "stone-950": oklchToHex("oklch(0.147 0.004 49.25)"),
 
-  white: "#fff",
+  white: "#fafafa",
   black: "#000",
 };
 
