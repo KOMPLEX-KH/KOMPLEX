@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "node:path";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 
 const bundleAnalyzer = withBundleAnalyzer({
@@ -6,6 +7,8 @@ const bundleAnalyzer = withBundleAnalyzer({
 });
 
 const nextConfig: NextConfig = {
+  output: "standalone", // small self-contained server for Docker (less RAM, smaller image)
+  outputFileTracingRoot: path.join(__dirname, "../.."), // pnpm monorepo root
   images: {
     unoptimized: true,
     remotePatterns: [
