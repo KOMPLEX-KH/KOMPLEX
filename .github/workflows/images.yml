@@ -1,0 +1,87 @@
+# Builds this repo's Docker image(s) on GitHub's runners and pushes them to ghcr.io.
+# The server (chanraksa-vps) pulls new images every few minutes and restarts what changed,
+# so nothing is compiled on the server any more.
+name: Build images
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: images-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: web
+            context: .
+            dockerfile: apps/web/Dockerfile
+            paths: .
+            build_args: |
+              NEXT_PUBLIC_API_URL=https://komplex-api.chanraksa.com
+              NEXT_PUBLIC_SITE_URL=https://komplex.chanraksa.com
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Skip images whose folder didn't change (a change to this workflow rebuilds everything).
+      - name: Did ${{ matrix.name }} change?
+        id: changed
+        run: |
+          before="${{ github.event.before }}"
+          if [ "${{ github.event_name }}" != "push" ] || [ -z "$before" ] || [ "$before" = "0000000000000000000000000000000000000000" ] \
+             || ! git cat-file -e "$before" 2>/dev/null \
+             || ! git diff --quiet "$before" HEAD -- "${{ matrix.paths }}" .github/workflows; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "build=false" >> "$GITHUB_OUTPUT"; echo "No changes under ${{ matrix.paths }}, skipping."
+          fi
+
+      - name: Image name
+        if: steps.changed.outputs.build == 'true'
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}/${{ matrix.name }}" >> "$GITHUB_ENV"
+
+      - uses: docker/setup-buildx-action@v3
+        if: steps.changed.outputs.build == 'true'
+
+      - uses: docker/login-action@v3
+        if: steps.changed.outputs.build == 'true'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        if: steps.changed.outputs.build == 'true'
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          build-args: |
+            ${{ matrix.build_args }}
+            ${{ matrix.name == 'web' && format('NEXT_PUBLIC_FIREBASE_API_KEY={0}', secrets.NEXT_PUBLIC_FIREBASE_API_KEY) || '' }}
+            ${{ matrix.name == 'web' && format('NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN={0}', secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN) || '' }}
+            ${{ matrix.name == 'web' && format('NEXT_PUBLIC_FIREBASE_PROJECT_ID={0}', secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID) || '' }}
+            ${{ matrix.name == 'web' && format('NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET={0}', secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET) || '' }}
+            ${{ matrix.name == 'web' && format('NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID={0}', secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID) || '' }}
+            ${{ matrix.name == 'web' && format('NEXT_PUBLIC_FIREBASE_APP_ID={0}', secrets.NEXT_PUBLIC_FIREBASE_APP_ID) || '' }}
+            ${{ matrix.name == 'web' && format('NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID={0}', secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID) || '' }}
+            ${{ matrix.name == 'web' && format('NEXT_PUBLIC_GOOGLE_ANALYTICS_ID={0}', secrets.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID) || '' }}
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
