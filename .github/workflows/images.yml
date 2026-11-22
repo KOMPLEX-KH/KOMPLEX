@@ -1,6 +1,7 @@
 # Builds this repo's Docker image(s) on GitHub's runners and pushes them to ghcr.io.
-# The server (chanraksa-vps) pulls new images every few minutes and restarts what changed,
-# so nothing is compiled on the server any more.
+# Then it SSHes into the server (chanraksa-vps) and runs ~/raksa/gh-deploy.sh <app> <commit>,
+# which pulls that exact image, waits for it to be healthy, and rolls back if it isn't.
+# The SSH key (secret DEPLOY_SSH_KEY) can only run that script, nothing else.
 name: Build images
 
 on:
@@ -14,7 +15,7 @@ permissions:
 
 concurrency:
   group: images-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false   # never cut a deploy off halfway
 
 jobs:
   build:
@@ -24,6 +25,7 @@ jobs:
       matrix:
         include:
           - name: web
+            app: komplex-web
             context: .
             dockerfile: apps/web/Dockerfile
             paths: .
@@ -85,3 +87,13 @@ jobs:
             ${{ env.IMAGE }}:${{ github.sha }}
           cache-from: type=gha,scope=${{ matrix.name }}
           cache-to: type=gha,mode=max,scope=${{ matrix.name }}
+
+      - name: Deploy ${{ matrix.app }} to the server
+        if: steps.changed.outputs.build == 'true'
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+          echo "139.99.173.64 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGEeAqjBBm1ZM0NoTKx9yZT1+uJRJQbPENqOREAu/jxo" >> ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key -o BatchMode=yes ubuntu@139.99.173.64 "${{ matrix.app }} ${{ github.sha }}"
