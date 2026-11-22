@@ -30,7 +30,7 @@ jobs:
             dockerfile: apps/web/Dockerfile
             paths: .
             build_args: |
-              NEXT_PUBLIC_API_URL=https://komplex-api.chanraksa.com
+              NEXT_PUBLIC_API_URL=https://komplex-api.chanraksa.com/api/komplex
               NEXT_PUBLIC_SITE_URL=https://komplex.chanraksa.com
     steps:
       - uses: actions/checkout@v4
